@@ -676,7 +676,7 @@ void s7_state::machine_reset()
 void s7_state::s7(machine_config &config)
 {
 	/* basic machine hardware */
-	M6808(config, m_maincpu, 3580000);
+	M6808(config, m_maincpu, XTAL::u(3580000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &s7_state::main_map);
 
 	/* Video */
@@ -735,7 +735,7 @@ void s7_state::s7(machine_config &config)
 
 	/* Add the soundcard */
 	SPEAKER(config, "mono").front_center();
-	WILLIAMS_S6_SOUND(config, m_s6sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S6_SOUND(config, m_s6sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 

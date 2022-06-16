@@ -49,7 +49,7 @@ public:
 
 protected:
 	// construction/destruction
-	v25_common_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool is_16bit, uint8_t prefetch_size, uint8_t prefetch_cycles, uint32_t chip_type);
+	v25_common_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool is_16bit, uint8_t prefetch_size, uint8_t prefetch_cycles, uint32_t chip_type);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -584,14 +584,14 @@ private:
 class v25_device : public v25_common_device
 {
 public:
-	v25_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	v25_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class v35_device : public v25_common_device
 {
 public:
-	v35_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	v35_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

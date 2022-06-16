@@ -759,10 +759,10 @@ void sb2m600_state::osi600(machine_config &config)
 	m_discrete->add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	/* cassette ACIA */
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set([this] (bool state) { m_cassbit = state; });
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 4'800)); // 300 baud x 16(divider) = 4800
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(4'800))); // 300 baud x 16(divider) = 4800
 	acia_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 
@@ -792,10 +792,10 @@ void uk101_state::uk101(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 
 	/* cassette ACIA */
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set([this] (bool state) { m_cassbit = state; });
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 4'800)); // 300 baud x 16(divider) = 4800
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(4'800))); // 300 baud x 16(divider) = 4800
 	acia_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 
@@ -826,7 +826,7 @@ void c1p_state::c1p(machine_config &config)
 	DISCRETE(config, m_discrete);
 	m_discrete->set_intf(osi600c_discrete_interface);
 	m_discrete->add_route(ALL_OUTPUTS, "mono", 0.50);
-	BEEP(config, "beeper", 300).add_route(ALL_OUTPUTS, "mono", 0.50);
+	BEEP(config, "beeper", XTAL::u(300)).add_route(ALL_OUTPUTS, "mono", 0.50);
 	TIMER(config, m_beep_timer).configure_generic(FUNC(c1p_state::beep_timer));
 
 	PIA6821(config, "pia_1");
@@ -834,10 +834,10 @@ void c1p_state::c1p(machine_config &config)
 	PIA6821(config, "pia_3");
 
 	/* cassette ACIA */
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set([this] (bool state) { m_cassbit = state; });
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 4'800)); // 300 baud x 16(divider) = 4800
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(4'800))); // 300 baud x 16(divider) = 4800
 	acia_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 
@@ -865,7 +865,7 @@ void c1pmf_state::c1pmf(machine_config &config)
 	pia0.cb2_handler().set(FUNC(c1pmf_state::osi470_pia_cb2_w));
 
 	/* floppy ACIA */
-	ACIA6850(config, "acia_1", 0);
+	ACIA6850(config, "acia_1");
 
 	CLOCK(config, "floppy_clock", XTAL(4'000'000)/8).signal_handler().set("acia_1", FUNC(acia6850_device::write_txc)); // 250 kHz
 
@@ -926,7 +926,7 @@ ROM_END
 TIMER_DEVICE_CALLBACK_MEMBER(c1p_state::beep_timer)
 {
 	m_beeper->set_state(0);
-	m_beeper->set_clock(300);
+	m_beeper->set_clock(XTAL::u(300));
 }
 
 void c1p_state::init_c1p()

@@ -213,7 +213,7 @@ DEFINE_DEVICE_TYPE(SONYPS2_IOP, iop_device,       "sonyiop", "Sony Playstation 2
 
 ALLOW_SAVE_TYPE(mips1core_device_base::branch_state);
 
-mips1core_device_base::mips1core_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws)
+mips1core_device_base::mips1core_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config_be("program", ENDIANNESS_BIG, 32, 32)
 	, m_program_config_le("program", ENDIANNESS_LITTLE, 32, 32)
@@ -228,64 +228,64 @@ mips1core_device_base::mips1core_device_base(machine_config const &mconfig, devi
 {
 }
 
-mips1_device_base::mips1_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws)
+mips1_device_base::mips1_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws)
 	: mips1core_device_base(mconfig, type, tag, owner, clock, cpurev, icache_size, dcache_size, cache_pws)
 	, m_fcr0(0)
 {
 }
 
-r2000_device::r2000_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size, size_t dcache_size)
+r2000_device::r2000_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size, size_t dcache_size)
 	: mips1_device_base(mconfig, R2000, tag, owner, clock, 0x0120, icache_size, dcache_size, false)
 {
 }
 
-r2000a_device::r2000a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size, size_t dcache_size)
+r2000a_device::r2000a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size, size_t dcache_size)
 	: mips1_device_base(mconfig, R2000A, tag, owner, clock, 0x0210, icache_size, dcache_size, false)
 {
 }
 
-r3000_device::r3000_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size, size_t dcache_size)
+r3000_device::r3000_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size, size_t dcache_size)
 	: mips1_device_base(mconfig, R3000, tag, owner, clock, 0x0220, icache_size, dcache_size, false)
 {
 }
 
-r3000a_device::r3000a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size, size_t dcache_size)
+r3000a_device::r3000a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size, size_t dcache_size)
 	: mips1_device_base(mconfig, R3000A, tag, owner, clock, 0x0230, icache_size, dcache_size, false)
 {
 }
 
-r3041_device::r3041_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+r3041_device::r3041_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: mips1core_device_base(mconfig, R3041, tag, owner, clock, 0x0700, 2048, 512, true)
 {
 }
 
-r3051_device::r3051_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+r3051_device::r3051_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: mips1core_device_base(mconfig, R3051, tag, owner, clock, 0x0200, 4096, 2048, true)
 {
 }
 
-r3052_device::r3052_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+r3052_device::r3052_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: mips1core_device_base(mconfig, R3052, tag, owner, clock, 0x0200, 8192, 2048, true)
 {
 }
 
-r3052e_device::r3052e_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+r3052e_device::r3052e_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: mips1_device_base(mconfig, R3052E, tag, owner, clock, 0x0200, 8192, 2048, true)
 {
 }
 
-r3071_device::r3071_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size, size_t dcache_size)
+r3071_device::r3071_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size, size_t dcache_size)
 	: mips1_device_base(mconfig, R3071, tag, owner, clock, 0x0200, icache_size, dcache_size, true)
 {
 }
 
-r3081_device::r3081_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size, size_t dcache_size)
+r3081_device::r3081_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size, size_t dcache_size)
 	: mips1_device_base(mconfig, R3081, tag, owner, clock, 0x0200, icache_size, dcache_size, true)
 {
 	set_fpu(0x0300);
 }
 
-iop_device::iop_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+iop_device::iop_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: mips1core_device_base(mconfig, SONYPS2_IOP, tag, owner, clock, 0x001f, 4096, 1024, false)
 {
 	m_endianness = ENDIANNESS_LITTLE;

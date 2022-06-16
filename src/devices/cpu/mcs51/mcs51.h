@@ -50,8 +50,8 @@ public:
 
 protected:
 	// construction/destruction
-	mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features = 0);
-	mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor program_map, address_map_constructor data_map, int program_width, int data_width, uint8_t features = 0);
+	mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features = 0);
+	mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor program_map, address_map_constructor data_map, int program_width, int data_width, uint8_t features = 0);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -342,28 +342,28 @@ class i8031_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i8031_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8031_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class i8051_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i8051_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8051_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class i8751_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i8751_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8751_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class am8753_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	am8753_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	am8753_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -371,10 +371,10 @@ class i8052_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i8052_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8052_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	i8052_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features = 0);
+	i8052_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features = 0);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 
@@ -387,21 +387,21 @@ class i8032_device : public i8052_device
 {
 public:
 	// construction/destruction
-	i8032_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8032_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class i8752_device : public i8052_device
 {
 public:
 	// construction/destruction
-	i8752_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8752_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class i80c31_device : public i8052_device
 {
 public:
 	// construction/destruction
-	i80c31_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i80c31_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -412,10 +412,10 @@ class i80c51_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i80c51_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i80c51_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	i80c51_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features = 0);
+	i80c51_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features = 0);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 };
@@ -424,7 +424,7 @@ class i87c51_device : public i80c51_device
 {
 public:
 	// construction/destruction
-	i87c51_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i87c51_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -432,10 +432,10 @@ class i80c52_device : public i8052_device
 {
 public:
 	// construction/destruction
-	i80c52_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i80c52_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	i80c52_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features = 0);
+	i80c52_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features = 0);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 
@@ -448,24 +448,24 @@ class i80c32_device : public i80c52_device
 {
 public:
 	// construction/destruction
-	i80c32_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i80c32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class i87c52_device : public i80c52_device
 {
 public:
 	// construction/destruction
-	i87c52_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i87c52_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class i87c51fa_device : public i80c52_device
 {
 public:
 	// construction/destruction
-	i87c51fa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i87c51fa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	i87c51fa_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features = 0);
+	i87c51fa_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features = 0);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 };
@@ -474,7 +474,7 @@ class i80c51gb_device : public i87c51fa_device
 {
 public:
 	// construction/destruction
-	i80c51gb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i80c51gb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -484,28 +484,28 @@ class at89c52_device : public i80c52_device
 {
 public:
 	// construction/destruction
-	at89c52_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	at89c52_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class at89s52_device : public i80c52_device
 {
 public:
 	// construction/destruction
-	at89s52_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	at89s52_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class at89c4051_device : public i80c51_device
 {
 public:
 	// construction/destruction
-	at89c4051_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	at89c4051_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class ds80c320_device : public i80c52_device
 {
 public:
 	// construction/destruction
-	ds80c320_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ds80c320_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -515,7 +515,7 @@ class sab80c535_device : public i80c51_device
 {
 public:
 	// construction/destruction
-	sab80c535_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sab80c535_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -525,7 +525,7 @@ class i8344_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i8344_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8344_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -535,7 +535,7 @@ class i8744_device : public mcs51_cpu_device
 {
 public:
 	// construction/destruction
-	i8744_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i8744_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -604,7 +604,7 @@ class ds5002fp_device : public mcs51_cpu_device, public device_nvram_interface
 {
 public:
 	// construction/destruction
-	ds5002fp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ds5002fp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_mcon(uint8_t mcon) { m_ds5002fp.mcon = mcon; }
 	void set_rpctl(uint8_t rpctl) { m_ds5002fp.rpctl = rpctl; }

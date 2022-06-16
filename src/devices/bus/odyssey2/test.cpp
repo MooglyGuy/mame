@@ -27,7 +27,7 @@ namespace {
 class o2_test_device : public device_t, public device_o2_cart_interface
 {
 public:
-	o2_test_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	o2_test_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -47,7 +47,7 @@ private:
 	u8 m_bus_data = 0;
 };
 
-o2_test_device::o2_test_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+o2_test_device::o2_test_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, O2_ROM_TEST, tag, owner, clock),
 	device_o2_cart_interface(mconfig, *this),
 	m_digit_out(*this, "tc_digit")

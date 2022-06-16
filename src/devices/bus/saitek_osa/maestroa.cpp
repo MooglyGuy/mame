@@ -38,7 +38,7 @@ class saitekosa_maestroa_device : public device_t, public device_saitekosa_expan
 {
 public:
 	// construction/destruction
-	saitekosa_maestroa_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	saitekosa_maestroa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	DECLARE_INPUT_CHANGED_MEMBER(change_cpu_freq);
 
@@ -69,7 +69,7 @@ private:
 	void control_w(u8 data);
 };
 
-saitekosa_maestroa_device::saitekosa_maestroa_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+saitekosa_maestroa_device::saitekosa_maestroa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, OSA_MAESTROA, tag, owner, clock),
 	device_saitekosa_expansion_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu")

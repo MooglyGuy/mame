@@ -199,8 +199,8 @@ private:
 	emu_timer *m_irq_timer = nullptr;
 	uint8_t m_irq_state = 0U;
 
-	static constexpr int MASTER_CLOCK = 10'000'000;
-	static constexpr int PIXEL_CLOCK = MASTER_CLOCK / 2;
+	static constexpr XTAL MASTER_CLOCK = XTAL::u(10'000'000);
+	static constexpr XTAL PIXEL_CLOCK = MASTER_CLOCK / 2;
 	static constexpr int HTOTAL = 320;
 	static constexpr int VTOTAL = 256;
 

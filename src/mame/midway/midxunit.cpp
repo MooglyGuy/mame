@@ -291,7 +291,7 @@ void midxunit_state::midxunit(machine_config &config)
 	screen.set_screen_update(m_maincpu, FUNC(tms34010_device::tms340x0_ind16));
 	screen.set_palette(m_palette);
 
-	PIC16C57(config, m_pic, 625000); // need to be verified
+	PIC16C57(config, m_pic, XTAL::u(625000)); // need to be verified
 	m_pic->read_a().set([this]() { return m_pic_command; });
 	m_pic->write_b().set([this](u8 data) { m_pic_data = data; });
 	m_pic->read_c().set([this]() { return m_pic_clk ^ 1; });
@@ -310,7 +310,7 @@ void midxunit_state::midxunit(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	DCS_AUDIO_2K_UART(config, m_dcs, 0);
+	DCS_AUDIO_2K_UART(config, m_dcs);
 	m_dcs->set_maincpu_tag(m_maincpu);
 	m_dcs->add_route(0, "mono", 1.0);
 }

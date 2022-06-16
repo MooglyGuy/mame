@@ -51,7 +51,7 @@ class sms_control_port_device : public device_t, public device_single_card_slot_
 public:
 	template <typename T>
 	sms_control_port_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt) :
-		sms_control_port_device(mconfig, tag, owner, 0)
+		sms_control_port_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -59,7 +59,7 @@ public:
 		set_fixed(false);
 	}
 
-	sms_control_port_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_control_port_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~sms_control_port_device();
 
 	auto th_handler() { return m_th_handler.bind(); } // 0 for pulled low, 1 for pulled high or high impedance

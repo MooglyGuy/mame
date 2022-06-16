@@ -53,7 +53,7 @@ public:
 	void set_default_config(uint8_t data) { assert(!configured()); m_config = data & m_config_mask; }
 
 protected:
-	mc68hc11_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint16_t ram_size, uint16_t reg_block_size, uint16_t rom_size, uint16_t eeprom_size, uint8_t init_value, uint8_t config_mask, uint8_t option_mask);
+	mc68hc11_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint16_t ram_size, uint16_t reg_block_size, uint16_t rom_size, uint16_t eeprom_size, uint8_t init_value, uint8_t config_mask, uint8_t option_mask);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -561,7 +561,7 @@ class mc68hc11a1_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc11a1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc11a1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -576,7 +576,7 @@ class mc68hc11d0_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc11d0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc11d0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -591,7 +591,7 @@ class mc68hc11e1_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc11e1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc11e1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -603,7 +603,7 @@ class mc68hc811e2_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc811e2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc811e2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -615,7 +615,7 @@ class mc68hc11f1_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc11f1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc11f1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -627,7 +627,7 @@ class mc68hc11k1_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc11k1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc11k1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void mc68hc11_reg_map(memory_view::memory_view_entry &block, offs_t base) override;
@@ -637,7 +637,7 @@ class mc68hc11m0_device : public mc68hc11_cpu_device
 {
 public:
 	// construction/destruction
-	mc68hc11m0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc68hc11m0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void mc68hc11_reg_map(memory_view::memory_view_entry &block, offs_t base) override;

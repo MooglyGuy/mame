@@ -339,7 +339,7 @@ void s11b_state::s11b_base(machine_config &config)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &s11b_state::s11_audio_map);
 	INPUT_MERGER_ANY_HIGH(config, m_audioirq).output_handler().set_inputline(m_audiocpu, M6802_IRQ_LINE);
 
-	MC1408(config, m_dac, 0);
+	MC1408(config, m_dac);
 
 	// this CVSD filter differs from the one on system 11 and 11a, possibly simplified so it uses more of the same components, or so it has a different
 	// shape/cutoff than the filter on the bg music/speech board, on purpose.
@@ -354,7 +354,7 @@ void s11b_state::s11b_base(machine_config &config)
 	FILTER_BIQUAD(config, m_cvsd_filter2).opamp_mfb_lowpass_setup(RES_K(12), RES_K(12), RES_K(56), CAP_P(4700), CAP_P(470));
 	FILTER_BIQUAD(config, m_cvsd_filter).opamp_mfb_lowpass_setup(RES_K(180), RES_K(180), RES_K(180), CAP_P(470), CAP_P(100));
 	m_cvsd_filter->add_route(ALL_OUTPUTS, m_cvsd_filter2, 1.0);
-	HC55516(config, m_hc55516, 0).add_route(ALL_OUTPUTS, m_cvsd_filter, 1.0/4.0); // to prevent massive clipping issues, we divide the signal by 4 here before going into the filters, then multiply it by 4 after it comes out the other end
+	HC55516(config, m_hc55516).add_route(ALL_OUTPUTS, m_cvsd_filter, 1.0/4.0); // to prevent massive clipping issues, we divide the signal by 4 here before going into the filters, then multiply it by 4 after it comes out the other end
 
 	PIA6821(config, m_pias);
 	m_pias->readpa_handler().set(FUNC(s11b_state::sound_r));

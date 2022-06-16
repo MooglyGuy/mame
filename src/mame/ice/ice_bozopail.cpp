@@ -151,7 +151,7 @@ void ice_bozopail_state::machine_reset()
 void ice_bozopail_state::ice_bozo(machine_config &config)
 {
 	/* basic machine hardware */
-	MC68HC11A1(config, m_maincpu, 12'000'000); // unknown clock
+	MC68HC11A1(config, m_maincpu, XTAL::u(12'000'000)); // unknown clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &ice_bozopail_state::ice_bozo_map);
 	m_maincpu->in_pa_callback().set(FUNC(ice_bozopail_state::pa_r));
 	m_maincpu->in_pe_callback().set_ioport("COINS");

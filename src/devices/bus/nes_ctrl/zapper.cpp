@@ -48,7 +48,7 @@ INPUT_CHANGED_MEMBER(nes_zapper_device::trigger)
 
 void nes_zapper_device::device_add_mconfig(machine_config &config)
 {
-	NES_ZAPPER_SENSOR(config, m_sensor, 0);
+	NES_ZAPPER_SENSOR(config, m_sensor);
 	if (m_port != nullptr)
 		m_sensor->set_screen_tag(m_port->m_screen);
 }
@@ -62,7 +62,7 @@ void nes_zapper_device::device_add_mconfig(machine_config &config)
 //  constructor
 //-------------------------------------------------
 
-nes_zapper_device::nes_zapper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+nes_zapper_device::nes_zapper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NES_ZAPPER, tag, owner, clock)
 	, device_nes_control_port_interface(mconfig, *this)
 	, m_sensor(*this, "sensor")

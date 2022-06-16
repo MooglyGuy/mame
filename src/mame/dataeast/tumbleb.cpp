@@ -2140,7 +2140,7 @@ MACHINE_RESET_MEMBER(tumbleb_state,tumbleb)
 void tumbleb_state::tumblepb(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 14000000);
+	M68000(config, m_maincpu, XTAL::u(14000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &tumbleb_state::tumblepopb_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(tumbleb_state::irq6_line_hold));
 
@@ -2156,7 +2156,7 @@ void tumbleb_state::tumblepb(machine_config &config)
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_tumblepb));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_tumbleb_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_tumbleb_spr);
 	m_sprgen->set_is_bootleg(true);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_tumbleb);
@@ -2167,7 +2167,7 @@ void tumbleb_state::tumblepb(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 8000000/10, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.70);
+	OKIM6295(config, m_oki, XTAL::u(8000000)/10, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.70);
 }
 
 void tumbleb_state::tumblepba(machine_config &config)
@@ -2179,7 +2179,7 @@ void tumbleb_state::tumblepba(machine_config &config)
 void tumbleb_state::tumbleb2(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 14000000);
+	M68000(config, m_maincpu, XTAL::u(14000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &tumbleb_state::tumblepopb_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(tumbleb_state::tumbleb2_interrupt));
 
@@ -2195,7 +2195,7 @@ void tumbleb_state::tumbleb2(machine_config &config)
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_tumblepb));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_tumbleb_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_tumbleb_spr);
 	m_sprgen->set_is_bootleg(true);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_tumbleb);
@@ -2206,7 +2206,7 @@ void tumbleb_state::tumbleb2(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 8000000/10, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.70);
+	OKIM6295(config, m_oki, XTAL::u(8000000)/10, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.70);
 }
 
 void tumbleb_pic_state::funkyjetb(machine_config &config)
@@ -2251,7 +2251,7 @@ void tumbleb_state::jumpkids(machine_config &config) // OSCs: 12MHz, 8MHz & 14.3
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_jumpkids));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_tumbleb_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_tumbleb_spr);
 	m_sprgen->set_is_bootleg(true);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_tumbleb);
@@ -2286,7 +2286,7 @@ void tumbleb_state::fncywld(machine_config &config) // OSCs: 12MHz, 4MHz & 28.63
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_fncywld));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_fncywld_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_fncywld_spr);
 	m_sprgen->set_is_bootleg(true);
 	m_sprgen->set_transpen(15);
 
@@ -2322,7 +2322,7 @@ void tumbleb_state::magipur(machine_config &config) // OSCs: 12MHz, 4MHz, 28.636
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_fncywld));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_fncywld_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_fncywld_spr);
 	m_sprgen->set_is_bootleg(true);
 	m_sprgen->set_transpen(15);
 
@@ -2377,7 +2377,7 @@ void tumbleb_state::htchctch(machine_config &config) // OSCs: 15MHz, 4.096MHz
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_semicom));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_tumbleb_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_tumbleb_spr);
 	m_sprgen->set_is_bootleg(true);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_tumbleb);
@@ -2492,7 +2492,7 @@ void tumbleb_state::suprtrio(machine_config &config) // OSCs: 14MHz, 12MHz & 8MH
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_suprtrio));
 	m_screen->set_palette("palette");
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_tumbleb_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_tumbleb_spr);
 	m_sprgen->set_is_bootleg(true);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_suprtrio);
@@ -2528,7 +2528,7 @@ void tumbleb_state::pangpang(machine_config &config) // OSCs: 14MHz, 12MHz & 8MH
 	m_screen->set_screen_update(FUNC(tumbleb_state::screen_update_pangpang));
 	m_screen->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_tumbleb_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_tumbleb_spr);
 	m_sprgen->set_is_bootleg(true);
 
 	GFXDECODE(config, m_gfxdecode, "palette", gfx_tumbleb);

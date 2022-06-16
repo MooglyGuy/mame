@@ -446,8 +446,8 @@ void sb16_lle_device::device_add_mconfig(machine_config &config)
 		return (m_irq8 << 0) | (m_irq16 << 1) | (m_irq_midi << 2) | (0x8 << 4);
 	});
 
-	DAC_16BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, m_mixer, 0.5, 0); // unknown DAC
-	DAC_16BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, m_mixer, 0.5, 1); // unknown DAC
+	DAC_16BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, m_mixer, 0.5, 0); // unknown DAC
+	DAC_16BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, m_mixer, 0.5, 1); // unknown DAC
 
 	ymf262_device &ymf262(YMF262(config, "ymf262", XTAL(14'318'181)));
 	ymf262.add_route(0, m_mixer, 1.00, 0);
@@ -702,7 +702,7 @@ void sb16_lle_device::mpu401_w(offs_t offset, uint8_t data)
 
 }
 
-sb16_lle_device::sb16_lle_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sb16_lle_device::sb16_lle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_SB16, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_mixer(*this, "mixer"),

@@ -64,7 +64,7 @@ public:
 	};
 
 protected:
-	avr8_base_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, const device_type type, uint32_t address_mask, address_map_constructor internal_map);
+	avr8_base_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const device_type type, uint32_t address_mask, address_map_constructor internal_map);
 
 	typedef void (avr8_base_device::*op_func) (uint16_t op);
 
@@ -1100,7 +1100,7 @@ class atmega88_device : public avr8_device<3>
 {
 public:
 	// construction/destruction
-	atmega88_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atmega88_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	void atmega88_internal_map(address_map &map) ATTR_COLD;
 };
 
@@ -1110,7 +1110,7 @@ class atmega168_device : public avr8_device<3>
 {
 public:
 	// construction/destruction
-	atmega168_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atmega168_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void update_interrupt(int source) override;
 	void atmega168_internal_map(address_map &map) ATTR_COLD;
@@ -1122,7 +1122,7 @@ class atmega328_device : public avr8_device<3>
 {
 public:
 	// construction/destruction
-	atmega328_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atmega328_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void update_interrupt(int source) override;
 	void atmega328_internal_map(address_map &map) ATTR_COLD;
@@ -1134,7 +1134,7 @@ class atmega644_device : public avr8_device<3>
 {
 public:
 	// construction/destruction
-	atmega644_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atmega644_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void update_interrupt(int source) override;
 	void atmega644_internal_map(address_map &map) ATTR_COLD;
@@ -1146,7 +1146,7 @@ class atmega1280_device : public avr8_device<6>
 {
 public:
 	// construction/destruction
-	atmega1280_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atmega1280_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void update_interrupt(int source) override;
 	void atmega1280_internal_map(address_map &map) ATTR_COLD;
@@ -1158,7 +1158,7 @@ class atmega2560_device : public avr8_device<6>
 {
 public:
 	// construction/destruction
-	atmega2560_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atmega2560_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void update_interrupt(int source) override;
 	void atmega2560_internal_map(address_map &map) ATTR_COLD;
@@ -1170,7 +1170,7 @@ class attiny15_device : public avr8_device<2>
 {
 public:
 	// construction/destruction
-	attiny15_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	attiny15_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	void attiny15_internal_map(address_map &map) ATTR_COLD;
 };
 

@@ -55,7 +55,7 @@ enum scsi_cbp_mask : u32
 	SCSI_CBP_EOX     = 0x8000'0000,
 };
 
-hpc1_device::hpc1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hpc1_device::hpc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_HPC1, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_pbus("pbus", ENDIANNESS_BIG, 16, 20, -1, address_map_constructor(FUNC(hpc1_device::pbus_map), this))

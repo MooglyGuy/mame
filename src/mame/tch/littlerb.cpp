@@ -304,7 +304,7 @@ void littlerb_state::littlerb(machine_config &config)
 	M68000(config, m_maincpu, XTAL(16'000'000)/2); // 10MHz rated part, near 16Mhz XTAL
 	m_maincpu->set_addrmap(AS_PROGRAM, &littlerb_state::main);
 
-	INDER_VIDEO(config, m_indervid, 0); // XTAL(40'000'000)
+	INDER_VIDEO(config, m_indervid); // XTAL(40'000'000)
 
 	// TODO: not accurate - driven by XTAL(6'000'000)?
 	TIMER(config, "step_timer").configure_periodic(FUNC(littlerb_state::sound_step_cb), attotime::from_hz(7500/150));
@@ -312,8 +312,8 @@ void littlerb_state::littlerb(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	DAC_8BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
-	DAC_8BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
+	DAC_8BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
+	DAC_8BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
 }
 
 ROM_START( littlerb )

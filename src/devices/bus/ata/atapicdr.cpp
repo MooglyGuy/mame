@@ -12,19 +12,19 @@
 DEFINE_DEVICE_TYPE(ATAPI_CDROM,        atapi_cdrom_device,        "cdrom",        "ATAPI CD-ROM")
 DEFINE_DEVICE_TYPE(ATAPI_DVDROM,       atapi_dvdrom_device,       "dvdrom",       "ATAPI CD/DVD-ROM")
 
-atapi_cdrom_device::atapi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+atapi_cdrom_device::atapi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	atapi_cdrom_device(mconfig, ATAPI_CDROM, tag, owner, clock)
 {
 }
 
-atapi_cdrom_device::atapi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+atapi_cdrom_device::atapi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	atapi_hle_device(mconfig, type, tag, owner, clock),
 	device_ata_interface(mconfig, *this),
 	m_ultra_dma_mode(0)
 {
 }
 
-atapi_dvdrom_device::atapi_dvdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+atapi_dvdrom_device::atapi_dvdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	atapi_cdrom_device(mconfig, ATAPI_DVDROM, tag, owner, clock)
 {
 }

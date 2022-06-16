@@ -230,7 +230,7 @@ ioport_constructor archimedes_keyboard_device::device_input_ports() const
 //  archimedes_keyboard_device - constructor
 //-------------------------------------------------
 
-archimedes_keyboard_device::archimedes_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+archimedes_keyboard_device::archimedes_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ARCHIMEDES_KEYBOARD, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_kout(*this)

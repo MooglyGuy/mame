@@ -612,7 +612,7 @@ void cops_state::base(machine_config &config)
 {
 	M6502(config, m_maincpu, MAIN_CLOCK/2/2); // fed through two dividers
 
-	SONY_LDP1450HLE(config, m_ld, 0);
+	SONY_LDP1450HLE(config, m_ld);
 	m_ld->set_screen("screen");
 	m_ld->set_overlay(256, 256, FUNC(cops_state::screen_update));
 	m_ld->add_route(0, "speaker", 0.50, 0);

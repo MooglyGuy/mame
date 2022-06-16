@@ -12,11 +12,11 @@ std::unique_ptr<util::disasm_interface> m68000_device::create_disassembler()
 	return std::make_unique<m68k_disassembler>(m68k_disassembler::TYPE_68000);
 }
 
-m68000_device::m68000_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) : m68000_device(mconfig, M68000, tag, owner, clock)
+m68000_device::m68000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : m68000_device(mconfig, M68000, tag, owner, clock)
 {
 }
 
-m68000_device::m68000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+m68000_device::m68000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: m68000_base_device(mconfig, type, tag, owner, clock),
 	  m_cmpild_instr_callback(*this),
 	  m_rte_instr_callback(*this),

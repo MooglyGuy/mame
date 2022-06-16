@@ -117,7 +117,7 @@ void i82371sb_isa_device::device_add_mconfig(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 0.50);
 
-	ISA16(config, m_isabus, 0);
+	ISA16(config, m_isabus);
 	m_isabus->irq3_callback().set(FUNC(i82371sb_isa_device::pc_irq3_w));
 	m_isabus->irq4_callback().set(FUNC(i82371sb_isa_device::pc_irq4_w));
 	m_isabus->irq5_callback().set(FUNC(i82371sb_isa_device::pc_irq5_w));
@@ -139,7 +139,7 @@ void i82371sb_isa_device::device_add_mconfig(machine_config &config)
 	m_isabus->iochck_callback().set(FUNC(i82371sb_isa_device::iochck_w));
 }
 
-i82371sb_isa_device::i82371sb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82371sb_isa_device::i82371sb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: i82371sb_isa_device(mconfig, I82371SB_ISA, tag, owner, clock)
 {
 	set_ids(0x80867000, 0x03, 0x060100, 0x00000000);
@@ -1025,7 +1025,7 @@ void i82371sb_ide_device::device_config_complete()
 	pci_device::device_config_complete();
 }
 
-i82371sb_ide_device::i82371sb_ide_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+i82371sb_ide_device::i82371sb_ide_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, type, tag, owner, clock)
 	, latency_timer(0)
 	, bmiba(1)

@@ -564,11 +564,11 @@ GFXDECODE_END
 void cloak_state::cloak(machine_config &config)
 {
 	// basic machine hardware
-	M6502(config, m_maincpu, 1'000'000);     // 1 MHz ????
+	M6502(config, m_maincpu, XTAL::u(1'000'000));     // 1 MHz ????
 	m_maincpu->set_addrmap(AS_PROGRAM, &cloak_state::master_map);
 	m_maincpu->set_periodic_int(FUNC(cloak_state::irq0_line_hold), attotime::from_hz(4*60));
 
-	M6502(config, m_slave, 1'250'000);       // 1.25 MHz ????
+	M6502(config, m_slave, XTAL::u(1'250'000));       // 1.25 MHz ????
 	m_slave->set_addrmap(AS_PROGRAM, &cloak_state::slave_map);
 	m_slave->set_periodic_int(FUNC(cloak_state::irq0_line_hold), attotime::from_hz(2*60));
 

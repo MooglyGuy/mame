@@ -557,12 +557,12 @@ GFXDECODE_END
 
 void ssingles_state::ssingles(machine_config &config)
 {
-	Z80(config, m_maincpu, 4'000'000);         // ? MHz
+	Z80(config, m_maincpu, XTAL::u(4'000'000));         // ? MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &ssingles_state::ssingles_map);
 	m_maincpu->set_addrmap(AS_IO, &ssingles_state::ssingles_io_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(4'000'000, 256, 0, 256, 256, 0, 256);   // temporary, CRTC will configure screen
+	screen.set_raw(XTAL::u(4'000'000), 256, 0, 256, 256, 0, 256);   // temporary, CRTC will configure screen
 	screen.set_screen_update("crtc", FUNC(mc6845_device::screen_update));
 
 	PALETTE(config, "palette").set_entries(4); // guess
@@ -579,8 +579,8 @@ void ssingles_state::ssingles(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	AY8910(config, "ay1", 1'500'000).add_route(ALL_OUTPUTS, "mono", 0.5); // ? MHz
-	AY8910(config, "ay2", 1'500'000).add_route(ALL_OUTPUTS, "mono", 0.5); // ? MHz
+	AY8910(config, "ay1", XTAL::u(1'500'000)).add_route(ALL_OUTPUTS, "mono", 0.5); // ? MHz
+	AY8910(config, "ay2", XTAL::u(1'500'000)).add_route(ALL_OUTPUTS, "mono", 0.5); // ? MHz
 }
 
 void ssingles_state::atamanot_irq(int state)

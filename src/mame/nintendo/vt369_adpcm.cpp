@@ -6,7 +6,7 @@
 
 DEFINE_DEVICE_TYPE(VT369_ADPCM_DECODER, vt369_adpcm_decoder_device, "vt369adpcm", "VRT VT369 ADPCM Decoder")
 
-vt369_adpcm_decoder_device::vt369_adpcm_decoder_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+vt369_adpcm_decoder_device::vt369_adpcm_decoder_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, VT369_ADPCM_DECODER, tag, owner, clock)
 {
 }

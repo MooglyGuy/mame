@@ -1995,7 +1995,7 @@ void lastmisn_state::lastmisn(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_shackled);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 
 	MCFG_VIDEO_START_OVERRIDE(lastmisn_state,lastmisn)
 
@@ -2047,7 +2047,7 @@ void lastmisn_state::shackled(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_KARNOVSPRITES(config, m_spritegen_krn, 0, m_palette, gfx_shackled_spr);
+	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_shackled_spr);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2055,7 +2055,7 @@ void lastmisn_state::shackled(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_shackled);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 
 	MCFG_VIDEO_START_OVERRIDE(lastmisn_state,shackled)
 
@@ -2083,10 +2083,10 @@ void lastmisn_state::shackled(machine_config &config)
 void gondo_state::gondo(machine_config &config)
 {
 	// basic machine hardware
-	HD6309E(config, m_maincpu, 3'000'000); // HD63C09EP
+	HD6309E(config, m_maincpu, XTAL::u(3'000'000)); // HD63C09EP
 	m_maincpu->set_addrmap(AS_PROGRAM, &gondo_state::gondo_map);
 
-	R65C02(config, m_audiocpu, 1'500'000);
+	R65C02(config, m_audiocpu, XTAL::u(1'500'000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &gondo_state::oscar_s_map); // NMIs are caused by the main CPU
 
 	I8751(config, m_mcu, 8_MHz_XTAL);
@@ -2102,8 +2102,12 @@ void gondo_state::gondo(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_KARNOVSPRITES(config, m_spritegen_krn, 0, m_palette, gfx_gondo_spr);
+	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_gondo_spr);
 	m_spritegen_krn->set_colpri_callback(FUNC(gondo_state::gondo_colpri_cb));
+=======
+	DECO_KARNOVSPRITES(config, m_spritegen_krn);
+	m_spritegen_krn->set_colpri_callback(FUNC(dec8_state::gondo_colpri_cb));
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2116,7 +2120,7 @@ void gondo_state::gondo(machine_config &config)
 	INPUT_MERGER_ALL_HIGH(config, m_nmigate).output_handler().set_inputline(m_maincpu, INPUT_LINE_NMI);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_gondo);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
@@ -2126,14 +2130,14 @@ void gondo_state::gondo(machine_config &config)
 	INPUT_MERGER_ANY_HIGH(config, m_soundirq);
 	m_soundirq->output_handler().set_inputline(m_audiocpu, m6502_device::IRQ_LINE);
 
-	ym2203_device &ym1(YM2203(config, "ym1", 1'500'000));
+	ym2203_device &ym1(YM2203(config, "ym1", XTAL::u(1'500'000)));
 	ym1.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<0>));
 	ym1.add_route(0, "mono", 0.20);
 	ym1.add_route(1, "mono", 0.20);
 	ym1.add_route(2, "mono", 0.20);
 	ym1.add_route(3, "mono", 0.40);
 
-	ym3526_device &ym2(YM3526(config, "ym2", 3'000'000));
+	ym3526_device &ym2(YM3526(config, "ym2", XTAL::u(3'000'000)));
 	ym2.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<1>));
 	ym2.add_route(ALL_OUTPUTS, "mono", 0.50);
 }
@@ -2141,10 +2145,10 @@ void gondo_state::gondo(machine_config &config)
 void ghostb_state::garyoret(machine_config &config)
 {
 	// basic machine hardware
-	HD6309E(config, m_maincpu, 3'000'000); // HD63C09EP
+	HD6309E(config, m_maincpu, XTAL::u(3'000'000)); // HD63C09EP
 	m_maincpu->set_addrmap(AS_PROGRAM, &ghostb_state::garyoret_map);
 
-	R65C02(config, m_audiocpu, 1'500'000);
+	R65C02(config, m_audiocpu, XTAL::u(1'500'000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &ghostb_state::oscar_s_map); // NMIs are caused by the main CPU
 
 	I8751(config, m_mcu, 8_MHz_XTAL);
@@ -2160,7 +2164,7 @@ void ghostb_state::garyoret(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_KARNOVSPRITES(config, m_spritegen_krn, 0, m_palette, gfx_gondo_spr);
+	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_gondo_spr);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2173,7 +2177,7 @@ void ghostb_state::garyoret(machine_config &config)
 	INPUT_MERGER_ALL_HIGH(config, m_nmigate).output_handler().set_inputline(m_maincpu, INPUT_LINE_NMI);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_gondo);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 
 	MCFG_VIDEO_START_OVERRIDE(ghostb_state,garyoret)
 
@@ -2185,14 +2189,14 @@ void ghostb_state::garyoret(machine_config &config)
 	INPUT_MERGER_ANY_HIGH(config, m_soundirq);
 	m_soundirq->output_handler().set_inputline(m_audiocpu, m6502_device::IRQ_LINE);
 
-	ym2203_device &ym1(YM2203(config, "ym1", 1'500'000));
+	ym2203_device &ym1(YM2203(config, "ym1", XTAL::u(1'500'000)));
 	ym1.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<0>));
 	ym1.add_route(0, "mono", 0.20);
 	ym1.add_route(1, "mono", 0.20);
 	ym1.add_route(2, "mono", 0.20);
 	ym1.add_route(3, "mono", 0.40);
 
-	ym3526_device &ym2(YM3526(config, "ym2", 3'000'000));
+	ym3526_device &ym2(YM3526(config, "ym2", XTAL::u(3'000'000)));
 	ym2.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<1>));
 	ym2.add_route(ALL_OUTPUTS, "mono", 0.80);
 }
@@ -2219,11 +2223,11 @@ void ghostb_state::ghostb(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_BAC06(config, m_tilegen[0], 0);
+	DECO_BAC06(config, m_tilegen[0]);
 	m_tilegen[0]->set_gfx_region_wide(1, 1, 0);
 	m_tilegen[0]->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_KARNOVSPRITES(config, m_spritegen_krn, 0, m_palette, gfx_shackled_spr);
+	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_shackled_spr);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2234,7 +2238,7 @@ void ghostb_state::ghostb(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_ghostb);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 	m_palette->set_prom_region("proms");
 	m_palette->set_init(m_palette, FUNC(deco_rmc3_device::palette_init_proms));
 	MCFG_VIDEO_START_OVERRIDE(ghostb_state,ghostb)
@@ -2263,7 +2267,7 @@ void ghostb_state::meikyuh(machine_config &config)
 {
 	ghostb(config);
 
-	R65C02(config.replace(), m_audiocpu, 1'500'000);
+	R65C02(config.replace(), m_audiocpu, XTAL::u(1'500'000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &ghostb_state::dec8_s_map);
 }
 
@@ -2295,7 +2299,7 @@ void csilver_state::csilver(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_KARNOVSPRITES(config, m_spritegen_krn, 0, m_palette, gfx_shackled_spr);
+	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_shackled_spr);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2304,7 +2308,7 @@ void csilver_state::csilver(machine_config &config)
 	m_screen->screen_vblank().set_inputline(m_subcpu, INPUT_LINE_NMI);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_shackled);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 
 	MCFG_VIDEO_START_OVERRIDE(csilver_state,lastmisn)
 
@@ -2348,12 +2352,12 @@ void oscar_state::oscar(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_BAC06(config, m_tilegen[0], 0);
+	DECO_BAC06(config, m_tilegen[0]);
 	m_tilegen[0]->set_gfx_region_wide(1, 1, 0);
 	m_tilegen[0]->set_gfxdecode_tag(m_gfxdecode);
 	m_tilegen[0]->set_tile_callback(FUNC(oscar_state::oscar_tile_cb));
 
-	DECO_MXC06(config, m_spritegen_mxc, 0, m_palette, gfx_oscar_spr);
+	DECO_MXC06(config, m_spritegen_mxc, m_palette, gfx_oscar_spr);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2361,7 +2365,7 @@ void oscar_state::oscar(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_oscar);
-	DECO_RMC3(config, m_palette, 0, 1024); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 1024); // xxxxBBBBGGGGRRRR with custom weighting
 
 	MCFG_VIDEO_START_OVERRIDE(oscar_state,oscar)
 
@@ -2398,10 +2402,10 @@ void oscar_state::oscarbl(machine_config &config)
 void srdarwin_state::srdarwin(machine_config &config)
 {
 	// basic machine hardware
-	MC6809E(config, m_maincpu, 1'500'000); // MC68A09EP or HD63?09EP
+	MC6809E(config, m_maincpu, XTAL::u(1'500'000)); // MC68A09EP or HD63?09EP
 	m_maincpu->set_addrmap(AS_PROGRAM, &srdarwin_state::main_map);
 
-	DECO_222(config, m_audiocpu, 1'500'000);
+	DECO_222(config, m_audiocpu, XTAL::u(1'500'000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &srdarwin_state::dec8_s_map); // NMIs are caused by the main CPU
 
 	I8751(config, m_mcu, 8_MHz_XTAL); // unknown frequency
@@ -2422,7 +2426,7 @@ void srdarwin_state::srdarwin(machine_config &config)
 	m_screen->screen_vblank().set_inputline(m_maincpu, INPUT_LINE_NMI);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_srdarwin);
-	DECO_RMC3(config, m_palette, 0, 144); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 144); // xxxxBBBBGGGGRRRR with custom weighting
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
@@ -2433,14 +2437,14 @@ void srdarwin_state::srdarwin(machine_config &config)
 	INPUT_MERGER_ANY_HIGH(config, m_soundirq);
 	m_soundirq->output_handler().set_inputline(m_audiocpu, m6502_device::IRQ_LINE);
 
-	ym2203_device &ym1(YM2203(config, "ym1", 1'500'000));
+	ym2203_device &ym1(YM2203(config, "ym1", XTAL::u(1'500'000)));
 	ym1.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<0>));
 	ym1.add_route(0, "mono", 0.20);
 	ym1.add_route(1, "mono", 0.20);
 	ym1.add_route(2, "mono", 0.20);
 	ym1.add_route(3, "mono", 0.40);
 
-	ym3812_device &ym2(YM3812(config, "ym2", 3'000'000));
+	ym3812_device &ym2(YM3812(config, "ym2", XTAL::u(3'000'000)));
 	ym2.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<1>));
 	ym2.add_route(ALL_OUTPUTS, "mono", 0.80);
 }
@@ -2458,24 +2462,24 @@ void srdarwin_state::srdarwinb(machine_config &config)
 void oscar_state::cobracom(machine_config &config)
 {
 	// basic machine hardware
-	MC6809E(config, m_maincpu, 1'500'000); // MC68B09EP
+	MC6809E(config, m_maincpu, XTAL::u(1'500'000)); // MC68B09EP
 	m_maincpu->set_addrmap(AS_PROGRAM, &oscar_state::cobra_map);
 
-	R65C02(config, m_audiocpu, 1'500'000);
+	R65C02(config, m_audiocpu, XTAL::u(1'500'000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &oscar_state::dec8_s_map); // NMIs are caused by the main CPU
 
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_BAC06(config, m_tilegen[0], 0);
+	DECO_BAC06(config, m_tilegen[0]);
 	m_tilegen[0]->set_gfx_region_wide(1, 1, 0);
 	m_tilegen[0]->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_BAC06(config, m_tilegen[1], 0);
+	DECO_BAC06(config, m_tilegen[1]);
 	m_tilegen[1]->set_gfx_region_wide(2, 2, 0);
 	m_tilegen[1]->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_MXC06(config, m_spritegen_mxc, 0, m_palette, gfx_cobracom_spr);
+	DECO_MXC06(config, m_spritegen_mxc, m_palette, gfx_cobracom_spr);
 	m_spritegen_mxc->set_colpri_callback(FUNC(oscar_state::cobracom_colpri_cb));
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
@@ -2485,7 +2489,7 @@ void oscar_state::cobracom(machine_config &config)
 	m_screen->screen_vblank().set_inputline(m_maincpu, INPUT_LINE_NMI);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_cobracom);
-	DECO_RMC3(config, m_palette, 0, 256); // xxxxBBBBGGGGRRRR with custom weighting
+	DECO_RMC3(config, m_palette, 256); // xxxxBBBBGGGGRRRR with custom weighting
 
 	MCFG_VIDEO_START_OVERRIDE(oscar_state,cobracom)
 
@@ -2498,14 +2502,14 @@ void oscar_state::cobracom(machine_config &config)
 	INPUT_MERGER_ANY_HIGH(config, m_soundirq);
 	m_soundirq->output_handler().set_inputline(m_audiocpu, m6502_device::IRQ_LINE);
 
-	ym2203_device &ym1(YM2203(config, "ym1", 1'500'000));
+	ym2203_device &ym1(YM2203(config, "ym1", XTAL::u(1'500'000)));
 	ym1.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<0>));
 	ym1.add_route(0, "mono", 0.20);
 	ym1.add_route(1, "mono", 0.20);
 	ym1.add_route(2, "mono", 0.20);
 	ym1.add_route(3, "mono", 0.40);
 
-	ym3812_device &ym2(YM3812(config, "ym2", 3'000'000));
+	ym3812_device &ym2(YM3812(config, "ym2", XTAL::u(3'000'000)));
 	ym2.irq_handler().set(m_soundirq, FUNC(input_merger_device::in_w<1>));
 	ym2.add_route(ALL_OUTPUTS, "mono", 0.80);
 }

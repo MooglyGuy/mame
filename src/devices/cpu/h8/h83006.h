@@ -27,7 +27,7 @@
 
 class h83006_device : public h8h_device {
 public:
-	h83006_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83006_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_port4()  { return m_read_port [PORT_4].bind(); }
 	auto write_port4() { return m_write_port[PORT_4].bind(); }
@@ -50,7 +50,7 @@ public:
 	void syscr_w(u8 data);
 
 protected:
-	h83006_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 start);
+	h83006_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 start);
 
 	required_device<h8h_intc_device> m_intc;
 	required_device<h8_adc_device> m_adc;
@@ -91,7 +91,7 @@ protected:
 
 class h83007_device : public h83006_device {
 public:
-	h83007_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83007_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(H83006, h83006_device)

@@ -386,12 +386,12 @@ void rockrage_state::rockrage(machine_config &config)
 	screen.set_palette(m_palette);
 	screen.screen_vblank().set(FUNC(rockrage_state::vblank_irq));
 
-	K007342(config, m_k007342, 0, m_palette, gfx_rockrage_tiles);
+	K007342(config, m_k007342, m_palette, gfx_rockrage_tiles);
 	m_k007342->set_tile_callback(FUNC(rockrage_state::tile_callback));
 	m_k007342->flipscreen_cb().set(m_k007420, FUNC(k007420_device::set_flipscreen));
 	m_k007342->sprite_wrap_y_cb().set(m_k007420, FUNC(k007420_device::set_wrap_y));
 
-	K007420(config, m_k007420, 0, m_palette, gfx_rockrage_spr);
+	K007420(config, m_k007420, m_palette, gfx_rockrage_spr);
 	m_k007420->set_bank_limit(0x3ff);
 	m_k007420->set_sprite_callback(FUNC(rockrage_state::sprite_callback));
 
@@ -404,9 +404,9 @@ void rockrage_state::rockrage(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch").data_pending_callback().set_inputline(m_audiocpu, M6809_IRQ_LINE);
 
-	YM2151(config, "ymsnd", 3'579'545).add_route(0, "speaker", 0.30, 0).add_route(1, "speaker", 0.30, 1);
+	YM2151(config, "ymsnd", XTAL::u(3'579'545)).add_route(0, "speaker", 0.30, 0).add_route(1, "speaker", 0.30, 1);
 
-	VLM5030(config, m_vlm, 3'579'545);
+	VLM5030(config, m_vlm, XTAL::u(3'579'545));
 	m_vlm->set_addrmap(0, &rockrage_state::vlm_map);
 	m_vlm->add_route(ALL_OUTPUTS, "speaker", 0.60, 0);
 	m_vlm->add_route(ALL_OUTPUTS, "speaker", 0.60, 1);

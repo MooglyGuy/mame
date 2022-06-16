@@ -571,7 +571,7 @@ void spdodgeb_state::spdodgeb(machine_config &config)
 	MC6809(config, m_audiocpu, XTAL(12'000'000) / 2); // HD68A09P (1.5MHz internally)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &spdodgeb_state::sound_map);
 
-	hd63701y0_cpu_device &mcu(HD63701Y0(config, m_mcu, 4'000'000)); // unknown clock
+	hd63701y0_cpu_device &mcu(HD63701Y0(config, m_mcu, XTAL::u(4'000'000))); // unknown clock
 	mcu.set_addrmap(AS_PROGRAM, &spdodgeb_state::mcu_map);
 	mcu.in_p2_cb().set_ioport("P1");
 	mcu.in_p6_cb().set_ioport("P2");
@@ -600,13 +600,13 @@ void spdodgeb_state::spdodgeb(machine_config &config)
 	ymsnd.add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	ymsnd.add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
-	MSM5205(config, m_msm[0], 384000);
+	MSM5205(config, m_msm[0], XTAL::u(384000));
 	m_msm[0]->vck_legacy_callback().set(FUNC(spdodgeb_state::adpcm_int<0>));  // interrupt function
 	m_msm[0]->set_prescaler_selector(msm5205_device::S48_4B);  // 8kHz?
 	m_msm[0]->add_route(ALL_OUTPUTS, "speaker", 0.50, 0);
 	m_msm[0]->add_route(ALL_OUTPUTS, "speaker", 0.50, 1);
 
-	MSM5205(config, m_msm[1], 384000);
+	MSM5205(config, m_msm[1], XTAL::u(384000));
 	m_msm[1]->vck_legacy_callback().set(FUNC(spdodgeb_state::adpcm_int<1>));  // interrupt function
 	m_msm[1]->set_prescaler_selector(msm5205_device::S48_4B);  // 8kHz?
 	m_msm[1]->add_route(ALL_OUTPUTS, "speaker", 0.50, 0);

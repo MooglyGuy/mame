@@ -25,7 +25,7 @@ class serial_io_device : public device_t, public device_rc2014_card_interface
 {
 public:
 	// construction/destruction
-	serial_io_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	serial_io_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -43,7 +43,7 @@ private:
 	required_device<acia6850_device> m_acia;
 };
 
-serial_io_device::serial_io_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+serial_io_device::serial_io_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, RC2014_SERIAL_IO, tag, owner, clock)
 	, device_rc2014_card_interface(mconfig, *this)
 	, m_acia(*this, "acia")
@@ -73,7 +73,7 @@ DEVICE_INPUT_DEFAULTS_END
 
 void serial_io_device::device_add_mconfig(machine_config &config)
 {
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set("rs232", FUNC(rs232_port_device::write_txd));
 	m_acia->txd_handler().append(FUNC(serial_io_device::tx_w));
 	m_acia->rts_handler().set("rs232", FUNC(rs232_port_device::write_rts));
@@ -98,7 +98,7 @@ class dual_serial_base : public device_t
 {
 protected:
 	// construction/destruction
-	dual_serial_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	dual_serial_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -118,7 +118,7 @@ protected:
 	required_device<z80sio_device> m_sio;
 };
 
-dual_serial_base::dual_serial_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+dual_serial_base::dual_serial_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_clk_portb(0)
 	, m_portb(*this, "JP1")
@@ -137,7 +137,7 @@ void dual_serial_base::device_reset()
 
 void dual_serial_base::device_add_mconfig(machine_config &config)
 {
-	Z80SIO(config, m_sio, 0);
+	Z80SIO(config, m_sio);
 	m_sio->out_txda_callback().set("rs232a", FUNC(rs232_port_device::write_txd));
 	m_sio->out_txda_callback().append(FUNC(dual_serial_base::tx_w));
 	m_sio->out_rtsa_callback().set("rs232a", FUNC(rs232_port_device::write_rts));
@@ -178,7 +178,7 @@ class dual_serial_device : public dual_serial_base, public device_rc2014_ext_car
 {
 public:
 	// construction/destruction
-	dual_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dual_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -196,7 +196,7 @@ protected:
 	virtual void card_rx2_w(int state) override  { m_sio->rxb_w(state); }
 };
 
-dual_serial_device::dual_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+dual_serial_device::dual_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: dual_serial_base(mconfig, RC2014_DUAL_SERIAL, tag, owner, clock)
 	, device_rc2014_ext_card_interface(mconfig, *this)
 {
@@ -225,7 +225,7 @@ class dual_serial_device_40pin : public dual_serial_base, public device_rc2014_c
 {
 public:
 	// construction/destruction
-	dual_serial_device_40pin(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dual_serial_device_40pin(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -241,7 +241,7 @@ protected:
 	virtual void card_rx_w(int state) override  { m_sio->rxa_w(state); }
 };
 
-dual_serial_device_40pin::dual_serial_device_40pin(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+dual_serial_device_40pin::dual_serial_device_40pin(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: dual_serial_base(mconfig, RC2014_DUAL_SERIAL_40P, tag, owner, clock)
 	, device_rc2014_card_interface(mconfig, *this)
 {

@@ -837,7 +837,7 @@ void gpl162xx_lcdtype_state::screen_vblank(int state)
 void gpl162xx_lcdtype_state::gpl162xx_lcdtype(machine_config &config)
 {
 
-	UNSP_20(config, m_maincpu, 96000000); // unknown CPU, unsp20 based, 96Mhz is listed as the maximum for most unSP2.0 chips, and appears correct here
+	UNSP_20(config, m_maincpu, XTAL::u(96000000)); // unknown CPU, unsp20 based, 96Mhz is listed as the maximum for most unSP2.0 chips, and appears correct here
 	m_maincpu->set_addrmap(AS_PROGRAM, &gpl162xx_lcdtype_state::map);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
@@ -850,7 +850,7 @@ void gpl162xx_lcdtype_state::gpl162xx_lcdtype(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 0x8000);
 
-	BL_HANDHELDS_MENUCONTROL(config, m_menucontrol, 0);
+	BL_HANDHELDS_MENUCONTROL(config, m_menucontrol);
 	m_menucontrol->set_is_unsp_type_hack();
 
 }

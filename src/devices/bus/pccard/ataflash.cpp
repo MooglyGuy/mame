@@ -3,12 +3,12 @@
 #include "emu.h"
 #include "ataflash.h"
 
-ata_flash_pccard_device::ata_flash_pccard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ata_flash_pccard_device::ata_flash_pccard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ata_flash_pccard_device(mconfig, ATA_FLASH_PCCARD, tag, owner, clock)
 {
 }
 
-ata_flash_pccard_device::ata_flash_pccard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ata_flash_pccard_device::ata_flash_pccard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: cf_device_base(mconfig, type, tag, owner, clock)
 	, device_pccard_interface(mconfig, *this)
 {
@@ -143,7 +143,7 @@ void ata_flash_pccard_device::ide_build_identify_device()
 }
 
 
-taito_pccard1_device::taito_pccard1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+taito_pccard1_device::taito_pccard1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	ata_flash_pccard_device(mconfig, TAITO_PCCARD1, tag, owner, clock),
 	m_locked(0)
 {
@@ -230,7 +230,7 @@ bool taito_pccard1_device::is_ready()
 	return m_locked == 0;
 }
 
-taito_pccard2_device::taito_pccard2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+taito_pccard2_device::taito_pccard2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	ata_flash_pccard_device(mconfig, TAITO_PCCARD2, tag, owner, clock),
 	m_locked(false)
 {
@@ -326,7 +326,7 @@ bool taito_pccard2_device::is_ready()
 }
 
 
-taito_compact_flash_device::taito_compact_flash_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+taito_compact_flash_device::taito_compact_flash_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	ata_flash_pccard_device(mconfig, TAITO_COMPACT_FLASH, tag, owner, clock),
 	m_locked(false)
 {

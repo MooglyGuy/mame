@@ -31,7 +31,7 @@ DEFINE_DEVICE_TYPE(MM74C923, mm74c923_device, "mm74c923", "MM74C923 20-Key Encod
 //  mm74c922_device - constructor
 //-------------------------------------------------
 
-mm74c922_device::mm74c922_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int max_y) :
+mm74c922_device::mm74c922_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int max_y) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_write_da(*this), m_read_x(*this, (1 << max_y) - 1), m_tristate_data(*this, (1 << max_y) - 1),
 	m_cap_osc(0), m_cap_debounce(0),
@@ -45,12 +45,12 @@ mm74c922_device::mm74c922_device(const machine_config &mconfig, device_type type
 {
 }
 
-mm74c922_device::mm74c922_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mm74c922_device::mm74c922_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mm74c922_device(mconfig, MM74C922, tag, owner, clock, 4)
 {
 }
 
-mm74c923_device::mm74c923_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mm74c923_device::mm74c923_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mm74c922_device(mconfig, MM74C923, tag, owner, clock, 5)
 {
 }

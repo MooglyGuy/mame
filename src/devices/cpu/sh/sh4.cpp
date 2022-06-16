@@ -884,7 +884,7 @@ void sh3_base_device::udi_7709s_map(address_map& map)
 	map(0x4000200, 0x4000201).rw(FUNC(sh3_base_device::sdir_r), FUNC(sh3_base_device::sdir_w));
 }
 
-sh34_base_device::sh34_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness, address_map_constructor internal)
+sh34_base_device::sh34_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness, address_map_constructor internal)
 	: sh_common_execution(mconfig, type, tag, owner, clock, endianness, internal)
 	, m_program_config("program", endianness, 64, 32, 0, internal)
 	, m_io_config("io", endianness, 64, 8)
@@ -930,7 +930,7 @@ bool sh34_base_device::memory_translate(int spacenum, int intention, offs_t& add
 	}
 }
 
-sh3_base_device::sh3_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness)
+sh3_base_device::sh3_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness)
 	: sh34_base_device(mconfig, type, tag, owner, clock, endianness, address_map_constructor(FUNC(sh3_base_device::sh3_internal_map), this))
 {
 	m_cpu_type = CPU_TYPE_SH3;
@@ -938,7 +938,7 @@ sh3_base_device::sh3_base_device(const machine_config &mconfig, device_type type
 }
 
 
-sh4_base_device::sh4_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness)
+sh4_base_device::sh4_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness)
 	: sh34_base_device(mconfig, type, tag, owner, clock, endianness, address_map_constructor(FUNC(sh4_base_device::sh4_internal_map), this))
 {
 	m_cpu_type = CPU_TYPE_SH4;
@@ -946,59 +946,59 @@ sh4_base_device::sh4_base_device(const machine_config &mconfig, device_type type
 }
 
 
-sh3_device::sh3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness)
+sh3_device::sh3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness)
 	: sh3_base_device(mconfig, SH3, tag, owner, clock, endianness)
 {
 }
 
-sh7708s_device::sh7708s_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7708s_device::sh7708s_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh3_base_device(mconfig, SH7708S, tag, owner, clock, endianness)
 {
 }
 
-sh7709_device::sh7709_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness)
+sh7709_device::sh7709_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness)
 	: sh3_base_device(mconfig, SH7709, tag, owner, clock, endianness)
 {
 }
 
-sh7709s_device::sh7709s_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7709s_device::sh7709s_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh3_base_device(mconfig, SH7709S, tag, owner, clock, endianness)
 {
 }
 
 
-sh4_device::sh4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness)
+sh4_device::sh4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH4, tag, owner, clock, endianness)
 {
 }
 
-sh7091_device::sh7091_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7091_device::sh7091_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH7091, tag, owner, clock, endianness)
 {
 }
 
-sh7750_device::sh7750_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7750_device::sh7750_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH7750, tag, owner, clock, endianness)
 {
 }
 
-sh7750s_device::sh7750s_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7750s_device::sh7750s_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH7750S, tag, owner, clock, endianness)
 {
 }
 
-sh7750r_device::sh7750r_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7750r_device::sh7750r_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH7750R, tag, owner, clock, endianness)
 {
 }
 
-sh7751_device::sh7751_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7751_device::sh7751_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH7751, tag, owner, clock, endianness)
 {
 	m_pciconf0 = 0x35051054;
 }
 
-sh7751r_device::sh7751r_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness)
+sh7751r_device::sh7751r_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness)
 	: sh4_base_device(mconfig, SH7751R, tag, owner, clock, endianness)
 {
 	m_pciconf0 = 0x350e1054;

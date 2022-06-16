@@ -1011,7 +1011,7 @@ INTERRUPT_GEN_MEMBER(taitopjc_state::vbi)
 
 void taitopjc_state::taitopjc(machine_config &config)
 {
-	PPC603E(config, m_maincpu, 100000000);
+	PPC603E(config, m_maincpu, XTAL::u(100000000));
 	m_maincpu->set_bus_frequency(XTAL(66'666'700)); // Multiplier 1.5, Bus = 66MHz, Core = 100MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &taitopjc_state::ppc603e_mem);
 
@@ -1052,7 +1052,7 @@ void taitopjc_state::taitopjc(machine_config &config)
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_888, 32768);
 	GFXDECODE(config, m_gfxdecode, m_palette, gfxdecode_device::empty);
 
-	TC0780FPA(config, m_tc0780fpa, 0);
+	TC0780FPA(config, m_tc0780fpa);
 }
 
 

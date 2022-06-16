@@ -28,7 +28,7 @@
 namespace {
 
 // overclocked to 8 * NTSC burst frequency
-#define MASTER_CLOCK 28618180
+#define MASTER_CLOCK XTAL::u(28618180)
 
 #define INTERLACED   0
 

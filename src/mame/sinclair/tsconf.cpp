@@ -298,7 +298,7 @@ void tsconf_state::tsconf(machine_config &config)
 	m_dma->out_sfile_callback().set(FUNC(tsconf_state::sfile_write16));
 	m_dma->on_ready_callback().set(FUNC(tsconf_state::dma_ready));
 
-	BETA_DISK(config, m_beta, 0);
+	BETA_DISK(config, m_beta);
 	SPEAKER(config, "speakers", 2).front();
 
 	config.device_remove("ay8912");

@@ -241,7 +241,7 @@ void kayproii_state::kayproii(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 950).add_route(ALL_OUTPUTS, "mono", 1.00); /* piezo-device needs to be measured */
+	BEEP(config, m_beep, XTAL::u(950)).add_route(ALL_OUTPUTS, "mono", 1.00); /* piezo-device needs to be measured */
 
 	/* devices */
 	QUICKLOAD(config, "quickload", "com,cpm", attotime::from_seconds(3)).set_load_callback(FUNC(kayproii_state::quickload_cb));
@@ -329,7 +329,7 @@ void kaypro84_state::kaypro484(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 950).add_route(ALL_OUTPUTS, "mono", 1.00); // piezo-device needs to be measured
+	BEEP(config, m_beep, XTAL::u(950)).add_route(ALL_OUTPUTS, "mono", 1.00); // piezo-device needs to be measured
 
 	/* devices */
 	MC6845(config, m_crtc, 18_MHz_XTAL / 8);

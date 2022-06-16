@@ -110,7 +110,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(VGA, vga_device, "vga", "VGA")
 
-vga_device::vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+vga_device::vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, device_palette_interface(mconfig, *this)
@@ -126,7 +126,7 @@ vga_device::vga_device(const machine_config &mconfig, device_type type, const ch
 	m_atc_space_config = address_space_config("attribute_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(vga_device::attribute_map), this));
 }
 
-vga_device::vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vga_device::vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vga_device(mconfig, VGA, tag, owner, clock)
 {
 }

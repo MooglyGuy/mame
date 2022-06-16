@@ -10,7 +10,7 @@
 
 DEFINE_DEVICE_TYPE(MEG, meg_device, "meg", "Multiple Effects Generator (HD62098 / XM309A00)")
 
-meg_device::meg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+meg_device::meg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MEG, tag, owner, clock)
 {
 }

@@ -349,7 +349,7 @@ void spirit76_state::machine_reset()
 void spirit76_state::spirit76(machine_config &config)
 {
 	/* basic machine hardware */
-	M6800(config, m_maincpu, 500000);
+	M6800(config, m_maincpu, XTAL::u(500000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &spirit76_state::maincpu_map);
 
 	TIMER(config, "irq").configure_periodic(FUNC(spirit76_state::irq), attotime::from_hz(1200));

@@ -34,7 +34,7 @@ public:
 
 protected:
 	// construction/destruction
-	trident_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	trident_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -163,7 +163,7 @@ private:
 class tgui9860_device : public trident_vga_device
 {
 public:
-	tgui9860_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tgui9860_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class tvga9000_device : public trident_vga_device
@@ -171,7 +171,7 @@ class tvga9000_device : public trident_vga_device
 public:
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
-	tvga9000_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tvga9000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void recompute_params() override;

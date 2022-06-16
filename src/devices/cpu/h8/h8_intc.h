@@ -17,7 +17,7 @@ class h8_device;
 
 class h8_intc_device : public device_t {
 public:
-	h8_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> h8_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu) :
 		h8_intc_device(mconfig, tag, owner)
 	{
@@ -61,7 +61,7 @@ protected:
 	u16 m_iscr;
 	int m_icr_filter, m_ipr_filter;
 
-	h8_intc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h8_intc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -74,7 +74,7 @@ protected:
 
 class h8325_intc_device : public h8_intc_device {
 public:
-	h8325_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8325_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> h8325_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu) :
 		h8325_intc_device(mconfig, tag, owner)
 	{
@@ -87,7 +87,7 @@ protected:
 
 class h8h_intc_device : public h8_intc_device {
 public:
-	h8h_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8h_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> h8h_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu) :
 		h8h_intc_device(mconfig, tag, owner)
 	{
@@ -104,7 +104,7 @@ protected:
 
 	u32 m_icr;
 
-	h8h_intc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h8h_intc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -114,7 +114,7 @@ protected:
 
 class h8s_intc_device : public h8h_intc_device {
 public:
-	h8s_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8s_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> h8s_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu) :
 		h8s_intc_device(mconfig, tag, owner)
 	{
@@ -141,7 +141,7 @@ private:
 
 class gt913_intc_device : public h8_intc_device {
 public:
-	gt913_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	gt913_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> gt913_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu) :
 		gt913_intc_device(mconfig, tag, owner)
 	{

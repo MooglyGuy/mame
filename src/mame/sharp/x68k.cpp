@@ -1037,7 +1037,7 @@ void x68k_state::x68000_base(machine_config &config)
 	MSX_GENERAL_PURPOSE_PORT(config, m_joy[0], msx_general_purpose_port_devices, "townspad");
 	MSX_GENERAL_PURPOSE_PORT(config, m_joy[1], msx_general_purpose_port_devices, "townspad");
 
-	I8255A(config, m_ppi, 0);
+	I8255A(config, m_ppi);
 	m_ppi->in_pa_callback().set(FUNC(x68k_state::ppi_port_a_r));
 	m_ppi->in_pb_callback().set(FUNC(x68k_state::ppi_port_b_r));
 	m_ppi->in_pc_callback().set(FUNC(x68k_state::ppi_port_c_r));
@@ -1144,7 +1144,7 @@ void x68k_state::x68000(machine_config &config)
 	m_crtc->gvram_read_cb().set(FUNC(x68k_state::gvram_read));
 	m_crtc->gvram_write_cb().set(FUNC(x68k_state::gvram_write));
 
-	X68KHDC(config, "x68k_hdc", 0);
+	X68KHDC(config, "x68k_hdc");
 }
 
 static void scsi_devices(device_slot_interface &device)

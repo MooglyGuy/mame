@@ -36,65 +36,65 @@ static constexpr uint8_t TOOLBOX_SET_NEXT_CD    = 0xd8;
 static constexpr uint8_t TOOLBOX_LIST_DEVICES   = 0xd9;
 static constexpr uint8_t TOOLBOX_COUNT_CDS      = 0xda;
 
-nscsi_cdrom_device::nscsi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_cdrom_device::nscsi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_CDROM, tag, owner, "Sony", "CDU-76S", "1.0", 0x00, 0x05)
 {
 }
 
-nscsi_cdrom_sgi_device::nscsi_cdrom_sgi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_cdrom_sgi_device::nscsi_cdrom_sgi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_CDROM_SGI, tag, owner, "Sony", "CDU-76S", "1.0", 0x00, 0x05)
 {
 }
 
-nscsi_cdrom_news_device::nscsi_cdrom_news_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_cdrom_news_device::nscsi_cdrom_news_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_CDROM_NEWS, tag, owner, "Sony", "CD-ROM CDU-541", "1.0A", 0x00, 0x05)
 {
 }
 
-nscsi_dec_rrd45_device::nscsi_dec_rrd45_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_dec_rrd45_device::nscsi_dec_rrd45_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_RRD45, tag, owner, "DEC     ", "RRD45   (C) DEC ", "0436", 0x98, 0x02)
 {
 }
 
-nscsi_toshiba_xm3301_device::nscsi_toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_toshiba_xm3301_device::nscsi_toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_XM3301, tag, owner, "TOSHIBA ", "CD-ROM XM-3301TA", "0272", 0x88, 0x02)
 {
 }
 
-nscsi_toshiba_xm5301_sun_device::nscsi_toshiba_xm5301_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_toshiba_xm5301_sun_device::nscsi_toshiba_xm5301_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_XM5301SUN, tag, owner, "TOSHIBA ", "XM-5301TASUN4XCD", "2915", 0x98, 0x02)
 {
 }
 
-nscsi_toshiba_xm5401_device::nscsi_toshiba_xm5401_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_toshiba_xm5401_device::nscsi_toshiba_xm5401_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_XM5401, tag, owner, "TOSHIBA ", "CD-ROM XM-5401TA", "3605", 0x98, 0x02)
 {
 }
 
-nscsi_toshiba_xm5401_sun_device::nscsi_toshiba_xm5401_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_toshiba_xm5401_sun_device::nscsi_toshiba_xm5401_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_XM5401SUN, tag, owner, "TOSHIBA ", "XM-5401TASUN4XCD", "1036", 0x98, 0x02)
 {
 }
 
-nscsi_toshiba_xm5701_device::nscsi_toshiba_xm5701_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_toshiba_xm5701_device::nscsi_toshiba_xm5701_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_XM5701, tag, owner, "TOSHIBA ", "CD-ROM XM-5701TA", "3136", 0x98, 0x02)
 {
 }
 
-nscsi_toshiba_xm5701_sun_device::nscsi_toshiba_xm5701_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_toshiba_xm5701_sun_device::nscsi_toshiba_xm5701_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_XM5701SUN, tag, owner, "TOSHIBA ", "XM5701TASUN12XCD", "0997", 0x98, 0x02)
 {
 }
 
 // drive identifies as an original Apple CDSC (Sony CDU-8001 with custom firmware)
-nscsi_cdrom_apple_device::nscsi_cdrom_apple_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+nscsi_cdrom_apple_device::nscsi_cdrom_apple_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nscsi_cdrom_device(mconfig, NSCSI_CDROM_APPLE, tag, owner, "SONY    ", "CD-ROM CDU-8002 ", "1.8g", 0x00, 0x05),
 	m_stopped(true),
 	m_stop_position(0)
 {
 }
 
-nscsi_cdrom_device::nscsi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+nscsi_cdrom_device::nscsi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: nscsi_full_device(mconfig, type, tag, owner, clock)
 	, image(*this, "image")
 	, cdda(*this, "cdda")

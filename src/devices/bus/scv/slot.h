@@ -21,7 +21,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	scv_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: scv_cart_slot_device(mconfig, tag, owner, 0)
+		: scv_cart_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -29,7 +29,7 @@ public:
 		set_fixed(false);
 	}
 
-	scv_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	scv_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~scv_cart_slot_device();
 
 	template <typename T> void set_address_space(T &&tag, int no) { m_address_space.set_tag(std::forward<T>(tag), no); }

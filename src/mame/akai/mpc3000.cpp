@@ -259,7 +259,7 @@ void mpc3000_state::mpc3000(machine_config &config)
 
 	FLOPPY_CONNECTOR(config, m_floppy, mpc3000_state::floppies, "35hd", floppy_image_device::default_mfm_floppy_formats);
 
-	pit8254_device &pit(PIT8254(config, "synctmr", 0)); // MB89254
+	pit8254_device &pit(PIT8254(config, "synctmr")); // MB89254
 	pit.set_clk<0>(16_MHz_XTAL / 4);
 	pit.set_clk<1>(16_MHz_XTAL / 4);
 	pit.set_clk<2>(16_MHz_XTAL / 4);

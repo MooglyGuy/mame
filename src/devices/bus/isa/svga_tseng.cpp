@@ -56,7 +56,7 @@ void isa16_svga_et4k_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(tseng_vga_device::screen_update));
 
-	TSENG_VGA(config, m_vga, 0);
+	TSENG_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(1*1024*1024);
 }
@@ -69,12 +69,12 @@ void isa16_svga_et4k_device::device_add_mconfig(machine_config &config)
 //  isa16_vga_device - constructor
 //-------------------------------------------------
 
-isa16_svga_et4k_device::isa16_svga_et4k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_svga_et4k_device::isa16_svga_et4k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	isa16_svga_et4k_device(mconfig, ISA16_SVGA_ET4K, tag, owner, clock)
 {
 }
 
-isa16_svga_et4k_device::isa16_svga_et4k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+isa16_svga_et4k_device::isa16_svga_et4k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_vga(*this, "vga")

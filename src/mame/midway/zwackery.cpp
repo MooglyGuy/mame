@@ -483,7 +483,7 @@ void zwackery_state::machine_start()
 void zwackery_state::zwackery(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 7652400);    // based on counter usage, should be XTAL(16'000'000)/2
+	M68000(config, m_maincpu, XTAL::u(7652400));    // based on counter usage, should be XTAL(16'000'000)/2
 	m_maincpu->set_addrmap(AS_PROGRAM, &zwackery_state::zwackery_map);
 
 	WATCHDOG_TIMER(config, m_watchdog);

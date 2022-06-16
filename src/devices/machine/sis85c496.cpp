@@ -93,12 +93,12 @@ void sis85c496_host_device::device_add_mconfig(machine_config &config)
 	m_dma8237_2->out_dack_callback<2>().set(FUNC(sis85c496_host_device::pc_dack6_w));
 	m_dma8237_2->out_dack_callback<3>().set(FUNC(sis85c496_host_device::pc_dack7_w));
 
-	PIC8259(config, m_pic8259_master, 0);
+	PIC8259(config, m_pic8259_master);
 	m_pic8259_master->out_int_callback().set_inputline(m_maincpu, 0);
 	m_pic8259_master->in_sp_callback().set_constant(1);
 	m_pic8259_master->read_slave_ack_callback().set(FUNC(sis85c496_host_device::get_slave_ack));
 
-	PIC8259(config, m_pic8259_slave, 0);
+	PIC8259(config, m_pic8259_slave);
 	m_pic8259_slave->out_int_callback().set(m_pic8259_master, FUNC(pic8259_device::ir2_w));
 	m_pic8259_slave->in_sp_callback().set_constant(0);
 
@@ -162,7 +162,7 @@ void sis85c496_host_device::device_add_mconfig(machine_config &config)
 }
 
 
-sis85c496_host_device::sis85c496_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sis85c496_host_device::sis85c496_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_host_device(mconfig, SIS85C496_HOST, tag, owner, clock),
 	m_maincpu(*this, finder_base::DUMMY_TAG),
 	m_pic8259_master(*this, "pic8259_master"),

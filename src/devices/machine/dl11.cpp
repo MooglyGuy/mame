@@ -56,7 +56,7 @@ enum
 //  dl11_device - constructor
 //-------------------------------------------------
 
-dl11_device::dl11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+dl11_device::dl11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, device_z80daisy_interface(mconfig, *this)

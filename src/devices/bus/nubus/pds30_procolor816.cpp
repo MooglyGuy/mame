@@ -44,10 +44,10 @@ class nubus_procolor816_device : public device_t,
 {
 public:
 	// construction/destruction
-	nubus_procolor816_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_procolor816_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	nubus_procolor816_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_procolor816_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -92,7 +92,7 @@ void nubus_procolor816_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_screen_update(FUNC(nubus_procolor816_device::screen_update));
-	m_screen->set_raw(25175000, 800, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(25175000), 800, 0, 640, 525, 0, 480);
 
 	TLC34076(config, m_dac, tlc34076_device::TLC34076_8_BIT);   // actually a TLC34075, but I can't find a difference
 }
@@ -102,12 +102,12 @@ const tiny_rom_entry *nubus_procolor816_device::device_rom_region() const
 	return ROM_NAME( procolor816 );
 }
 
-nubus_procolor816_device::nubus_procolor816_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_procolor816_device::nubus_procolor816_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_procolor816_device(mconfig, PDS030_PROCOLOR816, tag, owner, clock)
 {
 }
 
-nubus_procolor816_device::nubus_procolor816_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_procolor816_device::nubus_procolor816_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_video_interface(mconfig, *this),
 	device_nubus_card_interface(mconfig, *this),

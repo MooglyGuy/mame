@@ -643,7 +643,7 @@ void phc25_state::phc25(machine_config &config)
 
 	/* sound hardware (Synthesizer PSG-01 add-on) */
 	SPEAKER(config, "mono").front_center();
-	ay8910_device &psg(AY8910(config, "ay8910", 1'000'000));
+	ay8910_device &psg(AY8910(config, "ay8910", XTAL::u(1'000'000)));
 	psg.port_a_read_callback().set_ioport("JOY0");
 	psg.port_b_read_callback().set_ioport("JOY1");
 	psg.add_route(ALL_OUTPUTS, "mono", 2.00);

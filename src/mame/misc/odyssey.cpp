@@ -164,7 +164,7 @@ void odyssey_state::odyssey(machine_config &config)
 {
 	// a Celeron at 1.70 GHz on the MB I checked. <- doesn't match being a Triton/Triton-II ... -AS
 	// It also fails refresh check if it's barely above 66 MHz (ISA state $08)
-	PENTIUM(config, m_maincpu, 66'000'000);
+	PENTIUM(config, m_maincpu, XTAL::u(66'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &odyssey_state::odyssey_map);
 	m_maincpu->set_addrmap(AS_IO, &odyssey_state::odyssey_io);
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));

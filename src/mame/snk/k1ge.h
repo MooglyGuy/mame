@@ -17,13 +17,13 @@ class k1ge_device : public device_t, public device_video_interface, public devic
 {
 public:
 	template <typename T>
-	k1ge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&screen_tag)
+	k1ge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&screen_tag)
 		: k1ge_device(mconfig, tag, owner, clock)
 	{
 		set_screen(std::forward<T>(screen_tag));
 	}
 
-	k1ge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	k1ge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u8 read(offs_t offset);
 	virtual void write(offs_t offset, u8 data);
@@ -37,7 +37,7 @@ public:
 	static const int K1GE_SCREEN_HEIGHT = 199;
 
 protected:
-	k1ge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, bool color);
+	k1ge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool color);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -90,13 +90,13 @@ class k2ge_device : public k1ge_device
 {
 public:
 	template <typename T>
-	k2ge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&screen_tag)
+	k2ge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&screen_tag)
 		: k2ge_device(mconfig, tag, owner, clock)
 	{
 		set_screen(std::forward<T>(screen_tag));
 	}
 
-	k2ge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	k2ge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void write(offs_t offset, u8 data) override;
 

@@ -327,7 +327,7 @@ INPUT_PORTS_END
 void ufombs_state::ufombs(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D552(config, m_maincpu, 400000); // approximation
+	NEC_D552(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->read_b().set_ioport("IN.1");
 	m_maincpu->write_c().set(FUNC(ufombs_state::plate_w));
@@ -483,7 +483,7 @@ INPUT_PORTS_END
 void ssfball_state::ssfball(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D553(config, m_maincpu, 400000); // approximation
+	NEC_D553(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.3");
 	m_maincpu->read_b().set(FUNC(ssfball_state::input_b_r));
 	m_maincpu->write_c().set(FUNC(ssfball_state::grid_w));
@@ -633,7 +633,7 @@ INPUT_PORTS_END
 void bmsoccer_state::bmsoccer(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D552(config, m_maincpu, 400000); // approximation
+	NEC_D552(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set(FUNC(bmsoccer_state::input_a_r));
 	m_maincpu->read_b().set_ioport("IN.2");
 	m_maincpu->write_c().set(FUNC(bmsoccer_state::grid_w));
@@ -754,7 +754,7 @@ INPUT_PORTS_END
 void bmsafari_state::bmsafari(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D552(config, m_maincpu, 400000); // approximation
+	NEC_D552(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->read_b().set_ioport("IN.1");
 	m_maincpu->write_c().set(FUNC(bmsafari_state::grid_w));
@@ -916,7 +916,7 @@ INPUT_PORTS_END
 void splasfgt_state::splasfgt(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D553(config, m_maincpu, 400000); // approximation
+	NEC_D553(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.4");
 	m_maincpu->read_b().set(FUNC(splasfgt_state::input_b_r));
 	m_maincpu->write_c().set(FUNC(splasfgt_state::plate_w));
@@ -1435,7 +1435,7 @@ INPUT_PORTS_END
 void tactix_state::tactix(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D557L(config, m_maincpu, 200000); // approximation
+	NEC_D557L(config, m_maincpu, XTAL::u(200000)); // approximation
 	m_maincpu->read_a().set(FUNC(tactix_state::input_r));
 	m_maincpu->write_c().set(FUNC(tactix_state::input_w));
 	m_maincpu->write_d().set(FUNC(tactix_state::leds_w));
@@ -1579,7 +1579,7 @@ INPUT_PORTS_END
 void ctntune_state::ctntune(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D557L(config, m_maincpu, 200000); // approximation
+	NEC_D557L(config, m_maincpu, XTAL::u(200000)); // approximation
 	m_maincpu->read_a().set(FUNC(ctntune_state::input_r));
 	m_maincpu->write_c().set(FUNC(ctntune_state::input_w));
 	m_maincpu->write_d().set(FUNC(ctntune_state::input_w));
@@ -2291,7 +2291,7 @@ void mcompgin_state::mcompgin(machine_config &config)
 	screen.set_size(1920, 743);
 	screen.set_visarea_full();
 
-	HLCD0530(config, m_lcd, 500); // C=0.01uF
+	HLCD0530(config, m_lcd, XTAL::u(500)); // C=0.01uF
 	m_lcd->write_cols().set(FUNC(mcompgin_state::lcd_output_w));
 
 	PWM_DISPLAY(config, m_display).set_size(8, 24);
@@ -2395,7 +2395,7 @@ INPUT_PORTS_END
 void mvbfree_state::mvbfree(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D553(config, m_maincpu, 400000); // approximation
+	NEC_D553(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->read_b().set_ioport("IN.1");
 	m_maincpu->write_c().set(FUNC(mvbfree_state::plate_w));
@@ -2526,7 +2526,7 @@ INPUT_PORTS_END
 void grobot9_state::grobot9(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D557L(config, m_maincpu, 160000); // approximation
+	NEC_D557L(config, m_maincpu, XTAL::u(160000)); // approximation
 	m_maincpu->read_a().set(FUNC(grobot9_state::input_r));
 	m_maincpu->write_c().set(FUNC(grobot9_state::input_w));
 	m_maincpu->write_d().set(FUNC(grobot9_state::lamps_w));
@@ -2630,7 +2630,7 @@ INPUT_PORTS_END
 void tccombat_state::tccombat(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D552(config, m_maincpu, 400000); // approximation
+	NEC_D552(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->write_c().set(FUNC(tccombat_state::grid_w));
 	m_maincpu->write_d().set(FUNC(tccombat_state::grid_w));
@@ -2710,7 +2710,7 @@ INPUT_CHANGED_MEMBER(tmtennis_state::skill_switch)
 	// MCU clock is from an LC circuit oscillating by default at ~360kHz,
 	// but on PRO1, the difficulty switch puts a capacitor across the LC circuit
 	// to slow it down to ~260kHz.
-	m_maincpu->set_unscaled_clock((newval & 0x100) ? 260000 : 360000);
+	m_maincpu->set_unscaled_clock((newval & 0x100) ? XTAL::u(260000) : XTAL::u(360000));
 }
 
 void tmtennis_state::update_display()
@@ -2793,7 +2793,7 @@ INPUT_PORTS_END
 void tmtennis_state::tmtennis(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D552(config, m_maincpu, 260000); // see skill_switch
+	NEC_D552(config, m_maincpu, XTAL::u(260000)); // see skill_switch
 	m_maincpu->read_a().set(FUNC(tmtennis_state::input_r));
 	m_maincpu->read_b().set(FUNC(tmtennis_state::input_r));
 	m_maincpu->write_c().set(FUNC(tmtennis_state::plate_w));

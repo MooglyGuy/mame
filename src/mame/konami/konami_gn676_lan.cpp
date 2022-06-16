@@ -102,19 +102,19 @@ region/cab type and aren't interchangable with the NWK-TR versions.
 DEFINE_DEVICE_TYPE(KONAMI_GN676A_LAN, konami_gn676a_lan_device, "konami_gn676a_lan", "Konami GN676-PWB(H)A Network PCB")
 DEFINE_DEVICE_TYPE(KONAMI_GN676B_LAN, konami_gn676b_lan_device, "konami_gn676b_lan", "Konami GN676-PWB(H)B Network PCB")
 
-konami_gn676_lan_device::konami_gn676_lan_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, uint32_t clock)
+konami_gn676_lan_device::konami_gn676_lan_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock),
 	m_x76f041(*this, "eeprom"),
 	m_lanc2_ram(nullptr)
 {
 }
 
-konami_gn676a_lan_device::konami_gn676a_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+konami_gn676a_lan_device::konami_gn676a_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: konami_gn676_lan_device(mconfig, KONAMI_GN676A_LAN, tag, owner, clock)
 {
 }
 
-konami_gn676b_lan_device::konami_gn676b_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+konami_gn676b_lan_device::konami_gn676b_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: konami_gn676_lan_device(mconfig, KONAMI_GN676B_LAN, tag, owner, clock)
 {
 }

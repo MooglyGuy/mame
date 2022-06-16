@@ -17,7 +17,7 @@ class macadb_device :  public device_t
 {
 public:
 	// construction/destruction
-	macadb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	macadb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto adb_data_callback() { return write_adb_data.bind(); }
 	auto adb_irq_callback() { return write_adb_irq.bind(); }

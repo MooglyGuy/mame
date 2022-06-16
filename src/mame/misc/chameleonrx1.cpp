@@ -52,7 +52,7 @@ INPUT_PORTS_END
 void chameleonrx1_state::chameleonrx1(machine_config &config)
 {
 	/* basic machine hardware */
-	PENTIUM4(config, m_maincpu, 100'000'000); // actually 2.66 GHz
+	PENTIUM4(config, m_maincpu, XTAL::u(100'000'000)); // actually 2.66 GHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &chameleonrx1_state::chameleonrx1_map);
 
 	PCI_ROOT(config, "pci", 0);

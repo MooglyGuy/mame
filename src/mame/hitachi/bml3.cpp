@@ -184,7 +184,7 @@ void bml3_state::crtc_change_clock()
 	const u8 interlace = BIT(m_vres_reg, 3);
 	// CRTC and MPU are synchronous by default
 	int clock = (width80 ? C80_CLOCK : C40_CLOCK).value() << interlace;
-	m_crtc->set_unscaled_clock(clock);
+	m_crtc->set_unscaled_clock(XTAL::u(clock));
 }
 
 /*
@@ -901,7 +901,7 @@ void bml3_state::bml3(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, "speaker").add_route(ALL_OUTPUTS, "mono", 0.50);
 
-	BML3BUS(config, m_bml3bus, 0);
+	BML3BUS(config, m_bml3bus);
 	m_bml3bus->nmi_callback().set_inputline(m_maincpu, INPUT_LINE_NMI);
 	m_bml3bus->irq_callback().set_inputline(m_maincpu, M6809_IRQ_LINE);
 	m_bml3bus->firq_callback().set_inputline(m_maincpu, M6809_FIRQ_LINE);
@@ -923,7 +923,7 @@ void bml3_state::bml3(machine_config &config)
 #if 0
 	// TODO: slot device for sound card
 	// audio
-	YM2203(config, m_ym2203, 2000000); //unknown clock / divider
+	YM2203(config, m_ym2203, XTAL::u(2000000)); //unknown clock / divider
 	m_ym2203->set_flags(AY8910_LEGACY_OUTPUT);
 	m_ym2203->add_route(0, "mono", 0.25);
 	m_ym2203->add_route(1, "mono", 0.25);

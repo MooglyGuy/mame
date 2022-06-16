@@ -61,7 +61,7 @@
 
 DEFINE_DEVICE_TYPE(SIS630_GUI, sis630_gui_device, "sis630_gui", "SiS 630 GUI")
 
-sis630_gui_device::sis630_gui_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sis630_gui_device::sis630_gui_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, SIS630_GUI, tag, owner, clock)
 	, m_vga(*this, "svga")
 	, m_gui_rom(*this, "gui_rom")
@@ -95,7 +95,7 @@ void sis630_gui_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(sis630_vga_device::screen_update));
 
-	SIS630_VGA(config, m_vga, 0);
+	SIS630_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 64MB according to POST
 	// documentation claims 128MB, assume being wrong
@@ -280,7 +280,7 @@ void sis630_gui_device::vram_w(offs_t offset, uint8_t data)
 
 DEFINE_DEVICE_TYPE(SIS630_BRIDGE, sis630_bridge_device, "sis630_bridge", "SiS 630 Virtual PCI-to-PCI bridge")
 
-sis630_bridge_device::sis630_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sis630_bridge_device::sis630_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_bridge_device(mconfig, SIS630_BRIDGE, tag, owner, clock)
 	, m_vga(*this, finder_base::DUMMY_TAG)
 {

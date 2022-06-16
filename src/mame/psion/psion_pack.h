@@ -23,7 +23,7 @@ class datapack_device : public device_t,
 {
 public:
 	// construction/destruction
-	datapack_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	datapack_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~datapack_device();
 
 	void set_interface(const char *interface) { m_interface = interface; }

@@ -32,7 +32,7 @@ public:
 	typedef device_delegate<void (bitmap_ind16 &bitmap, u8 line, u8 pos, u8 y, u8 x, int state)> pixel_update_delegate;
 
 	// construction/destruction
-	hd44780_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd44780_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// static configuration helpers
 	void set_lcd_size(int lines, int chars) { m_lines = lines; m_chars = chars; }
@@ -58,7 +58,7 @@ public:
 	virtual uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
 protected:
-	hd44780_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	hd44780_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -131,7 +131,7 @@ class hd44780u_device : public hd44780_device
 {
 public:
 	// construction/destruction
-	hd44780u_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd44780u_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static auto parent_rom_device_type() { return &HD44780; }
 
@@ -145,7 +145,7 @@ class sed1278_device : public hd44780_device
 {
 public:
 	// construction/destruction
-	sed1278_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sed1278_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static auto parent_rom_device_type() { return &HD44780; }
 

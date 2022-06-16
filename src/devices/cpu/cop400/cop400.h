@@ -129,7 +129,7 @@ public:
 
 protected:
 	// construction/destruction
-	cop400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint8_t program_addr_bits, uint8_t data_addr_bits, uint8_t featuremask, uint8_t g_mask, uint8_t d_mask, uint8_t in_mask, bool has_counter, bool has_inil, address_map_constructor internal_map_program, address_map_constructor internal_map_data);
+	cop400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint8_t program_addr_bits, uint8_t data_addr_bits, uint8_t featuremask, uint8_t g_mask, uint8_t d_mask, uint8_t in_mask, bool has_counter, bool has_inil, address_map_constructor internal_map_program, address_map_constructor internal_map_data);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -363,7 +363,7 @@ class cop401_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop401_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop401_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -371,7 +371,7 @@ class cop410_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop410_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop410_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -380,7 +380,7 @@ class cop411_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop411_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop411_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -390,7 +390,7 @@ class cop402_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop402_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop402_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -398,7 +398,7 @@ class cop420_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop420_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop420_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -407,7 +407,7 @@ class cop421_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop421_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop421_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -416,7 +416,7 @@ class cop422_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop422_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop422_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -426,7 +426,7 @@ class cop404l_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop404l_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop404l_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -434,7 +434,7 @@ class cop444l_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop444l_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop444l_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -443,7 +443,7 @@ class cop445l_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop445l_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop445l_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -452,7 +452,7 @@ class cop404c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop404c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop404c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -461,7 +461,7 @@ class cop424c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop424c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop424c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -470,7 +470,7 @@ class cop425c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop425c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop425c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -479,7 +479,7 @@ class cop426c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop426c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop426c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -488,7 +488,7 @@ class cop444c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop444c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop444c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -497,7 +497,7 @@ class cop445c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop445c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop445c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -506,7 +506,7 @@ class cop446c_cpu_device : public cop400_cpu_device
 {
 public:
 	// construction/destruction
-	cop446c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cop446c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

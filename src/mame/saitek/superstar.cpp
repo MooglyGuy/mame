@@ -226,7 +226,7 @@ INPUT_PORTS_END
 void star_state::sstar28k(machine_config &config)
 {
 	// basic machine hardware
-	M6502(config, m_maincpu, 2'000'000); // no XTAL
+	M6502(config, m_maincpu, XTAL::u(2'000'000)); // no XTAL
 	m_maincpu->set_addrmap(AS_PROGRAM, &star_state::sstar28k_map);
 
 	CLOCK(config, m_nmi_clock, 2'000'000 / 0x2000); // 4020 Q13

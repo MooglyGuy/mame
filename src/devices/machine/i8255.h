@@ -45,7 +45,7 @@ class i8255_device : public device_t
 {
 public:
 	// construction/destruction
-	i8255_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	i8255_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto in_pa_callback()  { return m_in_pa_cb.bind(); }
 	auto in_pb_callback()  { return m_in_pb_cb.bind(); }
@@ -73,7 +73,7 @@ public:
 	void pc6_w(int state);
 
 protected:
-	i8255_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool is_ams40489);
+	i8255_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool is_ams40489);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -136,7 +136,7 @@ class ams40489_ppi_device : public i8255_device
 {
 public:
 	// construction/destruction
-	ams40489_ppi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ams40489_ppi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 // device type definition

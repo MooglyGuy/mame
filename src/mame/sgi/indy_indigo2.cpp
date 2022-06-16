@@ -104,8 +104,8 @@ public:
 	{
 	}
 
-	void ip24_base(machine_config &config, uint32_t system_clock);
-	void ip24(machine_config &config, uint32_t system_clock);
+	void ip24_base(machine_config &config, const XTAL &system_clock);
+	void ip24(machine_config &config, const XTAL &system_clock);
 	void indy_5015(machine_config &config);
 	void indy_4613(machine_config &config);
 	void indy_4610(machine_config &config);
@@ -287,7 +287,7 @@ INPUT_PORTS_END
 
 void ip24_state::wd33c93(device_t *device)
 {
-	device->set_clock(10000000);
+	device->set_clock(XTAL::u(10000000));
 	downcast<wd33c93b_device *>(device)->irq_cb().set(m_ioc2, FUNC(ioc2_device::scsi0_int_w));
 	downcast<wd33c93b_device *>(device)->drq_cb().set(m_hpc3, FUNC(hpc3_device::scsi0_drq));
 }
@@ -307,13 +307,13 @@ static DEVICE_INPUT_DEFAULTS_START(ip24_mc)
 	DEVICE_INPUT_DEFAULTS("VALID", 0x0f, 0x03)
 DEVICE_INPUT_DEFAULTS_END
 
-void ip24_state::ip24_base(machine_config &config, uint32_t system_clock)
+void ip24_state::ip24_base(machine_config &config, const XTAL &system_clock)
 {
 	SGI_MC(config, m_mem_ctrl, m_maincpu, m_eeprom, system_clock);
 	m_mem_ctrl->int_dma_done_cb().set(m_ioc2, FUNC(ioc2_device::mc_dma_done_w));
 	m_mem_ctrl->eisa_present().set_constant(1);
 
-	NSCSI_BUS(config, "scsibus", 0);
+	NSCSI_BUS(config, "scsibus");
 	NSCSI_CONNECTOR(config, "scsibus:0").option_set("wd33c93", WD33C93B)
 		.machine_config([this](device_t *device) { wd33c93(device); });
 	NSCSI_CONNECTOR(config, "scsibus:1", scsi_devices, "harddisk", false);
@@ -365,7 +365,7 @@ void ip24_state::ip24_base(machine_config &config, uint32_t system_clock)
 	SOFTWARE_LIST(config, "sgi_mips_hdd").set_original("sgi_mips_hdd");
 }
 
-void ip24_state::ip24(machine_config &config, uint32_t system_clock)
+void ip24_state::ip24(machine_config &config, const XTAL &system_clock)
 {
 	ip24_base(config, system_clock);
 	m_mem_ctrl->set_input_default(DEVICE_INPUT_DEFAULTS_NAME(ip24_mc));
@@ -382,12 +382,12 @@ void ip24_state::ip24(machine_config &config, uint32_t system_clock)
 	m_vino->i2c_stop().set(m_dmsd, FUNC(saa7191_device::i2c_stop_w));
 	m_vino->interrupt_cb().set(m_ioc2, FUNC(ioc2_device::video_int_w));
 
-	DS1386_8K(config, m_rtc, 32768);
+	DS1386_8K(config, m_rtc, XTAL::u(32768));
 }
 
 void ip24_state::indy_5015(machine_config &config)
 {
-	constexpr uint32_t system_clock = 50'000'000;
+	constexpr XTAL system_clock = XTAL::u(50'000'000);
 	ip24(config, system_clock);
 	R5000BE(config, m_maincpu, 3 * system_clock);
 	m_maincpu->set_system_clock(system_clock);
@@ -398,9 +398,9 @@ void ip24_state::indy_5015(machine_config &config)
 
 void ip24_state::indy_4613(machine_config &config)
 {
-	constexpr uint32_t system_clock = 66'666'666;
+	constexpr XTAL system_clock = XTAL::u(66'666'666);
 	ip24(config, system_clock);
-	R4600BE(config, m_maincpu, 2 * system_clock);
+	R4600BE(config, m_maincpu, system_clock * 2);
 	m_maincpu->set_system_clock(system_clock);
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
@@ -409,9 +409,9 @@ void ip24_state::indy_4613(machine_config &config)
 
 void ip24_state::indy_4610(machine_config &config)
 {
-	constexpr uint32_t system_clock = 50'000'000;
+	constexpr XTAL system_clock = XTAL::u(50'000'000);
 	ip24(config, system_clock);
-	R4600BE(config, m_maincpu, 2 * system_clock);
+	R4600BE(config, m_maincpu, system_clock * 2);
 	m_maincpu->set_system_clock(system_clock);
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
@@ -420,15 +420,15 @@ void ip24_state::indy_4610(machine_config &config)
 
 void ip22_state::wd33c93_2(device_t *device)
 {
-	device->set_clock(10000000);
+	device->set_clock(XTAL::u(10000000));
 	downcast<wd33c93b_device *>(device)->irq_cb().set(m_ioc2, FUNC(ioc2_device::scsi1_int_w));
 	downcast<wd33c93b_device *>(device)->drq_cb().set(m_hpc3, FUNC(hpc3_device::scsi1_drq));
 }
 
 void ip22_state::indigo2_4415(machine_config &config)
 {
-	constexpr uint32_t system_clock = 50'000'000;
-	R4400BE(config, m_maincpu, 3 * system_clock);
+	constexpr XTAL system_clock = XTAL::u(50'000'000);
+	R4400BE(config, m_maincpu, system_clock * 3);
 	m_maincpu->set_system_clock(system_clock);
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
@@ -437,7 +437,7 @@ void ip22_state::indigo2_4415(machine_config &config)
 	ip24_base(config, system_clock);
 	m_mem_ctrl->set_input_default(DEVICE_INPUT_DEFAULTS_NAME(ip22_mc));
 
-	NSCSI_BUS(config, "scsibus2", 0);
+	NSCSI_BUS(config, "scsibus2");
 	NSCSI_CONNECTOR(config, "scsibus2:0").option_set("wd33c93", WD33C93B)
 		.machine_config([this](device_t *device) { wd33c93_2(device); });
 	NSCSI_CONNECTOR(config, "scsibus2:1", scsi_devices, nullptr, false);
@@ -457,7 +457,7 @@ void ip22_state::indigo2_4415(machine_config &config)
 	m_hpc3->hd_reset_cb<1>().set(m_scsi_ctrl2, FUNC(wd33c93b_device::reset_w));
 
 	SGI_IOC2_FULL_HOUSE(config, m_ioc2, m_maincpu);
-	DS1286(config, m_rtc, 32768);
+	DS1286(config, m_rtc, XTAL::u(32768));
 }
 
 #define INDY_BIOS_FLAGS(bios) ROM_GROUPDWORD | ROM_BIOS(bios)

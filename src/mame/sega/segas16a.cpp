@@ -1967,15 +1967,15 @@ GFXDECODE_END
 void segas16a_state::system16a(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 10000000);
+	M68000(config, m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas16a_state::system16a_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas16a_state::irq4_line_hold));
 
-	Z80(config, m_soundcpu, 4000000);
+	Z80(config, m_soundcpu, XTAL::u(4000000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &segas16a_state::sound_map);
 	m_soundcpu->set_addrmap(AS_IO, &segas16a_state::sound_portmap);
 
-	UPD7751(config, m_upd7751, 6000000);
+	UPD7751(config, m_upd7751, XTAL::u(6000000));
 	m_upd7751->bus_in_cb().set(FUNC(segas16a_state::upd7751_rom_r));
 	m_upd7751->t1_in_cb().set_constant(0); // labelled as "TEST", connected to ground
 	m_upd7751->p1_out_cb().set("dac", FUNC(dac_byte_interface::data_w));
@@ -2009,7 +2009,7 @@ void segas16a_state::system16a(machine_config &config)
 	m_screen->set_screen_update(FUNC(segas16a_state::screen_update));
 	m_screen->set_palette(m_palette);
 
-	SEGA_SYS16A_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16A_SPRITES(config, m_sprites);
 	SEGAIC16VID(config, m_segaic16vid, 0, "gfxdecode");
 
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_segas16a);
@@ -2020,11 +2020,11 @@ void segas16a_state::system16a(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	YM2151(config, m_ymsnd, 4000000);
+	YM2151(config, m_ymsnd, XTAL::u(4000000));
 	m_ymsnd->port_write_handler().set(FUNC(segas16a_state::upd7751_control_w));
 	m_ymsnd->add_route(ALL_OUTPUTS, "speaker", 0.43);
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.4); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.4); // unknown DAC
 }
 
 
@@ -2064,7 +2064,7 @@ void segas16a_state::system16a_i8751(machine_config &config)
 	system16a(config);
 	m_maincpu->remove_vblank_int();
 
-	I8751(config, m_mcu, 8000000);
+	I8751(config, m_mcu, XTAL::u(8000000));
 	m_mcu->set_addrmap(AS_IO, &segas16a_state::mcu_io_map);
 	m_mcu->port_out_cb<1>().set(FUNC(segas16a_state::mcu_control_w));
 

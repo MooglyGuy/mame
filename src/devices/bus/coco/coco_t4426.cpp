@@ -94,7 +94,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		coco_t4426_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+		coco_t4426_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 		// optional information overrides
 		virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -116,7 +116,7 @@ namespace
 		void write_f13_clock(int state) { write_acia_clocks(mc14411_device::TIMER_F13, state); }
 		void write_f15_clock(int state) { write_acia_clocks(mc14411_device::TIMER_F15, state); }
 	protected:
-		coco_t4426_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+		coco_t4426_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 		// device-level overrides
 		virtual void device_start() override ATTR_COLD;
@@ -153,7 +153,7 @@ void coco_t4426_device::device_add_mconfig(machine_config &config)
 	PIA6821(config, m_pia);
 	m_pia->writepa_handler().set(FUNC(coco_t4426_device::pia_A_w));
 
-	ACIA6850(config, m_uart, 0);
+	ACIA6850(config, m_uart);
 	m_uart->txd_handler().set(SERIAL_TAG, FUNC(rs232_port_device::write_txd));
 	m_uart->rts_handler().set(SERIAL_TAG, FUNC(rs232_port_device::write_rts));
 
@@ -235,7 +235,7 @@ DEFINE_DEVICE_TYPE_PRIVATE(COCO_T4426, device_cococart_interface, coco_t4426_dev
 //  coco_t4426_device - constructor
 //-------------------------------------------------
 
-coco_t4426_device::coco_t4426_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+coco_t4426_device::coco_t4426_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_cococart_interface(mconfig, *this)
 	, m_cart(nullptr)
@@ -250,7 +250,7 @@ coco_t4426_device::coco_t4426_device(const machine_config &mconfig, device_type 
 {
 }
 
-coco_t4426_device::coco_t4426_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+coco_t4426_device::coco_t4426_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: coco_t4426_device(mconfig, COCO_T4426, tag, owner, clock)
 {
 }

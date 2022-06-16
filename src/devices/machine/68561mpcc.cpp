@@ -93,7 +93,7 @@ DEFINE_DEVICE_TYPE(MPCC68561A, mpcc68561a_device, "mpcc68561a", "MPCC 68561A")
 //  LIVE DEVICE
 //**************************************************************************
 
-mpcc_device::mpcc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint32_t variant)
+mpcc_device::mpcc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint32_t variant)
 	: device_t(mconfig, type, tag, owner, clock),
 	  device_serial_interface(mconfig, *this),
 	  m_irq(CLEAR_LINE),
@@ -137,27 +137,27 @@ mpcc_device::mpcc_device(const machine_config &mconfig, device_type type, const 
 		elem = 0;
 }
 
-mpcc_device::mpcc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mpcc_device::mpcc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mpcc_device(mconfig, MPCC, tag, owner, clock, TYPE_MPCC)
 {
 }
 
-mpcc68560_device::mpcc68560_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mpcc68560_device::mpcc68560_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mpcc_device(mconfig, MPCC68560, tag, owner, clock, TYPE_MPCC68560)
 {
 }
 
-mpcc68560a_device::mpcc68560a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mpcc68560a_device::mpcc68560a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mpcc_device(mconfig, MPCC68560A, tag, owner, clock, TYPE_MPCC68560A)
 {
 }
 
-mpcc68561_device::mpcc68561_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mpcc68561_device::mpcc68561_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mpcc_device(mconfig, MPCC68561, tag, owner, clock, TYPE_MPCC68561)
 {
 }
 
-mpcc68561a_device::mpcc68561a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mpcc68561a_device::mpcc68561a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mpcc_device(mconfig, MPCC68561A, tag, owner, clock, TYPE_MPCC68561A)
 {
 }
@@ -464,7 +464,7 @@ void mpcc_device::update_serial()
 	if  (m_rcr & REG_RCR_RRES)
 	{
 		LOGSETUP("- Rx in reset\n");
-		set_rcv_rate(0);
+		set_rcv_rate(XTAL::u(0));
 	}
 	// Rx is running
 	else
@@ -481,7 +481,7 @@ void mpcc_device::update_serial()
 	if  (m_tcr & REG_TCR_TRES)
 	{
 		LOGSETUP("- Tx in reset\n");
-		set_tra_rate(0);
+		set_tra_rate(XTAL::u(0));
 	}
 	// Tx is running
 	else
@@ -498,7 +498,7 @@ void mpcc_device::update_serial()
 		else
 		{
 			LOGSETUP("- Tx disabled\n");
-			set_tra_rate(0);
+			set_tra_rate(XTAL::u(0));
 		}
 	}
 }

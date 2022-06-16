@@ -521,7 +521,7 @@ void wmg_state::wmg(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
 
-	MC1408(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
+	MC1408(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 
 	/* pia */
 	INPUT_MERGER_ANY_HIGH(config, "mainirq").output_handler().set_inputline(m_maincpu, M6809_IRQ_LINE);

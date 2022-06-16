@@ -31,7 +31,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	a2eauxslot_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&slottag, U &&opts, char const *dflt)
-		: a2eauxslot_slot_device(mconfig, tag, owner, 0)
+		: a2eauxslot_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -40,14 +40,14 @@ public:
 		m_a2eauxslot.set_tag(std::forward<T>(slottag));
 	}
 
-	a2eauxslot_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	a2eauxslot_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_t implementation
 	virtual void device_resolve_objects() override ATTR_COLD;
 	virtual void device_start() override { }
 
 protected:
-	a2eauxslot_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	a2eauxslot_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration
 	required_device<a2eauxslot_device> m_a2eauxslot;
@@ -62,7 +62,7 @@ class a2eauxslot_device : public device_t
 {
 public:
 	// construction/destruction
-	a2eauxslot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2eauxslot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// inline configuration
 	template <typename T> void set_space(T &&tag, int spacenum) { m_space.set_tag(std::forward<T>(tag), spacenum); }
@@ -79,7 +79,7 @@ public:
 	void nmi_w(int state);
 
 protected:
-	a2eauxslot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	a2eauxslot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

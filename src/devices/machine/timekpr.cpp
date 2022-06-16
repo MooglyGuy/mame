@@ -89,7 +89,7 @@ inline int counter_from_ram(u8 const *data, s32 offset, u8 unmap = 0)
 //  timekeeper_device_config - constructor
 //-------------------------------------------------
 
-timekeeper_device::timekeeper_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 size)
+timekeeper_device::timekeeper_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 size)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 	, device_rtc_interface(mconfig, *this)
@@ -100,7 +100,7 @@ timekeeper_device::timekeeper_device(const machine_config &mconfig, device_type 
 {
 }
 
-m48t02_device::m48t02_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m48t02_device::m48t02_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: timekeeper_device(mconfig, M48T02, tag, owner, clock, 0x800)
 {
 	m_offset_watchdog = -1;
@@ -116,7 +116,7 @@ m48t02_device::m48t02_device(const machine_config &mconfig, const char *tag, dev
 	m_offset_flags = -1;
 }
 
-m48t35_device::m48t35_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m48t35_device::m48t35_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: timekeeper_device(mconfig, M48T35, tag, owner, clock, 0x8000)
 {
 	m_offset_watchdog = -1;
@@ -132,7 +132,7 @@ m48t35_device::m48t35_device(const machine_config &mconfig, const char *tag, dev
 	m_offset_flags = -1;
 }
 
-m48t37_device::m48t37_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m48t37_device::m48t37_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: timekeeper_device(mconfig, M48T37, tag, owner, clock, 0x8000)
 {
 	m_offset_watchdog = 0x7ff7;
@@ -148,7 +148,7 @@ m48t37_device::m48t37_device(const machine_config &mconfig, const char *tag, dev
 	m_offset_flags = 0x7ff0;
 }
 
-m48t58_device::m48t58_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+m48t58_device::m48t58_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: timekeeper_device(mconfig, type, tag, owner, clock, 0x2000)
 {
 	m_offset_watchdog = -1;
@@ -164,17 +164,17 @@ m48t58_device::m48t58_device(const machine_config &mconfig, device_type type, co
 	m_offset_flags = -1;
 }
 
-m48t58_device::m48t58_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m48t58_device::m48t58_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m48t58_device(mconfig, M48T58, tag, owner, clock)
 {
 }
 
-ds1643_device::ds1643_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ds1643_device::ds1643_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m48t58_device(mconfig, DS1643, tag, owner, clock)
 {
 }
 
-mk48t08_device::mk48t08_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mk48t08_device::mk48t08_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: timekeeper_device(mconfig, MK48T08, tag, owner, clock, 0x2000)
 {
 	m_offset_watchdog = -1;
@@ -190,7 +190,7 @@ mk48t08_device::mk48t08_device(const machine_config &mconfig, const char *tag, d
 	m_offset_flags = 0x1ff0;
 }
 
-mk48t12_device::mk48t12_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mk48t12_device::mk48t12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: timekeeper_device(mconfig, MK48T12, tag, owner, clock, 0x800)
 {
 	m_offset_watchdog = -1;

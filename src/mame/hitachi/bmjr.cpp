@@ -466,7 +466,7 @@ void bmjr_state::machine_reset()
 void bmjr_state::bmjr(machine_config &config)
 {
 	// 750khz gets the cassette sound close to a normal kansas city 300 baud
-	M6800(config, m_maincpu, 754'560); // TODO: HD46800, derive from actual clock / divider
+	M6800(config, m_maincpu, XTAL::u(754'560)); // TODO: HD46800, derive from actual clock / divider
 	m_maincpu->set_addrmap(AS_PROGRAM, &bmjr_state::main_map);
 	// NOTE: checked by using TIME commands, which implies a separate thread than the actual timer control
 	m_maincpu->set_vblank_int("screen", FUNC(bmjr_state::irq0_line_hold));

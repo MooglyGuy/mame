@@ -150,7 +150,7 @@ INPUT_PORTS_END
 
 void bowltry_state::bowltry(machine_config &config)
 {
-	H83008(config, m_maincpu, 16000000);
+	H83008(config, m_maincpu, XTAL::u(16000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &bowltry_state::bowltry_map);
 	// uses vector $64, IMIAB according to the manual (timer/compare B, internal to the CPU)
 	// no vblank, most likely handled by YGV video register bit at 0x090/2
@@ -170,7 +170,7 @@ void bowltry_state::bowltry(machine_config &config)
 	/* tt5665 sound */
 	SPEAKER(config, "speaker").front_center();
 
-	TT5665(config, "tt5665", 16000000/4, tt5665_device::ss_state::SS_HIGH, 0).add_route(1, "speaker", 1.0); // clock and SS pin unverified
+	TT5665(config, "tt5665", XTAL::u(16000000)/4, tt5665_device::ss_state::SS_HIGH, 0).add_route(1, "speaker", 1.0); // clock and SS pin unverified
 }
 
 ROM_START( bowltry )

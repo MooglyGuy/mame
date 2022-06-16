@@ -25,17 +25,17 @@ r65c02_device::r65c02_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-r65c02_device::r65c02_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+r65c02_device::r65c02_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	r65c02_device(mconfig, R65C02, tag, owner, clock)
 {
 }
 
-r65c102_device::r65c102_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+r65c102_device::r65c102_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	r65c02_device(mconfig, R65C102, tag, owner, clock)
 {
 }
 
-r65c112_device::r65c112_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+r65c112_device::r65c112_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	r65c02_device(mconfig, R65C112, tag, owner, clock)
 {
 }

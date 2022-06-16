@@ -40,7 +40,7 @@ enum
 class m6801_cpu_device : public m6800_cpu_device, public device_nvram_interface
 {
 public:
-	m6801_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6801_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// port 1-4 I/O, DDR is passed through mem_mask
 	auto in_p1_cb() { return m_in_port_func[0].bind(); }
@@ -69,7 +69,7 @@ public:
 	void clock_serial();
 
 protected:
-	m6801_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes);
+	m6801_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -248,7 +248,7 @@ public:
 class m6803_cpu_device : public m6801_cpu_device
 {
 public:
-	m6803_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6803_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -258,7 +258,7 @@ protected:
 class m6803e_cpu_device : public m6801_cpu_device
 {
 public:
-	m6803e_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6803e_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual u64 execute_clocks_to_cycles(u64 clocks) const noexcept override { return clocks; }
@@ -292,7 +292,7 @@ public:
 class hd6301_cpu_device : public m6801_cpu_device
 {
 protected:
-	hd6301_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes);
+	hd6301_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes);
 
 	// device_nvram_interface implementation
 	virtual bool nvram_read(util::read_stream &file) override;
@@ -313,7 +313,7 @@ protected:
 class hd6301v1_cpu_device : public hd6301_cpu_device
 {
 public:
-	hd6301v1_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6301v1_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -322,7 +322,7 @@ public:
 class hd63701v0_cpu_device : public hd6301_cpu_device
 {
 public:
-	hd63701v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd63701v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -333,7 +333,7 @@ public:
 class hd6303r_cpu_device : public hd6301_cpu_device
 {
 public:
-	hd6303r_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6303r_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -351,7 +351,7 @@ public:
 	void in_p6_override_mask(u8 mask) { m_portx_ddr_override[1] = mask; }
 
 protected:
-	hd6301x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal, int nvram_bytes);
+	hd6301x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal, int nvram_bytes);
 
 	// device_nvram_interface implementation
 	virtual bool nvram_read(util::read_stream &file) override;
@@ -430,10 +430,10 @@ protected:
 class hd6301x0_cpu_device : public hd6301x_cpu_device
 {
 public:
-	hd6301x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6301x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	hd6301x0_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal, int nvram_bytes);
+	hd6301x0_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal, int nvram_bytes);
 
 	virtual void device_reset() override ATTR_COLD;
 };
@@ -444,7 +444,7 @@ protected:
 class hd63701x0_cpu_device : public hd6301x0_cpu_device
 {
 public:
-	hd63701x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd63701x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -455,14 +455,14 @@ public:
 class hd6303x_cpu_device : public hd6301x_cpu_device
 {
 public:
-	hd6303x_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6303x_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hd6301y_cpu_device : public hd6301x_cpu_device
 {
 protected:
-	hd6301y_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal, int nvram_bytes);
+	hd6301y_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal, int nvram_bytes);
 
 	void hd6301y_io(address_map &map) ATTR_COLD;
 	void hd6303y_io(address_map &map) ATTR_COLD;
@@ -502,7 +502,7 @@ protected:
 class hd6301y0_cpu_device : public hd6301y_cpu_device
 {
 public:
-	hd6301y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6301y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -511,7 +511,7 @@ public:
 class hd63701y0_cpu_device : public hd6301y_cpu_device
 {
 public:
-	hd63701y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd63701y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -523,7 +523,7 @@ public:
 class hd6303y_cpu_device : public hd6301y_cpu_device
 {
 public:
-	hd6303y_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6303y_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

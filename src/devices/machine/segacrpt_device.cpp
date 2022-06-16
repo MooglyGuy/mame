@@ -290,7 +290,7 @@ DEFINE_DEVICE_TYPE(SEGA_315_5155, sega_315_5155_device, "sega_315_5155", "Sega 3
 
 
 
-segacrpt_z80_device::segacrpt_z80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+segacrpt_z80_device::segacrpt_z80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	z80_device(mconfig, type, tag, owner, clock),
 	m_decrypted_ptr(nullptr),
 	m_region_ptr(nullptr),
@@ -341,7 +341,7 @@ void segacrpt_z80_device::set_decrypted_p(uint8_t* ptr)
 
 
 
-sega_315_5132_device::sega_315_5132_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5132, tag, owner, clock) {}
+sega_315_5132_device::sega_315_5132_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5132, tag, owner, clock) {}
 void sega_315_5132_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -372,7 +372,7 @@ void sega_315_5132_device::decrypt()
 
 
 
-sega_315_5155_device::sega_315_5155_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5155, tag, owner, clock) {}
+sega_315_5155_device::sega_315_5155_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5155, tag, owner, clock) {}
 void sega_315_5155_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -403,7 +403,7 @@ void sega_315_5155_device::decrypt()
 
 
 
-sega_315_5110_device::sega_315_5110_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5110, tag, owner, clock) {}
+sega_315_5110_device::sega_315_5110_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5110, tag, owner, clock) {}
 void sega_315_5110_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -433,7 +433,7 @@ void sega_315_5110_device::decrypt()
 
 
 
-sega_315_5135_device::sega_315_5135_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5135, tag, owner, clock) {}
+sega_315_5135_device::sega_315_5135_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5135, tag, owner, clock) {}
 void sega_315_5135_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -464,7 +464,7 @@ void sega_315_5135_device::decrypt()
 
 
 
-sega_315_5051_device::sega_315_5051_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5051, tag, owner, clock) {}
+sega_315_5051_device::sega_315_5051_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5051, tag, owner, clock) {}
 void sega_315_5051_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -494,7 +494,7 @@ void sega_315_5051_device::decrypt()
 
 
 
-sega_315_5098_device::sega_315_5098_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5098, tag, owner, clock) {}
+sega_315_5098_device::sega_315_5098_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5098, tag, owner, clock) {}
 void sega_315_5098_device::decrypt()
 {
 	// also 315-5030 ?
@@ -526,7 +526,7 @@ void sega_315_5098_device::decrypt()
 
 
 
-sega_315_5102_device::sega_315_5102_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5102, tag, owner, clock) {}
+sega_315_5102_device::sega_315_5102_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5102, tag, owner, clock) {}
 void sega_315_5102_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -555,7 +555,7 @@ void sega_315_5102_device::decrypt()
 }
 
 
-sega_315_5065_device::sega_315_5065_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5065, tag, owner, clock) {}
+sega_315_5065_device::sega_315_5065_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5065, tag, owner, clock) {}
 void sega_315_5065_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -584,7 +584,7 @@ void sega_315_5065_device::decrypt()
 }
 
 
-sega_315_5064_device::sega_315_5064_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5064, tag, owner, clock) {}
+sega_315_5064_device::sega_315_5064_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5064, tag, owner, clock) {}
 void sega_315_5064_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -614,7 +614,7 @@ void sega_315_5064_device::decrypt()
 
 
 
-sega_315_5033_device::sega_315_5033_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5033, tag, owner, clock) {}
+sega_315_5033_device::sega_315_5033_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5033, tag, owner, clock) {}
 void sega_315_5033_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -643,7 +643,7 @@ void sega_315_5033_device::decrypt()
 }
 
 
-sega_315_5041_device::sega_315_5041_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5041, tag, owner, clock) {}
+sega_315_5041_device::sega_315_5041_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5041, tag, owner, clock) {}
 void sega_315_5041_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -673,8 +673,8 @@ void sega_315_5041_device::decrypt()
 
 
 
-sega_315_5048_device::sega_315_5048_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5048, tag, owner, clock) {}
-sega_315_5048_device::sega_315_5048_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, type, tag, owner, clock) {}
+sega_315_5048_device::sega_315_5048_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5048, tag, owner, clock) {}
+sega_315_5048_device::sega_315_5048_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, type, tag, owner, clock) {}
 void sega_315_5048_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -703,7 +703,7 @@ void sega_315_5048_device::decrypt()
 }
 
 
-sega_315_5093_device::sega_315_5093_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5093, tag, owner, clock) {}
+sega_315_5093_device::sega_315_5093_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5093, tag, owner, clock) {}
 void sega_315_5093_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -733,7 +733,7 @@ void sega_315_5093_device::decrypt()
 
 
 
-sega_315_5099_device::sega_315_5099_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5099, tag, owner, clock) {}
+sega_315_5099_device::sega_315_5099_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5099, tag, owner, clock) {}
 void sega_315_5099_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -764,8 +764,8 @@ void sega_315_5099_device::decrypt()
 
 
 
-sega_315_5006_device::sega_315_5006_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5006, tag, owner, clock) {}
-sega_315_5006_device::sega_315_5006_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, type, tag, owner, clock) {}
+sega_315_5006_device::sega_315_5006_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5006, tag, owner, clock) {}
+sega_315_5006_device::sega_315_5006_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, type, tag, owner, clock) {}
 void sega_315_5006_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -793,13 +793,13 @@ void sega_315_5006_device::decrypt()
 	decode(m_region_ptr, m_decrypted_ptr, m_decode_size, convtable, m_numbanks, m_banksize);
 }
 
-sega_315_5096_device::sega_315_5096_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : sega_315_5006_device(mconfig, SEGA_315_5096, tag, owner, clock) {}
+sega_315_5096_device::sega_315_5096_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : sega_315_5006_device(mconfig, SEGA_315_5096, tag, owner, clock) {}
 // == sega_315_5006_device
 
-sega_315_5111_device::sega_315_5111_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : sega_315_5006_device(mconfig, SEGA_315_5111, tag, owner, clock) {}
+sega_315_5111_device::sega_315_5111_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : sega_315_5006_device(mconfig, SEGA_315_5111, tag, owner, clock) {}
 // == sega_315_5006_device
 
-sega_315_5015_device::sega_315_5015_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5015, tag, owner, clock) {}
+sega_315_5015_device::sega_315_5015_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5015, tag, owner, clock) {}
 void sega_315_5015_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -829,11 +829,11 @@ void sega_315_5015_device::decrypt()
 }
 
 
-sega_315_5133_device::sega_315_5133_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : sega_315_5048_device(mconfig, SEGA_315_5133, tag, owner, clock) {}
+sega_315_5133_device::sega_315_5133_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : sega_315_5048_device(mconfig, SEGA_315_5133, tag, owner, clock) {}
 // == sega_315_5048_device
 
 
-sega_315_5014_device::sega_315_5014_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5014, tag, owner, clock) {}
+sega_315_5014_device::sega_315_5014_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5014, tag, owner, clock) {}
 void sega_315_5014_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -862,7 +862,7 @@ void sega_315_5014_device::decrypt()
 
 
 
-sega_315_5013_device::sega_315_5013_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5013, tag, owner, clock) {}
+sega_315_5013_device::sega_315_5013_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5013, tag, owner, clock) {}
 void sega_315_5013_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -891,7 +891,7 @@ void sega_315_5013_device::decrypt()
 }
 
 
-sega_315_5061_device::sega_315_5061_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5061, tag, owner, clock) {}
+sega_315_5061_device::sega_315_5061_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5061, tag, owner, clock) {}
 void sega_315_5061_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -921,7 +921,7 @@ void sega_315_5061_device::decrypt()
 
 
 
-sega_315_5018_device::sega_315_5018_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5018, tag, owner, clock) {}
+sega_315_5018_device::sega_315_5018_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5018, tag, owner, clock) {}
 void sega_315_5018_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -951,7 +951,7 @@ void sega_315_5018_device::decrypt()
 }
 
 
-sega_315_5010_device::sega_315_5010_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5010, tag, owner, clock) {}
+sega_315_5010_device::sega_315_5010_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5010, tag, owner, clock) {}
 void sega_315_5010_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -982,7 +982,7 @@ void sega_315_5010_device::decrypt()
 
 
 
-sega_315_5128_device::sega_315_5128_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5128, tag, owner, clock) {}
+sega_315_5128_device::sega_315_5128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5128, tag, owner, clock) {}
 void sega_315_5128_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -1011,7 +1011,7 @@ void sega_315_5128_device::decrypt()
 }
 
 
-sega_315_5028_device::sega_315_5028_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5028, tag, owner, clock) {}
+sega_315_5028_device::sega_315_5028_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5028, tag, owner, clock) {}
 void sega_315_5028_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =
@@ -1040,7 +1040,7 @@ void sega_315_5028_device::decrypt()
 }
 
 
-sega_315_5084_device::sega_315_5084_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : segacrpt_z80_device(mconfig, SEGA_315_5084, tag, owner, clock) {}
+sega_315_5084_device::sega_315_5084_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : segacrpt_z80_device(mconfig, SEGA_315_5084, tag, owner, clock) {}
 void sega_315_5084_device::decrypt()
 {
 	static const uint8_t convtable[32][4] =

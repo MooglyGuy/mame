@@ -1297,7 +1297,7 @@ void vigilant_state::vigilant(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.28, 0);
 	ymsnd.add_route(1, "speaker", 0.28, 1);
 
-	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac", 0)); // unknown DAC
+	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac")); // unknown DAC
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.5, 0);
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.5, 1);
 }
@@ -1360,7 +1360,7 @@ void vigilant_state::buccanrs(machine_config &config)
 	ym2.add_route(3, "speaker", 0.50, 0);
 	ym2.add_route(3, "speaker", 0.50, 1);
 
-	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac", 0)); // unknown DAC
+	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac")); // unknown DAC
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.35, 0);
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.35, 1);
 }
@@ -1420,7 +1420,7 @@ void vigilant_state::kikcubic(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.28, 0);
 	ymsnd.add_route(1, "speaker", 0.28, 1);
 
-	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac", 0)); // unknown DAC
+	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac")); // unknown DAC
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.5, 0);
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.5, 1);
 }
@@ -1484,7 +1484,7 @@ void vigilant_state::bowmen(machine_config &config)
 	ym2.add_route(3, "speaker", 0.50, 0);
 	ym2.add_route(3, "speaker", 0.50, 1);
 
-	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac", 0)); // unknown DAC
+	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac")); // unknown DAC
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.35, 0);
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.35, 1);
 }

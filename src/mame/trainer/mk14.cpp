@@ -408,8 +408,8 @@ void mk14_state::mk14(machine_config &config)
 	m_display->set_segmask(0xff, 0xff);
 
 	SPEAKER(config, "speaker").front_center();
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.25);
-	ZN425E(config, "dac8", 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // Ferranti ZN425E
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.25);
+	ZN425E(config, "dac8").add_route(ALL_OUTPUTS, "speaker", 0.5); // Ferranti ZN425E
 
 	ins8154_device &ic8(INS8154(config, "ic8"));
 	ic8.out_a().set(FUNC(mk14_state::port_a_w));

@@ -325,7 +325,7 @@ void mustache_state::mustache(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &mustache_state::memmap);
 	m_maincpu->set_addrmap(AS_OPCODES, &mustache_state::decrypted_opcodes_map);
 
-	SEI80BU(config, "sei80bu", 0).set_device_rom_tag("maincpu");
+	SEI80BU(config, "sei80bu").set_device_rom_tag("maincpu");
 
 	t5182_device &t5182(T5182(config, "t5182", 14.318181_MHz_XTAL / 4));
 	t5182.ym_read_callback().set("ymsnd", FUNC(ym2151_device::read));

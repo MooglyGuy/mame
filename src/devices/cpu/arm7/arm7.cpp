@@ -83,7 +83,7 @@ DEFINE_DEVICE_TYPE(SA1100,       sa1100_cpu_device,       "sa1100",       "Intel
 DEFINE_DEVICE_TYPE(SA1110,       sa1110_cpu_device,       "sa1110",       "Intel StrongARM SA-1110")
 DEFINE_DEVICE_TYPE(IGS036,       igs036_cpu_device,       "igs036",       "IGS036")
 
-arm7_cpu_device::arm7_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm7_cpu_device::arm7_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, ARM7, tag, owner, clock, 4, ARCHFLAG_T, ENDIANNESS_LITTLE)
 {
 }
@@ -92,7 +92,7 @@ arm7_cpu_device::arm7_cpu_device(
 		const machine_config &mconfig,
 		device_type type,
 		const char *tag, device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		uint8_t archRev,
 		uint32_t archFlags,
 		endianness_t endianness,
@@ -131,13 +131,13 @@ arm7_cpu_device::~arm7_cpu_device()
 }
 
 
-arm7_be_cpu_device::arm7_be_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm7_be_cpu_device::arm7_be_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, ARM7_BE, tag, owner, clock, 4, ARCHFLAG_T, ENDIANNESS_BIG)
 {
 }
 
 
-arm710a_cpu_device::arm710a_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm710a_cpu_device::arm710a_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, ARM710A, tag, owner, clock, 4, ARCHFLAG_MODE26, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_ARM
@@ -146,7 +146,7 @@ arm710a_cpu_device::arm710a_cpu_device(const machine_config &mconfig, const char
 }
 
 
-arm710t_cpu_device::arm710t_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm710t_cpu_device::arm710t_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, ARM710T, tag, owner, clock, 4, ARCHFLAG_MODE26, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_ARM
@@ -155,7 +155,7 @@ arm710t_cpu_device::arm710t_cpu_device(const machine_config &mconfig, const char
 }
 
 
-arm7500_cpu_device::arm7500_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm7500_cpu_device::arm7500_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, ARM7500, tag, owner, clock, 4, ARCHFLAG_MODE26, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_ARM
@@ -164,13 +164,13 @@ arm7500_cpu_device::arm7500_cpu_device(const machine_config &mconfig, const char
 }
 
 
-arm9_cpu_device::arm9_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm9_cpu_device::arm9_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm9_cpu_device(mconfig, ARM9, tag, owner, clock, 5, ARCHFLAG_T | ARCHFLAG_E, ENDIANNESS_LITTLE)
 {
 }
 
 
-arm9_cpu_device::arm9_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint8_t archRev, uint32_t archFlags, endianness_t endianness)
+arm9_cpu_device::arm9_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint8_t archRev, uint32_t archFlags, endianness_t endianness)
 	: arm7_cpu_device(mconfig, type, tag, owner, clock, archRev, archFlags, endianness)
 {
 	uint32_t arch = ARM9_COPRO_ID_ARCH_V4;
@@ -198,7 +198,7 @@ arm9_cpu_device::arm9_cpu_device(const machine_config &mconfig, device_type type
 }
 
 
-arm920t_cpu_device::arm920t_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm920t_cpu_device::arm920t_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm9_cpu_device(mconfig, ARM920T, tag, owner, clock, 4, ARCHFLAG_T, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_ARM
@@ -208,7 +208,7 @@ arm920t_cpu_device::arm920t_cpu_device(const machine_config &mconfig, const char
 			   | 0; // Stepping
 }
 
-arm946es_cpu_device::arm946es_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+arm946es_cpu_device::arm946es_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: arm9_cpu_device(mconfig, type, tag, owner, clock, 5, ARCHFLAG_T | ARCHFLAG_E, ENDIANNESS_LITTLE),
 	cp15_control(0x78)
 {
@@ -229,18 +229,18 @@ arm946es_cpu_device::arm946es_cpu_device(const machine_config &mconfig, device_t
 	cp15_itcm_reg = cp15_dtcm_reg = 0;
 }
 
-arm946es_cpu_device::arm946es_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm946es_cpu_device::arm946es_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm946es_cpu_device(mconfig, ARM946ES, tag, owner, clock)
 {
 }
 
-arm11_cpu_device::arm11_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm11_cpu_device::arm11_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm11_cpu_device(mconfig, ARM11, tag, owner, clock, 6, ARCHFLAG_T | ARCHFLAG_E | ARCHFLAG_K, ENDIANNESS_LITTLE)
 {
 }
 
 
-arm11_cpu_device::arm11_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint8_t archRev, uint32_t archFlags, endianness_t endianness)
+arm11_cpu_device::arm11_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint8_t archRev, uint32_t archFlags, endianness_t endianness)
 	: arm9_cpu_device(mconfig, type, tag, owner, clock, archRev, archFlags, endianness)
 {
 	uint32_t arch = ARM9_COPRO_ID_ARCH_V6;
@@ -248,7 +248,7 @@ arm11_cpu_device::arm11_cpu_device(const machine_config &mconfig, device_type ty
 	m_copro_id = ARM9_COPRO_ID_MFR_ARM | arch | (0xB00 << 4);
 }
 
-arm1176jzf_s_cpu_device::arm1176jzf_s_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arm1176jzf_s_cpu_device::arm1176jzf_s_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm11_cpu_device(mconfig, ARM1176JZF_S, tag, owner, clock, 6, ARCHFLAG_T | ARCHFLAG_E | ARCHFLAG_K, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_ARM
@@ -259,12 +259,12 @@ arm1176jzf_s_cpu_device::arm1176jzf_s_cpu_device(const machine_config &mconfig, 
 }
 
 // unknown configuration, but uses MPU not MMU, so closer to ARM946ES
-igs036_cpu_device::igs036_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+igs036_cpu_device::igs036_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm946es_cpu_device(mconfig, IGS036, tag, owner, clock)
 {
 }
 
-pxa250_cpu_device::pxa250_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pxa250_cpu_device::pxa250_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, PXA250, tag, owner, clock, 5, ARCHFLAG_T | ARCHFLAG_E | ARCHFLAG_XSCALE, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_INTEL
@@ -273,7 +273,7 @@ pxa250_cpu_device::pxa250_cpu_device(const machine_config &mconfig, const char *
 			   | ARM9_COPRO_ID_STEP_PXA255_A0;
 }
 
-pxa255_cpu_device::pxa255_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pxa255_cpu_device::pxa255_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, PXA255, tag, owner, clock, 5, ARCHFLAG_T | ARCHFLAG_E | ARCHFLAG_XSCALE, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_INTEL
@@ -282,7 +282,7 @@ pxa255_cpu_device::pxa255_cpu_device(const machine_config &mconfig, const char *
 			   | ARM9_COPRO_ID_STEP_PXA255_A0;
 }
 
-pxa270_cpu_device::pxa270_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pxa270_cpu_device::pxa270_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, PXA270, tag, owner, clock, 5, ARCHFLAG_T | ARCHFLAG_E | ARCHFLAG_XSCALE, ENDIANNESS_LITTLE)
 {
 	m_copro_id = ARM9_COPRO_ID_MFR_INTEL
@@ -291,7 +291,7 @@ pxa270_cpu_device::pxa270_cpu_device(const machine_config &mconfig, const char *
 			   | ARM9_COPRO_ID_STEP_PXA255_A0;
 }
 
-sa1100_cpu_device::sa1100_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sa1100_cpu_device::sa1100_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, SA1100, tag, owner, clock, 4, ARCHFLAG_SA, ENDIANNESS_LITTLE)
 	// has StrongARM, no Thumb, no Enhanced DSP
 {
@@ -301,7 +301,7 @@ sa1100_cpu_device::sa1100_cpu_device(const machine_config &mconfig, const char *
 			   | ARM9_COPRO_ID_STEP_SA1100_A;
 }
 
-sa1110_cpu_device::sa1110_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sa1110_cpu_device::sa1110_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arm7_cpu_device(mconfig, SA1110, tag, owner, clock, 4, ARCHFLAG_SA, ENDIANNESS_LITTLE)
 	// has StrongARM, no Thumb, no Enhanced DSP
 {

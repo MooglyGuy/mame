@@ -24,13 +24,13 @@ class bbc_scsiaiv_device:
 {
 public:
 	// construction/destruction
-	bbc_scsiaiv_device(const machine_config &mconfig, const char* tag, device_t* owner, uint32_t clock);
+	bbc_scsiaiv_device(const machine_config &mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 	void bsy_w(int state);
 	void req_w(int state);
 
 protected:
-	bbc_scsiaiv_device(const machine_config &mconfig, device_type type, const char* tag, device_t* owner, uint32_t clock);
+	bbc_scsiaiv_device(const machine_config &mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -55,7 +55,7 @@ private:
 //{
 //public:
 //  // construction/destruction
-//  bbc_vp415_device(const machine_config &mconfig, const char* tag, device_t* owner, uint32_t clock);
+//  bbc_vp415_device(const machine_config &mconfig, const char* tag, device_t* owner, const XTAL &clock);
 //
 //protected:
 //  // optional information overrides

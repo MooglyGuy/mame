@@ -38,7 +38,7 @@ inline void ATTR_PRINTF( 3, 4 ) x76f100_device::verboselog( int n_level, const c
 DEFINE_DEVICE_TYPE(X76F100, x76f100_device, "x76f100", "X76F100 Secure SerialFlash")
 
 
-x76f100_device::x76f100_device( const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock ) :
+x76f100_device::x76f100_device( const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock ) :
 	device_t( mconfig, X76F100, tag, owner, clock ),
 	device_nvram_interface(mconfig, *this),
 	m_region(*this, DEVICE_SELF),

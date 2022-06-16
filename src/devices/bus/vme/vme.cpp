@@ -84,10 +84,49 @@
 DEFINE_DEVICE_TYPE(VME, vme_bus_device, "vme", "VME bus")
 DEFINE_DEVICE_TYPE(VME_SLOT, vme_slot_device, "vme_slot", "VME slot")
 
+<<<<<<< HEAD
 vme_bus_device::vme_bus_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, u8 datawidth)
 	: device_t(mconfig, VME, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_asc
+=======
+//-------------------------------------------------
+//  vme_slot_device - constructor
+//-------------------------------------------------
+vme_slot_device::vme_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: vme_slot_device(mconfig, VME_SLOT, tag, owner, clock)
+{
+}
+
+vme_slot_device::vme_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
+	: device_t(mconfig, type, tag, owner, clock)
+	, device_slot_interface(mconfig, *this)
+	, m_vme(*this, finder_base::DUMMY_TAG)
+	, m_slot_nbr(0)
+	, m_vme_j1_callback(*this)
+{
+	LOG("%s %s\n", tag, FUNCNAME);
+}
+
+//-------------------------------------------------
+//  device_start - device-specific startup
+//-------------------------------------------------
+void vme_slot_device::device_start()
+{
+	//  m_card = dynamic_cast<device_vme_card_interface *>(get_card_device());
+}
+
+//-------------------------------------------------
+//  device_resolve_objects - resolve objects that
+//  may be needed for other devices to set
+//  initial conditions at start time
+//-------------------------------------------------
+void vme_slot_device::device_resolve_objects()
+{
+	device_vme_card_interface *dev = dynamic_cast<device_vme_card_interface *>(get_card_device());
+	LOG("%s %s - %s\n", tag(), FUNCNAME, m_vme.finder_tag());
+	if (dev)
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	{
 		{ "iack",   ENDIANNESS_BIG, datawidth, 4, -2, address_map_constructor(FUNC(vme_bus_device::iack), this) },
 		{}, {}, {}, {}, {}, {}, {}, {},
@@ -155,7 +194,40 @@ device_memory_interface::space_config_vector vme_bus_device::memory_space_config
 
 u32 vme_bus_device::read_iack(address_space &space, offs_t offset, u32 mem_mask)
 {
+<<<<<<< HEAD
 	if (!device().machine().side_effects_disabled())
+=======
+	LOG("%s %s\n", tag(), FUNCNAME);
+
+	m_allocspaces = false;
+}
+
+vme_device::vme_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: vme_device(mconfig, VME, tag, owner, clock)
+{
+}
+
+vme_device::vme_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
+	: device_t(mconfig, type, tag, owner, clock)
+	, device_memory_interface(mconfig, *this)
+	, m_a32_config("a32", ENDIANNESS_BIG, 32, 32, 0, address_map_constructor())
+	, m_allocspaces(true)
+	, m_cputag("maincpu")
+{
+	LOG("%s %s\n", tag, FUNCNAME);
+}
+
+vme_device::~vme_device()
+{
+	LOG("%s %s\n", tag(), FUNCNAME);
+	m_device_list.detach_all();
+}
+
+void vme_device::device_start()
+{
+	LOG("%s %s %s\n", owner()->tag(), tag(), FUNCNAME);
+	if (m_allocspaces)
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	{
 		// decode the interrupt number from address lines A03-A01
 		unsigned const irq = BIT(offset, 1, 3);

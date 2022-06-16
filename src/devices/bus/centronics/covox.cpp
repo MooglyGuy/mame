@@ -29,7 +29,7 @@ DEFINE_DEVICE_TYPE(CENTRONICS_COVOX, centronics_covox_device, "covox", "Covox Sp
 //  centronics_covox_device - constructor
 //-------------------------------------------------
 
-centronics_covox_device::centronics_covox_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+centronics_covox_device::centronics_covox_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CENTRONICS_COVOX, tag, owner, clock),
 	device_centronics_peripheral_interface( mconfig, *this ),
 	m_dac(*this, "dac"),
@@ -45,7 +45,7 @@ void centronics_covox_device::device_add_mconfig(machine_config &config)
 {
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
 }
 
 void centronics_covox_device::device_start()
@@ -74,7 +74,7 @@ DEFINE_DEVICE_TYPE(CENTRONICS_COVOX_STEREO, centronics_covox_stereo_device, "cov
 //  centronics_covox_stereo_device - constructor
 //-------------------------------------------------
 
-centronics_covox_stereo_device::centronics_covox_stereo_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+centronics_covox_stereo_device::centronics_covox_stereo_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CENTRONICS_COVOX_STEREO, tag, owner, clock),
 	device_centronics_peripheral_interface( mconfig, *this ),
 	m_ldac(*this, "ldac"),
@@ -93,8 +93,8 @@ void centronics_covox_stereo_device::device_add_mconfig(machine_config &config)
 {
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
-	DAC_8BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
-	DAC_8BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
+	DAC_8BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
+	DAC_8BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
 }
 
 void centronics_covox_stereo_device::device_start()

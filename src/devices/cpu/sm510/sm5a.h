@@ -60,10 +60,10 @@ O34 60 |  *                                                         | 16 O48
 class sm5a_device : public sm500_device
 {
 public:
-	sm5a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 32768);
+	sm5a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32768));
 
 protected:
-	sm5a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int stack_levels, int o_pins, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
+	sm5a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int stack_levels, int o_pins, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
 
 	void program_1_8k(address_map &map) ATTR_COLD;
 	void data_5x13x4(address_map &map) ATTR_COLD;
@@ -80,9 +80,18 @@ protected:
 class sm5l_device : public sm5a_device
 {
 public:
-	sm5l_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 32768);
+	sm5l_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32768));
 };
 
+<<<<<<< HEAD
+=======
+class kb1013vk12_device : public sm5a_device
+{
+public:
+	kb1013vk12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32768));
+};
+
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 
 DECLARE_DEVICE_TYPE(SM5A, sm5a_device)
 DECLARE_DEVICE_TYPE(SM5L, sm5l_device)

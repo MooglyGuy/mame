@@ -114,14 +114,14 @@ void electron_m2105_device::device_add_mconfig(machine_config &config)
 	output_latch_device &latch(OUTPUT_LATCH(config, "cent_data_out"));
 	centronics.set_output_latch(latch);
 
-	tms5220_device &tms(TMS5220(config, "vsp", 640000));
+	tms5220_device &tms(TMS5220(config, "vsp", XTAL::u(640000)));
 	tms.ready_cb().set(m_via[0], FUNC(via6522_device::write_ca1));
 	tms.ready_cb().append(m_via[0], FUNC(via6522_device::write_pb2));
 	tms.irq_cb().set(m_via[0], FUNC(via6522_device::write_ca2));
 	tms.irq_cb().append(m_via[0], FUNC(via6522_device::write_pb3));
 	tms.add_route(ALL_OUTPUTS, "mono", 0.5);
 
-	TMS6100(config, "vsm", 0);
+	TMS6100(config, "vsm");
 	tms.m0_cb().set("vsm", FUNC(tms6100_device::m0_w));
 	tms.m1_cb().set("vsm", FUNC(tms6100_device::m1_w));
 	tms.addr_cb().set("vsm", FUNC(tms6100_device::add_w));
@@ -144,7 +144,7 @@ const tiny_rom_entry *electron_m2105_device::device_rom_region() const
 //  electron_m2105_device - constructor
 //-------------------------------------------------
 
-electron_m2105_device::electron_m2105_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+electron_m2105_device::electron_m2105_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ELECTRON_M2105, tag, owner, clock)
 	, device_electron_expansion_interface(mconfig, *this)
 	, m_exp_rom(*this, "exp_rom")

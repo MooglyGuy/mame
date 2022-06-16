@@ -16,7 +16,7 @@ class arcompact_device : public cpu_device, protected arcompact_common
 {
 public:
 	// construction/destruction
-	arcompact_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	arcompact_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_default_vector_base(uint32_t address) { m_default_vector_base = address & 0xfffffc00; }
 

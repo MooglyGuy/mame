@@ -423,15 +423,15 @@ void ggconnie_state::ggconnie(machine_config &config)
 
 	INPUT_MERGER_ANY_HIGH(config, m_irqs).output_handler().set_inputline(m_maincpu, 0);
 
-	huc6270_device &huc6270_0(HUC6270(config, "huc6270_0", 0));
+	huc6270_device &huc6270_0(HUC6270(config, "huc6270_0"));
 	huc6270_0.set_vram_size(0x10000);
 	huc6270_0.irq().set(m_irqs, FUNC(input_merger_device::in_w<0>));
 
-	huc6270_device &huc6270_1(HUC6270(config, "huc6270_1", 0));
+	huc6270_device &huc6270_1(HUC6270(config, "huc6270_1"));
 	huc6270_1.set_vram_size(0x10000);
 	huc6270_1.irq().set(m_irqs, FUNC(input_merger_device::in_w<1>));
 
-	huc6202_device &huc6202(HUC6202(config, "huc6202", 0 ));
+	huc6202_device &huc6202(HUC6202(config, "huc6202"));
 	huc6202.next_pixel_0_callback().set("huc6270_0", FUNC(huc6270_device::next_pixel));
 	huc6202.time_til_next_event_0_callback().set("huc6270_0", FUNC(huc6270_device::time_until_next_event));
 	huc6202.vsync_changed_0_callback().set("huc6270_0", FUNC(huc6270_device::vsync_changed));

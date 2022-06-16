@@ -35,7 +35,7 @@ public:
 	class mameimg_disk_image_device;
 
 	// construction/destruction
-	nubus_image_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	enum
@@ -59,7 +59,7 @@ protected:
 		u32 bytecount;
 	};
 
-	nubus_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -96,7 +96,7 @@ class nubus_image_device::mameimg_disk_image_device : public device_t, public de
 {
 public:
 	// construction/destruction
-	mameimg_disk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mameimg_disk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_image_interface implementation
 	virtual bool is_readable()  const noexcept override { return true; }
@@ -122,7 +122,7 @@ public:
 
 DEFINE_DEVICE_TYPE(MAMEIMG_DISK, nubus_image_device::mameimg_disk_image_device, "messimg_disk_image", "Mac image")
 
-nubus_image_device::mameimg_disk_image_device::mameimg_disk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_image_device::mameimg_disk_image_device::mameimg_disk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MAMEIMG_DISK, tag, owner, clock),
 	device_image_interface(mconfig, *this),
 	m_size(0), m_data(nullptr), m_ejected(false)
@@ -175,7 +175,7 @@ ROM_END
 
 void nubus_image_device::device_add_mconfig(machine_config &config)
 {
-	MAMEIMG_DISK(config, "nb_disk", 0);
+	MAMEIMG_DISK(config, "nb_disk");
 }
 
 //-------------------------------------------------
@@ -187,12 +187,12 @@ const tiny_rom_entry *nubus_image_device::device_rom_region() const
 	return ROM_NAME( image );
 }
 
-nubus_image_device::nubus_image_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_image_device::nubus_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_image_device(mconfig, NUBUS_IMAGE, tag, owner, clock)
 {
 }
 
-nubus_image_device::nubus_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_image_device::nubus_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_image(nullptr)

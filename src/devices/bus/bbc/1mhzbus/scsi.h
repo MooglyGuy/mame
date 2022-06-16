@@ -24,13 +24,13 @@ class bbc_scsi_device:
 {
 public:
 	// construction/destruction
-	bbc_scsi_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock);
+	bbc_scsi_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 	void bsy_w(int state);
 	void req_w(int state);
 
 protected:
-	bbc_scsi_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, uint32_t clock);
+	bbc_scsi_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -57,7 +57,7 @@ public:
 	static constexpr feature_type imperfect_features() { return feature::DISK; }
 
 	// construction/destruction
-	bbc_awhd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_awhd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

@@ -23,7 +23,7 @@ class dave_device : public device_t,
 					public device_sound_interface
 {
 public:
-	dave_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dave_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~dave_device();
 
 	auto irq_wr() { return m_write_irq.bind(); }

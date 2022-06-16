@@ -93,7 +93,7 @@ class ns32000_delay : public std::exception { };
 
 static const u32 size_mask[] = { 0x0000'00ffU, 0x0000'ffffU, 0x0000'0000U, 0xffff'ffffU };
 
-template <int HighBits, int Width>ns32000_device<HighBits, Width>::ns32000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+template <int HighBits, int Width>ns32000_device<HighBits, Width>::ns32000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_address_mask(util::make_bitmask<u32>(HighBits))
 	, m_program_config("program", ENDIANNESS_LITTLE, 8 << Width, HighBits, 0)
@@ -125,27 +125,27 @@ template <int HighBits, int Width>ns32000_device<HighBits, Width>::ns32000_devic
 {
 }
 
-ns32008_device::ns32008_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ns32008_device::ns32008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns32000_device(mconfig, NS32008, tag, owner, clock)
 {
 }
 
-ns32016_device::ns32016_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ns32016_device::ns32016_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns32000_device(mconfig, NS32016, tag, owner, clock)
 {
 }
 
-ns32032_device::ns32032_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ns32032_device::ns32032_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns32000_device(mconfig, NS32032, tag, owner, clock)
 {
 }
 
-ns32332_device::ns32332_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ns32332_device::ns32332_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns32000_device(mconfig, NS32332, tag, owner, clock)
 {
 }
 
-ns32532_device::ns32532_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ns32532_device::ns32532_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns32000_device(mconfig, NS32532, tag, owner, clock)
 	, ns32000_mmu_interface(mconfig, *this)
 	, m_pt1_config("pt1", ENDIANNESS_LITTLE, 32, 32, 0)

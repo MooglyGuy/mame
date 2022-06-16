@@ -986,7 +986,7 @@ void expro02_state::comad_noview2(machine_config &config)
 void expro02_state::fantasia(machine_config &config)
 {
 	comad_noview2(config);
-	m_maincpu->set_clock(10000000);
+	m_maincpu->set_clock(XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &expro02_state::comad_map);
 }
 
@@ -996,7 +996,7 @@ void expro02_state::supmodel(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &expro02_state::supmodel_map);
 
-	okim6295_device &oki(OKIM6295(config.replace(), "oki", 1584000, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
+	okim6295_device &oki(OKIM6295(config.replace(), "oki", XTAL::u(1584000), okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
 	oki.set_addrmap(0, &expro02_state::oki_map);
 	oki.add_route(ALL_OUTPUTS, "mono", 1.0);
 }
@@ -1028,7 +1028,7 @@ void expro02_state::galhustl(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &expro02_state::galhustl_map);
 
-	okim6295_device &oki(OKIM6295(config.replace(), "oki", 1056000, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
+	okim6295_device &oki(OKIM6295(config.replace(), "oki", XTAL::u(1056000), okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
 	oki.set_addrmap(0, &expro02_state::oki_map);
 	oki.add_route(ALL_OUTPUTS, "mono", 1.0);
 
@@ -1042,7 +1042,7 @@ void expro02_state::zipzap(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &expro02_state::zipzap_map);
 
-	okim6295_device &oki(OKIM6295(config.replace(), "oki", 1056000, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
+	okim6295_device &oki(OKIM6295(config.replace(), "oki", XTAL::u(1056000), okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
 	oki.set_addrmap(0, &expro02_state::oki_map);
 	oki.add_route(ALL_OUTPUTS, "mono", 1.0);
 

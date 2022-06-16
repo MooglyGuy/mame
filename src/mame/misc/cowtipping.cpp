@@ -87,7 +87,7 @@ void cowtipping_state::cowtipping(machine_config &config)
 	MC68EZ328(config, m_maincpu, 32.768_kHz_XTAL * 506); // 16.580608 MHz, multiplier unknown, actually MC68SZ328
 	m_maincpu->set_addrmap(AS_PROGRAM, &cowtipping_state::main_map);
 
-	PIC16C56(config, "pic", 4000000);  // Actually PIC12C508/P, clock not verified
+	PIC16C56(config, "pic", XTAL::u(4000000));  // Actually PIC12C508/P, clock not verified
 
 //  TODO: AMD_29LV640MB (64 MBit with Boot Sector)
 

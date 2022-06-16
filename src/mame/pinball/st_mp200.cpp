@@ -622,7 +622,7 @@ void st_mp200_state::init_st_mp202()
 void st_mp200_state::st_mp200(machine_config &config)
 {
 	/* basic machine hardware */
-	M6800(config, m_maincpu, 1000000); // no xtal, just 2 chips forming a random oscillator
+	M6800(config, m_maincpu, XTAL::u(1000000)); // no xtal, just 2 chips forming a random oscillator
 	m_maincpu->set_addrmap(AS_PROGRAM, &st_mp200_state::mem_map);
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
@@ -644,7 +644,7 @@ void st_mp200_state::st_mp200(machine_config &config)
 	m_pia_u10->irqa_handler().set("irq", FUNC(input_merger_device::in_w<0>));
 	m_pia_u10->irqb_handler().set("irq", FUNC(input_merger_device::in_w<1>));
 
-	clock_device &u10_clock(CLOCK(config, "u10_clock", 120)); // crosspoint detector
+	clock_device &u10_clock(CLOCK(config, "u10_clock", XTAL::u(120))); // crosspoint detector
 	u10_clock.signal_handler().set(m_pia_u10, FUNC(pia6821_device::cb1_w));
 
 	PIA6821(config, m_pia_u11);
@@ -656,7 +656,7 @@ void st_mp200_state::st_mp200(machine_config &config)
 	m_pia_u11->irqa_handler().set("irq", FUNC(input_merger_device::in_w<2>));
 	m_pia_u11->irqb_handler().set("irq", FUNC(input_merger_device::in_w<3>));
 
-	clock_device &u11_clock(CLOCK(config, "u11_clock", 634));  // NE555 astable
+	clock_device &u11_clock(CLOCK(config, "u11_clock", XTAL::u(634)));  // NE555 astable
 	u11_clock.signal_handler().set(m_pia_u11, FUNC(pia6821_device::ca1_w));
 
 	INPUT_MERGER_ANY_HIGH(config, "irq").output_handler().set_inputline(m_maincpu, M6800_IRQ_LINE);

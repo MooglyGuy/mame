@@ -202,7 +202,7 @@
 #include "screen.h"
 
 
-#define MAIN_CPU_MASTER_CLOCK   (11200000)
+#define MAIN_CPU_MASTER_CLOCK   XTAL::u(11200000)
 #define PIXEL_CLOCK             (MAIN_CPU_MASTER_CLOCK / 2)
 #define CRTC_CLOCK              (MAIN_CPU_MASTER_CLOCK / 16)
 
@@ -504,11 +504,11 @@ INPUT_PORTS_END
 void spiders_state::spiders(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809(config, m_maincpu, 2800000);
+	MC6809(config, m_maincpu, XTAL::u(2800000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &spiders_state::spiders_main_map);
 	m_maincpu->set_periodic_int(FUNC(spiders_state::update_pia_1), attotime::from_hz(25));
 
-	M6802(config, m_audiocpu, 3000000);
+	M6802(config, m_audiocpu, XTAL::u(3000000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &spiders_state::spiders_audio_map);
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
@@ -553,7 +553,7 @@ void spiders_state::spiders(machine_config &config)
 	m_pia[3]->writepb_handler().set(FUNC(spiders_state::spiders_audio_b_w));
 	m_pia[3]->irqa_handler().set_inputline("audiocpu", M6802_IRQ_LINE);
 
-	ttl74123_device &ic60(TTL74123(config, "ic60", 0));
+	ttl74123_device &ic60(TTL74123(config, "ic60"));
 	ic60.set_connection_type(TTL74123_GROUNDED);    /* the hook up type */
 	ic60.set_resistor_value(RES_K(22));             /* resistor connected to RCext */
 	ic60.set_capacitor_value(CAP_U(0.01));          /* capacitor connected to Cext and RCext */

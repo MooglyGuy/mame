@@ -423,7 +423,7 @@ void netlist_mame_sub_interface::set_mult_offset(const double mult, const double
 
 
 netlist_mame_analog_input_device::netlist_mame_analog_input_device(const machine_config &mconfig, const char *tag, device_t *owner, const char *param_name)
-	: device_t(mconfig, NETLIST_ANALOG_INPUT, tag, owner, 0)
+	: device_t(mconfig, NETLIST_ANALOG_INPUT, tag, owner)
 	, netlist_mame_sub_interface(*owner)
 	, m_param(nullptr)
 	, m_auto_port(true)
@@ -432,7 +432,7 @@ netlist_mame_analog_input_device::netlist_mame_analog_input_device(const machine
 {
 }
 
-netlist_mame_analog_input_device::netlist_mame_analog_input_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_analog_input_device::netlist_mame_analog_input_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_ANALOG_INPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_param(nullptr)
@@ -474,7 +474,7 @@ void netlist_mame_analog_input_device::validity_helper(validity_checker &valid,
 // netlist_mame_analog_output_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_analog_output_device::netlist_mame_analog_output_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_analog_output_device::netlist_mame_analog_output_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_ANALOG_OUTPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_in("")
@@ -526,7 +526,7 @@ void netlist_mame_analog_output_device::device_start()
 // netlist_mame_logic_output_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_logic_output_device::netlist_mame_logic_output_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_logic_output_device::netlist_mame_logic_output_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_LOGIC_OUTPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_in("")
@@ -577,7 +577,7 @@ void netlist_mame_logic_output_device::device_start()
 // netlist_mame_int_input_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_int_input_device::netlist_mame_int_input_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_int_input_device::netlist_mame_int_input_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_INT_INPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_param(nullptr)
@@ -621,7 +621,7 @@ void netlist_mame_int_input_device::validity_helper(validity_checker &valid,
 // netlist_mame_logic_input_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_logic_input_device::netlist_mame_logic_input_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_logic_input_device::netlist_mame_logic_input_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_LOGIC_INPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_param(nullptr)
@@ -664,7 +664,7 @@ void netlist_mame_logic_input_device::validity_helper(validity_checker &valid,
 // netlist_mame_ram_pointer_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_ram_pointer_device::netlist_mame_ram_pointer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_ram_pointer_device::netlist_mame_ram_pointer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_RAM_POINTER, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_param(nullptr)
@@ -674,7 +674,7 @@ netlist_mame_ram_pointer_device::netlist_mame_ram_pointer_device(const machine_c
 }
 
 netlist_mame_ram_pointer_device::netlist_mame_ram_pointer_device(const machine_config &mconfig, const char *tag, device_t *owner, const char *pname)
-	: device_t(mconfig, NETLIST_RAM_POINTER, tag, owner, 0)
+	: device_t(mconfig, NETLIST_RAM_POINTER, tag, owner)
 	, netlist_mame_sub_interface(*owner)
 	, m_param(nullptr)
 	, m_param_name(pname)
@@ -716,7 +716,7 @@ void netlist_mame_ram_pointer_device::validity_helper(validity_checker &valid,
 // netlist_mame_stream_input_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_stream_input_device::netlist_mame_stream_input_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_stream_input_device::netlist_mame_stream_input_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_STREAM_INPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_channel(0)
@@ -751,7 +751,7 @@ void netlist_mame_stream_input_device::custom_netlist_additions(netlist::nlparse
 // netlist_mame_stream_output_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_stream_output_device::netlist_mame_stream_output_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_stream_output_device::netlist_mame_stream_output_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NETLIST_STREAM_OUTPUT, tag, owner, clock)
 	, netlist_mame_sub_interface(*owner)
 	, m_channel(0)
@@ -875,12 +875,12 @@ void netlist_mame_stream_output_device::process(netlist::netlist_time_ext tim, n
 // netlist_mame_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_device::netlist_mame_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_device::netlist_mame_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: netlist_mame_device(mconfig, NETLIST_CORE, tag, owner, clock)
 {
 }
 
-netlist_mame_device::netlist_mame_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_device::netlist_mame_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_setup_func(nullptr)
 	, m_device_reset_called(false)
@@ -1170,7 +1170,7 @@ void netlist_mame_device::save_state()
 // netlist_mame_cpu_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_cpu_device::netlist_mame_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+netlist_mame_cpu_device::netlist_mame_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: netlist_mame_device(mconfig, NETLIST_CPU, tag, owner, clock)
 	, device_execute_interface(mconfig, *this)
 	, device_state_interface(mconfig, *this)
@@ -1316,8 +1316,8 @@ offs_t netlist_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 // netlist_mame_sound_device
 // ----------------------------------------------------------------------------------------
 
-netlist_mame_sound_device::netlist_mame_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
-	: netlist_mame_device(mconfig, NETLIST_SOUND, tag, owner, 0)
+netlist_mame_sound_device::netlist_mame_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: netlist_mame_device(mconfig, NETLIST_SOUND, tag, owner)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
 	, m_cur_time(attotime::zero)

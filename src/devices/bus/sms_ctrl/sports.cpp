@@ -100,7 +100,7 @@ private:
 //  sms_sports_pad_device - constructor
 //-------------------------------------------------
 
-sms_sports_pad_device::sms_sports_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sms_sports_pad_device::sms_sports_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_SPORTS_PAD, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_buttons(*this, "SPORTS_BT"),

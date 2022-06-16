@@ -764,7 +764,7 @@ void dassault_state::dassault(machine_config &config)
 	BUFFERED_SPRITERAM16(config, m_spriteram[0]);
 	BUFFERED_SPRITERAM16(config, m_spriteram[1]);
 
-	DECO16IC(config, m_deco_tilegen[0], 0);
+	DECO16IC(config, m_deco_tilegen[0]);
 	m_deco_tilegen[0]->set_pf1_size(DECO_64x32);
 	m_deco_tilegen[0]->set_pf2_size(DECO_64x32);
 	m_deco_tilegen[0]->set_pf1_col_bank(0);
@@ -777,7 +777,7 @@ void dassault_state::dassault(machine_config &config)
 	m_deco_tilegen[0]->set_pf12_16x16_bank(1);
 	m_deco_tilegen[0]->set_gfxdecode_tag("gfxdecode");
 
-	DECO16IC(config, m_deco_tilegen[1], 0);
+	DECO16IC(config, m_deco_tilegen[1]);
 	m_deco_tilegen[1]->set_pf1_size(DECO_64x32);
 	m_deco_tilegen[1]->set_pf2_size(DECO_64x32);
 	m_deco_tilegen[1]->set_pf1_col_bank(0);
@@ -790,8 +790,8 @@ void dassault_state::dassault(machine_config &config)
 	m_deco_tilegen[1]->set_pf12_16x16_bank(2);
 	m_deco_tilegen[1]->set_gfxdecode_tag("gfxdecode");
 
-	DECO_SPRITE(config, m_sprgen[0], 0, m_palette, gfx_dassault_spr1);
-	DECO_SPRITE(config, m_sprgen[1], 0, m_palette, gfx_dassault_spr2);
+	DECO_SPRITE(config, m_sprgen[0], m_palette, gfx_dassault_spr1);
+	DECO_SPRITE(config, m_sprgen[1], m_palette, gfx_dassault_spr2);
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();

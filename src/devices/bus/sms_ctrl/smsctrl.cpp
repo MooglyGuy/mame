@@ -51,7 +51,7 @@ void device_sms_control_interface::out_w(u8 data, u8 mem_mask)
 //  SLOT DEVICE
 //**************************************************************************
 
-sms_control_port_device::sms_control_port_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_control_port_device::sms_control_port_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_CONTROL_PORT, tag, owner, clock),
 	device_single_card_slot_interface<device_sms_control_interface>(mconfig, *this),
 	m_screen(*this, finder_base::DUMMY_TAG),

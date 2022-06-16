@@ -250,7 +250,7 @@ tms3202x_device::tms3202x_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		unsigned stack_depth,
 		address_map_constructor prgmap,
 		address_map_constructor datamap)
@@ -284,18 +284,18 @@ tms32025_device::tms32025_device(const machine_config &mconfig, device_type type
 {
 }
 
-tms32025_device::tms32025_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+tms32025_device::tms32025_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: tms32025_device(mconfig, type, tag, owner, clock, address_map_constructor(), address_map_constructor(FUNC(tms3202x_device::tms3202x_data), this))
 {
 	m_fixed_STR1 = 0x0180;
 }
 
-tms32025_device::tms32025_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tms32025_device::tms32025_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tms32025_device(mconfig, TMS32025, tag, owner, clock)
 {
 }
 
-tms32026_device::tms32026_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tms32026_device::tms32026_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tms32025_device(mconfig, TMS32026, tag, owner, clock, address_map_constructor(), address_map_constructor(FUNC(tms32026_device::tms32026_data), this))
 {
 	m_fixed_STR1 = 0x0100;

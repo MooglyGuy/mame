@@ -28,10 +28,10 @@ public:
 		DIV
 	};
 
-	h8_timer8_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_timer8_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8_timer8_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int irq_ca, int irq_cb, int irq_v,
 				int div1, int div2, int div3, int div4, int div5, int div6)
-		: h8_timer8_channel_device(mconfig, tag, owner, 0)
+		: h8_timer8_channel_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));
@@ -96,7 +96,7 @@ protected:
 	int m_clock_type, m_clock_divider, m_clear_type, m_counter_cycle;
 	u64 m_last_clock_update, m_event_time;
 
-	h8_timer8_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h8_timer8_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -109,10 +109,10 @@ protected:
 
 class h8h_timer8_channel_device : public h8_timer8_channel_device {
 public:
-	h8h_timer8_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8h_timer8_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U, typename V> h8h_timer8_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int irq_ca, int irq_cb, int irq_v,
 				V &&chain, int chain_type, bool has_adte, bool has_ice)
-		: h8h_timer8_channel_device(mconfig, tag, owner, 0)
+		: h8h_timer8_channel_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));

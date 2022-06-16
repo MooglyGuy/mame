@@ -22,7 +22,7 @@ public:
 	enum class model { II, IIE, IIGS, II_J_PLUS, IVEL_ULTRA };
 
 	// construction/destruction
-	a2_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u32 m_GSborder_colors[16]{}, m_shr_palette[256]{};
 	std::unique_ptr<bitmap_ind16> m_8bit_graphics;

@@ -745,7 +745,7 @@ void nycaptor_state::nycaptor(machine_config &config)
 	const attotime audio_irq_period = attotime::from_ticks(0x10000, 8000000); // ~122Hz
 	m_audiocpu->set_periodic_int(FUNC(nycaptor_state::irq0_line_hold), audio_irq_period);
 
-	TAITO68705_MCU(config, m_bmcu, 2000000);
+	TAITO68705_MCU(config, m_bmcu, XTAL::u(2000000));
 
 	// 100 CPU slices per frame - a high value to ensure proper synchronization of the CPUs
 	config.set_maximum_quantum(attotime::from_hz(6000));
@@ -781,7 +781,7 @@ void nycaptor_state::nycaptor(machine_config &config)
 	ay2.port_b_write_callback().set(FUNC(nycaptor_state::unk_w));
 	ay2.add_route(ALL_OUTPUTS, "speaker", 0.15);
 
-	MSM5232(config, m_msm, 2000000);
+	MSM5232(config, m_msm, XTAL::u(2000000));
 	m_msm->set_capacitors(1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6); // 1 uF capacitors (match the sample, not verified, standard)
 	m_msm->add_route(0, "speaker", 1.0); // pin 28  2'-1
 	m_msm->add_route(1, "speaker", 1.0); // pin 29  4'-1
@@ -795,7 +795,7 @@ void nycaptor_state::nycaptor(machine_config &config)
 	// pin 2 SOLO 16'       not mapped
 	// pin 22 Noise Output  not mapped
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 }
 
 void nycaptor_state::cyclshtg(machine_config &config)
@@ -816,7 +816,7 @@ void nycaptor_state::cyclshtg(machine_config &config)
 	m_audiocpu->set_periodic_int(FUNC(nycaptor_state::irq0_line_hold), audio_irq_period);
 
 #ifdef USE_MCU
-	TAITO68705_MCU(config, m_bmcu, 2000000);
+	TAITO68705_MCU(config, m_bmcu, XTAL::u(2000000));
 #endif
 
 	config.set_maximum_quantum(attotime::from_hz(6000));
@@ -850,7 +850,7 @@ void nycaptor_state::cyclshtg(machine_config &config)
 	ay2.port_b_write_callback().set(FUNC(nycaptor_state::unk_w));
 	ay2.add_route(ALL_OUTPUTS, "speaker", 0.15);
 
-	MSM5232(config, m_msm, 2000000);
+	MSM5232(config, m_msm, XTAL::u(2000000));
 	m_msm->set_capacitors(1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6); // 1 uF capacitors (match the sample, not verified, standard)
 	m_msm->add_route(0, "speaker", 1.0); // pin 28  2'-1
 	m_msm->add_route(1, "speaker", 1.0); // pin 29  4'-1
@@ -864,7 +864,7 @@ void nycaptor_state::cyclshtg(machine_config &config)
 	// pin 2 SOLO 16'       not mapped
 	// pin 22 Noise Output  not mapped
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 }
 
 
@@ -916,7 +916,7 @@ void nycaptor_state::bronx(machine_config &config)
 	ay2.port_b_write_callback().set(FUNC(nycaptor_state::unk_w));
 	ay2.add_route(ALL_OUTPUTS, "speaker", 0.15);
 
-	MSM5232(config, m_msm, 2000000);
+	MSM5232(config, m_msm, XTAL::u(2000000));
 	m_msm->set_capacitors(1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6); // 1 uF capacitors (match the sample, not verified, standard)
 	m_msm->add_route(0, "speaker", 1.0); // pin 28  2'-1
 	m_msm->add_route(1, "speaker", 1.0); // pin 29  4'-1
@@ -930,7 +930,7 @@ void nycaptor_state::bronx(machine_config &config)
 	// pin 2 SOLO 16'       not mapped
 	// pin 22 Noise Output  not mapped
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 }
 
 

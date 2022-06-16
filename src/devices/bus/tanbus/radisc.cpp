@@ -65,7 +65,7 @@ void tanbus_radisc_device::device_add_mconfig(machine_config &config)
 	m_via->irq_handler().set(m_irq_line, FUNC(input_merger_device::in_w<IRQ_VIA>));
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 1000); // TODO: unknown frequency
+	BEEP(config, m_beeper, XTAL::u(1000)); // TODO: unknown frequency
 	m_beeper->add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
@@ -77,7 +77,7 @@ void tanbus_radisc_device::device_add_mconfig(machine_config &config)
 //  tanbus_radisc_device - constructor
 //-------------------------------------------------
 
-tanbus_radisc_device::tanbus_radisc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_radisc_device::tanbus_radisc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TANBUS_RADISC, tag, owner, clock)
 	, device_tanbus_interface(mconfig, *this)
 	, m_fdc(*this, "fdc")

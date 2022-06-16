@@ -60,7 +60,7 @@ public:
 	using draw_text_delegate = device_delegate<void (bitmap_rgb32 &bitmap, uint32_t addr, int y, int wd, int pitch, int lr, int cursor_on, int cursor_addr, int cursor_bot, int cursor_top)>;
 
 	// construction/destruction
-	upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T>
 	upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&screen_tag)

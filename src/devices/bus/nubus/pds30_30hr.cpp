@@ -80,7 +80,7 @@ class maverick_device : public device_t,
 						public device_nubus_card_interface
 {
 protected:
-	maverick_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	maverick_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	TIMER_CALLBACK_MEMBER(vbl_tick);
 
@@ -123,7 +123,7 @@ void maverick_device::base_map(address_map &map)
 	map(0xa0'0000, 0xa0'003f).rw(FUNC(maverick_device::bregs_r), FUNC(maverick_device::bregs_w));
 }
 
-maverick_device::maverick_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+maverick_device::maverick_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_skipbytes(1024),

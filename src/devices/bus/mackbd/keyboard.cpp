@@ -253,7 +253,7 @@ public:
 	}
 
 protected:
-	peripheral_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+	peripheral_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, type, tag, owner, clock)
 		, device_mac_keyboard_interface(mconfig, *this)
 		, m_mpu{ *this, "mpu" }
@@ -268,7 +268,7 @@ protected:
 
 	virtual void device_add_mconfig(machine_config &config) override
 	{
-		I8021(config, m_mpu, 3'000'000); // 100µH inductor gives approximately 3MHz
+		I8021(config, m_mpu, XTAL::u(3'000'000)); // 100µH inductor gives approximately 3MHz
 		m_mpu->p0_out_cb().set(FUNC(peripheral_base::host_clock_w)).bit(7);
 		m_mpu->p2_out_cb().set(FUNC(peripheral_base::host_data_w)).bit(0);
 	}
@@ -380,7 +380,7 @@ private:
 class keyboard_base : public peripheral_base<9>
 {
 protected:
-	keyboard_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+	keyboard_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 		: peripheral_base<9>(mconfig, type, tag, owner, clock)
 	{
 	}
@@ -413,7 +413,7 @@ public:
 	}
 
 protected:
-	keypad_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+	keypad_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 		: peripheral_base<3>(mconfig, type, tag, owner, clock)
 		, m_keyboard_port(*this, "kbd")
 	{
@@ -788,7 +788,7 @@ INPUT_PORTS_END
 class m0110_device : public keyboard_base
 {
 public:
-	m0110_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0110_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keyboard_base(mconfig, MACKBD_M0110, tag, owner, clock)
 	{
 	}
@@ -803,7 +803,7 @@ protected:
 class m0110b_device : public keyboard_base
 {
 public:
-	m0110b_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0110b_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keyboard_base(mconfig, MACKBD_M0110B, tag, owner, clock)
 	{
 	}
@@ -820,7 +820,7 @@ protected:
 class m0110f_device : public keyboard_base
 {
 public:
-	m0110f_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0110f_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keyboard_base(mconfig, MACKBD_M0110F, tag, owner, clock)
 	{
 	}
@@ -837,7 +837,7 @@ protected:
 class m0110t_device : public keyboard_base
 {
 public:
-	m0110t_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0110t_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keyboard_base(mconfig, MACKBD_M0110T, tag, owner, clock)
 	{
 	}
@@ -923,7 +923,7 @@ INPUT_PORTS_END
 class m0120_device : public keypad_base
 {
 public:
-	m0120_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0120_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keypad_base(mconfig, MACKBD_M0120, tag, owner, clock)
 	{
 	}
@@ -940,7 +940,7 @@ protected:
 class m0120p_device : public keypad_base
 {
 public:
-	m0120p_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0120p_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keypad_base(mconfig, MACKBD_M0120P, tag, owner, clock)
 	{
 	}

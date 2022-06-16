@@ -896,7 +896,7 @@ class ti990_tape_image_device : public magtape_image_device
 {
 public:
 	// construction/destruction
-	ti990_tape_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ti990_tape_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_image_interface implementation
 	virtual const char *file_extensions() const noexcept override { return "tap"; }
@@ -914,7 +914,7 @@ private:
 
 DEFINE_DEVICE_TYPE(TI990_TAPE, ti990_tape_image_device, "ti990_tape_image", "TI-990 Magnetic Tape")
 
-ti990_tape_image_device::ti990_tape_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ti990_tape_image_device::ti990_tape_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: magtape_image_device(mconfig, TI990_TAPE, tag, owner, clock)
 {
 }
@@ -958,7 +958,7 @@ void ti990_tape_image_device::call_unload()
 
 DEFINE_DEVICE_TYPE(TI990_TAPE_CTRL, tap_990_device, "ti990_tap", "Generic TI-900 Tape Controller")
 
-tap_990_device::tap_990_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tap_990_device::tap_990_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TI990_TAPE_CTRL, tag, owner, clock)
 	, m_memory_space(*this, finder_base::DUMMY_TAG, -1)
 	, m_int_line(*this)
@@ -986,8 +986,8 @@ void tap_990_device::device_start()
 
 void tap_990_device::device_add_mconfig(machine_config &config)
 {
-	TI990_TAPE(config, "tape0", 0);
-	TI990_TAPE(config, "tape1", 0);
-	TI990_TAPE(config, "tape2", 0);
-	TI990_TAPE(config, "tape3", 0);
+	TI990_TAPE(config, "tape0");
+	TI990_TAPE(config, "tape1");
+	TI990_TAPE(config, "tape2");
+	TI990_TAPE(config, "tape3");
 }

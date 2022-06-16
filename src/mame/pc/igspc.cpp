@@ -85,7 +85,7 @@ INPUT_PORTS_END
 void speeddrv_state::speeddrv(machine_config &config)
 {
 	// TODO: AMD Geode, superset of MediaGX, clock is probably higher
-	MEDIAGX(config, m_maincpu, 40'000'000);
+	MEDIAGX(config, m_maincpu, XTAL::u(40'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &speeddrv_state::speeddrv_map);
 
 	PCI_ROOT(config, "pci", 0);

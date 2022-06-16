@@ -512,12 +512,12 @@ void exidy_sound_device::sfxctrl_w(offs_t offset, uint8_t data)
 
 DEFINE_DEVICE_TYPE(EXIDY_VENTURE, venture_sound_device, "venture_sound", "Exidy SFX+PSG")
 
-venture_sound_device::venture_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+venture_sound_device::venture_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: venture_sound_device(mconfig, EXIDY_VENTURE, tag, owner, clock)
 {
 }
 
-venture_sound_device::venture_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+venture_sound_device::venture_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: exidy_sh8253_sound_device(mconfig, type, tag, owner, clock)
 	, m_pa_callback(*this)
 	, m_pb_callback(*this)
@@ -579,11 +579,25 @@ void venture_sound_device::venture_audio_map(address_map &map)
 
 void venture_sound_device::device_add_mconfig(machine_config &config)
 {
+<<<<<<< HEAD
 	exidy_sh8253_sound_device::device_add_mconfig(config);
 
 	m6502_device &audiocpu(M6502(config, "audiocpu", 3.579545_MHz_XTAL / 4));
 	audiocpu.set_addrmap(AS_PROGRAM, &venture_sound_device::venture_audio_map);
 
+=======
+	m6502_device &audiocpu(M6502(config, "audiocpu", XTAL::u(3579545)/4));
+	audiocpu.set_addrmap(AS_PROGRAM, &venture_sound_device::venture_audio_map);
+
+	RIOT6532(config, m_riot, SH6532_CLOCK);
+	m_riot->in_pa_callback().set(FUNC(venture_sound_device::r6532_porta_r));
+	m_riot->out_pa_callback().set(FUNC(venture_sound_device::r6532_porta_w));
+	m_riot->in_pb_callback().set(FUNC(venture_sound_device::r6532_portb_r));
+	m_riot->out_pb_callback().set(FUNC(venture_sound_device::r6532_portb_w));
+	m_riot->irq_callback().set("audioirq", FUNC(input_merger_device::in_w<0>));
+
+	PIA6821(config, m_pia);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_pia->writepa_handler().set(FUNC(venture_sound_device::pia_pa_w));
 	m_pia->writepb_handler().set(FUNC(venture_sound_device::pia_pb_w));
 	m_pia->ca2_handler().set(FUNC(venture_sound_device::pia_ca2_w));
@@ -600,7 +614,7 @@ void venture_sound_device::device_add_mconfig(machine_config &config)
 
 DEFINE_DEVICE_TYPE(EXIDY_MTRAP, mtrap_sound_device, "mtrap_sound", "Exidy SFX+PSG+CVSD")
 
-mtrap_sound_device::mtrap_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mtrap_sound_device::mtrap_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: venture_sound_device(mconfig, EXIDY_MTRAP, tag, owner, clock)
 	, m_cvsd_timer(*this, "cvsd_timer")
 	, m_cvsd(*this, "cvsd")
@@ -703,15 +717,24 @@ void mtrap_sound_device::device_add_mconfig(machine_config &config)
 	m_cvsdcpu->set_addrmap(AS_PROGRAM, &mtrap_sound_device::cvsd_map);
 	m_cvsdcpu->set_addrmap(AS_IO, &mtrap_sound_device::cvsd_iomap);
 
+<<<<<<< HEAD
 	// this is a 555 timer with 53% duty cycle, within margin of error of 50% duty cycle; the handler clocks on both clock edges, hence * 2.0
 	TIMER(config, m_cvsd_timer).configure_periodic(FUNC(mtrap_sound_device::cvsd_timer), attotime::from_hz(CVSD_CLOCK * 2.0));
+=======
+	TIMER(config, m_cvsd_timer).configure_periodic(FUNC(mtrap_sound_device::cvsd_timer), attotime::from_hz(CVSD_CLOCK*2)); // this is a 555 timer with 53% duty cycle, within margin of error of 50% duty cycle; the handler clocks on both clock edges, hence * 2.0
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	// audio hardware
 	FILTER_BIQUAD(config, m_cvsd_filter2).opamp_mfb_lowpass_setup(RES_K(10), RES_K(3.9), RES_K(18), CAP_N(20), CAP_N(2.2));
 	m_cvsd_filter2->add_route(ALL_OUTPUTS, "mono", 1.0);
 	FILTER_BIQUAD(config, m_cvsd_filter).opamp_mfb_lowpass_setup(RES_K(10), RES_K(3.9), RES_K(18), CAP_N(20), CAP_N(2.2));
 	m_cvsd_filter->add_route(ALL_OUTPUTS, m_cvsd_filter2, 1.0);
+<<<<<<< HEAD
 	MC3417(config, m_cvsd, 0).add_route(ALL_OUTPUTS, m_cvsd_filter, 0.3086); // each filter has gain of 1.8 for total gain of 3.24, 0.3086 cancels this out.
+=======
+	MC3417(config, m_cvsd).add_route(ALL_OUTPUTS, m_cvsd_filter, 0.3086); // each filter has gain of 1.8 for total gain of 3.24, 0.3086 cancels this out. was 0.8
+
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 }
 
 
@@ -834,6 +857,17 @@ void victory_sound_device::main_ack_w(int state)
 }
 
 
+<<<<<<< HEAD
+=======
+DEFINE_DEVICE_TYPE(EXIDY_VICTORY, victory_sound_device, "victory_sound", "Exidy SFX+PSG+Speech")
+
+victory_sound_device::victory_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: exidy_sh8253_sound_device(mconfig, EXIDY_VICTORY, tag, owner, clock)
+	, m_victory_sound_response_ack_clk(0)
+{
+}
+
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 //-------------------------------------------------
 //  Address maps
 //-------------------------------------------------
@@ -871,8 +905,12 @@ void victory_sound_device::device_add_mconfig(machine_config &config)
 	m_riot->pb_rd_callback<2>().set(m_tms, FUNC(tms5220_device::readyq_r));
 	m_riot->pb_rd_callback<3>().set(m_tms, FUNC(tms5220_device::intq_r));
 
+<<<<<<< HEAD
+=======
+	PIA6821(config, m_pia);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_pia->ca2_handler().set(FUNC(victory_sound_device::irq_clear_w));
 	m_pia->cb2_handler().set(FUNC(victory_sound_device::main_ack_w));
 
-	TMS5220(config, m_tms, 640000).add_route(ALL_OUTPUTS, "mono", 1.0);
+	TMS5220(config, m_tms, XTAL::u(640000)).add_route(ALL_OUTPUTS, "mono", 1.0);
 }

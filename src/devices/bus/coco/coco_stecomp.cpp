@@ -35,7 +35,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		coco_stereo_composer_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		coco_stereo_composer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: device_t(mconfig, COCO_STEREO_COMPOSER, tag, owner, clock)
 			, device_cococart_interface(mconfig, *this)
 			, m_pia(*this, "sc_pia")

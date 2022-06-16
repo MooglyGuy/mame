@@ -62,7 +62,7 @@ public:
 
 protected:
 	// construction/destruction
-	dp8344_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	dp8344_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -225,7 +225,7 @@ class dp8344a_device : public dp8344_device
 {
 public:
 	// device type constructor
-	dp8344a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dp8344a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // ======================> dp8344b_device
@@ -234,7 +234,7 @@ class dp8344b_device : public dp8344_device
 {
 public:
 	// device type constructor
-	dp8344b_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dp8344b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // device type declarations

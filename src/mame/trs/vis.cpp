@@ -20,7 +20,7 @@ class vis_audio_device : public device_t,
 						 public device_isa16_card_interface
 {
 public:
-	vis_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vis_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t pcm_r(offs_t offset);
 	void pcm_w(offs_t offset, uint8_t data);
@@ -49,7 +49,7 @@ private:
 
 DEFINE_DEVICE_TYPE(VIS_AUDIO, vis_audio_device, "vis_pcm", "vis_pcm")
 
-vis_audio_device::vis_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vis_audio_device::vis_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VIS_AUDIO, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_rdac(*this, "rdac"),
@@ -142,8 +142,8 @@ void vis_audio_device::device_add_mconfig(machine_config &config)
 	ymf262.add_route(2, "speaker", 1.00, 0);
 	ymf262.add_route(3, "speaker", 1.00, 1);
 
-	DAC_16BIT_R2R(config, m_ldac, 0);
-	DAC_16BIT_R2R(config, m_rdac, 0);
+	DAC_16BIT_R2R(config, m_ldac);
+	DAC_16BIT_R2R(config, m_rdac);
 	m_ldac->add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // sanyo lc7883k
 	m_rdac->add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // sanyo lc7883k
 }
@@ -235,7 +235,7 @@ class vis_vga_device : public svga_device,
 					   public device_isa16_card_interface
 {
 public:
-	vis_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vis_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t visvgamem_r(offs_t offset);
 	void visvgamem_w(offs_t offset, uint8_t data);
@@ -272,7 +272,7 @@ private:
 
 DEFINE_DEVICE_TYPE(VIS_VGA, vis_vga_device, "vis_vga", "vis_vga")
 
-vis_vga_device::vis_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+vis_vga_device::vis_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	svga_device(mconfig, VIS_VGA, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this)
 {
@@ -1102,13 +1102,13 @@ void vis_state::vis(machine_config &config)
 	kbdc.input_buffer_full_callback().set("mb:pic8259_master", FUNC(pic8259_device::ir1_w));
 
 	// FIXME: determine ISA bus clock
-	ISA16_SLOT(config, "mcd",      0, "mb:isabus", pc_isa16_cards, "mcd",      true);
-	ISA16_SLOT(config, "visaudio", 0, "mb:isabus", vis_cards,      "visaudio", true);
-	ISA16_SLOT(config, "visvga",   0, "mb:isabus", vis_cards,      "visvga",   true);
+	ISA16_SLOT(config, "mcd",      "mb:isabus", pc_isa16_cards, "mcd",      true);
+	ISA16_SLOT(config, "visaudio", "mb:isabus", vis_cards,      "visaudio", true);
+	ISA16_SLOT(config, "visvga",   "mb:isabus", vis_cards,      "visvga",   true);
 
 	SOFTWARE_LIST(config, "cd_list").set_original("vis");
 
-	DS6417(config, m_card, 0);
+	DS6417(config, m_card);
 }
 
 ROM_START(vis)

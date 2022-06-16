@@ -14,7 +14,7 @@
 
 namespace {
 
-#define MASTER_CLOCK    8000000
+#define MASTER_CLOCK    XTAL::u(8000000)
 
 class lft_chiptune_state : public driver_device
 {
@@ -68,7 +68,7 @@ void lft_chiptune_state::chiptune(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "avr8").front_center();
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(0, "avr8", 0.9);
+	DAC_8BIT_R2R(config, m_dac).add_route(0, "avr8", 0.9);
 }
 
 ROM_START( powernin )

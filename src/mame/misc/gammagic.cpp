@@ -137,21 +137,21 @@ void gammagic_state::smc_superio_config(device_t *device)
 
 void gammagic_state::gammagic(machine_config &config)
 {
-	pentium_device &maincpu(PENTIUM(config, "maincpu", 133000000));
+	pentium_device &maincpu(PENTIUM(config, "maincpu", XTAL::u(133000000)));
 	maincpu.set_addrmap(AS_PROGRAM, &gammagic_state::gammagic_map);
 	maincpu.set_addrmap(AS_IO, &gammagic_state::gammagic_io);
 	maincpu.set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	maincpu.smiact().set("pci:00.0", FUNC(i82439hx_host_device::smi_act_w));
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// TODO: confirm size
-	I82439HX(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
+	I82439HX(config, "pci:00.0", "maincpu", 256*1024*1024);
 
-	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", 0, "maincpu"));
+	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", "maincpu"));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	i82371sb_ide_device &ide(I82371SB_IDE(config, "pci:07.1", 0, "maincpu"));
+	i82371sb_ide_device &ide(I82371SB_IDE(config, "pci:07.1", "maincpu"));
 	ide.irq_pri().set("pci:07.0", FUNC(i82371sb_isa_device::pc_irq14_w));
 	ide.irq_sec().set("pci:07.0", FUNC(i82371sb_isa_device::pc_mirq0_w));
 	ide.subdevice<bus_master_ide_controller_device>("ide1")->slot(0).set_default_option("xm3301");
@@ -164,7 +164,7 @@ void gammagic_state::gammagic(machine_config &config)
 	PCI_SLOT(config, "pci:4", pci_cards, 18, 3, 0, 1, 2, "oti64111");
 
 	// FIXME: this should obviously map to above instead of direct PCI mount ...
-	voodoo_2_pci_device &voodoo(VOODOO_2_PCI(config, "pci:11.0", 0, "maincpu", "voodoo_screen"));
+	voodoo_2_pci_device &voodoo(VOODOO_2_PCI(config, "pci:11.0", "maincpu", "voodoo_screen"));
 	voodoo.set_fbmem(2);
 	voodoo.set_tmumem(4, 4);
 	voodoo.set_status_cycles(1000);
@@ -176,11 +176,11 @@ void gammagic_state::gammagic(machine_config &config)
 	screen.set_visarea(0, 512 - 1, 0, 240 - 1);
 	screen.set_screen_update("pci:11.0", FUNC(voodoo_2_pci_device::screen_update));
 
-	ISA16_SLOT(config, "board4", 0, "pci:07.0:isabus", isa_internal_devices, "fdc37c93x", true).set_option_machine_config("fdc37c93x", smc_superio_config);
-	ISA16_SLOT(config, "isa1", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa2", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa3", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa4", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "board4", "pci:07.0:isabus", isa_internal_devices, "fdc37c93x", true).set_option_machine_config("fdc37c93x", smc_superio_config);
+	ISA16_SLOT(config, "isa1", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa2", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa3", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa4", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
 
 	rs232_port_device &serport0(RS232_PORT(config, "serport0", isa_com, nullptr));
 	serport0.rxd_handler().set("board4:fdc37c93x", FUNC(fdc37c93x_device::rxd1_w));

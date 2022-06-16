@@ -38,7 +38,7 @@ public:
 	void notify_standby(int state);
 
 protected:
-	h8_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h8_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	required_device<h8_device> m_cpu;
 	required_device<h8_intc_device> m_intc;
@@ -96,9 +96,9 @@ protected:
 
 class h8_adc_3337_device : public h8_adc_device {
 public:
-	h8_adc_3337_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_adc_3337_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T, typename U> h8_adc_3337_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int vect)
-		: h8_adc_3337_device(mconfig, tag, owner, 0)
+		: h8_adc_3337_device(mconfig, tag, owner)
 	{
 		set_info(cpu, intc, vect);
 	}
@@ -110,9 +110,9 @@ protected:
 
 class h8_adc_3006_device : public h8_adc_device {
 public:
-	h8_adc_3006_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_adc_3006_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T, typename U> h8_adc_3006_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int vect)
-		: h8_adc_3006_device(mconfig, tag, owner, 0)
+		: h8_adc_3006_device(mconfig, tag, owner)
 	{
 		set_info(cpu, intc, vect);
 	}
@@ -124,9 +124,9 @@ protected:
 
 class h8_adc_2245_device : public h8_adc_device {
 public:
-	h8_adc_2245_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_adc_2245_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T, typename U> h8_adc_2245_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int vect)
-		: h8_adc_2245_device(mconfig, tag, owner, 0)
+		: h8_adc_2245_device(mconfig, tag, owner)
 	{
 		set_info(cpu, intc, vect);
 	}
@@ -138,9 +138,9 @@ protected:
 
 class h8_adc_2319_device : public h8_adc_device {
 public:
-	h8_adc_2319_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_adc_2319_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T, typename U> h8_adc_2319_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int vect)
-		: h8_adc_2319_device(mconfig, tag, owner, 0)
+		: h8_adc_2319_device(mconfig, tag, owner)
 	{
 		set_info(cpu, intc, vect);
 	}
@@ -152,9 +152,9 @@ protected:
 
 class h8_adc_2357_device : public h8_adc_device {
 public:
-	h8_adc_2357_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_adc_2357_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T, typename U> h8_adc_2357_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int vect)
-		: h8_adc_2357_device(mconfig, tag, owner, 0)
+		: h8_adc_2357_device(mconfig, tag, owner)
 	{
 		set_info(cpu, intc, vect);
 	}
@@ -166,9 +166,9 @@ protected:
 
 class h8_adc_2655_device : public h8_adc_device {
 public:
-	h8_adc_2655_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_adc_2655_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T, typename U> h8_adc_2655_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int vect)
-		: h8_adc_2655_device(mconfig, tag, owner, 0)
+		: h8_adc_2655_device(mconfig, tag, owner)
 	{
 		set_info(cpu, intc, vect);
 	}

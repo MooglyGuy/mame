@@ -35,12 +35,12 @@ DEFINE_DEVICE_TYPE(RTC4553, rtc4553_device, "rtc4553", "Epson RTC-4553 RTC/SRAM"
 //  s3520cf_device - constructor
 //-------------------------------------------------
 
-s3520cf_device::s3520cf_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+s3520cf_device::s3520cf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3520cf_device(mconfig, S3520CF, tag, owner, clock)
 {
 }
 
-s3520cf_device::s3520cf_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+s3520cf_device::s3520cf_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 	, device_rtc_interface(mconfig, *this)
@@ -334,7 +334,7 @@ void s3520cf_device::set_clock_line(int state)
 	}
 }
 
-rtc4553_device::rtc4553_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+rtc4553_device::rtc4553_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3520cf_device(mconfig, RTC4553, tag, owner, clock)
 {
 }

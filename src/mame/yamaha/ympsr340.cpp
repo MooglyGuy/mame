@@ -232,7 +232,7 @@ void psr340_state::psr340(machine_config &config)
 	m_mks3->write_da().set(m_maincpu, FUNC(swx00_device::sci_rx_w<1>));
 	m_mks3->write_clk().set(m_maincpu, FUNC(swx00_device::sci_clk_w<1>));
 
-	KS0066(config, m_lcdc, 270000); // 91K resistor
+	KS0066(config, m_lcdc, XTAL::u(270000)); // 91K resistor
 	m_lcdc->set_default_bios_tag("f05");
 	m_lcdc->set_lcd_size(2, 40);
 

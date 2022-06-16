@@ -73,7 +73,7 @@ INPUT_PORTS_END
 void sh4robot_state::sh4robot(machine_config &config)
 {
 	/* basic machine hardware */
-	SH7750(config, m_maincpu, 200000000);
+	SH7750(config, m_maincpu, XTAL::u(200000000));
 	m_maincpu->set_md(0, 1);
 	m_maincpu->set_md(1, 0);
 	m_maincpu->set_md(2, 1);

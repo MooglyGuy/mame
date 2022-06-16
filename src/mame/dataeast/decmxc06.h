@@ -12,9 +12,9 @@ class deco_mxc06_device : public device_t, public device_video_interface, public
 public:
 	typedef device_delegate<void (u32 &colour, u32 &pri_mask)> colpri_cb_delegate;
 
-	deco_mxc06_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-	template <typename T> deco_mxc06_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: deco_mxc06_device(mconfig, tag, owner, clock)
+	deco_mxc06_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> deco_mxc06_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: deco_mxc06_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

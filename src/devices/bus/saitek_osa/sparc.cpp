@@ -47,7 +47,7 @@ class saitekosa_sparc_device : public device_t, public device_saitekosa_expansio
 {
 public:
 	// construction/destruction
-	saitekosa_sparc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	saitekosa_sparc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// from host
 	virtual u8 data_r() override;
@@ -82,7 +82,7 @@ private:
 	void set_ram_mask(u8 n) { m_ram_mask = ((1 << n) / 4) - 1; }
 };
 
-saitekosa_sparc_device::saitekosa_sparc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+saitekosa_sparc_device::saitekosa_sparc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, OSA_SPARC, tag, owner, clock),
 	device_saitekosa_expansion_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),

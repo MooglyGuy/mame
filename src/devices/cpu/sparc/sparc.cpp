@@ -85,7 +85,7 @@ const char *const sparc_base_device::DEFAULT_ASI_NAMES[16] =
 //  sparc_base_device - constructor
 //-------------------------------------------------
 
-sparc_base_device::sparc_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+sparc_base_device::sparc_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_mmu(*this, finder_base::DUMMY_TAG)
 {
@@ -105,12 +105,12 @@ sparc_base_device::sparc_base_device(const machine_config &mconfig, device_type 
 //  sparcv7_device - constructors
 //-------------------------------------------------
 
-sparcv7_device::sparcv7_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sparcv7_device::sparcv7_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sparcv7_device(mconfig, SPARCV7, tag, owner, clock)
 {
 }
 
-sparcv7_device::sparcv7_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+sparcv7_device::sparcv7_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: sparc_base_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -120,13 +120,13 @@ sparcv7_device::sparcv7_device(const machine_config &mconfig, device_type type, 
 //  sparcv8_device - constructor
 //-------------------------------------------------
 
-sparcv8_device::sparcv8_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sparcv8_device::sparcv8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sparcv8_device(mconfig, SPARCV8, tag, owner, clock)
 {
 }
 
 
-sparcv8_device::sparcv8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+sparcv8_device::sparcv8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: sparc_base_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -136,7 +136,7 @@ sparcv8_device::sparcv8_device(const machine_config &mconfig, device_type type, 
 //  mb86930_device - constructor
 //-------------------------------------------------
 
-mb86930_device::mb86930_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mb86930_device::mb86930_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sparcv8_device(mconfig, MB86930, tag, owner, clock)
 	, m_cs_r(*this, 0)
 	, m_cs_w(*this)

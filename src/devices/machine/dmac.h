@@ -48,7 +48,7 @@ public:
 	void xdreq_w(int state);
 
 protected:
-	amiga_dmac_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool rev1);
+	amiga_dmac_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool rev1);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -162,13 +162,13 @@ private:
 class amiga_dmac_rev1_device : public amiga_dmac_device
 {
 public:
-	amiga_dmac_rev1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	amiga_dmac_rev1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class amiga_dmac_rev2_device : public amiga_dmac_device
 {
 public:
-	amiga_dmac_rev2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	amiga_dmac_rev2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // device type declaration

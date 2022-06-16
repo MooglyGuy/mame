@@ -868,10 +868,10 @@ DECOSPR_COLOUR_CB_MEMBER(rohga_state::schmeisr_col_callback)
 void rohga_state::rohga_base(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 14'000'000);
+	M68000(config, m_maincpu, XTAL::u(14'000'000));
 	m_maincpu->set_vblank_int("screen", FUNC(rohga_state::irq6_line_assert));
 
-	H6280(config, m_audiocpu, 32'220'000/4/3); // verified on PCB (8.050Mhz is XIN on pin 10 of H6280
+	H6280(config, m_audiocpu, XTAL::u(32'220'000)/4/3); // verified on PCB (8.050Mhz is XIN on pin 10 of H6280
 	m_audiocpu->set_addrmap(AS_PROGRAM, &rohga_state::sound_map);
 	m_audiocpu->add_route(ALL_OUTPUTS, "speaker", 0, 0); // internal sound unused
 	m_audiocpu->add_route(ALL_OUTPUTS, "speaker", 0, 1);
@@ -887,10 +887,10 @@ void rohga_state::rohga_base(machine_config &config)
 
 	PALETTE(config, m_palette).set_entries(2048);
 
-	DECOCOMN(config, m_decocomn, 0);
+	DECOCOMN(config, m_decocomn);
 	m_decocomn->set_palette_tag(m_palette);
 
-	DECO16IC(config, m_deco_tilegen[0], 0);
+	DECO16IC(config, m_deco_tilegen[0]);
 	m_deco_tilegen[0]->set_pf1_size(DECO_64x64);
 	m_deco_tilegen[0]->set_pf2_size(DECO_64x32);
 	m_deco_tilegen[0]->set_pf1_col_bank(0x00);
@@ -903,7 +903,7 @@ void rohga_state::rohga_base(machine_config &config)
 	m_deco_tilegen[0]->set_pf12_16x16_bank(1);
 	m_deco_tilegen[0]->set_gfxdecode_tag("gfxdecode");
 
-	DECO16IC(config, m_deco_tilegen[1], 0);
+	DECO16IC(config, m_deco_tilegen[1]);
 	m_deco_tilegen[1]->set_pf1_size(DECO_64x32);
 	m_deco_tilegen[1]->set_pf2_size(DECO_64x32);
 	m_deco_tilegen[1]->set_pf1_col_bank(0x00);
@@ -918,7 +918,7 @@ void rohga_state::rohga_base(machine_config &config)
 
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_rohga);
 
-	DECO104PROT(config, m_ioprot, 0);
+	DECO104PROT(config, m_ioprot);
 	m_ioprot->port_a_cb().set_ioport("INPUTS");
 	m_ioprot->port_b_cb().set_ioport("SYSTEM");
 	m_ioprot->port_c_cb().set_ioport("DSW");
@@ -927,17 +927,17 @@ void rohga_state::rohga_base(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 32'220'000/9));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(32'220'000)/9));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 1);    // IRQ2
 	ymsnd.port_write_handler().set(FUNC(rohga_state::sound_bankswitch_w));
 	ymsnd.add_route(0, "speaker", 0.36, 0);
 	ymsnd.add_route(1, "speaker", 0.36, 1);
 
-	OKIM6295(config, m_oki[0], 32'220'000/32, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki[0], XTAL::u(32'220'000)/32, okim6295_device::PIN7_HIGH);
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 0.46, 0);
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 0.46, 1);
 
-	OKIM6295(config, m_oki[1], 32'220'000/16, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki[1], XTAL::i(32'220'000)/16, okim6295_device::PIN7_HIGH);
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 0.18, 0);
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 0.18, 1);
 }
@@ -972,8 +972,8 @@ void rohga_state::wizdfire(machine_config &config)
 
 	m_deco_tilegen[0]->set_pf1_size(DECO_64x32);
 
-	DECO_SPRITE(config, m_sprgen[0], 0, m_palette, gfx_wizdfire_spr1);
-	DECO_SPRITE(config, m_sprgen[1], 0, m_palette, gfx_wizdfire_spr2);
+	DECO_SPRITE(config, m_sprgen[0], m_palette, gfx_wizdfire_spr1);
+	DECO_SPRITE(config, m_sprgen[1], m_palette, gfx_wizdfire_spr2);
 
 	m_ioprot->set_interface_scramble_reverse();
 
@@ -1002,12 +1002,12 @@ void rohga_state::nitrobal(machine_config &config)
 	m_deco_tilegen[1]->set_pf1_col_mask(0);
 	m_deco_tilegen[1]->set_pf2_col_mask(0);
 
-	DECO_SPRITE(config, m_sprgen[0], 0, m_palette, gfx_wizdfire_spr1);
-	DECO_SPRITE(config, m_sprgen[1], 0, m_palette, gfx_wizdfire_spr2);
+	DECO_SPRITE(config, m_sprgen[0], m_palette, gfx_wizdfire_spr1);
+	DECO_SPRITE(config, m_sprgen[1], m_palette, gfx_wizdfire_spr2);
 
 	MCFG_VIDEO_START_OVERRIDE(rohga_state, wizdfire)
 
-	DECO146PROT(config.replace(), m_ioprot, 0);
+	DECO146PROT(config.replace(), m_ioprot);
 	m_ioprot->port_a_cb().set_ioport("INPUTS");
 	m_ioprot->port_b_cb().set_ioport("SYSTEM");
 	m_ioprot->port_c_cb().set_ioport("DSW");

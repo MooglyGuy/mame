@@ -11,7 +11,7 @@ class msx_slot_ram_device : public device_t,
 							public msx_internal_slot_interface
 {
 public:
-	msx_slot_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// Set to 0xe000 for 8KB RAM
 	void force_start_address(u16 start) { m_start_address = start; }

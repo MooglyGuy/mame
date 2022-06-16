@@ -1213,8 +1213,8 @@ void galivan_state::common(machine_config &config)
 	YM3526(config, "ymsnd", XTAL(8'000'000) / 2).add_route(ALL_OUTPUTS, m_ymfilter, 0.4922);
 
 	// note the two dac channel volume mix values might be backwards, we need a PCB reference recording!
-	DAC_8BIT_R2R(config, "dac1", 0).add_route(ALL_OUTPUTS, m_dacfilter1, 0.2095); // SIP R2R DAC @ RA1 with 74HC374P latch
-	DAC_8BIT_R2R(config, "dac2", 0).add_route(ALL_OUTPUTS, m_dacfilter2, 0.2983); // SIP R2R DAC @ RA2 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac1").add_route(ALL_OUTPUTS, m_dacfilter1, 0.2095); // SIP R2R DAC @ RA1 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac2").add_route(ALL_OUTPUTS, m_dacfilter2, 0.2983); // SIP R2R DAC @ RA2 with 74HC374P latch
 }
 
 void galivan_state::galivan(machine_config &config)
@@ -1247,7 +1247,7 @@ void ninjemak_state::ninjemak(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &ninjemak_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &ninjemak_state::io_map);
 
-	NB1414M4(config, m_nb1414m4, 0);
+	NB1414M4(config, m_nb1414m4);
 
 	// video hardware
 	m_screen->set_screen_update(FUNC(ninjemak_state::screen_update));

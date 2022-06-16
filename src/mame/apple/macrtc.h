@@ -29,8 +29,8 @@ class rtc3430042_device :  public device_t,
 
 public:
 	// construction/destruction
-	rtc3430042_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool hasBigPRAM);
-	rtc3430042_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rtc3430042_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool hasBigPRAM);
+	rtc3430042_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void ce_w(int state);
 	void clk_w(int state);
@@ -104,7 +104,7 @@ private:
 class rtc3430040_device: public rtc3430042_device
 {
 public:
-	rtc3430040_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rtc3430040_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual bool nvram_read(util::read_stream &file) override;

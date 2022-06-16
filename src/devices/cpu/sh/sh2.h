@@ -31,7 +31,7 @@ public:
 	void func_fastirq(); // required for DRC, needs to be public to be accessible through non-classed static trampoline function
 
 protected:
-	sh2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int cpu_type, address_map_constructor internal_map, int addrlines, uint32_t address_mask);
+	sh2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int cpu_type, address_map_constructor internal_map, int addrlines, uint32_t address_mask);
 
 	void check_pending_irq(const char *message);
 

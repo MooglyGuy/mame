@@ -1445,7 +1445,7 @@ void cb2001_state::palette_init(palette_device &palette) const
 
 void cb2001_state::cb2001(machine_config &config)
 {
-	V35(config, m_maincpu, 20'000'000); // CPU91A-011-0016JK004; encrypted CPU like NEC V25/35 used in some Irem games
+	V35(config, m_maincpu, XTAL::u(20'000'000)); // CPU91A-011-0016JK004; encrypted CPU like NEC V25/35 used in some Irem games
 	m_maincpu->set_decryption_table(cb2001_decryption_table);
 	m_maincpu->set_addrmap(AS_PROGRAM, &cb2001_state::program_map);
 	m_maincpu->set_addrmap(AS_IO, &cb2001_state::io_map);
@@ -1469,7 +1469,7 @@ void cb2001_state::cb2001(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	ay8910_device &aysnd(AY8910(config, "aysnd", 1'500'000)); // wrong
+	ay8910_device &aysnd(AY8910(config, "aysnd", XTAL::u(1'500'000))); // wrong
 	aysnd.port_a_read_callback().set_ioport("DSW4");
 	aysnd.port_b_read_callback().set_ioport("DSW5");
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.50);

@@ -543,7 +543,7 @@ void cubeqst_state::cubeqst(machine_config &config)
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	SIMUTREK_SPECIAL(config, m_laserdisc, 0);
+	SIMUTREK_SPECIAL(config, m_laserdisc);
 	m_laserdisc->set_overlay(CUBEQST_HBLANK, CUBEQST_VCOUNT, FUNC(cubeqst_state::screen_update_cubeqst));
 	m_laserdisc->set_overlay_clip(0, 320-1, 0, 256-8);
 	m_laserdisc->set_overlay_position(0.002f, -0.018f);

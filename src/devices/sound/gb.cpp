@@ -86,19 +86,19 @@ DEFINE_DEVICE_TYPE(AGB_APU, agb_apu_device, "agb_apu", "AGB APU")
 //  gameboy_sound_device - constructor
 //-------------------------------------------------
 
-gameboy_sound_device::gameboy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+gameboy_sound_device::gameboy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 {
 }
 
 
-dmg_apu_device::dmg_apu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dmg_apu_device::dmg_apu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gameboy_sound_device(mconfig, DMG_APU, tag, owner, clock)
 {
 }
 
-cgb04_apu_device::cgb04_apu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+cgb04_apu_device::cgb04_apu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: gameboy_sound_device(mconfig, type, tag, owner, clock)
 {
 }

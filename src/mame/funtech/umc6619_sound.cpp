@@ -19,7 +19,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(UMC6619_SOUND, umc6619_sound_device, "umc6619_sound", "UMC UM6619 Sound Engine")
 
-umc6619_sound_device::umc6619_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+umc6619_sound_device::umc6619_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UMC6619_SOUND, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
@@ -36,7 +36,7 @@ umc6619_sound_device::umc6619_sound_device(const machine_config &mconfig, const 
 void umc6619_sound_device::device_start()
 {
 	m_stream = stream_alloc(0, 2, clock() / 16 / 5);
-	m_mix = std::make_unique<int32_t[]>((clock() / 16 / 5) * 2);
+	m_mix = std::make_unique<int32_t[]>((clock().value() / 16 / 5) * 2);
 	m_timer = timer_alloc(FUNC(umc6619_sound_device::channel_irq), this);
 
 	// register for savestates

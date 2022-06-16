@@ -24,7 +24,7 @@
 #define LOGDMA(...)   LOGMASKED(LOG_DMA, __VA_ARGS__)
 #define LOGIRQ(...)   LOGMASKED(LOG_IRQ, __VA_ARGS__)
 
-psxdma_device::psxdma_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+psxdma_device::psxdma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PSX_DMA, tag, owner, clock), m_ram(), m_ramsize(0), m_dpcp(0), m_dicr(0),
 	m_irq_handler(*this)
 {

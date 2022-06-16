@@ -509,7 +509,7 @@ void leapster_state::leapster(machine_config &config)
 {
 	// Basic machine hardware
 	// CPU is ArcTangent-A5 '5.1' (ARCompact core)
-	ARCA5(config, m_maincpu, 96000000);
+	ARCA5(config, m_maincpu, XTAL::u(96000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &leapster_state::leapster_map);
 	m_maincpu->set_addrmap(AS_IO, &leapster_state::leapster_aux);
 	m_maincpu->set_default_vector_base(0x40000000);

@@ -34,7 +34,7 @@ namespace {
 class o2_voice_device : public device_t, public device_o2_cart_interface
 {
 public:
-	o2_voice_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	o2_voice_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_init() override;
 
@@ -64,7 +64,7 @@ private:
 	bool m_reset = false;
 };
 
-o2_voice_device::o2_voice_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+o2_voice_device::o2_voice_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, O2_ROM_VOICE, tag, owner, clock),
 	device_o2_cart_interface(mconfig, *this),
 	m_speech(*this, "speech"),

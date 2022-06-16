@@ -17,14 +17,14 @@
 //  rc2014_bus_device
 //-------------------------------------------------
 
-rc2014_bus_device::rc2014_bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rc2014_bus_device::rc2014_bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_installer{}
 	, m_daisy_chain{}
 {
 }
 
-rc2014_bus_device::rc2014_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rc2014_bus_device::rc2014_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_bus_device(mconfig, RC2014_BUS, tag, owner, clock)
 {
 }
@@ -147,14 +147,14 @@ device_rc2014_card_interface::device_rc2014_card_interface(const machine_config 
 //  rc2014_slot_device
 //-------------------------------------------------
 
-rc2014_slot_device::rc2014_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rc2014_slot_device::rc2014_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_slot_interface(mconfig, *this)
 	, m_bus(*this, finder_base::DUMMY_TAG)
 {
 }
 
-rc2014_slot_device::rc2014_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rc2014_slot_device::rc2014_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_slot_device(mconfig, RC2014_SLOT, tag, owner, clock)
 {
 }
@@ -179,12 +179,12 @@ void rc2014_slot_device::device_resolve_objects()
 //  rc2014_ext_bus_device
 //-------------------------------------------------
 
-rc2014_ext_bus_device::rc2014_ext_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rc2014_ext_bus_device::rc2014_ext_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_ext_bus_device(mconfig, RC2014_EXT_BUS, tag, owner, clock)
 {
 }
 
-rc2014_ext_bus_device::rc2014_ext_bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rc2014_ext_bus_device::rc2014_ext_bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_bus_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -208,12 +208,12 @@ device_rc2014_ext_card_interface::device_rc2014_ext_card_interface(const machine
 //  rc2014_ext_slot_device
 //-------------------------------------------------
 
-rc2014_ext_slot_device::rc2014_ext_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rc2014_ext_slot_device::rc2014_ext_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_ext_slot_device(mconfig, RC2014_EXT_SLOT, tag, owner, clock)
 {
 }
 
-rc2014_ext_slot_device::rc2014_ext_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rc2014_ext_slot_device::rc2014_ext_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_slot_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -293,12 +293,12 @@ void rc2014_ext_slot_device::device_resolve_objects()
 //  rc2014_rc80_bus_device
 //-------------------------------------------------
 
-rc2014_rc80_bus_device::rc2014_rc80_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rc2014_rc80_bus_device::rc2014_rc80_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_rc80_bus_device(mconfig, RC2014_RC80_BUS, tag, owner, clock)
 {
 }
 
-rc2014_rc80_bus_device::rc2014_rc80_bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rc2014_rc80_bus_device::rc2014_rc80_bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_ext_bus_device(mconfig, type, tag, owner, clock)
 
 {
@@ -329,7 +329,7 @@ device_rc2014_rc80_card_interface::device_rc2014_rc80_card_interface(const machi
 //  rc2014_rc80_slot_device
 //-------------------------------------------------
 
-rc2014_rc80_slot_device::rc2014_rc80_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rc2014_rc80_slot_device::rc2014_rc80_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rc2014_ext_slot_device(mconfig, RC2014_RC80_SLOT, tag, owner, clock)
 {
 }

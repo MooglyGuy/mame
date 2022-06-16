@@ -203,7 +203,7 @@ void bbc_tube_a500d_device::device_add_mconfig(machine_config &config)
 //  bbc_tube_a500_device - constructor
 //-------------------------------------------------
 
-bbc_tube_a500_device::bbc_tube_a500_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+bbc_tube_a500_device::bbc_tube_a500_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_bbc_tube_interface(mconfig, *this)
 	, m_maincpu(*this, "maincpu")

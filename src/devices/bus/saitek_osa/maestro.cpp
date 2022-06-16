@@ -52,7 +52,7 @@ class saitekosa_maestro_device : public device_t, public device_saitekosa_expans
 {
 public:
 	// construction/destruction
-	saitekosa_maestro_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	saitekosa_maestro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	DECLARE_INPUT_CHANGED_MEMBER(change_cpu_freq);
 
@@ -62,7 +62,7 @@ public:
 	virtual void ack_w(int state) override;
 
 protected:
-	saitekosa_maestro_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	saitekosa_maestro_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -91,7 +91,7 @@ protected:
 	void control_w(u8 data);
 };
 
-saitekosa_maestro_device::saitekosa_maestro_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+saitekosa_maestro_device::saitekosa_maestro_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_saitekosa_expansion_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),
@@ -101,7 +101,7 @@ saitekosa_maestro_device::saitekosa_maestro_device(const machine_config &mconfig
 	m_extrom(*this, "extrom")
 { }
 
-saitekosa_maestro_device::saitekosa_maestro_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+saitekosa_maestro_device::saitekosa_maestro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	saitekosa_maestro_device(mconfig, OSA_MAESTRO, tag, owner, clock)
 { }
 
@@ -111,7 +111,7 @@ saitekosa_maestro_device::saitekosa_maestro_device(const machine_config &mconfig
 class saitekosa_analyst_device : public saitekosa_maestro_device
 {
 public:
-	saitekosa_analyst_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	saitekosa_analyst_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u32 screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect) override;
 
@@ -127,7 +127,7 @@ private:
 	virtual void main_map(address_map &map) override ATTR_COLD;
 };
 
-saitekosa_analyst_device::saitekosa_analyst_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+saitekosa_analyst_device::saitekosa_analyst_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	saitekosa_maestro_device(mconfig, OSA_ANALYST, tag, owner, clock),
 	m_lcd(*this, "lcd")
 { }

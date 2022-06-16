@@ -25,7 +25,7 @@ class videobrain_timeshare_cartridge_device : public device_t, public device_vid
 {
 public:
 	// construction/destruction
-	videobrain_timeshare_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	videobrain_timeshare_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

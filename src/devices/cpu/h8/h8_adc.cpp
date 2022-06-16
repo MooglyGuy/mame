@@ -15,7 +15,7 @@ DEFINE_DEVICE_TYPE(H8_ADC_2319, h8_adc_2319_device, "h8_adc_2319", "H8/2319 ADC"
 DEFINE_DEVICE_TYPE(H8_ADC_2357, h8_adc_2357_device, "h8_adc_2357", "H8/2357 ADC")
 DEFINE_DEVICE_TYPE(H8_ADC_2655, h8_adc_2655_device, "h8_adc_2655", "H8/2655 ADC")
 
-h8_adc_device::h8_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+h8_adc_device::h8_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG),
@@ -272,7 +272,7 @@ int h8_adc_device::get_channel_index(int count)
 }
 
 
-h8_adc_3337_device::h8_adc_3337_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_adc_3337_device::h8_adc_3337_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_adc_device(mconfig, H8_ADC_3337, tag, owner, clock)
 {
 	m_register_mask = 3;
@@ -303,7 +303,7 @@ void h8_adc_3337_device::mode_update()
 }
 
 
-h8_adc_3006_device::h8_adc_3006_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_adc_3006_device::h8_adc_3006_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_adc_device(mconfig, H8_ADC_3006, tag, owner, clock)
 {
 	m_register_mask = 3;
@@ -334,7 +334,7 @@ void h8_adc_3006_device::mode_update()
 }
 
 
-h8_adc_2245_device::h8_adc_2245_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_adc_2245_device::h8_adc_2245_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_adc_device(mconfig, H8_ADC_2245, tag, owner, clock)
 {
 	m_register_mask = 3;
@@ -365,7 +365,7 @@ void h8_adc_2245_device::mode_update()
 }
 
 
-h8_adc_2319_device::h8_adc_2319_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_adc_2319_device::h8_adc_2319_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_adc_device(mconfig, H8_ADC_2319, tag, owner, clock)
 {
 	m_register_mask = 3;
@@ -402,7 +402,7 @@ void h8_adc_2319_device::mode_update()
 }
 
 
-h8_adc_2357_device::h8_adc_2357_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_adc_2357_device::h8_adc_2357_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_adc_device(mconfig, H8_ADC_2357, tag, owner, clock)
 {
 	m_register_mask = 3;
@@ -433,7 +433,7 @@ void h8_adc_2357_device::mode_update()
 }
 
 
-h8_adc_2655_device::h8_adc_2655_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_adc_2655_device::h8_adc_2655_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_adc_device(mconfig, H8_ADC_2655, tag, owner, clock)
 {
 	m_suspend_on_interrupt = true;

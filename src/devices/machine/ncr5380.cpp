@@ -32,7 +32,7 @@ DEFINE_DEVICE_TYPE(DP8490,   dp8490_device,   "dp8490",   "National Semiconducto
 
 ALLOW_SAVE_TYPE(ncr5380_device::state);
 
-ncr5380_device::ncr5380_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, bool has_lbs)
+ncr5380_device::ncr5380_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, bool has_lbs)
 	: nscsi_device(mconfig, type, tag, owner, clock)
 	, nscsi_slot_card_interface(mconfig, *this, DEVICE_SELF)
 	, m_irq_handler(*this)
@@ -41,17 +41,17 @@ ncr5380_device::ncr5380_device(machine_config const &mconfig, device_type type, 
 {
 }
 
-ncr5380_device::ncr5380_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ncr5380_device::ncr5380_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ncr5380_device(mconfig, NCR5380, tag, owner, clock)
 {
 }
 
-ncr53c80_device::ncr53c80_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ncr53c80_device::ncr53c80_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ncr5380_device(mconfig, NCR53C80, tag, owner, clock, true)
 {
 }
 
-cxd1180_device::cxd1180_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+cxd1180_device::cxd1180_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ncr5380_device(mconfig, CXD1180, tag, owner, clock, true)
 {
 }

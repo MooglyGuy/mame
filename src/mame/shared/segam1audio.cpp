@@ -92,7 +92,7 @@ void segam1audio_device::device_add_mconfig(machine_config &config)
 //  segam1audio_device - constructor
 //-------------------------------------------------
 
-segam1audio_device::segam1audio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+segam1audio_device::segam1audio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SEGAM1AUDIO, tag, owner, clock),
 	m_audiocpu(*this, "sndcpu"),
 	m_multipcm_1(*this, "pcm1"),

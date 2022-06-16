@@ -98,7 +98,7 @@ const tiny_rom_entry *cuda_device::device_rom_region() const
 //  LIVE DEVICE
 //**************************************************************************
 
-cuda_device::cuda_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+cuda_device::cuda_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock),
 	device_nvram_interface(mconfig, *this),
 	write_reset(*this),
@@ -398,7 +398,7 @@ void cuda_302_device::device_add_mconfig(machine_config &config)
 	m_maincpu->set_pullups<1>(0xc0); // pull-ups on port B bits 6 & 7 (DFAC/I2C SDA & SCL)
 }
 
-cuda_302_device::cuda_302_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+cuda_302_device::cuda_302_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	cuda_device(mconfig, CUDA_V302, tag, owner, clock)
 {
 }
@@ -430,7 +430,7 @@ const tiny_rom_entry *cuda_lite_device::device_rom_region() const
 	return ROM_NAME( cudalite );
 }
 
-cuda_lite_device::cuda_lite_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+cuda_lite_device::cuda_lite_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	cuda_device(mconfig, CUDA_LITE, tag, owner, clock)
 {
 }

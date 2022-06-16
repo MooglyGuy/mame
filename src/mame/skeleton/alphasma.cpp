@@ -574,7 +574,7 @@ void alphasmart_state::alphasmart(machine_config &config)
 
 	for (auto &lcdc : m_lcdc)
 	{
-		KS0066(config, lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+		KS0066(config, lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 		lcdc->set_default_bios_tag("f05");
 		lcdc->set_lcd_size(2, 40);
 	}

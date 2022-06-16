@@ -961,7 +961,7 @@ void tek4051_state::tek4051(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &tek4051_state::tek4051_mem);
 
 	// video hardware
-	VECTOR(config, "vector", 0);
+	VECTOR(config, "vector");
 	screen_device &screen(SCREEN(config, SCREEN_TAG, SCREEN_TYPE_VECTOR));
 	screen.set_color(rgb_t::green());
 	screen.set_refresh_hz(50);
@@ -1037,10 +1037,10 @@ void tek4051_state::tek4051(machine_config &config)
 	m_com_pia->irqa_handler().set(FUNC(tek4051_state::com_pia_irqa_w));
 	m_com_pia->irqb_handler().set(FUNC(tek4051_state::com_pia_irqb_w));
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->irq_handler().set(FUNC(tek4051_state::acia_irq_w));
 
-	CLOCK(config, m_acia_clock, 38400);
+	CLOCK(config, m_acia_clock, XTAL::u(38400));
 	m_acia_clock->signal_handler().set(FUNC(tek4051_state::write_acia_clock));
 
 	IEEE488(config, m_gpib);
@@ -1058,11 +1058,11 @@ void tek4051_state::tek4051(machine_config &config)
 void tek4052_state::tek4052(machine_config &config)
 {
 	// basic machine hardware
-	m6800_cpu_device &cpu(M6800(config, AM2901A_TAG, 1000000)); // should be 4x AM2901A + AM2911
+	m6800_cpu_device &cpu(M6800(config, AM2901A_TAG, XTAL::u(1000000))); // should be 4x AM2901A + AM2911
 	cpu.set_addrmap(AS_PROGRAM, &tek4052_state::tek4052_mem);
 
 	// video hardware
-	VECTOR(config, "vector", 0);
+	VECTOR(config, "vector");
 	screen_device &screen(SCREEN(config, SCREEN_TAG, SCREEN_TYPE_VECTOR));
 	screen.set_color(rgb_t::green());
 	screen.set_refresh_hz(50);

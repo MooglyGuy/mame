@@ -27,7 +27,7 @@ class egret_device :  public device_t, public device_nvram_interface
 {
 public:
 	// construction/destruction
-	egret_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	egret_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_config_nvram_interface overrides
 	virtual void nvram_default() override;

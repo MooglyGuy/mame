@@ -2214,6 +2214,7 @@ void gottlieb_state::gottlieb2_ram_rom(machine_config &config)
 void gottlieb_ld_state::g2laser(machine_config &config)
 {
 	gottlieb_core(config);
+<<<<<<< HEAD
 	m_maincpu->set_addrmap(AS_PROGRAM, &gottlieb_ld_state::gottlieb_ld_ram_map);
 
 	GOTTLIEB_SOUND_REV2(config, m_r2_sound).add_route(ALL_OUTPUTS, "speaker", 1.0);
@@ -2221,6 +2222,13 @@ void gottlieb_ld_state::g2laser(machine_config &config)
 	PIONEER_PR8210(config, m_laserdisc, 0);
 	m_laserdisc->set_audio(FUNC(gottlieb_ld_state::laserdisc_audio_process));
 	m_laserdisc->set_overlay(GOTTLIEB_VIDEO_HCOUNT, GOTTLIEB_VIDEO_VCOUNT, FUNC(gottlieb_ld_state::screen_update));
+=======
+	GOTTLIEB_SOUND_REV2(config, m_r2_sound).add_route(ALL_OUTPUTS, "speaker", 1.0);
+
+	PIONEER_PR8210(config, m_laserdisc);
+	m_laserdisc->set_audio(FUNC(gottlieb_state::laserdisc_audio_process));
+	m_laserdisc->set_overlay(GOTTLIEB_VIDEO_HCOUNT, GOTTLIEB_VIDEO_VCOUNT, FUNC(gottlieb_state::screen_update));
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_laserdisc->set_overlay_clip(0, GOTTLIEB_VIDEO_HBLANK-1, 0, GOTTLIEB_VIDEO_VBLANK-8);
 	m_laserdisc->add_route(0, "speaker", 1.0);
 	m_laserdisc->set_screen(m_screen);
@@ -2242,6 +2250,16 @@ void gottlieb_ld_state::g2laser(machine_config &config)
  *
  *************************************/
 
+<<<<<<< HEAD
+=======
+
+void gottlieb_state::gottlieb1_votrax(machine_config &config)
+{
+	gottlieb_core(config);
+	GOTTLIEB_SOUND_REV1_VOTRAX(config, m_r1_sound).add_route(ALL_OUTPUTS, "speaker", 1.0);
+}
+
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 void gottlieb_state::reactor(machine_config &config)
 {
 	gottlieb1_votrax_old(config);
@@ -2278,6 +2296,7 @@ void gottlieb_state::screwloo(machine_config &config)
 void gottlieb_ld_state::cobram3(machine_config &config)
 {
 	gottlieb_core(config);
+<<<<<<< HEAD
 	m_maincpu->set_addrmap(AS_PROGRAM, &gottlieb_ld_state::gottlieb_ld_ram_map);
 
 	GOTTLIEB_SOUND_REV2(config, m_r2_sound).add_route(ALL_OUTPUTS, "speaker", 1.0);
@@ -2286,6 +2305,14 @@ void gottlieb_ld_state::cobram3(machine_config &config)
 	PIONEER_PR8210(config, m_laserdisc, 0);
 	m_laserdisc->set_audio(FUNC(gottlieb_ld_state::laserdisc_audio_process));
 	m_laserdisc->set_overlay(GOTTLIEB_VIDEO_HCOUNT, GOTTLIEB_VIDEO_VCOUNT, FUNC(gottlieb_ld_state::screen_update));
+=======
+	GOTTLIEB_SOUND_REV2(config, m_r2_sound).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	m_r2_sound->enable_cobram3_mods();
+
+	PIONEER_PR8210(config, m_laserdisc);
+	m_laserdisc->set_audio(FUNC(gottlieb_state::laserdisc_audio_process));
+	m_laserdisc->set_overlay(GOTTLIEB_VIDEO_HCOUNT, GOTTLIEB_VIDEO_VCOUNT, FUNC(gottlieb_state::screen_update));
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_laserdisc->set_overlay_clip(0, GOTTLIEB_VIDEO_HBLANK-1, 0, GOTTLIEB_VIDEO_VBLANK-8);
 	m_laserdisc->add_route(0, "speaker", 1.0);
 	m_laserdisc->set_screen(m_screen);

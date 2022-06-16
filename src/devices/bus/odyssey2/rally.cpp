@@ -33,10 +33,10 @@ namespace {
 class o2_rally_device : public device_t, public device_o2_cart_interface
 {
 public:
-	o2_rally_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	o2_rally_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	o2_rally_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	o2_rally_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -52,12 +52,12 @@ protected:
 	u8 m_bank = 0;
 };
 
-o2_rally_device::o2_rally_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+o2_rally_device::o2_rally_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_o2_cart_interface(mconfig, *this)
 { }
 
-o2_rally_device::o2_rally_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+o2_rally_device::o2_rally_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	o2_rally_device(mconfig, O2_ROM_RALLY, tag, owner, clock)
 { }
 

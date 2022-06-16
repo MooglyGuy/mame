@@ -871,8 +871,8 @@ void ngp_state::ngp_common(machine_config &config)
 	m_t6w28->add_route(0, "speaker", 0.50, 0);
 	m_t6w28->add_route(1, "speaker", 0.50, 1);
 
-	DAC_8BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
-	DAC_8BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
+	DAC_8BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
+	DAC_8BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
 }
 
 

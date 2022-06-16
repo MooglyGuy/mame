@@ -1174,7 +1174,7 @@ void macpdm_state::pdm_map(address_map &map)
 
 void macpdm_state::macpdm(machine_config &config)
 {
-	PPC601(config, m_maincpu, 60000000);
+	PPC601(config, m_maincpu, XTAL::u(60000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &macpdm_state::pdm_map);
 	m_maincpu->ppcdrc_set_options(PPCDRC_COMPATIBLE_OPTIONS);
 
@@ -1235,8 +1235,8 @@ void macpdm_state::macpdm(machine_config &config)
 
 	// pclk is maincpu:60MHz/4, RTxCA is IO_CLOCK*2/17 or GPI input, RTxCB is IO_CLOCK*2/17
 	// IO_CLOCK*2/17 is 3'686'400
-	SCC85C30(config, m_scc, 60000000/4);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	SCC85C30(config, m_scc, XTAL::u(60000000)/4);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(FUNC(macpdm_state::scc_irq));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));

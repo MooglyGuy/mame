@@ -1642,7 +1642,7 @@ void namcos10_memm_state::ns10_mrdrilr2(machine_config &config)
 {
 	namcos10_memm(config);
 	/* decrypter device (CPLD in hardware?) */
-	MRDRILR2_DECRYPTER(config, m_decrypter, 0);
+	MRDRILR2_DECRYPTER(config, m_decrypter);
 }
 
 

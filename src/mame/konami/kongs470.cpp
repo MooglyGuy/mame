@@ -72,13 +72,13 @@ void kongs470_state::machine_start()
 void kongs470_state::kongs470(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 10'000'000); // clock unverified
+	M68000(config, m_maincpu, XTAL::u(10'000'000)); // clock unverified
 	m_maincpu->set_addrmap(AS_PROGRAM, &kongs470_state::main_map);
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	k054539_device &k054539(K054539(config, "k054539", 18'432'000)); // clock unverified
+	k054539_device &k054539(K054539(config, "k054539", XTAL::u(18'432'000))); // clock unverified
 	k054539.add_route(0, "speaker", 0.75, 1);
 	k054539.add_route(1, "speaker", 0.75, 0);
 }

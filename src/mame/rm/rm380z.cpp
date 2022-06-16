@@ -251,7 +251,7 @@ void rm380z_state_cos34::rm380z34e(machine_config &config)
 
 	m_screen->set_raw(8_MHz_XTAL, 512, 0, 320, 312, 0, 240);
 
-	SN74S262(config, m_rocg, 0);
+	SN74S262(config, m_rocg);
 	m_rocg->set_palette(m_palette);
 }
 

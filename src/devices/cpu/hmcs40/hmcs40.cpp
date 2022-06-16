@@ -73,7 +73,7 @@ DEFINE_DEVICE_TYPE(HD44868, hd44868_device, "hd44868", "Hitachi HD44868") // CMO
 //  constructor
 //-------------------------------------------------
 
-hmcs40_cpu_device::hmcs40_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int family, u16 polarity, int stack_levels, int pcwidth, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data) :
+hmcs40_cpu_device::hmcs40_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int family, u16 polarity, int stack_levels, int pcwidth, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data) :
 	cpu_device(mconfig, type, tag, owner, clock),
 	m_program_config("program", ENDIANNESS_LITTLE, 16, prgwidth, -1, program),
 	m_data_config("data", ENDIANNESS_LITTLE, 8, datawidth, 0, data),
@@ -92,83 +92,83 @@ hmcs40_cpu_device::hmcs40_cpu_device(const machine_config &mconfig, device_type 
 hmcs40_cpu_device::~hmcs40_cpu_device() { }
 
 
-hmcs43_cpu_device::hmcs43_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity) :
+hmcs43_cpu_device::hmcs43_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity) :
 	hmcs40_cpu_device(mconfig, type, tag, owner, clock, HMCS43_FAMILY, polarity, 3 /* stack levels */, 10 /* pc width */, 11 /* prg width */, address_map_constructor(FUNC(hmcs43_cpu_device::program_1k), this), 7 /* data width */, address_map_constructor(FUNC(hmcs43_cpu_device::data_80x4), this))
 { }
 
-hd38750_device::hd38750_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38750_device::hd38750_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs43_cpu_device(mconfig, HD38750, tag, owner, clock, IS_PMOS)
 { }
-hd38755_device::hd38755_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38755_device::hd38755_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs43_cpu_device(mconfig, HD38755, tag, owner, clock, IS_PMOS)
 { }
-hd44750_device::hd44750_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44750_device::hd44750_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs43_cpu_device(mconfig, HD44750, tag, owner, clock, IS_CMOS)
 { }
-hd44758_device::hd44758_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44758_device::hd44758_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs43_cpu_device(mconfig, HD44758, tag, owner, clock, IS_CMOS)
 { }
 
 
-hmcs44_cpu_device::hmcs44_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity) :
+hmcs44_cpu_device::hmcs44_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity) :
 	hmcs40_cpu_device(mconfig, type, tag, owner, clock, HMCS44_FAMILY, polarity, 4, 11, 12, address_map_constructor(FUNC(hmcs44_cpu_device::program_2k), this), 8, address_map_constructor(FUNC(hmcs44_cpu_device::data_160x4), this))
 { }
 
-hd38800_device::hd38800_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38800_device::hd38800_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs44_cpu_device(mconfig, HD38800, tag, owner, clock, IS_PMOS)
 { }
-hd38805_device::hd38805_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38805_device::hd38805_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs44_cpu_device(mconfig, HD38805, tag, owner, clock, IS_PMOS)
 { }
-hd44801_device::hd44801_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44801_device::hd44801_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs44_cpu_device(mconfig, HD44801, tag, owner, clock, IS_CMOS)
 { }
-hd44808_device::hd44808_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44808_device::hd44808_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs44_cpu_device(mconfig, HD44808, tag, owner, clock, IS_CMOS)
 { }
 
 
-hmcs45_cpu_device::hmcs45_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity) :
+hmcs45_cpu_device::hmcs45_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity) :
 	hmcs40_cpu_device(mconfig, type, tag, owner, clock, HMCS45_FAMILY, polarity, 4, 11, 12, address_map_constructor(FUNC(hmcs45_cpu_device::program_2k), this), 8, address_map_constructor(FUNC(hmcs45_cpu_device::data_160x4), this))
 { }
 
-hd38820_device::hd38820_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38820_device::hd38820_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs45_cpu_device(mconfig, HD38820, tag, owner, clock, IS_PMOS)
 { }
-hd38825_device::hd38825_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38825_device::hd38825_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs45_cpu_device(mconfig, HD38825, tag, owner, clock, IS_PMOS)
 { }
-hd44820_device::hd44820_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44820_device::hd44820_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs45_cpu_device(mconfig, HD44820, tag, owner, clock, IS_CMOS)
 { }
-hd44828_device::hd44828_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44828_device::hd44828_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs45_cpu_device(mconfig, HD44828, tag, owner, clock, IS_CMOS)
 { }
 
 
-hmcs46_cpu_device::hmcs46_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity) :
+hmcs46_cpu_device::hmcs46_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity) :
 	hmcs40_cpu_device(mconfig, type, tag, owner, clock, HMCS46_FAMILY, polarity, 4, 12, 12, address_map_constructor(FUNC(hmcs46_cpu_device::program_2k), this), 8, address_map_constructor(FUNC(hmcs46_cpu_device::data_256x4), this))
 { }
 
-hd44840_device::hd44840_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44840_device::hd44840_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs46_cpu_device(mconfig, HD44840, tag, owner, clock, IS_CMOS)
 { }
-hd44848_device::hd44848_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44848_device::hd44848_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs46_cpu_device(mconfig, HD44848, tag, owner, clock, IS_CMOS)
 { }
 
 
-hmcs47_cpu_device::hmcs47_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity) :
+hmcs47_cpu_device::hmcs47_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity) :
 	hmcs40_cpu_device(mconfig, type, tag, owner, clock, HMCS47_FAMILY, polarity, 4, 12, 12, address_map_constructor(FUNC(hmcs47_cpu_device::program_2k), this), 8, address_map_constructor(FUNC(hmcs47_cpu_device::data_256x4), this))
 { }
 
-hd38870_device::hd38870_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd38870_device::hd38870_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs47_cpu_device(mconfig, HD38870, tag, owner, clock, IS_PMOS)
 { }
-hd44860_device::hd44860_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44860_device::hd44860_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs47_cpu_device(mconfig, HD44860, tag, owner, clock, IS_CMOS)
 { }
-hd44868_device::hd44868_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd44868_device::hd44868_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs47_cpu_device(mconfig, HD44868, tag, owner, clock, IS_CMOS)
 { }
 

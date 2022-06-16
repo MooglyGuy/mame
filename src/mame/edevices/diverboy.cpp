@@ -263,11 +263,11 @@ GFXDECODE_END
 
 void diverboy_state::diverboy(machine_config &config)
 {
-	M68000(config, m_maincpu, 12000000); // guess
+	M68000(config, m_maincpu, XTAL::u(12000000)); // guess
 	m_maincpu->set_addrmap(AS_PROGRAM, &diverboy_state::diverboy_map);
 	m_maincpu->set_vblank_int("screen", FUNC(diverboy_state::irq6_line_hold));
 
-	Z80(config, m_audiocpu, 4000000);
+	Z80(config, m_audiocpu, XTAL::u(4000000));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &diverboy_state::snd_map);
 
 
@@ -288,7 +288,7 @@ void diverboy_state::diverboy(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch").data_pending_callback().set_inputline(m_audiocpu, 0);
 
-	OKIM6295(config, m_oki, 1320000, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.50); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki, XTAL::u(1320000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.50); // clock frequency & pin 7 not verified
 }
 
 void diverboy_state::tumblebed(machine_config &config)

@@ -36,7 +36,7 @@ const tiny_rom_entry *cpc_smartwatch_device::device_rom_region() const
 //  LIVE DEVICE
 //**************************************************************************
 
-cpc_smartwatch_device::cpc_smartwatch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cpc_smartwatch_device::cpc_smartwatch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CPC_SMARTWATCH, tag, owner, clock),
 	device_cpc_expansion_card_interface(mconfig, *this), m_slot(nullptr),
 	m_rtc(*this,"rtc"), m_bank(nullptr)

@@ -26,7 +26,7 @@ class labtam_vducom_device_base
 	, public device_multibus_interface
 {
 protected:
-	labtam_vducom_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	labtam_vducom_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -73,7 +73,7 @@ private:
 class labtam_8086cpu_device : public labtam_vducom_device_base
 {
 public:
-	labtam_8086cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	labtam_8086cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -83,7 +83,7 @@ protected:
 class labtam_vducom_device : public labtam_vducom_device_base
 {
 public:
-	labtam_vducom_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	labtam_vducom_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;

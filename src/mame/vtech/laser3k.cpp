@@ -1040,7 +1040,7 @@ void laser3k_state::laser3k(machine_config &config)
 	m_gamepad->set_sw_pullups(true); // 3K9 pullups to +5V
 
 	/* the 8048 isn't dumped, so substitute modified real Apple II h/w */
-	AY3600(config, m_ay3600, 0);
+	AY3600(config, m_ay3600);
 	m_ay3600->x0().set_ioport("X0");
 	m_ay3600->x1().set_ioport("X1");
 	m_ay3600->x2().set_ioport("X2");

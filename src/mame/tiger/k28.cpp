@@ -291,7 +291,7 @@ INPUT_PORTS_END
 
 void k28_state::k28(machine_config &config)
 {
-	constexpr u32 MASTER_CLOCK = 640'000; // approximation
+	constexpr XTAL MASTER_CLOCK = XTAL::u(640'000); // approximation
 
 	// basic machine hardware
 	TMS1400(config, m_maincpu, MASTER_CLOCK/2);

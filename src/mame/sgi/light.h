@@ -20,7 +20,7 @@ class sgi_lg1_device : public device_t
 public:
 	auto write_vblank() { return  m_screen.lookup()->screen_vblank(); }
 
-	sgi_lg1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	sgi_lg1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_map &map) ATTR_COLD;
 

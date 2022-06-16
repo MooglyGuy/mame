@@ -31,7 +31,7 @@ public:
 	auto sync_acknowledge_write() { return m_syncack_write_func.bind(); }
 protected:
 	// construction/destruction
-	m6809_base_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, const device_type type, int divider);
+	m6809_base_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const device_type type, int divider);
 
 	class memory_interface {
 	public:
@@ -310,7 +310,7 @@ class mc6809_device : public m6809_base_device
 {
 public:
 	// construction/destruction
-	mc6809_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6809_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // ======================> mc6809e_device
@@ -319,7 +319,7 @@ class mc6809e_device : public m6809_base_device
 {
 public:
 	// construction/destruction
-	mc6809e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6809e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// MC6809E has LIC line to indicate opcode/data fetch
 	auto lic() { return m_lic_func.bind(); }
@@ -331,7 +331,7 @@ class m6809_device : public m6809_base_device
 {
 public:
 	// construction/destruction
-	m6809_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m6809_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 enum

@@ -796,6 +796,7 @@ void lazercmd_state::medlanes(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
+<<<<<<< HEAD
 	DAC_1BIT(config, m_dac[2], 0).add_route(ALL_OUTPUTS, "speaker", 0.99);
 	DAC_1BIT(config, m_dac[3], 0).add_route(ALL_OUTPUTS, "speaker", 0.99);
 }
@@ -812,6 +813,10 @@ void lazercmd_state::lazercmd(machine_config &config)
 
 	DAC_1BIT(config, m_dac[0], 0).add_route(ALL_OUTPUTS, "speaker", 0.99);
 	DAC_1BIT(config, m_dac[1], 0).add_route(ALL_OUTPUTS, "speaker", 0.99);
+=======
+	DAC_1BIT(config, m_dac2).add_route(ALL_OUTPUTS, "speaker", 0.99);
+	DAC_1BIT(config, m_dac3).add_route(ALL_OUTPUTS, "speaker", 0.99);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 }
 
 
@@ -822,7 +827,26 @@ void lazercmd_state::bbonk(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &lazercmd_state::bbonk_map);
 	TIMER(config.replace(), "scantimer").configure_scanline(FUNC(lazercmd_state::bbonk_timer), "screen", 0, 1);
 
+<<<<<<< HEAD
 	subdevice<screen_device>("screen")->set_visarea(0 * HORZ_CHR, HORZ_RES * HORZ_CHR - 1, 0 * VERT_CHR, (VERT_RES - 1) * VERT_CHR - 1);
+=======
+	/* video hardware */
+	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
+	screen.set_refresh_hz(60);
+	screen.set_vblank_time(ATTOSECONDS_IN_USEC(2500) /* not accurate */);
+	screen.set_size(HORZ_RES * HORZ_CHR, VERT_RES * VERT_CHR);
+	screen.set_visarea(0 * HORZ_CHR, HORZ_RES * HORZ_CHR - 1, 0 * VERT_CHR, (VERT_RES - 1) * VERT_CHR - 1);
+	screen.set_screen_update(FUNC(lazercmd_state::screen_update_lazercmd));
+	screen.set_palette(m_palette);
+
+	GFXDECODE(config, m_gfxdecode, m_palette, gfx_lazercmd);
+	PALETTE(config, m_palette, FUNC(lazercmd_state::lazercmd_palette), 5);
+
+	/* sound hardware */
+	SPEAKER(config, "speaker").front_center();
+	DAC_1BIT(config, m_dac2).add_route(ALL_OUTPUTS, "speaker", 0.99);
+	DAC_1BIT(config, m_dac3).add_route(ALL_OUTPUTS, "speaker", 0.99);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 }
 
 /***************************************************************************

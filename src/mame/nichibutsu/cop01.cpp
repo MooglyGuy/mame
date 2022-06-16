@@ -798,7 +798,7 @@ void mightguy_state::mightguy(machine_config &config)
 
 	YM3526(config, "ymsnd", 8_MHz_XTAL / 2).add_route(ALL_OUTPUTS, "mono", 1.0);
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "mono", 0.5); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "mono", 0.5); // unknown DAC
 }
 
 

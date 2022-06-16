@@ -18,7 +18,7 @@ class isa16_svga_cirrus_device :
 {
 public:
 	// construction/destruction
-	isa16_svga_cirrus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_svga_cirrus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t input_port_0_r();
 
@@ -43,7 +43,7 @@ class isa16_svga_cirrus_gd542x_device :
 {
 public:
 	// construction/destruction
-	isa16_svga_cirrus_gd542x_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_svga_cirrus_gd542x_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t input_port_0_r();
 

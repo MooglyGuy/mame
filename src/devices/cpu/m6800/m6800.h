@@ -30,7 +30,7 @@ public:
 	typedef void (m6800_cpu_device::*op_func)();
 
 	// construction/destruction
-	m6800_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6800_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	enum
@@ -39,7 +39,7 @@ protected:
 		M6800_SLP = 0x10  // HD63701 only
 	};
 
-	m6800_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal);
+	m6800_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -361,12 +361,12 @@ protected:
 class m6802_cpu_device : public m6800_cpu_device
 {
 public:
-	m6802_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6802_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_ram_enable(bool re) { assert(!configured()); m_ram_enable = re; }
 
 protected:
-	m6802_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, const m6800_cpu_device::op_func *insn, const u8 *cycles);
+	m6802_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const m6800_cpu_device::op_func *insn, const u8 *cycles);
 
 	virtual u64 execute_clocks_to_cycles(u64 clocks) const noexcept override { return (clocks + 4 - 1) / 4; }
 	virtual u64 execute_cycles_to_clocks(u64 cycles) const noexcept override { return (cycles * 4); }
@@ -382,7 +382,7 @@ private:
 class m6808_cpu_device : public m6802_cpu_device
 {
 public:
-	m6808_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6808_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -393,7 +393,7 @@ protected:
 class nsc8105_cpu_device : public m6802_cpu_device
 {
 public:
-	nsc8105_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nsc8105_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;

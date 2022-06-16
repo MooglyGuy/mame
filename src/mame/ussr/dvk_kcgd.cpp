@@ -428,7 +428,7 @@ void kcgd_state::kcgd(machine_config &config)
 	m_dl11kbd->txrdy_wr_callback().set_inputline(m_maincpu, t11_device::VEC_LINE);
 	m_dl11kbd->rxrdy_wr_callback().set_inputline(m_maincpu, t11_device::VEC_LINE);
 
-	MS7004(config, m_ms7004, 0);
+	MS7004(config, m_ms7004);
 	m_ms7004->tx_handler().set(m_dl11kbd, FUNC(dl11_device::rx_w));
 }
 

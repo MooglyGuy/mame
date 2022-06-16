@@ -19,7 +19,7 @@ class bbc_pmsgenie_device
 	, public device_nvram_interface
 {
 public:
-	bbc_pmsgenie_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	bbc_pmsgenie_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, BBC_PMSGENIE, tag, owner, clock)
 		, device_bbc_rom_interface(mconfig, *this)
 		, device_nvram_interface(mconfig, *this)

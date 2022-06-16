@@ -358,7 +358,7 @@ void konamigq_state::konamigq(machine_config &config)
 	m_dasp->set_addrmap(AS_DATA, &konamigq_state::konamigq_dasp_map);
 	m_dasp->set_periodic_int(FUNC(konamigq_state::tms_sync), attotime::from_hz(48000));
 
-	MB89371(config, "mb89371", 0);
+	MB89371(config, "mb89371");
 
 	EEPROM_93C46_16BIT(config, "eeprom").default_data(konamigq_def_eeprom, 128);
 

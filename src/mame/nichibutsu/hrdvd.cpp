@@ -520,7 +520,7 @@ void hrdvd_state::hrdvd(machine_config &config)
 	m_mpeg->sp2_clk_w().set(m_mpega, FUNC(nn71003f_device::clk_w));
 	m_mpeg->sp2_dat_w().set(m_mpega, FUNC(nn71003f_device::dat_w));
 
-	NICHISND(config, m_nichisnd, 0);
+	NICHISND(config, m_nichisnd);
 
 	SPEAKER(config, m_speaker, 2).front();
 }

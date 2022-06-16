@@ -466,7 +466,7 @@ void blockout_state::blockout(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.60, 0);
 	ymsnd.add_route(1, "speaker", 0.60, 1);
 
-	okim6295_device &oki(OKIM6295(config, "oki", 1'056'000, okim6295_device::PIN7_HIGH));
+	okim6295_device &oki(OKIM6295(config, "oki", XTAL::u(1'056'000), okim6295_device::PIN7_HIGH));
 	oki.add_route(ALL_OUTPUTS, "speaker", 0.50, 0);
 	oki.add_route(ALL_OUTPUTS, "speaker", 0.50, 1);
 }

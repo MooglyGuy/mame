@@ -312,14 +312,14 @@ INPUT_PORTS_END
 void touchme_state::touchme(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 250000); // approximation - RC osc. R=100K, C=47pF
+	PIC1655(config, m_maincpu, XTAL::u(250000)); // approximation - RC osc. R=100K, C=47pF
 	m_maincpu->read_a().set(FUNC(touchme_state::read_a));
 	m_maincpu->write_b().set(FUNC(touchme_state::write_b));
 	m_maincpu->read_c().set_constant(0xff);
 	m_maincpu->write_c().set(FUNC(touchme_state::write_c));
 
 	// PIC CLKOUT, tied to RTCC
-	CLOCK(config, "clock", 250000/4).signal_handler().set_inputline("maincpu", PIC16C5x_RTCC);
+	CLOCK(config, "clock", XTAL::u(250000)/4).signal_handler().set_inputline("maincpu", PIC16C5x_RTCC);
 
 	// video hardware
 	PWM_DISPLAY(config, m_display).set_size(7, 7);
@@ -430,7 +430,7 @@ INPUT_PORTS_END
 void pabball_state::pabball(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 1200000); // approximation - RC osc. R=18K, C=27pF
+	PIC1655(config, m_maincpu, XTAL::u(1200000)); // approximation - RC osc. R=18K, C=27pF
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->write_b().set(FUNC(pabball_state::write_b));
 	m_maincpu->read_c().set_ioport("IN.1");
@@ -699,7 +699,7 @@ INPUT_PORTS_END
 void melodym_state::melodym(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 1000000); // approximation
+	PIC1655(config, m_maincpu, XTAL::u(1000000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.5");
 	m_maincpu->write_b().set(FUNC(melodym_state::write_b));
 	m_maincpu->read_c().set(FUNC(melodym_state::read_c));
@@ -805,7 +805,7 @@ INPUT_PORTS_END
 void maniac_state::maniac(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 1000000); // approximation - RC osc. R=~13.4K, C=470pF
+	PIC1655(config, m_maincpu, XTAL::u(1000000)); // approximation - RC osc. R=~13.4K, C=470pF
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->write_b().set(FUNC(maniac_state::write_b));
 	m_maincpu->write_c().set(FUNC(maniac_state::write_c));
@@ -965,7 +965,7 @@ INPUT_PORTS_END
 void flash_state::flash(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 1050000); // approximation
+	PIC1655(config, m_maincpu, XTAL::u(1050000)); // approximation
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->write_b().set(FUNC(flash_state::write_b));
 	m_maincpu->read_c().set(FUNC(flash_state::read_c));
@@ -1038,7 +1038,7 @@ INPUT_CHANGED_MEMBER(matchme_state::speed_switch)
 {
 	// MCU clock is ~1.2MHz by default (R=18K, C=15pF), high speed setting adds a
 	// 10pF cap to speed it up by about 7.5%.
-	m_maincpu->set_unscaled_clock((newval & 1) ? 1300000 : 1200000);
+	m_maincpu->set_unscaled_clock((newval & 1) ? XTAL::u(1300000) : XTAL::u(1200000));
 }
 
 void matchme_state::write_b(u8 data)
@@ -1118,7 +1118,7 @@ INPUT_PORTS_END
 void matchme_state::matchme(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 1200000); // see speed_switch
+	PIC1655(config, m_maincpu, XTAL::u(1200000)); // see speed_switch
 	m_maincpu->read_a().set_ioport("IN.3");
 	m_maincpu->write_b().set(FUNC(matchme_state::write_b));
 	m_maincpu->read_c().set(FUNC(matchme_state::read_c));
@@ -1242,7 +1242,7 @@ INPUT_PORTS_END
 void drdunk_state::drdunk(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 800000); // approximation - RC osc. R=18K, C=47pF
+	PIC1655(config, m_maincpu, XTAL::u(800000)); // approximation - RC osc. R=18K, C=47pF
 	m_maincpu->read_a().set(FUNC(drdunk_state::read_a));
 	m_maincpu->write_b().set(FUNC(drdunk_state::write_b));
 	m_maincpu->read_c().set_constant(0xff);
@@ -1412,7 +1412,7 @@ INPUT_PORTS_END
 void leboom_state::leboom(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 1000000); // approximation
+	PIC1655(config, m_maincpu, XTAL::u(1000000)); // approximation
 	m_maincpu->read_a().set(FUNC(leboom_state::read_a));
 	m_maincpu->write_b().set(FUNC(leboom_state::write_b));
 	m_maincpu->read_c().set_constant(0xff);
@@ -1529,7 +1529,7 @@ INPUT_PORTS_END
 void rockpin_state::rockpin(machine_config &config)
 {
 	// basic machine hardware
-	PIC1650(config, m_maincpu, 450000); // approximation - RC osc. R=47K, C=47pF
+	PIC1650(config, m_maincpu, XTAL::u(450000)); // approximation - RC osc. R=47K, C=47pF
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->write_a().set(FUNC(rockpin_state::write_a));
 	m_maincpu->read_b().set_constant(0xff);
@@ -1540,7 +1540,7 @@ void rockpin_state::rockpin(machine_config &config)
 	m_maincpu->write_d().set(FUNC(rockpin_state::write_d));
 
 	// PIC CLKOUT, tied to RTCC
-	CLOCK(config, "clock", 450000/4).signal_handler().set_inputline(m_maincpu, PIC16C5x_RTCC);
+	CLOCK(config, "clock", XTAL::u(450000)/4).signal_handler().set_inputline(m_maincpu, PIC16C5x_RTCC);
 
 	// video hardware
 	PWM_DISPLAY(config, m_display).set_size(3+6, 8);
@@ -1660,7 +1660,7 @@ INPUT_PORTS_END
 void hccbaskb_state::hccbaskb(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 800000); // approximation - RC osc. R=15K, C=47pF
+	PIC1655(config, m_maincpu, XTAL::u(800000)); // approximation - RC osc. R=15K, C=47pF
 	m_maincpu->read_a().set(FUNC(hccbaskb_state::read_a));
 	m_maincpu->write_b().set(FUNC(hccbaskb_state::write_b));
 	m_maincpu->read_c().set_constant(0xff);
@@ -1789,7 +1789,7 @@ INPUT_PORTS_END
 void ttfball_state::ttfball(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 550000); // approximation - RC osc. 27K, C=68pF
+	PIC1655(config, m_maincpu, XTAL::u(550000)); // approximation - RC osc. 27K, C=68pF
 	m_maincpu->read_a().set(FUNC(ttfball_state::read_a));
 	m_maincpu->write_b().set(FUNC(ttfball_state::write_b));
 	m_maincpu->read_c().set_constant(0xff);
@@ -2005,7 +2005,7 @@ INPUT_PORTS_END
 void uspbball_state::uspbball(machine_config &config)
 {
 	// basic machine hardware
-	PIC1650(config, m_maincpu, 900000); // approximation - RC osc. R=22K, C=47pF
+	PIC1650(config, m_maincpu, XTAL::u(900000)); // approximation - RC osc. R=22K, C=47pF
 	m_maincpu->read_a().set_ioport("IN.0");
 	m_maincpu->write_a().set(FUNC(uspbball_state::write_a));
 	m_maincpu->read_b().set_constant(0xff);
@@ -2016,7 +2016,7 @@ void uspbball_state::uspbball(machine_config &config)
 	m_maincpu->write_d().set(FUNC(uspbball_state::write_d));
 
 	// PIC CLKOUT, tied to RTCC
-	CLOCK(config, "clock", 900000/4).signal_handler().set_inputline("maincpu", PIC16C5x_RTCC);
+	CLOCK(config, "clock", XTAL::u(900000)/4).signal_handler().set_inputline("maincpu", PIC16C5x_RTCC);
 
 	// video hardware
 	PWM_DISPLAY(config, m_display).set_size(6, 16);
@@ -2151,7 +2151,7 @@ INPUT_PORTS_END
 void us2pfball_state::us2pfball(machine_config &config)
 {
 	// basic machine hardware
-	PIC1650(config, m_maincpu, 800000); // approximation - RC osc. R=39K, C=75pF
+	PIC1650(config, m_maincpu, XTAL::u(800000)); // approximation - RC osc. R=39K, C=75pF
 	m_maincpu->read_a().set(FUNC(us2pfball_state::read_a));
 	m_maincpu->write_a().set(FUNC(us2pfball_state::write_a));
 	m_maincpu->read_b().set_ioport("IN.5");
@@ -2162,7 +2162,7 @@ void us2pfball_state::us2pfball(machine_config &config)
 	m_maincpu->write_d().set(FUNC(us2pfball_state::write_d));
 
 	// PIC CLKOUT, tied to RTCC
-	CLOCK(config, "clock", 800000/4).signal_handler().set_inputline("maincpu", PIC16C5x_RTCC);
+	CLOCK(config, "clock", XTAL::u(800000)/4).signal_handler().set_inputline("maincpu", PIC16C5x_RTCC);
 
 	// video hardware
 	PWM_DISPLAY(config, m_display).set_size(10, 7);

@@ -57,7 +57,7 @@ public:
 	template <typename... T> void set_get_char_rom(T &&... args) { m_charrom_cb.set(std::forward<T>(args)...); }
 
 protected:
-	mc6847_friend_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock,
+	mc6847_friend_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock,
 			const uint8_t *fontdata, bool is_mc6847t1, double tpfs, int field_sync_falling_edge_scanline, int divider,
 			bool supports_partial_body_scanlines, bool pal);
 
@@ -505,7 +505,7 @@ public:
 	void set_palette(const uint32_t *palette) { m_palette = (palette) ? palette : default_palette(); }
 
 protected:
-	mc6847_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, const uint8_t *fontdata, double tpfs, bool pal);
+	mc6847_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const uint8_t *fontdata, double tpfs, bool pal);
 
 	// device-level overrides
 	virtual void device_config_complete() override;
@@ -606,34 +606,34 @@ private:
 class mc6847_ntsc_device : public mc6847_base_device
 {
 public:
-	mc6847_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6847_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class mc6847_pal_device : public mc6847_base_device
 {
 public:
-	mc6847_pal_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6847_pal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class mc6847y_ntsc_device : public mc6847_base_device
 {
 public:
-	mc6847y_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6847y_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class mc6847y_pal_device : public mc6847_base_device
 {
 public:
-	mc6847y_pal_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6847y_pal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class mc6847t1_ntsc_device : public mc6847_base_device
 {
 public:
-	mc6847t1_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6847t1_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	mc6847t1_ntsc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, const uint8_t *fontdata, double tpfs, bool pal);
+	mc6847t1_ntsc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const uint8_t *fontdata, double tpfs, bool pal);
 
 	virtual uint8_t border_value(uint8_t mode) override;
 };
@@ -641,13 +641,13 @@ protected:
 class mc6847t1_pal_device : public mc6847t1_ntsc_device
 {
 public:
-	mc6847t1_pal_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6847t1_pal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class s68047_device : public mc6847_base_device
 {
 public:
-	s68047_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	s68047_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual uint32_t emit_samples(uint8_t mode, const uint8_t *data, int length, pixel_t *RESTRICT pixels, const pixel_t *RESTRICT palette,
@@ -664,7 +664,7 @@ private:
 class m5c6847p1_device : public mc6847_base_device
 {
 public:
-	m5c6847p1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m5c6847p1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

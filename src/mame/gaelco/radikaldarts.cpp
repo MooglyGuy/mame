@@ -54,10 +54,10 @@ INPUT_PORTS_END
 void radikaldarts_state::radikaldarts(machine_config &config)
 {
 	// Basic machine hardware
-	PENTIUM3(config, m_maincpu, 120'000'000); // Celeron SL6C8 1.2 GHz
+	PENTIUM3(config, m_maincpu, XTAL::u(120'000'000)); // Celeron SL6C8 1.2 GHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &radikaldarts_state::radikaldarts_map);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

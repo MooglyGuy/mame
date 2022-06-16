@@ -492,7 +492,7 @@ TIMER_DEVICE_CALLBACK_MEMBER(acommand_state::scanline_cb)
 
 void acommand_state::acommand(machine_config &config)
 {
-	M68000(config, m_maincpu, 12000000);
+	M68000(config, m_maincpu, XTAL::u(12000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &acommand_state::main_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(acommand_state::scanline_cb), "screen", 0, 1);
 
@@ -511,11 +511,11 @@ void acommand_state::acommand(machine_config &config)
 	// assume amplified stereo
 	SPEAKER(config, "speaker", 2).front();
 
-	OKIM6295(config, m_oki[0], 2112000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki[0], XTAL::u(2112000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
-	OKIM6295(config, m_oki[1], 2112000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki[1], XTAL::u(2112000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 }

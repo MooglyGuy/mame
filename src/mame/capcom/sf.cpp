@@ -784,12 +784,12 @@ void sf_state::sfan(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.60, 0);
 	ymsnd.add_route(1, "speaker", 0.60, 1);
 
-	MSM5205(config, m_msm[0], 384000);
+	MSM5205(config, m_msm[0], XTAL::u(384000));
 	m_msm[0]->set_prescaler_selector(msm5205_device::SEX_4B);   /* 8KHz playback ? */
 	m_msm[0]->add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	m_msm[0]->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
-	MSM5205(config, m_msm[1], 384000);
+	MSM5205(config, m_msm[1], XTAL::u(384000));
 	m_msm[1]->set_prescaler_selector(msm5205_device::SEX_4B);   /* 8KHz playback ? */
 	m_msm[1]->add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	m_msm[1]->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);

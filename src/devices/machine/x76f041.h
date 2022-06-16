@@ -18,7 +18,7 @@ class x76f041_device : public device_t,
 {
 public:
 	// construction/destruction
-	x76f041_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	x76f041_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void write_cs(int state);
 	void write_rst(int state);

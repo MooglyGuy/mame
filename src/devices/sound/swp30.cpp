@@ -439,7 +439,7 @@ const std::array<u32, 4> swp30_device::lfo_shape_offset_tri   = { 0x00000000, 0x
 
 const std::array<u8, 4> swp30_device::dpcm_offset = { 7, 6, 4, 0 };
 
-swp30_device::swp30_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+swp30_device::swp30_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, SWP30, tag, owner, clock),
 	  device_sound_interface(mconfig, *this),
 	  m_program_config("meg_program", ENDIANNESS_LITTLE, 64, 9, -3, address_map_constructor(FUNC(swp30_device::meg_prg_map), this)),

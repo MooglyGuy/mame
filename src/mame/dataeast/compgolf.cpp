@@ -410,7 +410,7 @@ void compgolf_state::machine_reset()
 void compgolf_state::compgolf(machine_config &config)
 {
 	// basic machine hardware
-	MC6809E(config, m_maincpu, 2'000'000); // HD68B09EP
+	MC6809E(config, m_maincpu, XTAL::u(2'000'000)); // HD68B09EP
 	m_maincpu->set_addrmap(AS_PROGRAM, &compgolf_state::program_map);
 
 	// video hardware
@@ -428,7 +428,7 @@ void compgolf_state::compgolf(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	ym2203_device &ymsnd(YM2203(config, "ymsnd", 1'500'000));
+	ym2203_device &ymsnd(YM2203(config, "ymsnd", XTAL::u(1'500'000)));
 	ymsnd.irq_handler().set_inputline(m_maincpu, 0);
 	ymsnd.port_a_write_callback().set(FUNC(compgolf_state::scrollx_lo_w));
 	ymsnd.port_b_write_callback().set(FUNC(compgolf_state::scrolly_lo_w));

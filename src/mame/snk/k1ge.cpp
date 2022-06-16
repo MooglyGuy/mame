@@ -502,12 +502,12 @@ void k1ge_device::device_reset()
 
 DEFINE_DEVICE_TYPE(K1GE, k1ge_device, "k1ge", "K1GE Monochrome Graphics + LCD")
 
-k1ge_device::k1ge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+k1ge_device::k1ge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: k1ge_device(mconfig, K1GE, tag, owner, clock, false)
 {
 }
 
-k1ge_device::k1ge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, bool color)
+k1ge_device::k1ge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool color)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, device_palette_interface(mconfig, *this)
@@ -520,7 +520,7 @@ k1ge_device::k1ge_device(const machine_config &mconfig, device_type type, const 
 
 DEFINE_DEVICE_TYPE(K2GE, k2ge_device, "k2ge", "K2GE Color Graphics + LCD")
 
-k2ge_device::k2ge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+k2ge_device::k2ge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: k1ge_device(mconfig, K2GE, tag, owner, clock, true)
 {
 }

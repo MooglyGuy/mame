@@ -4640,7 +4640,7 @@ void calomega_state::sys903(machine_config &config)
 	ay8912.add_route(ALL_OUTPUTS, "mono", 0.75);
 
 	// acia 0
-	ACIA6850(config, m_acia6850[0], 0);
+	ACIA6850(config, m_acia6850[0]);
 	m_acia6850[0]->irq_handler().set_inputline("maincpu", M6502_IRQ_LINE);
 
 	clock_device &aciabaud(CLOCK(config, "aciabaud", UART_CLOCK));
@@ -4713,11 +4713,11 @@ void calomega_state::sys903kb(machine_config &config)
 	ay8912.add_route(ALL_OUTPUTS, "mono", 0.75);
 
 	// acia 0
-	ACIA6850(config, m_acia6850[0], 0);
+	ACIA6850(config, m_acia6850[0]);
 	m_acia6850[0]->txd_handler().set("uart", FUNC(i8251_device::write_rxd));
 	m_acia6850[0]->irq_handler().set_inputline("maincpu", M6502_IRQ_LINE);
 
-	I8251(config, m_uart, 5'185'000);
+	I8251(config, m_uart, XTAL::u(5'185'000));
 	m_uart->txd_handler().set("acia6850_0", FUNC(acia6850_device::write_rxd));
 	m_uart->rxrdy_handler().set([this] (int state) { calomega_state::m_rxrdy = state;});
 

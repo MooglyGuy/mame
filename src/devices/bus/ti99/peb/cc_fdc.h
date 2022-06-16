@@ -57,7 +57,7 @@ public:
 	void select_bank(int state);
 
 protected:
-	corcomp_fdc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, const char *dpname, const char *cpname);
+	corcomp_fdc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const char *dpname, const char *cpname);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -129,7 +129,7 @@ protected:
 class corcomp_dcc_device : public corcomp_fdc_device
 {
 public:
-	corcomp_dcc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	corcomp_dcc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -146,7 +146,7 @@ public:
 	virtual int address9901();
 
 protected:
-	ccfdc_dec_pal_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ccfdc_dec_pal_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void device_start() override { }
 
@@ -168,7 +168,7 @@ public:
 	virtual int ready_out() =0;
 
 protected:
-	ccfdc_sel_pal_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ccfdc_sel_pal_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override { }
 
@@ -187,7 +187,7 @@ protected:
 class ccdcc_palu2_device : public ccfdc_dec_pal_device
 {
 public:
-	ccdcc_palu2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ccdcc_palu2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // =========== Specific selector PAL circuit of the CCDCC ================
@@ -195,7 +195,7 @@ public:
 class ccdcc_palu1_device : public ccfdc_sel_pal_device
 {
 public:
-	ccdcc_palu1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ccdcc_palu1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	int ready_out() override;
 };
 
@@ -208,7 +208,7 @@ class corcomp_fdca_device : public corcomp_fdc_device
 	friend class ccfdc_palu6_device;
 
 public:
-	corcomp_fdca_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	corcomp_fdca_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -221,7 +221,7 @@ private:
 class ccfdc_palu12_device : public ccfdc_dec_pal_device
 {
 public:
-	ccfdc_palu12_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ccfdc_palu12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	int address9901() override;
 };
 
@@ -230,7 +230,7 @@ public:
 class ccfdc_palu6_device : public ccfdc_sel_pal_device
 {
 public:
-	ccfdc_palu6_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ccfdc_palu6_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	int selectwdc() override;
 	int selectdsr() override;
 

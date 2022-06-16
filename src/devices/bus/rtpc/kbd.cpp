@@ -56,7 +56,7 @@
 
 DEFINE_DEVICE_TYPE(RTPC_KBD, rtpc_kbd_device, "rtpc_kbd", "IBM RT PC Keyboard")
 
-rtpc_kbd_device::rtpc_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+rtpc_kbd_device::rtpc_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, RTPC_KBD, tag, owner, clock)
 	, device_rtpc_kbd_interface(mconfig, *this)
 	, m_mcu(*this, "mcu")

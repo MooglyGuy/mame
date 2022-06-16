@@ -58,7 +58,7 @@ class sms_paddle_device : public device_t, public device_sms_control_interface
 {
 public:
 	// construction/destruction
-	sms_paddle_device(const machine_config &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_paddle_device(const machine_config &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_sms_control_interface implementation
 	virtual u8 in_r() override;
@@ -76,7 +76,7 @@ private:
 };
 
 
-sms_paddle_device::sms_paddle_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_paddle_device::sms_paddle_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_PADDLE, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_button(*this, "BUTTON"),

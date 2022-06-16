@@ -81,7 +81,7 @@ class multibus_device
 	, public device_memory_interface
 {
 public:
-	multibus_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	multibus_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	enum flags : u16
 	{
@@ -121,7 +121,7 @@ class multibus_slot_device
 	, public device_slot_interface
 {
 public:
-	multibus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = DERIVED_CLOCK(1, 1));
+	multibus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = DERIVED_CLOCK(1, 1));
 
 	template <typename T, typename U>
 	multibus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&bus_tag, U &&slot_options, char const *default_option, bool const fixed)

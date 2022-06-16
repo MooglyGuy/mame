@@ -93,7 +93,7 @@ DECLARE_DEVICE_TYPE(A1000_KBRESET, a1000_kbreset_device)
 class a1000_kbreset_device : public device_t
 {
 public:
-	a1000_kbreset_device(machine_config const &config, char const *tag, device_t *owner, u32 clock = 0U) :
+	a1000_kbreset_device(machine_config const &config, char const *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		device_t(config, A1000_KBRESET, tag, owner, clock),
 		m_kbrst_cb(*this)
 	{
@@ -1973,11 +1973,11 @@ void cdtv_state::cdtv(machine_config &config)
 	m_dmac->csx0_a4_write_cb().set(m_tpi, FUNC(tpi6525_device::write));
 	m_dmac->xdack_read_cb().set(m_cdrom, FUNC(cr511b_device::read));
 
-	TPI6525(config, m_tpi, 0);
+	TPI6525(config, m_tpi);
 	m_tpi->out_irq_cb().set(FUNC(cdtv_state::tpi_int_w));
 	m_tpi->out_pb_cb().set(FUNC(cdtv_state::tpi_portb_w));
 
-	CR511B(config, m_cdrom, 0);
+	CR511B(config, m_cdrom);
 	m_cdrom->add_route(0, "speaker", 1.0, 0);
 	m_cdrom->add_route(1, "speaker", 1.0, 1);
 	m_cdrom->scor_cb().set(m_tpi, FUNC(tpi6525_device::i1_w)).invert();
@@ -2308,9 +2308,9 @@ void cd32_state::cd32(machine_config &config)
 	// disable floppy as default (available only via back port as expansion)
 	subdevice<floppy_connector>("fdc:0")->set_default_option(nullptr);
 
-	I2C_24C08(config, "i2cmem", 0); // AT24C08N
+	I2C_24C08(config, "i2cmem"); // AT24C08N
 
-	akiko_device &akiko(AKIKO(config, "akiko", 0));
+	akiko_device &akiko(AKIKO(config, "akiko"));
 	akiko.mem_r_callback().set(FUNC(amiga_state::chip_ram_r));
 	akiko.mem_w_callback().set(FUNC(amiga_state::chip_ram_w));
 	akiko.int_callback().set(FUNC(cd32_state::akiko_int_w));

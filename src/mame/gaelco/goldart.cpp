@@ -359,7 +359,7 @@ void goldart_state::goldart(machine_config &config)
 void goldart_state::goldartp(machine_config &config)
 {
 	// basic machine hardware
-	PIC16C54(config, "maincpu", 12'000'000); // Unknown clock
+	PIC16C54(config, "maincpu", XTAL::u(12'000'000)); // Unknown clock
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));

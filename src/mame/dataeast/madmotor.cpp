@@ -268,19 +268,19 @@ void madmotor_state::madmotor(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, "palette", gfx_madmotor);
 	PALETTE(config, "palette").set_format(palette_device::xBGR_444, 1024);
 
-	DECO_BAC06(config, m_tilegen[0], 0);
+	DECO_BAC06(config, m_tilegen[0]);
 	m_tilegen[0]->set_gfx_region_wide(0, 0, 0);
 	m_tilegen[0]->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_BAC06(config, m_tilegen[1], 0);
+	DECO_BAC06(config, m_tilegen[1]);
 	m_tilegen[1]->set_gfx_region_wide(0, 1, 0);
 	m_tilegen[1]->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_BAC06(config, m_tilegen[2], 0);
+	DECO_BAC06(config, m_tilegen[2]);
 	m_tilegen[2]->set_gfx_region_wide(0, 2, 1);
 	m_tilegen[2]->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_MXC06(config, m_spritegen, 0, "palette", gfx_madmotor_spr);
+	DECO_MXC06(config, m_spritegen, "palette", gfx_madmotor_spr);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
@@ -294,9 +294,9 @@ void madmotor_state::madmotor(machine_config &config)
 	ym2.add_route(0, "mono", 0.45);
 	ym2.add_route(1, "mono", 0.45);
 
-	OKIM6295(config, "oki1", 1'023'924, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.50); // clock frequency & pin 7 not verified
+	OKIM6295(config, "oki1", XTAL::u(1'023'924), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.50); // clock frequency & pin 7 not verified
 
-	OKIM6295(config, "oki2", 2'047'848, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.25); // clock frequency & pin 7 not verified
+	OKIM6295(config, "oki2", XTAL::u(2'047'848), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.25); // clock frequency & pin 7 not verified
 }
 
 /******************************************************************************/

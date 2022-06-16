@@ -240,21 +240,21 @@ INPUT_PORTS_END
 
 void kpython_state::kpython(machine_config &config)
 {
-	R5900BE(config, m_maincpu, 294'912'000, m_vu0);
+	R5900BE(config, m_maincpu, XTAL::u(294'912'000), m_vu0);
 	m_maincpu->set_force_no_drc(true);
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
 	m_maincpu->set_addrmap(AS_PROGRAM, &kpython_state::ps2_map);
 
-	SONYPS2_VU0(config, m_vu0, 294'912'000, m_vu1);
-	SONYPS2_VU1(config, m_vu1, 294'912'000, m_gs);
+	SONYPS2_VU0(config, m_vu0, XTAL::u(294'912'000), m_vu1);
+	SONYPS2_VU1(config, m_vu1, XTAL::u(294'912'000), m_gs);
 
 	SONYPS2_INTC(config, m_intc, m_maincpu);
-	SONYPS2_GS(config, m_gs, 294912000/2, m_intc, m_vu1);
-	SONYPS2_DMAC(config, m_dmac, 294912000/2, m_maincpu, m_ram, m_sif, m_gs, m_vu1);
+	SONYPS2_GS(config, m_gs, XTAL::u(294912000)/2, m_intc, m_vu1);
+	SONYPS2_DMAC(config, m_dmac, XTAL::u(294912000)/2, m_maincpu, m_ram, m_sif, m_gs, m_vu1);
 	SONYPS2_SIF(config, m_sif, m_intc);
 
-	//H83664(config, m_io_mcu, 14000000); // from filter board
+	//H83664(config, m_io_mcu, XTAL::u(14000000)); // from filter board
 
 	//DS2430(config, m_ds2430);
 	M48T58(config, m_m48t58);

@@ -669,7 +669,7 @@ void calchase_isa16_cards(device_slot_interface &device)
 
 void calchase_state::calchase(machine_config &config)
 {
-	PENTIUM(config, m_maincpu, 133000000); // Cyrix 686MX-PR200 CPU
+	PENTIUM(config, m_maincpu, XTAL::u(133000000)); // Cyrix 686MX-PR200 CPU
 	m_maincpu->set_addrmap(AS_PROGRAM, &calchase_state::calchase_map);
 	m_maincpu->set_addrmap(AS_IO, &calchase_state::calchase_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_1", FUNC(pic8259_device::inta_cb));
@@ -679,7 +679,7 @@ void calchase_state::calchase(machine_config &config)
 	ide_controller_32_device &ide(IDE_CONTROLLER_32(config, "ide").options(ata_devices, "hdd", nullptr, true));
 	ide.irq_handler().set("pic8259_2", FUNC(pic8259_device::ir6_w));
 
-	pci_bus_legacy_device &pcibus(PCI_BUS_LEGACY(config, "pcibus", 0, 0));
+	pci_bus_legacy_device &pcibus(PCI_BUS_LEGACY(config, "pcibus"));
 	pcibus.set_device(0, FUNC(calchase_state::intel82439tx_pci_r), FUNC(calchase_state::intel82439tx_pci_w));
 	pcibus.set_device(7, FUNC(calchase_state::intel82371ab_pci_r), FUNC(calchase_state::intel82371ab_pci_w));
 
@@ -694,12 +694,11 @@ void calchase_state::calchase(machine_config &config)
 	ds12885_device &rtc(DS12885(config.replace(), "rtc"));
 	rtc.irq().set("pic8259_2", FUNC(pic8259_device::ir0_w));
 	rtc.set_century_index(0x32);
-
 }
 
 void calchase_state::hostinv(machine_config &config)
 {
-	PENTIUM(config, m_maincpu, 133000000); // Cyrix 686MX-PR200 CPU
+	PENTIUM(config, m_maincpu, XTAL::u(133000000)); // Cyrix 686MX-PR200 CPU
 	m_maincpu->set_addrmap(AS_PROGRAM, &calchase_state::calchase_map);
 	m_maincpu->set_addrmap(AS_IO, &calchase_state::calchase_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_1", FUNC(pic8259_device::inta_cb));
@@ -709,17 +708,17 @@ void calchase_state::hostinv(machine_config &config)
 	ide_controller_32_device &ide(IDE_CONTROLLER_32(config, "ide").options(ata_devices, "cdrom", nullptr, true));
 	ide.irq_handler().set("pic8259_2", FUNC(pic8259_device::ir6_w));
 
-	pci_bus_legacy_device &pcibus(PCI_BUS_LEGACY(config, "pcibus", 0, 0));
+	pci_bus_legacy_device &pcibus(PCI_BUS_LEGACY(config, "pcibus"));
 	pcibus.set_device(0, FUNC(calchase_state::intel82439tx_pci_r), FUNC(calchase_state::intel82439tx_pci_w));
 	pcibus.set_device(7, FUNC(calchase_state::intel82371ab_pci_r), FUNC(calchase_state::intel82371ab_pci_w));
 
 	// TODO: determine isa bus clock
-	isa16_device &isa(ISA16(config, "isa", 0));
+	isa16_device &isa(ISA16(config, "isa"));
 	isa.set_memspace("maincpu", AS_PROGRAM);
 	isa.set_iospace("maincpu", AS_IO);
-	ISA16_SLOT(config, "isa1", 0, "isa", calchase_isa16_cards, "calchase_jamma_if", true);
+	ISA16_SLOT(config, "isa1", "isa", calchase_isa16_cards, "calchase_jamma_if", true);
 	// TODO: temp, to be converted to PCI slot
-	ISA16_SLOT(config, "isa2", 0, "isa", calchase_isa16_cards, "tgui9680", true);
+	ISA16_SLOT(config, "isa2", "isa", calchase_isa16_cards, "tgui9680", true);
 }
 
 void calchase_state::init_calchase()

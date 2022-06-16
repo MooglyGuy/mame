@@ -21,7 +21,7 @@ class gt913_io_hle_device : public device_t
 {
 public:
 	// construction/destruction
-	gt913_io_hle_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	gt913_io_hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> gt913_io_hle_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int t0irq, int t1irq)
 		: gt913_io_hle_device(mconfig, tag, owner)
 	{

@@ -27,7 +27,7 @@ public:
 		const machine_config &mconfig,
 		const char *tag,
 		device_t *owner,
-		u32 clock);
+		const XTAL &clock);
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 
@@ -44,7 +44,7 @@ protected:
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock);
+		const XTAL &clock);
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
 	virtual void key_make(u8 row, u8 column) override;

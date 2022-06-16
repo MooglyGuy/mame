@@ -92,7 +92,7 @@ void uknc_state::uknc(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &uknc_state::uknc_mem);
 	m_maincpu->set_disable();
 
-	QBUS(config, m_qbus, 0);
+	QBUS(config, m_qbus);
 	m_qbus->set_space(m_maincpu, AS_PROGRAM);
 	m_qbus->birq4().set_inputline(m_maincpu, t11_device::VEC_LINE);
 	QBUS_SLOT(config, "qbus" ":1", qbus_cards, nullptr);
@@ -101,7 +101,7 @@ void uknc_state::uknc(machine_config &config)
 	m_subcpu->set_addrmap(AS_PROGRAM, &uknc_state::uknc_sub_mem);
 	m_subcpu->set_initial_mode(0x8000);
 
-	QBUS(config, m_cart, 0);
+	QBUS(config, m_cart);
 	m_cart->set_space(m_subcpu, AS_PROGRAM);
 	m_cart->birq4().set_inputline(m_subcpu, t11_device::VEC_LINE);
 	QBUS_SLOT(config, "cart" ":1", qbus_cards, "mz");

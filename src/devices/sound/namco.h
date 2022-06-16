@@ -34,7 +34,7 @@ protected:
 		int32_t waveform_select;
 	};
 
-	namco_audio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	namco_audio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -75,7 +75,7 @@ protected:
 class namco_device : public namco_audio_device
 {
 public:
-	namco_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namco_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void pacman_sound_w(offs_t offset, uint8_t data);
 
@@ -96,7 +96,7 @@ private:
 class namco_15xx_device : public namco_audio_device
 {
 public:
-	namco_15xx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namco_15xx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void namco_15xx_w(offs_t offset, uint8_t data);
 	uint8_t sharedram_r(offs_t offset);
@@ -116,7 +116,7 @@ private:
 class namco_cus30_device : public namco_audio_device
 {
 public:
-	namco_cus30_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namco_cus30_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void namcos1_cus30_w(offs_t offset, uint8_t data); // wavedata + sound registers + RAM
 	uint8_t namcos1_cus30_r(offs_t offset);

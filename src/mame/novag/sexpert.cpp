@@ -430,7 +430,7 @@ void sexpert_state::sexpert(machine_config &config)
 
 	PALETTE(config, "palette", FUNC(sexpert_state::lcd_palette), 3);
 
-	HD44780(config, m_lcd, 270'000); // OSC = 91K resistor
+	HD44780(config, m_lcd, XTAL::u(270'000)); // OSC = 91K resistor
 	m_lcd->set_lcd_size(2, 8);
 	m_lcd->set_pixel_update_cb(FUNC(sexpert_state::lcd_pixel_update));
 

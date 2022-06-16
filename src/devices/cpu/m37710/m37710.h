@@ -199,7 +199,7 @@ protected:
 	void set_int_control(int level, uint8_t data);
 
 	// construction/destruction
-	m37710_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor map_delegate);
+	m37710_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor map_delegate);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -2145,7 +2145,7 @@ class m37702s1_device : public m37710_cpu_device
 {
 public:
 	// construction/destruction
-	m37702s1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m37702s1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	void map(address_map &map) ATTR_COLD;
 };
@@ -2154,9 +2154,9 @@ class m37702m2_device : public m37710_cpu_device
 {
 public:
 	// construction/destruction
-	m37702m2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m37702m2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
-	m37702m2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	m37702m2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	void map(address_map &map) ATTR_COLD;
 };
 
@@ -2164,7 +2164,7 @@ class m37710s4_device : public m37710_cpu_device
 {
 public:
 	// construction/destruction
-	m37710s4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m37710s4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	void map(address_map &map) ATTR_COLD;
 };
@@ -2173,7 +2173,7 @@ class m37720s1_device : public m37710_cpu_device
 {
 public:
 	// construction/destruction
-	m37720s1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m37720s1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	void map(address_map &map) ATTR_COLD;
 };
@@ -2182,7 +2182,7 @@ class m37730s2_device : public m37710_cpu_device
 {
 public:
 	// construction/destruction
-	m37730s2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m37730s2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	void map(address_map &map) ATTR_COLD;
 };
@@ -2191,7 +2191,7 @@ class m37732s4_device : public m37710_cpu_device
 {
 public:
 	// construction/destruction
-	m37732s4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m37732s4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	void map(address_map &map) ATTR_COLD;
 };

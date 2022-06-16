@@ -71,7 +71,7 @@ enum operand_length : unsigned
 	LENGTH_L = 8, // double precision
 };
 
-ns32081_device_base::ns32081_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+ns32081_device_base::ns32081_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, ns32000_fpu_interface(mconfig, *this)
 {

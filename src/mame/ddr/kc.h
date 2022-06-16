@@ -59,8 +59,8 @@ public:
 
 protected:
 	// from service manual
-	static inline constexpr uint32_t KC85_2_CLOCK = 1'751'938;
-	static inline constexpr uint32_t KC85_4_CLOCK = 1'773'447;
+	static inline constexpr XTAL KC85_2_CLOCK = XTAL::u(1'751'938);
+	static inline constexpr XTAL KC85_4_CLOCK = XTAL::u(1'773'447);
 
 	static inline constexpr unsigned KC85_4_SCREEN_PIXEL_RAM_SIZE = 0x04000;
 	static inline constexpr unsigned KC85_4_SCREEN_COLOUR_RAM_SIZE = 0x04000;

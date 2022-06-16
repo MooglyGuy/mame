@@ -26,7 +26,7 @@ class nubus_bootbug_device : public device_t,
 							 public device_nubus_card_interface
 {
 public:
-	nubus_bootbug_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_bootbug_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	required_device<ns16450_device> m_uart;
@@ -77,7 +77,7 @@ const tiny_rom_entry *nubus_bootbug_device::device_rom_region() const
 	return ROM_NAME( bootbug );
 }
 
-nubus_bootbug_device::nubus_bootbug_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_bootbug_device::nubus_bootbug_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NUBUS_BOOTBUG, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_uart(*this, "uart_0")

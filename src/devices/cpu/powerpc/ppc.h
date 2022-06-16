@@ -215,7 +215,7 @@ protected:
 	};
 
 	// construction/destruction
-	ppc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int address_bits, int data_bits, powerpc_flavor flavor, uint32_t cap, uint32_t tb_divisor, address_map_constructor internal_map);
+	ppc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int address_bits, int data_bits, powerpc_flavor flavor, uint32_t cap, uint32_t tb_divisor, address_map_constructor internal_map);
 
 public:
 	virtual ~ppc_device() override;
@@ -724,42 +724,42 @@ private:
 class ppc603_device : public ppc_device
 {
 public:
-	ppc603_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc603_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class ppc603e_device : public ppc_device
 {
 public:
-	ppc603e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc603e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class ppc603r_device : public ppc_device
 {
 public:
-	ppc603r_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc603r_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class ppc602_device : public ppc_device
 {
 public:
-	ppc602_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc602_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mpc8240_device : public ppc_device
 {
 public:
-	mpc8240_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mpc8240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class ppc601_device : public ppc_device
 {
 public:
-	ppc601_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc601_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -769,19 +769,19 @@ protected:
 class ppc604_device : public ppc_device
 {
 public:
-	ppc604_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc604_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class ppc740_device : public ppc_device
 {
 public:
-	ppc740_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc740_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class ppc750_device : public ppc_device
 {
 public:
-	ppc750_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc750_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class ppc4xx_device : public ppc_device
@@ -800,7 +800,7 @@ public:
 
 	void internal_ppc4xx(address_map &map) ATTR_COLD;
 protected:
-	ppc4xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, powerpc_flavor flavor, uint32_t cap, uint32_t tb_divisor);
+	ppc4xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, powerpc_flavor flavor, uint32_t cap, uint32_t tb_divisor);
 
 	virtual void execute_set_input(int inputnum, int state) override;
 };
@@ -809,21 +809,21 @@ protected:
 class ppc403ga_device : public ppc4xx_device
 {
 public:
-	ppc403ga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc403ga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class ppc403gcx_device : public ppc4xx_device
 {
 public:
-	ppc403gcx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc403gcx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class ppc405gp_device : public ppc4xx_device
 {
 public:
-	ppc405gp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ppc405gp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

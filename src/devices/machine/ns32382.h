@@ -14,7 +14,7 @@ class ns32382_device
 	, public ns32000_fast_slave_interface
 {
 public:
-	ns32382_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32382_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// ns32000_slave_interface implementation
 	virtual void state_add(device_state_interface &parent, int &index) override;

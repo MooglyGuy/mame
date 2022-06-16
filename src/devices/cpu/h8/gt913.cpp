@@ -26,7 +26,7 @@
 
 DEFINE_DEVICE_TYPE(GT913, gt913_device, "gt913", "Casio GT913F")
 
-gt913_device::gt913_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+gt913_device::gt913_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8_device(mconfig, GT913, tag, owner, clock, address_map_constructor(FUNC(gt913_device::map), this)),
 	device_mixer_interface(mconfig, *this),
 	m_rom(*this, DEVICE_SELF),

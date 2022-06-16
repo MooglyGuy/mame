@@ -19,14 +19,14 @@ class scv_rom8_device : public device_t,
 						public device_scv_cart_interface
 {
 public:
-	scv_rom8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM8K, tag, owner, clock)
 	{ }
 
 	virtual void install_memory_handlers(address_space *space) override;
 
 protected:
-	scv_rom8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+	scv_rom8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, type, tag, owner, clock), device_scv_cart_interface(mconfig, *this)
 	{ }
 
@@ -49,7 +49,7 @@ void scv_rom8_device::install_memory_handlers(address_space *space)
 class scv_rom16_device : public scv_rom8_device
 {
 public:
-	scv_rom16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM16K, tag, owner, clock)
 	{ }
 
@@ -67,7 +67,7 @@ void scv_rom16_device::install_memory_handlers(address_space *space)
 class scv_rom32_device : public scv_rom8_device
 {
 public:
-	scv_rom32_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM32K, tag, owner, clock)
 	{ }
 
@@ -84,7 +84,7 @@ void scv_rom32_device::install_memory_handlers(address_space *space)
 class scv_rom32ram8_device : public scv_rom8_device
 {
 public:
-	scv_rom32ram8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom32ram8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM32K_RAM8K, tag, owner, clock)
 		, m_view(*this, "view")
 	{ }
@@ -122,7 +122,7 @@ void scv_rom32ram8_device::write_bank(uint8_t data)
 class scv_rom64_device : public scv_rom8_device
 {
 public:
-	scv_rom64_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom64_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM64K, tag, owner, clock)
 		, m_bank(*this, "bank")
 	{ }
@@ -158,7 +158,7 @@ void scv_rom64_device::write_bank(uint8_t data)
 class scv_rom128_device : public scv_rom8_device
 {
 public:
-	scv_rom128_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM128K, tag, owner, clock)
 		, m_bank(*this, "bank")
 	{ }
@@ -194,7 +194,7 @@ void scv_rom128_device::write_bank(uint8_t data)
 class scv_rom128ram4_device : public scv_rom8_device
 {
 public:
-	scv_rom128ram4_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	scv_rom128ram4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: scv_rom8_device(mconfig, SCV_ROM128K_RAM4K, tag, owner, clock)
 		, m_bank(*this, "bank")
 		, m_view(*this, "view")

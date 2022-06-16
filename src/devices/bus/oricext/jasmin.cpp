@@ -48,7 +48,7 @@ void oric_jasmin_device::map_rom()
 	(*view)[3].install_rom(0xf800, 0xffff, m_jasmin_rom);
 }
 
-oric_jasmin_device::oric_jasmin_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+oric_jasmin_device::oric_jasmin_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ORIC_JASMIN, tag, owner, clock),
 	device_oricext_interface(mconfig, *this),
 	m_fdc(*this, "fdc"),

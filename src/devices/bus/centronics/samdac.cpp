@@ -25,8 +25,8 @@ void centronics_samdac_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "speaker", 2).front();
 
-	DAC_8BIT_R2R(config, m_dac[0], 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0);
-	DAC_8BIT_R2R(config, m_dac[1], 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1);
+	DAC_8BIT_R2R(config, m_dac[0]).add_route(ALL_OUTPUTS, "speaker", 0.5, 0);
+	DAC_8BIT_R2R(config, m_dac[1]).add_route(ALL_OUTPUTS, "speaker", 0.5, 1);
 }
 
 
@@ -38,7 +38,7 @@ void centronics_samdac_device::device_add_mconfig(machine_config &config)
 //  centronics_samdac_device - constructor
 //-------------------------------------------------
 
-centronics_samdac_device::centronics_samdac_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+centronics_samdac_device::centronics_samdac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CENTRONICS_SAMDAC, tag, owner, clock),
 	device_centronics_peripheral_interface(mconfig, *this),
 	m_dac(*this, "dac%u", 0U),

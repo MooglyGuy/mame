@@ -1613,7 +1613,7 @@ void pc6601_state::machine_start()
 {
 	pc6001mk2_state::machine_start();
 
-	m_fdc->set_rate(250000);
+	m_fdc->set_rate(XTAL::u(250000));
 	m_floppy->get_device()->set_rpm(300);
 }
 
@@ -1705,7 +1705,7 @@ void pc6001_state::pc6001(machine_config &config)
 //  m_maincpu->set_vblank_int("screen", FUNC(pc6001_state::vrtc_irq));
 	m_maincpu->set_irq_acknowledge_callback(FUNC(pc6001_state::irq_callback));
 
-//  I8049(config, "subcpu", 7987200);
+//  I8049(config, "subcpu", XTAL::u(7987200));
 
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_pc6001m2);
 
@@ -1728,7 +1728,7 @@ void pc6001_state::pc6001(machine_config &config)
 	m_ppi->out_pc_callback().set(FUNC(pc6001_state::ppi_portc_w));
 
 	/* uart */
-	I8251(config, "uart", 0);
+	I8251(config, "uart");
 
 	MSX_GENERAL_PURPOSE_PORT(config, m_joy[0], msx_general_purpose_port_devices, "joystick");
 	MSX_GENERAL_PURPOSE_PORT(config, m_joy[1], msx_general_purpose_port_devices, "joystick");
@@ -1795,7 +1795,7 @@ static void pc6601_floppies(device_slot_interface &device)
 
 void pc6601_state::pc6601_fdc_config(machine_config &config)
 {
-	UPD765A(config, m_fdc, 8'000'000, true, true);
+	UPD765A(config, m_fdc, XTAL::u(8'000'000), true, true);
 	FLOPPY_CONNECTOR(config, m_floppy, pc6601_floppies, "35ssdd", pc6601_state::floppy_formats).enable_sound(true);
 
 	// TODO: slotify external I/F

@@ -43,7 +43,7 @@ DEFINE_DEVICE_TYPE(MIDXUNIT_VIDEO, midxunit_video_device, "xunitvid", "Midway X-
 #define LOGCTRL(...)     LOGMASKED(LOG_CTRL,     __VA_ARGS__)
 #define LOGDMACTRL(...)  LOGMASKED(LOG_DMACTRL,  __VA_ARGS__)
 
-midtunit_video_device::midtunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+midtunit_video_device::midtunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_palette(*this, finder_base::DUMMY_TAG)
 	, m_gfxrom(*this, DEVICE_SELF)
@@ -59,23 +59,23 @@ midtunit_video_device::midtunit_video_device(const machine_config &mconfig, devi
 	std::fill(std::begin(m_dma_register), std::end(m_dma_register), 0);
 }
 
-midtunit_video_device::midtunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midtunit_video_device::midtunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: midtunit_video_device(mconfig, MIDTUNIT_VIDEO, tag, owner, clock)
 {
 }
 
-midwunit_video_device::midwunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+midwunit_video_device::midwunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: midtunit_video_device(mconfig, type, tag, owner, clock)
 {
 	m_gfx_rom_large = true;
 }
 
-midwunit_video_device::midwunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midwunit_video_device::midwunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: midwunit_video_device(mconfig, MIDWUNIT_VIDEO, tag, owner, clock)
 {
 }
 
-midxunit_video_device::midxunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midxunit_video_device::midxunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: midwunit_video_device(mconfig, MIDXUNIT_VIDEO, tag, owner, clock)
 {
 }

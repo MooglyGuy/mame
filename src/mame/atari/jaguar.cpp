@@ -1784,8 +1784,8 @@ void jaguar_state::cojagr3k(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
 
 	// TODO: subwoofer speaker
 }
@@ -1833,8 +1833,8 @@ void jaguar_state::jaguar(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
 
 	/* quickload */
 	QUICKLOAD(config, "quickload", "abs,bin,cof,jag,prg,rom", attotime::from_seconds(1)).set_load_callback(FUNC(jaguar_state::quickload_cb));

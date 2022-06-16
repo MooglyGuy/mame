@@ -13,9 +13,9 @@ class namcos2_sprite_device : public device_t, public device_gfx_interface
 {
 public:
 	// construction/destruction
-	namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	template <typename T> namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: namcos2_sprite_device(mconfig, tag, owner, clock)
+	namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: namcos2_sprite_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));
@@ -26,7 +26,7 @@ public:
 	virtual void draw_sprites(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect, int pri, int control );
 
 protected:
-	namcos2_sprite_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	namcos2_sprite_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -44,9 +44,9 @@ class namcos2_sprite_finallap_device : public namcos2_sprite_device
 {
 public:
 	// construction/destruction
-	namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	template <typename T> namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: namcos2_sprite_finallap_device(mconfig, tag, owner, clock)
+	namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: namcos2_sprite_finallap_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));
@@ -61,9 +61,9 @@ class namcos2_sprite_metalhawk_device : public namcos2_sprite_device
 {
 public:
 	// construction/destruction
-	namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	template <typename T> namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: namcos2_sprite_metalhawk_device(mconfig, tag, owner, clock)
+	namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: namcos2_sprite_metalhawk_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

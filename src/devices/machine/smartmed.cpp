@@ -299,7 +299,7 @@ void smartmedia_image_device::call_unload()
 
 DEFINE_DEVICE_TYPE(SMARTMEDIA, smartmedia_image_device, "smartmedia", "SmartMedia Flash card")
 
-smartmedia_image_device::smartmedia_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+smartmedia_image_device::smartmedia_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: nand_device(mconfig, SMARTMEDIA, tag, owner, clock)
 	, device_memcard_image_interface(mconfig, *this)
 {

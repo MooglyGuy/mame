@@ -46,7 +46,7 @@ class williams_cvsd_sound_device :  public device_t,
 {
 public:
 	// construction/destruction
-	williams_cvsd_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_cvsd_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	void write(u16 data);
@@ -93,7 +93,7 @@ class williams_narc_sound_device :  public device_t,
 {
 public:
 	// construction/destruction
-	williams_narc_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_narc_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	u16 read();
@@ -155,7 +155,7 @@ class williams_adpcm_sound_device : public device_t,
 {
 public:
 	// construction/destruction
-	williams_adpcm_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_adpcm_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	void write(u16 data);
@@ -204,7 +204,7 @@ class williams_s4_sound_device : public device_t, public device_mixer_interface
 {
 public:
 	// construction/destruction
-	williams_s4_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_s4_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	void write(u8 data);
@@ -232,7 +232,7 @@ class williams_s6_sound_device : public device_t, public device_mixer_interface
 {
 public:
 	// construction/destruction
-	williams_s6_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_s6_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	void write(u8 data);
@@ -262,7 +262,7 @@ class williams_s9_sound_device : public device_t, public device_mixer_interface
 {
 public:
 	// construction/destruction
-	williams_s9_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_s9_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	void write(u8 data);
@@ -292,7 +292,7 @@ class williams_s11_sound_device : public device_t, public device_mixer_interface
 {
 public:
 	// construction/destruction
-	williams_s11_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_s11_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// read/write
 	void write(u8 data);

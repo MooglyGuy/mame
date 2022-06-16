@@ -40,7 +40,7 @@ void oric_microdisc_device::map_rom()
 	(*view)[2].install_rom(0xe000, 0xffff, microdisc_rom);
 }
 
-oric_microdisc_device::oric_microdisc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+oric_microdisc_device::oric_microdisc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ORIC_MICRODISC, tag, owner, clock),
 	device_oricext_interface(mconfig, *this),
 	fdc(*this, "fdc"),

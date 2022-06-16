@@ -108,15 +108,15 @@ INPUT_PORTS_END
 void alphasmart3k_state::alphasmart3k(machine_config &config)
 {
 	// Basic machine hardware
-	MC68EZ328(config, m_maincpu, 16'000'000); // MC68EZ328PU16V, clock unverified
+	MC68EZ328(config, m_maincpu, XTAL::u(16'000'000)); // MC68EZ328PU16V, clock unverified
 	m_maincpu->set_addrmap(AS_PROGRAM, &alphasmart3k_state::main_map);
 
 	// Values from AlphaSmart 2000, not confirmed for AlphaSmart 3000
 	// AlphaSmart 3000 uses a Data Image CM4040 LCD display, LCD is 40x4 according to ref
-	KS0066(config, m_lcdc0, 270'000); // TODO: Possibly wrong device type, needs confirmation; clock not measured, datasheet typical clock used
+	KS0066(config, m_lcdc0, XTAL::u(270'000)); // TODO: Possibly wrong device type, needs confirmation; clock not measured, datasheet typical clock used
 	m_lcdc0->set_default_bios_tag("f05");
 	m_lcdc0->set_lcd_size(4, 40);
-	KS0066(config, m_lcdc1, 270'000); // TODO: Possibly wrong device type, needs confirmation; clock not measured, datasheet typical clock used
+	KS0066(config, m_lcdc1, XTAL::u(270'000)); // TODO: Possibly wrong device type, needs confirmation; clock not measured, datasheet typical clock used
 	m_lcdc1->set_default_bios_tag("f05");
 	m_lcdc1->set_lcd_size(4, 40);
 

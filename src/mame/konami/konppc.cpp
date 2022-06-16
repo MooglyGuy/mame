@@ -25,7 +25,7 @@ static constexpr unsigned DSP_BANK_SIZE_WORD = (DSP_BANK_SIZE / 4);
 
 DEFINE_DEVICE_TYPE(KONPPC, konppc_device, "konppc", "Konami PowerPC Common Functions")
 
-konppc_device::konppc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+konppc_device::konppc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, KONPPC, tag, owner, clock)
 	, m_dsp(*this, {finder_base::DUMMY_TAG, finder_base::DUMMY_TAG})
 	, m_k033906(*this, {finder_base::DUMMY_TAG, finder_base::DUMMY_TAG})

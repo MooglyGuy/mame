@@ -65,7 +65,7 @@ INPUT_PORTS_END
 
 void bntyhunt_state::bntyhunt(machine_config &config)
 {
-	PENTIUM3(config, m_maincpu, 200'000'000); // unknown CPU
+	PENTIUM3(config, m_maincpu, XTAL::u(200'000'000)); // unknown CPU
 	m_maincpu->set_addrmap(AS_PROGRAM, &bntyhunt_state::bntyhunt_map);
 	m_maincpu->set_disable();
 

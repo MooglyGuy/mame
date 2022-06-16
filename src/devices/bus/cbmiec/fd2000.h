@@ -30,7 +30,7 @@ class fd2000_device :  public device_t,
 {
 public:
 	// construction/destruction
-	fd2000_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fd2000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t via_pa_r();
 	void via_pa_w(uint8_t data);
@@ -40,7 +40,7 @@ public:
 	//static void floppy_formats(format_registration &fr);
 
 protected:
-	fd2000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	fd2000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -73,7 +73,7 @@ class fd4000_device :  public fd2000_device
 {
 public:
 	// construction/destruction
-	fd4000_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fd4000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

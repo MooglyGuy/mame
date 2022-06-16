@@ -1351,7 +1351,7 @@ void pc88va_state::machine_start()
 
 	m_fdd[0]->get_device()->set_rpm(300);
 	m_fdd[1]->get_device()->set_rpm(300);
-	m_fdc->set_rate(250000);
+	m_fdc->set_rate(XTAL::u(250000));
 }
 
 void pc88va_state::machine_reset()
@@ -1485,7 +1485,7 @@ void pc88va_state::pc88va(machine_config &config)
 	d8255_3.out_pc_callback().set(FUNC(pc88va_state::r232_ctrl_portc_w));
 
 	// external PIC
-	PIC8259(config, m_pic2, 0);
+	PIC8259(config, m_pic2);
 	m_pic2->out_int_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ7);
 	m_pic2->in_sp_callback().set_constant(0);
 

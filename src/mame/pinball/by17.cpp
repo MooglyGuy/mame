@@ -994,7 +994,7 @@ void by17_state::machine_reset()
 void by17_state::by17(machine_config &config)
 {
 	/* basic machine hardware */
-	M6800(config, m_maincpu, 530000);  // No xtal, just 2 chips forming a multivibrator oscillator around 530KHz
+	M6800(config, m_maincpu, XTAL::u(530000));  // No xtal, just 2 chips forming a multivibrator oscillator around 530KHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &by17_state::by17_map);
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);   // 'F' filled causes Credit Display to be blank on first startup

@@ -83,7 +83,7 @@ public:
 
 protected:
 	// construction/destruction
-	pic16c5x_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int program_width, int data_width, int picmodel, address_map_constructor data_map);
+	pic16c5x_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, int picmodel, address_map_constructor data_map);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -243,7 +243,7 @@ class pic16c54_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic16c54_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic16c54_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -251,7 +251,7 @@ class pic16c55_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic16c55_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic16c55_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -259,7 +259,7 @@ class pic16c56_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic16c56_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic16c56_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -267,7 +267,7 @@ class pic16c57_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic16c57_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic16c57_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -275,7 +275,7 @@ class pic16c58_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic16c58_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic16c58_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -283,14 +283,14 @@ class pic1650_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic1650_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic1650_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class pic1654s_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic1654s_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic1654s_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// 1654S has a /8 clock divider instead of the typical /4
@@ -302,7 +302,7 @@ class pic1655_device : public pic16c5x_device
 {
 public:
 	// construction/destruction
-	pic1655_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pic1655_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 #endif  // MAME_CPU_PIC16C5X_PIC16C5X_H

@@ -79,7 +79,7 @@ void neomania_state::neomania(machine_config &config)
 {
 	// Basic machine hardware
 	// Neoemu.exe requires a processor with at least MMX features
-	PENTIUM3(config, m_maincpu, 100'000'000); // Exact hardware not specified
+	PENTIUM3(config, m_maincpu, XTAL::u(100'000'000)); // Exact hardware not specified
 	m_maincpu->set_addrmap(AS_PROGRAM, &neomania_state::neomania_map);
 	m_maincpu->set_disable();
 

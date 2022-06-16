@@ -295,8 +295,8 @@ void mogura_state::mogura(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
-	DAC_4BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0);
-	DAC_4BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1);
+	DAC_4BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 0.25, 0);
+	DAC_4BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 0.25, 1);
 }
 
 

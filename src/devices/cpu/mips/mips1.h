@@ -17,7 +17,7 @@ public:
 	void berr_w(int state) { m_bus_error = bool(state); }
 
 protected:
-	mips1core_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws);
+	mips1core_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -156,7 +156,7 @@ public:
 	void set_fpu(u32 revision, unsigned interrupt = 3) { m_fcr0 = revision; m_fpu_irq = interrupt; }
 
 protected:
-	mips1_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws);
+	mips1_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, u32 cpurev, size_t icache_size, size_t dcache_size, bool cache_pws);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -188,31 +188,31 @@ private:
 class r2000_device : public mips1_device_base
 {
 public:
-	r2000_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size = 0, size_t dcache_size = 0);
+	r2000_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size = 0, size_t dcache_size = 0);
 };
 
 class r2000a_device : public mips1_device_base
 {
 public:
-	r2000a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size = 0, size_t dcache_size = 0);
+	r2000a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size = 0, size_t dcache_size = 0);
 };
 
 class r3000_device : public mips1_device_base
 {
 public:
-	r3000_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size = 0, size_t dcache_size = 0);
+	r3000_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size = 0, size_t dcache_size = 0);
 };
 
 class r3000a_device : public mips1_device_base
 {
 public:
-	r3000a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size = 0, size_t dcache_size = 0);
+	r3000a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size = 0, size_t dcache_size = 0);
 };
 
 class r3041_device : public mips1core_device_base
 {
 public:
-	r3041_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	r3041_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -222,37 +222,37 @@ protected:
 class r3051_device : public mips1core_device_base
 {
 public:
-	r3051_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	r3051_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class r3052_device : public mips1core_device_base
 {
 public:
-	r3052_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	r3052_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class r3052e_device : public mips1_device_base
 {
 public:
-	r3052e_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	r3052e_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class r3071_device : public mips1_device_base
 {
 public:
-	r3071_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size = 16384, size_t dcache_size = 4096);
+	r3071_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size = 16384, size_t dcache_size = 4096);
 };
 
 class r3081_device : public mips1_device_base
 {
 public:
-	r3081_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, size_t icache_size = 16384, size_t dcache_size = 4096);
+	r3081_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, size_t icache_size = 16384, size_t dcache_size = 4096);
 };
 
 class iop_device : public mips1core_device_base
 {
 public:
-	iop_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	iop_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(R2000,       r2000_device)

@@ -5,7 +5,7 @@
 
 DEFINE_DEVICE_TYPE(ZNMCU, znmcu_device, "znmcu", "Sony ZN MCU")
 
-znmcu_device::znmcu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+znmcu_device::znmcu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ZNMCU, tag, owner, clock),
 	m_analog_cb(*this, 0xff),
 	m_trackball_cb(*this, 0),

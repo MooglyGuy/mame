@@ -35,13 +35,13 @@ DEFINE_DEVICE_TYPE(A800_ROM_OSS91, a800_rom_oss091m_device, "a800_m091",  "Atari
 
  -------------------------------------------------*/
 
-a800_rom_oss8k_device::a800_rom_oss8k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_oss8k_device::a800_rom_oss8k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_bank(0)
 {
 }
 
-a800_rom_oss8k_device::a800_rom_oss8k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_oss8k_device::a800_rom_oss8k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_oss8k_device(mconfig, A800_ROM_OSS8K, tag, owner, clock)
 {
 }
@@ -110,7 +110,7 @@ void a800_rom_oss8k_device::cctl_map(address_map &map)
 
  -------------------------------------------------*/
 
-a800_rom_oss091m_device::a800_rom_oss091m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_oss091m_device::a800_rom_oss091m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_oss8k_device(mconfig, A800_ROM_OSS91, tag, owner, clock)
 {
 }

@@ -226,7 +226,7 @@ void news_r3k_base_state::init_common()
 	m_cpu->space(0).install_ram(0x00000000, m_ram->mask(), m_ram->pointer());
 
 	// HACK: hardwire the rate until fdc is better understood
-	m_fdc->set_rate(500000);
+	m_fdc->set_rate(XTAL::u(500000));
 
 	// HACK: signal floppy density?
 	m_scsi->port_w(0x02);

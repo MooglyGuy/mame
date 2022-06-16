@@ -15,7 +15,7 @@ class k573npu_device : public device_t,
 	public device_pccard_interface
 {
 public:
-	k573npu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	k573npu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

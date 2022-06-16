@@ -1148,8 +1148,8 @@ void armedf_state::sound_config_common(machine_config &config) // common amongst
 	FILTER_BIQUAD(config, m_dacfilter2).opamp_sk_lowpass_setup(RES_K(10), RES_K(10), RES_M(999.99), RES_R(0.001), CAP_N(10), CAP_N(4.7));
 	m_dacfilter2->add_route(ALL_OUTPUTS, "speaker", 1.0);
 
-	DAC_8BIT_R2R(config, "dac1", 0).add_route(ALL_OUTPUTS, m_dacfilter1, 0.4); // SIP R2R DAC @ G11-1 with 74HC374P latch
-	DAC_8BIT_R2R(config, "dac2", 0).add_route(ALL_OUTPUTS, m_dacfilter2, 0.4); // SIP R2R DAC @ G11-2 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac1").add_route(ALL_OUTPUTS, m_dacfilter1, 0.4); // SIP R2R DAC @ G11-1 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac2").add_route(ALL_OUTPUTS, m_dacfilter2, 0.4); // SIP R2R DAC @ G11-2 with 74HC374P latch
 }
 
 void armedf_state::sound_config(machine_config &config) // 3526, used on almost all non-bootlegs
@@ -1199,7 +1199,7 @@ void armedf_state::terraf(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &armedf_state::terraf_map);
 	m_maincpu->set_vblank_int("screen", FUNC(armedf_state::irq1_line_assert));
 
-	NB1414M4(config, m_nb1414m4, 0);
+	NB1414M4(config, m_nb1414m4);
 
 	video_config(config, 12, 8, 248);
 
@@ -1240,7 +1240,7 @@ void armedf_state::kozure(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &armedf_state::kozure_map);
 	m_maincpu->set_vblank_int("screen", FUNC(armedf_state::irq1_line_assert));
 
-	NB1414M4(config, m_nb1414m4, 0);
+	NB1414M4(config, m_nb1414m4);
 
 	/* video hardware */
 	video_config(config, 12, 8, 248);
@@ -1270,7 +1270,7 @@ void armedf_state::cclimbr2(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &armedf_state::cclimbr2_map);
 	m_maincpu->set_vblank_int("screen", FUNC(armedf_state::irq2_line_assert));
 
-	NB1414M4(config, m_nb1414m4, 0);
+	NB1414M4(config, m_nb1414m4);
 
 	video_config(config, 14, 16, 240);
 
@@ -1296,7 +1296,7 @@ void armedf_state::legion(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &armedf_state::legion_map);
 
-	NB1414M4(config, m_nb1414m4, 0);
+	NB1414M4(config, m_nb1414m4);
 
 	/* sound hardware */
 	sound_config_legion(config);

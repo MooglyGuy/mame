@@ -137,7 +137,7 @@ m68hc05_device::m68hc05_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock,
+		const XTAL &clock,
 		device_type type,
 		u32 addr_width,
 		u16 vector_mask,
@@ -754,7 +754,7 @@ m68hc705_device::m68hc705_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock,
+		const XTAL &clock,
 		device_type type,
 		u32 addr_width,
 		address_map_constructor internal_map)
@@ -800,7 +800,7 @@ void m68hc05c4_device::c4_map(address_map &map)
 }
 
 
-m68hc05c4_device::m68hc05c4_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc05c4_device::m68hc05c4_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc05_device(
 			mconfig,
 			tag,
@@ -867,7 +867,7 @@ void m68hc05c8_device::c8_map(address_map &map)
 }
 
 
-m68hc05c8_device::m68hc05c8_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc05c8_device::m68hc05c8_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc05_device(
 			mconfig,
 			tag,
@@ -938,7 +938,7 @@ void m68hc705c4a_device::c4a_map(address_map &map)
 }
 
 
-m68hc705c4a_device::m68hc705c4a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc705c4a_device::m68hc705c4a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc705_device(
 			mconfig,
 			tag,
@@ -1034,7 +1034,7 @@ void m68hc705c8a_device::c8a_map(address_map &map)
 }
 
 
-m68hc705c8a_device::m68hc705c8a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc705c8a_device::m68hc705c8a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc705_device(
 			mconfig,
 			tag,
@@ -1150,7 +1150,7 @@ void m68hc705j1a_device::j1a_map(address_map &map)
 }
 
 
-m68hc705j1a_device::m68hc705j1a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc705j1a_device::m68hc705j1a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc705_device(
 			mconfig,
 			tag,
@@ -1230,7 +1230,7 @@ void m68hc05l9_device::l9_map(address_map &map)
 }
 
 
-m68hc05l9_device::m68hc05l9_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc05l9_device::m68hc05l9_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc05_device(
 			mconfig,
 			tag,
@@ -1313,7 +1313,7 @@ void m68hc05l11_device::l11_map(address_map &map)
 }
 
 
-m68hc05l11_device::m68hc05l11_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m68hc05l11_device::m68hc05l11_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m68hc05_device(
 			mconfig,
 			tag,

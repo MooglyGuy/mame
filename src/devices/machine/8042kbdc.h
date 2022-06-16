@@ -37,7 +37,7 @@ public:
 	};
 
 	// construction/destruction
-	kbdc8042_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	kbdc8042_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_keyboard_tag(T &&tag) { m_keyboard_dev.set_tag(std::forward<T>(tag)); }
 

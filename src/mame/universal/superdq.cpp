@@ -31,7 +31,7 @@
 
 namespace {
 
-#define MASTER_CLOCK    20000000
+#define MASTER_CLOCK    XTAL::u(20000000)
 
 
 class superdq_state : public driver_device
@@ -346,7 +346,7 @@ void superdq_state::superdq(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &superdq_state::superdq_io);
 	m_maincpu->set_vblank_int("screen", FUNC(superdq_state::superdq_vblank));
 
-	PIONEER_LDV1000(config, m_laserdisc, 0);
+	PIONEER_LDV1000(config, m_laserdisc);
 	m_laserdisc->set_overlay(256, 256, FUNC(superdq_state::screen_update_superdq));
 	m_laserdisc->add_route(0, "speaker", 1.0, 0);
 	m_laserdisc->add_route(1, "speaker", 1.0, 1);

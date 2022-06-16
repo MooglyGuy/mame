@@ -9,7 +9,7 @@ class bacta_datalogger_device : public device_t,
 	public device_serial_interface
 {
 public:
-	bacta_datalogger_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	bacta_datalogger_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void write_txd(int state) {device_serial_interface::rx_w(state); }
 	auto rxd_handler() { return m_rxd_handler.bind(); }
@@ -17,7 +17,7 @@ public:
 	void output_rxd(int state) { m_rxd_handler(state); }
 
 protected:
-	bacta_datalogger_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bacta_datalogger_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

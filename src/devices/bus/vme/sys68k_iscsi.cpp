@@ -295,7 +295,7 @@ const tiny_rom_entry *vme_sys68k_iscsi1_card_device::device_rom_region() const
 //**************************************************************************
 //  LIVE DEVICE
 //**************************************************************************
-vme_sys68k_iscsi1_card_device::vme_sys68k_iscsi1_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_iscsi1_card_device::vme_sys68k_iscsi1_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu(*this, "maincpu")
@@ -309,7 +309,7 @@ vme_sys68k_iscsi1_card_device::vme_sys68k_iscsi1_card_device(const machine_confi
 	LOG("%s\n", FUNCNAME);
 }
 
-vme_sys68k_iscsi1_card_device::vme_sys68k_iscsi1_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_iscsi1_card_device::vme_sys68k_iscsi1_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_iscsi1_card_device(mconfig, VME_SYS68K_ISCSI1, tag, owner, clock)
 {
 }

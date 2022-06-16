@@ -758,27 +758,27 @@ void jpmsys5_state::jpmsys5_common(machine_config& config)
 	M68000(config, m_maincpu, 8_MHz_XTAL);
 
 	INPUT_MERGER_ANY_HIGH(config, "acia_irq").output_handler().set_inputline(m_maincpu, INT_6850ACIA);
-	bacta_datalogger_device &bacta(BACTA_DATALOGGER(config, "bacta", 0));
+	bacta_datalogger_device &bacta(BACTA_DATALOGGER(config, "bacta"));
 
-	ACIA6850(config, m_acia6850[0], 0);
+	ACIA6850(config, m_acia6850[0]);
 	m_acia6850[0]->txd_handler().set("bacta", FUNC(bacta_datalogger_device::write_txd));
 	m_acia6850[0]->irq_handler().set("acia_irq", FUNC(input_merger_device::in_w<0>));
 
 	bacta.rxd_handler().set(m_acia6850[0], FUNC(acia6850_device::write_rxd));
 
-	ACIA6850(config, m_acia6850[1], 0);
+	ACIA6850(config, m_acia6850[1]);
 	m_acia6850[1]->txd_handler().set(FUNC(jpmsys5_state::a1_tx_w));
 	m_acia6850[1]->irq_handler().set("acia_irq", FUNC(input_merger_device::in_w<1>));
 
-	ACIA6850(config, m_acia6850[2], 0);
+	ACIA6850(config, m_acia6850[2]);
 	m_acia6850[2]->txd_handler().set(FUNC(jpmsys5_state::a2_tx_w));
 	m_acia6850[2]->irq_handler().set("acia_irq", FUNC(input_merger_device::in_w<2>));
 
-	clock_device &bacta_clock(CLOCK(config, "bacta_clock", 19200)); // Gives 1200 baud, but real timer is programmable (location?)
+	clock_device &bacta_clock(CLOCK(config, "bacta_clock", XTAL::u(19200))); // Gives 1200 baud, but real timer is programmable (location?)
 	bacta_clock.signal_handler().set(m_acia6850[0], FUNC(acia6850_device::write_txc));
 	bacta_clock.signal_handler().append(m_acia6850[0], FUNC(acia6850_device::write_rxc));
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 10000)); // What are the correct ACIA clocks ?
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(10000))); // What are the correct ACIA clocks ?
 	acia_clock.signal_handler().append(m_acia6850[1], FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append(m_acia6850[1], FUNC(acia6850_device::write_rxc));
 	acia_clock.signal_handler().append(m_acia6850[2], FUNC(acia6850_device::write_txc));
@@ -796,8 +796,8 @@ void jpmsys5_state::jpmsys5_common(machine_config& config)
 	pia.irqb_handler().set(FUNC(jpmsys5_state::pia_irq));
 
 	/* 6840 PTM */
-	ptm6840_device &ptm(PTM6840(config, "6840ptm", 1000000/4)); // with this at 1mhz the non-video games run at a ridiculous speed
-	ptm.set_external_clocks(0, 0, 0);
+	ptm6840_device &ptm(PTM6840(config, "6840ptm", XTAL::u(1000000)/4)); // with this at 1mhz the non-video games run at a ridiculous speed
+	ptm.set_external_clocks(XTAL(), XTAL(), XTAL());
 	ptm.o1_callback().set(FUNC(jpmsys5_state::u26_o1_callback));
 	ptm.irq_callback().set(FUNC(jpmsys5_state::ptm_irq));
 	config.set_default_layout(layout_jpmsys5);
@@ -810,7 +810,7 @@ void jpmsys5_state::ymsound(machine_config &config)
 	UPD7759(config, m_upd7759);
 	m_upd7759->add_route(ALL_OUTPUTS, "mono", 0.30);
 
-	ym2413_device &ym2413(YM2413(config, "ym2413", 4000000)); /* Unconfirmed */
+	ym2413_device &ym2413(YM2413(config, "ym2413", XTAL::u(4000000))); /* Unconfirmed */
 	ym2413.add_route(ALL_OUTPUTS, "mono", 1.00);
 }
 
@@ -821,7 +821,7 @@ void jpmsys5_state::saasound(machine_config &config)
 	UPD7759(config, m_upd7759);
 	m_upd7759->add_route(ALL_OUTPUTS, "mono", 0.30);
 
-	SAA1099(config, "saa", 4000000 /* guess */).add_route(ALL_OUTPUTS, "mono", 1.0);
+	SAA1099(config, "saa", XTAL::u(4000000) /* guess */).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void jpmsys5v_state::tmsvideo(machine_config &config)
@@ -830,7 +830,7 @@ void jpmsys5v_state::tmsvideo(machine_config &config)
 	screen.set_raw(XTAL(40'000'000) / 4, 676, 20*4, 147*4, 256, 0, 254);
 	screen.set_screen_update(FUNC(jpmsys5v_state::screen_update_jpmsys5v));
 
-	TMS34061(config, m_tms34061, 0);
+	TMS34061(config, m_tms34061);
 	m_tms34061->set_rowshift(8);  /* VRAM address is (row << rowshift) | col */
 	m_tms34061->set_vram_size(0x40000);
 	m_tms34061->int_callback().set(FUNC(jpmsys5v_state::generate_tms34061_interrupt));
@@ -872,7 +872,7 @@ void jpmsys5_state::jpmsys5_ym(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &jpmsys5_state::m68000_awp_map);
 
-	METERS(config, m_meters, 0).set_number(8);
+	METERS(config, m_meters).set_number(8);
 
 	ymsound(config);
 
@@ -886,7 +886,7 @@ void jpmsys5_state::jpmsys5(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &jpmsys5_state::m68000_awp_map_saa);
 
-	METERS(config, m_meters, 0).set_number(8);
+	METERS(config, m_meters).set_number(8);
 
 	saasound(config);
 

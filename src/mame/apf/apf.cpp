@@ -596,7 +596,7 @@ void apf_state::apfimag(machine_config &config)
 	m_cass->add_route(ALL_OUTPUTS, "mono", 0.15);
 	m_cass->set_interface("apf_cass");
 
-	FD1771(config, m_fdc, 1000000); // guess
+	FD1771(config, m_fdc, XTAL::u(1000000)); // guess
 	FLOPPY_CONNECTOR(config, "fdc:0", apf_floppies, "525dd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);
 	FLOPPY_CONNECTOR(config, "fdc:1", apf_floppies, "525dd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);
 

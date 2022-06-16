@@ -14,7 +14,7 @@ class microtouch_device :
 public:
 	typedef device_delegate<int (int *, int *)> touch_cb;
 
-	microtouch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	microtouch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto stx() { return m_out_stx_func.bind(); }
 	template <typename... T> void set_touch_callback(T &&... args) { m_out_touch_cb.set(std::forward<T>(args)...); }

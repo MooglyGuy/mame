@@ -30,7 +30,7 @@ static constexpr unsigned TC0280GRD_RAM_SIZE = 0x2000;
 DEFINE_DEVICE_TYPE(TC0280GRD, tc0280grd_device, "tc0280grd", "Taito TC0280GRD")
 DEFINE_DEVICE_TYPE(TC0430GRW, tc0430grw_device, "tc0430grw", "Taito TC0430GRW")
 
-tc0280grd_device::tc0280grd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int xmultiply)
+tc0280grd_device::tc0280grd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int xmultiply)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 	, m_ram(nullptr)
@@ -41,12 +41,12 @@ tc0280grd_device::tc0280grd_device(const machine_config &mconfig, device_type ty
 	std::fill(std::begin(m_ctrl), std::end(m_ctrl), 0);
 }
 
-tc0280grd_device::tc0280grd_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tc0280grd_device::tc0280grd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tc0280grd_device(mconfig, TC0280GRD, tag, owner, clock, 2)
 {
 }
 
-tc0430grw_device::tc0430grw_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tc0430grw_device::tc0430grw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tc0280grd_device(mconfig, TC0430GRW, tag, owner, clock, 1)
 {
 }

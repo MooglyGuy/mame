@@ -20,7 +20,7 @@
 
 namespace {
 
-#define MAIN_CLOCK 6250000
+#define MAIN_CLOCK XTAL::u(6250000)
 #define VSYNC      0x80
 #define HSYNC      0x40
 
@@ -226,7 +226,7 @@ void gigatron_state::gigatron(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
-	DAC_4BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	DAC_4BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	GTRON(config, m_maincpu, MAIN_CLOCK);
 	m_maincpu->set_addrmap(AS_PROGRAM, &gigatron_state::prog_map);

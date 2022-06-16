@@ -29,7 +29,7 @@ class vga_device : public device_t
 
 public:
 	// construction/destruction
-	vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void zero();
 	virtual uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
@@ -68,7 +68,7 @@ protected:
 		RGB32_MODE
 	};
 
-	vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	TIMER_CALLBACK_MEMBER(vblank_timer_cb);
 
@@ -329,7 +329,7 @@ public:
 
 protected:
 	// construction/destruction
-	svga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	svga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void svga_vh_rgb8(bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	void svga_vh_rgb15(bitmap_rgb32 &bitmap, const rectangle &cliprect);

@@ -474,7 +474,7 @@ TIMER_CALLBACK_MEMBER(s6_state::irq_timer)
 void s6_state::s6(machine_config &config)
 {
 	/* basic machine hardware */
-	M6808(config, m_maincpu, 3580000); // 6802 or 6808 could be used here
+	M6808(config, m_maincpu, XTAL::u(3580000)); // 6802 or 6808 could be used here
 	m_maincpu->set_addrmap(AS_PROGRAM, &s6_state::main_map);
 
 	/* Video */
@@ -523,7 +523,7 @@ void s6_state::s6(machine_config &config)
 
 	/* Add the soundcard */
 	SPEAKER(config, "mono").front_center();
-	WILLIAMS_S6_SOUND(config, m_s6sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S6_SOUND(config, m_s6sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void s6_state::s6a(machine_config &config)

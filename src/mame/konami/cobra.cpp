@@ -2948,22 +2948,22 @@ void cobra_state::machine_reset()
 void cobra_state::cobra(machine_config &config)
 {
 	/* basic machine hardware */
-	PPC603(config, m_maincpu, 100000000);      /* 603EV, 100? MHz */
+	PPC603(config, m_maincpu, XTAL::u(100000000));      /* 603EV, 100? MHz */
 	m_maincpu->set_bus_frequency(XTAL(66'666'700)); /* Multiplier 1.5, Bus = 66MHz, Core = 100MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &cobra_state::cobra_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(cobra_state::cobra_vblank));
 
-	PPC403GA(config, m_subcpu, 32000000);      /* 403GA, 33? MHz */
+	PPC403GA(config, m_subcpu, XTAL::u(32000000));      /* 403GA, 33? MHz */
 	m_subcpu->set_serial_clock(XTAL(7'372'800)); // set serial clock to 7.3728MHz to allow for JVS comm at 115200 baud
 	m_subcpu->set_addrmap(AS_PROGRAM, &cobra_state::cobra_sub_map);
 
-	PPC604(config, m_gfxcpu, 100000000);       /* 604, 100? MHz */
+	PPC604(config, m_gfxcpu, XTAL::u(100000000));       /* 604, 100? MHz */
 	m_gfxcpu->set_bus_frequency(XTAL(66'666'700));   /* Multiplier 1.5, Bus = 66MHz, Core = 100MHz */
 	m_gfxcpu->set_addrmap(AS_PROGRAM, &cobra_state::cobra_gfx_map);
 
 	config.set_maximum_quantum(attotime::from_hz(55005));
 
-	PCI_BUS_LEGACY(config, m_legacy_pci, 0, 0);
+	PCI_BUS_LEGACY(config, m_legacy_pci);
 	m_legacy_pci->set_device(0, FUNC(cobra_state::mpc106_pci_r), FUNC(cobra_state::mpc106_pci_w));
 
 	ATA_INTERFACE(config, m_ata).options(ata_devices, "hdd", nullptr, true);
@@ -2989,12 +2989,12 @@ void cobra_state::cobra(machine_config &config)
 
 	DMADAC(config, m_dmadac[1]).add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
-	M48T58(config, "m48t58", 0);
+	M48T58(config, "m48t58");
 
-	K001604(config, m_k001604, 0);     // on the LAN board in Racing Jam DX
+	K001604(config, m_k001604);     // on the LAN board in Racing Jam DX
 	m_k001604->set_palette(m_palette);
 
-	KONPPC_JVS_HOST(config, m_jvs_host, 4000000);
+	KONPPC_JVS_HOST(config, m_jvs_host, XTAL::u(4000000));
 	m_jvs_host->output_callback().set([this](uint8_t c) { m_subcpu->ppc4xx_spu_receive_byte(c); });
 }
 

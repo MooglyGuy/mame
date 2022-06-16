@@ -165,7 +165,7 @@ public:
 protected:
 	static unsigned const PORT_COUNT = 4;
 
-	m6805_hmos_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, device_type type, u32 addr_width, unsigned ram_size);
+	m6805_hmos_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, device_type type, u32 addr_width, unsigned ram_size);
 
 	void map(address_map &map) { internal_map(map); }
 	virtual void internal_map(address_map &map) ATTR_COLD;
@@ -230,7 +230,7 @@ private:
 class m6805_mrom_device : public m6805_hmos_device
 {
 protected:
-	m6805_mrom_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, device_type type, u32 addr_width, unsigned ram_size)
+	m6805_mrom_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, device_type type, u32 addr_width, unsigned ram_size)
 		: m6805_hmos_device(mconfig, tag, owner, clock, type, addr_width, ram_size)
 	{
 	}
@@ -253,7 +253,7 @@ public:
 protected:
 	virtual void internal_map(address_map &map) override ATTR_COLD;
 
-	m68705_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, device_type type, u32 addr_width, unsigned ram_size);
+	m68705_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, device_type type, u32 addr_width, unsigned ram_size);
 
 	template <offs_t B> u8 eprom_r(offs_t offset);
 	template <offs_t B> void eprom_w(offs_t offset, u8 data);
@@ -295,7 +295,7 @@ public:
 protected:
 	virtual void internal_map(address_map &map) override ATTR_COLD;
 
-	m68705p_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, device_type type);
+	m68705p_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, device_type type);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -313,7 +313,7 @@ public:
 protected:
 	virtual void internal_map(address_map &map) override ATTR_COLD;
 
-	m68705u_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, device_type type);
+	m68705u_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, device_type type);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -325,7 +325,7 @@ class m68705r_device : public m68705u_device
 protected:
 	virtual void internal_map(address_map &map) override ATTR_COLD;
 
-	m68705r_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, device_type type);
+	m68705r_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, device_type type);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -336,7 +336,7 @@ protected:
 class m6805p2_device : public m6805_mrom_device
 {
 public:
-	m6805p2_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m6805p2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// mask options
 	void set_timer_divisor(unsigned divisor) { m_timer.set_divisor(divisor); }
@@ -346,7 +346,7 @@ public:
 class m6805p6_device : public m6805_mrom_device
 {
 public:
-	m6805p6_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m6805p6_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// mask options
 	void set_timer_divisor(unsigned divisor) { m_timer.set_divisor(divisor); }
@@ -356,7 +356,7 @@ public:
 class m6805r2_device : public m6805_mrom_device
 {
 public:
-	m6805r2_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m6805r2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// mask options
 	void set_timer_divisor(unsigned divisor) { m_timer.set_divisor(divisor); }
@@ -369,7 +369,7 @@ protected:
 class m6805r3_device : public m6805_mrom_device
 {
 public:
-	m6805r3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m6805r3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void internal_map(address_map &map) override ATTR_COLD;
@@ -378,7 +378,7 @@ protected:
 class m6805u2_device : public m6805_mrom_device
 {
 public:
-	m6805u2_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m6805u2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// mask options
 	void set_timer_divisor(unsigned divisor) { m_timer.set_divisor(divisor); }
@@ -388,7 +388,7 @@ public:
 class m6805u3_device : public m6805_mrom_device
 {
 public:
-	m6805u3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m6805u3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 };
@@ -396,19 +396,19 @@ protected:
 class hd6805s1_device : public m6805_mrom_device
 {
 public:
-	hd6805s1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	hd6805s1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd6805u1_device : public m6805_mrom_device
 {
 public:
-	hd6805u1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	hd6805u1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class m68705p3_device : public m68705p_device
 {
 public:
-	m68705p3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m68705p3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual tiny_rom_entry const *device_rom_region() const override ATTR_COLD;
@@ -419,7 +419,7 @@ protected:
 class m68705p5_device : public m68705p_device
 {
 public:
-	m68705p5_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m68705p5_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual tiny_rom_entry const *device_rom_region() const override ATTR_COLD;
@@ -430,7 +430,7 @@ protected:
 class m68705r3_device : public m68705r_device
 {
 public:
-	m68705r3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m68705r3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual tiny_rom_entry const *device_rom_region() const override ATTR_COLD;
@@ -441,7 +441,7 @@ protected:
 class m68705u3_device : public m68705u_device
 {
 public:
-	m68705u3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	m68705u3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	static auto parent_rom_device_type() { return &M68705R3; }
 

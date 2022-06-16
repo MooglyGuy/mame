@@ -57,7 +57,7 @@ class nubus_mac8390_device : public device_t,
 {
 protected:
 	// construction/destruction
-	nubus_mac8390_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_mac8390_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -86,20 +86,20 @@ private:
 class nubus_asntmc3nb_device : public nubus_mac8390_device
 {
 public:
-	nubus_asntmc3nb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_asntmc3nb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class nubus_appleenet_device : public nubus_mac8390_device
 {
 public:
-	nubus_appleenet_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_appleenet_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 };
 
 class pds030_ethermac30i_device : public nubus_mac8390_device
 {
 public:
-	pds030_ethermac30i_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pds030_ethermac30i_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 
 protected:
@@ -109,7 +109,7 @@ protected:
 class pdslc_macconilc_device : public nubus_mac8390_device
 {
 public:
-	pdslc_macconilc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pdslc_macconilc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 
 protected:
@@ -118,7 +118,7 @@ protected:
 
 void nubus_mac8390_device::device_add_mconfig(machine_config &config)
 {
-	DP8390D(config, m_dp83902, 0);
+	DP8390D(config, m_dp83902);
 	m_dp83902->irq_callback().set(FUNC(nubus_mac8390_device::dp_irq_w));
 	m_dp83902->mem_read_callback().set(FUNC(nubus_mac8390_device::dp_mem_read));
 	m_dp83902->mem_write_callback().set(FUNC(nubus_mac8390_device::dp_mem_write));
@@ -144,29 +144,29 @@ const tiny_rom_entry *pdslc_macconilc_device::device_rom_region() const
 	return ROM_NAME(macconilc);
 }
 
-nubus_mac8390_device::nubus_mac8390_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_mac8390_device::nubus_mac8390_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_dp83902(*this, "dp83902")
 {
 }
 
-nubus_asntmc3nb_device::nubus_asntmc3nb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_asntmc3nb_device::nubus_asntmc3nb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_mac8390_device(mconfig, NUBUS_ASNTMC3NB, tag, owner, clock)
 {
 }
 
-nubus_appleenet_device::nubus_appleenet_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_appleenet_device::nubus_appleenet_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_mac8390_device(mconfig, NUBUS_APPLEENET, tag, owner, clock)
 {
 }
 
-pds030_ethermac30i_device::pds030_ethermac30i_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+pds030_ethermac30i_device::pds030_ethermac30i_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_mac8390_device(mconfig, PDS030_ETHERMAC30I, tag, owner, clock)
 {
 }
 
-pdslc_macconilc_device::pdslc_macconilc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+pdslc_macconilc_device::pdslc_macconilc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_mac8390_device(mconfig, PDSLC_MACCONILC, tag, owner, clock)
 {
 }

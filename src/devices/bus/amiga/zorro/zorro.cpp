@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(ZORRO2_BUS, zorro2_bus_device, "zorro2", "Zorro-II Bus")
 
-zorro2_bus_device::zorro2_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+zorro2_bus_device::zorro2_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ZORRO2_BUS, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	m_zorro_space_config("zorro", ENDIANNESS_BIG, 16, 24, 0, address_map_constructor()),

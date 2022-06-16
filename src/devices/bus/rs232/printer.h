@@ -14,14 +14,14 @@ class serial_printer_device : public device_t,
 	public device_rs232_port_interface
 {
 public:
-	serial_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	serial_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void input_txd(int state) override { device_serial_interface::rx_w(state); }
 
 	void update_serial(int state);
 
 protected:
-	serial_printer_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	serial_printer_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -44,7 +44,7 @@ private:
 class radio_shack_serial_printer_device : public serial_printer_device
 {
 public:
-	radio_shack_serial_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	radio_shack_serial_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(SERIAL_PRINTER, serial_printer_device)

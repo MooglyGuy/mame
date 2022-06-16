@@ -534,11 +534,11 @@ void dcon_state::layer_scroll_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 void dcon_state::dcon(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 10'000'000);
+	M68000(config, m_maincpu, XTAL::u(10'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &dcon_state::dcon_map);
 	m_maincpu->set_vblank_int("screen", FUNC(dcon_state::irq4_line_hold));
 
-	z80_device &audiocpu(Z80(config, "audiocpu", 4'000'000)); // Perhaps 14'318'180 / 4?
+	z80_device &audiocpu(Z80(config, "audiocpu", XTAL::u(4'000'000))); // Perhaps 14'318'180 / 4?
 	audiocpu.set_addrmap(AS_PROGRAM, &dcon_state::seibu_sound_map);
 	audiocpu.set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -551,7 +551,7 @@ void dcon_state::dcon(machine_config &config)
 	screen.set_screen_update(FUNC(dcon_state::screen_update_dcon));
 	screen.set_palette(m_palette);
 
-	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc", 0));
+	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc"));
 	crtc.layer_en_callback().set(FUNC(dcon_state::layer_en_w));
 	crtc.layer_scroll_callback().set(FUNC(dcon_state::layer_scroll_w));
 
@@ -564,14 +564,14 @@ void dcon_state::dcon(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 4'000'000));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(4'000'000)));
 	ymsnd.irq_handler().set("seibu_sound", FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 
-	okim6295_device &oki(OKIM6295(config, "oki", 1'320'000, okim6295_device::PIN7_LOW));
+	okim6295_device &oki(OKIM6295(config, "oki", XTAL::u(1'320'000), okim6295_device::PIN7_LOW));
 	oki.add_route(ALL_OUTPUTS, "mono", 0.40);
 
-	SEIBU_SOUND(config, m_seibu_sound, 0);
+	SEIBU_SOUND(config, m_seibu_sound);
 	m_seibu_sound->int_callback().set_inputline("audiocpu", 0);
 	m_seibu_sound->coin_io_callback().set_ioport("COIN");
 	m_seibu_sound->set_rom_tag("audiocpu");
@@ -600,7 +600,7 @@ void dcon_state::sdgndmps(machine_config &config) // PCB number is PB91008
 	screen.set_screen_update(FUNC(dcon_state::screen_update_sdgndmps));
 	screen.set_palette(m_palette);
 
-	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc", 0));
+	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc"));
 	crtc.layer_en_callback().set(FUNC(dcon_state::layer_en_w));
 	crtc.layer_scroll_callback().set(FUNC(dcon_state::layer_scroll_w));
 
@@ -621,7 +621,7 @@ void dcon_state::sdgndmps(machine_config &config) // PCB number is PB91008
 	okim6295_device &oki(OKIM6295(config, "oki", XTAL(20'000'000) / 16, okim6295_device::PIN7_LOW)); // 1.25Mhz? unverified clock & divisor (was 1320000)
 	oki.add_route(ALL_OUTPUTS, "mono", 0.40);
 
-	SEIBU_SOUND(config, m_seibu_sound, 0);
+	SEIBU_SOUND(config, m_seibu_sound);
 	m_seibu_sound->int_callback().set_inputline("audiocpu", 0);
 	m_seibu_sound->coin_io_callback().set_ioport("COIN");
 	m_seibu_sound->set_rom_tag("audiocpu");

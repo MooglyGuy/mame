@@ -230,7 +230,7 @@ void s11a_state::s11a_base(machine_config &config)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &s11a_state::s11_audio_map);
 	INPUT_MERGER_ANY_HIGH(config, m_audioirq).output_handler().set_inputline(m_audiocpu, M6802_IRQ_LINE);
 
-	MC1408(config, m_dac, 0);
+	MC1408(config, m_dac);
 
 	// common CVSD filter for system 11 and 11a, this is also the same filter circuit as Sinistar/System 6 uses,
 	// and is ALMOST the same filter from the s11 bg sound boards, see /mame/audio/s11c_bg.cpp
@@ -245,7 +245,7 @@ void s11a_state::s11a_base(machine_config &config)
 	FILTER_BIQUAD(config, m_cvsd_filter2).opamp_mfb_lowpass_setup(RES_K(27), RES_K(15), RES_K(27), CAP_P(4700), CAP_P(1200));
 	FILTER_BIQUAD(config, m_cvsd_filter).opamp_mfb_lowpass_setup(RES_K(43), RES_K(36), RES_K(180), CAP_P(1800), CAP_P(180));
 	m_cvsd_filter->add_route(ALL_OUTPUTS, m_cvsd_filter2, 1.0);
-	HC55516(config, m_hc55516, 0).add_route(ALL_OUTPUTS, m_cvsd_filter, 1.0);
+	HC55516(config, m_hc55516).add_route(ALL_OUTPUTS, m_cvsd_filter, 1.0);
 
 	PIA6821(config, m_pias);
 	m_pias->readpa_handler().set(FUNC(s11a_state::sound_r));

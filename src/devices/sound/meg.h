@@ -13,7 +13,7 @@
 class meg_device : public device_t
 {
 public:
-	meg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 44100*256);
+	meg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(44100*256));
 	void map(address_map &map) ATTR_COLD;
 
 protected:

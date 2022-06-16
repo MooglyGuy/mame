@@ -212,7 +212,7 @@ void cmpchess_state::update_reset(ioport_value state)
 INPUT_CHANGED_MEMBER(cmpchess_state::change_cpu_freq)
 {
 	// 2 MK I versions, 2nd one was a lot faster
-	const u32 freq = (newval & 1) ? 3'500'000 : 2'250'000;
+	const XTAL freq = (newval & 1) ? XTAL::u(3'500'000) : XTAL::u(2'250'000);
 	m_maincpu->set_unscaled_clock(freq);
 	subdevice<f3853_device>("smi")->set_unscaled_clock(freq);
 }
@@ -438,9 +438,15 @@ void cmpchess_state::mk1(machine_config &config)
 {
 	cmpchess(config);
 
+<<<<<<< HEAD
 	// basic machine hardware
 	m_maincpu->set_clock(2'250'000); // see notes
 	subdevice<f3853_device>("smi")->set_clock(2'250'000);
+=======
+	/* basic machine hardware */
+	m_maincpu->set_clock(XTAL::u(2250000)); // see notes
+	subdevice<f3853_device>("smi")->set_clock(XTAL::u(2250000));
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	config.set_default_layout(layout_novag_mk1);
 }
@@ -449,18 +455,27 @@ void cmpchess_state::cncchess(machine_config &config)
 {
 	cmpchess2(config);
 
+<<<<<<< HEAD
 	// basic machine hardware
 	m_maincpu->set_clock(2'000'000); // LC circuit, measured 2MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &cmpchess_state::cncchess_map);
 	m_maincpu->set_addrmap(AS_IO, &cmpchess_state::cncchess_io);
 
 	subdevice<f3853_device>("smi")->set_clock(2'000'000);
+=======
+	/* basic machine hardware */
+	m_maincpu->set_clock(XTAL::u(2000000)); // LC circuit, measured 2MHz
+	m_maincpu->set_addrmap(AS_PROGRAM, &cmpchess_state::cncchess_map);
+	m_maincpu->set_addrmap(AS_IO, &cmpchess_state::cncchess_io);
+
+	subdevice<f3853_device>("smi")->set_clock(XTAL::u(2000000));
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	config.set_default_layout(layout_conic_cchess);
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	BEEP(config, m_beeper, 2000); // wrong, see TODO
+	BEEP(config, m_beeper, XTAL::u(2000)); // wrong, see TODO
 	m_beeper->add_route(ALL_OUTPUTS, "speaker", 0.25);
 	TIMER(config, "beeper_off").configure_generic(FUNC(cmpchess_state::beeper_off));
 }

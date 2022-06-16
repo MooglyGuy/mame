@@ -27,12 +27,12 @@ DEFINE_DEVICE_TYPE(VT3XX_SOC_UNK_DG, vt3xx_soc_unk_dg_device, "vt3xx_unknown_soc
 DEFINE_DEVICE_TYPE(VT3XX_SOC_UNK_FA, vt3xx_soc_unk_fa_device, "vt3xx_unknown_soc_fa", "VT3xx series System on a Chip (Family Pocket)")
 
 
-vt3xx_soc_base_device::vt3xx_soc_base_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt3xx_soc_base_device::vt3xx_soc_base_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt3xx_soc_base_device(mconfig, VT3XX_SOC, tag, owner, clock)
 {
 }
 
-vt3xx_soc_base_device::vt3xx_soc_base_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+vt3xx_soc_base_device::vt3xx_soc_base_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt09_soc_device(mconfig, type, tag, owner, clock),
 	m_soundcpu(*this, "soundcpu"),
 	m_sound_timer(nullptr),
@@ -44,48 +44,48 @@ vt3xx_soc_base_device::vt3xx_soc_base_device(const machine_config& mconfig, devi
 {
 }
 
-vt3xx_soc_unk_bt_device::vt3xx_soc_unk_bt_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt3xx_soc_unk_bt_device::vt3xx_soc_unk_bt_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt3xx_soc_base_device(mconfig, VT3XX_SOC_UNK_BT, tag, owner, clock)
 {
 }
 
 
-vt369_soc_introm_noswap_device::vt369_soc_introm_noswap_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+vt369_soc_introm_noswap_device::vt369_soc_introm_noswap_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	vt3xx_soc_base_device(mconfig, type, tag, owner, clock)
 {
 }
 
-vt369_soc_introm_noswap_device::vt369_soc_introm_noswap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt369_soc_introm_noswap_device::vt369_soc_introm_noswap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt369_soc_introm_noswap_device(mconfig, VT369_SOC_INTROM_NOSWAP, tag, owner, clock)
 {
 }
 
-vt369_soc_introm_swap_device::vt369_soc_introm_swap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt369_soc_introm_swap_device::vt369_soc_introm_swap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt369_soc_introm_noswap_device(mconfig, VT369_SOC_INTROM_SWAP, tag, owner, clock)
 {
 }
 
-vt369_soc_introm_altswap_device::vt369_soc_introm_altswap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt369_soc_introm_altswap_device::vt369_soc_introm_altswap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt369_soc_introm_noswap_device(mconfig, VT369_SOC_INTROM_ALTSWAP, tag, owner, clock)
 {
 }
 
-vt369_soc_introm_vibesswap_device::vt369_soc_introm_vibesswap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt369_soc_introm_vibesswap_device::vt369_soc_introm_vibesswap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt369_soc_introm_noswap_device(mconfig, VT369_SOC_INTROM_VIBESSWAP, tag, owner, clock)
 {
 }
 
-vt3xx_soc_unk_dg_device::vt3xx_soc_unk_dg_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+vt3xx_soc_unk_dg_device::vt3xx_soc_unk_dg_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	vt3xx_soc_base_device(mconfig, type, tag, owner, clock)
 {
 }
 
-vt3xx_soc_unk_dg_device::vt3xx_soc_unk_dg_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt3xx_soc_unk_dg_device::vt3xx_soc_unk_dg_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt3xx_soc_unk_dg_device(mconfig, VT3XX_SOC_UNK_DG, tag, owner, clock)
 {
 }
 
-vt3xx_soc_unk_fa_device::vt3xx_soc_unk_fa_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+vt3xx_soc_unk_fa_device::vt3xx_soc_unk_fa_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	vt3xx_soc_unk_dg_device(mconfig, VT3XX_SOC_UNK_FA, tag, owner, clock)
 {
 }
@@ -111,12 +111,11 @@ void vt3xx_soc_base_device::device_add_mconfig(machine_config& config)
 	m_soundcpu->set_addrmap(AS_PROGRAM, &vt3xx_soc_base_device::vt369_sound_map);
 	m_soundcpu->set_addrmap(5, &vt3xx_soc_base_device::vt369_sound_external_map);
 
-	VT369_ADPCM_DECODER(config, m_vt369adpcm, 0);
+	VT369_ADPCM_DECODER(config, m_vt369adpcm);
 
 	// are these really left/right, or just 2 channels (does this SoC support stereo?)
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_leftdac, 0).add_route(0, "mono", 0.2, 0);
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rightdac, 0).add_route(0, "mono", 0.2, 0);
-
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_leftdac).add_route(0, "mono", 0.2, 0);
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rightdac).add_route(0, "mono", 0.2, 0);
 }
 
 void vt3xx_soc_base_device::vt369_soundcpu_control_w(offs_t offset, u8 data)

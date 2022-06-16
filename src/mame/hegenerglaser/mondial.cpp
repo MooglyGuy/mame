@@ -166,7 +166,7 @@ INPUT_PORTS_END
 void mondial_state::mondial(machine_config &config)
 {
 	// basic machine hardware
-	G65SC02(config, m_maincpu, 2'000'000);
+	G65SC02(config, m_maincpu, XTAL::u(2'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &mondial_state::mondial_mem);
 
 	const attotime irq_period = attotime::from_hz(2'000'000 / 0x1000);
@@ -185,7 +185,7 @@ void mondial_state::mondial(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	BEEP(config, m_beeper, 2150); // approximation
+	BEEP(config, m_beeper, XTAL::u(2150)); // approximation
 	m_beeper->add_route(ALL_OUTPUTS, "speaker", 0.25);
 }
 

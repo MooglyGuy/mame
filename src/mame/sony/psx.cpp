@@ -504,7 +504,7 @@ void psx1_state::psx_base(machine_config &config)
 	m_maincpu->cd_write().set(m_psxcd, FUNC(psxcd_device::write));
 	m_maincpu->subdevice<ram_device>("ram")->set_default_size("2M");
 
-	psxcontrollerports_device &controllers(PSXCONTROLLERPORTS(config, "controllers", 0));
+	psxcontrollerports_device &controllers(PSXCONTROLLERPORTS(config, "controllers"));
 	controllers.rxd().set("maincpu:sio0", FUNC(psxsio0_device::write_rxd));
 	controllers.dsr().set("maincpu:sio0", FUNC(psxsio0_device::write_dsr));
 	PSX_CONTROLLER_PORT(config, "port1", psx_controllers, "digital_pad");
@@ -551,7 +551,7 @@ void psx1_state::psu(machine_config &config)
 {
 	psj(config);
 
-	HD63705Z0(config, "subcpu", 4166667).set_addrmap(AS_PROGRAM, &psx1_state::subcpu_map); // FIXME: actually MC68HC05G6
+	HD63705Z0(config, "subcpu", XTAL::u(4166667)).set_addrmap(AS_PROGRAM, &psx1_state::subcpu_map); // FIXME: actually MC68HC05G6
 
 	m_cd_softlist->set_filter("NTSC-U");
 }

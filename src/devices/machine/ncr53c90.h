@@ -10,7 +10,7 @@
 class ncr53c90_device : public nscsi_device, public nscsi_slot_card_interface
 {
 public:
-	ncr53c90_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ncr53c90_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	auto irq_handler_cb() { return m_irq_handler.bind(); }
@@ -48,7 +48,7 @@ public:
 	void dma_w(uint8_t val);
 
 protected:
-	ncr53c90_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ncr53c90_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -241,7 +241,7 @@ protected:
 class ncr53c90a_device : public ncr53c90_device
 {
 public:
-	ncr53c90a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ncr53c90a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 
@@ -254,7 +254,7 @@ public:
 	virtual void write(offs_t offset, uint8_t data) override;
 
 protected:
-	ncr53c90a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ncr53c90a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -285,7 +285,7 @@ protected:
 class ncr53c94_device : public ncr53c90a_device
 {
 public:
-	ncr53c94_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ncr53c94_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	enum busmd_t : u8
 	{
@@ -313,7 +313,7 @@ public:
 	void dma16_swap_w(u16 data) { return dma16_w(swapendian_int16(data)); }
 
 protected:
-	ncr53c94_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ncr53c94_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	enum conf3_mask : u8
 	{
@@ -341,7 +341,7 @@ public:
 class ncr53cf94_device : public ncr53c94_device
 {
 public:
-	ncr53cf94_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ncr53cf94_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 
@@ -373,7 +373,7 @@ private:
 class ncr53cf96_device : public ncr53cf94_device
 {
 public:
-	ncr53cf96_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ncr53cf96_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(NCR53C90, ncr53c90_device)

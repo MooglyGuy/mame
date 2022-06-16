@@ -27,10 +27,10 @@ class ql_trump_card_device : public device_t, public device_ql_expansion_card_in
 {
 public:
 	// construction/destruction
-	ql_trump_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ql_trump_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	ql_trump_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int ram_size);
+	ql_trump_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int ram_size);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -64,7 +64,7 @@ class ql_trump_card_256k_device :  public ql_trump_card_device
 {
 public:
 	// construction/destruction
-	ql_trump_card_256k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ql_trump_card_256k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -74,7 +74,7 @@ class ql_trump_card_512k_device :  public ql_trump_card_device
 {
 public:
 	// construction/destruction
-	ql_trump_card_512k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ql_trump_card_512k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -84,7 +84,7 @@ class ql_trump_card_768k_device :  public ql_trump_card_device
 {
 public:
 	// construction/destruction
-	ql_trump_card_768k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ql_trump_card_768k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

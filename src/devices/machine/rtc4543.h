@@ -28,7 +28,7 @@ class rtc4543_device :  public device_t,
 
 public:
 	// construction/destruction
-	rtc4543_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rtc4543_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void ce_w(int state);
 	void wr_w(int state);
@@ -39,7 +39,7 @@ public:
 	auto data_cb() { return m_data_cb.bind(); }
 
 protected:
-	rtc4543_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	rtc4543_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -82,7 +82,7 @@ class jrc6355e_device : public rtc4543_device
 {
 public:
 	// construction/destruction
-	jrc6355e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	jrc6355e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// rtc4543 overrides

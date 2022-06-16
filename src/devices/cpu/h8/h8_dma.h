@@ -81,13 +81,13 @@ protected:
 
 	virtual u8 active_channels() const = 0;
 
-	h8gen_dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock = 0);
+	h8gen_dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class h8h_dma_device : public h8gen_dma_device
 {
 public:
-	h8h_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8h_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T> h8h_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu)
 		: h8h_dma_device(mconfig, tag, owner)
@@ -102,7 +102,7 @@ public:
 class h8s_dma_device : public h8gen_dma_device
 {
 public:
-	h8s_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8s_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T> h8s_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu)
 		: h8s_dma_device(mconfig, tag, owner)
@@ -152,7 +152,7 @@ public:
 
 	h8_dma_state m_state[2];
 
-	h8gen_dma_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h8gen_dma_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	u16 marah_r();
 	void marah_w(offs_t offset, u16 data, u16 mem_mask = ~0);
@@ -205,7 +205,7 @@ protected:
 class h8h_dma_channel_device : public h8gen_dma_channel_device
 {
 public:
-	h8h_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8h_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T, typename U, typename V> h8h_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner,
 																		T &&cpu, U &&dma, V &&intc, bool has_adc, bool targets_sci1)
@@ -243,7 +243,7 @@ protected:
 class h8s_dma_channel_device : public h8gen_dma_channel_device
 {
 public:
-	h8s_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8s_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T, typename U, typename V> h8s_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner,
 																		T &&cpu, U &&dma, V &&intc)

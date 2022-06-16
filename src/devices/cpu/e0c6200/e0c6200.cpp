@@ -24,7 +24,7 @@ TODO:
 
 
 // construction/destruction
-e0c6200_cpu_device::e0c6200_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor program, address_map_constructor data) :
+e0c6200_cpu_device::e0c6200_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor program, address_map_constructor data) :
 	cpu_device(mconfig, type, tag, owner, clock),
 	m_program_config("program", ENDIANNESS_BIG, 16, 13, -1, program),
 	m_data_config("data", ENDIANNESS_BIG, 8, 12, 0, data)

@@ -18,13 +18,13 @@ class msx_systemflags_device : public device_t
 public:
 	template <typename T>
 	msx_systemflags_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&maincpu_tag, u8 initial_value)
-		: msx_systemflags_device(mconfig, tag, owner, 0)
+		: msx_systemflags_device(mconfig, tag, owner, XTAL())
 	{
 		set_maincpu_tag(std::forward<T>(maincpu_tag));
 		set_initial_value(initial_value);
 	}
 
-	msx_systemflags_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_systemflags_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	template <typename T> void set_maincpu_tag(T &&maincpu_tag) { m_maincpu.set_tag(std::forward<T>(maincpu_tag)); }

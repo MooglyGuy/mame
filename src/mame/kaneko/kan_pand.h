@@ -22,9 +22,9 @@ class kaneko_pandora_device : public device_t,
 {
 public:
 	// constructor/destructor
-	kaneko_pandora_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-	template <typename T> kaneko_pandora_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: kaneko_pandora_device(mconfig, tag, owner, clock)
+	kaneko_pandora_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> kaneko_pandora_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: kaneko_pandora_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

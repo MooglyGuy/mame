@@ -20,7 +20,7 @@ namespace {
 class o2_ktaa_device : public device_t, public device_o2_cart_interface
 {
 public:
-	o2_ktaa_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	o2_ktaa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -38,7 +38,7 @@ private:
 	u8 m_bank = 0;
 };
 
-o2_ktaa_device::o2_ktaa_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+o2_ktaa_device::o2_ktaa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, O2_ROM_KTAA, tag, owner, clock),
 	device_o2_cart_interface(mconfig, *this)
 { }

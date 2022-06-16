@@ -25,7 +25,7 @@ class bbc_beebspch_device :
 {
 public:
 	// construction/destruction
-	bbc_beebspch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_beebspch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void cb1_w(int state);
 	void cb2_w(int state);

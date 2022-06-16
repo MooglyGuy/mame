@@ -36,13 +36,13 @@ public:
 	};
 
 	// construction/destruction
-	f2mc16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	f2mc16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	bool rmw() { return m_rmw; }
 	void set_irq_level(int level);
 
 protected:
-	f2mc16_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	f2mc16_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

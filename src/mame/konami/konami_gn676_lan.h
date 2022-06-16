@@ -20,7 +20,7 @@ public:
 	void reset_fpga_state(bool state);
 
 protected:
-	konami_gn676_lan_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	konami_gn676_lan_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

@@ -24,7 +24,7 @@ namespace {
 class dragon_serial_device : public device_t, public device_cococart_interface
 {
 public:
-	dragon_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	dragon_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, DRAGON_SERIAL, tag, owner, clock)
 		, device_cococart_interface(mconfig, *this )
 		, m_eprom(*this, "eprom")
@@ -73,7 +73,7 @@ const tiny_rom_entry *dragon_serial_device::device_rom_region() const
 
 void dragon_serial_device::device_add_mconfig(machine_config &config)
 {
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set("rs232", FUNC(rs232_port_device::write_txd));
 	m_acia->rts_handler().set("rs232", FUNC(rs232_port_device::write_rts));
 	m_acia->irq_handler().set([this](int state) { set_line_value(line::NMI, state); });

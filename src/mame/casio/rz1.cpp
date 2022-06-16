@@ -439,7 +439,7 @@ void rz1_state::rz1(machine_config &config)
 
 	PALETTE(config, "palette", FUNC(rz1_state::rz1_palette), 3);
 
-	HD44780(config, m_hd44780, 270'000); // TODO: clock not measured, datasheet typical clock used
+	HD44780(config, m_hd44780, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	m_hd44780->set_lcd_size(1, 16);
 	m_hd44780->set_pixel_update_cb(FUNC(rz1_state::lcd_pixel_update));
 
@@ -460,6 +460,7 @@ void rz1_state::rz1(machine_config &config)
 	SPEAKER(config, "sample_3_and_4").front_center();
 	// for tape / line in
 	SPEAKER(config, "speaker").front_center();
+<<<<<<< HEAD
 
 	UPD934G(config, m_pg[0], 1333000);
 	m_pg[0]->set_addrmap(0, &rz1_state::pg0_map);
@@ -477,6 +478,14 @@ void rz1_state::rz1(machine_config &config)
 	m_pg[1]->add_route(1, "bd", 1.0);
 	m_pg[1]->add_route(2, "rim_and_sd", 1.0);
 	m_pg[1]->add_route(3, "hihat", 1.0);
+=======
+	UPD934G(config, m_pg[0], XTAL::u(1333000));
+	m_pg[0]->data_callback().set(FUNC(rz1_state::upd934g_c_data_r));
+	m_pg[0]->add_route(ALL_OUTPUTS, "speaker", 1.0);
+	UPD934G(config, m_pg[1], XTAL::u(1280000));
+	m_pg[1]->data_callback().set(FUNC(rz1_state::upd934g_b_data_r));
+	m_pg[1]->add_route(ALL_OUTPUTS, "speaker", 1.0);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	// midi
 	midi_port_device &mdin(MIDI_PORT(config, "mdin", midiin_slot, "midiin"));

@@ -14,7 +14,7 @@
 class pwm_display_device : public device_t
 {
 public:
-	pwm_display_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	pwm_display_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// configuration helpers
 	pwm_display_device &set_size(u8 height, u8 width) { m_height = height; m_width = width; return *this; } // max 64 * 64

@@ -1786,7 +1786,7 @@ void seibuspi_state::spi(machine_config &config)
 
 	PALETTE(config, m_palette, palette_device::BLACK, 6144);
 
-	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc", 0));
+	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc"));
 	crtc.decrypt_key_callback().set(FUNC(seibuspi_state::tile_decrypt_key_w));
 	crtc.layer_en_callback().set(FUNC(seibuspi_state::spi_layer_enable_w));
 	crtc.reg_1a_callback().set(FUNC(seibuspi_state::spi_layer_bank_w));
@@ -1906,7 +1906,7 @@ void seibuspi_state::sys386i(machine_config &config)
 
 	PALETTE(config, m_palette, palette_device::BLACK, 6144);
 
-	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc", 0));
+	seibu_crtc_device &crtc(SEIBU_CRTC(config, "crtc"));
 	crtc.decrypt_key_callback().set(FUNC(seibuspi_state::tile_decrypt_key_w));
 	crtc.layer_en_callback().set(FUNC(seibuspi_state::spi_layer_enable_w));
 	crtc.reg_1a_callback().set(FUNC(seibuspi_state::spi_layer_bank_w));

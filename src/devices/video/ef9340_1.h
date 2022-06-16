@@ -45,7 +45,7 @@ class ef9340_1_device : public device_t, public device_video_interface
 public:
 	// construction/destruction
 	template <typename T>
-	ef9340_1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&screen_tag)
+	ef9340_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&screen_tag)
 		: ef9340_1_device(mconfig, tag, owner, clock)
 	{
 		set_screen(std::forward<T>(screen_tag));
@@ -56,7 +56,7 @@ public:
 	auto write_exram() { return m_write_exram.bind(); } // ADR0-ADR3 in a0-a3, B in a4-a11, A in a12-a19
 	auto read_exram() { return m_read_exram.bind(); } // "
 
-	ef9340_1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	ef9340_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	inline bitmap_ind16 *get_bitmap() { return &m_tmp_bitmap; }
 	u32 screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);

@@ -134,7 +134,7 @@ class s100_bus_device : public device_t
 {
 public:
 	// construction/destruction
-	s100_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	s100_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	~s100_bus_device();
 
 	auto irq() { return m_write_irq.bind(); }
@@ -226,7 +226,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	s100_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	s100_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_bus(T &&tag) { m_bus.set_tag(std::forward<T>(tag)); }
 

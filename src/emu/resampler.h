@@ -28,7 +28,7 @@ public:
 class audio_resampler_hq : public audio_resampler
 {
 public:
-	audio_resampler_hq(u32 fs, u32 ft, float latency, u32 max_order_per_lane, u32 max_lanes);
+	audio_resampler_hq(const XTAL &fs, const XTAL &ft, float latency, u32 max_order_per_lane, u32 max_lanes);
 	virtual ~audio_resampler_hq() = default;
 
 	virtual u32 history_size() const override;

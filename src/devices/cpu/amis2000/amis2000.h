@@ -39,7 +39,7 @@ public:
 
 protected:
 	// construction/destruction
-	amis2000_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u8 bu_bits, u8 callstack_bits, u8 callstack_depth, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
+	amis2000_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u8 bu_bits, u8 callstack_bits, u8 callstack_depth, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -173,21 +173,21 @@ protected:
 class amis2000_cpu_device : public amis2000_base_device
 {
 public:
-	amis2000_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	amis2000_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class amis2150_cpu_device : public amis2000_base_device
 {
 public:
-	amis2150_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	amis2150_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class amis2152_cpu_device : public amis2000_base_device
 {
 public:
-	amis2152_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	amis2152_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

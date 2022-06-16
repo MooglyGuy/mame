@@ -76,7 +76,7 @@ public:
 	virtual void sound_stream_update(sound_stream &stream) = 0;
 
 	// stream creation
-	sound_stream *stream_alloc(int inputs, int outputs, int sample_rate, sound_stream_flags flags = sound_stream_flags(0));
+	sound_stream *stream_alloc(int inputs, int outputs, const XTAL &sample_rate, sound_stream_flags flags = sound_stream_flags(0));
 
 	// helpers
 	int inputs() const;

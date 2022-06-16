@@ -576,7 +576,7 @@ void by133_state::u11_ca2_w(int state)
 void by133_state::u7_cb2_w(int state)
 {
 	// red led
-	m_beep->set_clock(950);
+	m_beep->set_clock(XTAL::u(950));
 	m_beep->set_state(state);
 	m_sound_int_handler(state);
 }
@@ -842,7 +842,7 @@ void by133_state::by133(machine_config &config)
 	m_cheap_squeak->sound_ack_w_handler().set(m_pia_u11, FUNC(pia6821_device::cb2_w));
 
 	SPEAKER(config, "beee").front_center();
-	BEEP(config, m_beep, 600).add_route(ALL_OUTPUTS, "beee", 0.10);
+	BEEP(config, m_beep, XTAL::u(600)).add_route(ALL_OUTPUTS, "beee", 0.10);
 }
 
 void by133_state::granny(machine_config &config)

@@ -42,7 +42,7 @@ void device_pccard_interface::write_reg(offs_t offset, uint16_t data, uint16_t m
 		device().logerror("unhandled register write %08x %04x %04x\n", offset, data, mem_mask);
 }
 
-pccard_slot_device::pccard_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pccard_slot_device::pccard_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PCCARD_SLOT, tag, owner, clock),
 	device_single_card_slot_interface<device_pccard_interface>(mconfig, *this),
 	device_pccard_interface(mconfig, *this)

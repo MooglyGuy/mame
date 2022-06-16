@@ -110,7 +110,7 @@ public:
 	void program_9bit(address_map &map) ATTR_COLD;
 
 protected:
-	mb88_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int program_width, int data_width);
+	mb88_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -207,42 +207,42 @@ private:
 class mb88201_cpu_device : public mb88_cpu_device
 {
 public:
-	mb88201_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb88201_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mb88202_cpu_device : public mb88_cpu_device
 {
 public:
-	mb88202_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb88202_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mb8841_cpu_device : public mb88_cpu_device
 {
 public:
-	mb8841_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb8841_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mb8842_cpu_device : public mb88_cpu_device
 {
 public:
-	mb8842_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb8842_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mb8843_cpu_device : public mb88_cpu_device
 {
 public:
-	mb8843_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb8843_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mb8844_cpu_device : public mb88_cpu_device
 {
 public:
-	mb8844_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb8844_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

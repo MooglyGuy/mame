@@ -2024,12 +2024,12 @@ void megasys1_typea_state::system_A_p47bl(machine_config &config)
 	GENERIC_LATCH_8(config, "soundlatch3");
 
 	// OKI M5205
-	MSM5205(config, m_p47bl_adpcm[0], 384000);
+	MSM5205(config, m_p47bl_adpcm[0], XTAL::u(384000));
 	m_p47bl_adpcm[0]->set_prescaler_selector(msm5205_device::SEX_4B);
 	m_p47bl_adpcm[0]->add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	m_p47bl_adpcm[0]->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
-	MSM5205(config, m_p47bl_adpcm[1], 384000);
+	MSM5205(config, m_p47bl_adpcm[1], XTAL::u(384000));
 	m_p47bl_adpcm[1]->set_prescaler_selector(msm5205_device::SEX_4B);
 	m_p47bl_adpcm[1]->add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	m_p47bl_adpcm[1]->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
@@ -2128,11 +2128,11 @@ void megasys1_bc_iosim_state::system_B_hayaosi1(machine_config &config)
 
 	/* basic machine hardware */
 
-	OKIM6295(config.replace(), m_oki[0], 2000000, okim6295_device::PIN7_HIGH); /* correct speed, but unknown OSC + divider combo */
+	OKIM6295(config.replace(), m_oki[0], XTAL::u(2000000), okim6295_device::PIN7_HIGH); /* correct speed, but unknown OSC + divider combo */
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 0.30, 0);
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 0.30, 1);
 
-	OKIM6295(config.replace(), m_oki[1], 2000000, okim6295_device::PIN7_HIGH); /* correct speed, but unknown OSC + divider combo */
+	OKIM6295(config.replace(), m_oki[1], XTAL::u(2000000), okim6295_device::PIN7_HIGH); /* correct speed, but unknown OSC + divider combo */
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 0.30, 0);
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 0.30, 1);
 }
@@ -2239,7 +2239,7 @@ void megasys1_typez_state::system_Z(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &megasys1_typez_state::megasys1Z_map);
 	TIMER(config, m_scantimer).configure_scanline(FUNC(megasys1_typez_state::megasys_base_scanline), m_screen, 0, 1);
 
-	Z80(config, m_audiocpu, 3000000); /* OSC 12MHz divided by 4 ??? */
+	Z80(config, m_audiocpu, XTAL::u(3000000)); /* OSC 12MHz divided by 4 ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &megasys1_typez_state::z80_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &megasys1_typez_state::z80_sound_io_map);
 
@@ -2265,7 +2265,7 @@ void megasys1_typez_state::system_Z(machine_config &config)
 
 	GENERIC_LATCH_16(config, m_soundlatch[0]);
 
-	ym2203_device &ymsnd(YM2203(config, "ymsnd", 1500000));
+	ym2203_device &ymsnd(YM2203(config, "ymsnd", XTAL::u(1500000)));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.50);
 }

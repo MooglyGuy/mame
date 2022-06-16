@@ -33,7 +33,7 @@ void fuukitmap_device::vregs_map(address_map &map)
 
 DEFINE_DEVICE_TYPE(FUUKI_TILEMAP, fuukitmap_device, "fuukitmap", "Fuuki Tilemap hardware")
 
-fuukitmap_device::fuukitmap_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+fuukitmap_device::fuukitmap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, FUUKI_TILEMAP, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this, nullptr)
 	, device_video_interface(mconfig, *this, true)

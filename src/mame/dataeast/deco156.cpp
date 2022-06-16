@@ -315,7 +315,7 @@ DECOSPR_PRIORITY_CB_MEMBER(deco156_state::pri_callback)
 void deco156_state::hvysmsh(machine_config &config)
 {
 	/* basic machine hardware */
-	ARM(config, m_maincpu, 28000000); /* Unconfirmed */
+	ARM(config, m_maincpu, XTAL::u(28000000)); /* Unconfirmed */
 	m_maincpu->set_addrmap(AS_PROGRAM, &deco156_state::hvysmsh_map);
 
 	EEPROM_93C46_16BIT(config, "eeprom");
@@ -331,7 +331,7 @@ void deco156_state::hvysmsh(machine_config &config)
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_hvysmsh);
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_888, 1024);
 
-	DECO16IC(config, m_deco_tilegen, 0);
+	DECO16IC(config, m_deco_tilegen);
 	m_deco_tilegen->set_pf1_size(DECO_64x32);
 	m_deco_tilegen->set_pf2_size(DECO_64x32);
 	m_deco_tilegen->set_pf1_col_bank(0x00);
@@ -344,23 +344,23 @@ void deco156_state::hvysmsh(machine_config &config)
 	m_deco_tilegen->set_pf12_16x16_bank(1);
 	m_deco_tilegen->set_gfxdecode_tag("gfxdecode");
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_hvysmsh_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_hvysmsh_spr);
 	m_sprgen->set_pri_callback(FUNC(deco156_state::pri_callback));
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki1, 28000000/28, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki1, XTAL::u(28000000)/28, okim6295_device::PIN7_HIGH);
 	m_oki1->add_route(ALL_OUTPUTS, "mono", 1.0);
 
-	OKIM6295(config, m_oki2, 28000000/14, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki2, XTAL::u(28000000)/14, okim6295_device::PIN7_HIGH);
 	m_oki2->add_route(ALL_OUTPUTS, "mono", 0.35);
 }
 
 void deco156_state::wcvol95(machine_config &config)
 {
 	/* basic machine hardware */
-	ARM(config, m_maincpu, 28000000); /* Unconfirmed */
+	ARM(config, m_maincpu, XTAL::u(28000000)); /* Unconfirmed */
 	m_maincpu->set_addrmap(AS_PROGRAM, &deco156_state::wcvol95_map);
 
 	EEPROM_93C46_16BIT(config, "eeprom");
@@ -376,7 +376,7 @@ void deco156_state::wcvol95(machine_config &config)
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_hvysmsh);
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 1024);
 
-	DECO16IC(config, m_deco_tilegen, 0);
+	DECO16IC(config, m_deco_tilegen);
 	m_deco_tilegen->set_pf1_size(DECO_64x32);
 	m_deco_tilegen->set_pf2_size(DECO_64x32);
 	m_deco_tilegen->set_pf1_col_bank(0x00);
@@ -389,13 +389,13 @@ void deco156_state::wcvol95(machine_config &config)
 	m_deco_tilegen->set_pf12_16x16_bank(1);
 	m_deco_tilegen->set_gfxdecode_tag("gfxdecode");
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_hvysmsh_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_hvysmsh_spr);
 	m_sprgen->set_pri_callback(FUNC(deco156_state::pri_callback));
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	ymz280b_device &ymz(YMZ280B(config, "ymz", 28000000 / 2));
+	ymz280b_device &ymz(YMZ280B(config, "ymz", XTAL::u(28000000) / 2));
 	ymz.add_route(0, "speaker", 1.0, 0);
 	ymz.add_route(1, "speaker", 1.0, 1);
 }

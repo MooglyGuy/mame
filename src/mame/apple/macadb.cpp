@@ -232,7 +232,7 @@ static INPUT_PORTS_START( macadb )
 	PORT_BIT(0xf800, IP_ACTIVE_HIGH, IPT_UNUSED)    // 7b-7f are unused
 INPUT_PORTS_END
 
-macadb_device::macadb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+macadb_device::macadb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MACADB, tag, owner, clock),
 		m_mouse0(*this, "MOUSE0"),
 		m_mouse1(*this, "MOUSE1"),

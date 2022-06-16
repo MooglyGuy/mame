@@ -389,13 +389,13 @@ void mekd2_state::mekd2(machine_config &config)
 	m_pia_u->irqa_handler().set_inputline("maincpu", M6800_IRQ_LINE);
 	m_pia_u->irqb_handler().set_inputline("maincpu", M6800_IRQ_LINE);
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set([this] (bool state) { m_cassbit = state; });
 
 	clock_device &acia_tx_clock(CLOCK(config, "acia_tx_clock", XTAL_MEKD2 / 256)); // 4800Hz
 	acia_tx_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 
-	clock_device &acia_rx_clock(CLOCK(config, "acia_rx_clock", 300)); // toggled by cassette circuit
+	clock_device &acia_rx_clock(CLOCK(config, "acia_rx_clock", XTAL::u(300))); // toggled by cassette circuit
 	acia_rx_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_rxc));
 
 	TIMER(config, "kansas_w").configure_periodic(FUNC(mekd2_state::kansas_w), attotime::from_hz(4800));

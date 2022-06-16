@@ -30,7 +30,7 @@ DEFINE_DEVICE_TYPE(H8S_DMA_CHANNEL, h8s_dma_channel_device, "h8s_dma_channel", "
 
 // H8 top device, common code
 
-h8gen_dma_device::h8gen_dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+h8gen_dma_device::h8gen_dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_dmach(*this, "%u", 0)
@@ -381,7 +381,7 @@ void h8gen_dma_channel_device::count_done(int submodule)
 
 // H8H top device specifics
 
-h8h_dma_device::h8h_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8h_dma_device::h8h_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8gen_dma_device(mconfig, H8H_DMA, tag, owner, clock)
 {
 }
@@ -398,7 +398,7 @@ u8 h8h_dma_device::active_channels() const
 
 // H8S top device specifics
 
-h8s_dma_device::h8s_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s_dma_device::h8s_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8gen_dma_device(mconfig, H8S_DMA, tag, owner, clock)
 {
 }
@@ -501,7 +501,7 @@ int h8s_dma_device::channel_mode(int id, bool block) const
 
 // H8H channels specifics
 
-h8h_dma_channel_device::h8h_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8h_dma_channel_device::h8h_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8gen_dma_channel_device(mconfig, H8H_DMA_CHANNEL, tag, owner, clock),
 	m_dma(*this, finder_base::DUMMY_TAG)
 {
@@ -651,7 +651,7 @@ s8 h8h_dma_channel_device::trigger_vector(int submodule) const
 
 // H8S channels specifics
 
-h8s_dma_channel_device::h8s_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s_dma_channel_device::h8s_dma_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8gen_dma_channel_device(mconfig, H8S_DMA_CHANNEL, tag, owner, clock),
 	m_dma(*this, finder_base::DUMMY_TAG)
 {

@@ -351,15 +351,15 @@ void spcforce_state::spcforce(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	SN76496(config, m_sn[0], 2000000);
+	SN76496(config, m_sn[0], XTAL::u(2000000));
 	m_sn[0]->add_route(ALL_OUTPUTS, "mono", 1.0);
 	m_sn[0]->ready_cb().set(FUNC(spcforce_state::write_sn_ready<0>));
 
-	SN76496(config, m_sn[1], 2000000);
+	SN76496(config, m_sn[1], XTAL::u(2000000));
 	m_sn[1]->add_route(ALL_OUTPUTS, "mono", 1.0);
 	m_sn[1]->ready_cb().set(FUNC(spcforce_state::write_sn_ready<1>));
 
-	SN76496(config, m_sn[2], 2000000);
+	SN76496(config, m_sn[2], XTAL::u(2000000));
 	m_sn[2]->add_route(ALL_OUTPUTS, "mono", 1.0);
 	m_sn[2]->ready_cb().set(FUNC(spcforce_state::write_sn_ready<2>));
 }

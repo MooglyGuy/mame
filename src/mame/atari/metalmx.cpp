@@ -735,17 +735,17 @@ void metalmx_state::metalmx(machine_config &config)
 	m_adsp->set_addrmap(AS_PROGRAM, &metalmx_state::adsp_program_map);
 	m_adsp->set_addrmap(AS_DATA, &metalmx_state::adsp_data_map);
 
-	TMS34020(config, m_gsp, 40'000'000);         // Unverified
+	TMS34020(config, m_gsp, XTAL::u(40'000'000));         // Unverified
 	m_gsp->set_addrmap(AS_PROGRAM, &metalmx_state::gsp_map);
 	m_gsp->set_halt_on_reset(true);
 	m_gsp->set_pixel_clock(4'000'000);
 	m_gsp->set_pixels_per_clock(2);
 	m_gsp->output_int().set_inputline("maincpu", 4);
 
-	DSP32C(config, m_dsp32c[0], 40'000'000);      // Unverified
+	DSP32C(config, m_dsp32c[0], XTAL::u(40'000'000));      // Unverified
 	m_dsp32c[0]->set_addrmap(AS_PROGRAM, &metalmx_state::dsp32c_1_map);
 
-	DSP32C(config, m_dsp32c[1], 40'000'000);      // Unverified
+	DSP32C(config, m_dsp32c[1], XTAL::u(40'000'000));      // Unverified
 	m_dsp32c[1]->set_addrmap(AS_PROGRAM, &metalmx_state::dsp32c_2_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
@@ -763,7 +763,7 @@ void metalmx_state::metalmx(machine_config &config)
 	SPEAKER(config, "speaker", 4).front().headrest_left(2).headrest_right(3);
 	//SPEAKER(config, "subwoofer").seat(); Not implemented, Quad Amp PCB output;
 
-	ATARI_CAGE(config, m_cage, 0);
+	ATARI_CAGE(config, m_cage);
 	m_cage->set_speedup(0); // TODO: speedup address
 	m_cage->irq_handler().set(FUNC(metalmx_state::cage_irq_callback));
 	m_cage->add_route(0, "speaker", 1.0, 1); // Foward Right

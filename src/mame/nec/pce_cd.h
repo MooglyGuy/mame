@@ -24,7 +24,7 @@ class pce_cd_device : public device_t,
 {
 public:
 	// construction/destruction
-	pce_cd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pce_cd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration
 	template <typename T> void set_maincpu(T &&tag) { m_maincpu.set_tag(std::forward<T>(tag)); }

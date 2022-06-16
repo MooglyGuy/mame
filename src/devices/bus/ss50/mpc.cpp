@@ -24,7 +24,7 @@ class ss50_mpc_device : public device_t, public ss50_card_interface
 {
 public:
 	// construction/destruction
-	ss50_mpc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	ss50_mpc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, SS50_MPC, tag, owner, clock)
 		, ss50_card_interface(mconfig, *this)
 		, m_pia(*this, "pia")

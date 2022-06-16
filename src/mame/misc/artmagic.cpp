@@ -867,22 +867,22 @@ void artmagic_state::shtstar(machine_config &config)
 
 	m_tms->output_int().set_inputline("maincpu", M68K_IRQ_4);
 
-	mc68681_device &mainduart(MC68681(config, "mainduart", 3686400));
+	mc68681_device &mainduart(MC68681(config, "mainduart", XTAL::u(3686400)));
 	mainduart.irq_cb().set_inputline("maincpu", M68K_IRQ_5);
-	mainduart.set_clocks(500000, 500000, 500000, 500000); // external clocking required for self-test; values probably wrong
+	mainduart.set_clocks(XTAL::u(500000), XTAL::u(500000), XTAL::u(500000), XTAL::u(500000)); // external clocking required for self-test; values probably wrong
 
 	/* sub cpu*/
 	m68000_device &subcpu(M68000(config, "subcpu", MASTER_CLOCK_25MHz/2));
 	subcpu.set_addrmap(AS_PROGRAM, &artmagic_state::shtstar_subcpu_map);
 	subcpu.set_addrmap(m68000_device::AS_CPU_SPACE, &artmagic_state::shtstar_subcpu_vector_map);
 
-	mc68681_device &subduart(MC68681(config, "subduart", 3686400));
+	mc68681_device &subduart(MC68681(config, "subduart", XTAL::u(3686400)));
 	subduart.irq_cb().set_inputline("subcpu", M68K_IRQ_4);
 
-	YM2149(config, "aysnd", 3686400/2).add_route(ALL_OUTPUTS, "mono", 0.10);
+	YM2149(config, "aysnd", XTAL::u(3686400)/2).add_route(ALL_OUTPUTS, "mono", 0.10);
 
 	/*gun board cpu*/
-	i80c31_device &guncpu(I80C31(config, "guncpu", 6000000));
+	i80c31_device &guncpu(I80C31(config, "guncpu", XTAL::u(6000000)));
 	guncpu.set_addrmap(AS_PROGRAM, &artmagic_state::shtstar_guncpu_map);
 	guncpu.set_addrmap(AS_IO, &artmagic_state::shtstar_guncpu_io_map);
 	guncpu.port_in_cb<1>().set_constant(0); // ?

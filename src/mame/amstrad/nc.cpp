@@ -1303,7 +1303,7 @@ static void pcmcia_devices(device_slot_interface &device)
 
 void nc_state::nc_base(machine_config &config)
 {
-	Z80(config, m_maincpu, /*6000000*/ 4606000);        /* Russell Marks says this is more accurate */
+	Z80(config, m_maincpu, /*XTAL::u(6000000)*/ XTAL::u(4606000));        /* Russell Marks says this is more accurate */
 	m_maincpu->set_addrmap(AS_PROGRAM, &nc_state::mem_map);
 	config.set_maximum_quantum(attotime::from_hz(60));
 
@@ -1321,8 +1321,8 @@ void nc_state::nc_base(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper1, 0).add_route(ALL_OUTPUTS, "mono", 0.50);
-	BEEP(config, m_beeper2, 0).add_route(ALL_OUTPUTS, "mono", 0.50);
+	BEEP(config, m_beeper1).add_route(ALL_OUTPUTS, "mono", 0.50);
+	BEEP(config, m_beeper2).add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	// centronics
 	CENTRONICS(config, m_centronics, centronics_devices, "printer");
@@ -1332,12 +1332,12 @@ void nc_state::nc_base(machine_config &config)
 	m_centronics->set_output_latch(cent_data_out);
 
 	// uart
-	I8251(config, m_uart, 0);
+	I8251(config, m_uart);
 	m_uart->txd_handler().set("serial", FUNC(rs232_port_device::write_txd));
 	m_uart->rts_handler().set("serial", FUNC(rs232_port_device::write_rts));
 	m_uart->dtr_handler().set("serial", FUNC(rs232_port_device::write_dtr));
 
-	clock_device &uart_clock(CLOCK(config, "uart_clock", 150 * 16));
+	clock_device &uart_clock(CLOCK(config, "uart_clock", XTAL::u(150) * 16));
 	uart_clock.signal_handler().set(m_uart, FUNC(i8251_device::write_rxc));
 	uart_clock.signal_handler().append(m_uart, FUNC(i8251_device::write_txc));
 

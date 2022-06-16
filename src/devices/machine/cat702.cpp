@@ -92,7 +92,7 @@ static constexpr uint8_t initial_sbox[8] = { 0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0,
 DEFINE_DEVICE_TYPE(CAT702, cat702_device, "cat702", "CAT702")
 DEFINE_DEVICE_TYPE(CAT702_PIU, cat702_piu_device, "cat702_piu", "CAT702_PIU")
 
-cat702_device_base::cat702_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+cat702_device_base::cat702_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_select(1),
 	m_clock(1),
@@ -193,7 +193,7 @@ void cat702_device_base::write_datain(int state)
 ///////////////
 
 
-cat702_device::cat702_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cat702_device::cat702_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	cat702_device_base(mconfig, CAT702, tag, owner, clock)
 {
 }
@@ -245,7 +245,7 @@ void cat702_device::write_clock(int state)
 
 ///////////////
 
-cat702_piu_device::cat702_piu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cat702_piu_device::cat702_piu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	cat702_device_base(mconfig, CAT702_PIU, tag, owner, clock)
 {
 }

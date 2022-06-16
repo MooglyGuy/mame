@@ -27,13 +27,13 @@ class i82371sb_isa_device : public pci_device
 {
 public:
 	template <typename T>
-	i82371sb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&cpu_tag)
+	i82371sb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&cpu_tag)
 		: i82371sb_isa_device(mconfig, tag, owner, clock)
 	{
 		set_cpu_tag(std::forward<T>(cpu_tag));
 	}
 
-	i82371sb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82371sb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto smi() { return m_smi_callback.bind(); }
 	auto nmi() { return m_nmi_callback.bind(); }
@@ -225,13 +225,13 @@ class i82371sb_ide_device : public pci_device
 {
 public:
 	template <typename T>
-	i82371sb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&cpu_tag)
+	i82371sb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&cpu_tag)
 		: i82371sb_ide_device(mconfig, tag, owner, clock)
 	{
 		set_cpu_tag(std::forward<T>(cpu_tag));
 	}
 
-	i82371sb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82371sb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto irq_pri() { return m_irq_pri_callback.bind(); }
 	auto irq_sec() { return m_irq_sec_callback.bind(); }

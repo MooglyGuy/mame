@@ -47,7 +47,7 @@ namespace {
 	{
 	public:
 		// construction/destruction
-		nubus_laserview_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+		nubus_laserview_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	protected:
 		// device-level overrides
@@ -99,7 +99,7 @@ const tiny_rom_entry *nubus_laserview_device::device_rom_region() const
 	return ROM_NAME( laserview );
 }
 
-nubus_laserview_device::nubus_laserview_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_laserview_device::nubus_laserview_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NUBUS_LASERVIEW, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_screen(*this, "screen"),

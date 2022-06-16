@@ -1251,7 +1251,7 @@ void output_chips(std::ostream &out, device_t &device, const char *root_tag)
 			out << " type=\"cpu\"";
 			util::stream_format(out, " tag=\"%s\"", normalize_string(newtag));
 			util::stream_format(out, " name=\"%s\"", normalize_string(exec.device().name()));
-			util::stream_format(out, " clock=\"%d\"", exec.device().clock());
+			util::stream_format(out, " clock=\"%d\"", exec.device().clock().value());
 			out << "/>\n";
 		}
 	}
@@ -1268,8 +1268,8 @@ void output_chips(std::ostream &out, device_t &device, const char *root_tag)
 			out << " type=\"audio\"";
 			util::stream_format(out, " tag=\"%s\"", normalize_string(newtag));
 			util::stream_format(out, " name=\"%s\"", normalize_string(sound.device().name()));
-			if (sound.device().clock() != 0)
-				util::stream_format(out, " clock=\"%d\"", sound.device().clock());
+			if (!sound.device().clock().disabled())
+				util::stream_format(out, " clock=\"%d\"", sound.device().clock().value());
 			out << "/>\n";
 		}
 	}
@@ -2301,7 +2301,7 @@ char const *get_merge_name(machine_config &config, device_t const &device, util:
 	{
 		// instantiate the parent device
 		machine_config::token const tok(config.begin_configuration(config.root_device()));
-		device_t *const parent = config.device_add("_parent", *parenttype, 0);
+		device_t *const parent = config.device_add("_parent", *parenttype);
 
 		// look in the parent's ROMs
 		result = get_merge_name(parent->rom_region(), romhashes);

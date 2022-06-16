@@ -301,7 +301,7 @@ void globalvr_state::globalvr(machine_config &config)
 	// Logs inside gvrxpsys claims that it expects a "GenuineIntel"
 	// with CPU features 0x0383f9ff (no SSE2, MMX, SSE, no Procesor Serial Number)
 	// Socket 370 Celeron/Pentium 3?
-	PENTIUM3(config, m_maincpu, 100'000'000);      // ? MHz
+	PENTIUM3(config, m_maincpu, XTAL::u(100'000'000));      // ? MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &globalvr_state::globalvr_map);
 	m_maincpu->set_disable();
 

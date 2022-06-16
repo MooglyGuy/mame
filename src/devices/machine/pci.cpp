@@ -70,7 +70,7 @@ void pci_bridge_device::config_map(address_map &map)
 	map(0x3e, 0x3f).rw(FUNC(pci_bridge_device::bridge_control_r), FUNC(pci_bridge_device::bridge_control_w));
 }
 
-pci_device::pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pci_device::pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_region(*this, DEVICE_SELF)
 {
@@ -455,7 +455,7 @@ void pci_device::set_map_flags(int id, int flags)
 	remap_cb();
 }
 
-agp_device::agp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+agp_device::agp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -472,12 +472,12 @@ void agp_device::device_reset()
 
 
 
-pci_bridge_device::pci_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pci_bridge_device::pci_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_bridge_device(mconfig, PCI_BRIDGE, tag, owner, clock)
 {
 }
 
-pci_bridge_device::pci_bridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pci_bridge_device::pci_bridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, type, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, configure_space_config("configuration_space", ENDIANNESS_LITTLE, 32, 20)
@@ -865,7 +865,7 @@ void pci_bridge_device::bridge_control_w(offs_t offset, uint16_t data, uint16_t 
 }
 
 
-agp_bridge_device::agp_bridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+agp_bridge_device::agp_bridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_bridge_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -895,7 +895,7 @@ void pci_host_device::set_spaces(address_space *memory, address_space *io, addre
 	m_pci_root->set_pci_busmaster_space(busmaster ? busmaster : memory);
 }
 
-pci_host_device::pci_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pci_host_device::pci_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_bridge_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -1015,7 +1015,7 @@ void pci_host_device::root_config_write(uint8_t bus, uint8_t device, uint16_t re
 }
 
 
-pci_root_device::pci_root_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pci_root_device::pci_root_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PCI_ROOT, tag, owner, clock),
 	  m_pin_mapper(*this),
 	  m_irq_handler(*this),

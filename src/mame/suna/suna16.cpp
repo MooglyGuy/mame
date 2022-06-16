@@ -866,10 +866,10 @@ void suna16_state::bssoccer(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.2, 0);
 	ymsnd.add_route(1, "speaker", 0.2, 1);
 
-	DAC_4BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
-	DAC_4BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
-	DAC_4BIT_R2R(config, "ldac2", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
-	DAC_4BIT_R2R(config, "rdac2", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
+	DAC_4BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
+	DAC_4BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
+	DAC_4BIT_R2R(config, "ldac2").add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
+	DAC_4BIT_R2R(config, "rdac2").add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
 }
 
 
@@ -920,8 +920,8 @@ void suna16_state::uballoon(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.50, 0);
 	ymsnd.add_route(1, "speaker", 0.50, 1);
 
-	DAC_4BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
-	DAC_4BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
+	DAC_4BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
+	DAC_4BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
 }
 
 
@@ -971,8 +971,8 @@ void suna16_state::sunaq(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.50, 0);
 	ymsnd.add_route(1, "speaker", 0.50, 1);
 
-	DAC_4BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
-	DAC_4BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
+	DAC_4BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
+	DAC_4BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
 }
 
 
@@ -1033,10 +1033,10 @@ void suna16_state::bestbest(machine_config &config)
 	ymsnd.add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	ymsnd.add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
-	DAC_4BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
-	DAC_4BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
-	DAC_4BIT_R2R(config, "ldac2", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
-	DAC_4BIT_R2R(config, "rdac2", 0).add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
+	DAC_4BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
+	DAC_4BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
+	DAC_4BIT_R2R(config, "ldac2").add_route(ALL_OUTPUTS, "speaker", 0.2, 0); // unknown DAC
+	DAC_4BIT_R2R(config, "rdac2").add_route(ALL_OUTPUTS, "speaker", 0.2, 1); // unknown DAC
 }
 
 /***************************************************************************

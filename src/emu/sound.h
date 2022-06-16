@@ -68,15 +68,6 @@
 #include <condition_variable>
 
 //**************************************************************************
-//  CONSTANTS
-//**************************************************************************
-
-// special sample-rate values
-constexpr u32 SAMPLE_RATE_INPUT_ADAPTIVE = 0xffffffff;
-constexpr u32 SAMPLE_RATE_OUTPUT_ADAPTIVE = 0xfffffffe;
-constexpr u32 SAMPLE_RATE_ADAPTIVE  = 0xfffffffd;
-
-//**************************************************************************
 //  DEBUGGING
 //**************************************************************************
 
@@ -108,7 +99,19 @@ enum sound_stream_flags : u32
 	// specify that updates should be forced to one sample at a time, in real time
 	// this implicitly creates a timer that runs at the stream's output frequency
 	// so only use when strictly necessary
-	STREAM_SYNCHRONOUS = 0x01
+	STREAM_SYNCHRONOUS = 0x01,
+
+	// specify that the input frequency should be set to the connected
+	// source frequency
+	SAMPLE_RATE_INPUT_ADAPTIVE = 0x02,
+
+	// specify that the output frequency should be set to the connected
+	// sink frequency
+	SAMPLE_RATE_OUTPUT_ADAPTIVE = 0x04,
+
+	// specify that both the input and output frequencies should be set
+	// to the connected sink and source frequencies
+	SAMPLE_RATE_ADAPTIVE = 0x08
 };
 
 namespace emu::detail {
@@ -161,7 +164,7 @@ namespace emu::detail {
 		void ensure_size(u32 buffer_size);
 		void set_history(u32 history);
 
-		void resample(u32 previous_rate, u32 next_rate, attotime sync_time, attotime now);
+		void resample(const XTAL &previous_rate, const XTAL &next_rate, attotime sync_time, attotime now);
 
 		void register_save_state(device_t &device, const char *id1, const char *id2);
 
@@ -189,7 +192,7 @@ public:
 	using sample_t = float;
 
 	// construction/destruction
-	sound_stream(device_t &device, u32 inputs, u32 outputs, u32 sample_rate, stream_update_delegate callback, sound_stream_flags flags = sound_stream_flags::STREAM_DEFAULT_FLAGS);
+	sound_stream(device_t &device, u32 inputs, u32 outputs, const XTAL &sample_rate, stream_update_delegate callback, sound_stream_flags flags = sound_stream_flags::STREAM_DEFAULT_FLAGS);
 	virtual ~sound_stream();
 
 	// simple getters
@@ -205,7 +208,7 @@ public:
 	u32 output_count() const { return m_output_count; }
 
 	// sample rate and timing getters
-	u32 sample_rate() const { return m_sample_rate; }
+	XTAL sample_rate() const { return m_sample_rate; }
 	attotime sample_period() const { return attotime::from_hz(m_sample_rate); }
 
 	// sample id and timing of the first and last sample of the current update block, and first of the next sample block
@@ -231,7 +234,7 @@ public:
 	void apply_output_gain(s32 output, float gain)    { update(); m_output_channel_gain[output] *= gain; }
 
 	// set the sample rate of the stream
-	void set_sample_rate(u32 sample_rate);
+	void set_sample_rate(const XTAL &sample_rate);
 
 	// force an update to the current time
 	void update();
@@ -321,7 +324,7 @@ private:
 	void create_resamplers();
 	void lookup_history_sizes();
 	u32 get_history_for_bw_route(const sound_stream *source, u32 channel) const;
-	void internal_set_sample_rate(u32 sample_rate);
+	void internal_set_sample_rate(const XTAL &sample_rate);
 
 	std::string m_name;                            // name of this stream
 	std::string m_state_tag;
@@ -345,7 +348,7 @@ private:
 	float m_user_output_gain;
 
 	// general information
-	u32 m_sample_rate;                             // current sample rate
+	XTAL m_sample_rate;                            // current sample rate
 	u32 m_input_count;
 	u32 m_output_count;
 	bool m_input_adaptive;                         // adaptive stream that runs at the sample rate of its input
@@ -400,7 +403,7 @@ public:
 		std::vector<channel_mapping> m_channel_mappings;
 	};
 
-	static constexpr int STREAMS_UPDATE_FREQUENCY = 50;
+	static constexpr XTAL STREAMS_UPDATE_FREQUENCY = XTAL::u(50);
 
 	// construction/destruction
 	sound_manager(running_machine &machine);
@@ -416,7 +419,7 @@ public:
 	const std::vector<mapping> &get_mappings() const { return m_mappings; }
 
 	// allocate a new stream
-	sound_stream *stream_alloc(device_t &device, u32 inputs, u32 outputs, u32 sample_rate, stream_update_delegate callback, sound_stream_flags flags);
+	sound_stream *stream_alloc(device_t &device, u32 inputs, u32 outputs, const XTAL &sample_rate, stream_update_delegate callback, sound_stream_flags flags);
 
 	// WAV recording
 	bool is_recording() const { return bool(m_wavfile); }
@@ -458,7 +461,7 @@ public:
 
 	void input_get(int m_id, sound_stream &stream);
 	void output_push(int m_id, sound_stream &stream);
-	const audio_resampler *get_resampler(u32 fs, u32 ft);
+	const audio_resampler *get_resampler(const XTAL &fs, const XTAL &ft);
 
 	u32 effect_chains() const { return m_speakers.size(); }
 	std::string effect_chain_tag(s32 index) const;
@@ -526,7 +529,7 @@ private:
 		u32 m_node;
 		std::string m_node_name;
 		u32 m_channels;
-		u32 m_rate;
+		XTAL m_rate;
 		u32 m_unused_channels_mask;
 		bool m_is_system_default;
 		bool m_is_channel_mapping;

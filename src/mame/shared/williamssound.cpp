@@ -76,7 +76,7 @@ DEFINE_DEVICE_TYPE(WILLIAMS_S11_SOUND, williams_s11_sound_device, "wmss11", "Wil
 //  williams_cvsd_sound_device - constructor
 //-------------------------------------------------
 
-williams_cvsd_sound_device::williams_cvsd_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_cvsd_sound_device::williams_cvsd_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_CVSD_SOUND, tag, owner, clock),
 		device_mixer_interface(mconfig, *this),
 		m_cpu(*this, "cpu"),
@@ -201,7 +201,7 @@ void williams_cvsd_sound_device::device_add_mconfig(machine_config &config)
 
 	MC1408(config, "dac").add_route(ALL_OUTPUTS, *this, 0.25);
 
-	HC55516(config, m_hc55516, 0);
+	HC55516(config, m_hc55516);
 	m_hc55516->add_route(ALL_OUTPUTS, *this, 0.60);
 }
 
@@ -272,7 +272,7 @@ TIMER_CALLBACK_MEMBER(williams_cvsd_sound_device::sync_write)
 //  williams_narc_sound_device - constructor
 //-------------------------------------------------
 
-williams_narc_sound_device::williams_narc_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_narc_sound_device::williams_narc_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_NARC_SOUND, tag, owner, clock),
 		device_mixer_interface(mconfig, *this),
 		m_cpu(*this, "cpu%u", 0U),
@@ -519,10 +519,10 @@ void williams_narc_sound_device::device_add_mconfig(machine_config &config)
 	ym2151.irq_handler().set_inputline("cpu0", M6809_FIRQ_LINE);
 	ym2151.add_route(ALL_OUTPUTS, *this, 0.10);
 
-	AD7224(config, "dac1", 0).add_route(ALL_OUTPUTS, *this, 0.25);
-	AD7224(config, "dac2", 0).add_route(ALL_OUTPUTS, *this, 0.25);
+	AD7224(config, "dac1").add_route(ALL_OUTPUTS, *this, 0.25);
+	AD7224(config, "dac2").add_route(ALL_OUTPUTS, *this, 0.25);
 
-	HC55516(config, m_hc55516, 0).add_route(ALL_OUTPUTS, *this, 0.60);
+	HC55516(config, m_hc55516).add_route(ALL_OUTPUTS, *this, 0.60);
 }
 
 
@@ -626,7 +626,7 @@ TIMER_CALLBACK_MEMBER(williams_narc_sound_device::sync_clear)
 //  williams_adpcm_sound_device - constructor
 //-------------------------------------------------
 
-williams_adpcm_sound_device::williams_adpcm_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_adpcm_sound_device::williams_adpcm_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_ADPCM_SOUND, tag, owner, clock),
 		device_mixer_interface(mconfig, *this),
 		m_cpu(*this, "cpu"),
@@ -772,7 +772,7 @@ void williams_adpcm_sound_device::device_add_mconfig(machine_config &config)
 	ym2151.irq_handler().set_inputline("cpu", M6809_FIRQ_LINE);
 	ym2151.add_route(ALL_OUTPUTS, *this, 0.10);
 
-	AD7524(config, "dac", 0).add_route(ALL_OUTPUTS, *this, 0.10);
+	AD7524(config, "dac").add_route(ALL_OUTPUTS, *this, 0.10);
 
 	okim6295_device &oki(OKIM6295(config, "oki", ADPCM_MASTER_CLOCK/8, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
 	oki.set_addrmap(0, &williams_adpcm_sound_device::williams_adpcm_oki_map);
@@ -859,7 +859,7 @@ TIMER_CALLBACK_MEMBER(williams_adpcm_sound_device::irq_clear)
 //-------------------------------------------------
 //  williams_s4_sound_device - constructor
 //-------------------------------------------------
-williams_s4_sound_device::williams_s4_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_s4_sound_device::williams_s4_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_S4_SOUND, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -898,7 +898,7 @@ void williams_s4_sound_device::williams_s4_map(address_map &map)
 //-------------------------------------------------
 void williams_s4_sound_device::device_add_mconfig(machine_config &config)
 {
-	M6808(config, m_cpu, 3580000);
+	M6808(config, m_cpu, XTAL::u(3580000));
 	m_cpu->set_addrmap(AS_PROGRAM, &williams_s4_sound_device::williams_s4_map);
 
 	MC1408(config, "dac").add_route(ALL_OUTPUTS, *this, 0.5);
@@ -959,7 +959,7 @@ ioport_constructor williams_s4_sound_device::device_input_ports() const
 //-------------------------------------------------
 //  williams_s6_sound_device - constructor
 //-------------------------------------------------
-williams_s6_sound_device::williams_s6_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_s6_sound_device::williams_s6_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_S6_SOUND, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -1008,12 +1008,12 @@ void williams_s6_sound_device::williams_s6_map(address_map &map)
 //-------------------------------------------------
 void williams_s6_sound_device::device_add_mconfig(machine_config &config)
 {
-	M6802(config, m_cpu, 3580000);
+	M6802(config, m_cpu, XTAL::u(3580000));
 	m_cpu->set_addrmap(AS_PROGRAM, &williams_s6_sound_device::williams_s6_map);
 
 	MC1408(config, "dac").add_route(ALL_OUTPUTS, *this, 0.5);
 
-	HC55516(config, m_hc, 0).add_route(ALL_OUTPUTS, *this, 1.00);
+	HC55516(config, m_hc).add_route(ALL_OUTPUTS, *this, 1.00);
 
 	PIA6821(config, m_pia);
 	m_pia->writepa_handler().set("dac", FUNC(dac_byte_interface::data_w));
@@ -1077,7 +1077,7 @@ ioport_constructor williams_s6_sound_device::device_input_ports() const
 //-------------------------------------------------
 //  williams_s9_sound_device - constructor
 //-------------------------------------------------
-williams_s9_sound_device::williams_s9_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_s9_sound_device::williams_s9_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_S9_SOUND, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -1122,7 +1122,7 @@ void williams_s9_sound_device::device_add_mconfig(machine_config &config)
 
 	MC1408(config, "dac").add_route(ALL_OUTPUTS, *this, 0.5);
 
-	HC55516(config, m_hc, 0).add_route(ALL_OUTPUTS, *this, 1.00);
+	HC55516(config, m_hc).add_route(ALL_OUTPUTS, *this, 1.00);
 
 	PIA6821(config, m_pia);
 	m_pia->set_port_a_input_overrides_output_mask(0xff);
@@ -1179,7 +1179,7 @@ ioport_constructor williams_s9_sound_device::device_input_ports() const
 //-------------------------------------------------
 //  williams_s11_sound_device - constructor
 //-------------------------------------------------
-williams_s11_sound_device::williams_s11_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+williams_s11_sound_device::williams_s11_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WILLIAMS_S11_SOUND, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -1235,7 +1235,7 @@ void williams_s11_sound_device::device_add_mconfig(machine_config &config)
 
 	MC1408(config, "dac").add_route(ALL_OUTPUTS, *this, 0.5);
 
-	HC55516(config, m_hc, 0).add_route(ALL_OUTPUTS, *this, 1.00);
+	HC55516(config, m_hc).add_route(ALL_OUTPUTS, *this, 1.00);
 
 	PIA6821(config, m_pia);
 	m_pia->set_port_a_input_overrides_output_mask(0xff);

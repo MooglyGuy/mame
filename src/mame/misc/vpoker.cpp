@@ -529,7 +529,7 @@ void vpoker_state::vpoker(machine_config &config)
 
 	// 6840 PTM
 	ptm6840_device &ptm(PTM6840(config, "6840ptm", XTAL(4'000'000) / 4));
-	ptm.set_external_clocks(500, 0, 3000);
+	ptm.set_external_clocks(XTAL::u(500), XTAL(), XTAL::u(3000));
 	ptm.irq_callback().set(FUNC(vpoker_state::ptm_irq));
 	ptm.o2_callback().set("dac", FUNC(dac_1bit_device::data_w));
 

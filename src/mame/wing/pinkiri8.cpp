@@ -60,8 +60,7 @@ Dumped by Chackn
 class janshi_vdp_device : public device_t, public device_memory_interface, public device_gfx_interface
 {
 public:
-	// constructor/destructor
-	janshi_vdp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	janshi_vdp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configurations
 	void set_janshi_hack(bool janshi_hack) { m_janshi_hack = janshi_hack; }
@@ -169,7 +168,7 @@ void janshi_vdp_device::map(address_map &map)
 
 DEFINE_DEVICE_TYPE(JANSHIVDP, janshi_vdp_device, "janshi_vdp", "Janshi VDP")
 
-janshi_vdp_device::janshi_vdp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+janshi_vdp_device::janshi_vdp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, JANSHIVDP, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_gfx_interface(mconfig, *this, gfxinfo, "palette")
@@ -1105,12 +1104,12 @@ void pinkiri8_state::pinkiri8(machine_config &config)
 	screen.set_screen_update(m_vdp, FUNC(janshi_vdp_device::screen_update));
 	screen.set_palette("janshivdp:palette");
 
-	JANSHIVDP(config, m_vdp, 0);
+	JANSHIVDP(config, m_vdp);
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, "oki", 1056000, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5); // clock frequency & pin 7 not verified
+	OKIM6295(config, "oki", XTAL::u(1056000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5); // clock frequency & pin 7 not verified
 }
 
 void pinkiri8_state::ronjan(machine_config &config)

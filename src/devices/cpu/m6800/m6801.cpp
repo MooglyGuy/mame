@@ -420,12 +420,12 @@ DEFINE_DEVICE_TYPE(HD6303R, hd6303r_cpu_device, "hd6303r", "Hitachi HD6303R")
 DEFINE_DEVICE_TYPE(HD6303X, hd6303x_cpu_device, "hd6303x", "Hitachi HD6303X")
 DEFINE_DEVICE_TYPE(HD6303Y, hd6303y_cpu_device, "hd6303y", "Hitachi HD6303Y")
 
-m6801_cpu_device::m6801_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m6801_cpu_device::m6801_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m6801_cpu_device(mconfig, M6801, tag, owner, clock, m6803_insn, cycles_6803, address_map_constructor(FUNC(m6803_cpu_device::m6801_mem), this), 64)
 {
 }
 
-m6801_cpu_device::m6801_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, const op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes)
+m6801_cpu_device::m6801_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes)
 	: m6800_cpu_device(mconfig, type, tag, owner, clock, insn, cycles, internal)
 	, device_nvram_interface(mconfig, *this)
 	, m_in_port_func(*this, 0xff)
@@ -445,62 +445,62 @@ m6801_cpu_device::m6801_cpu_device(const machine_config &mconfig, device_type ty
 	nvram_enable_backup(false);
 }
 
-m6801u4_cpu_device::m6801u4_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m6801u4_cpu_device::m6801u4_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m6801_cpu_device(mconfig, M6801U4, tag, owner, clock, m6803_insn, cycles_6803, address_map_constructor(FUNC(m6801u4_cpu_device::m6801u4_mem), this), 32)
 {
 }
 
-hd6801v0_cpu_device::hd6801v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6801v0_cpu_device::hd6801v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m6801_cpu_device(mconfig, HD6801V0, tag, owner, clock, m6803_insn, cycles_6803, address_map_constructor(FUNC(hd6801v0_cpu_device::hd6801_mem), this), 64)
 {
 }
 
-m6803_cpu_device::m6803_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m6803_cpu_device::m6803_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m6801_cpu_device(mconfig, M6803, tag, owner, clock, m6803_insn, cycles_6803, address_map_constructor(FUNC(m6803_cpu_device::m6803_mem), this), 64)
 {
 }
 
-m6803e_cpu_device::m6803e_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m6803e_cpu_device::m6803e_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m6801_cpu_device(mconfig, M6803E, tag, owner, clock, m6803_insn, cycles_6803, address_map_constructor(FUNC(m6803e_cpu_device::m6803_mem), this), 64)
 {
 }
 
-mc68120_device::mc68120_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal)
+mc68120_device::mc68120_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal)
 	: m6801_cpu_device(mconfig, type, tag, owner, clock, m6803_insn, cycles_6803, internal, 0)
 {
 }
 
-mc68120_device::mc68120_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc68120_device::mc68120_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc68120_device(mconfig, MC68120, tag, owner, clock, address_map_constructor(FUNC(mc68120_device::m6801_mem), this))
 {
 }
 
-mc68121_device::mc68121_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc68121_device::mc68121_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc68120_device(mconfig, MC68121, tag, owner, clock, address_map_constructor(FUNC(mc68121_device::m6803_mem), this))
 {
 }
 
-hd6301_cpu_device::hd6301_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes)
+hd6301_cpu_device::hd6301_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, const m6800_cpu_device::op_func *insn, const u8 *cycles, address_map_constructor internal, int nvram_bytes)
 	: m6801_cpu_device(mconfig, type, tag, owner, clock, hd63701_insn, cycles_63701, internal, nvram_bytes)
 {
 }
 
-hd6301v1_cpu_device::hd6301v1_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6301v1_cpu_device::hd6301v1_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301_cpu_device(mconfig, HD6301V1, tag, owner, clock, hd63701_insn, cycles_63701, address_map_constructor(FUNC(hd6301v1_cpu_device::hd6801_mem), this), 128)
 {
 }
 
-hd63701v0_cpu_device::hd63701v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd63701v0_cpu_device::hd63701v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301_cpu_device(mconfig, HD63701V0, tag, owner, clock, hd63701_insn, cycles_63701, address_map_constructor(FUNC(hd63701v0_cpu_device::hd6801_mem), this), 128)
 {
 }
 
-hd6303r_cpu_device::hd6303r_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6303r_cpu_device::hd6303r_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301_cpu_device(mconfig, HD6303R, tag, owner, clock, m6803_insn, cycles_6803, address_map_constructor(FUNC(hd6303r_cpu_device::m6803_mem), this), 128)
 {
 }
 
-hd6301x_cpu_device::hd6301x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal, int nvram_bytes)
+hd6301x_cpu_device::hd6301x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal, int nvram_bytes)
 	: hd6301_cpu_device(mconfig, type, tag, owner, clock, hd63701_insn, cycles_63701, internal, nvram_bytes)
 	, m_in_portx_func(*this, 0xff)
 	, m_out_portx_func(*this)
@@ -510,42 +510,42 @@ hd6301x_cpu_device::hd6301x_cpu_device(const machine_config &mconfig, device_typ
 	m_sclk_divider = 16;
 }
 
-hd6301x0_cpu_device::hd6301x0_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal, int nvram_bytes)
+hd6301x0_cpu_device::hd6301x0_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal, int nvram_bytes)
 	: hd6301x_cpu_device(mconfig, type, tag, owner, clock, internal, nvram_bytes)
 {
 }
 
-hd6301x0_cpu_device::hd6301x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6301x0_cpu_device::hd6301x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301x0_cpu_device(mconfig, HD6301X0, tag, owner, clock, address_map_constructor(FUNC(hd6301x0_cpu_device::hd6301x_mem), this), 192)
 {
 }
 
-hd63701x0_cpu_device::hd63701x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd63701x0_cpu_device::hd63701x0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301x0_cpu_device(mconfig, HD63701X0, tag, owner, clock, address_map_constructor(FUNC(hd63701x0_cpu_device::hd6301x_mem), this), 192)
 {
 }
 
-hd6303x_cpu_device::hd6303x_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6303x_cpu_device::hd6303x_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301x_cpu_device(mconfig, HD6303X, tag, owner, clock, address_map_constructor(FUNC(hd6303x_cpu_device::hd6303x_mem), this), 192)
 {
 }
 
-hd6301y_cpu_device::hd6301y_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal, int nvram_bytes)
+hd6301y_cpu_device::hd6301y_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal, int nvram_bytes)
 	: hd6301x_cpu_device(mconfig, type, tag, owner, clock, internal, nvram_bytes)
 {
 }
 
-hd6301y0_cpu_device::hd6301y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6301y0_cpu_device::hd6301y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301y_cpu_device(mconfig, HD6301Y0, tag, owner, clock, address_map_constructor(FUNC(hd6301y0_cpu_device::hd6301y_mem), this), 256)
 {
 }
 
-hd63701y0_cpu_device::hd63701y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd63701y0_cpu_device::hd63701y0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301y_cpu_device(mconfig, HD63701Y0, tag, owner, clock, address_map_constructor(FUNC(hd63701y0_cpu_device::hd6301y_mem), this), 256)
 {
 }
 
-hd6303y_cpu_device::hd6303y_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hd6303y_cpu_device::hd6303y_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6301y_cpu_device(mconfig, HD6303Y, tag, owner, clock, address_map_constructor(FUNC(hd6303y_cpu_device::hd6303y_mem), this), 256)
 {
 }

@@ -203,21 +203,21 @@ template<typename S> void emu::detail::output_buffer_flat<S>::set_history(u32 hi
 	}
 }
 
-template<typename S> void emu::detail::output_buffer_flat<S>::resample(u32 previous_rate, u32 next_rate, attotime sync_time, attotime now)
+template<typename S> void emu::detail::output_buffer_flat<S>::resample(const XTAL &previous_rate, const XTAL &next_rate, attotime sync_time, attotime now)
 {
 	if(!m_write_position)
 		return;
 
-	auto si = [](attotime time, u32 rate) -> s64 {
-		return time.m_seconds * rate + muldivu_64(time.m_attoseconds, rate, ATTOSECONDS_PER_SECOND);
+	auto si = [](attotime time, const XTAL &rate) -> s64 {
+		return time.m_seconds * rate.value() + muldivu_64(time.m_attoseconds, rate.value(), ATTOSECONDS_PER_SECOND);
 	};
 
-	auto cv = [](u32 source_rate, u32 dest_rate, s64 time) -> std::pair<s64, double> {
-		s64 sec = time / source_rate;
-		s64 prem = time % source_rate;
-		double nrem = double(prem * dest_rate) / double(source_rate);
+	auto cv = [](const XTAL &source_rate, const XTAL &dest_rate, s64 time) -> std::pair<s64, double> {
+		s64 sec = time / source_rate.value();
+		s64 prem = time % source_rate.value();
+		double nrem = (prem * dest_rate.dvalue()) / source_rate.dvalue();
 		s64 cyc = s64(nrem);
-		return std::make_pair(sec * dest_rate + cyc, nrem - cyc);
+		return std::make_pair(sec * dest_rate.value() + cyc, nrem - cyc);
 	};
 
 	// Compute what will be the new start, sync and write positions (if it fits)
@@ -233,7 +233,7 @@ template<typename S> void emu::detail::output_buffer_flat<S>::resample(u32 previ
 	if(nwrite - nbase > space) {
 		nbase = nwrite - space;
 		if(nbase > nsync)
-			fatalerror("Stream buffer too small, can't proceed, rate change %d -> %d, space=%d\n", previous_rate, next_rate, space);
+			fatalerror("Stream buffer too small, can't proceed, rate change %d -> %d, space=%d\n", previous_rate.value(), next_rate.value(), space);
 	}
 
 	auto [ppos, pdec] = cv(next_rate, previous_rate, nbase);
@@ -288,14 +288,14 @@ sound_manager::effect_step::effect_step(u32 buffer_size, u32 channels) : m_buffe
 
 //**// Streams and routes
 
-sound_stream::sound_stream(device_t &device, u32 inputs, u32 outputs, u32 sample_rate, stream_update_delegate callback, sound_stream_flags flags) :
+sound_stream::sound_stream(device_t &device, u32 inputs, u32 outputs, const XTAL &sample_rate, stream_update_delegate callback, sound_stream_flags flags) :
 	m_device(device),
 	m_output_buffer(0, outputs),
-	m_sample_rate(sample_rate == SAMPLE_RATE_INPUT_ADAPTIVE || sample_rate == SAMPLE_RATE_OUTPUT_ADAPTIVE || sample_rate == SAMPLE_RATE_ADAPTIVE ? 0 : sample_rate),
+	m_sample_rate((flags & (SAMPLE_RATE_INPUT_ADAPTIVE | SAMPLE_RATE_OUTPUT_ADAPTIVE | SAMPLE_RATE_ADAPTIVE)) ? 0 : sample_rate),
 	m_input_count(inputs),
 	m_output_count(outputs),
-	m_input_adaptive(sample_rate == SAMPLE_RATE_INPUT_ADAPTIVE || sample_rate == SAMPLE_RATE_ADAPTIVE),
-	m_output_adaptive(sample_rate == SAMPLE_RATE_OUTPUT_ADAPTIVE || sample_rate == SAMPLE_RATE_ADAPTIVE),
+	m_input_adaptive(flags & (SAMPLE_RATE_INPUT_ADAPTIVE | SAMPLE_RATE_ADAPTIVE)),
+	m_output_adaptive(flags & (SAMPLE_RATE_OUTPUT_ADAPTIVE | SAMPLE_RATE_ADAPTIVE)),
 	m_synchronous((flags & STREAM_SYNCHRONOUS) != 0),
 	m_started(false),
 	m_in_update(false),
@@ -414,13 +414,13 @@ void sound_stream::add_dependants(std::vector<sound_stream *> &deps)
 
 //**// Stream sample rate
 
-void sound_stream::set_sample_rate(u32 new_rate)
+void sound_stream::set_sample_rate(const XTAL &new_rate)
 {
 	m_input_adaptive = m_output_adaptive = false;
 	internal_set_sample_rate(new_rate);
 }
 
-void sound_stream::internal_set_sample_rate(u32 new_rate)
+void sound_stream::internal_set_sample_rate(const XTAL &new_rate)
 {
 	if(new_rate == m_sample_rate)
 		return;
@@ -448,10 +448,10 @@ bool sound_stream::try_solving_frequency()
 		for(const route_bw &r : m_bw_routes) {
 			if(!r.m_source->frequency_is_solved())
 				return false;
-			if(freq < r.m_source->sample_rate())
-				freq = r.m_source->sample_rate();
+			if(freq < r.m_source->sample_rate().value())
+				freq = r.m_source->sample_rate().value();
 		}
-		m_sample_rate = freq;
+		m_sample_rate = XTAL::u(freq);
 		return true;
 
 	} else if(output_adaptive() && !input_adaptive()) {
@@ -459,10 +459,10 @@ bool sound_stream::try_solving_frequency()
 		for(const route_fw &r : m_fw_routes) {
 			if(!r.m_target->frequency_is_solved())
 				return false;
-			if(freq < r.m_target->sample_rate())
-				freq = r.m_target->sample_rate();
+			if(freq < r.m_target->sample_rate().value())
+				freq = r.m_target->sample_rate().value();
 		}
-		m_sample_rate = freq;
+		m_sample_rate = XTAL::u(freq);
 		return true;
 
 	} else {
@@ -472,8 +472,8 @@ bool sound_stream::try_solving_frequency()
 				freqbw = 0;
 				break;
 			}
-			if(freqbw < r.m_source->sample_rate())
-				freqbw = r.m_source->sample_rate();
+			if(freqbw < r.m_source->sample_rate().value())
+				freqbw = r.m_source->sample_rate().value();
 		}
 		u32 freqfw = 0;
 		for(const route_fw &r : m_fw_routes) {
@@ -481,13 +481,13 @@ bool sound_stream::try_solving_frequency()
 				freqfw = 0;
 				break;
 			}
-			if(freqfw < r.m_target->sample_rate())
-				freqfw = r.m_target->sample_rate();
+			if(freqfw < r.m_target->sample_rate().value())
+				freqfw = r.m_target->sample_rate().value();
 		}
 		if(!freqbw && !freqfw)
 			return false;
 
-		m_sample_rate = freqfw > freqbw ? freqfw : freqbw;
+		m_sample_rate = XTAL::u(freqfw > freqbw ? freqfw : freqbw);
 		return true;
 	}
 }
@@ -498,7 +498,7 @@ bool sound_stream::try_solving_frequency()
 void sound_stream::init()
 {
 	// Ensure the buffer size is non-zero, since a stream can be started at any time
-	u32 bsize = m_sample_rate ? m_sample_rate : 48000;
+	u32 bsize = m_sample_rate.value() ? m_sample_rate.value() : 48000;
 	m_input_buffer.resize(m_input_count);
 	for(auto &b : m_input_buffer)
 		b.resize(bsize);
@@ -514,7 +514,7 @@ void sound_stream::init()
 u64 sound_stream::get_current_sample_index() const
 {
 	attotime now = m_device.machine().time();
-	return now.m_seconds * m_sample_rate + muldivu_64(now.m_attoseconds, m_sample_rate, ATTOSECONDS_PER_SECOND);
+	return now.m_seconds * m_sample_rate.dvalue() + muldivu_64(now.m_attoseconds, m_sample_rate.value(), ATTOSECONDS_PER_SECOND);
 }
 
 void sound_stream::update()
@@ -882,7 +882,7 @@ void sound_manager::input_get(int id, sound_stream &stream)
 	u64 dest_end_pos = dest_start_pos + dest_samples;
 	u32 skip = stream.output_count();
 
-	
+
 	for(const auto &step : m_microphones[id].m_input_mixing_steps) {
 		if(step.m_mode == mixing_step::CLEAR || step.m_mode == mixing_step::COPY)
 				fatalerror("Impossible step encountered in input\n");
@@ -1055,7 +1055,7 @@ void sound_manager::run_effects()
 					}
 					break;
 				}
-					
+
 				case mixing_step::ADD: {
 					float gain = 32768 * step.m_linear_volume * m_master_gain;
 					for(u32 sample = 0; sample != source_samples; sample++) {
@@ -1082,10 +1082,14 @@ void sound_manager::run_effects()
 		for(auto &si : m_speakers)
 			si.m_effects.back().m_buffer.sync();
 
+		machine().osd().sound_begin_update();
+
 		// Send the result to the osd
 		for(auto &stream : m_osd_output_streams)
 			if(stream.m_samples)
 				machine().osd().sound_stream_sink_update(stream.m_id, stream.m_buffer.data(), stream.m_samples);
+
+		machine().osd().sound_end_update();
 
 		dlock.lock();
 	}
@@ -2520,7 +2524,7 @@ void sound_manager::mapping_update()
 			for(const auto &m : m_microphones) {
 				LOG_OUTPUT_FUNC("  %s:\n", m.m_dev.tag());
 				for(const auto &ms : m.m_input_mixing_steps) {
-					static const char *const modes[5] = { "clear", "copy", "copy+vol", "add", "add+vol" };
+					static const char *const modes[5] = { "clear", "copy", "add" };
 					LOG_OUTPUT_FUNC("  - %s osd %u:%u -> device %u:%u level %g\n", modes[ms.m_mode], ms.m_osd_index, ms.m_osd_channel, ms.m_device_index, ms.m_device_channel, ms.m_linear_volume);
 				}
 			}
@@ -2541,7 +2545,7 @@ void sound_manager::mapping_update()
 			}
 			LOG_OUTPUT_FUNC("Output mixing steps:\n");
 			for(const auto &ms : m_output_mixing_steps) {
-				static const char *const modes[5] = { "clear", "copy", "copy+vol", "add", "add+vol" };
+				static const char *const modes[5] = { "clear", "copy", "add" };
 				LOG_OUTPUT_FUNC("- %s device %u:%u -> osd %u:%u level %g\n", modes[ms.m_mode], ms.m_device_index, ms.m_device_channel, ms.m_osd_index, ms.m_osd_channel, ms.m_linear_volume);
 			}
 		}
@@ -2624,7 +2628,7 @@ void sound_manager::streams_update()
 }
 
 //**// Resampler management
-const audio_resampler *sound_manager::get_resampler(u32 fs, u32 ft)
+const audio_resampler *sound_manager::get_resampler(const XTAL &fs, const XTAL &ft)
 {
 	auto key = std::make_pair(fs, ft);
 	auto i = m_resamplers.find(key);
@@ -2642,7 +2646,7 @@ const audio_resampler *sound_manager::get_resampler(u32 fs, u32 ft)
 
 void sound_manager::rebuild_all_stream_resamplers()
 {
-	u32 edge_rate = machine().sample_rate();
+	XTAL edge_rate = machine().sample_rate();
 	for(auto &stream : m_osd_input_streams)
 		if(stream.m_rate != edge_rate) {
 			stream.m_resampler = get_resampler(stream.m_rate, edge_rate);
@@ -2664,7 +2668,7 @@ void sound_manager::rebuild_all_stream_resamplers()
 		if(step.m_mode != mixing_step::CLEAR) {
 			auto &stream = m_osd_output_streams[step.m_osd_index];
 			if(stream.m_resampler)
-				m_speakers[step.m_device_index].m_effects.back().m_buffer.set_history(stream.m_resampler->history_size());			
+				m_speakers[step.m_device_index].m_effects.back().m_buffer.set_history(stream.m_resampler->history_size());
 		}
 }
 

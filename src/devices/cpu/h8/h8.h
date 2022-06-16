@@ -132,7 +132,7 @@ protected:
 		EXR_I  = 0x07
 	};
 
-	h8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor map_delegate);
+	h8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor map_delegate);
 
 	// device_t implementation
 	virtual void device_config_complete() override;

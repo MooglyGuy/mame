@@ -13,7 +13,7 @@ class kaneko_calc3_device : public device_t
 public:
 	template <typename T, typename U, typename V, typename W, typename X>
 	kaneko_calc3_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, U &&eeprom_tag, V &&mcuram_tag, W &&dsw_tag, X &&region_tag)
-		: kaneko_calc3_device(mconfig, tag, owner, (uint32_t)0)
+		: kaneko_calc3_device(mconfig, tag, owner)
 	{
 		m_maincpu.set_tag(std::forward<T>(cpu_tag));
 		m_eeprom.set_tag(std::forward<U>(eeprom_tag));
@@ -22,7 +22,7 @@ public:
 		m_calc3_region.set_tag(std::forward<X>(region_tag));
 	}
 
-	kaneko_calc3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	kaneko_calc3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void mcu_com0_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	void mcu_com1_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);

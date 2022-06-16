@@ -24,8 +24,8 @@ enum vtxx_pal_mode {
 
 class ppu_vt03_device : public ppu2c0x_device {
 public:
-	ppu_vt03_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	ppu_vt03_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	ppu_vt03_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	ppu_vt03_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_bg() { return m_read_bg.bind(); }
 	auto read_sp() { return m_read_sp.bind(); }
@@ -144,7 +144,7 @@ private:
 
 class ppu_vt03pal_device : public ppu_vt03_device {
 public:
-	ppu_vt03pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	ppu_vt03pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 };
 
 class ppu_vt3xx_device : public ppu_vt03_device {
@@ -164,7 +164,7 @@ public:
 
 	u8 spritehigh_2008_r() { return m_2008_spritehigh; }
 	void spritehigh_2008_w(u8 data) { m_2008_spritehigh = data; logerror("%s: spritehigh_2008_w %02x\n", machine().describe_context(), data); }
- 
+
 protected:
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

@@ -97,7 +97,7 @@ namespace
 	{
 	protected:
 		// construction/destruction
-		dragon_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+		dragon_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 		// device-level overrides
 		virtual u8 cts_read(offs_t offset) override;
@@ -119,7 +119,7 @@ namespace
 	{
 	protected:
 		// construction/destruction
-		premier_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+		premier_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 		// device-level overrides
 		virtual u8 cts_read(offs_t offset) override;
@@ -179,7 +179,7 @@ void premier_fdc_device_base::device_add_mconfig(machine_config &config)
 //-------------------------------------------------
 //  dragon_fdc_device_base - constructor
 //-------------------------------------------------
-dragon_fdc_device_base::dragon_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+dragon_fdc_device_base::dragon_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: coco_family_fdc_device_base(mconfig, type, tag, owner, clock)
 	, m_wd2797(*this, "wd2797")
 	, m_floppies(*this, "wd2797:%u", 0)
@@ -187,7 +187,7 @@ dragon_fdc_device_base::dragon_fdc_device_base(const machine_config &mconfig, de
 }
 
 
-premier_fdc_device_base::premier_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+premier_fdc_device_base::premier_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: coco_family_fdc_device_base(mconfig, type, tag, owner, clock)
 	, m_wd2791(*this, "wd2791")
 	, m_floppies(*this, "wd2791:%u", 0)
@@ -390,7 +390,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		dragon_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		dragon_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: dragon_fdc_device_base(mconfig, DRAGON_FDC, tag, owner, clock)
 		{
 		}
@@ -422,7 +422,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		premier_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		premier_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: premier_fdc_device_base(mconfig, PREMIER_FDC, tag, owner, clock)
 		{
 		}
@@ -454,7 +454,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		sdtandy_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		sdtandy_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: dragon_fdc_device_base(mconfig, SDTANDY_FDC, tag, owner, clock)
 		{
 		}

@@ -111,14 +111,14 @@ protected:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock,
+			const XTAL &clock,
 			device_type const type,
 			configuration_params const &params);
 	m6805_base_device(
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock,
+			const XTAL &clock,
 			device_type const type,
 			configuration_params const &params,
 			address_map_constructor internal_map);
@@ -312,7 +312,7 @@ class m68hc05eg_device : public m6805_base_device
 {
 public:
 	// construction/destruction
-	m68hc05eg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m68hc05eg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

@@ -9,7 +9,7 @@
 class namco_62xx_device : public device_t
 {
 public:
-	namco_62xx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namco_62xx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <unsigned N> auto input_callback() { return m_in[N].bind(); }
 	template <unsigned N> auto output_callback() { return m_out[N].bind(); }

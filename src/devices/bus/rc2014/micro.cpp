@@ -29,7 +29,7 @@ class rc2014_micro : public device_t, public device_rc2014_card_interface
 {
 public:
 	// construction/destruction
-	rc2014_micro(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	rc2014_micro(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	// device_t implementation
@@ -60,7 +60,7 @@ private:
 	static constexpr XTAL MAIN_CLOCK = XTAL(7'372'800);
 };
 
-rc2014_micro::rc2014_micro(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+rc2014_micro::rc2014_micro(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, RC2014_MICRO, tag, owner, clock)
 	, device_rc2014_card_interface(mconfig, *this)
 	, m_maincpu(*this, "maincpu")
@@ -122,7 +122,7 @@ void rc2014_micro::device_add_mconfig(machine_config &config)
 	clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_txc));
 	clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set("rs232", FUNC(rs232_port_device::write_txd));
 	m_acia->txd_handler().append(FUNC(rc2014_micro::tx_w));
 	m_acia->rts_handler().set("rs232", FUNC(rs232_port_device::write_rts));
@@ -176,7 +176,7 @@ class rc2014_mini_cpm : public device_t, public device_rc2014_card_interface
 {
 public:
 	// construction/destruction
-	rc2014_mini_cpm(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	rc2014_mini_cpm(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -210,7 +210,7 @@ private:
 	memory_bank_creator m_rambank;
 };
 
-rc2014_mini_cpm::rc2014_mini_cpm(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+rc2014_mini_cpm::rc2014_mini_cpm(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, RC2014_MINI_CPM, tag, owner, clock)
 	, device_rc2014_card_interface(mconfig, *this)
 	, m_ata(*this, "ata")

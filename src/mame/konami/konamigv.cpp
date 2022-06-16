@@ -573,7 +573,7 @@ void konamigv_state::konamigv(machine_config &config)
 	m_maincpu->subdevice<psxdma_device>("dma")->install_write_handler(5, psxdma_device::write_delegate(&konamigv_state::scsi_dma_write, this));
 	m_maincpu->subdevice<ram_device>("ram")->set_default_size("2M");
 
-	MB89371(config, "mb89371", 0);
+	MB89371(config, "mb89371");
 	EEPROM_93C46_16BIT(config, "eeprom");
 
 	NSCSI_BUS(config, "scsi");

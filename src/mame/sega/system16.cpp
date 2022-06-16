@@ -2073,14 +2073,14 @@ GFXDECODE_END
 
 void segas1x_bootleg_state::z80_ym2151(machine_config &config)
 {
-	Z80(config, m_soundcpu, 4000000);
+	Z80(config, m_soundcpu, XTAL::u(4000000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::sound_map);
 	m_soundcpu->set_addrmap(AS_IO, &segas1x_bootleg_state::sound_io_map);
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", 4000000).add_route(0, "speaker", 0.32, 0).add_route(1, "speaker", 0.32, 1);
+	YM2151(config, "ymsnd", XTAL::u(4000000)).add_route(0, "speaker", 0.32, 0).add_route(1, "speaker", 0.32, 1);
 }
 
 void segas1x_bootleg_state::sound_cause_nmi(int state)
@@ -2091,14 +2091,14 @@ void segas1x_bootleg_state::sound_cause_nmi(int state)
 
 void segas1x_bootleg_state::z80_ym2151_upd7759(machine_config &config)
 {
-	Z80(config, m_soundcpu, 4000000);
+	Z80(config, m_soundcpu, XTAL::u(4000000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::sound_7759_map);
 	m_soundcpu->set_addrmap(AS_IO, &segas1x_bootleg_state::sound_7759_io_map);
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", 4000000).add_route(0, "speaker", 0.32, 0).add_route(1, "speaker", 0.32, 1);
+	YM2151(config, "ymsnd", XTAL::u(4000000)).add_route(0, "speaker", 0.32, 0).add_route(1, "speaker", 0.32, 1);
 
 	UPD7759(config, m_upd7759);
 	m_upd7759->drq().set(FUNC(segas1x_bootleg_state::sound_cause_nmi));
@@ -2113,15 +2113,15 @@ void segas1x_bootleg_state::datsu_ym2151_msm5205(machine_config &config)
 	- speaker is likely to be mono for the bootlegs, not stereo.
 	- check msm5205 frequency.
 	*/
-	Z80(config, m_soundcpu, 4000000);
+	Z80(config, m_soundcpu, XTAL::u(4000000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::tturfbl_sound_map);
 	m_soundcpu->set_addrmap(AS_IO, &segas1x_bootleg_state::tturfbl_sound_io_map);
 
 	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", 4000000).add_route(0, "speaker", 0.32, 0).add_route(1, "speaker", 0.32, 1);
+	YM2151(config, "ymsnd", XTAL::u(4000000)).add_route(0, "speaker", 0.32, 0).add_route(1, "speaker", 0.32, 1);
 
-	MSM5205(config, m_msm, 220000);
+	MSM5205(config, m_msm, XTAL::u(220000));
 	m_msm->vck_legacy_callback().set(FUNC(segas1x_bootleg_state::tturfbl_msm5205_callback));
 	m_msm->set_prescaler_selector(msm5205_device::S48_4B);
 	m_msm->add_route(ALL_OUTPUTS, "speaker", 0.80, 0);
@@ -2130,29 +2130,29 @@ void segas1x_bootleg_state::datsu_ym2151_msm5205(machine_config &config)
 
 void segas1x_bootleg_state::datsu_2x_ym2203_msm5205(machine_config &config)
 {
-	Z80(config, m_soundcpu, 4000000);
+	Z80(config, m_soundcpu, XTAL::u(4000000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::shinobi_datsu_sound_map);
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
 	// 2x YM2203C, one at U57, one at U56
-	ym2203_device &ym1(YM2203(config, "ym1", 4000000));
+	ym2203_device &ym1(YM2203(config, "ym1", XTAL::u(4000000)));
 	ym1.add_route(0, "mono", 0.50);
 	ym1.add_route(1, "mono", 0.50);
 	ym1.add_route(2, "mono", 0.50);
 	ym1.add_route(3, "mono", 0.80);
 
-	ym2203_device &ym2(YM2203(config, "ym2", 4000000));
+	ym2203_device &ym2(YM2203(config, "ym2", XTAL::u(4000000)));
 	ym2.add_route(0, "mono", 0.50);
 	ym2.add_route(1, "mono", 0.50);
 	ym2.add_route(2, "mono", 0.50);
 	ym2.add_route(3, "mono", 0.80);
 
-	LS157(config, m_adpcm_select, 0);
+	LS157(config, m_adpcm_select);
 	m_adpcm_select->out_callback().set("5205", FUNC(msm5205_device::data_w));
 
-	MSM5205(config, m_msm, 384000);
+	MSM5205(config, m_msm, XTAL::u(384000));
 	m_msm->vck_legacy_callback().set(FUNC(segas1x_bootleg_state::datsu_msm5205_callback));
 	m_msm->set_prescaler_selector(msm5205_device::S48_4B);
 	m_msm->add_route(ALL_OUTPUTS, "mono", 0.80);
@@ -2169,7 +2169,7 @@ void segas1x_bootleg_state::datsu_2x_ym2203_msm5205(machine_config &config)
 void segas1x_bootleg_state::system16_base(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 10000000);
+	M68000(config, m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_vblank_int("screen", FUNC(segas1x_bootleg_state::irq4_line_hold));
 
 	/* video hardware */
@@ -2266,7 +2266,7 @@ void segas1x_bootleg_state::wb3bble(machine_config &config)
 void segas1x_bootleg_state::goldnaxeb_base(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 10000000);
+	M68000(config, m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::goldnaxeb1_map);
 	m_maincpu->set_addrmap(AS_OPCODES, &segas1x_bootleg_state::decrypted_opcodes_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas1x_bootleg_state::irq4_line_hold));
@@ -2283,7 +2283,7 @@ void segas1x_bootleg_state::goldnaxeb_base(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_sys16);
 	PALETTE(config, m_palette, palette_device::BLACK, 2048*SHADOW_COLORS_MULTIPLIER);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-121);
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state,system16)
@@ -2344,7 +2344,7 @@ void segas1x_bootleg_state::tturfbl(machine_config &config)
 
 	datsu_ym2151_msm5205(config);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-107);
 }
 
@@ -2355,7 +2355,7 @@ void segas1x_bootleg_state::dduxbl(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::dduxbl_map);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-112);
 
 	z80_ym2151(config);
@@ -2368,7 +2368,7 @@ void segas1x_bootleg_state::eswatbl(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::eswatbl_map);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-124);
 
 	z80_ym2151_upd7759(config);
@@ -2381,7 +2381,7 @@ void segas1x_bootleg_state::eswatbl2(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::eswatbl2_map);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-121);
 
 	datsu_2x_ym2203_msm5205(config);
@@ -2394,7 +2394,7 @@ void segas1x_bootleg_state::tetrisbl(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::tetrisbl_map);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-112);
 
 	z80_ym2151(config);
@@ -2407,7 +2407,7 @@ void segas1x_bootleg_state::altbeastbl(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::tetrisbl_map);
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-112);
 
 	datsu_2x_ym2203_msm5205(config);
@@ -2430,10 +2430,10 @@ void segas1x_bootleg_state::beautyb(machine_config &config)
 void segas1x_bootleg_state::system18(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 10000000);
+	M68000(config, m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_vblank_int("screen", FUNC(segas1x_bootleg_state::irq4_line_hold));
 
-	Z80(config, m_soundcpu, 8000000);
+	Z80(config, m_soundcpu, XTAL::u(8000000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::sound_18_map);
 	m_soundcpu->set_addrmap(AS_IO, &segas1x_bootleg_state::sound_18_io_map);
 
@@ -2451,7 +2451,7 @@ void segas1x_bootleg_state::system18(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state,system18old)
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(64);
 
 	/* sound hardware */
@@ -2459,15 +2459,15 @@ void segas1x_bootleg_state::system18(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	ym3438_device &ym3438_0(YM3438(config, "3438.0", 8000000));
+	ym3438_device &ym3438_0(YM3438(config, "3438.0", XTAL::u(8000000)));
 	ym3438_0.add_route(0, "speaker", 0.40, 0);
 	ym3438_0.add_route(1, "speaker", 0.40, 1);
 
-	ym3438_device &ym3438_1(YM3438(config, "3438.1", 8000000));
+	ym3438_device &ym3438_1(YM3438(config, "3438.1", XTAL::u(8000000)));
 	ym3438_1.add_route(0, "speaker", 0.40, 0);
 	ym3438_1.add_route(1, "speaker", 0.40, 1);
 
-	rf5c68_device &rf5c68(RF5C68(config, "5c68", 8000000));
+	rf5c68_device &rf5c68(RF5C68(config, "5c68", XTAL::u(8000000)));
 	rf5c68.add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	rf5c68.add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 	rf5c68.set_addrmap(0, &segas1x_bootleg_state::pcm_map);
@@ -2497,7 +2497,7 @@ void segas1x_bootleg_state::mwalkbl(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state,system18old)
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(64);
 
 	GENERIC_LATCH_8(config, m_soundlatch);
@@ -2523,7 +2523,7 @@ void segas1x_bootleg_state::shdancbl(machine_config &config)
 
 	config.device_remove("5c68");
 
-	MSM5205(config, m_msm, 200000);
+	MSM5205(config, m_msm, XTAL::u(200000));
 	m_msm->vck_legacy_callback().set(FUNC(segas1x_bootleg_state::shdancbl_msm5205_callback));
 	m_msm->set_prescaler_selector(msm5205_device::S48_4B);
 	m_msm->add_route(ALL_OUTPUTS, "speaker", 0.80, 0);
@@ -2542,7 +2542,7 @@ void segas1x_bootleg_state::shdancbla(machine_config &config)
 
 	config.device_remove("5c68");
 
-	MSM5205(config, m_msm, 200000);
+	MSM5205(config, m_msm, XTAL::u(200000));
 	m_msm->vck_legacy_callback().set(FUNC(segas1x_bootleg_state::shdancbl_msm5205_callback));
 	m_msm->set_prescaler_selector(msm5205_device::S48_4B);
 	m_msm->add_route(ALL_OUTPUTS, "speaker", 0.80, 0);
@@ -2565,7 +2565,7 @@ MACHINE_RESET_MEMBER(segas1x_bootleg_state,ddcrewbl)
 void segas1x_bootleg_state::ddcrewbl(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 10000000);
+	M68000(config, m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::ddcrewbl_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas1x_bootleg_state::irq4_line_hold));
 
@@ -2583,7 +2583,7 @@ void segas1x_bootleg_state::ddcrewbl(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state,system18old)
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(189-124);
 
 	MCFG_MACHINE_RESET_OVERRIDE(segas1x_bootleg_state,ddcrewbl)

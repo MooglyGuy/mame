@@ -29,7 +29,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *parent,
-			u32 clock) :
+			const XTAL &clock) :
 		n8080_sound_device_base(mconfig, type, tag, parent, clock),
 		m_dac(*this, "dac"),
 		m_sn(*this, "snsnd")
@@ -158,7 +158,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *parent,
-			u32 clock) :
+			const XTAL &clock) :
 		n8080_csg_sound_device_base<3>(mconfig, SPACEFEV_SOUND, tag, parent, clock)
 	{
 	}
@@ -246,7 +246,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *parent,
-			u32 clock) :
+			const XTAL &clock) :
 		n8080_csg_sound_device_base<2>(mconfig, SHERIFF_SOUND, tag, parent, clock)
 	{
 	}
@@ -304,7 +304,7 @@ public:
 	helifire_sound_device(machine_config const &mconfig,
 			char const *tag,
 			device_t *parent,
-			u32 clock) :
+			const XTAL &clock) :
 		n8080_sound_device_base(mconfig, HELIFIRE_SOUND, tag, parent, clock),
 		m_dac(*this, "dac"),
 		m_dac_volume(1.0),
@@ -481,7 +481,7 @@ n8080_sound_device_base::n8080_sound_device_base(
 		device_type type,
 		char const *tag,
 		device_t *parent,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, parent, clock),
 	m_cpu(*this, "cpu"),
 	m_curr_pins(0)
@@ -517,3 +517,4 @@ template class device_finder<n8080_sound_device_base, true>;
 DEFINE_DEVICE_TYPE_PRIVATE(SPACEFEV_SOUND, n8080_sound_device_base, spacefev_sound_device, "spacefev_sound", "Nintendo Space Fever Sound Board")
 DEFINE_DEVICE_TYPE_PRIVATE(SHERIFF_SOUND,  n8080_sound_device_base, sheriff_sound_device,  "sheriff_sound",  "Nintendo Sheriff Sound Board")
 DEFINE_DEVICE_TYPE_PRIVATE(HELIFIRE_SOUND, n8080_sound_device_base, helifire_sound_device, "helifire_sound", "Nintendo HeliFire Sound Board")
+

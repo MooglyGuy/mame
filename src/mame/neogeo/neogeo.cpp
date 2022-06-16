@@ -1949,7 +1949,7 @@ void neogeo_base_state::neogeo_base(machine_config &config)
 	/* 4096 colors * two banks * normal and shadow */
 	PALETTE(config, m_palette, palette_device::BLACK, 4096*2*2);
 
-	NEOGEO_SPRITE_OPTIMZIED(config, m_sprgen, 0).set_screen(m_screen);
+	NEOGEO_SPRITE_OPTIMZIED(config, m_sprgen).set_screen(m_screen);
 
 	/* audio hardware */
 	INPUT_MERGER_ALL_HIGH(config, m_audionmi);

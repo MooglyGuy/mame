@@ -53,7 +53,7 @@ class nes_datach_slot_device : public device_t,
 public:
 	// construction/destruction
 	template <typename T>
-	nes_datach_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock, T &&opts)
+	nes_datach_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, T &&opts)
 		: nes_datach_slot_device(mconfig, tag, owner, clock)
 	{
 		option_reset();
@@ -61,7 +61,7 @@ public:
 		set_default_option(nullptr);
 		set_fixed(false);
 	}
-	nes_datach_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nes_datach_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~nes_datach_slot_device();
 
 	// device_image_interface implementation
@@ -100,12 +100,12 @@ class nes_datach_rom_device : public device_t, public datach_cart_interface
 {
 public:
 	// construction/destruction
-	nes_datach_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nes_datach_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual uint8_t *get_cart_base();
 
 protected:
-	nes_datach_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	nes_datach_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -119,7 +119,7 @@ class nes_datach_24c01_device : public nes_datach_rom_device
 {
 public:
 	// construction/destruction
-	nes_datach_24c01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nes_datach_24c01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -143,7 +143,7 @@ class nes_datach_device : public nes_lz93d50_device
 {
 public:
 	// construction/destruction
-	nes_datach_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nes_datach_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual uint8_t read_m(offs_t offset) override;
 	virtual uint8_t read_h(offs_t offset) override;

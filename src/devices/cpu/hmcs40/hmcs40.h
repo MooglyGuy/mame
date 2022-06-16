@@ -103,7 +103,7 @@ protected:
 	};
 
 	// construction
-	hmcs40_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int family, u16 polarity, int stack_levels, int pcwidth, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
+	hmcs40_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int family, u16 polarity, int stack_levels, int pcwidth, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -308,7 +308,7 @@ protected:
 class hmcs43_cpu_device : public hmcs40_cpu_device
 {
 protected:
-	hmcs43_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity);
+	hmcs43_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity);
 
 	// overrides
 	virtual u8 read_r(u8 index) override;
@@ -319,32 +319,32 @@ protected:
 class hd38750_device : public hmcs43_cpu_device
 {
 public:
-	hd38750_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38750_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd38755_device : public hmcs43_cpu_device
 {
 public:
-	hd38755_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38755_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44750_device : public hmcs43_cpu_device
 {
 public:
-	hd44750_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44750_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44758_device : public hmcs43_cpu_device
 {
 public:
-	hd44758_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44758_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs44_cpu_device : public hmcs40_cpu_device
 {
 protected:
-	hmcs44_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity);
+	hmcs44_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity);
 
 	// overrides
 	virtual u8 read_r(u8 index) override;
@@ -354,32 +354,32 @@ protected:
 class hd38800_device : public hmcs44_cpu_device
 {
 public:
-	hd38800_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38800_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd38805_device : public hmcs44_cpu_device
 {
 public:
-	hd38805_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38805_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44801_device : public hmcs44_cpu_device
 {
 public:
-	hd44801_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44801_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44808_device : public hmcs44_cpu_device
 {
 public:
-	hd44808_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44808_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs45_cpu_device : public hmcs40_cpu_device
 {
 protected:
-	hmcs45_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity);
+	hmcs45_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity);
 
 	// overrides
 	virtual u8 read_r(u8 index) override;
@@ -389,25 +389,25 @@ protected:
 class hd38820_device : public hmcs45_cpu_device
 {
 public:
-	hd38820_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38820_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd38825_device : public hmcs45_cpu_device
 {
 public:
-	hd38825_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38825_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44820_device : public hmcs45_cpu_device
 {
 public:
-	hd44820_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44820_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44828_device : public hmcs45_cpu_device
 {
 public:
-	hd44828_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44828_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

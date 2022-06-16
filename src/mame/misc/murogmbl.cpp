@@ -352,7 +352,7 @@ GFXDECODE_END
 void murogmbl_state::murogmbl(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 1000000); /* Z80? */
+	Z80(config, m_maincpu, XTAL::u(1000000)); /* Z80? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &murogmbl_state::murogmbl_map);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_murogmbl);
@@ -369,13 +369,13 @@ void murogmbl_state::murogmbl(machine_config &config)
 	PALETTE(config, m_palette, FUNC(murogmbl_state::murogmbl_palette), 0x100);
 
 	SPEAKER(config, "speaker").front_center();
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
 }
 
 void slotunbl_state::slotunbl(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 1000000); /* Z80? */
+	Z80(config, m_maincpu, XTAL::u(1000000)); /* Z80? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &slotunbl_state::slotunbl_map);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_slotunbl);
@@ -392,7 +392,7 @@ void slotunbl_state::slotunbl(machine_config &config)
 	PALETTE(config, m_palette, FUNC(slotunbl_state::slotunbl_palette), 0x100);
 
 	SPEAKER(config, "speaker").front_center();
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
 }
 
 ROM_START(murogmbl)

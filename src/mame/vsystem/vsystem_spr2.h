@@ -10,9 +10,9 @@ typedef device_delegate<uint32_t (uint32_t)> vsystem_tile2_indirection_delegate;
 class vsystem_spr2_device : public device_t, public device_gfx_interface
 {
 public:
-	vsystem_spr2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-	template <typename T> vsystem_spr2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: vsystem_spr2_device(mconfig, tag, owner, clock)
+	vsystem_spr2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> vsystem_spr2_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: vsystem_spr2_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

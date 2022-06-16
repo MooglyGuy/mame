@@ -67,7 +67,7 @@ GFXDECODE_END
 
 DEFINE_DEVICE_TYPE(NAMCO_C355SPR, namco_c355spr_device, "namco_c355spr", "Namco 186/187 or C355/187 (sprites)")
 
-namco_c355spr_device::namco_c355spr_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+namco_c355spr_device::namco_c355spr_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_gfx_interface(mconfig, *this),
 	device_video_interface(mconfig, *this),
@@ -92,7 +92,7 @@ namco_c355spr_device::namco_c355spr_device(const machine_config &mconfig, device
 		m_spriteram[i] = nullptr;
 }
 
-namco_c355spr_device::namco_c355spr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+namco_c355spr_device::namco_c355spr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	namco_c355spr_device(mconfig, NAMCO_C355SPR, tag, owner, clock)
 {
 }

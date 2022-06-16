@@ -210,7 +210,7 @@ protected:
 	};
 
 	// construction/destruction
-	adsp21xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint32_t chiptype);
+	adsp21xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint32_t chiptype);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -473,7 +473,7 @@ class adsp2100_device : public adsp21xx_device
 {
 public:
 	// construction/destruction
-	adsp2100_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	adsp2100_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_memory_interface overrides
@@ -491,10 +491,10 @@ class adsp2101_device : public adsp21xx_device
 {
 public:
 	// construction/destruction
-	adsp2101_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	adsp2101_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	adsp2101_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint32_t chiptype);
+	adsp2101_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint32_t chiptype);
 
 	// device_memory_interface overrides
 	virtual space_config_vector memory_space_config() const override;
@@ -511,7 +511,7 @@ class adsp2181_device : public adsp21xx_device
 {
 public:
 	// construction/destruction
-	adsp2181_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	adsp2181_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_memory_interface overrides
@@ -538,19 +538,19 @@ public:
 class adsp2104_device : public adsp2101_device
 {
 public:
-	adsp2104_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	adsp2104_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class adsp2105_device : public adsp2101_device
 {
 public:
-	adsp2105_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	adsp2105_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class adsp2115_device : public adsp2101_device
 {
 public:
-	adsp2115_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	adsp2115_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

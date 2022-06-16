@@ -68,7 +68,7 @@ class mc10_pak_mcx128_device :
 {
 public:
 	// construction/destruction
-	mc10_pak_mcx128_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mc10_pak_mcx128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -107,7 +107,7 @@ private:
 //  mc10_pak_device - constructor
 //-------------------------------------------------
 
-mc10_pak_mcx128_device::mc10_pak_mcx128_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc10_pak_mcx128_device::mc10_pak_mcx128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MC10_PAK_MCX128, tag, owner, clock)
 	, device_mc10cart_interface(mconfig, *this)
 	, m_share(*this, "ext_ram", 1024*128, ENDIANNESS_BIG)

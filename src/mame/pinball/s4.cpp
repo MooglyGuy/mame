@@ -428,7 +428,7 @@ void s4_state::irq_w(int state)
 void s4_state::s4(machine_config &config)
 {
 	// basic machine hardware
-	M6802(config, m_maincpu, 3580000); // Divided by 4 internally
+	M6802(config, m_maincpu, XTAL::u(3580000)); // Divided by 4 internally
 	m_maincpu->set_addrmap(AS_PROGRAM, &s4_state::main_map);
 
 	// Video
@@ -483,11 +483,11 @@ void s4_state::s4(machine_config &config)
 	m_4020->set_stages(14); // Using Q5,Q8,Q9
 	m_4020->count_out_cb().set(FUNC(s4_state::clockcnt_w));
 
-	CLOCK(config, "rclock", 3580000/4).signal_handler().set(m_4020, FUNC(ripple_counter_device::clock_w));
+	CLOCK(config, "rclock", XTAL::u(3580000)/4).signal_handler().set(m_4020, FUNC(ripple_counter_device::clock_w));
 
 	// Add the soundcard
 	SPEAKER(config, "mono").front_center();
-	WILLIAMS_S4_SOUND(config, m_s4sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S4_SOUND(config, m_s4sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 

@@ -125,7 +125,7 @@ control registers
 
 DEFINE_DEVICE_TYPE(K007121, k007121_device, "k007121", "K007121 Sprite/Tilemap Controller")
 
-k007121_device::k007121_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+k007121_device::k007121_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, K007121, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 	, m_flipscreen(false)

@@ -60,7 +60,7 @@ public:
 	typedef device_delegate<void (int address, int strobe)> on_update_addr_changed_delegate;
 
 	// construction/destruction
-	mc6845_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6845_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// HACK: show the full screen_device htotal/vtotal if true (regulate with UI slider controls)
 	void set_show_border_area(bool show) { m_show_border_area = show; }
@@ -128,7 +128,7 @@ public:
 	uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 
 protected:
-	mc6845_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	mc6845_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -297,7 +297,7 @@ protected:
 class mc6845_1_device : public mc6845_device
 {
 public:
-	mc6845_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mc6845_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -307,7 +307,7 @@ protected:
 class r6545_1_device : public mc6845_device
 {
 public:
-	r6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	r6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -317,7 +317,7 @@ protected:
 class c6545_1_device : public mc6845_device
 {
 public:
-	c6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	c6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -327,10 +327,10 @@ protected:
 class hd6845s_device : public mc6845_device
 {
 public:
-	hd6845s_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd6845s_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	hd6845s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	hd6845s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -340,7 +340,7 @@ protected:
 class sy6545_1_device : public mc6845_device
 {
 public:
-	sy6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sy6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -350,7 +350,7 @@ protected:
 class sy6845e_device : public mc6845_device
 {
 public:
-	sy6845e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sy6845e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -360,7 +360,7 @@ protected:
 class hd6345_device : public hd6845s_device
 {
 public:
-	hd6345_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd6345_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void address_w(uint8_t data);
 	uint8_t register_r();
@@ -395,7 +395,7 @@ protected:
 class ams40489_device : public mc6845_device
 {
 public:
-	ams40489_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ams40489_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

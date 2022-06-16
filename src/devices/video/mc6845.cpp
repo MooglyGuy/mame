@@ -79,7 +79,7 @@ DEFINE_DEVICE_TYPE(AMS40489, ams40489_device, "ams40489", "AMS40489 ASIC (CRTC)"
 #define MODE_INTERLACE_AND_VIDEO    ((m_mode_control & 0x03) == 3)
 
 
-mc6845_device::mc6845_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+mc6845_device::mc6845_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this, false)
 	, m_line_timer(nullptr)
@@ -104,7 +104,7 @@ mc6845_device::mc6845_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-mc6845_device::mc6845_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mc6845_device::mc6845_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, MC6845, tag, owner, clock)
 {
 }
@@ -1312,55 +1312,55 @@ void hd6345_device::device_reset()
 void ams40489_device::device_reset() { mc6845_device::device_reset(); }
 
 
-r6545_1_device::r6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+r6545_1_device::r6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, R6545_1, tag, owner, clock)
 {
 }
 
 
-mc6845_1_device::mc6845_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mc6845_1_device::mc6845_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, MC6845_1, tag, owner, clock)
 {
 }
 
 
-hd6845s_device::hd6845s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+hd6845s_device::hd6845s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, type, tag, owner, clock)
 {
 }
 
 
-hd6845s_device::hd6845s_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hd6845s_device::hd6845s_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, HD6845S, tag, owner, clock)
 {
 }
 
 
-c6545_1_device::c6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+c6545_1_device::c6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, C6545_1, tag, owner, clock)
 {
 }
 
 
-sy6545_1_device::sy6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sy6545_1_device::sy6545_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, SY6545_1, tag, owner, clock)
 {
 }
 
 
-sy6845e_device::sy6845e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sy6845e_device::sy6845e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, SY6845E, tag, owner, clock)
 {
 }
 
 
-hd6345_device::hd6345_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hd6345_device::hd6345_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd6845s_device(mconfig, HD6345, tag, owner, clock)
 {
 }
 
 
-ams40489_device::ams40489_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ams40489_device::ams40489_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, AMS40489, tag, owner, clock)
 {
 }

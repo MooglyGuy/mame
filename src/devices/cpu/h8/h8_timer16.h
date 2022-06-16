@@ -55,9 +55,9 @@ public:
 	};
 
 
-	h8_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int tgr_count, int tbr_count, U &&intc, int irq_base)
-		: h8_timer16_channel_device(mconfig, tag, owner, 0)
+		: h8_timer16_channel_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));
@@ -114,7 +114,7 @@ protected:
 	bool m_counter_incrementing;
 	bool m_channel_active;
 
-	h8_timer16_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h8_timer16_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -167,9 +167,9 @@ private:
 
 class h8h_timer16_channel_device : public h8_timer16_channel_device {
 public:
-	h8h_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8h_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8h_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int tgr_count, int tbr_count, U &&intc, int irq_base)
-		: h8h_timer16_channel_device(mconfig, tag, owner, 0)
+		: h8h_timer16_channel_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));
@@ -195,10 +195,10 @@ protected:
 
 class h8s_timer16_channel_device : public h8_timer16_channel_device {
 public:
-	h8s_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8s_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int tgr_count, int tier_mask, U &&intc, int irq_base,
 					int t0, int t1, int t2, int t3, int t4, int t5, int t6, int t7)
-		: h8s_timer16_channel_device(mconfig, tag, owner, 0)
+		: h8s_timer16_channel_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));
@@ -237,9 +237,9 @@ protected:
 
 class h8_timer16_device : public device_t {
 public:
-	h8_timer16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_timer16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> h8_timer16_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int timer_count, u8 default_tstr)
-		: h8_timer16_device(mconfig, tag, owner, 0)
+		: h8_timer16_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_timer_count = timer_count;

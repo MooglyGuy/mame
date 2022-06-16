@@ -49,7 +49,7 @@ DEFINE_DEVICE_TYPE(GOTTLIEB_SOUND_REV2,         gottlieb_sound_r2_device,       
 //  gottlieb_sound_p2_device - constructors
 //-------------------------------------------------
 
-gottlieb_sound_p2_device::gottlieb_sound_p2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p2_device::gottlieb_sound_p2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p2_device(mconfig, GOTTLIEB_SOUND_PIN2, tag, owner, clock)
 {
 }
@@ -132,15 +132,15 @@ INPUT_CHANGED_MEMBER(gottlieb_sound_p2_device::audio_nmi)
 void gottlieb_sound_p2_device::device_add_mconfig(machine_config &config)
 {
 	// audio CPU
-	M6503(config, m_cpu, 800'000); // clock is a gate, a resistor and a capacitor. Freq 675-1000kHz.
+	M6503(config, m_cpu, XTAL::u(800'000)); // clock is a gate, a resistor and a capacitor. Freq 675-1000kHz.
 	m_cpu->set_addrmap(AS_PROGRAM, &gottlieb_sound_p2_device::p2_map);
 
 	// I/O configuration
-	MOS6530(config, m_r6530, 800'000); // same as cpu
+	MOS6530(config, m_r6530, XTAL::u(800'000)); // same as cpu
 	m_r6530->pa_wr_callback().set("dac", FUNC(dac_byte_interface::data_w));
 
 	// sound devices
-	MC1408(config, "dac", 0).add_route(ALL_OUTPUTS, *this, 0.50); // SSS1408-6P
+	MC1408(config, "dac").add_route(ALL_OUTPUTS, *this, 0.50); // SSS1408-6P
 }
 
 
@@ -162,7 +162,7 @@ void gottlieb_sound_p2_device::device_start()
 //  gottlieb_sound_p3_device - constructors
 //-------------------------------------------------
 
-gottlieb_sound_p3_device::gottlieb_sound_p3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p3_device::gottlieb_sound_p3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p2_device(mconfig, GOTTLIEB_SOUND_PIN3, tag, owner, clock)
 	, m_irqclock(false)
 	, m_irqenable(false)
@@ -266,12 +266,12 @@ void gottlieb_sound_p3_device::device_start()
 //  gottlieb_sound_r1_device - constructors
 //-------------------------------------------------
 
-gottlieb_sound_r1_device::gottlieb_sound_r1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_r1_device::gottlieb_sound_r1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_r1_device(mconfig, GOTTLIEB_SOUND_REV1, tag, owner, clock)
 {
 }
 
-gottlieb_sound_r1_device::gottlieb_sound_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_r1_device::gottlieb_sound_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_dac(*this, "dac")
@@ -357,7 +357,7 @@ void gottlieb_sound_r1_device::device_add_mconfig(machine_config &config)
 	m_riot->irq_wr_callback().set_inputline("audiocpu", M6502_IRQ_LINE);
 
 	// sound devices
-	MC1408(config, m_dac, 0).add_route(ALL_OUTPUTS, *this, 0.25);
+	MC1408(config, m_dac).add_route(ALL_OUTPUTS, *this, 0.25);
 }
 
 
@@ -380,12 +380,12 @@ void gottlieb_sound_r1_device::device_start()
 //  constructors
 //-------------------------------------------------
 
-gottlieb_sound_speech_r1_device::gottlieb_sound_speech_r1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_speech_r1_device::gottlieb_sound_speech_r1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_speech_r1_device(mconfig, GOTTLIEB_SOUND_SPEECH_REV1, tag, owner, clock)
 {
 }
 
-gottlieb_sound_speech_r1_device::gottlieb_sound_speech_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_speech_r1_device::gottlieb_sound_speech_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_r1_device(mconfig, type, tag, owner, clock)
 	, m_votrax(*this, "votrax")
 	, m_speech_clock(0)
@@ -527,7 +527,7 @@ void gottlieb_sound_speech_r1a_device::device_add_mconfig(machine_config &config
 //  gottlieb_sound_r2_device - constructor
 //-------------------------------------------------
 
-gottlieb_sound_r2_device::gottlieb_sound_r2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_r2_device::gottlieb_sound_r2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p4_device(mconfig, GOTTLIEB_SOUND_REV2, tag, owner, clock)
 	, m_sp0250(*this, "spsnd")
 	, m_cobram3_mod(false)
@@ -667,8 +667,8 @@ void gottlieb_sound_r2_device::device_add_mconfig(machine_config &config)
 	m_ycpu->set_addrmap(AS_PROGRAM, &gottlieb_sound_r2_device::r2_ymap);
 
 	// sound hardware
-	AD7528(config, "dac", 0).add_route(ALL_OUTPUTS, *this, 0.25); // Dac A adjusts the ref voltage of DAC B, which in turn makes the sound
-	AD7528(config, "dacvol", 0)
+	AD7528(config, "dac").add_route(ALL_OUTPUTS, *this, 0.25); // Dac A adjusts the ref voltage of DAC B, which in turn makes the sound
+	AD7528(config, "dacvol")
 		.set_output_range(0, 1)
 		.add_route(0, "dac", 1.0, DAC_INPUT_RANGE_HI)
 		.add_route(0, "dac", -1.0, DAC_INPUT_RANGE_LO);
@@ -706,12 +706,12 @@ void gottlieb_sound_r2_device::device_start()
 //  gottlieb_sound_p4_device - constructor
 //-------------------------------------------------
 
-gottlieb_sound_p4_device::gottlieb_sound_p4_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p4_device::gottlieb_sound_p4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p4_device(mconfig, GOTTLIEB_SOUND_PIN4, tag, owner, clock)
 {
 }
 
-gottlieb_sound_p4_device::gottlieb_sound_p4_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p4_device::gottlieb_sound_p4_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_dcpu(*this, "audiocpu")
@@ -938,8 +938,8 @@ void gottlieb_sound_p4_device::device_add_mconfig(machine_config &config)
 	m_ycpu->set_addrmap(AS_PROGRAM, &gottlieb_sound_p4_device::p4_ymap);
 
 	// sound hardware
-	AD7528(config, "dac", 0).add_route(ALL_OUTPUTS, *this, 0.5);
-	AD7528(config, "dacvol", 0)
+	AD7528(config, "dac").add_route(ALL_OUTPUTS, *this, 0.5);
+	AD7528(config, "dacvol")
 		.set_output_range(0, 1)
 		.add_route(0, "dac", 1.0, DAC_INPUT_RANGE_HI)
 		.add_route(0, "dac", -1.0, DAC_INPUT_RANGE_LO);
@@ -1006,7 +1006,7 @@ TIMER_CALLBACK_MEMBER(gottlieb_sound_p4_device::clear_nmi)
 //  gottlieb_sound_p5_device - constructor
 //-------------------------------------------------
 
-gottlieb_sound_p5_device::gottlieb_sound_p5_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p5_device::gottlieb_sound_p5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p5_device(mconfig, GOTTLIEB_SOUND_PIN5, tag, owner, clock)
 {
 }
@@ -1061,7 +1061,7 @@ void gottlieb_sound_p5_device::device_start()
 //  gottlieb_sound_p6_device - constructor
 //-------------------------------------------------
 
-gottlieb_sound_p6_device::gottlieb_sound_p6_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p6_device::gottlieb_sound_p6_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p5_device(mconfig, GOTTLIEB_SOUND_PIN6, tag, owner, clock)
 {
 }
@@ -1106,8 +1106,8 @@ void gottlieb_sound_p6_device::device_add_mconfig(machine_config &config)
 	M6502(config, m_dcpu2, SOUND2_CLOCK/2);
 	m_dcpu2->set_addrmap(AS_PROGRAM, &gottlieb_sound_p6_device::p6_dmap);
 
-	AD7528(config, "dac2", 0).add_route(ALL_OUTPUTS, *this, 0.5);
-	AD7528(config, "dacvol2", 0)
+	AD7528(config, "dac2").add_route(ALL_OUTPUTS, *this, 0.5);
+	AD7528(config, "dacvol2")
 		.set_output_range(0, 1)
 		.add_route(0, "dac2", 1.0, DAC_INPUT_RANGE_HI)
 		.add_route(0, "dac2", -1.0, DAC_INPUT_RANGE_LO);
@@ -1133,7 +1133,7 @@ void gottlieb_sound_p6_device::device_start()
 //  gottlieb_sound_p7_device - constructor
 //-------------------------------------------------
 
-gottlieb_sound_p7_device::gottlieb_sound_p7_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p7_device::gottlieb_sound_p7_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p5_device(mconfig, GOTTLIEB_SOUND_PIN7, tag, owner, clock)
 	, m_oki(*this, "oki")
 	, m_msm_latch1(0)

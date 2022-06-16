@@ -787,11 +787,11 @@ void psion_state::psion_base(machine_config &config)
 	PALETTE(config, "palette", FUNC(psion_state::psion_palette), 2);
 	GFXDECODE(config, "gfxdecode", "palette", gfx_psion);
 
-	HD44780(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+	HD44780(config, m_lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 3250).add_route(ALL_OUTPUTS, "mono", 1.00);
+	BEEP(config, m_beep, XTAL::u(3250)).add_route(ALL_OUTPUTS, "mono", 1.00);
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0); // RAM
 

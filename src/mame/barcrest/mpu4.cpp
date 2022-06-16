@@ -2257,7 +2257,7 @@ void mpu4_state::mpu4_common(machine_config &config)
 	MSC1937(config, m_vfd);
 	/* 6840 PTM */
 	PTM6840(config, m_6840ptm, MPU4_MASTER_CLOCK / 4);
-	m_6840ptm->set_external_clocks(0, 0, 0);
+	m_6840ptm->set_external_clocks(XTAL(), XTAL(), XTAL());
 	m_6840ptm->o1_callback().set(FUNC(mpu4_state::ic2_o1_callback));
 	m_6840ptm->o2_callback().set(FUNC(mpu4_state::ic2_o2_callback));
 	m_6840ptm->o3_callback().set(FUNC(mpu4_state::ic2_o3_callback));
@@ -2316,17 +2316,16 @@ void mpu4_state::mpu4_common(machine_config &config)
 	m_pia8->irqa_handler().set(FUNC(mpu4_state::cpu0_irq));
 	m_pia8->irqb_handler().set(FUNC(mpu4_state::cpu0_irq));
 
-	METERS(config, m_meters, 0).set_number(8);
+	METERS(config, m_meters).set_number(8);
 
-	BACTA_DATALOGGER(config, m_dataport, 0);
+	BACTA_DATALOGGER(config, m_dataport);
 	m_dataport->rxd_handler().set(FUNC(mpu4_state::dataport_rxd));
 
 	HOPPER(config, m_hopper1, attotime::from_msec(100));
 
-
 	SPEAKER(config, "mono").front_center();
 
-	DAC_1BIT(config, m_alarmdac, 0);
+	DAC_1BIT(config, m_alarmdac);
 	m_alarmdac->add_route(ALL_OUTPUTS, "mono", 0.50);
 }
 
@@ -2384,7 +2383,7 @@ void mpu4_state::mod2_cheatchr_f(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &mpu4_state::mpu4_memmap_characteriser);
 
-	MPU4_CHARACTERISER_PAL(config, m_characteriser, 0);
+	MPU4_CHARACTERISER_PAL(config, m_characteriser);
 	m_characteriser->set_cpu_tag("maincpu");
 	m_characteriser->set_allow_6809_cheat(true);
 	m_characteriser->set_lamp_table(nullptr);
@@ -2409,7 +2408,6 @@ void mpu4_state::mod4oki_f(machine_config &config)
 	m_okicard->add_route(ALL_OUTPUTS, "mono", 1.0);
 
 	m_okicard->cb2_handler().set(FUNC(mpu4_state::pia_gb_cb2_w));
-
 }
 
 void mpu4_state::mod4oki_no_bacta_f(machine_config &config)
@@ -2425,7 +2423,7 @@ void mpu4_state::mod4oki_cheatchr_f(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &mpu4_state::mpu4_memmap_characteriser);
 
-	MPU4_CHARACTERISER_PAL(config, m_characteriser, 0);
+	MPU4_CHARACTERISER_PAL(config, m_characteriser);
 	m_characteriser->set_cpu_tag("maincpu");
 	m_characteriser->set_allow_6809_cheat(true);
 	m_characteriser->set_lamp_table(nullptr);

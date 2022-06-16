@@ -370,9 +370,9 @@ void fastlane_state::fastlane(machine_config &config)
 
 	PALETTE(config, m_palette, FUNC(fastlane_state::palette)).set_format(palette_device::xBGR_555, 1024*16, 0x400);
 
-	K007121(config, m_k007121, 0, m_palette, gfx_fastlane);
+	K007121(config, m_k007121, m_palette, gfx_fastlane);
 
-	K051733(config, "k051733", 0);
+	K051733(config, "k051733");
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();

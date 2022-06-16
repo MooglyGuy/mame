@@ -334,7 +334,7 @@ void uapce_state::uapce(machine_config &config)
 	m_maincpu->add_route(0, "speaker", 0.5, 0);
 	m_maincpu->add_route(1, "speaker", 0.5, 1);
 
-	z80_device &sub(Z80(config, "sub", 1400000));
+	z80_device &sub(Z80(config, "sub", XTAL::u(1400000)));
 	sub.set_addrmap(AS_PROGRAM, &uapce_state::z80_map);
 
 	config.set_maximum_quantum(attotime::from_hz(60));
@@ -351,7 +351,7 @@ void uapce_state::uapce(machine_config &config)
 	m_huc6260->vsync_changed().set("huc6270", FUNC(huc6270_device::vsync_changed));
 	m_huc6260->hsync_changed().set("huc6270", FUNC(huc6270_device::hsync_changed));
 
-	huc6270_device &huc6270(HUC6270(config, "huc6270", 0));
+	huc6270_device &huc6270(HUC6270(config, "huc6270"));
 	huc6270.set_vram_size(0x10000);
 	huc6270.irq().set_inputline(m_maincpu, 0);
 

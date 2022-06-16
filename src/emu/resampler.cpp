@@ -149,10 +149,10 @@
 // Having the sum of coefficients being 1 ensures that.
 
 
-audio_resampler_hq::audio_resampler_hq(u32 fs, u32 ft, float latency, u32 max_order_per_lane, u32 max_lanes)
+audio_resampler_hq::audio_resampler_hq(const XTAL &fs, const XTAL &ft, float latency, u32 max_order_per_lane, u32 max_lanes)
 {
-	m_ft = ft;
-	m_fs = fs;
+	m_ft = ft.value();
+	m_fs = fs.value();
 
 	// Compute the multiplier for fs and ft to reach the common frequency
 	u32 gcd = compute_gcd(fs, ft);
@@ -401,10 +401,10 @@ const std::array<std::array<float, 0x1001>, 2> audio_resampler_lofi::interpolati
 	return result;
 }();
 
-audio_resampler_lofi::audio_resampler_lofi(u32 fs, u32 ft)
+audio_resampler_lofi::audio_resampler_lofi(const XTAL &fs, const XTAL &ft)
 {
-	m_fs = fs;
-	m_ft = ft;
+	m_fs = fs.value();
+	m_ft = ft.value();
 
 	m_source_divide = fs <= ft ? 1 : 1+fs/ft;
 	m_step = u64(fs) * 0x1000000 / ft / m_source_divide;

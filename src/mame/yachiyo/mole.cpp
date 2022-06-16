@@ -323,7 +323,7 @@ GFXDECODE_END
 void mole_state::mole(machine_config &config)
 {
 	/* basic machine hardware */
-	M6502(config, m_maincpu, 2'000'000); // ???
+	M6502(config, m_maincpu, XTAL::u(2'000'000)); // ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &mole_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(mole_state::irq0_line_assert));
 
@@ -342,7 +342,7 @@ void mole_state::mole(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	AY8910(config, "aysnd", 2000000).add_route(ALL_OUTPUTS, "mono", 1.0);
+	AY8910(config, "aysnd", XTAL::u(2000000)).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 

@@ -65,10 +65,10 @@ INPUT_PORTS_END
 
 void frenzyxprss_state::frenzyxprss(machine_config &config)
 {
-	PENTIUM3(config, m_maincpu, 100'000'000); // Intel Celeron SL5ZF 1GHz
+	PENTIUM3(config, m_maincpu, XTAL::u(100'000'000)); // Intel Celeron SL5ZF 1GHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &frenzyxprss_state::frenzyxprss_map);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

@@ -35,7 +35,7 @@ enum u7_mask : u8
 DEFINE_DEVICE_TYPE(LABTAM_8086CPU, labtam_8086cpu_device, "labtam_8086cpu", "Labtam 8086 CPU")
 DEFINE_DEVICE_TYPE(LABTAM_VDUCOM,  labtam_vducom_device,  "labtam_vducom",  "Labtam 8086 VDU COMM")
 
-labtam_vducom_device_base::labtam_vducom_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+labtam_vducom_device_base::labtam_vducom_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_multibus_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")

@@ -46,7 +46,7 @@ enum
 
 DEFINE_DEVICE_TYPE(SGI_LG1, sgi_lg1_device, "sgi_lg1", "SGI LG1")
 
-sgi_lg1_device::sgi_lg1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_lg1_device::sgi_lg1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_LG1, tag, owner, clock)
 	, m_vc1(*this, "vc1")
 	, m_lut1(*this, "lut1")

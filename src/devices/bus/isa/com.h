@@ -20,13 +20,13 @@ class isa8_com_device :
 {
 public:
 	// construction/destruction
-	isa8_com_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa8_com_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void pc_com_interrupt_1(int state) { m_isa->irq4_w(state); }
 	void pc_com_interrupt_2(int state) { m_isa->irq3_w(state); }
 
 protected:
-	isa8_com_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	isa8_com_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -47,7 +47,7 @@ class isa8_com_at_device :
 {
 public:
 	// construction/destruction
-	isa8_com_at_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa8_com_at_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

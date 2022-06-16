@@ -445,7 +445,7 @@ void triplhnt_state::palette(palette_device &palette) const
 void triplhnt_state::triplhnt(machine_config &config)
 {
 	// basic machine hardware
-	M6800(config, m_maincpu, 800'000);
+	M6800(config, m_maincpu, XTAL::u(800'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &triplhnt_state::program_map);
 	m_maincpu->set_vblank_int("screen", FUNC(triplhnt_state::irq0_line_hold));
 

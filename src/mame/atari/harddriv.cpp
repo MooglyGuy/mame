@@ -346,7 +346,7 @@ Notes:
  *
  *************************************/
 
-harddriv_state::harddriv_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+harddriv_state::harddriv_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_maincpu(*this, "maincpu"),
 	m_gsp(*this, "gsp"),
@@ -1464,13 +1464,13 @@ void harddriv_state::driver_nomsp(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &harddriv_state::driver_68k_map);
 	m_maincpu->set_periodic_int(FUNC(harddriv_state::hd68k_irq_gen), attotime::from_hz(HARDDRIV_MASTER_CLOCK/16/16/16/16/2));
 
-	SLAPSTIC(config, m_slapstic, 117);
+	SLAPSTIC(config, m_slapstic, XTAL::u(117));
 	m_slapstic->set_range(m_maincpu, AS_PROGRAM, 0xe0000, 0xe7fff, 0x18000);
 	m_slapstic->set_bank(m_slapstic_bank);
 
 	WATCHDOG_TIMER(config, "watchdog");
 
-	ADC0809(config, m_adc8, 1000000); // unknown clock
+	ADC0809(config, m_adc8, XTAL::u(1000000)); // unknown clock
 	m_adc8->in_callback<0>().set_ioport("8BADC.0");
 	m_adc8->in_callback<1>().set_ioport("8BADC.1");
 	m_adc8->in_callback<2>().set_ioport("8BADC.2");
@@ -1493,7 +1493,7 @@ void harddriv_state::driver_nomsp(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(30000));
 
-	M48T02(config, m_200e, 0);
+	M48T02(config, m_200e);
 
 	EEPROM_2816(config, m_210e); // MK48Z02
 
@@ -1629,8 +1629,8 @@ void harddriv_state::ds3(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	DAC_16BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
-	DAC_16BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
+	DAC_16BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
+	DAC_16BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
 }
 
 
@@ -1653,7 +1653,7 @@ void harddriv_state::dsk(machine_config &config)
 	EEPROM_2816(config, m_dsk_30c); // MK48Z02
 
 	/* ASIC65 */
-	ASIC65(config, m_asic65, 0, ASIC65_STANDARD);
+	ASIC65(config, m_asic65, ASIC65_STANDARD);
 }
 
 
@@ -1666,7 +1666,7 @@ void harddriv_state::dsk2(machine_config &config)
 	m_dsp32->set_addrmap(AS_PROGRAM, &harddriv_state::dsk2_dsp32_map);
 
 	/* ASIC65 */
-	ASIC65(config, m_asic65, 0, ASIC65_STANDARD);
+	ASIC65(config, m_asic65, ASIC65_STANDARD);
 }
 
 
@@ -1679,7 +1679,7 @@ void harddriv_state::sound_int_write_line(int state)
 
 DEFINE_DEVICE_TYPE(HARDDRIV_BOARD, harddriv_board_device_state, "harddriv_board", "Hard Drivin' Board Device")
 
-harddriv_board_device_state::harddriv_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+harddriv_board_device_state::harddriv_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, HARDDRIV_BOARD, tag, owner, clock)
 {
 }
@@ -1689,7 +1689,7 @@ void harddriv_board_device_state::device_add_mconfig(machine_config &config)
 	driver_msp(config);
 	/* basic machine hardware */        /* original driver board with MSP */
 	adsp(config);                       /* ADSP board */
-	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound, 0); /* driver sound board */
+	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound); /* driver sound board */
 }
 
 void harddriv_board_device_state::device_start()
@@ -1708,7 +1708,7 @@ void harddrivc_board_device_state::device_start()
 
 DEFINE_DEVICE_TYPE(HARDDRIVC_BOARD, harddrivc_board_device_state, "harddrivc_board", "Hard Drivin' C Board Device")
 
-harddrivc_board_device_state::harddrivc_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+harddrivc_board_device_state::harddrivc_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, HARDDRIVC_BOARD, tag, owner, clock)
 {
 }
@@ -1719,7 +1719,7 @@ void harddrivc_board_device_state::device_add_mconfig(machine_config &config)
 
 	/* basic machine hardware */        /* multisync board with MSP */
 	adsp(config);                       /* ADSP board */
-	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound, 0); /* driver sound board */
+	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound); /* driver sound board */
 }
 
 
@@ -1740,17 +1740,17 @@ void racedrivb1_board_device_state::device_start()
 DEFINE_DEVICE_TYPE(RACEDRIV_BOARD, racedriv_board_device_state, "racedriv_board", "Race Drivin' Board Device")
 DEFINE_DEVICE_TYPE(RACEDRIVB1_BOARD, racedrivb1_board_device_state, "racedrivb1_board", "Race Drivin' B1 Board Device")
 
-racedriv_board_device_state::racedriv_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+racedriv_board_device_state::racedriv_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: racedriv_board_device_state(mconfig, RACEDRIV_BOARD, tag, owner, clock)
 {
 }
 
-racedriv_board_device_state::racedriv_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+racedriv_board_device_state::racedriv_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, type, tag, owner, clock)
 {
 }
 
-racedrivb1_board_device_state::racedrivb1_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+racedrivb1_board_device_state::racedrivb1_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: racedriv_board_device_state(mconfig, RACEDRIVB1_BOARD, tag, owner, clock)
 {
 }
@@ -1762,7 +1762,7 @@ void racedriv_board_device_state::device_add_mconfig(machine_config &config)
 	/* basic machine hardware */        /* original driver board without MSP */
 	adsp(config);                       /* ADSP board */
 	dsk(config);                        /* DSK board */
-	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound, 0); /* driver sound board */
+	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound); /* driver sound board */
 }
 
 /* Race Drivin Compact */
@@ -1791,22 +1791,22 @@ DEFINE_DEVICE_TYPE(RACEDRIVC_BOARD, racedrivc_board_device_state, "racedrivc_boa
 DEFINE_DEVICE_TYPE(RACEDRIVC1_BOARD, racedrivc1_board_device_state, "racedrivc1_board", "Race Drivin' C1 Board Device")
 DEFINE_DEVICE_TYPE(RACEDRIVC_PANORAMA_SIDE_BOARD, racedrivc_panorama_side_board_device_state, "racedrivc_panorama_side_board", "Race Drivin' C Panorama Board Device")
 
-racedrivc_board_device_state::racedrivc_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+racedrivc_board_device_state::racedrivc_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: racedrivc_board_device_state(mconfig, RACEDRIVC_BOARD, tag, owner, clock)
 {
 }
 
-racedrivc_board_device_state::racedrivc_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+racedrivc_board_device_state::racedrivc_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, type, tag, owner, clock)
 {
 }
 
-racedrivc1_board_device_state::racedrivc1_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+racedrivc1_board_device_state::racedrivc1_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: racedrivc_board_device_state(mconfig, RACEDRIVC1_BOARD, tag, owner, clock)
 {
 }
 
-racedrivc_panorama_side_board_device_state::racedrivc_panorama_side_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+racedrivc_panorama_side_board_device_state::racedrivc_panorama_side_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: racedrivc_board_device_state(mconfig, RACEDRIVC_PANORAMA_SIDE_BOARD, tag, owner, clock)
 {
 }
@@ -1818,7 +1818,7 @@ void racedrivc_board_device_state::device_add_mconfig(machine_config &config)
 	/* basic machine hardware */        /* multisync board without MSP */
 	adsp(config);                       /* ADSP board */
 	dsk(config);                        /* DSK board */
-	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound, 0); /* driver sound board */
+	HARDDRIV_SOUND_BOARD(config, m_harddriv_sound); /* driver sound board */
 }
 
 void racedrivc_panorama_side_board_device_state::device_add_mconfig(machine_config &config)
@@ -1838,7 +1838,7 @@ void racedrivc_panorama_side_board_device_state::device_add_mconfig(machine_conf
 	/* basic machine hardware */        /* multisync board without MSP */
 	adsp(config);                       /* ADSP board */
 //  dsk(config);                        /* DSK board */
-//  HARDDRIV_SOUND_BOARD(config, "sound_board", 0); /* driver sound board */
+//  HARDDRIV_SOUND_BOARD(config, "sound_board"); /* driver sound board */
 }
 
 /* Stun Runner */
@@ -1851,7 +1851,7 @@ void stunrun_board_device_state::device_start()
 
 DEFINE_DEVICE_TYPE(STUNRUN_BOARD, stunrun_board_device_state, "stunrun_board", "Stun Runner Board Device")
 
-stunrun_board_device_state::stunrun_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+stunrun_board_device_state::stunrun_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, STUNRUN_BOARD, tag, owner, clock)
 {
 }
@@ -1866,12 +1866,12 @@ void stunrun_board_device_state::device_add_mconfig(machine_config &config)
 	config.device_remove("slapstic");
 
 	/* video hardware */
-	m_screen->set_raw(5000000*2, 317*2, 0, 256*2, 262, 0, 228);
+	m_screen->set_raw(XTAL::u(5000000)*2, 317*2, 0, 256*2, 262, 0, 228);
 
 	/* sund hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ATARI_JSA_II(config, m_jsa, 0);
+	ATARI_JSA_II(config, m_jsa);
 	m_jsa->main_int_cb().set(FUNC(harddriv_state::sound_int_write_line));
 	m_jsa->test_read_cb().set_ioport("IN0").bit(5);
 	m_jsa->add_route(ALL_OUTPUTS, "mono", 0.5);
@@ -1901,22 +1901,22 @@ DEFINE_DEVICE_TYPE(STEELTAL_BOARD, steeltal_board_device_state, "steeltal_board"
 DEFINE_DEVICE_TYPE(STEELTAL1_BOARD, steeltal1_board_device_state, "steeltal1_board", "Steel Talons 1 Board Device")
 DEFINE_DEVICE_TYPE(STEELTALP_BOARD, steeltalp_board_device_state, "steeltalp_board", "Steel Talons P Board Device")
 
-steeltal_board_device_state::steeltal_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+steeltal_board_device_state::steeltal_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: steeltal_board_device_state(mconfig, STEELTAL_BOARD, tag, owner, clock)
 {
 }
 
-steeltal_board_device_state::steeltal_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+steeltal_board_device_state::steeltal_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, type, tag, owner, clock)
 {
 }
 
-steeltal1_board_device_state::steeltal1_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+steeltal1_board_device_state::steeltal1_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: steeltal_board_device_state(mconfig, STEELTAL1_BOARD, tag, owner, clock)
 {
 }
 
-steeltalp_board_device_state::steeltalp_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+steeltalp_board_device_state::steeltalp_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: steeltal_board_device_state(mconfig, STEELTALP_BOARD, tag, owner, clock)
 {
 }
@@ -1933,12 +1933,12 @@ void steeltal_board_device_state::device_add_mconfig(machine_config &config) //t
 	config.device_remove("rdac");
 	config.device_remove("speaker");
 
-	ASIC65(config, m_asic65, 0, ASIC65_STEELTAL);         /* ASIC65 on DSPCOM board */
+	ASIC65(config, m_asic65, ASIC65_STEELTAL);         /* ASIC65 on DSPCOM board */
 
 	/* sund hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ATARI_JSA_III(config, m_jsa, 0);
+	ATARI_JSA_III(config, m_jsa);
 	m_jsa->main_int_cb().set(FUNC(harddriv_state::sound_int_write_line));
 	m_jsa->test_read_cb().set_ioport("IN0").bit(5);
 	m_jsa->add_route(ALL_OUTPUTS, "mono", 1.0);
@@ -1954,7 +1954,7 @@ void strtdriv_board_device_state::device_start()
 
 DEFINE_DEVICE_TYPE(STRTDRIV_BOARD, strtdriv_board_device_state, "strtdriv_board", "Street Drivin' Board Device")
 
-strtdriv_board_device_state::strtdriv_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+strtdriv_board_device_state::strtdriv_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, STRTDRIV_BOARD, tag, owner, clock)
 {
 }
@@ -1987,17 +1987,17 @@ void hdrivairp_board_device_state::device_start()
 DEFINE_DEVICE_TYPE(HDRIVAIR_BOARD, hdrivair_board_device_state, "hdrivair_board", "Hard Drivin' Airborne Board Device")
 DEFINE_DEVICE_TYPE(HDRIVAIRP_BOARD, hdrivairp_board_device_state, "hdrivairp_board", "Hard Drivin' Airborne P Board Device")
 
-hdrivair_board_device_state::hdrivair_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hdrivair_board_device_state::hdrivair_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hdrivair_board_device_state(mconfig, HDRIVAIR_BOARD, tag, owner, clock)
 {
 }
 
-hdrivair_board_device_state::hdrivair_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+hdrivair_board_device_state::hdrivair_board_device_state(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: harddriv_state(mconfig, type, tag, owner, clock)
 {
 }
 
-hdrivairp_board_device_state::hdrivairp_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hdrivairp_board_device_state::hdrivairp_board_device_state(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hdrivair_board_device_state(mconfig, HDRIVAIRP_BOARD, tag, owner, clock)
 {
 }
@@ -2014,67 +2014,67 @@ void hdrivair_board_device_state::device_add_mconfig(machine_config &config)
 
 void harddriv_new_state::harddriv_machine(machine_config &config)
 {
-	HARDDRIV_BOARD(config, "mainpcb", 0);
+	HARDDRIV_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::harddrivc_machine(machine_config &config)
 {
-	HARDDRIVC_BOARD(config, "mainpcb", 0);
+	HARDDRIVC_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::racedriv_machine(machine_config &config)
 {
-	RACEDRIV_BOARD(config, "mainpcb", 0);
+	RACEDRIV_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::racedrivb1_machine(machine_config &config)
 {
-	RACEDRIVB1_BOARD(config, "mainpcb", 0);
+	RACEDRIVB1_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::racedrivc_machine(machine_config &config)
 {
-	RACEDRIVC_BOARD(config, "mainpcb", 0);
+	RACEDRIVC_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::racedrivc1_machine(machine_config &config)
 {
-	RACEDRIVC1_BOARD(config, "mainpcb", 0);
+	RACEDRIVC1_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::stunrun_machine(machine_config &config)
 {
-	STUNRUN_BOARD(config, "mainpcb", 0);
+	STUNRUN_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::strtdriv_machine(machine_config &config)
 {
-	STRTDRIV_BOARD(config, "mainpcb", 0);
+	STRTDRIV_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::hdrivair_machine(machine_config &config)
 {
-	HDRIVAIR_BOARD(config, "mainpcb", 0);
+	HDRIVAIR_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::hdrivairp_machine(machine_config &config)
 {
-	HDRIVAIRP_BOARD(config, "mainpcb", 0);
+	HDRIVAIRP_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::steeltal_machine(machine_config &config)
 {
-	STEELTAL_BOARD(config, "mainpcb", 0);
+	STEELTAL_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::steeltal1_machine(machine_config &config)
 {
-	STEELTAL1_BOARD(config, "mainpcb", 0);
+	STEELTAL1_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::steeltalp_machine(machine_config &config)
 {
-	STEELTALP_BOARD(config, "mainpcb", 0);
+	STEELTALP_BOARD(config, "mainpcb");
 }
 
 void harddriv_new_state::tx_a(int state)
@@ -2086,9 +2086,9 @@ void harddriv_new_state::tx_a(int state)
 
 void harddriv_new_state::racedriv_panorama_machine(machine_config &config)
 {
-	RACEDRIV_BOARD(config, "mainpcb", 0);
-	RACEDRIVC_PANORAMA_SIDE_BOARD(config, "leftpcb", 0);
-	RACEDRIVC_PANORAMA_SIDE_BOARD(config, "rightpcb", 0);
+	RACEDRIV_BOARD(config, "mainpcb");
+	RACEDRIVC_PANORAMA_SIDE_BOARD(config, "leftpcb");
+	RACEDRIVC_PANORAMA_SIDE_BOARD(config, "rightpcb");
 
 //  config.set_maximum_quantum(attotime::from_hz(100000));
 	subdevice<mc68681_device>("mainpcb:duartn68681")->a_tx_cb().set(FUNC(harddriv_new_state::tx_a));

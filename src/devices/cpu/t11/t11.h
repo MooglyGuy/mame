@@ -36,7 +36,7 @@ public:
 	static constexpr uint8_t BUS_ERROR = 8;
 
 	// construction/destruction
-	t11_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	t11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	void set_initial_mode(const uint16_t mode) { c_initial_mode = mode; }
@@ -86,7 +86,7 @@ protected:
 		IS_VM2      = 1 << 6,   // same plus RSEL, MxUS, RCPx, WCPx
 	};
 
-	t11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	t11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -1217,7 +1217,7 @@ class k1801vm2_device : public t11_device, public z80_daisy_chain_interface
 {
 public:
 	// construction/destruction
-	k1801vm2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	k1801vm2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

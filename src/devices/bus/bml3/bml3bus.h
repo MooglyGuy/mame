@@ -32,7 +32,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	bml3bus_slot_device(machine_config const &mconfig, const char *tag, device_t *owner, T &&nbtag, U &&opts, const char *dflt)
-		: bml3bus_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: bml3bus_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -41,7 +41,7 @@ public:
 		set_bml3bus_slot(std::forward<T>(nbtag), tag);
 	}
 
-	bml3bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	bml3bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// inline configuration
 	template <typename T>
@@ -52,7 +52,7 @@ public:
 	}
 
 protected:
-	bml3bus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bml3bus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -72,7 +72,7 @@ class bml3bus_device : public device_t
 	friend class device_bml3bus_card_interface;
 public:
 	// construction/destruction
-	bml3bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bml3bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// inline configuration
 	auto nmi_callback() { return m_out_nmi_cb.bind(); }
@@ -89,7 +89,7 @@ public:
 	void firq_w(int state);
 
 protected:
-	bml3bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bml3bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

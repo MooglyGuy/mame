@@ -262,7 +262,7 @@ void sis630_state::sis630(machine_config &config)
 {
 	// Slot 1/Socket 370, Coppermine FC-PGA @ 500~850+/100 MHz or Celeron PPGA 300~600+ MHz
 	// TODO: lowered rate for debugging aid, needs a slot option anyway
-	PENTIUM3(config, m_maincpu, 100'000'000);
+	PENTIUM3(config, m_maincpu, XTAL::u(100'000'000));
 //  m_maincpu->set_addrmap(AS_PROGRAM, &sis630_state::main_map);
 //  m_maincpu->set_addrmap(AS_IO, &sis630_state::main_io);
 	m_maincpu->set_irq_acknowledge_callback("pci:01.0:pic_master", FUNC(pic8259_device::inta_cb));
@@ -272,7 +272,7 @@ void sis630_state::sis630(machine_config &config)
 	// Needs a $80000 sized ROM
 	AMD_29F400T(config, "flash");
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// up to 512MB, 2 x DIMM sockets
 	SIS630_HOST(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
 	SIS5513_IDE(config, m_ide_00_1, 0, "maincpu");
@@ -287,14 +287,14 @@ void sis630_state::sis630(machine_config &config)
 		if (state)
 			machine().schedule_soft_reset();
 	});
-	LPC_ACPI(config, "pci:01.0:acpi", 0);
-	SIS950_SMBUS(config, "pci:01.0:smbus", 0);
+	LPC_ACPI(config, "pci:01.0:acpi");
+	SIS950_SMBUS(config, "pci:01.0:smbus");
 
-	SIS900_ETH(config, "pci:01.1", 0);
+	SIS900_ETH(config, "pci:01.1");
 	// USB config: 2 on back, 3 on front. Front is fn 2
 	SIS7001_USB(config, "pci:01.2", 0, 3);
 	SIS7001_USB(config, "pci:01.3", 0, 2);
-	SIS7018_AUDIO(config, "pci:01.4", 0);
+	SIS7018_AUDIO(config, "pci:01.4");
 	// documentation doesn't mention modem part #, derived from Shuttle MS11 MB manual
 //  SIS7013_MODEM_AC97(config, "pci:01.6"
 
@@ -302,7 +302,7 @@ void sis630_state::sis630(machine_config &config)
 	SIS630_BRIDGE(config, "pci:02.0", 0, "pci:02.0:00.0");
 	// GUI must go under the virtual bridge
 	// This will be correctly identified as bus #1-dev #0-func #0 by the Award BIOS
-	SIS630_GUI(config, "pci:02.0:00.0", 0);
+	SIS630_GUI(config, "pci:02.0:00.0");
 
 	// optional stuff (according to Kontron 786LCD manual)
 //  "pci:08.0" SCSI controller (vendor=1000 NCR / LSI Logic / Symbios Logic device=0012 53C895A)
@@ -318,7 +318,7 @@ void sis630_state::sis630(machine_config &config)
 
 	// TODO: move in MB implementations
 	// (some unsupported variants uses W83697HF, namely Gigabyte GA-6SMZ7)
-	ISA16_SLOT(config, "superio", 0, "pci:01.0:isabus", isa_internal_devices, "it8705f", true).set_option_machine_config("it8705f", ite_superio_config);
+	ISA16_SLOT(config, "superio", "pci:01.0:isabus", isa_internal_devices, "it8705f", true).set_option_machine_config("it8705f", ite_superio_config);
 
 	rs232_port_device& serport0(RS232_PORT(config, "serport0", isa_com, "microsoft_mouse"));
 	serport0.rxd_handler().set("superio:it8705f", FUNC(it8705f_device::rxd1_w));

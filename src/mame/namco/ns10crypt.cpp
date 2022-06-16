@@ -128,7 +128,7 @@ DEFINE_DEVICE_TYPE(NS10_TYPE2_DECRYPTER_NONLINEAR, ns10_type2_decrypter_nonlinea
 
 // base class
 
-ns10_decrypter_device::ns10_decrypter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ns10_decrypter_device::ns10_decrypter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 {
 }
@@ -165,7 +165,7 @@ constexpr int U{UNKNOWN};
 // this could perfectly be part of the per-game logic but, with only one known type-1 game, we cannot say anything definitive
 const int ns10_type1_decrypter_device::INIT_SBOX[16]{U, U, U, 0, 4, 9, U, U, U, 8, U, 1, U, 9, U, 5};
 
-ns10_type1_decrypter_device::ns10_type1_decrypter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ns10_type1_decrypter_device::ns10_type1_decrypter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: ns10_decrypter_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -217,7 +217,7 @@ void ns10_type1_decrypter_device::init(int iv)
 	m_counter = 0;
 }
 
-mrdrilr2_decrypter_device::mrdrilr2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mrdrilr2_decrypter_device::mrdrilr2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns10_type1_decrypter_device(mconfig, MRDRILR2_DECRYPTER, tag, owner, clock)
 {
 }
@@ -227,12 +227,12 @@ mrdrilr2_decrypter_device::mrdrilr2_decrypter_device(const machine_config &mconf
 // this could perfectly be part of the per-game logic; by now, only gamshara seems to use it, so we keep it global
 const int ns10_type2_decrypter_device::INIT_SBOX[16]{0, 12, 13, 6, 2, 4, 9, 8, 11, 1, 7, 15, 10, 5, 14, 3};
 
-ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER, tag, owner, clock)
 {
 }
 
-ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, ns10_crypto_logic &&logic)
+ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, ns10_crypto_logic &&logic)
 	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER, tag, owner, clock)
 	, m_logic(std::move(logic))
 {
@@ -296,13 +296,13 @@ void ns10_type2_decrypter_device::device_reset()
 // type-2 decrypter with a table for the non-linear bits
 const int ns10_type2_decrypter_nonlinear_device::INIT_SBOX[16]{0, 12, 13, 6, 2, 4, 9, 8, 11, 1, 7, 15, 10, 5, 14, 3};
 
-ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER_NONLINEAR, tag, owner, clock)
 	, m_nonlinear_region(*this, "nonlinear_table")
 {
 }
 
-ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, ns10_crypto_logic &&logic)
+ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, ns10_crypto_logic &&logic)
 	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER_NONLINEAR, tag, owner, clock)
 	, m_nonlinear_region(*this, "nonlinear_table")
 	, m_logic(std::move(logic))

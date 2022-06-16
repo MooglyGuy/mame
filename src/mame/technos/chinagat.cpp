@@ -793,7 +793,7 @@ void chinagat_state::chinagat(machine_config &config)
 	ymsnd.add_route(0, "mono", 0.80);
 	ymsnd.add_route(1, "mono", 0.80);
 
-	okim6295_device &oki(OKIM6295(config, "oki", 1'065'000, okim6295_device::PIN7_HIGH)); // pin 7 not verified, clock frequency estimated with recording
+	okim6295_device &oki(OKIM6295(config, "oki", XTAL::u(1'065'000), okim6295_device::PIN7_HIGH)); // pin 7 not verified, clock frequency estimated with recording
 	oki.add_route(ALL_OUTPUTS, "mono", 0.80);
 }
 

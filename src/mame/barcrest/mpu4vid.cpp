@@ -2118,7 +2118,7 @@ void mpu4vid_state::mpu4_vid(machine_config &config)
 	EF9369(config, m_ef9369).set_color_update_callback(FUNC(mpu4vid_state::ef9369_color_update));
 
 	PTM6840(config, m_ptm, VIDEO_MASTER_CLOCK / 10); /* 68k E clock */
-	m_ptm->set_external_clocks(0, 0, 0);
+	m_ptm->set_external_clocks(XTAL(), XTAL(), XTAL());
 	m_ptm->o1_callback().set(FUNC(mpu4vid_state::vid_o1_callback));
 	m_ptm->o2_callback().set(FUNC(mpu4vid_state::vid_o2_callback));
 	m_ptm->o3_callback().set(FUNC(mpu4vid_state::vid_o3_callback));
@@ -2127,16 +2127,16 @@ void mpu4vid_state::mpu4_vid(machine_config &config)
 	SPEAKER(config, "speaker", 2).front();
 
 	/* Present on all video cards */
-	saa1099_device &saa(SAA1099(config, "saa", 8000000));
+	saa1099_device &saa(SAA1099(config, "saa", XTAL::u(8000000)));
 	saa.add_route(0, "speaker", 0.5, 0);
 	saa.add_route(1, "speaker", 0.5, 1);
 
-	ACIA6850(config, m_acia_0, 0);
+	ACIA6850(config, m_acia_0);
 	m_acia_0->txd_handler().set("acia6850_1", FUNC(acia6850_device::write_rxd));
 	m_acia_0->rts_handler().set("acia6850_1", FUNC(acia6850_device::write_dcd));
 	m_acia_0->irq_handler().set(FUNC(mpu4vid_state::m6809_acia_irq));
 
-	ACIA6850(config, m_acia_1, 0);
+	ACIA6850(config, m_acia_1);
 	m_acia_1->txd_handler().set("acia6850_0", FUNC(acia6850_device::write_rxd));
 	m_acia_1->rts_handler().set("acia6850_0", FUNC(acia6850_device::write_dcd));
 	m_acia_1->irq_handler().set(FUNC(mpu4vid_state::m68k_acia_irq));
@@ -2145,7 +2145,7 @@ void mpu4vid_state::mpu4_vid(machine_config &config)
 void mpu4vid_state::mpu4_vid_cheatchr(machine_config &config)
 {
 	mpu4_vid(config);
-	MPU4_CHARACTERISER_PAL(config, m_characteriser, 0);
+	MPU4_CHARACTERISER_PAL(config, m_characteriser);
 	m_characteriser->set_cpu_tag("video");
 	m_characteriser->set_allow_68k_cheat(true);
 }
@@ -2155,7 +2155,7 @@ void mpu4vid_state::mpu4_vid_strike(machine_config& config)
 	mpu4_vid(config);
 	m_videocpu->set_addrmap(AS_PROGRAM, &mpu4vid_state::mpu4_68k_map_strike);
 
-	MPU4_CHARACTERISER_PAL(config, m_characteriser, 0);
+	MPU4_CHARACTERISER_PAL(config, m_characteriser);
 	m_characteriser->set_use_4k_table_sim(true);
 }
 
@@ -2174,7 +2174,7 @@ void mpu4vid_state::crmaze_base(machine_config &config)
 void mpu4vid_state::crmaze(machine_config& config)
 {
 	crmaze_base(config);
-	MPU4_CHARACTERISER_PAL(config, m_characteriser, 0);
+	MPU4_CHARACTERISER_PAL(config, m_characteriser);
 	m_characteriser->set_cpu_tag("video");
 	m_characteriser->set_allow_68k_cheat(true);
 
@@ -2190,7 +2190,6 @@ void mpu4vid_state::vid_oki(machine_config &config)
 	m_okicard->add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
 	m_okicard->cb2_handler().set(FUNC(mpu4vid_state::pia_gb_cb2_w));
-
 }
 
 void mpu4vid_state::mating(machine_config &config)

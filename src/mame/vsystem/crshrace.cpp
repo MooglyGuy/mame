@@ -590,11 +590,11 @@ void crshrace_state::machine_reset()
 void crshrace_state::crshrace(machine_config &config) // TODO: PCB sports 32 MHz and 24 MHz XTALs. Derive from those and verify dividers.
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16'000'000);    // 16 MHz ???
+	M68000(config, m_maincpu, XTAL::u(16'000'000));    // 16 MHz ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &crshrace_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(crshrace_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 4'000'000);   // 4 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(4'000'000));   // 4 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &crshrace_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &crshrace_state::sound_io_map);
 
@@ -611,13 +611,13 @@ void crshrace_state::crshrace(machine_config &config) // TODO: PCB sports 32 MHz
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_crshrace);
 	PALETTE(config, m_palette).set_format(palette_device::xGBR_555, 2048);
 
-	VSYSTEM_SPR(config, m_spr, 0, m_palette, gfx_crshrace_spr);
+	VSYSTEM_SPR(config, m_spr, m_palette, gfx_crshrace_spr);
 	m_spr->set_tile_indirect_cb(FUNC(crshrace_state::tile_callback));
 
 	BUFFERED_SPRITERAM16(config, m_spriteram[0]);
 	BUFFERED_SPRITERAM16(config, m_spriteram[1]);
 
-	K053936(config, m_k053936, 0);
+	K053936(config, m_k053936);
 	m_k053936->set_wrap(1);
 	m_k053936->set_offsets(-48, -21);
 
@@ -628,7 +628,7 @@ void crshrace_state::crshrace(machine_config &config) // TODO: PCB sports 32 MHz
 	m_soundlatch->data_pending_callback().set(FUNC(crshrace_state::soundlatch_pending_w));
 	m_soundlatch->set_separate_acknowledge(true);
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 8'000'000));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(8'000'000)));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 1);

@@ -638,7 +638,7 @@ void dynduke_state::dynduke(machine_config &config)
 	audiocpu.set_addrmap(AS_OPCODES, &dynduke_state::sound_decrypted_opcodes_map);
 	audiocpu.set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
-	sei80bu_device &sei80bu(SEI80BU(config, "sei80bu", 0));
+	sei80bu_device &sei80bu(SEI80BU(config, "sei80bu"));
 	sei80bu.set_addrmap(AS_PROGRAM, &dynduke_state::sei80bu_encrypted_full_map);
 
 	config.set_maximum_quantum(attotime::from_hz(3600));
@@ -669,7 +669,7 @@ void dynduke_state::dynduke(machine_config &config)
 	okim6295_device &oki(OKIM6295(config, "oki", 12_MHz_XTAL / 12, okim6295_device::PIN7_HIGH));
 	oki.add_route(ALL_OUTPUTS, "mono", 0.40);
 
-	SEIBU_SOUND(config, m_seibu_sound, 0);
+	SEIBU_SOUND(config, m_seibu_sound);
 	m_seibu_sound->int_callback().set_inputline("audiocpu", 0);
 	m_seibu_sound->coin_io_callback().set_ioport("COIN");
 	m_seibu_sound->set_rom_tag("audiocpu");

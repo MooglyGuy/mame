@@ -1048,11 +1048,11 @@ void polepos_state::topracern(machine_config &config)
 	m_namco_sound->add_route(1, "speaker", 0.80, 1);
 
 	/* engine sound */
-	polepos_sound_device &polepos(POLEPOS_SOUND(config, "engine", 0));
+	polepos_sound_device &polepos(POLEPOS_SOUND(config, "engine"));
 	polepos.add_route(ALL_OUTPUTS, "speaker", 0.90 * 0.77, 0);
 	polepos.add_route(ALL_OUTPUTS, "speaker", 0.90 * 0.77, 1);
 
-	dac_4bit_r2r_device &dac(DAC_4BIT_R2R(config, "dac", 0)); // unknown resistor configuration
+	dac_4bit_r2r_device &dac(DAC_4BIT_R2R(config, "dac")); // unknown resistor configuration
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.12, 0);
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.12, 1);
 }
@@ -1069,7 +1069,7 @@ void polepos_state::polepos2bi(machine_config &config)
 	m_soundlatch->data_pending_callback().set_inputline(m_sound_z80, INPUT_LINE_NMI);
 	m_soundlatch->set_separate_acknowledge(true);
 
-	TMS5220(config, "tms", 600000) /* ? Mhz */
+	TMS5220(config, "tms", XTAL::u(600000)) /* ? Mhz */
 			.add_route(ALL_OUTPUTS, "speaker", 0.80, 0)
 			.add_route(ALL_OUTPUTS, "speaker", 0.80, 1);
 }

@@ -71,7 +71,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	nubus_slot_device(const machine_config &mconfig, T &&tag, device_t *owner, const char *nbtag, U &&opts, const char *dflt)
-		: nubus_slot_device(mconfig, tag, owner, (u32)0)
+		: nubus_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -79,7 +79,7 @@ public:
 		set_nubus_slot(std::forward<T>(nbtag), tag);
 	}
 
-	nubus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// inline configuration
 	template <typename T>
@@ -90,7 +90,7 @@ public:
 	}
 
 protected:
-	nubus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_resolve_objects() override ATTR_COLD;
@@ -111,7 +111,7 @@ class nubus_device : public device_t, public device_memory_interface
 {
 public:
 	// construction/destruction
-	nubus_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	~nubus_device();
 
 	// inline configuration
@@ -170,7 +170,7 @@ public:
 	void irqe_w(int state);
 
 protected:
-	nubus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

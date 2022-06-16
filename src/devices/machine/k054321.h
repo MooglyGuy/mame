@@ -11,7 +11,7 @@
 class k054321_device : public device_t
 {
 public:
-	k054321_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	k054321_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T>
 	k054321_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&speaker) :

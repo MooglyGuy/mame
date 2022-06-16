@@ -77,7 +77,7 @@ void cst_q_plus4_device::device_add_mconfig(machine_config &config)
 //  cst_q_plus4_device - constructor
 //-------------------------------------------------
 
-cst_q_plus4_device::cst_q_plus4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cst_q_plus4_device::cst_q_plus4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CST_Q_PLUS4, tag, owner, clock),
 	device_ql_expansion_card_interface(mconfig, *this),
 	m_exp1(*this, "exp1"),

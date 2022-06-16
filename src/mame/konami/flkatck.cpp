@@ -434,7 +434,7 @@ void flkatck_state::flkatck(machine_config &config)
 
 	PALETTE(config, "palette").set_format(palette_device::xBGR_555, 512).set_endianness(ENDIANNESS_LITTLE);
 
-	K007121(config, m_k007121, 0, "palette", gfx_flkatck);
+	K007121(config, m_k007121, "palette", gfx_flkatck);
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();

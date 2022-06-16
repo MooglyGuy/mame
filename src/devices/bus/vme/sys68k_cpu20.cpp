@@ -366,7 +366,7 @@ void vme_sys68k_cpu21yb_card_device::device_add_mconfig(machine_config &config)
 //**************************************************************************
 //  Base Device
 //**************************************************************************
-vme_sys68k_cpu20_card_device_base::vme_sys68k_cpu20_card_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, fc_board_t board_id) :
+vme_sys68k_cpu20_card_device_base::vme_sys68k_cpu20_card_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, fc_board_t board_id) :
 	device_t(mconfig, type, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu (*this, "maincpu")
@@ -385,46 +385,46 @@ vme_sys68k_cpu20_card_device_base::vme_sys68k_cpu20_card_device_base(const machi
 //**************************************************************************
 //  Card Devices
 //**************************************************************************
-vme_sys68k_cpu20_card_device::vme_sys68k_cpu20_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu20_card_device::vme_sys68k_cpu20_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device(mconfig, VME_SYS68K_CPU20, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu20_card_device ctor: %s\n", tag);
 }
 
 
-vme_sys68k_cpu21s_card_device::vme_sys68k_cpu21s_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu21s_card_device::vme_sys68k_cpu21s_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_cpu21s_card_device(mconfig, VME_SYS68K_CPU21S, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu21s_card_device ctor: %s\n", tag);
 }
 
-vme_sys68k_cpu21_card_device::vme_sys68k_cpu21_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu21_card_device::vme_sys68k_cpu21_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_cpu21_card_device(mconfig, VME_SYS68K_CPU21, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu21_card_device ctor: %s\n", tag);
 }
 
-vme_sys68k_cpu21a_card_device::vme_sys68k_cpu21a_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu21a_card_device::vme_sys68k_cpu21a_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_cpu21a_card_device(mconfig, VME_SYS68K_CPU21A, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu21a_card_device ctor: %s\n", tag);
 }
 
 // TODO: Change to 2MB on board RAM and move FLME memory and find/verify memory map
-vme_sys68k_cpu21ya_card_device::vme_sys68k_cpu21ya_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu21ya_card_device::vme_sys68k_cpu21ya_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_cpu21ya_card_device(mconfig, VME_SYS68K_CPU21YA, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu21ya_card_device ctor: %s\n", tag);
 }
 
-vme_sys68k_cpu21b_card_device::vme_sys68k_cpu21b_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu21b_card_device::vme_sys68k_cpu21b_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_cpu21b_card_device(mconfig, VME_SYS68K_CPU21B, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu21b_card_device ctor: %s\n", tag);
 }
 
 // TODO: Change to 2MB on board RAM and move FLME memory and find/verify memory map
-vme_sys68k_cpu21yb_card_device::vme_sys68k_cpu21yb_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vme_sys68k_cpu21yb_card_device::vme_sys68k_cpu21yb_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vme_sys68k_cpu21yb_card_device(mconfig, VME_SYS68K_CPU21YB, tag, owner, clock)
 {
 	LOG("vme_sys68k_cpu21yb_card_device ctor: %s\n", tag);

@@ -60,8 +60,12 @@ private:
 
 void electron_elksdp1_device::device_add_mconfig(machine_config &config)
 {
+<<<<<<< HEAD
 	SPI_SDCARD(config, m_sdcard, 0);
 	m_sdcard->set_prefer_sdhc();
+=======
+	SPI_SDCARD(config, m_sdcard);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_sdcard->spi_miso_callback().set([this](int state) { m_in_bit = state; });
 }
 
@@ -73,7 +77,7 @@ void electron_elksdp1_device::device_add_mconfig(machine_config &config)
 //  electron_elksdp1_device - constructor
 //-------------------------------------------------
 
-electron_elksdp1_device::electron_elksdp1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+electron_elksdp1_device::electron_elksdp1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ELECTRON_ELKSDP1, tag, owner, clock)
 	, device_electron_cart_interface(mconfig, *this)
 	, m_sdcard(*this, "sdcard")

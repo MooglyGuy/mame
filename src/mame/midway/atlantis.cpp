@@ -803,17 +803,17 @@ DEVICE_INPUT_DEFAULTS_END
 void atlantis_state::mwskins(machine_config &config)
 {
 	/* basic machine hardware */
-	VR4310LE(config, m_maincpu, 166666666);
+	VR4310LE(config, m_maincpu, XTAL::u(166666666));
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
 	m_maincpu->set_system_clock(66666666);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 
 	vrc4373_device &vrc4373(VRC4373(config, PCI_ID_NILE, 0, m_maincpu));
 	vrc4373.set_ram_size(0x00800000);
 
-	pci9050_device &pci9050(PCI9050(config, PCI_ID_9050, 0));
+	pci9050_device &pci9050(PCI9050(config, PCI_ID_9050));
 	pci9050.set_map(0, address_map_constructor(&atlantis_state::map0, "map0", this), this);
 	pci9050.set_map(1, address_map_constructor(&atlantis_state::map1, "map1", this), this);
 	pci9050.set_map(2, address_map_constructor(&atlantis_state::map2, "map2", this), this);
@@ -825,7 +825,7 @@ void atlantis_state::mwskins(machine_config &config)
 	m_rtc->reset_cb().set(FUNC(atlantis_state::watchdog_reset));
 	m_rtc->irq_cb().set(FUNC(atlantis_state::watchdog_irq));
 
-	IDE_PCI(config, m_ide, 0, 0x10950646, 0x07, 0x0, PCI_ID_NILE, AS_DATA).irq_handler().set(FUNC(atlantis_state::ide_irq));
+	IDE_PCI(config, m_ide, 0x10950646, 0x07, 0x0, PCI_ID_NILE, AS_DATA).irq_handler().set(FUNC(atlantis_state::ide_irq));
 
 	/* video hardware */
 	ZEUS2(config, m_zeus, ZEUS2_VIDEO_CLOCK);
@@ -841,14 +841,14 @@ void atlantis_state::mwskins(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	DCS2_AUDIO_DENVER_2CH(config, m_dcs, 0);
+	DCS2_AUDIO_DENVER_2CH(config, m_dcs);
 	m_dcs->set_maincpu_tag(m_maincpu);
 	m_dcs->set_dram_in_mb(4);
 	m_dcs->set_polling_offset(0xe33);
 	m_dcs->add_route(0, "speaker", 1.0, 1);
 	m_dcs->add_route(1, "speaker", 1.0, 0);
 
-	MIDWAY_IOASIC(config, m_ioasic, 0);
+	MIDWAY_IOASIC(config, m_ioasic);
 	m_ioasic->in_port_cb<0>().set_ioport("DIPS");
 	m_ioasic->in_port_cb<1>().set_ioport("SYSTEM");
 	m_ioasic->in_port_cb<2>().set_ioport("IN1");
@@ -861,7 +861,7 @@ void atlantis_state::mwskins(machine_config &config)
 	m_ioasic->set_auto_ack(1);
 	if DEBUG_CONSOLE {
 		m_ioasic->serial_tx_handler().set(m_uart0, FUNC(generic_terminal_device::write));
-		GENERIC_TERMINAL(config, m_uart0, 0);
+		GENERIC_TERMINAL(config, m_uart0);
 		m_uart0->set_keyboard_callback("ioasic", FUNC(midway_ioasic_device::serial_rx_w));
 	}
 

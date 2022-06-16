@@ -56,17 +56,17 @@ void amd98_device::device_add_mconfig(machine_config &config)
 {
 	// Assume mono, as per highway making engine noise from ay1 only
 	SPEAKER(config, "speaker").front_center();
-	AY8910(config, m_ay1, 1'996'800);
+	AY8910(config, m_ay1, XTAL::u(1'996'800));
 	m_ay1->port_a_read_callback().set_ioport("OPN_PA1");
 	m_ay1->port_b_write_callback().set(FUNC(amd98_device::ay3_address_w));
 	m_ay1->add_route(ALL_OUTPUTS, "speaker", 0.50);
 
-	AY8910(config, m_ay2, 1'996'800);
+	AY8910(config, m_ay2, XTAL::u(1'996'800));
 	m_ay2->port_a_read_callback().set_ioport("OPN_PA2");
 	m_ay2->port_b_write_callback().set(FUNC(amd98_device::ay3_data_latch_w));
 	m_ay2->add_route(ALL_OUTPUTS, "speaker", 0.50);
 
-	AY8910(config, m_ay3, 1'996'800);
+	AY8910(config, m_ay3, XTAL::u(1'996'800));
 	m_ay3->port_b_write_callback().set([this] (u8 data) {
 		LOG("AMD-98 DAC %02x\n", data);
 	});
@@ -111,7 +111,7 @@ ioport_constructor amd98_device::device_input_ports() const
 //  amd98_device - constructor
 //-------------------------------------------------
 
-amd98_device::amd98_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+amd98_device::amd98_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, AMD98, tag, owner, clock)
 	, m_bus(*this, DEVICE_SELF_OWNER)
 	, m_ay1(*this, "ay1")

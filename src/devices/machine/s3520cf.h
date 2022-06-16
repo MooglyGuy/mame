@@ -26,7 +26,7 @@ class s3520cf_device :  public device_t,
 {
 public:
 	// construction/destruction
-	s3520cf_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 32'768);
+	s3520cf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32'768));
 
 	// I/O operations
 	int read_bit();
@@ -37,7 +37,7 @@ public:
 	TIMER_CALLBACK_MEMBER(timer_callback);
 
 protected:
-	s3520cf_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	s3520cf_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	struct rtc_regs_t
 	{
@@ -87,7 +87,7 @@ Epson RTC-4553
 class rtc4553_device : public s3520cf_device
 {
 public:
-	rtc4553_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 32'768);
+	rtc4553_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32'768));
 };
 
 // device type definition

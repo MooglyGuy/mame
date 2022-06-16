@@ -282,7 +282,7 @@ void dynadice_state::dynadice(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	AY8910(config, m_ay8910, 2000000).add_route(ALL_OUTPUTS, "mono", 1.0);
+	AY8910(config, m_ay8910, XTAL::u(2000000)).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 ROM_START( dynadice )

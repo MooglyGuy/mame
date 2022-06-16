@@ -141,7 +141,7 @@ void grfd2301_state::machine_reset()
 void grfd2301_state::grfd2301(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 4000000);
+	Z80(config, m_maincpu, XTAL::u(4000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &grfd2301_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &grfd2301_state::io_map);
 

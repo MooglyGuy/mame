@@ -74,12 +74,12 @@ const tiny_rom_entry *nubus_radiustpd_device::device_rom_region() const
 	return ROM_NAME( radiustpd );
 }
 
-nubus_radiustpd_device::nubus_radiustpd_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_radiustpd_device::nubus_radiustpd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_radiustpd_device(mconfig, NUBUS_RADIUSTPD, tag, owner, clock)
 {
 }
 
-nubus_radiustpd_device::nubus_radiustpd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_radiustpd_device::nubus_radiustpd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_screen(*this, "screen"),

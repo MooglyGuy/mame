@@ -17,7 +17,7 @@
 
 class m6510_device : public m6502_device {
 public:
-	m6510_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m6510_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t get_port();
 	void set_pulls(uint8_t pullup, uint8_t pulldown);
@@ -30,7 +30,7 @@ public:
 	virtual void do_exec_partial() override;
 
 protected:
-	m6510_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	m6510_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	class mi_6510 : public memory_interface {
 	public:
@@ -76,7 +76,7 @@ protected:
 
 class m6508_device : public m6510_device {
 public:
-	m6508_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m6508_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

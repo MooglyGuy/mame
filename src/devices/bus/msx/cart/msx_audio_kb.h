@@ -25,14 +25,14 @@ public:
 	// construction/destruction
 	template <typename T>
 	msx_audio_kbdc_port_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: msx_audio_kbdc_port_device(mconfig, tag, owner, u32(0))
+		: msx_audio_kbdc_port_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	msx_audio_kbdc_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_audio_kbdc_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// Physical connection simply consists of 8 input and 8 output lines split across 2 connectors
 	void write(u8 data);

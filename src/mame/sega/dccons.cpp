@@ -412,7 +412,7 @@ void dc_cons_state::dc_base(machine_config &config)
 	screen.set_raw(13458568*2, 857, 0, 640, 524, 0, 480);
 	screen.set_screen_update("powervr2", FUNC(powervr2_device::screen_update));
 
-	POWERVR2(config, m_powervr2, 0);
+	POWERVR2(config, m_powervr2);
 	m_powervr2->irq_callback().set(FUNC(dc_state::pvr_irq));
 
 	SPEAKER(config, "speaker", 2).front();
@@ -426,7 +426,7 @@ void dc_cons_state::dc_base(machine_config &config)
 
 	AICARTC(config, "aicartc", XTAL(32'768));
 
-	ATA_INTERFACE(config, m_ata, 0);
+	ATA_INTERFACE(config, m_ata);
 	m_ata->irq_handler().set(FUNC(dc_cons_state::ata_interrupt));
 
 	ata_slot_device &ata_0(*subdevice<ata_slot_device>("ata:0"));

@@ -447,7 +447,7 @@ void ip6_state::common(machine_config &config)
 		{
 			wd33c9x_base_device &wd33c93(downcast<wd33c9x_base_device &>(*device));
 
-			wd33c93.set_clock(10000000);
+			wd33c93.set_clock(XTAL::u(10000000));
 			wd33c93.irq_cb().set(*this, FUNC(ip6_state::lio_interrupt<LIO_SCSI>)).invert();
 			wd33c93.drq_cb().set(*this, FUNC(ip6_state::scsi_drq));
 		});

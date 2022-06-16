@@ -10505,7 +10505,7 @@ void sanghopm_state::star100(machine_config &config)
 	screen.screen_vblank().set_inputline(m_maincpu, 0, HOLD_LINE);
 
 	PALETTE(config, m_palette).set_entries(0x100);
-	RAMDAC(config, "ramdac", 0, "palette").set_addrmap(0, &sanghopm_state::ramdac_map);
+	RAMDAC(config, "ramdac", "palette").set_addrmap(0, &sanghopm_state::ramdac_map);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_sangho);
 
@@ -11653,7 +11653,7 @@ void unkch_state::bonusch(machine_config &config)
 
 void goldstar_state::feverch(machine_config &config)
 {
-	Z80(config, m_maincpu, 12'000'000 / 2); // clock not verified
+	Z80(config, m_maincpu, XTAL::u(12'000'000) / 2); // clock not verified
 	m_maincpu->set_addrmap(AS_PROGRAM, &goldstar_state::feverch_map);
 	m_maincpu->set_addrmap(AS_IO, &goldstar_state::feverch_portmap);
 
@@ -11686,9 +11686,9 @@ void goldstar_state::feverch(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	SN76489A(config, "sn1", 12'000'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.80);  // actually SN76489AN, clock not verified
-	SN76489A(config, "sn2", 12'000'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.80);  // actually SN76489AN, clock not verified
-	SN76489A(config, "sn3", 12'000'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.80);  // actually SN76489AN, clock not verified
+	SN76489A(config, "sn1", XTAL::u(12'000'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.80);  // actually SN76489AN, clock not verified
+	SN76489A(config, "sn2", XTAL::u(12'000'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.80);  // actually SN76489AN, clock not verified
+	SN76489A(config, "sn3", XTAL::u(12'000'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.80);  // actually SN76489AN, clock not verified
 }
 
 

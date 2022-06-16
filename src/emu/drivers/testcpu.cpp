@@ -208,7 +208,7 @@ void testcpu_state::ppc_mem(address_map &map)
 void testcpu_state::testcpu(machine_config &config)
 {
 	// CPUs
-	PPC603E(config, m_cpu, 66'000'000);
+	PPC603E(config, m_cpu, XTAL::(66'000'000));
 	m_cpu->set_bus_frequency(66'000'000);  // Multiplier 1, Bus = 66MHz, Core = 66MHz
 	m_cpu->set_addrmap(AS_PROGRAM, &testcpu_state::ppc_mem);
 }

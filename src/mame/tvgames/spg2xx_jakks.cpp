@@ -198,7 +198,7 @@ static INPUT_PORTS_START( spg2xx_sesa )
 	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_UNUSED )
 	PORT_BIT( 0x4000, IP_ACTIVE_HIGH, IPT_UNUSED )
 	PORT_BIT( 0x2000, IP_ACTIVE_HIGH, IPT_UNUSED )
-	PORT_BIT( 0x1000, IP_ACTIVE_HIGH, IPT_UNUSED ) 
+	PORT_BIT( 0x1000, IP_ACTIVE_HIGH, IPT_UNUSED )
 	PORT_BIT( 0x0800, IP_ACTIVE_HIGH, IPT_BUTTON1 ) PORT_PLAYER(1) PORT_NAME("Red Button")
 	PORT_BIT( 0x0400, IP_ACTIVE_HIGH, IPT_BUTTON2 ) PORT_PLAYER(1) PORT_NAME("Blue Button")
 	PORT_BIT( 0x0200, IP_ACTIVE_HIGH, IPT_UNUSED )
@@ -277,7 +277,7 @@ static INPUT_PORTS_START( spg2xx_gdg )
 	PORT_BIT( 0x2000, IP_ACTIVE_HIGH, IPT_JOYSTICK_LEFT )  PORT_PLAYER(1) PORT_NAME("Joypad Left")
 	PORT_BIT( 0x1000, IP_ACTIVE_HIGH, IPT_JOYSTICK_RIGHT ) PORT_PLAYER(1) PORT_NAME("Joypad Right")
 	PORT_BIT( 0x0800, IP_ACTIVE_HIGH, IPT_BUTTON1 )        PORT_PLAYER(1) PORT_NAME("A Button")
-	PORT_BIT( 0x0400, IP_ACTIVE_HIGH, IPT_UNUSED )  
+	PORT_BIT( 0x0400, IP_ACTIVE_HIGH, IPT_UNUSED )
 	PORT_BIT( 0x0200, IP_ACTIVE_HIGH, IPT_UNUSED )
 	PORT_BIT( 0x0100, IP_ACTIVE_HIGH, IPT_UNUSED )
 	PORT_BIT( 0x0080, IP_ACTIVE_HIGH, IPT_UNUSED )
@@ -325,7 +325,7 @@ void jakks_state::base_config(machine_config& config)
 	m_maincpu->portc_in().set_ioport("P3");
 	m_maincpu->portc_out().set(FUNC(jakks_state::portc_w));
 
-	I2C_24C04(config, m_i2cmem, 0);
+	I2C_24C04(config, m_i2cmem);
 }
 
 void jakks_state::spg2xx_jakks(machine_config &config)
@@ -400,7 +400,7 @@ void jakks_state::jakks_mpaco(machine_config &config)
 void jakks_state::jakks_mpac(machine_config &config)
 {
 	jakks_mpaco(config);
-	I2C_24C04(config, m_i2cmem, 0); 
+	I2C_24C04(config, m_i2cmem, 0);
 	m_maincpu->adc_in<0>().set_ioport("DIALX");
 }
 

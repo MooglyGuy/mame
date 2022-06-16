@@ -530,7 +530,7 @@ void arachnid_state::arachnid(machine_config &config)
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 1.0);
 
 	ptm6840_device &ptm(PTM6840(config, PTM6840_TAG, 10.738635_MHz_XTAL / 3 / 4));
-	ptm.set_external_clocks(0, 0, 0);
+	ptm.set_external_clocks(XTAL(), XTAL(), XTAL());
 	ptm.o1_callback().set(FUNC(arachnid_state::ptm_o1_callback));
 }
 

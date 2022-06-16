@@ -545,7 +545,7 @@ void ginganin_state::ginganin(machine_config &config)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &ginganin_state::sound_map);
 
 	ptm6840_device &ptm(PTM6840(config, "6840ptm", SOUND_CLOCK / 4));
-	ptm.set_external_clocks(0, 0, 0);
+	ptm.set_external_clocks(XTAL(), XTAL(), XTAL());
 	ptm.o1_callback().set_inputline(m_audiocpu, M6809_IRQ_LINE);
 
 	GENERIC_LATCH_8(config, m_soundlatch);

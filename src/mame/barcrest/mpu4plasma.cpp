@@ -84,7 +84,7 @@ uint32_t mpu4plasma_state::screen_update_mpu4plasma(screen_device &screen, bitma
 void mpu4plasma_state::mpu4plasma_f(machine_config &config)
 {
 	mod2_f(config);
-	m68000_device &plasmacpu(M68000(config, "plasmacpu", 10000000));
+	m68000_device &plasmacpu(M68000(config, "plasmacpu", XTAL::u(10000000)));
 	plasmacpu.set_addrmap(AS_PROGRAM, &mpu4plasma_state::mpu4plasma_map);
 
 	SCC8530(config, "scc", 4915200).out_int_callback().set_inputline("plasmacpu", 4);
@@ -99,7 +99,7 @@ void mpu4plasma_state::mpu4plasma_f(machine_config &config)
 
 	PALETTE(config, m_palette).set_entries(0x200);
 
-	MPU4_CHARACTERISER_PAL(config, m_characteriser, 0);
+	MPU4_CHARACTERISER_PAL(config, m_characteriser);
 	m_characteriser->set_cpu_tag("maincpu");
 	m_characteriser->set_allow_6809_cheat(true);
 	m_characteriser->set_lamp_table(nullptr);

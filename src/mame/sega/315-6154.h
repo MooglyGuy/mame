@@ -13,7 +13,7 @@ class sega_315_6154_device : public pci_host_device
 {
 public:
 	// construction/destruction
-	sega_315_6154_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sega_315_6154_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u32 registers_r(offs_t offset);
 	void registers_w(offs_t offset, u32 data, u32 mem_mask = 0xffffffff);

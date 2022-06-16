@@ -1701,7 +1701,7 @@ void nbmj9195_state::nbmjtype1(machine_config &config)
 	PALETTE(config, m_palette).set_entries(256);
 
 	// sound hardware
-	NICHISND(config, "nichisnd", 0);
+	NICHISND(config, "nichisnd");
 }
 
 void nbmj9195_state::nbmjtype2(machine_config &config)

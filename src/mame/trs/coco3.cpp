@@ -284,7 +284,7 @@ void coco3_state::coco3(machine_config &config)
 	m_pia_1->irqb_handler().set(m_firqs, FUNC(input_merger_device::in_w<1>));
 
 	// Becker Port device
-	COCO_DWSOCK(config, m_beckerport, 0);
+	COCO_DWSOCK(config, m_beckerport);
 
 	// sound hardware
 	coco_sound(config);

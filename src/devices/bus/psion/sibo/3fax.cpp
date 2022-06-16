@@ -67,7 +67,7 @@ void psion_3fax_modem_device::device_add_mconfig(machine_config &config)
 //  psion_3fax_modem_device - constructor
 //-------------------------------------------------
 
-psion_3fax_modem_device::psion_3fax_modem_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_3fax_modem_device::psion_3fax_modem_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_3FAX_MODEM, tag, owner, clock)
 	, device_psion_sibo_interface(mconfig, *this)
 	, m_asic4(*this, "asic4")

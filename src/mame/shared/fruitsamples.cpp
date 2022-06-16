@@ -46,7 +46,7 @@ const fruit_samples_device::sample_params params[] =
 
 DEFINE_DEVICE_TYPE(FRUIT_SAMPLES, fruit_samples_device, "fruit_samples", "Fruit Machine Mechanical Samples")
 
-fruit_samples_device::fruit_samples_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+fruit_samples_device::fruit_samples_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, FRUIT_SAMPLES, tag, owner, clock),
 	m_samples(*this, "samples")
 {

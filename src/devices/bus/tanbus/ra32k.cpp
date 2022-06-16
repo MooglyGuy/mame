@@ -138,7 +138,7 @@ const tiny_rom_entry *tanbus_ra32krom_device::device_rom_region() const
 //  tanbus_ra32k_device - constructor
 //-------------------------------------------------
 
-tanbus_ra32k_device::tanbus_ra32k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+tanbus_ra32k_device::tanbus_ra32k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_tanbus_interface(mconfig, *this)
 	, m_dsw(*this, "DSW%u", 1)
@@ -146,12 +146,12 @@ tanbus_ra32k_device::tanbus_ra32k_device(const machine_config &mconfig, device_t
 {
 }
 
-tanbus_ra32kram_device::tanbus_ra32kram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_ra32kram_device::tanbus_ra32kram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_ra32k_device(mconfig, TANBUS_RA32KRAM, tag, owner, clock)
 {
 }
 
-tanbus_ra32krom_device::tanbus_ra32krom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_ra32krom_device::tanbus_ra32krom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_ra32k_device(mconfig, TANBUS_RA32KROM, tag, owner, clock)
 	, m_rom(*this, "rom")
 {

@@ -34,7 +34,7 @@ class thomson_extension_device : public device_t, public device_single_card_slot
 	friend class thomson_extension_interface;
 
 public:
-	thomson_extension_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	thomson_extension_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~thomson_extension_device() = default;
 
 	auto firq_callback() { return m_firq_callback.bind(); }

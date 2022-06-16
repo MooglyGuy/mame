@@ -570,7 +570,7 @@ void fresh_state::fresh(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	YM2413(config, "ymsnd", 4'000'000).add_route(ALL_OUTPUTS, "mono", 1.0); // actual clock and type unknown
+	YM2413(config, "ymsnd", XTAL::u(4'000'000)).add_route(ALL_OUTPUTS, "mono", 1.0); // actual clock and type unknown
 }
 
 

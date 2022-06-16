@@ -22,7 +22,7 @@
 class tanbus_ra32k_device : public device_t, public device_tanbus_interface
 {
 protected:
-	tanbus_ra32k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_ra32k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// optional information overrides
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -40,7 +40,7 @@ class tanbus_ra32kram_device : public tanbus_ra32k_device
 {
 public:
 	// construction/destruction
-	tanbus_ra32kram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_ra32kram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -60,7 +60,7 @@ class tanbus_ra32krom_device : public tanbus_ra32k_device
 {
 public:
 	// construction/destruction
-	tanbus_ra32krom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_ra32krom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

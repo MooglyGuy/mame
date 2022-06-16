@@ -88,7 +88,7 @@ public:
 
 protected:
 	// construction/destruction
-	mos6530_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, u32 rsize);
+	mos6530_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rsize);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -175,7 +175,7 @@ class mos6530_device : public mos6530_device_base
 {
 public:
 	// construction/destruction
-	mos6530_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mos6530_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void rom_map(address_map &map) ATTR_COLD;
 	virtual void ram_map(address_map &map) ATTR_COLD;
@@ -193,7 +193,7 @@ class mos6532_device : public mos6530_device_base
 {
 public:
 	// construction/destruction
-	mos6532_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mos6532_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void ram_map(address_map &map) ATTR_COLD;
 	virtual void io_map(address_map &map) ATTR_COLD;

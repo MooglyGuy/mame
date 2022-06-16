@@ -15,7 +15,7 @@
 class nes_vt02_vt03_soc_device : public device_t, public device_memory_interface
 {
 public:
-	nes_vt02_vt03_soc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nes_vt02_vt03_soc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void program_map(address_map &map) ATTR_COLD;
 
@@ -51,7 +51,7 @@ public:
 	void write_byte_to_cpu(offs_t address, uint8_t data) { m_maincpu->space(AS_PROGRAM).write_byte(address, data); }
 
 protected:
-	nes_vt02_vt03_soc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nes_vt02_vt03_soc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -169,7 +169,7 @@ private:
 class nes_vt02_vt03_soc_pal_device : public nes_vt02_vt03_soc_device
 {
 public:
-	nes_vt02_vt03_soc_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config& config) override;
@@ -179,10 +179,10 @@ protected:
 class nes_vt02_vt03_soc_waixing_device : public nes_vt02_vt03_soc_device
 {
 public:
-	nes_vt02_vt03_soc_waixing_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_waixing_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
-	nes_vt02_vt03_soc_waixing_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nes_vt02_vt03_soc_waixing_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void nes_vt_2012_to_2017_regs(address_map &map) override;
 };
@@ -190,7 +190,7 @@ protected:
 class nes_vt02_vt03_soc_waixing_pal_device : public nes_vt02_vt03_soc_waixing_device
 {
 public:
-	nes_vt02_vt03_soc_waixing_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_waixing_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config& config) override;
@@ -199,7 +199,7 @@ protected:
 class nes_vt02_vt03_soc_hummer_device : public nes_vt02_vt03_soc_device
 {
 public:
-	nes_vt02_vt03_soc_hummer_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_hummer_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void nes_vt_2012_to_2017_regs(address_map &map) override;
@@ -208,10 +208,10 @@ protected:
 class nes_vt02_vt03_soc_sports_device : public nes_vt02_vt03_soc_device
 {
 public:
-	nes_vt02_vt03_soc_sports_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_sports_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
-	nes_vt02_vt03_soc_sports_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nes_vt02_vt03_soc_sports_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void nes_vt_2012_to_2017_regs(address_map &map) override;
@@ -220,7 +220,7 @@ protected:
 class nes_vt02_vt03_soc_sports_pal_device : public nes_vt02_vt03_soc_sports_device
 {
 public:
-	nes_vt02_vt03_soc_sports_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_sports_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config& config) override;
@@ -229,7 +229,7 @@ protected:
 class nes_vt02_vt03_soc_scramble_device : public nes_vt02_vt03_soc_device
 {
 public:
-	nes_vt02_vt03_soc_scramble_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_scramble_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config& config) override;
@@ -238,7 +238,7 @@ protected:
 class nes_vt02_vt03_soc_scramble_pal_device : public nes_vt02_vt03_soc_device
 {
 public:
-	nes_vt02_vt03_soc_scramble_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	nes_vt02_vt03_soc_scramble_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config& config) override;

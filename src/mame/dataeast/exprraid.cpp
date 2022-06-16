@@ -739,7 +739,7 @@ void exprraid_state::wexpressb2(machine_config &config)
 {
 	exprraid(config);
 
-	M6502(config.replace(), m_maincpu, 1'500'000);      // 1.5 MHz ???
+	M6502(config.replace(), m_maincpu, XTAL::u(1'500'000));      // 1.5 MHz ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &exprraid_state::wexpressb_map<0x3800>);
 }
 
@@ -747,7 +747,7 @@ void exprraid_state::wexpressb3(machine_config &config)
 {
 	exprraid(config);
 
-	M6502(config.replace(), m_maincpu, 1'500'000);      // 1.5 MHz ???
+	M6502(config.replace(), m_maincpu, XTAL::u(1'500'000));      // 1.5 MHz ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &exprraid_state::wexpressb_map<0xffc0>);
 }
 

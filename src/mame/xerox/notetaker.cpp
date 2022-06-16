@@ -833,7 +833,7 @@ void notetaker_state::notetakr(machine_config &config)
 	m_iop_cpu->set_addrmap(AS_IO, &notetaker_state::iop_io);
 	m_iop_cpu->set_irq_acknowledge_callback("iop_pic8259", FUNC(pic8259_device::inta_cb));
 
-	PIC8259(config, m_iop_pic, 0); // iP8259A-2 @ E6
+	PIC8259(config, m_iop_pic); // iP8259A-2 @ E6
 	m_iop_pic->out_int_callback().set_inputline(m_iop_cpu, 0);
 
 	/* Emulator CPU: 8086@5MHz */
@@ -843,7 +843,7 @@ void notetaker_state::notetakr(machine_config &config)
 	m_ep_cpu->set_addrmap(AS_IO, &notetaker_state::ep_io);
 	m_ep_cpu->set_irq_acknowledge_callback("ep_pic8259", FUNC(pic8259_device::inta_cb));
 
-	PIC8259(config, m_ep_pic, 0); // iP8259A-2 @ E6
+	PIC8259(config, m_ep_pic); // iP8259A-2 @ E6
 	m_ep_pic->out_int_callback().set_inputline(m_ep_cpu, 0);
 
 	/* video hardware */
@@ -896,7 +896,7 @@ void notetaker_state::notetakr(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 	// TODO: hook DAC up to two HA2425 (sample and hold) chips and hook those up to the speakers
-	DAC1200(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
+	DAC1200(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
 }
 
 void notetaker_state::driver_start()

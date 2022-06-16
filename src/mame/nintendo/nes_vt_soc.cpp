@@ -75,7 +75,7 @@ void nes_vt02_vt03_soc_device::program_map(address_map &map)
 {
 }
 
-nes_vt02_vt03_soc_device::nes_vt02_vt03_soc_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_device::nes_vt02_vt03_soc_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),
@@ -121,61 +121,61 @@ nes_vt02_vt03_soc_device::nes_vt02_vt03_soc_device(const machine_config& mconfig
 	m_use_raster_timing_hack = false;
 }
 
-nes_vt02_vt03_soc_device::nes_vt02_vt03_soc_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_device::nes_vt02_vt03_soc_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, NES_VT02_VT03_SOC, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_pal_device::nes_vt02_vt03_soc_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_pal_device::nes_vt02_vt03_soc_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, NES_VT02_VT03_SOC_PAL, tag, owner, clock)
 {
 }
 
 
 
-nes_vt02_vt03_soc_waixing_device::nes_vt02_vt03_soc_waixing_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_waixing_device::nes_vt02_vt03_soc_waixing_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, type, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_waixing_device::nes_vt02_vt03_soc_waixing_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_waixing_device::nes_vt02_vt03_soc_waixing_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_waixing_device(mconfig, NES_VT02_VT03_SOC_WAIXING, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_waixing_pal_device::nes_vt02_vt03_soc_waixing_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_waixing_pal_device::nes_vt02_vt03_soc_waixing_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_waixing_device(mconfig, NES_VT02_VT03_SOC_WAIXING_PAL, tag, owner, clock)
 {
 }
 
 
-nes_vt02_vt03_soc_hummer_device::nes_vt02_vt03_soc_hummer_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_hummer_device::nes_vt02_vt03_soc_hummer_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, NES_VT02_VT03_SOC_HUMMER, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_sports_device::nes_vt02_vt03_soc_sports_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_sports_device::nes_vt02_vt03_soc_sports_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, type, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_sports_device::nes_vt02_vt03_soc_sports_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_sports_device::nes_vt02_vt03_soc_sports_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_sports_device(mconfig, NES_VT02_VT03_SOC_SPORTS, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_sports_pal_device::nes_vt02_vt03_soc_sports_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_sports_pal_device::nes_vt02_vt03_soc_sports_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_sports_device(mconfig, NES_VT02_VT03_SOC_SPORTS_PAL, tag, owner, clock)
 {
 }
 
 
-nes_vt02_vt03_soc_scramble_device::nes_vt02_vt03_soc_scramble_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_scramble_device::nes_vt02_vt03_soc_scramble_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, NES_VT02_VT03_SOC_SCRAMBLE, tag, owner, clock)
 {
 }
 
-nes_vt02_vt03_soc_scramble_pal_device::nes_vt02_vt03_soc_scramble_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+nes_vt02_vt03_soc_scramble_pal_device::nes_vt02_vt03_soc_scramble_pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	nes_vt02_vt03_soc_device(mconfig, NES_VT02_VT03_SOC_SCRAMBLE_PAL, tag, owner, clock)
 {
 }

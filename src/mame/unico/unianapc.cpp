@@ -60,7 +60,7 @@ INPUT_PORTS_END
 void unianapc_state::unianapc(machine_config &config)
 {
 	/* basic machine hardware */
-	PENTIUM3(config, m_maincpu, 100'000'000); // actually a Celeron at 1.70 GHz
+	PENTIUM3(config, m_maincpu, XTAL::u(100'000'000)); // actually a Celeron at 1.70 GHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &unianapc_state::unianapc_map);
 	m_maincpu->set_disable();
 

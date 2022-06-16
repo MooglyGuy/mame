@@ -453,14 +453,14 @@ void labyrunr_state::labyrunr(machine_config &config)
 	PALETTE(config, m_palette, FUNC(labyrunr_state::palette));
 	m_palette->set_format(palette_device::xBGR_555, 2*8*16*16, 128);
 
-	K007121(config, m_k007121, 0, m_palette, gfx_labyrunr);
+	K007121(config, m_k007121, m_palette, gfx_labyrunr);
 
-	K051733(config, "k051733", 0);
+	K051733(config, "k051733");
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ym2203_device &ym1(YM2203(config, "ym1", 3000000));
+	ym2203_device &ym1(YM2203(config, "ym1", XTAL::u(3000000)));
 	ym1.port_a_read_callback().set_ioport("DSW1");
 	ym1.port_b_read_callback().set_ioport("DSW2");
 	ym1.add_route(0, "mono", 0.40);
@@ -468,7 +468,7 @@ void labyrunr_state::labyrunr(machine_config &config)
 	ym1.add_route(2, "mono", 0.40);
 	ym1.add_route(3, "mono", 0.80);
 
-	ym2203_device &ym2(YM2203(config, "ym2", 3000000));
+	ym2203_device &ym2(YM2203(config, "ym2", XTAL::u(3000000)));
 	ym2.port_b_read_callback().set_ioport("DSW3");
 	ym2.add_route(0, "mono", 0.40);
 	ym2.add_route(1, "mono", 0.40);

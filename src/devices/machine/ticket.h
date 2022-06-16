@@ -36,7 +36,7 @@ public:
 	{
 		set_period(period);
 	}
-	ticket_dispenser_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ticket_dispenser_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~ticket_dispenser_device();
 
 	// inline configuration helpers
@@ -48,7 +48,7 @@ public:
 	void motor_w(int state);
 
 protected:
-	ticket_dispenser_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	ticket_dispenser_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -76,7 +76,7 @@ public:
 	{
 		set_period(period);
 	}
-	hopper_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	hopper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 #endif // MAME_MACHINE_TICKET_H

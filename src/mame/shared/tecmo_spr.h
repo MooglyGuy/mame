@@ -13,9 +13,9 @@ public:
 	typedef device_delegate<uint32_t (uint8_t pri)> pri_cb_delegate;
 
 	// constructors/destructors
-	tecmo_spr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-	template <typename T> tecmo_spr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: tecmo_spr_device(mconfig, tag, owner, clock)
+	tecmo_spr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> tecmo_spr_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: tecmo_spr_device(mconfig, tag, owner, XTAL())
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

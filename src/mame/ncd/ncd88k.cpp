@@ -142,16 +142,16 @@ INPUT_PORTS_END
 
 void ncd88k_state::ncd19c(machine_config &config)
 {
-	MC88100(config, m_maincpu, 15'000'000);
+	MC88100(config, m_maincpu, XTAL::u(15'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &ncd88k_state::code_map);
 	m_maincpu->set_addrmap(AS_DATA, &ncd88k_state::data_map);
 
-	SCN2681(config, "duart", 3'686'400);
+	SCN2681(config, "duart", XTAL::u(3'686'400));
 
-	BT458(config, m_ramdac, 0);
+	BT458(config, m_ramdac);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(125'000'000, 1680, 0, 1280, 1063, 0, 1024); // 74.4 kHz horizontal, 70 Hz vertical
+	m_screen->set_raw(XTAL::u(125'000'000), 1680, 0, 1280, 1063, 0, 1024); // 74.4 kHz horizontal, 70 Hz vertical
 	m_screen->set_screen_update(FUNC(ncd88k_state::screen_update));
 }
 
@@ -255,7 +255,7 @@ void ncdmcx_state::ncdmcx(machine_config &config)
 	m_lance->dma_in().set([this](offs_t offset) { return util::big_endian_cast<const u16>(m_dram.target())[offset >> 1]; });
 	m_lance->dma_out().set([this](offs_t offset, u16 data, u16 mem_mask) { COMBINE_DATA(&util::big_endian_cast<u16>(m_dram.target())[offset >> 1]); });
 
-	SCN2681(config, m_duart, 3'686'400);
+	SCN2681(config, m_duart, XTAL::u(3'686'400));
 	m_duart->irq_cb().set(FUNC(ncdmcx_state::irq_w<3>));
 	m_duart->outport_cb().set(
 		[this](u8 data)
@@ -265,10 +265,10 @@ void ncdmcx_state::ncdmcx(machine_config &config)
 			m_eeprom->clk_write(BIT(data, 6));
 		});
 
-	BT477(config, m_ramdac, 125'000'000); // ATT20C497-11
+	BT477(config, m_ramdac, XTAL::u(125'000'000)); // ATT20C497-11
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(125'000'000, 1680, 0, 1280, 1063, 0, 1024); // 74.4 kHz horizontal, 70 Hz vertical
+	m_screen->set_raw(XTAL::u(125'000'000), 1680, 0, 1280, 1063, 0, 1024); // 74.4 kHz horizontal, 70 Hz vertical
 	m_screen->set_screen_update(FUNC(ncdmcx_state::screen_update));
 	m_screen->screen_vblank().set(FUNC(ncdmcx_state::irq_w<4>));
 

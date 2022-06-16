@@ -505,7 +505,7 @@ void dinopic_state::dinopic(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_HIGH);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 0.30);
 	m_oki->set_addrmap(0, &dinopic_state::oki_map);
 }
@@ -547,7 +547,7 @@ void cps1bl_pic_state::punipic(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_HIGH);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 0.30);
 	m_oki->set_addrmap(0, &cps1bl_pic_state::oki_map);
 }
@@ -555,12 +555,12 @@ void cps1bl_pic_state::punipic(machine_config &config)
 void cps1bl_pic_state::slampic(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 12000000);
+	M68000(config, m_maincpu, XTAL::u(12000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &cps1bl_pic_state::slampic_map);
 	m_maincpu->set_vblank_int("screen", FUNC(cps1bl_pic_state::cps1_interrupt));
 	m_maincpu->set_addrmap(m68000_base_device::AS_CPU_SPACE, &cps1bl_pic_state::cpu_space_map);
 
-	PIC16C57(config, m_pic, 12000000);
+	PIC16C57(config, m_pic, XTAL::u(12000000));
 	m_pic->set_disable(); // no valid dump
 
 	MCFG_MACHINE_START_OVERRIDE(cps1bl_pic_state, slampic)
@@ -583,19 +583,19 @@ void cps1bl_pic_state::slampic(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_HIGH);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 0.30);
 	m_oki->set_addrmap(0, &cps1bl_pic_state::oki_map);
 }
 
 void slampic2_state::slampic2(machine_config &config)
 {
-	M68000(config, m_maincpu, 10000000);  // measured
+	M68000(config, m_maincpu, XTAL::u(10000000));  // measured
 	m_maincpu->set_addrmap(AS_PROGRAM, &slampic2_state::slampic2_map);
 	m_maincpu->set_vblank_int("screen", FUNC(slampic2_state::cps1_interrupt));
 	m_maincpu->set_addrmap(m68000_base_device::AS_CPU_SPACE, &slampic2_state::cpu_space_map);
 
-	PIC16C57(config, m_pic, 4000000); // measured
+	PIC16C57(config, m_pic, XTAL::u(4000000)); // measured
 	m_pic->set_disable();
 
 	MCFG_MACHINE_START_OVERRIDE(slampic2_state, slampic2)
@@ -612,7 +612,7 @@ void slampic2_state::slampic2(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	//GENERIC_LATCH_8(config, m_soundlatch);
 	//GENERIC_LATCH_8(config, m_soundlatch2);
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_LOW);  // measured & pin 7 verified
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_LOW);  // measured & pin 7 verified
 	//m_oki->set_addrmap(0, &slampic2_state::slampic2_oki_map);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 0.80);
 }

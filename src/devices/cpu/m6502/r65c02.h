@@ -15,14 +15,14 @@
 
 class r65c02_device : public w65c02_device {
 public:
-	r65c02_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	r65c02_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 	virtual void do_exec_full() override;
 	virtual void do_exec_partial() override;
 
 protected:
-	r65c02_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	r65c02_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class r65c102_device : public r65c02_device {

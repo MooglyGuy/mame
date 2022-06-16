@@ -509,7 +509,7 @@ void igs_fear_state::cpld_w(offs_t offset, u32 data, u32 mem_mask)
 
 void igs_fear_state::igs_fear(machine_config &config)
 {
-	IGS027A(config, m_maincpu, 50'000'000/2);
+	IGS027A(config, m_maincpu, XTAL::u(50'000'000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &igs_fear_state::main_map);
 	m_maincpu->in_port().set(FUNC(igs_fear_state::igs027_gpio_r));
 	m_maincpu->out_port().set(FUNC(igs_fear_state::igs027_gpio_w));

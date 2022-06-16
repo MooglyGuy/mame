@@ -50,7 +50,7 @@ class dac76_device : public device_t, public device_sound_interface
 {
 public:
 	// construction/destruction
-	dac76_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dac76_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// When streaming is enabled, the Iref will be obtained from the input sound
 	// stream. Otherwise, the value set with `set_fixed_iref` will be used.

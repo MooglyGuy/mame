@@ -205,7 +205,7 @@ void victor_9000_fdc_device::device_add_mconfig(machine_config &config)
 //  victor_9000_fdc_device - constructor
 //-------------------------------------------------
 
-victor_9000_fdc_device::victor_9000_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+victor_9000_fdc_device::victor_9000_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, VICTOR_9000_FDC, tag, owner, clock),
 	m_irq_cb(*this),
 	m_syn_cb(*this),

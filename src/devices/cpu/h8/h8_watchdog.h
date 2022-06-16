@@ -20,9 +20,9 @@ class h8_watchdog_device : public device_t {
 public:
 	enum { B, H, S };
 
-	h8_watchdog_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_watchdog_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8_watchdog_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int irq, int type)
-		: h8_watchdog_device(mconfig, tag, owner, 0)
+		: h8_watchdog_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));

@@ -102,7 +102,7 @@ DEFINE_DEVICE_TYPE(CD4099, cd4099_device, "cd4099", "CD4099B Addressable Latch")
 //  ADDRESSABLE LATCH DEVICE
 //**************************************************************************
 
-addressable_latch_device::addressable_latch_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, bool clear_active)
+addressable_latch_device::addressable_latch_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool clear_active)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_q_out_cb(*this)
 	, m_parallel_out_cb(*this)
@@ -372,7 +372,7 @@ void addressable_latch_device::clear_outputs(u8 new_q)
 //  LS259 DEVICE
 //**************************************************************************
 
-ls259_device::ls259_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ls259_device::ls259_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: addressable_latch_device(mconfig, LS259, tag, owner, clock, false)
 {
 }
@@ -381,7 +381,7 @@ ls259_device::ls259_device(const machine_config &mconfig, const char *tag, devic
 //  HC259 DEVICE
 //**************************************************************************
 
-hc259_device::hc259_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hc259_device::hc259_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: addressable_latch_device(mconfig, HC259, tag, owner, clock, false)
 {
 }
@@ -390,7 +390,7 @@ hc259_device::hc259_device(const machine_config &mconfig, const char *tag, devic
 //  HCT259 DEVICE
 //**************************************************************************
 
-hct259_device::hct259_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+hct259_device::hct259_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: addressable_latch_device(mconfig, HCT259, tag, owner, clock, false)
 {
 }
@@ -399,7 +399,7 @@ hct259_device::hct259_device(const machine_config &mconfig, const char *tag, dev
 //  F9334 DEVICE
 //**************************************************************************
 
-f9334_device::f9334_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+f9334_device::f9334_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: addressable_latch_device(mconfig, F9334, tag, owner, clock, false)
 {
 }
@@ -408,7 +408,7 @@ f9334_device::f9334_device(const machine_config &mconfig, const char *tag, devic
 //  CD4099 DEVICE
 //**************************************************************************
 
-cd4099_device::cd4099_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+cd4099_device::cd4099_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: addressable_latch_device(mconfig, CD4099, tag, owner, clock, true)
 {
 }

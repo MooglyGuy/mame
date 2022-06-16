@@ -151,7 +151,7 @@ void device_a5200_cart_interface::interface_post_start()
 //  ****_cart_slot_device - constructor
 //-------------------------------------------------
 
-a800_cart_slot_device::a800_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_cart_slot_device::a800_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, A800_CART_SLOT, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_cartrom_image_interface(mconfig, *this)
@@ -165,7 +165,7 @@ a800_cart_slot_device::a800_cart_slot_device(const machine_config &mconfig, cons
 {
 }
 
-a5200_cart_slot_device::a5200_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a5200_cart_slot_device::a5200_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, A5200_CART_SLOT, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_cartrom_image_interface(mconfig, *this)

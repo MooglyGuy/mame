@@ -21,10 +21,10 @@
 class vt3xx_soc_base_device : public nes_vt09_soc_device
 {
 public:
-	vt3xx_soc_base_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt3xx_soc_base_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
-	vt3xx_soc_base_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock);
+	vt3xx_soc_base_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config& config) override;
 	void device_start() override ATTR_COLD;
@@ -119,7 +119,7 @@ private:
 class vt3xx_soc_unk_bt_device : public vt3xx_soc_base_device
 {
 public:
-	vt3xx_soc_unk_bt_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt3xx_soc_unk_bt_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config& config) override;
@@ -132,10 +132,10 @@ protected:
 class vt369_soc_introm_noswap_device : public vt3xx_soc_base_device
 {
 public:
-	vt369_soc_introm_noswap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt369_soc_introm_noswap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
-	vt369_soc_introm_noswap_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock);
+	vt369_soc_introm_noswap_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock);
 
 	virtual void device_start() override;
 	virtual void device_add_mconfig(machine_config& config) override;
@@ -152,7 +152,7 @@ protected:
 class vt369_soc_introm_swap_device : public vt369_soc_introm_noswap_device
 {
 public:
-	vt369_soc_introm_swap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt369_soc_introm_swap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override;
@@ -161,7 +161,7 @@ protected:
 class vt369_soc_introm_altswap_device : public vt369_soc_introm_noswap_device
 {
 public:
-	vt369_soc_introm_altswap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt369_soc_introm_altswap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override;
@@ -170,7 +170,7 @@ protected:
 class vt369_soc_introm_vibesswap_device : public vt369_soc_introm_noswap_device
 {
 public:
-	vt369_soc_introm_vibesswap_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt369_soc_introm_vibesswap_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override;
@@ -179,10 +179,10 @@ protected:
 class vt3xx_soc_unk_dg_device : public vt3xx_soc_base_device
 {
 public:
-	vt3xx_soc_unk_dg_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt3xx_soc_unk_dg_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
-	vt3xx_soc_unk_dg_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock);
+	vt3xx_soc_unk_dg_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config& config) override;
 
@@ -194,7 +194,7 @@ protected:
 class vt3xx_soc_unk_fa_device : public vt3xx_soc_unk_dg_device
 {
 public:
-	vt3xx_soc_unk_fa_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	vt3xx_soc_unk_fa_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 protected:
 

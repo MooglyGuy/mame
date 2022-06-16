@@ -47,11 +47,11 @@ INPUT_PORTS_END
 
 void photoplays_state::photoplays(machine_config &config)
 {
-	PENTIUM2(config, m_maincpu, 366'000'000); // Actually an Intel CELERON FV524RX366 128 SL36C
+	PENTIUM2(config, m_maincpu, XTAL::u(366'000'000)); // Actually an Intel CELERON FV524RX366 128 SL36C
 	m_maincpu->set_addrmap(AS_PROGRAM, &photoplays_state::photoplays_map);
 	m_maincpu->set_disable();
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

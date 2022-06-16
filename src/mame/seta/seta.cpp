@@ -7452,11 +7452,11 @@ TIMER_DEVICE_CALLBACK_MEMBER(seta_state::seta_interrupt_2_and_4)
 void seta_state::atehate(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::atehate_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // correct (test grid)
@@ -7477,7 +7477,7 @@ void seta_state::atehate(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -7534,11 +7534,11 @@ void seta_state::blandia(machine_config &config)
 void seta_state::blandiap(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::blandiap_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_2_and_4), "screen", 0, 1);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(8, 0); // correct (test grid, startup bg)
@@ -7565,7 +7565,7 @@ void seta_state::blandiap(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 	m_x1snd->set_addrmap(0, &seta_state::blandia_x1_map);
 }
@@ -7628,7 +7628,7 @@ void seta_state::blockcarb(machine_config &config)
 	// basic machine hardware
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::blockcarb_map);
 
-	Z80(config, m_audiocpu, 4000000); // unk freq
+	Z80(config, m_audiocpu, XTAL::u(4000000)); // unk freq
 	m_audiocpu->set_addrmap(AS_PROGRAM, &seta_state::blockcarb_sound_map);
 
 	// the sound hardware / program is ripped from Mercs (CPS1)
@@ -7636,11 +7636,11 @@ void seta_state::blockcarb(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 4000000)); // unk freq
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(4000000))); // unk freq
 	ymsnd.irq_handler().set_inputline(m_audiocpu, INPUT_LINE_IRQ0);
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.5);
 
-	OKIM6295(config, "oki", 1000000, okim6295_device::PIN7_HIGH) // clock frequency & pin 7 not verified
+	OKIM6295(config, "oki", XTAL::u(1000000), okim6295_device::PIN7_HIGH) // clock frequency & pin 7 not verified
 		.add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -7763,7 +7763,7 @@ void seta_state::qzkklgy2(machine_config &config)
 {
 	drgnunit(config);
 	// basic machine hardware
-	m_maincpu->set_clock(16000000);   // 16 MHz
+	m_maincpu->set_clock(XTAL::u(16000000));   // 16 MHz
 
 	m_spritegen->set_fg_xoffsets(0, 0); // sprites unknown, tilemaps correct (test grid)
 	m_layers[0]->set_xoffsets(-3, -1);
@@ -7808,8 +7808,8 @@ void setaroul_state::setaroul(machine_config &config)
 	NVRAM(config, "nvram", nvram_device::DEFAULT_RANDOM);
 
 	// devices
-	UPD4992(config, m_rtc, 32'768); // ! Actually D4911C !
-	ACIA6850(config, "acia0", 0);
+	UPD4992(config, m_rtc, XTAL::u(32'768)); // ! Actually D4911C !
+	ACIA6850(config, "acia0");
 	TICKET_DISPENSER(config, "hopper", attotime::from_msec(150));
 
 	// video hardware
@@ -7852,12 +7852,12 @@ void setaroul_state::setaroulm(machine_config &config)
 void seta_state::eightfrc(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::zingzip_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(4, 3); // correct (test mode)
@@ -7882,7 +7882,7 @@ void seta_state::eightfrc(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 	m_x1snd->set_addrmap(0, &seta_state::blandia_x1_map);
 }
@@ -7902,12 +7902,12 @@ void seta_state::extdwnhl(machine_config &config)
 	// TODO: verify clocks (16 MHz and 14.318 MHz XTALs are both on board)
 
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::extdwnhl_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // correct (test grid, background images)
@@ -7932,7 +7932,7 @@ void seta_state::extdwnhl(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(0, "speaker", 1.0, 0);
 	m_x1snd->add_route(1, "speaker", 1.0, 1);
 }
@@ -8033,12 +8033,12 @@ void zombraid_state::zombraid(machine_config &config)
 void seta_state::jjsquawk(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::zingzip_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(1, 1); // correct (test mode)
@@ -8063,18 +8063,18 @@ void seta_state::jjsquawk(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
 void seta_state::jjsquawb(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::jjsquawb_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(1, 1); // correct (test mode)
@@ -8099,7 +8099,7 @@ void seta_state::jjsquawb(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -8112,16 +8112,16 @@ void seta_state::jjsquawb(machine_config &config)
 void seta_state::kamenrid(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::kamenrid_map);
 
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
-	pit.set_clk<0>(16000000/2/8);
+	pit8254_device &pit(PIT8254(config, "pit")); // uPD71054C
+	pit.set_clk<0>(XTAL::u(16000000)/2/8);
 	pit.out_handler<0>().set(FUNC(seta_state::pit_out0));
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // correct (map, banpresto logo)
@@ -8147,7 +8147,7 @@ void seta_state::kamenrid(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -8224,7 +8224,7 @@ void keroppi_state::keroppi(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	X1_010(config, m_x1snd, 14318180);   // 14.318180 MHz
+	X1_010(config, m_x1snd, XTAL::u(14318180));   // 14.318180 MHz
 	m_x1snd->add_route(0, "speaker", 1.0, 0);
 	m_x1snd->add_route(1, "speaker", 1.0, 1);
 }
@@ -8283,14 +8283,14 @@ void seta_state::krzybowl(machine_config &config)
 void seta_state::madshark(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::madshark_map);
 
-	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
-	pit.set_clk<0>(16000000/2/8);
+	pit8254_device &pit(PIT8254(config, "pit")); // uPD71054C
+	pit.set_clk<0>(XTAL::u(16000000)/2/8);
 	pit.out_handler<0>().set(FUNC(seta_state::pit_out0));
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // unknown (wrong when flipped, but along y)
@@ -8318,7 +8318,7 @@ void seta_state::madshark(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -8376,16 +8376,16 @@ void magspeed_state::machine_start()
 void magspeed_state::magspeed(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &magspeed_state::magspeed_map);
 
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
-	pit.set_clk<0>(16000000/2/8);
+	pit8254_device &pit(PIT8254(config, "pit")); // uPD71054C
+	pit.set_clk<0>(XTAL::u(16000000)/2/8);
 	pit.out_handler<0>().set(FUNC(magspeed_state::pit_out0));
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(magspeed_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // floating tilemap maybe 1px off in test grid
@@ -8411,7 +8411,7 @@ void magspeed_state::magspeed(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -8425,14 +8425,14 @@ void magspeed_state::magspeed(machine_config &config)
 void seta_state::msgundam(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::msgundam_map);
 
-	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
-	pit.set_clk<0>(16000000/2/8);
+	pit8254_device &pit(PIT8254(config, "pit")); // uPD71054C
+	pit.set_clk<0>(XTAL::u(16000000)/2/8);
 	pit.out_handler<0>().set(FUNC(seta_state::pit_out0));
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // correct (test grid, banpresto logo)
@@ -8459,7 +8459,7 @@ void seta_state::msgundam(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -8477,11 +8477,11 @@ void seta_state::msgundamb(machine_config &config)
 void seta_state::oisipuzl(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::oisipuzl_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(1, 1); // correct (test mode) flip screen not supported?
@@ -8508,7 +8508,7 @@ void seta_state::oisipuzl(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(0, "speaker", 1.0, 0);
 	m_x1snd->add_route(1, "speaker", 1.0, 1);
 }
@@ -8523,10 +8523,10 @@ void seta_state::oisipuzl(machine_config &config)
 void seta_state::triplfun(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::triplfun_map);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(1, 1); // correct (test mode) flip screen not supported?
@@ -8554,7 +8554,7 @@ void seta_state::triplfun(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	okim6295_device &oki(OKIM6295(config, "oki", 792000, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
+	okim6295_device &oki(OKIM6295(config, "oki", XTAL::u(792000), okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
 	oki.add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	oki.add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 }
@@ -8806,15 +8806,15 @@ void seta_state::umanclub(machine_config &config)
 void seta_state::utoukond(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::utoukond_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 
-	Z80(config, m_audiocpu, 16000000/4);   // 4 MHz
+	Z80(config, m_audiocpu, XTAL::u(16000000)/4);   // 4 MHz
 	m_audiocpu->set_addrmap(AS_PROGRAM, &seta_state::utoukond_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &seta_state::utoukond_sound_io_map);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // unknown (wrong when flipped, but along y)
@@ -8843,10 +8843,10 @@ void seta_state::utoukond(machine_config &config)
 	m_soundlatch->data_pending_callback().set_inputline(m_audiocpu, 0);
 	m_soundlatch->set_separate_acknowledge(true);
 
-	X1_010(config, m_x1snd, 16000000);
+	X1_010(config, m_x1snd, XTAL::u(16000000));
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.50);
 
-	ym3438_device &ymsnd(YM3438(config, "ymsnd", 16000000/2)); // 8 MHz
+	ym3438_device &ymsnd(YM3438(config, "ymsnd", XTAL::u(16000000)/2)); // 8 MHz
 	ymsnd.irq_handler().set_inputline(m_audiocpu, INPUT_LINE_NMI);
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.30);
 }
@@ -8859,7 +8859,7 @@ void seta_state::utoukond(machine_config &config)
 void seta_state::wrofaero(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);   // 16 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::wrofaero_map);
 
 	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
@@ -8868,7 +8868,7 @@ void seta_state::wrofaero(machine_config &config)
 
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // correct (test mode)
@@ -8894,7 +8894,7 @@ void seta_state::wrofaero(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -8955,14 +8955,14 @@ void seta_state::zingzipbl(machine_config &config)
 	m_layers[1]->set_info(gfx_zingzipbl_layer2);
 	// TODO: layers x and y offsets' adjustments
 
-	M68000(config.replace(), m_maincpu, 16000000);   // 16 MHz
+	M68000(config.replace(), m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::zingzipbl_map);
 
 	subdevice<screen_device>("screen")->screen_vblank().set_inputline(m_maincpu, 6, HOLD_LINE); // TODO: there's probably more than this
 
 	config.device_remove("x1snd");
 
-	OKIM6295(config, "oki", 1000000, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0);
+	OKIM6295(config, "oki", XTAL::u(1000000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 
@@ -8998,7 +8998,7 @@ void pairlove_state::pairlove(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
@@ -9090,7 +9090,7 @@ void jockeyc_state::jockeyc(machine_config &config)
 
 	WATCHDOG_TIMER(config, m_watchdog).set_time(attotime::from_seconds(2.0)); // jockeyc: watchdog test error if over 2.5s
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // sprites correct? (bets), tilemap correct (test grid)
@@ -9101,8 +9101,8 @@ void jockeyc_state::jockeyc(machine_config &config)
 
 	MCFG_MACHINE_START_OVERRIDE(jockeyc_state, jockeyc)
 	// devices
-	UPD4992(config, m_rtc, 32'768); // ! Actually D4911C !
-	ACIA6850(config, "acia0", 0);
+	UPD4992(config, m_rtc, XTAL::u(32'768)); // ! Actually D4911C !
+	ACIA6850(config, "acia0");
 	TICKET_DISPENSER(config, "hopper1", attotime::from_msec(150));
 	TICKET_DISPENSER(config, "hopper2", attotime::from_msec(150));
 
@@ -9122,7 +9122,7 @@ void jockeyc_state::jockeyc(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	X1_010(config, m_x1snd, 16000000);
+	X1_010(config, m_x1snd, XTAL::u(16000000));
 	m_x1snd->add_route(0, "speaker", 1.0, 0);
 	m_x1snd->add_route(1, "speaker", 1.0, 1);
 
@@ -9156,8 +9156,8 @@ void jockeyc_state::inttoote(machine_config &config)
 	PIA6821(config, "pia0");
 	PIA6821(config, "pia1");
 
-	ACIA6850(config, "acia1", 0);
-	ACIA6850(config, "acia2", 0);
+	ACIA6850(config, "acia1");
+	ACIA6850(config, "acia2");
 
 	// layout
 	config.set_default_layout(layout_inttoote);

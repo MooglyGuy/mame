@@ -43,7 +43,7 @@
 
 DEFINE_DEVICE_TYPE(CR511B, cr511b_device, "cr511b", "CR-511-B CD-ROM drive")
 
-cr511b_device::cr511b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cr511b_device::cr511b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	cdrom_image_device(mconfig, CR511B, tag, owner, clock),
 	device_mixer_interface(mconfig, *this),
 	m_cdda(*this, "cdda"),

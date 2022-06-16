@@ -100,7 +100,7 @@ PC5380-9651            5380-JY3306A           5380-N1045503A
 
 
 /* constants */
-#define MASTER_CLOCK    48000000
+#define MASTER_CLOCK    XTAL::u(48000000)
 
 
 /*************************************
@@ -449,7 +449,7 @@ void policetr_state::policetr(machine_config &config)
 	m_screen->set_screen_update(FUNC(policetr_state::screen_update));
 	m_screen->screen_vblank().set(FUNC(policetr_state::vblank));
 
-	BT481(config, m_ramdac, 0); // Bt481AKPJ110
+	BT481(config, m_ramdac); // Bt481AKPJ110
 
 	/* sound hardware */
 	SPEAKER(config, m_speaker, 2).front();

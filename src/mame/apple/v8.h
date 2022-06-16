@@ -20,7 +20,7 @@ class v8_device : public device_t, public device_sound_interface
 {
 public:
 	// construction/destruction
-	v8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	v8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// interface routines
 	auto pb4_callback() { return write_pb4.bind(); }
@@ -57,7 +57,7 @@ protected:
 	bool m_overlay;
 	u8 m_video_config;
 
-	v8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	v8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -119,7 +119,7 @@ private:
 class eagle_device : public v8_device
 {
 public:
-	eagle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	eagle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -136,7 +136,7 @@ private:
 class spice_device : public v8_device
 {
 public:
-	spice_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	spice_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 
@@ -144,7 +144,7 @@ public:
 	required_device_array<floppy_connector, 2> m_floppy;
 
 protected:
-	spice_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	spice_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -173,7 +173,7 @@ private:
 class tinkerbell_device : public spice_device
 {
 public:
-	tinkerbell_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tinkerbell_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

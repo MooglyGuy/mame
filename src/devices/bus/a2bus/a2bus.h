@@ -37,7 +37,7 @@ class a2bus_slot_device : public device_t, public device_single_card_slot_interf
 public:
 	// construction/destruction
 	template <typename T, typename U>
-	a2bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&a2bus_tag, U &&opts, const char *dflt)
+	a2bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&a2bus_tag, U &&opts, const char *dflt)
 		: a2bus_slot_device(mconfig, tag, owner, clock)
 	{
 		option_reset();
@@ -46,10 +46,10 @@ public:
 		set_fixed(false);
 		m_a2bus.set_tag(std::forward<T>(a2bus_tag));
 	}
-	a2bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	a2bus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_resolve_objects() override ATTR_COLD;
@@ -70,7 +70,7 @@ class a2bus_device : public device_t
 	friend class a2bus_mcms2_device;
 public:
 	// construction/destruction
-	a2bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// inline configuration
 	template <typename T> void set_space(T &&tag, int spacenum) { m_maincpu_space.set_tag(std::forward<T>(tag), spacenum); }
@@ -96,7 +96,7 @@ public:
 	void nmi_w(int state);
 
 protected:
-	a2bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

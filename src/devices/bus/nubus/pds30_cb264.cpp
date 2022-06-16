@@ -28,10 +28,10 @@ class nubus_cb264se30_device : public device_t,
 {
 public:
 	// construction/destruction
-	nubus_cb264se30_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_cb264se30_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	nubus_cb264se30_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_cb264se30_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -77,9 +77,9 @@ void nubus_cb264se30_device::device_add_mconfig(machine_config &config)
 	m_screen->set_screen_update(FUNC(nubus_cb264se30_device::screen_update));
 	m_screen->set_raw(30.24_MHz_XTAL, 864, 0, 640, 525, 0, 480);
 
-	BT473(config, m_ramdac, 0);
+	BT473(config, m_ramdac);
 
-	TMS34061(config, m_tms34061, 0);
+	TMS34061(config, m_tms34061);
 	m_tms34061->set_rowshift(10); // VRAM address is (row << rowshift) | col
 	m_tms34061->set_vram_size(VRAM_SIZE);
 	m_tms34061->set_screen(m_screen);
@@ -91,12 +91,12 @@ const tiny_rom_entry *nubus_cb264se30_device::device_rom_region() const
 	return ROM_NAME( cb264se30 );
 }
 
-nubus_cb264se30_device::nubus_cb264se30_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_cb264se30_device::nubus_cb264se30_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_cb264se30_device(mconfig, PDS030_CB264SE30, tag, owner, clock)
 {
 }
 
-nubus_cb264se30_device::nubus_cb264se30_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_cb264se30_device::nubus_cb264se30_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_screen(*this, "screen"),

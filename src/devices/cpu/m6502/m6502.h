@@ -38,7 +38,7 @@ public:
 		virtual void write_9(uint16_t adr, uint8_t val);
 	};
 
-	m6502_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m6502_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_address_width(int width, bool custom_interface) {
 		program_config.m_addr_width = width;
@@ -57,7 +57,7 @@ public:
 	devcb_write_line sync_w;
 
 protected:
-	m6502_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	m6502_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	class mi_default : public memory_interface {
 	public:
@@ -281,7 +281,7 @@ protected:
 
 class m6512_device : public m6502_device {
 public:
-	m6512_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	m6512_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 enum {

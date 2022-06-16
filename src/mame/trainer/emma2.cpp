@@ -190,7 +190,7 @@ void emma2_state::machine_start()
 void emma2_state::emma2(machine_config &config)
 {
 	/* basic machine hardware */
-	M6502(config, m_maincpu, 1'000'000);
+	M6502(config, m_maincpu, XTAL::u(1'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &emma2_state::mem_map);
 
 	/* video hardware */
@@ -199,7 +199,7 @@ void emma2_state::emma2(machine_config &config)
 	m_display->set_segmask(0xff, 0xff);
 
 	/* Devices */
-	MOS6522(config, m_via, 1'000'000);  // #2 from cpu
+	MOS6522(config, m_via, XTAL::u(1'000'000));  // #2 from cpu
 	m_via->irq_handler().set_inputline(m_maincpu, m6502_device::IRQ_LINE);
 
 	PIA6821(config, m_pia);

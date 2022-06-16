@@ -31,7 +31,7 @@ class abc99_device :  public device_t,
 {
 public:
 	// construction/destruction
-	abc99_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	abc99_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	ioport_value cursor_x4_r();
 	ioport_value cursor_x6_r();

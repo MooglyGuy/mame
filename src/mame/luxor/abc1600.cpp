@@ -921,10 +921,10 @@ void abc1600_state::abc1600(machine_config &config)
 	m_maincpu->set_addrmap(m68000_base_device::AS_CPU_SPACE, &abc1600_state::cpu_space_map);
 
 	// video hardware
-	ABC1600_MOVER(config, ABC1600_MOVER_TAG, 0);
+	ABC1600_MOVER(config, ABC1600_MOVER_TAG);
 
 	// devices
-	ABC1600_MAC(config, m_mac, 0);
+	ABC1600_MAC(config, m_mac);
 	m_mac->set_addrmap(AS_PROGRAM, &abc1600_state::mac_mem);
 	m_mac->set_cpu(m_maincpu);
 	m_mac->in_tren0_cb().set(m_bus0i, FUNC(abcbus_slot_device::read_tren)); // TODO bus0x
@@ -1017,7 +1017,7 @@ void abc1600_state::abc1600(machine_config &config)
 	m_cio->pc_rd_cb().set(FUNC(abc1600_state::cio_pc_r));
 	m_cio->pc_wr_cb().set(FUNC(abc1600_state::cio_pc_w));
 
-	NMC9306(config, m_nvram, 0);
+	NMC9306(config, m_nvram);
 
 	E0516(config, m_rtc, 32.768_kHz_XTAL);
 	m_rtc->outsel_rd_cb().set_constant(0);

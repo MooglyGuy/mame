@@ -939,7 +939,7 @@ void meadows_state::meadows(machine_config &config)
 
 	// audio hardware
 	SPEAKER(config, "speaker").front_center();
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5); // unknown DAC
 
 	SAMPLES(config, m_samples);
 	m_samples->set_channels(2);

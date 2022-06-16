@@ -165,7 +165,7 @@ void pv9234_state::machine_reset()
 
 void pv9234_state::pv9234(machine_config &config)
 {
-	ARM7(config, m_maincpu, 4915000); // TODO: unknown type, VLSI branded?
+	ARM7(config, m_maincpu, XTAL::u(4915000)); // TODO: unknown type, VLSI branded?
 	m_maincpu->set_addrmap(AS_PROGRAM, &pv9234_state::main_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));

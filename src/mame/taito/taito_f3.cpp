@@ -462,7 +462,7 @@ void taito_f3_state::f3(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	TAITO_EN(config, m_taito_en, 0);
+	TAITO_EN(config, m_taito_en);
 	m_taito_en->add_route(0, "speaker", 1.0, 0);
 	m_taito_en->add_route(1, "speaker", 1.0, 1);
 }
@@ -546,7 +546,7 @@ void taito_f3_state::bubsympb(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_HIGH); // not verified
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_HIGH); // not verified
 	m_oki->set_addrmap(0, &taito_f3_state::bubsympb_oki_map);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }

@@ -17,7 +17,7 @@ class cuda_device :  public device_t, public device_nvram_interface
 {
 public:
 	// construction/destruction
-	cuda_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	cuda_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_config_nvram_interface overrides
 	virtual void nvram_default() override;
@@ -82,7 +82,7 @@ private:
 class cuda_2xx_device : public cuda_device
 {
 public:
-	cuda_2xx_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	cuda_2xx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -91,7 +91,7 @@ protected:
 class cuda_302_device : public cuda_device
 {
 public:
-	cuda_302_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	cuda_302_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

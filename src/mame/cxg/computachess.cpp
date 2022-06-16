@@ -189,7 +189,7 @@ INPUT_PORTS_END
 void cpchess_state::scpchess(machine_config &config)
 {
 	// basic machine hardware
-	HD44801(config, m_maincpu, 400'000); // approximation
+	HD44801(config, m_maincpu, XTAL::u(400'000)); // approximation
 	m_maincpu->write_r<2>().set(FUNC(cpchess_state::mux_w<0>));
 	m_maincpu->write_r<3>().set(FUNC(cpchess_state::mux_w<1>));
 	m_maincpu->write_d().set(FUNC(cpchess_state::control_w));

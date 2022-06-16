@@ -184,12 +184,12 @@ ioport_constructor nubus_spec8s3_device::device_input_ports() const
 //  nubus_spec8s3_device - constructor
 //-------------------------------------------------
 
-nubus_spec8s3_device::nubus_spec8s3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_spec8s3_device::nubus_spec8s3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_spec8s3_device(mconfig, NUBUS_SPEC8S3, tag, owner, clock)
 {
 }
 
-nubus_spec8s3_device::nubus_spec8s3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_spec8s3_device::nubus_spec8s3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	device_video_interface(mconfig, *this),

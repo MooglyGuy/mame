@@ -141,7 +141,7 @@ void vme_mzr8300_card_device::device_add_mconfig(machine_config &config)
 //  LIVE DEVICE
 //**************************************************************************
 
-vme_mzr8300_card_device::vme_mzr8300_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+vme_mzr8300_card_device::vme_mzr8300_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_sio(*this, "sio%u", 0U)
@@ -150,7 +150,7 @@ vme_mzr8300_card_device::vme_mzr8300_card_device(const machine_config &mconfig, 
 	LOG("%s %s\n", tag, FUNCNAME);
 }
 
-vme_mzr8300_card_device::vme_mzr8300_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+vme_mzr8300_card_device::vme_mzr8300_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	vme_mzr8300_card_device(mconfig, VME_MZR8300, tag, owner, clock)
 {
 }

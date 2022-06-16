@@ -43,7 +43,7 @@ DEFINE_DEVICE_TYPE(MIDWAY_TURBO_CHEAP_SQUEAK, midway_turbo_cheap_squeak_device, 
 //  midway_ssio_device - constructor
 //-------------------------------------------------
 
-midway_ssio_device::midway_ssio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midway_ssio_device::midway_ssio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MIDWAY_SSIO, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -479,7 +479,7 @@ TIMER_CALLBACK_MEMBER(midway_ssio_device::synced_write)
 //  midway_sounds_good_device - constructor
 //-------------------------------------------------
 
-midway_sounds_good_device::midway_sounds_good_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midway_sounds_good_device::midway_sounds_good_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MIDWAY_SOUNDS_GOOD, tag, owner, clock)
 		, device_mixer_interface(mconfig, *this)
 		, m_cpu(*this, "cpu")
@@ -674,7 +674,7 @@ TIMER_CALLBACK_MEMBER(midway_sounds_good_device::synced_write)
 //  midway_turbo_cheap_squeak_device - constructor
 //-------------------------------------------------
 
-midway_turbo_cheap_squeak_device::midway_turbo_cheap_squeak_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midway_turbo_cheap_squeak_device::midway_turbo_cheap_squeak_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MIDWAY_TURBO_CHEAP_SQUEAK, tag, owner, clock)
 		, device_mixer_interface(mconfig, *this)
 		, m_cpu(*this, "cpu")

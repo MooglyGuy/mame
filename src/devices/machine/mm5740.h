@@ -79,7 +79,7 @@ Vgg                  18          -12V
 class mm5740_device : public device_t
 {
 public:
-	mm5740_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mm5740_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// public interface
 	u16 b_r();

@@ -32,7 +32,7 @@ class harddisk_image_base_device : public device_t, public device_image_interfac
 {
 protected:
 	// construction/destruction
-	harddisk_image_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	harddisk_image_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_image_interface implementation
 	virtual bool is_readable()  const noexcept override { return true; }
@@ -53,11 +53,11 @@ public:
 
 	// construction/destruction
 	harddisk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const char *intf)
-		: harddisk_image_device(mconfig, tag, owner, (uint32_t)0)
+		: harddisk_image_device(mconfig, tag, owner)
 	{
 		set_interface(intf);
 	}
-	harddisk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	harddisk_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~harddisk_image_device();
 
 	template <typename... T> void set_device_load(T &&... args) { m_device_image_load.set(std::forward<T>(args)...); }
@@ -85,7 +85,7 @@ public:
 	std::error_condition get_disk_key_data(std::vector<uint8_t> &data) const;
 
 protected:
-	harddisk_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	harddisk_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_config_complete() override;

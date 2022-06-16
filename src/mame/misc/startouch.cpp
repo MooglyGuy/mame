@@ -72,7 +72,7 @@ INPUT_PORTS_END
 void startouch_state::europl01(machine_config &config)
 {
 	// Super Socket 7
-	PENTIUM_MMX(config, m_maincpu, 233'000'000);
+	PENTIUM_MMX(config, m_maincpu, XTAL::u(233'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &startouch_state::mem_map);
 
 	PCI_ROOT(config, "pci", 0);

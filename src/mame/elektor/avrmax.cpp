@@ -263,7 +263,7 @@ void avrmax_state::avrmax(machine_config &config)
 	base(config);
 
 	// basic machine hardware
-	m_maincpu->set_clock(8'000'000); // internal R/C clock
+	m_maincpu->set_clock(XTAL::u(8'000'000)); // internal R/C clock
 	m_maincpu->gpio_out<atmega88_device::GPIOC>().set(FUNC(avrmax_state::digit_w));
 	m_maincpu->gpio_out<atmega88_device::GPIOD>().set(FUNC(avrmax_state::segment_w));
 
@@ -287,7 +287,7 @@ void avrmax_state::atm18mcc(machine_config &config)
 	screen.set_visarea_full();
 	screen.set_screen_update(FUNC(avrmax_state::screen_update));
 
-	HD44780U(config, m_lcd, 270'000); // TODO: clock not measured, datasheet typical clock used
+	HD44780U(config, m_lcd, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	// HD44780UA02 is required for certain international characters in cc2schach,
 	// the English version can optionally use a more standard HD44780[U]A00 display
 	m_lcd->set_default_bios_tag("a02");

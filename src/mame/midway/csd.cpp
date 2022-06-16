@@ -67,7 +67,7 @@ const tiny_rom_entry *midway_cheap_squeak_deluxe_device::device_rom_region() con
 //  midway_cheap_squeak_deluxe_device - constructor
 //-------------------------------------------------
 
-midway_cheap_squeak_deluxe_device::midway_cheap_squeak_deluxe_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+midway_cheap_squeak_deluxe_device::midway_cheap_squeak_deluxe_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MIDWAY_CHEAP_SQUEAK_DELUXE, tag, owner, clock),
 	device_mixer_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),

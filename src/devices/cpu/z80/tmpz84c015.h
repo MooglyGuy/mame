@@ -25,7 +25,7 @@
 class tmpz84c015_device : public z80_device
 {
 public:
-	tmpz84c015_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tmpz84c015_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	template <int Channel> void set_clk_trg(u32 clock) { m_ctc.lookup()->set_clk<Channel>(clock); }

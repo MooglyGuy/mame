@@ -28,7 +28,7 @@ class e0516_device : public device_t, public device_rtc_interface
 {
 public:
 	// construction/destruction
-	e0516_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	e0516_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto outsel_rd_cb() { return m_read_outsel.bind(); }
 	auto sec_wr_cb() { return m_write_sec.bind(); }

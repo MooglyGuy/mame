@@ -18,7 +18,7 @@
 
 class rp2a03_vtscr : public rp2a03_core_device {
 public:
-	rp2a03_vtscr(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rp2a03_vtscr(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_next_scramble(bool scr);
 	void set_scramble(bool scr);

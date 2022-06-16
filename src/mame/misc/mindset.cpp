@@ -72,7 +72,7 @@ protected:
 
 	void irq_w(int state);
 
-	mindset_module_interface(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	mindset_module_interface(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
 
@@ -91,7 +91,7 @@ void mindset_module_interface::device_reset()
 	m_irq_cb(m_irq_state);
 }
 
-mindset_module_interface::mindset_module_interface(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+mindset_module_interface::mindset_module_interface(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_irq_cb(*this)
 {
@@ -109,14 +109,14 @@ class mindset_module: public device_t,
 public:
 	template <typename T>
 	mindset_module(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt, bool fixed = false)
-		: mindset_module(mconfig, tag, owner, 0)
+		: mindset_module(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(fixed);
 	}
-	mindset_module(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mindset_module(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~mindset_module() = default;
 
 	void map(address_space &space, offs_t base, bool id);
@@ -128,7 +128,7 @@ protected:
 
 DEFINE_DEVICE_TYPE(MINDSET_MODULE, mindset_module,  "mindset_module", "MINDSET module")
 
-mindset_module::mindset_module(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mindset_module::mindset_module(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MINDSET_MODULE, tag, owner, clock),
 	device_slot_interface(mconfig, *this)
 {
@@ -155,7 +155,7 @@ void mindset_module::map(address_space &space, offs_t base, bool id)
 
 class mindset_sound_module: public mindset_module_interface {
 public:
-	mindset_sound_module(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mindset_sound_module(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~mindset_sound_module() = default;
 
 	virtual void map(address_map &map) override ATTR_COLD;
@@ -180,7 +180,7 @@ private:
 
 DEFINE_DEVICE_TYPE(MINDSET_SOUND_MODULE, mindset_sound_module,  "mindset_sound_module", "MINDSET stereo sound module")
 
-mindset_sound_module::mindset_sound_module(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mindset_sound_module::mindset_sound_module(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mindset_module_interface(mconfig, MINDSET_SOUND_MODULE, tag, owner, clock),
 	m_soundcpu(*this, "soundcpu"),
 	m_dac(*this, "dac")
@@ -245,13 +245,13 @@ void mindset_sound_module::device_add_mconfig(machine_config &config)
 	I8042(config, m_soundcpu, 12_MHz_XTAL/2);
 	m_soundcpu->p1_out_cb().set(FUNC(mindset_sound_module::p1_w));
 	m_soundcpu->p2_out_cb().set(FUNC(mindset_sound_module::p2_w));
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, ":speaker", 0.5, 1);
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, ":speaker", 0.5, 1);
 }
 
 
 class mindset_rs232_module: public mindset_module_interface {
 public:
-	mindset_rs232_module(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mindset_rs232_module(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~mindset_rs232_module() = default;
 
 	virtual void map(address_map &map) override ATTR_COLD;
@@ -267,7 +267,7 @@ private:
 
 DEFINE_DEVICE_TYPE(MINDSET_RS232_MODULE, mindset_rs232_module,  "mindset_rs232_module", "MINDSET RS232 module")
 
-mindset_rs232_module::mindset_rs232_module(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mindset_rs232_module::mindset_rs232_module(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mindset_module_interface(mconfig, MINDSET_RS232_MODULE, tag, owner, clock),
 	m_ins8250(*this, "ins8250"),
 	m_rs232(*this, "rs232")
@@ -1345,7 +1345,7 @@ void mindset_state::mindset(machine_config &config)
 	FLOPPY_CONNECTOR(config, m_fdco[1], pc_dd_floppies, "525dd", floppy_image_device::default_pc_floppy_formats);
 
 	SPEAKER(config, "speaker", 2).front();
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0);
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5, 0);
 
 	MINDSET_MODULE(config, "m0", mindset_modules, "stereo", false);
 	MINDSET_MODULE(config, "m1", mindset_modules, "rs232", false);

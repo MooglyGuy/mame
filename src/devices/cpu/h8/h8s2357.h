@@ -37,7 +37,7 @@
 
 class h8s2357_device : public h8s2000_device {
 public:
-	h8s2357_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s2357_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_port1()  { return m_read_port [PORT_1].bind(); }
 	auto write_port1() { return m_write_port[PORT_1].bind(); }
@@ -101,7 +101,7 @@ protected:
 	u32 m_ram_start;
 	unsigned char m_syscr;
 
-	h8s2357_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 start);
+	h8s2357_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 start);
 
 	virtual bool exr_in_stack() const override;
 	virtual void update_irq_filter() override;
@@ -121,27 +121,27 @@ protected:
 
 class h8s2352_device : public h8s2357_device {
 public:
-	h8s2352_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s2352_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8s2398_device : public h8s2357_device {
 public:
-	h8s2398_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s2398_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8s2394_device : public h8s2357_device {
 public:
-	h8s2394_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s2394_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8s2392_device : public h8s2357_device {
 public:
-	h8s2392_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s2392_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8s2390_device : public h8s2357_device {
 public:
-	h8s2390_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8s2390_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(H8S2357, h8s2357_device)

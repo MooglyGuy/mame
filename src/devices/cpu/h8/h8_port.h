@@ -17,9 +17,9 @@
 
 class h8_port_device : public device_t {
 public:
-	h8_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> h8_port_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int address, u8 default_ddr, u8 mask)
-		: h8_port_device(mconfig, tag, owner, 0)
+		: h8_port_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_address = address;

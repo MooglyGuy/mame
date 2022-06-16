@@ -18,7 +18,7 @@ class hpc1_device
 	, public device_memory_interface
 {
 public:
-	hpc1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	hpc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_gio(T &&tag, int spacenum) { m_gio.set_tag(std::forward<T>(tag), spacenum); }
 	template <typename T> void set_enet(T &&tag) { m_enet.set_tag(std::forward<T>(tag)); }

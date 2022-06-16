@@ -488,7 +488,7 @@ GFXDECODE_END
 void videopin_state::videopin(machine_config &config)
 {
 	// basic machine hardware
-	M6502(config, m_maincpu, 12'096'000 / 16);
+	M6502(config, m_maincpu, XTAL::u(12'096'000) / 16);
 	m_maincpu->set_addrmap(AS_PROGRAM, &videopin_state::main_map);
 
 	WATCHDOG_TIMER(config, "watchdog");

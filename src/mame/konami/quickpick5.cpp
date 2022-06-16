@@ -646,7 +646,7 @@ void waijockey_state::waijockey(machine_config &config)
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 1024);
 	m_palette->enable_shadows();
 
-	K053245(config, m_k053245, 0);
+	K053245(config, m_k053245);
 	m_k053245->set_palette(m_palette);
 	m_k053245->set_offsets(-96, 16);
 	m_k053245->set_sprite_callback(FUNC(waijockey_state::sprite_callback));

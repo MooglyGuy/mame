@@ -15,7 +15,7 @@
 class nscsi_cdrom_device : public nscsi_full_device
 {
 public:
-	nscsi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void set_block_size(u32 block_size);
 
@@ -23,10 +23,10 @@ protected:
 	required_device<cdrom_image_device> image;
 	required_device<cdda_device> cdda;
 
-	nscsi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	nscsi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const char *mfr, const char *product, const char *rev, uint8_t inq_data, uint8_t compliance)
-		: nscsi_cdrom_device(mconfig, type, tag, owner, 0)
+		: nscsi_cdrom_device(mconfig, type, tag, owner)
 	{
 		strncpy(manufacturer, mfr, 8);
 		strncpy(this->product, product, 16);
@@ -81,7 +81,7 @@ private:
 class nscsi_cdrom_sgi_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_cdrom_sgi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_cdrom_sgi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void scsi_command() override;
@@ -97,19 +97,19 @@ public:
 class nscsi_dec_rrd45_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_dec_rrd45_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_dec_rrd45_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_toshiba_xm3301_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_toshiba_xm5301_sun_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_toshiba_xm5301_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_toshiba_xm5301_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_toshiba_xm5401_device : public nscsi_cdrom_device
@@ -121,25 +121,25 @@ public:
 class nscsi_toshiba_xm5401_sun_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_toshiba_xm5401_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_toshiba_xm5401_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_toshiba_xm5701_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_toshiba_xm5701_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_toshiba_xm5701_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_toshiba_xm5701_sun_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_toshiba_xm5701_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_toshiba_xm5701_sun_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_cdrom_apple_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_cdrom_apple_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_cdrom_apple_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual void device_start() override ATTR_COLD;
 
 protected:

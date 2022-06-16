@@ -105,8 +105,8 @@ void pc9801_86_device::pc9801_86_config(machine_config &config)
 	m_opna->add_route(2, "speaker", 1.00, 1);
 
 	// 2x burr brown pcm61p
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_ldac).add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_rdac).add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 
 	// NOTE: 1x DE-9 port only
 	MSX_GENERAL_PURPOSE_PORT(config, m_joy, msx_general_purpose_port_devices, "joystick");
@@ -187,14 +187,42 @@ ioport_constructor pc9801_86_device::device_input_ports() const
 	return INPUT_PORTS_NAME( pc9801_86 );
 }
 
+<<<<<<< HEAD
 // only for derived designs?
 void pc9801_86_device::opna_map(address_map &map)
+=======
+//**************************************************************************
+//  LIVE DEVICE
+//**************************************************************************
+
+//-------------------------------------------------
+//  pc9801_86_device - constructor
+//-------------------------------------------------
+
+pc9801_86_device::pc9801_86_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
+	: pc9801_snd_device(mconfig, type, tag, owner, clock)
+	, m_bus(*this, DEVICE_SELF_OWNER)
+	, m_opna(*this, "opna")
+	, m_ldac(*this, "ldac")
+	, m_rdac(*this, "rdac")
+	, m_queue(QUEUE_SIZE)
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 {
 	// TODO: confirm it really is ROMless
 	// TODO: confirm size
 	map(0x000000, 0x1fffff).ram();
 }
 
+<<<<<<< HEAD
+=======
+pc9801_86_device::pc9801_86_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: pc9801_86_device(mconfig, PC9801_86, tag, owner, clock)
+{
+
+}
+
+
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 //-------------------------------------------------
 //  device_validity_check - perform validity checks
 //  on this device
@@ -530,7 +558,7 @@ const tiny_rom_entry *pc9801_speakboard_device::device_rom_region() const
 	return ROM_NAME( pc9801_spb );
 }
 
-pc9801_speakboard_device::pc9801_speakboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc9801_speakboard_device::pc9801_speakboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc9801_86_device(mconfig, PC9801_SPEAKBOARD, tag, owner, clock)
 	, m_opna_slave(*this, "opna_slave")
 {
@@ -588,7 +616,13 @@ void pc9801_speakboard_device::opna_slave_w(offs_t offset, u8 data)
 //
 //**************************************************************************
 
+<<<<<<< HEAD
 otomichan_kai_device::otomichan_kai_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+=======
+DEFINE_DEVICE_TYPE(OTOMICHAN_KAI, otomichan_kai_device, "pc98_otomichan_kai", "MAD Factory Otomi-chan Kai") // 音美(おとみ)ちゃん改
+
+otomichan_kai_device::otomichan_kai_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	: pc9801_86_device(mconfig, OTOMICHAN_KAI, tag, owner, clock)
 	, m_opn2c(*this, "opn2c")
 {

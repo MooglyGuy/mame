@@ -50,7 +50,7 @@ public:
 
 	void set_own_id(unsigned id) { m_own_id = id; }
 
-	ncr5385_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ncr5385_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	void map(address_map &map) ATTR_COLD;
 

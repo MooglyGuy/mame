@@ -22,7 +22,7 @@
 class atapi_cdrom_device : public atapi_hle_device, public device_ata_interface, public t10mmc
 {
 public:
-	atapi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atapi_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_ultra_dma_mode(uint16_t mode);
 
@@ -43,7 +43,7 @@ public:
 	virtual void write_pdiag(int state) override { set_pdiag_in(state); }
 
 protected:
-	atapi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	atapi_cdrom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -69,7 +69,7 @@ private:
 class atapi_dvdrom_device : public atapi_cdrom_device
 {
 public:
-	atapi_dvdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atapi_dvdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;

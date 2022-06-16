@@ -38,7 +38,7 @@ public:
 
 protected:
 	// construction/destruction
-	vt5x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int bbits, int ybits);
+	vt5x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int bbits, int ybits);
 
 	// device_t implementation
 	virtual void device_config_complete() override;
@@ -135,7 +135,7 @@ class vt50_cpu_device : public vt5x_cpu_device
 {
 public:
 	// device type constructor
-	vt50_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	vt50_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_disasm_interface overrides
@@ -148,7 +148,7 @@ class vt52_cpu_device : public vt5x_cpu_device
 {
 public:
 	// device type constructor
-	vt52_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	vt52_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto graphic_callback() { return m_graphic_callback.bind(); }
 

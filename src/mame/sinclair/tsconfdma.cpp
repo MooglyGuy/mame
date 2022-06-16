@@ -15,7 +15,7 @@ TODO:
 #define VERBOSE ( LOG_GENERAL )
 #include "logmacro.h"
 
-tsconfdma_device::tsconfdma_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tsconfdma_device::tsconfdma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TSCONF_DMA, tag, owner, clock),
 	  m_in_mreq_cb(*this, 0),
 	  m_out_mreq_cb(*this),

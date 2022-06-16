@@ -711,7 +711,7 @@ void svision_state::svision(machine_config &config)
 {
 	svision_base(config);
 
-	W65C02(config, m_maincpu, 4'000'000);
+	W65C02(config, m_maincpu, XTAL::u(4'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &svision_state::program_map);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_LCD);
@@ -738,7 +738,7 @@ void svision_state::svisionp(machine_config &config)
 {
 	svision(config);
 
-	m_maincpu->set_clock(4'430'000);
+	m_maincpu->set_clock(XTAL::u(4'430'000));
 
 	m_screen->set_refresh(HZ_TO_ATTOSECONDS(50));
 

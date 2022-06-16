@@ -64,7 +64,7 @@ class sms_graphic_device : public device_t, public device_sms_control_interface
 {
 public:
 	// construction/destruction
-	sms_graphic_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sms_graphic_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_sms_control_interface implementation
 	virtual uint8_t in_r() override;
@@ -90,7 +90,7 @@ private:
 //  sms_graphic_device - constructor
 //-------------------------------------------------
 
-sms_graphic_device::sms_graphic_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sms_graphic_device::sms_graphic_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_GRAPHIC, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_buttons(*this, "BUTTONS"),

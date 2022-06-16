@@ -9,7 +9,7 @@
 class interpro_mcga_device : public device_t
 {
 public:
-	interpro_mcga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	interpro_mcga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) ATTR_COLD;
 
@@ -59,7 +59,7 @@ public:
 	void memsize_w(u16 data) { m_memsize = data; }
 
 protected:
-	interpro_mcga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	interpro_mcga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -76,7 +76,7 @@ private:
 class interpro_fmcc_device : public interpro_mcga_device
 {
 public:
-	interpro_fmcc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	interpro_fmcc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 

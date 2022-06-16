@@ -28,7 +28,7 @@ enum
 class z80_device : public cpu_device, public z80_daisy_chain_interface
 {
 public:
-	z80_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	z80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void z80_set_m1_cycles(u8 m1_cycles) { m_m1_cycles = m1_cycles; }
 	void z80_set_memrq_cycles(u8 memrq_cycles) { m_memrq_cycles = memrq_cycles; }
@@ -48,7 +48,7 @@ public:
 	int busack_r() { return m_busack_state; }
 
 protected:
-	z80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	z80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_validity_check(validity_checker &valid) const override;

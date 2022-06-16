@@ -528,7 +528,7 @@ void by6803_state::by6803(machine_config &config)
 void by6803_state::s11(machine_config &config)
 {
 	by6803(config);
-	//WILLIAMS_S11B_SOUND(config, m_s11sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	//WILLIAMS_S11B_SOUND(config, m_s11sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void by6803_state::gen1(machine_config &config)

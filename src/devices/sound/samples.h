@@ -30,7 +30,7 @@ public:
 	typedef device_delegate<void ()> start_cb_delegate;
 
 	// construction/destruction
-	samples_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samples_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// configuration helpers
 	void set_channels(uint8_t channels) { m_channels = channels; }
@@ -70,7 +70,7 @@ public:
 
 protected:
 	// subclasses can do it this way
-	samples_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	samples_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

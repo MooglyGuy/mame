@@ -210,7 +210,7 @@ void floppy_image_device::default_pc_floppy_formats(format_registration &fr)
 	fr.add_pc_formats();
 }
 
-floppy_connector::floppy_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_connector::floppy_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, FLOPPY_CONNECTOR, tag, owner, clock),
 	device_slot_interface(mconfig, *this),
 	formats(nullptr),
@@ -247,7 +247,7 @@ floppy_image_device *floppy_connector::get_device()
 //  floppy_image_device - constructor
 //-------------------------------------------------
 
-floppy_image_device::floppy_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+floppy_image_device::floppy_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock),
 		device_image_interface(mconfig, *this),
 		m_input_format(nullptr),
@@ -1402,7 +1402,7 @@ static const char *const floppy525_sample_names[] =
 	nullptr
 };
 
-floppy_sound_device::floppy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+floppy_sound_device::floppy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: samples_device(mconfig, FLOPPYSOUND, tag, owner, clock),
 		m_sound(nullptr),
 		m_step_base(0),
@@ -1708,7 +1708,7 @@ void floppy_sound_device::sound_stream_update(sound_stream &stream)
 void floppy_image_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, FLOPSPK).front_center();
-	FLOPPYSOUND(config, FLOPSND_TAG, 44100).add_route(ALL_OUTPUTS, FLOPSPK, 0.5);
+	FLOPPYSOUND(config, FLOPSND_TAG, XTAL::u(44100)).add_route(ALL_OUTPUTS, FLOPSPK, 0.5);
 }
 
 
@@ -1723,7 +1723,7 @@ DEFINE_DEVICE_TYPE(FLOPPYSOUND, floppy_sound_device, "flopsnd", "Floppy sound")
 //  3" single-sided single density
 //-------------------------------------------------
 
-floppy_3_sssd::floppy_3_sssd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_3_sssd::floppy_3_sssd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_3_SSSD, tag, owner, clock)
 {
 }
@@ -1746,7 +1746,7 @@ void floppy_3_sssd::setup_characteristics()
 //  3" double-sided single density
 //-------------------------------------------------
 
-floppy_3_dssd::floppy_3_dssd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_3_dssd::floppy_3_dssd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_3_DSSD, tag, owner, clock)
 {
 }
@@ -1770,7 +1770,7 @@ void floppy_3_dssd::setup_characteristics()
 //  3" single-sided double density
 //-------------------------------------------------
 
-floppy_3_ssdd::floppy_3_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_3_ssdd::floppy_3_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_3_SSDD, tag, owner, clock)
 {
 }
@@ -1794,7 +1794,7 @@ void floppy_3_ssdd::setup_characteristics()
 //  3" double-sided double density
 //-------------------------------------------------
 
-floppy_3_dsdd::floppy_3_dsdd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_3_dsdd::floppy_3_dsdd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_3_DSDD, tag, owner, clock)
 {
 }
@@ -1820,7 +1820,7 @@ void floppy_3_dsdd::setup_characteristics()
 //  3" double-sided quad density
 //-------------------------------------------------
 
-floppy_3_dsqd::floppy_3_dsqd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_3_dsqd::floppy_3_dsqd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_3_DSQD, tag, owner, clock)
 {
 }
@@ -1847,7 +1847,7 @@ void floppy_3_dsqd::setup_characteristics()
 //  3.5" single-sided double density
 //-------------------------------------------------
 
-floppy_35_ssdd::floppy_35_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_35_ssdd::floppy_35_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_35_SSDD, tag, owner, clock)
 {
 }
@@ -1871,7 +1871,7 @@ void floppy_35_ssdd::setup_characteristics()
 //  3.5" double-sided double density
 //-------------------------------------------------
 
-floppy_35_dd::floppy_35_dd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_35_dd::floppy_35_dd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_35_DD, tag, owner, clock)
 {
 }
@@ -1896,7 +1896,7 @@ void floppy_35_dd::setup_characteristics()
 //  3.5" high density
 //-------------------------------------------------
 
-floppy_35_hd::floppy_35_hd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_35_hd::floppy_35_hd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_35_HD, tag, owner, clock)
 {
 }
@@ -1922,7 +1922,7 @@ void floppy_35_hd::setup_characteristics()
 //  3.5" extended density
 //-------------------------------------------------
 
-floppy_35_ed::floppy_35_ed(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_35_ed::floppy_35_ed(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_35_ED, tag, owner, clock)
 {
 }
@@ -1949,7 +1949,7 @@ void floppy_35_ed::setup_characteristics()
 //  5.25" single-sided single density 35 tracks
 //-------------------------------------------------
 
-floppy_525_sssd_35t::floppy_525_sssd_35t(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_sssd_35t::floppy_525_sssd_35t(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_SSSD_35T, tag, owner, clock)
 {
 }
@@ -1972,7 +1972,7 @@ void floppy_525_sssd_35t::setup_characteristics()
 //  5.25" double-sided single density 35 tracks
 //-------------------------------------------------
 
-floppy_525_sd_35t::floppy_525_sd_35t(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_sd_35t::floppy_525_sd_35t(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_SD_35T, tag, owner, clock)
 {
 }
@@ -1996,7 +1996,7 @@ void floppy_525_sd_35t::setup_characteristics()
 //  5.25" single-sided single density, VTECH edition
 //-------------------------------------------------
 
-floppy_525_vtech::floppy_525_vtech(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_vtech::floppy_525_vtech(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_VTECH, tag, owner, clock)
 {
 	m_amplifier_freakout_time = attotime::from_usec(64);
@@ -2020,7 +2020,7 @@ void floppy_525_vtech::setup_characteristics()
 //  5.25" single-sided single density
 //-------------------------------------------------
 
-floppy_525_sssd::floppy_525_sssd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_sssd::floppy_525_sssd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_SSSD, tag, owner, clock)
 {
 }
@@ -2043,7 +2043,7 @@ void floppy_525_sssd::setup_characteristics()
 //  5.25" double-sided single density
 //-------------------------------------------------
 
-floppy_525_sd::floppy_525_sd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_sd::floppy_525_sd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_SD, tag, owner, clock)
 {
 }
@@ -2066,7 +2066,7 @@ void floppy_525_sd::setup_characteristics()
 //  5.25" single-sided double density
 //-------------------------------------------------
 
-floppy_525_ssdd::floppy_525_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_ssdd::floppy_525_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_SSDD, tag, owner, clock)
 {
 }
@@ -2090,7 +2090,7 @@ void floppy_525_ssdd::setup_characteristics()
 //  5.25" double-sided double density
 //-------------------------------------------------
 
-floppy_525_dd::floppy_525_dd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_dd::floppy_525_dd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_DD, tag, owner, clock)
 {
 }
@@ -2115,7 +2115,7 @@ void floppy_525_dd::setup_characteristics()
 //  5.25" single-sided quad density
 //-------------------------------------------------
 
-floppy_525_ssqd::floppy_525_ssqd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_ssqd::floppy_525_ssqd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_SSQD, tag, owner, clock)
 {
 }
@@ -2140,7 +2140,7 @@ void floppy_525_ssqd::setup_characteristics()
 //  5.25" double-sided quad density
 //-------------------------------------------------
 
-floppy_525_qd::floppy_525_qd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_qd::floppy_525_qd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_QD, tag, owner, clock)
 {
 }
@@ -2168,7 +2168,7 @@ void floppy_525_qd::setup_characteristics()
 //  5.25" high density
 //-------------------------------------------------
 
-floppy_525_hd::floppy_525_hd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_525_hd::floppy_525_hd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_525_HD, tag, owner, clock)
 {
 }
@@ -2196,7 +2196,7 @@ void floppy_525_hd::setup_characteristics()
 //  8" single-sided single density
 //-------------------------------------------------
 
-floppy_8_sssd::floppy_8_sssd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_8_sssd::floppy_8_sssd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_8_SSSD, tag, owner, clock)
 {
 }
@@ -2220,7 +2220,7 @@ void floppy_8_sssd::setup_characteristics()
 //  8" double-sided single density
 //-------------------------------------------------
 
-floppy_8_dssd::floppy_8_dssd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_8_dssd::floppy_8_dssd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_8_DSSD, tag, owner, clock)
 {
 }
@@ -2245,7 +2245,7 @@ void floppy_8_dssd::setup_characteristics()
 //  8" single-sided double density
 //-------------------------------------------------
 
-floppy_8_ssdd::floppy_8_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_8_ssdd::floppy_8_ssdd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_8_SSDD, tag, owner, clock)
 {
 }
@@ -2270,7 +2270,7 @@ void floppy_8_ssdd::setup_characteristics()
 //  8" double-sided double density
 //-------------------------------------------------
 
-floppy_8_dsdd::floppy_8_dsdd(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+floppy_8_dsdd::floppy_8_dsdd(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, FLOPPY_8_DSDD, tag, owner, clock)
 {
 }
@@ -2307,7 +2307,7 @@ void floppy_8_dsdd::setup_characteristics()
 //
 //-------------------------------------------------
 
-epson_smd_165::epson_smd_165(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+epson_smd_165::epson_smd_165(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, EPSON_SMD_165, tag, owner, clock)
 {
 }
@@ -2354,7 +2354,7 @@ void epson_smd_165::setup_characteristics()
 //
 //-------------------------------------------------
 
-epson_sd_320::epson_sd_320(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+epson_sd_320::epson_sd_320(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, EPSON_SD_320, tag, owner, clock)
 {
 }
@@ -2382,7 +2382,7 @@ void epson_sd_320::setup_characteristics()
 //
 //-------------------------------------------------
 
-epson_sd_321::epson_sd_321(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+epson_sd_321::epson_sd_321(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, EPSON_SD_321, tag, owner, clock)
 {
 }
@@ -2414,7 +2414,7 @@ void epson_sd_321::setup_characteristics()
 //
 //-------------------------------------------------
 
-pana_ju_363::pana_ju_363(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pana_ju_363::pana_ju_363(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, PANA_JU_363, tag, owner, clock)
 {
 }
@@ -2446,7 +2446,7 @@ void pana_ju_363::setup_characteristics()
 //
 //-------------------------------------------------
 
-sony_oa_d31v::sony_oa_d31v(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sony_oa_d31v::sony_oa_d31v(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, SONY_OA_D31V, tag, owner, clock)
 {
 }
@@ -2478,7 +2478,7 @@ void sony_oa_d31v::setup_characteristics()
 //
 //-------------------------------------------------
 
-sony_oa_d32w::sony_oa_d32w(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sony_oa_d32w::sony_oa_d32w(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, SONY_OA_D32W, tag, owner, clock)
 {
 }
@@ -2511,7 +2511,7 @@ void sony_oa_d32w::setup_characteristics()
 //
 //-------------------------------------------------
 
-sony_oa_d32v::sony_oa_d32v(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sony_oa_d32v::sony_oa_d32v(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, SONY_OA_D32V, tag, owner, clock)
 {
 }
@@ -2542,7 +2542,7 @@ void sony_oa_d32v::setup_characteristics()
 //
 //-------------------------------------------------
 
-teac_fd_30a::teac_fd_30a(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+teac_fd_30a::teac_fd_30a(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, TEAC_FD_30A, tag, owner, clock)
 {
 }
@@ -2571,7 +2571,7 @@ void teac_fd_30a::setup_characteristics()
 //
 //-------------------------------------------------
 
-teac_fd_55a::teac_fd_55a(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+teac_fd_55a::teac_fd_55a(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: floppy_image_device(mconfig, TEAC_FD_55A, tag, owner, clock)
 {
 }
@@ -2601,7 +2601,7 @@ void teac_fd_55a::setup_characteristics()
 //
 //-------------------------------------------------
 
-teac_fd_55b::teac_fd_55b(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+teac_fd_55b::teac_fd_55b(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: floppy_image_device(mconfig, TEAC_FD_55B, tag, owner, clock)
 {
 }
@@ -2633,7 +2633,7 @@ void teac_fd_55b::setup_characteristics()
 //
 //-------------------------------------------------
 
-teac_fd_55e::teac_fd_55e(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+teac_fd_55e::teac_fd_55e(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, TEAC_FD_55E, tag, owner, clock)
 {
 }
@@ -2664,7 +2664,7 @@ void teac_fd_55e::setup_characteristics()
 //
 //-------------------------------------------------
 
-teac_fd_55f::teac_fd_55f(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+teac_fd_55f::teac_fd_55f(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, TEAC_FD_55F, tag, owner, clock)
 {
 }
@@ -2698,7 +2698,7 @@ void teac_fd_55f::setup_characteristics()
 //
 //-------------------------------------------------
 
-teac_fd_55g::teac_fd_55g(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+teac_fd_55g::teac_fd_55g(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, TEAC_FD_55G, tag, owner, clock)
 {
 }
@@ -2728,7 +2728,7 @@ void teac_fd_55g::setup_characteristics()
 //  used in the Commodoere 1541 disk drive
 //-------------------------------------------------
 
-alps_3255190x::alps_3255190x(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+alps_3255190x::alps_3255190x(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, ALPS_3255190X, tag, owner, clock)
 {
 }
@@ -2752,7 +2752,7 @@ void alps_3255190x::setup_characteristics()
 //  IBM 6360 -- 8" single-sided single density
 //-------------------------------------------------
 
-ibm_6360::ibm_6360(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ibm_6360::ibm_6360(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	floppy_image_device(mconfig, IBM_6360, tag, owner, clock)
 {
 }
@@ -2778,7 +2778,7 @@ void ibm_6360::setup_characteristics()
 //  Variable-speed Macintosh drives
 //-------------------------------------------------
 
-mac_floppy_device::mac_floppy_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) : floppy_image_device(mconfig, type, tag, owner, clock)
+mac_floppy_device::mac_floppy_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) : floppy_image_device(mconfig, type, tag, owner, clock)
 {
 	m_has_mfm = false;
 	m_dskchg_writable = true;
@@ -3001,7 +3001,7 @@ void mac_floppy_device::tfsel_w(int state)
 	}
 }
 
-oa_d34v_device::oa_d34v_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : mac_floppy_device(mconfig, OAD34V, tag, owner, clock)
+oa_d34v_device::oa_d34v_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : mac_floppy_device(mconfig, OAD34V, tag, owner, clock)
 {
 }
 
@@ -3028,7 +3028,7 @@ void oa_d34v_device::track_changed()
 	floppy_image_device::track_changed();
 }
 
-mfd51w_device::mfd51w_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : mac_floppy_device(mconfig, MFD51W, tag, owner, clock)
+mfd51w_device::mfd51w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : mac_floppy_device(mconfig, MFD51W, tag, owner, clock)
 {
 }
 void mfd51w_device::setup_characteristics()
@@ -3047,7 +3047,7 @@ bool mfd51w_device::is_2m() const
 	return true;
 }
 
-mfd75w_device::mfd75w_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) : mac_floppy_device(mconfig, MFD75W, tag, owner, clock)
+mfd75w_device::mfd75w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) : mac_floppy_device(mconfig, MFD75W, tag, owner, clock)
 {
 	m_has_mfm = true;
 }

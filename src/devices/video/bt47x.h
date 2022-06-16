@@ -19,7 +19,7 @@ public:
 	virtual void write(offs_t offset, u8 data);
 
 protected:
-	bt47x_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, unsigned const palette_colors, unsigned const overlay_colors, unsigned const color_bits);
+	bt47x_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, unsigned const palette_colors, unsigned const overlay_colors, unsigned const color_bits);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -64,7 +64,7 @@ public:
 	virtual void write(offs_t offset, u8 data) override;
 
 protected:
-	bt475_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, unsigned const palette_colors, unsigned const overlay_colors, unsigned const color_bits);
+	bt475_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, unsigned const palette_colors, unsigned const overlay_colors, unsigned const color_bits);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -89,7 +89,7 @@ protected:
 class bt471_device : public bt47x_device_base
 {
 public:
-	bt471_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt471_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class bt473_device : public bt47x_device_base
@@ -101,19 +101,19 @@ public:
 class bt475_device : public bt475_device_base
 {
 public:
-	bt475_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt475_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class bt476_device : public bt47x_device_base
 {
 public:
-	bt476_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt476_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class bt477_device : public bt475_device_base
 {
 public:
-	bt477_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt477_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual unsigned color_bits() const override { return (m_command & D1) ? 8 : 6; }
@@ -122,7 +122,7 @@ protected:
 class bt478_device : public bt47x_device_base
 {
 public:
-	bt478_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt478_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class bt479_device : public bt47x_device_base

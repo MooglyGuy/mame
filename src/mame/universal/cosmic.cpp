@@ -850,7 +850,7 @@ void cosmic_state::panic(machine_config &config)
 	m_samples->set_samples_names(panic_sample_names);
 	m_samples->add_route(ALL_OUTPUTS, "speaker", 0.25);
 
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
 void cosmic_state::cosmica(machine_config &config)
@@ -892,7 +892,7 @@ void cosmic_state::magspot(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
 void cosmic_state::devzone(machine_config &config)
@@ -919,7 +919,7 @@ void cosmic_state::nomnlnd(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
 

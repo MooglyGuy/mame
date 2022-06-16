@@ -123,7 +123,7 @@ void wangpc_keyboard_device::device_add_mconfig(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	SN76496(config, SN76496_TAG, 2000000).add_route(ALL_OUTPUTS, "mono", 1.00); // ???
+	SN76496(config, SN76496_TAG, XTAL::u(2000000)).add_route(ALL_OUTPUTS, "mono", 1.00); // ???
 }
 
 
@@ -365,7 +365,7 @@ ioport_constructor wangpc_keyboard_device::device_input_ports() const
 //  wangpc_keyboard_device - constructor
 //-------------------------------------------------
 
-wangpc_keyboard_device::wangpc_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+wangpc_keyboard_device::wangpc_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, WANGPC_KEYBOARD, tag, owner, clock),
 	m_maincpu(*this, I8051_TAG),
 	m_y(*this, "Y%u", 0),

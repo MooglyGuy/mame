@@ -572,7 +572,7 @@ void s8_state::psound(machine_config &config)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &s8_state::audio_map);
 
 	SPEAKER(config, "speaker").front_center();
-	MC1408(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	MC1408(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	PIA6821(config, m_pias);
 	m_pias->readpa_handler().set(FUNC(s8_state::sound_r));
@@ -653,7 +653,7 @@ void s8_state::scrzy(machine_config &config)
 
 	/* Add the soundcard */
 	SPEAKER(config, "mono").front_center();
-	WILLIAMS_S9_SOUND(config, m_s9sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S9_SOUND(config, m_s9sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void s8_state::ratrc(machine_config &config)

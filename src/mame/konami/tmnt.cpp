@@ -828,7 +828,7 @@ void tmnt_state::machine_reset()
 void tmnt_state::cuebrick(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 8000000);    /* 8 MHz */
+	M68000(config, m_maincpu, XTAL::u(8000000));    /* 8 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &tmnt_state::cuebrick_main_map);
 
 	WATCHDOG_TIMER(config, "watchdog");
@@ -853,12 +853,12 @@ void tmnt_state::cuebrick(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt_state,cuebrick)
 
-	K052109(config, m_k052109, 0);
+	K052109(config, m_k052109);
 	m_k052109->set_palette(m_palette);
 	m_k052109->set_screen(nullptr);
 	m_k052109->set_tile_callback(FUNC(tmnt_state::cuebrick_tile_callback));
 
-	K051960(config, m_k051960, 0);
+	K051960(config, m_k051960);
 	m_k051960->set_palette(m_palette);
 	m_k051960->set_screen("screen");
 	m_k051960->set_sprite_callback(FUNC(tmnt_state::mia_sprite_callback));
@@ -901,12 +901,12 @@ void tmnt_state::mia(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt_state,mia)
 
-	K052109(config, m_k052109, 0);
+	K052109(config, m_k052109);
 	m_k052109->set_palette(m_palette);
 	m_k052109->set_screen(nullptr);
 	m_k052109->set_tile_callback(FUNC(tmnt_state::mia_tile_callback));
 
-	K051960(config, m_k051960, 0);
+	K051960(config, m_k051960);
 	m_k051960->set_palette(m_palette);
 	m_k051960->set_screen("screen");
 	m_k051960->set_sprite_callback(FUNC(tmnt_state::mia_sprite_callback));
@@ -966,12 +966,12 @@ void tmnt_state::tmnt(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt_state,tmnt)
 
-	K052109(config, m_k052109, 0);
+	K052109(config, m_k052109);
 	m_k052109->set_palette(m_palette);
 	m_k052109->set_screen(nullptr);
 	m_k052109->set_tile_callback(FUNC(tmnt_state::tmnt_tile_callback));
 
-	K051960(config, m_k051960, 0);
+	K051960(config, m_k051960);
 	m_k051960->set_palette(m_palette);
 	m_k051960->set_screen("screen");
 	m_k051960->set_sprite_callback(FUNC(tmnt_state::tmnt_sprite_callback));
@@ -1005,7 +1005,7 @@ void tmnt_state::tmntucbl(machine_config &config)
 
 	M68705R3(config, "mcu", XTAL(4'000'000)).set_disable(); // not dumped
 
-	MSM5205(config, "msm", 384'000).add_route(ALL_OUTPUTS, "mono", 0.5); // TODO: hook up, frequency unknown
+	MSM5205(config, "msm", XTAL::u(384'000)).add_route(ALL_OUTPUTS, "mono", 0.5); // TODO: hook up, frequency unknown
 
 	config.device_remove("k007232");
 }

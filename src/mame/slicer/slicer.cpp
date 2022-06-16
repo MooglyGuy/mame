@@ -67,7 +67,7 @@ void slicer_state::drive_sel_w(int state)
 
 void slicer_state::drive_size_w(int state)
 {
-	m_fdc->set_unscaled_clock (state ? 1'000'000 : 2'000'000);
+	m_fdc->set_unscaled_clock (state ? XTAL::u(1'000'000) : 2'000'000);
 }
 
 void slicer_state::slicer_map(address_map &map)
@@ -130,7 +130,7 @@ void slicer_state::slicer(machine_config &config)
 	drivelatch.q_out_cb<6>().set(FUNC(slicer_state::drive_size_w));
 	drivelatch.q_out_cb<7>().set(m_fdc, FUNC(fd1797_device::dden_w));
 
-	SCSI_PORT(config, m_sasi, 0);
+	SCSI_PORT(config, m_sasi);
 	m_sasi->set_data_input_buffer("sasi_data_in");
 	m_sasi->bsy_handler().set("sasi_ctrl_in", FUNC(input_buffer_device::write_bit3));
 	m_sasi->msg_handler().set("sasi_ctrl_in", FUNC(input_buffer_device::write_bit4));

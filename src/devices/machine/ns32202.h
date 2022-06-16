@@ -14,7 +14,7 @@ public:
 	auto out_cout() { return m_out_cout.bind(); }
 	template <unsigned Number> auto out_g() { return m_out_g[Number].bind(); }
 
-	ns32202_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32202_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// input lines
 	template <unsigned Number> void ir_w(int state);

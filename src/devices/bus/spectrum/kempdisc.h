@@ -24,12 +24,12 @@ class spectrum_kempdisc_device :
 {
 public:
 	// construction/destruction
-	spectrum_kempdisc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	spectrum_kempdisc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static void floppy_formats(format_registration &fr);
 
 protected:
-	spectrum_kempdisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	spectrum_kempdisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -64,7 +64,7 @@ class spectrum_spdos_device :
 {
 public:
 	// construction/destruction
-	spectrum_spdos_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	spectrum_spdos_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

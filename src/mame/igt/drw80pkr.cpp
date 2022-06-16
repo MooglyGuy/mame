@@ -642,7 +642,7 @@ void drw80pkr_state::drw80pkr(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	AY8912(config, m_aysnd, 20000000/12).add_route(ALL_OUTPUTS, "mono", 0.75);
+	AY8912(config, m_aysnd, XTAL::u(20000000)/12).add_route(ALL_OUTPUTS, "mono", 0.75);
 	m_aysnd->port_a_read_callback().set_ioport("DSW1");
 
 	HOPPER(config, m_hopper, attotime::from_msec(150));

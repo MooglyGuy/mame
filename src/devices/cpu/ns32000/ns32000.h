@@ -18,7 +18,7 @@ public:
 	void rdy_w(int state) { m_ready = !state; }
 
 protected:
-	ns32000_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	ns32000_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -197,25 +197,25 @@ private:
 class ns32008_device : public ns32000_device<24, 0>
 {
 public:
-	ns32008_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32008_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class ns32016_device : public ns32000_device<24, 1>
 {
 public:
-	ns32016_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32016_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class ns32032_device : public ns32000_device<24, 2>
 {
 public:
-	ns32032_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32032_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class ns32332_device : public ns32000_device<32, 2>
 {
 public:
-	ns32332_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32332_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class ns32532_device
@@ -223,7 +223,7 @@ class ns32532_device
 	, public ns32000_mmu_interface
 {
 public:
-	ns32532_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32532_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// ns32000_mmu_interface implementation
 	virtual void state_add(device_state_interface &parent, int &index) override;

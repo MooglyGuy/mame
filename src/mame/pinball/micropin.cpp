@@ -489,7 +489,7 @@ void pent6800_state::pent6800(machine_config &config)
 	/* Sound */
 	genpin_audio(config);
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 387).add_route(ALL_OUTPUTS, "mono", 0.50);
+	BEEP(config, m_beep, XTAL::u(387)).add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	/* Devices */
 	pia6821_device &pia50(PIA6821(config, "pia50"));
@@ -510,11 +510,11 @@ void pent6800_state::pent6800(machine_config &config)
 void pent8085_state::pent8085(machine_config &config)
 {
 	/* basic machine hardware */
-	I8085A(config, m_v2cpu, 2000000);
+	I8085A(config, m_v2cpu, XTAL::u(2000000));
 	m_v2cpu->set_addrmap(AS_PROGRAM, &pent8085_state::mem_map);
 	m_v2cpu->set_addrmap(AS_IO, &pent8085_state::io_map);
 
-	clock_device &cpoint_clock(CLOCK(config, "cpoint_clock", 50)); // crosspoint detector
+	clock_device &cpoint_clock(CLOCK(config, "cpoint_clock", XTAL::u(50))); // crosspoint detector
 	cpoint_clock.signal_handler().set(FUNC(pent8085_state::clock_w));
 
 	config.set_default_layout(layout_micropin); // wrong layout

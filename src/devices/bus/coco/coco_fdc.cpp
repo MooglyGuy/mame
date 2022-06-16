@@ -123,7 +123,7 @@ class coco_fdc_device_base : public coco_family_fdc_device_base
 {
 protected:
 	// construction/destruction
-	coco_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	coco_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual u8 cts_read(offs_t offset) override;
@@ -236,7 +236,7 @@ memory_region *coco_family_fdc_device_base::get_cart_memregion()
 //  coco_fdc_device_base - constructor
 //-------------------------------------------------
 
-coco_fdc_device_base::coco_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+coco_fdc_device_base::coco_fdc_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: coco_family_fdc_device_base(mconfig, type, tag, owner, clock)
 	, m_wd17xx(*this, WD_TAG)
 	, m_floppies(*this, WD_TAG ":%u", 0)
@@ -499,7 +499,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		coco_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		coco_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: coco_fdc_device_base(mconfig, COCO_FDC, tag, owner, clock)
 		{
 		}
@@ -523,7 +523,7 @@ namespace
 	public:
 		// construction/destruction
 			// construction/destruction
-		coco_scii_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		coco_scii_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: coco_fdc_device_base(mconfig, COCO_SCII, tag, owner, clock)
 			, m_slot(*this, MEB_TAG)
 			, m_carts(*this, "cart_line")
@@ -780,7 +780,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		cp450_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		cp450_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: coco_fdc_device_base(mconfig, CP450_FDC, tag, owner, clock)
 		{
 		}
@@ -805,7 +805,7 @@ namespace
 	{
 	public:
 		// construction/destruction
-		cd6809_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+		cd6809_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 			: coco_fdc_device_base(mconfig, CD6809_FDC, tag, owner, clock)
 		{
 		}

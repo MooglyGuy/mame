@@ -160,7 +160,7 @@ TIMER_DEVICE_CALLBACK_MEMBER(ace_sp_state::gen_fixfreq)
 
 void ace_sp_state::ace_sp(machine_config &config)
 {
-	HD6303Y(config, m_maincpu, 2000000); // unknown clock
+	HD6303Y(config, m_maincpu, XTAL::u(2000000)); // unknown clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &ace_sp_state::ace_sp_map);
 
 	PIA6821(config, "pia0");
@@ -168,7 +168,7 @@ void ace_sp_state::ace_sp(machine_config &config)
 	// unknown frequency
 	TIMER(config, "fixedfreq").configure_periodic(FUNC(ace_sp_state::gen_fixfreq), attotime::from_hz(10));
 
-	ACE_SP_REELCTRL(config, m_reelctrl, 2000000); // unknown clock
+	ACE_SP_REELCTRL(config, m_reelctrl, XTAL::u(2000000)); // unknown clock
 
 	config.set_default_layout(layout_ace_sp_dmd);
 }

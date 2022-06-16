@@ -75,7 +75,7 @@ public:
 
 protected:
 	// construction/destruction
-	tms3202x_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, unsigned stack_depth, address_map_constructor prgmap, address_map_constructor datamap);
+	tms3202x_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, unsigned stack_depth, address_map_constructor prgmap, address_map_constructor datamap);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -391,7 +391,7 @@ class tms32026_device : public tms32025_device
 {
 public:
 	// construction/destruction
-	tms32026_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tms32026_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;

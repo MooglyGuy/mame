@@ -18,7 +18,7 @@ class mc88100_device : public cpu_device
 {
 public:
 	// construction/destruction
-	mc88100_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mc88100_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	void set_cmmu_code(std::function<mc88200_device &(u32 const address)> f) { m_cmmu_code = f; }
 	void set_cmmu_data(std::function<mc88200_device &(u32 const address)> f) { m_cmmu_data = f; }

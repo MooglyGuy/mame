@@ -111,6 +111,9 @@
 #include "softlist_dev.h"
 #include "speaker.h"
 
+#define A7800_NTSC_Y1   XTAL(14'318'181)
+#define A7800_PAL_Y1   XTAL(14'187'576)
+#define CLK_PAL XTAL::u(1773447)
 
 namespace {
 
@@ -133,7 +136,7 @@ public:
 	}
 
 protected:
-	void a7800_common(machine_config &config, uint32_t clock);
+	void a7800_common(machine_config &config, const XTAL clock);
 
 	uint8_t bios_or_cart_r(offs_t offset);
 	uint8_t tia_r(offs_t offset);
@@ -1375,7 +1378,7 @@ void a7800_state::machine_reset()
 	m_bios_enabled = 0;
 }
 
-void a7800_state::a7800_common(machine_config &config, uint32_t clock)
+void a7800_state::a7800_common(machine_config &config, const XTAL clock)
 {
 	// basic machine hardware
 	M6502(config, m_maincpu, clock/8); // NTSC 1.79 MHz, PAL 1.77 MHz (switches to 1.19 MHz on TIA or RIOT access)
@@ -1389,7 +1392,7 @@ void a7800_state::a7800_common(machine_config &config, uint32_t clock)
 
 	PALETTE(config, "palette", FUNC(a7800_state::a7800_palette), std::size(a7800_colors));
 
-	ATARI_MARIA(config, m_maria, 0);
+	ATARI_MARIA(config, m_maria);
 	m_maria->set_dmacpu_tag(m_maincpu);
 	m_maria->set_screen_tag(m_screen);
 
@@ -1408,7 +1411,7 @@ void a7800_state::a7800_common(machine_config &config, uint32_t clock)
 
 void a7800_ntsc_state::a7800_ntsc(machine_config &config)
 {
-	a7800_common(config, 14'318'180); // from schematics
+	a7800_common(config, A7800_NTSC_Y1); // from schematics
 
 	// basic machine hardware
 	m_screen->set_raw(14'318'180/2, 454, 0, 320, 263, 27, 27 + 192 + 32);
@@ -1419,7 +1422,7 @@ void a7800_ntsc_state::a7800_ntsc(machine_config &config)
 
 void a7800_pal_state::a7800_pal(machine_config &config)
 {
-	a7800_common(config, 14'187'576); // from hardware tests (and label?)
+	a7800_common(config, A7800_PAL_Y1); // from hardware tests (and label?)
 
 	// basic machine hardware
 	m_screen->set_raw(14'187'576/2, 454, 0, 320, 313, 35, 35 + 228 + 32);

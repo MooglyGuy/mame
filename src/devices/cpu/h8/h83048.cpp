@@ -8,7 +8,7 @@ DEFINE_DEVICE_TYPE(H83045, h83045_device, "h83045", "Hitachi H8/3045")
 DEFINE_DEVICE_TYPE(H83047, h83047_device, "h83047", "Hitachi H8/3047")
 DEFINE_DEVICE_TYPE(H83048, h83048_device, "h83048", "Hitachi H8/3048")
 
-h83048_device::h83048_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 start) :
+h83048_device::h83048_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 start) :
 	h8h_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(h83048_device::map), this)),
 	m_intc(*this, "intc"),
 	m_adc(*this, "adc"),
@@ -38,22 +38,22 @@ h83048_device::h83048_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-h83048_device::h83048_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83048_device::h83048_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83048_device(mconfig, H83048, tag, owner, clock, 0xef10)
 {
 }
 
-h83044_device::h83044_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83044_device::h83044_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83048_device(mconfig, H83044, tag, owner, clock, 0xf710)
 {
 }
 
-h83045_device::h83045_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83045_device::h83045_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83048_device(mconfig, H83045, tag, owner, clock, 0xf710)
 {
 }
 
-h83047_device::h83047_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83047_device::h83047_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83048_device(mconfig, H83047, tag, owner, clock, 0xef10)
 {
 }

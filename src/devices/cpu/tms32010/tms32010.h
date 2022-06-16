@@ -36,7 +36,7 @@ public:
 	auto bio() { return m_bio_in.bind(); }
 
 protected:
-	tms3201x_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor data_map);
+	tms3201x_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor data_map);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -194,7 +194,7 @@ class tms32015_device : public tms3201x_base_device<12>
 {
 public:
 	// construction/destruction
-	tms32015_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tms32015_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -202,7 +202,7 @@ class tms32016_device : public tms3201x_base_device<16>
 {
 public:
 	// construction/destruction
-	tms32016_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tms32016_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

@@ -26,7 +26,7 @@ namespace bus::amiga::zorro {
 class a2052_device : public device_t, public device_zorro2_card_interface, public amiga_autoconfig
 {
 public:
-	a2052_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2052_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;

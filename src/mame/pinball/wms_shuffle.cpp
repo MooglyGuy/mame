@@ -457,7 +457,7 @@ void shuffle_state::machine_reset()
 void shuffle_state::s4(machine_config &config)
 {
 	// basic machine hardware
-	M6802(config, m_maincpu, 3580000); // Divided by 4 internally
+	M6802(config, m_maincpu, XTAL::u(3580000)); // Divided by 4 internally
 	m_maincpu->set_addrmap(AS_PROGRAM, &shuffle_state::s4_map);
 
 	// Video
@@ -511,11 +511,11 @@ void shuffle_state::s4(machine_config &config)
 	m_4020->set_stages(14); // Using Q5,Q8,Q9
 	m_4020->count_out_cb().set(FUNC(shuffle_state::clockcnt_w));
 
-	CLOCK(config, "rclock", 3580000/4).signal_handler().set(m_4020, FUNC(ripple_counter_device::clock_w));
+	CLOCK(config, "rclock", XTAL::u(3580000)/4).signal_handler().set(m_4020, FUNC(ripple_counter_device::clock_w));
 
 	// Add the soundcard
 	SPEAKER(config, "mono").front_center();
-	WILLIAMS_S4_SOUND(config, m_s4sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S4_SOUND(config, m_s4sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void shuffle_state::s9(machine_config &config)
@@ -537,7 +537,7 @@ void shuffle_state::s9(machine_config &config)
 	m_pia21->irqa_handler().set(m_mainirq, FUNC(input_merger_device::in_w<9>));
 	m_pia21->irqb_handler().set(m_mainirq, FUNC(input_merger_device::in_w<10>));
 
-	WILLIAMS_S9_SOUND(config, m_s9sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S9_SOUND(config, m_s9sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void shuffle_state::s11(machine_config &config)
@@ -564,7 +564,7 @@ void shuffle_state::s11(machine_config &config)
 	m_pia34->irqa_handler().set(m_mainirq, FUNC(input_merger_device::in_w<13>));
 	m_pia34->irqb_handler().set(m_mainirq, FUNC(input_merger_device::in_w<14>));
 
-	WILLIAMS_S11_SOUND(config, m_s11sound, 0).add_route(ALL_OUTPUTS, "mono", 1.0);
+	WILLIAMS_S11_SOUND(config, m_s11sound).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 

@@ -49,7 +49,7 @@ class e0c6s46_device : public e0c6200_cpu_device
 public:
 	using pixel_delegate = device_delegate<void (int &dx, int &dy)>;
 
-	e0c6s46_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	e0c6s46_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// 5 4-bit R output ports
 	template <std::size_t Port> auto write_r() { return m_write_r[Port].bind(); }

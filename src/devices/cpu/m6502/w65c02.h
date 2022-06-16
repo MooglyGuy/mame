@@ -17,14 +17,14 @@
 
 class w65c02_device : public m6502_device {
 public:
-	w65c02_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	w65c02_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 	virtual void do_exec_full() override;
 	virtual void do_exec_partial() override;
 
 protected:
-	w65c02_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	w65c02_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 #define O(o) void o ## _full(); void o ## _partial()
 

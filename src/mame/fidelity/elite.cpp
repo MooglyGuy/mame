@@ -494,7 +494,7 @@ void elite_state::pc(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	S14001A(config, m_speech, 25000); // R/C circuit, around 25khz
+	S14001A(config, m_speech, XTAL::u(25000)); // R/C circuit, around 25khz
 	m_speech->add_route(ALL_OUTPUTS, "speaker", 0.75);
 
 	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.25);
@@ -545,7 +545,7 @@ void elite_state::easx(machine_config &config)
 	m_maincpu->set_clock(5_MHz_XTAL);
 	m_maincpu->set_addrmap(AS_PROGRAM, &elite_state::eag_map);
 
-	auto &irq_clock(CLOCK(config.replace(), "irq_clock", 600)); // from 556 timer (22nF, 82K+pot, 1K), ideal frequency is 600Hz
+	auto &irq_clock(CLOCK(config.replace(), "irq_clock", XTAL::u(600))); // from 556 timer (22nF, 82K+pot, 1K), ideal frequency is 600Hz
 	irq_clock.set_pulse_width(attotime::from_nsec(15250)); // active for 15.25us
 	irq_clock.signal_handler().set_inputline(m_maincpu, M6502_IRQ_LINE);
 

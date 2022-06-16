@@ -648,7 +648,7 @@ std::tuple<u32, u16, u8> upd7220_device::get_area_partition_props(int line)
 //  upd7220_device - constructor
 //-------------------------------------------------
 
-upd7220_device::upd7220_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+upd7220_device::upd7220_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	device_video_interface(mconfig, *this),

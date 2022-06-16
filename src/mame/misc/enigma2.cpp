@@ -145,7 +145,7 @@ namespace {
    they were derived from the schematics.  The horizontal synch chain
    counts from 0x0c0-0x1ff and the vertical one from 0x0d8-0x1ff.  */
 
-#define MASTER_CLOCK        (10000000)
+#define MASTER_CLOCK        XTAL::u(10000000)
 #define CPU_CLOCK           (MASTER_CLOCK / 4)
 #define PIXEL_CLOCK         (MASTER_CLOCK / 2)
 #define AY8910_CLOCK        (MASTER_CLOCK / 8)

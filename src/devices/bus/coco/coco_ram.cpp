@@ -36,7 +36,7 @@ namespace
 	{
 		public:
 			// construction/destruction
-			coco_pak_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+			coco_pak_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 			virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 
 		protected:
@@ -67,7 +67,7 @@ DEFINE_DEVICE_TYPE_PRIVATE(COCO_PAK_RAM, device_cococart_interface, coco_pak_ram
 //  coco_pak_ram_device - constructor
 //-------------------------------------------------
 
-coco_pak_ram_device::coco_pak_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+coco_pak_ram_device::coco_pak_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, COCO_PAK_RAM, tag, owner, clock)
 	, device_cococart_interface(mconfig, *this)
 	, m_slot(*this, MEB_TAG)

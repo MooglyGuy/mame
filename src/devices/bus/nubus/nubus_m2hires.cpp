@@ -122,7 +122,7 @@ void nubus_m2hires_device::device_add_mconfig(machine_config &config)
 	m_screen->set_screen_update(FUNC(nubus_m2hires_device::screen_update));
 	m_screen->set_raw(30.24_MHz_XTAL, 896, 0, 640, 525, 0, 480);
 
-	BT453(config, m_ramdac, 0);
+	BT453(config, m_ramdac);
 }
 
 const tiny_rom_entry *nubus_m2hires_device::device_rom_region() const
@@ -130,12 +130,12 @@ const tiny_rom_entry *nubus_m2hires_device::device_rom_region() const
 	return ROM_NAME( m2hires );
 }
 
-nubus_m2hires_device::nubus_m2hires_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_m2hires_device::nubus_m2hires_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_m2hires_device(mconfig, NUBUS_M2HIRES, tag, owner, clock)
 {
 }
 
-nubus_m2hires_device::nubus_m2hires_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_m2hires_device::nubus_m2hires_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_video_interface(mconfig, *this),
 	device_nubus_card_interface(mconfig, *this),

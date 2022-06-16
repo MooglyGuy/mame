@@ -252,12 +252,12 @@ ioport_constructor decocpu_type1_device::device_input_ports() const
 	return INPUT_PORTS_NAME( decocpu1 );
 }
 
-decocpu_type1_device::decocpu_type1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+decocpu_type1_device::decocpu_type1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: decocpu_type1_device(mconfig, DECOCPU1, tag, owner, clock)
 {
 }
 
-decocpu_type1_device::decocpu_type1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+decocpu_type1_device::decocpu_type1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 		, m_cpu(*this,"maincpu")
 		, m_pia21(*this, "pia21")
@@ -292,12 +292,12 @@ void decocpu_type1_device::device_start()
 	save_item(NAME(m_lamp_data));
 }
 
-decocpu_type2_device::decocpu_type2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+decocpu_type2_device::decocpu_type2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: decocpu_type2_device(mconfig, DECOCPU2, tag, owner, clock)
 {
 }
 
-decocpu_type2_device::decocpu_type2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+decocpu_type2_device::decocpu_type2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: decocpu_type1_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -315,12 +315,12 @@ void decocpu_type2_device::device_start()
 	decocpu_type1_device::device_start();
 }
 
-decocpu_type3_device::decocpu_type3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+decocpu_type3_device::decocpu_type3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: decocpu_type3_device(mconfig, DECOCPU3, tag, owner, clock)
 {
 }
 
-decocpu_type3_device::decocpu_type3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+decocpu_type3_device::decocpu_type3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: decocpu_type2_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -330,7 +330,7 @@ void decocpu_type3_device::device_start()
 	decocpu_type1_device::device_start();
 }
 
-decocpu_type3b_device::decocpu_type3b_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+decocpu_type3b_device::decocpu_type3b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: decocpu_type3_device(mconfig, DECOCPU3B, tag, owner, clock)
 {
 }

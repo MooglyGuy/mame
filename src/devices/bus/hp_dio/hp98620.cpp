@@ -130,12 +130,12 @@ private:
 	bool m_dmar[2];
 };
 
-dio16_98620_device::dio16_98620_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+dio16_98620_device::dio16_98620_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	dio16_98620_device(mconfig, HPDIO_98620, tag, owner, clock)
 {
 }
 
-dio16_98620_device::dio16_98620_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+dio16_98620_device::dio16_98620_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t{mconfig, type, tag, owner, clock},
 	device_execute_interface{mconfig, *this},
 	device_dio16_card_interface{mconfig, *this},

@@ -75,7 +75,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	tiki100_bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&bus, U &&opts, const char *dflt)
-		: tiki100_bus_slot_device(mconfig, tag, owner, 0)
+		: tiki100_bus_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -84,7 +84,7 @@ public:
 		set_bus(std::forward<T>(bus));
 	}
 
-	tiki100_bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	tiki100_bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_bus(T &&tag) { m_bus.set_tag(std::forward<T>(tag)); }
 
@@ -114,7 +114,7 @@ class tiki100_bus_device : public device_t
 {
 public:
 	// construction/destruction
-	tiki100_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tiki100_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	~tiki100_bus_device();
 
 	auto irq_wr_callback() { return m_irq_cb.bind(); }

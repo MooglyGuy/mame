@@ -52,7 +52,7 @@ const u16 ks0164_device::sample_dec[0x100]=
 	0xffc0, 0xffc8, 0xffd0, 0xffd8, 0xffe0, 0xffe8, 0xfff0, 0xfff8,
 };
 
-ks0164_device::ks0164_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ks0164_device::ks0164_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, KS0164, tag, owner, clock),
 	  device_sound_interface(mconfig, *this),
 	  device_memory_interface(mconfig, *this),

@@ -62,7 +62,7 @@ void e0c6s48_device::data_map(address_map &map)
 
 
 // constructor
-e0c6s46_device::e0c6s46_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor program, address_map_constructor data) :
+e0c6s46_device::e0c6s46_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor program, address_map_constructor data) :
 	e0c6200_cpu_device(mconfig, type, tag, owner, clock, program, data),
 	m_vram(*this, "vram%u", 1U),
 	m_write_segs(*this),
@@ -74,11 +74,11 @@ e0c6s46_device::e0c6s46_device(const machine_config &mconfig, device_type type, 
 	m_osc3(0)
 { }
 
-e0c6s46_device::e0c6s46_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+e0c6s46_device::e0c6s46_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	e0c6s46_device(mconfig, E0C6S46, tag, owner, clock, address_map_constructor(FUNC(e0c6s46_device::program_map), this), address_map_constructor(FUNC(e0c6s46_device::data_map), this))
 { }
 
-e0c6s48_device::e0c6s48_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+e0c6s48_device::e0c6s48_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	e0c6s46_device(mconfig, E0C6S48, tag, owner, clock, address_map_constructor(FUNC(e0c6s48_device::program_map), this), address_map_constructor(FUNC(e0c6s48_device::data_map), this))
 { }
 

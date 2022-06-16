@@ -522,8 +522,8 @@ void thomson_state::to7_base(machine_config &config, bool is_mo)
 
 /* sound */
 	SPEAKER(config, "speaker").front_center();
-	DAC_1BIT(config, "buzzer", 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
-	DAC_6BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // 6-bit game extension R-2R DAC (R=10K)
+	DAC_1BIT(config, "buzzer").add_route(ALL_OUTPUTS, "speaker", 0.5);
+	DAC_6BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5); // 6-bit game extension R-2R DAC (R=10K)
 
 /* cassette */
 	CASSETTE(config, m_cassette);

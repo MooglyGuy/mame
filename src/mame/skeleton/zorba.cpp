@@ -259,7 +259,7 @@ void zorba_state::zorba(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 800).add_route(ALL_OUTPUTS, "mono", 1.00); // should be horizontal frequency / 16, so depends on CRTC parameters
+	BEEP(config, m_beep, XTAL::u(800)).add_route(ALL_OUTPUTS, "mono", 1.00); // should be horizontal frequency / 16, so depends on CRTC parameters
 
 	INPUT_MERGER_ANY_HIGH(config, "irq0").output_handler().set(FUNC(zorba_state::irq_w<0>));
 	INPUT_MERGER_ANY_HIGH(config, "irq1").output_handler().set(FUNC(zorba_state::irq_w<1>));
@@ -312,7 +312,7 @@ void zorba_state::zorba(machine_config &config)
 	m_pia[1]->irqb_handler().set("irq1", FUNC(input_merger_device::in_w<1>));
 
 	// PIT
-	pit8254_device &pit(PIT8254(config, "pit", 0));
+	pit8254_device &pit(PIT8254(config, "pit"));
 	pit.set_clk<0>(24_MHz_XTAL / 3);
 	pit.set_clk<1>(24_MHz_XTAL / 3);
 	pit.set_clk<2>(24_MHz_XTAL / 3);

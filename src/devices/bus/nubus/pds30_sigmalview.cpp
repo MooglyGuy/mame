@@ -77,7 +77,7 @@ const tiny_rom_entry *nubus_lview_device::device_rom_region() const
 	return ROM_NAME( lview );
 }
 
-nubus_lview_device::nubus_lview_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_lview_device::nubus_lview_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PDS030_LVIEW, tag, owner, clock),
 	device_video_interface(mconfig, *this),
 	device_nubus_card_interface(mconfig, *this),

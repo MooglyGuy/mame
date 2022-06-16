@@ -118,7 +118,7 @@ enum va_mask : u32
 	VA_OFFSET = 0x00000fff,
 };
 
-ns32382_device::ns32382_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ns32382_device::ns32382_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NS32382, tag, owner, clock)
 	, ns32000_mmu_interface(mconfig, *this)
 	, ns32000_fast_slave_interface(mconfig, *this)

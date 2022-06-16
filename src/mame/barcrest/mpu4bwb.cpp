@@ -129,7 +129,6 @@ void mpu4bwb_machines_state::bwboki_f(machine_config &config)
 	mpu4base(config);
 	MCFG_MACHINE_START_OVERRIDE(mpu4bwb_machines_state,mpu4bwb)
 
-
 	MPU4_OKI_SAMPLED_SOUND(config, m_okicard, MPU4_MASTER_CLOCK/4);
 	m_okicard->add_route(ALL_OUTPUTS, "mono", 1.0);
 
@@ -140,7 +139,7 @@ template<const uint32_t* Key> void mpu4bwb_machines_state::bwboki_chr_cheat_f(ma
 {
 	bwboki_f(config);
 	m_maincpu->set_addrmap(AS_PROGRAM, &mpu4bwb_machines_state::mpu4_memmap_characteriser_bwb);
-	MPU4_CHARACTERISER_PAL_BWB(config, m_characteriser_bwb, 0);
+	MPU4_CHARACTERISER_PAL_BWB(config, m_characteriser_bwb);
 	m_characteriser_bwb->set_common_key(Key[0] & 0xff);
 	m_characteriser_bwb->set_other_key(Key[1]);
 }

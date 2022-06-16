@@ -373,7 +373,7 @@ GFXDECODE_END
 
 void bestleag_state::bestleag(machine_config &config)
 {
-	M68000(config, m_maincpu, 12000000);
+	M68000(config, m_maincpu, XTAL::u(12000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &bestleag_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(bestleag_state::irq6_line_hold));
 
@@ -390,7 +390,7 @@ void bestleag_state::bestleag(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_HIGH); /* Hand-tuned */
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_HIGH); /* Hand-tuned */
 	m_oki->add_route(ALL_OUTPUTS, "speaker", 1.00, 0);
 	m_oki->add_route(ALL_OUTPUTS, "speaker", 1.00, 1);
 }

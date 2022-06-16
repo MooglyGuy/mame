@@ -622,8 +622,8 @@ void contra_state::contra(machine_config &config)
 	m_palette->set_indirect_entries(128);
 	m_palette->set_endianness(ENDIANNESS_LITTLE);
 
-	K007121(config, m_k007121[0], 0, m_palette, gfx_contra_1);
-	K007121(config, m_k007121[1], 0, m_palette, gfx_contra_2);
+	K007121(config, m_k007121[0], m_palette, gfx_contra_1);
+	K007121(config, m_k007121[1], m_palette, gfx_contra_2);
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();

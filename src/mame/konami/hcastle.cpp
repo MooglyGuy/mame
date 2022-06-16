@@ -441,11 +441,11 @@ void hcastle_state::machine_reset()
 void hcastle_state::hcastle(machine_config &config)
 {
 	// basic machine hardware
-	KONAMI(config, m_maincpu, 12000000);    // Derived from 24 MHz clock
+	KONAMI(config, m_maincpu, XTAL::u(12000000));    // Derived from 24 MHz clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &hcastle_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(hcastle_state::irq0_line_hold));
 
-	Z80(config, m_audiocpu, 3579545);
+	Z80(config, m_audiocpu, XTAL::u(3579545));
 	m_audiocpu->set_addrmap(AS_PROGRAM, &hcastle_state::sound_map);
 
 	WATCHDOG_TIMER(config, "watchdog");
@@ -464,24 +464,24 @@ void hcastle_state::hcastle(machine_config &config)
 
 	PALETTE(config, m_palette, FUNC(hcastle_state::palette)).set_format(palette_device::xBGR_555, 2*8*16*16, 128);
 
-	K007121(config, m_k007121[0], 0, m_palette, gfx_hcastle_1);
-	K007121(config, m_k007121[1], 0, m_palette, gfx_hcastle_2);
+	K007121(config, m_k007121[0], m_palette, gfx_hcastle_1);
+	K007121(config, m_k007121[1], m_palette, gfx_hcastle_2);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	K007232(config, m_k007232, 3579545);
+	K007232(config, m_k007232, XTAL::u(3579545));
 	m_k007232->port_write().set(FUNC(hcastle_state::volume_callback));
 	m_k007232->add_route(0, "mono", 0.44);
 	m_k007232->add_route(1, "mono", 0.50);
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 3579545));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(3579545)));
 	ymsnd.irq_handler().set_inputline("audiocpu", INPUT_LINE_NMI); // from schematic; NMI handler is just a retn
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.70);
 
-	K051649(config, "k051649", 3579545).add_route(ALL_OUTPUTS, "mono", 0.45);
+	K051649(config, "k051649", XTAL::u(3579545)).add_route(ALL_OUTPUTS, "mono", 0.45);
 }
 
 /***************************************************************************/

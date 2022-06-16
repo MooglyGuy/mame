@@ -18,7 +18,7 @@ namespace {
 class o2_rom_device : public device_t, public device_o2_cart_interface
 {
 public:
-	o2_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	o2_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -35,7 +35,7 @@ private:
 	u8 m_bank = 0;
 };
 
-o2_rom_device::o2_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+o2_rom_device::o2_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, O2_ROM_STD, tag, owner, clock),
 	device_o2_cart_interface(mconfig, *this)
 { }

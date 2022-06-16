@@ -29,7 +29,7 @@ DEFINE_DEVICE_TYPE(ALESIS_DM3AG, alesis_dm3ag_device, "alesis_dm3ag", "Alesis DM
 //  alesis_dm3ag_device - constructor
 //-------------------------------------------------
 
-alesis_dm3ag_device::alesis_dm3ag_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+alesis_dm3ag_device::alesis_dm3ag_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ALESIS_DM3AG, tag, owner, clock)
 	, m_dac(*this, "dac")
 	, m_samples(*this, DEVICE_SELF)
@@ -49,7 +49,7 @@ void alesis_dm3ag_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "speaker1", 2).front();
 	SPEAKER(config, "speaker2", 2).front();
-	PCM54HP(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker1", 1.0, 0).add_route(ALL_OUTPUTS, "speaker1", 1.0, 1); // PCM54HP DAC + R63/R73-75 + Sample and hold
+	PCM54HP(config, m_dac).add_route(ALL_OUTPUTS, "speaker1", 1.0, 0).add_route(ALL_OUTPUTS, "speaker1", 1.0, 1); // PCM54HP DAC + R63/R73-75 + Sample and hold
 }
 
 //-------------------------------------------------

@@ -41,7 +41,7 @@ class c1571_device : public device_t, public device_cbm_iec_interface, public de
 {
 public:
 	// construction/destruction
-	c1571_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	c1571_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void via0_irq_w(int state);
 	uint8_t via0_pa_r();
@@ -70,7 +70,7 @@ public:
 
 	void c1571_mem(address_map &map) ATTR_COLD;
 protected:
-	c1571_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	c1571_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -134,7 +134,7 @@ class c1570_device :  public c1571_device
 {
 public:
 	// construction/destruction
-	c1570_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	c1570_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -149,7 +149,7 @@ class c1571cr_device :  public c1571_device
 {
 public:
 	// construction/destruction
-	c1571cr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	c1571cr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -168,7 +168,7 @@ class mini_chief_device :  public c1571_device
 {
 public:
 	// construction/destruction
-	mini_chief_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mini_chief_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

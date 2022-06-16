@@ -402,8 +402,8 @@ void techno_state::techno(machine_config &config)
 	// Sound
 	genpin_audio(config);
 	SPEAKER(config, "speaker", 2).front();
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // DAC0808
-	Y8950(config, "ym1", 3580000).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // TKY2016 - no crystal, just a random oscillator, sch says 3.58MHz
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // DAC0808
+	Y8950(config, "ym1", XTAL::u(3580000)).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // TKY2016 - no crystal, just a random oscillator, sch says 3.58MHz
 }
 
 ROM_START(xforce)

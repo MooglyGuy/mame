@@ -24,29 +24,29 @@ DEFINE_DEVICE_TYPE(PCE_ROM_SF2,       pce_sf2_device,       "pce_sf2",       "PC
 DEFINE_DEVICE_TYPE(PCE_ROM_TENNOKOE,  pce_tennokoe_device,  "pce_tennokoe",  "PCE Tennokoe Bank HuCard")
 
 
-pce_rom_device::pce_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pce_rom_device::pce_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_pce_cart_interface(mconfig, *this)
 {
 }
 
-pce_rom_device::pce_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_rom_device::pce_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_rom_device(mconfig, PCE_ROM_STD, tag, owner, clock)
 {
 }
 
-pce_populous_device::pce_populous_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_populous_device::pce_populous_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_rom_device(mconfig, PCE_ROM_POPULOUS, tag, owner, clock)
 {
 }
 
-pce_sf2_device::pce_sf2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_sf2_device::pce_sf2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_rom_device(mconfig, PCE_ROM_SF2, tag, owner, clock)
 	, m_rom_bank(*this, "rom_bank")
 {
 }
 
-pce_tennokoe_device::pce_tennokoe_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_tennokoe_device::pce_tennokoe_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_rom_device(mconfig, PCE_ROM_TENNOKOE, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 {

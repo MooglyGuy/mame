@@ -849,7 +849,7 @@ void welltris_state::welltris(machine_config &config)
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
 
-	VSYSTEM_SPR2(config, m_spr_old, 0, "palette", gfx_welltris_spr);
+	VSYSTEM_SPR2(config, m_spr_old, "palette", gfx_welltris_spr);
 	m_spr_old->set_pritype(-1);
 
 	// sound hardware
@@ -859,7 +859,7 @@ void welltris_state::welltris(machine_config &config)
 	m_soundlatch->data_pending_callback().set(FUNC(welltris_state::soundlatch_pending_w));
 	m_soundlatch->set_separate_acknowledge(true);
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 8000000));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(8000000)));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "mono", 0.75);
 	ymsnd.add_route(1, "mono", 0.75);

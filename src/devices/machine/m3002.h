@@ -35,7 +35,7 @@ class m3002_device : public device_t, public device_nvram_interface, public devi
 {
 public:
 	// device type constructor
-	m3002_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m3002_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto irq_out() { return m_irq_callback.bind(); }
 
@@ -48,7 +48,7 @@ public:
 	int irq_r() { return m_irq_active ? 0 : 1; }
 
 protected:
-	m3002_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	m3002_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -104,7 +104,7 @@ class m3000_device : public m3002_device
 {
 public:
 	// device type constructor
-	m3000_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m3000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // device type declarations

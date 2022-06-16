@@ -203,7 +203,7 @@ u8 CalculateOutput(bool bVoiced, bool bXSilence, u8 uPPQtr, bool bPPQStart, u8 u
 // device definition
 DEFINE_DEVICE_TYPE(S14001A, s14001a_device, "s14001a", "SSi TSI S14001A")
 
-s14001a_device::s14001a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+s14001a_device::s14001a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, S14001A, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
 	device_rom_interface(mconfig, *this),

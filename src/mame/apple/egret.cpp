@@ -99,7 +99,7 @@ const tiny_rom_entry *egret_device::device_rom_region() const
 	return ROM_NAME( egret );
 }
 
-egret_device::egret_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+egret_device::egret_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, EGRET, tag, owner, clock),
 	  device_nvram_interface(mconfig, *this),
 	  write_reset(*this),

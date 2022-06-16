@@ -30,7 +30,7 @@ public:
 
 protected:
 	// device base class constructor
-	rst_buffer_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	rst_buffer_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -53,7 +53,7 @@ class rst_pos_buffer_device : public rst_buffer_device
 {
 public:
 	// device constructor
-	rst_pos_buffer_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	rst_pos_buffer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// set RST 1/RST 08H request line (modifies bit 3 of vector)
 	void rst1_w(int state) { sync_input(state, 0x08); }
@@ -75,7 +75,7 @@ class rst_neg_buffer_device : public rst_buffer_device
 {
 public:
 	// device constructor
-	rst_neg_buffer_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	rst_neg_buffer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// set RST 30H request line (modifies bit 3 of vector)
 	void rst30_w(int state) { sync_input(state, 0x08); }

@@ -1076,7 +1076,7 @@ void mpu2_stepper_state::device_post_load()
 
 void mpu12_base_state::mpu12_base(machine_config &config)
 {
-	M6800(config, m_maincpu, 1'000'000); /* On MPU1, the clock comes from a multivibrator circuit varying somewhere around 1 MHz from
+	M6800(config, m_maincpu, XTAL::u(1'000'000)); /* On MPU1, the clock comes from a multivibrator circuit varying somewhere around 1 MHz from
 	                                        board to board. This results in for example slightly different sound pitch across machines.
 	                                        I've set a stable 1 MHz clock here, which is also the case on MPU2. */
 	m_maincpu->set_addrmap(AS_PROGRAM, &mpu12_base_state::mpu1_map);
@@ -1104,7 +1104,7 @@ void mpu12_base_state::mpu12_base(machine_config &config)
 	m_pia2->cb2_handler().set(FUNC(mpu12_base_state::pia_lamp_update));
 
 	SPEAKER(config, "mono").front_center();
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "mono", 0.25);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "mono", 0.25);
 
 	FRUIT_SAMPLES(config, m_samples);
 

@@ -23,7 +23,7 @@ DEFINE_DEVICE_TYPE(PPU_VT03PAL, ppu_vt03pal_device, "ppu_vt03pal", "VT03 PPU (PA
 
 DEFINE_DEVICE_TYPE(PPU_VT3XX, ppu_vt3xx_device, "ppu_vt3xx", "VT3XX PPU (NTSC)")
 
-ppu_vt03_device::ppu_vt03_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, u32 clock) :
+ppu_vt03_device::ppu_vt03_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock) :
 	ppu2c0x_device(mconfig, type, tag, owner, clock),
 	m_is_pal(false),
 	m_is_50hz(false),
@@ -33,13 +33,13 @@ ppu_vt03_device::ppu_vt03_device(const machine_config& mconfig, device_type type
 {
 }
 
-ppu_vt03_device::ppu_vt03_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+ppu_vt03_device::ppu_vt03_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	ppu_vt03_device(mconfig, PPU_VT03, tag, owner, clock)
 {
 }
 
 
-ppu_vt03pal_device::ppu_vt03pal_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+ppu_vt03pal_device::ppu_vt03pal_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	ppu_vt03_device(mconfig, PPU_VT03PAL, tag, owner, clock)
 {
 	m_scanlines_per_frame = PAL_SCANLINES_PER_FRAME;
@@ -635,7 +635,7 @@ void ppu_vt3xx_device::lcdc_regs_w(offs_t offset, u8 data)
 	//
 	// of note lxcmcysp (which has a vertical screen squashed to horizontal) writes different
 	// config values here compared to the natively horizontal versions
-	// 
+	//
 	// the real devices scale the higher res images to the lower LCD, dropping pixels
 	logerror("%s: ppu_vt3xx_device::lcdc_regs_w %d %02x\n", machine().describe_context(), offset, data);
 	m_204x_screenregs[offset] = data;
@@ -1002,7 +1002,7 @@ void ppu_vt3xx_device::draw_sprites(u8* line_priority)
 			if ((ypos + height <= m_scanline) || (ypos > m_scanline))
 				continue;
 
-			// compute the character's line to draw 
+			// compute the character's line to draw
 			const int sprite_line = m_scanline - ypos;
 
 			// a 16 pixel wide sprite (packed format), at 4bpp, requires 8 bytes for a single line
@@ -1035,7 +1035,7 @@ void ppu_vt3xx_device::draw_sprites(u8* line_priority)
 			u8 spritepatternbuf[8];
 			for (int i = 0; i < 8; i++)
 				spritepatternbuf[i] = m_read_onespace_with_relative(pattern_offset + i);
-	
+
 			if (pri)
 			{
 				for (int pixel = 0; pixel < width; pixel++)

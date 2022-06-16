@@ -441,7 +441,7 @@ GFXDECODE_END
 void skyraid_state::skyraid(machine_config &config)
 {
 	// basic machine hardware
-	M6502(config, m_maincpu, 12'096'000 / 12);
+	M6502(config, m_maincpu, XTAL::u(12'096'000) / 12);
 	m_maincpu->set_addrmap(AS_PROGRAM, &skyraid_state::program_map);
 	m_maincpu->set_vblank_int("screen", FUNC(skyraid_state::irq0_line_hold));
 

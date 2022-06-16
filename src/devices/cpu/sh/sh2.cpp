@@ -23,7 +23,7 @@
 
 constexpr int SH2_INT_15 = 15;
 
-sh2_device::sh2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int cpu_type, address_map_constructor internal_map, int addrlines, uint32_t address_mask)
+sh2_device::sh2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int cpu_type, address_map_constructor internal_map, int addrlines, uint32_t address_mask)
 	: sh_common_execution(mconfig, type, tag, owner, clock, ENDIANNESS_BIG, internal_map)
 	, m_am(address_mask)
 	, m_program_config("program", ENDIANNESS_BIG, 32, addrlines, 0, internal_map)

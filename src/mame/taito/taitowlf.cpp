@@ -635,7 +635,7 @@ void taitowlf_state::taitowlf(machine_config &config)
 
 	m_maincpu->set_clock(200'000'000);
 
-	ISA16_SLOT(config, "board1", 0, "pci:07.0:isabus", isa_internal_devices, "taito_romdisk", true).set_option_machine_config("taito_romdisk", romdisk_config);
+	ISA16_SLOT(config, "board1", "pci:07.0:isabus", isa_internal_devices, "taito_romdisk", true).set_option_machine_config("taito_romdisk", romdisk_config);
 	// TODO: remove keyboard slot option
 
 	VOODOO_1_PCI(config.replace(), m_voodoo, 0, m_maincpu, m_screen);

@@ -1838,7 +1838,7 @@ void mz2500_state::mz2500(machine_config &config)
 	ym.add_route(2, "mono", 0.50);
 	ym.add_route(3, "mono", 0.50);
 
-	BEEP(config, m_beeper, 4096).add_route(ALL_OUTPUTS,"mono",0.50);
+	BEEP(config, m_beeper, XTAL::u(4096)).add_route(ALL_OUTPUTS,"mono",0.50);
 }
 
 

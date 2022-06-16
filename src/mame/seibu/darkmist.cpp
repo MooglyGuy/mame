@@ -509,12 +509,12 @@ TIMER_DEVICE_CALLBACK_MEMBER(darkmist_state::scanline)
 void darkmist_state::darkmist(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 4'000'000);         // ? MHz
+	Z80(config, m_maincpu, XTAL::u(4'000'000));         // ? MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &darkmist_state::memmap);
 	m_maincpu->set_addrmap(AS_OPCODES, &darkmist_state::decrypted_opcodes_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(darkmist_state::scanline), "screen", 0, 1);
 
-	T5182(config, m_t5182, 14'318'180 / 4);
+	T5182(config, m_t5182, XTAL::u(14'318'180) / 4);
 	m_t5182->ym_read_callback().set("ymsnd", FUNC(ym2151_device::read));
 	m_t5182->ym_write_callback().set("ymsnd", FUNC(ym2151_device::write));
 

@@ -19,7 +19,7 @@ DEFINE_DEVICE_TYPE(NAMCO_C67, namco_c67_device, "namcoc67", "Namco C67 (TMS320C2
 DEFINE_DEVICE_TYPE(NAMCO_C71, namco_c71_device, "namcoc71", "Namco C71 (TMS320C25)")
 
 
-namco_c67_device::namco_c67_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namco_c67_device::namco_c67_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	tms32025_device(mconfig, NAMCO_C67, tag, owner, clock)
 {
 	set_mp_mc(false);

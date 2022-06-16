@@ -684,7 +684,7 @@ void xtom3d_state::xtom3d(machine_config &config)
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	I82371EB_IDE(config, m_pci_ide, 0, m_maincpu);
+	I82371EB_IDE(config, m_pci_ide, m_maincpu);
 	m_pci_ide->irq_pri().set("pci:07.0", FUNC(i82371eb_isa_device::pc_irq14_w));
 	m_pci_ide->irq_sec().set("pci:07.0", FUNC(i82371eb_isa_device::pc_mirq0_w));
 

@@ -187,12 +187,12 @@ DEFINE_DEVICE_TYPE(ATARI_CAGE, atari_cage_device, "atari_cage", "Atari CAGE")
 //  atari_cage_device - constructor
 //-------------------------------------------------
 
-atari_cage_device::atari_cage_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+atari_cage_device::atari_cage_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	atari_cage_device(mconfig, ATARI_CAGE, tag, owner, clock)
 {
 }
 
-atari_cage_device::atari_cage_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+atari_cage_device::atari_cage_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_mixer_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),
@@ -716,7 +716,7 @@ DEFINE_DEVICE_TYPE(ATARI_CAGE_SEATTLE, atari_cage_seattle_device, "atari_cage_se
 //  atari_cage_seattle_device - constructor
 //-------------------------------------------------
 
-atari_cage_seattle_device::atari_cage_seattle_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+atari_cage_seattle_device::atari_cage_seattle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	atari_cage_device(mconfig, ATARI_CAGE_SEATTLE, tag, owner, clock)
 {
 }

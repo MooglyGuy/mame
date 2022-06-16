@@ -110,24 +110,24 @@ void silverball_state::i440zx_superio_config(device_t *device)
 // SY-7IZB+
 void silverball_state::silverball_i440zx(machine_config &config)
 {
-	PENTIUM2(config, m_maincpu, 133'000'000); // Pentium-S minimum, up to a Pentium II / Celeron Socket 370
+	PENTIUM2(config, m_maincpu, XTAL::u(133'000'000)); // Pentium-S minimum, up to a Pentium II / Celeron Socket 370
 	m_maincpu->set_addrmap(AS_PROGRAM, &silverball_state::silverball_map);
 	m_maincpu->set_addrmap(AS_IO, &silverball_state::silverball_io);
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	m_maincpu->smiact().set("pci:00.0", FUNC(i82443bx_host_device::smi_act_w));
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// i440ZX (BX equivalent)
 	// TODO: unknown RAM size
-	I82443BX_HOST(config, "pci:00.0", 0, "maincpu", 32*1024*1024);
-	I82443BX_BRIDGE(config, "pci:01.0", 0 ); //"pci:01.0:00.0");
+	I82443BX_HOST(config, "pci:00.0", "maincpu", 32*1024*1024);
+	I82443BX_BRIDGE(config, "pci:01.0"); //"pci:01.0:00.0");
 	//I82443BX_AGP   (config, "pci:01.0:00.0");
 
-	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", 0, m_maincpu));
+	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", m_maincpu));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	i82371eb_ide_device &ide(I82371EB_IDE(config, PCI_IDE_ID, 0, m_maincpu));
+	i82371eb_ide_device &ide(I82371EB_IDE(config, PCI_IDE_ID, m_maincpu));
 	ide.irq_pri().set("pci:07.0", FUNC(i82371eb_isa_device::pc_irq14_w));
 	ide.irq_sec().set("pci:07.0", FUNC(i82371eb_isa_device::pc_mirq0_w));
 
@@ -136,14 +136,14 @@ void silverball_state::silverball_i440zx(machine_config &config)
 
 	ide.subdevice<bus_master_ide_controller_device>("ide2")->slot(0).set_default_option(nullptr);
 
-	I82371EB_USB (config, "pci:07.2", 0);
-	I82371EB_ACPI(config, "pci:07.3", 0);
-	LPC_ACPI     (config, "pci:07.3:acpi", 0);
-	SMBUS        (config, "pci:07.3:smbus", 0);
+	I82371EB_USB (config, "pci:07.2");
+	I82371EB_ACPI(config, "pci:07.3");
+	LPC_ACPI     (config, "pci:07.3:acpi");
+	SMBUS        (config, "pci:07.3:smbus");
 
-	ISA16_SLOT(config, "board4", 0, "pci:07.0:isabus", isa_internal_devices, "w83977tf", true).set_option_machine_config("w83977tf", i440zx_superio_config);
-	ISA16_SLOT(config, "isa1", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa2", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "board4", "pci:07.0:isabus", isa_internal_devices, "w83977tf", true).set_option_machine_config("w83977tf", i440zx_superio_config);
+	ISA16_SLOT(config, "isa1", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa2", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
 
 	// TODO: actually a Trio64V2
 	PCI_SLOT(config, "pci:1", pci_cards, 14, 0, 1, 2, 3, "virge");

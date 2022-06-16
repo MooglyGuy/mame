@@ -89,7 +89,7 @@ class jmfb_device :
 {
 protected:
 	// construction/destruction
-	jmfb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	jmfb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -163,7 +163,7 @@ private:
 class nubus_48gc_device : public jmfb_device
 {
 public:
-	nubus_48gc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_48gc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -177,7 +177,7 @@ private:
 class nubus_824gc_device : public jmfb_device
 {
 public:
-	nubus_824gc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_824gc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -324,7 +324,7 @@ u32 jmfb_device::palette_entries() const noexcept
 //  jmfb_device - constructor
 //-------------------------------------------------
 
-jmfb_device::jmfb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+jmfb_device::jmfb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	device_video_interface(mconfig, *this),
@@ -336,12 +336,12 @@ jmfb_device::jmfb_device(const machine_config &mconfig, device_type type, const 
 	set_screen(*this, GC48_SCREEN_NAME);
 }
 
-nubus_48gc_device::nubus_48gc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_48gc_device::nubus_48gc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	jmfb_device(mconfig, NUBUS_MDC48, tag, owner, clock)
 {
 }
 
-nubus_824gc_device::nubus_824gc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_824gc_device::nubus_824gc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	jmfb_device(mconfig, NUBUS_MDC824, tag, owner, clock)
 {
 }

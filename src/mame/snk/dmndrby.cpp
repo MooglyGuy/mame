@@ -774,11 +774,11 @@ TIMER_DEVICE_CALLBACK_MEMBER(dmndrby_state::scanline_cb)
 
 void dmndrby_state::dderby(machine_config &config)
 {
-	Z80(config, m_maincpu, 4'000'000);         // ? MHz
+	Z80(config, m_maincpu, XTAL::u(4'000'000));         // ? MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &dmndrby_state::main_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(dmndrby_state::scanline_cb), "screen", 0, 1);
 
-	Z80(config, m_audiocpu, 4'000'000);  // verified on schematics
+	Z80(config, m_audiocpu, XTAL::u(4'000'000));  // verified on schematics
 	m_audiocpu->set_addrmap(AS_PROGRAM, &dmndrby_state::sound_map);
 	m_audiocpu->set_periodic_int(FUNC(dmndrby_state::irq0_line_hold), attotime::from_hz(60));
 
@@ -801,7 +801,7 @@ void dmndrby_state::dderby(machine_config &config)
 	GENERIC_LATCH_8(config, "soundlatch");
 	GENERIC_LATCH_8(config, "soundlatch2");
 
-	AY8910(config, "ay1", 4'000'000 / 2).add_route(ALL_OUTPUTS, "mono", 0.35); // frequency guessed, tied with sound timer irq above
+	AY8910(config, "ay1", XTAL::u(4'000'000) / 2).add_route(ALL_OUTPUTS, "mono", 0.35); // frequency guessed, tied with sound timer irq above
 }
 
 

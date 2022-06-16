@@ -24,7 +24,7 @@ class bbc_opus8272_device :
 {
 public:
 	// construction/destruction
-	bbc_opus8272_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opus8272_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -54,7 +54,7 @@ public:
 
 protected:
 	// construction/destruction
-	bbc_opusfdc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opusfdc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -72,7 +72,7 @@ private:
 class bbc_opus2791_device : public bbc_opusfdc_device
 {
 public:
-	bbc_opus2791_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opus2791_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -82,7 +82,7 @@ protected:
 class bbc_opus2793_device : public bbc_opusfdc_device
 {
 public:
-	bbc_opus2793_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opus2793_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -92,7 +92,7 @@ protected:
 class bbc_opus1770_device : public bbc_opusfdc_device
 {
 public:
-	bbc_opus1770_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opus1770_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

@@ -510,7 +510,7 @@ void pktgaldx_state::pktgaldx(machine_config &config)
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_pktgaldx);
 
-	DECO16IC(config, m_deco_tilegen, 0);
+	DECO16IC(config, m_deco_tilegen);
 	m_deco_tilegen->set_pf1_size(DECO_64x32);
 	m_deco_tilegen->set_pf2_size(DECO_64x32);
 	m_deco_tilegen->set_pf1_col_bank(0x00);
@@ -523,9 +523,9 @@ void pktgaldx_state::pktgaldx(machine_config &config)
 	m_deco_tilegen->set_pf12_16x16_bank(1);
 	m_deco_tilegen->set_gfxdecode_tag(m_gfxdecode);
 
-	DECO_SPRITE(config, m_sprgen, 0, m_palette, gfx_pktgaldx_spr);
+	DECO_SPRITE(config, m_sprgen, m_palette, gfx_pktgaldx_spr);
 
-	DECO104PROT(config, m_deco104, 0);
+	DECO104PROT(config, m_deco104);
 	m_deco104->port_a_cb().set_ioport("INPUTS");
 	m_deco104->port_b_cb().set_ioport("SYSTEM");
 	m_deco104->port_c_cb().set_ioport("DSW");
@@ -545,7 +545,7 @@ void pktgaldx_state::pktgaldx(machine_config &config)
 void pktgaldxb_state::pktgaldxb(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000);
+	M68000(config, m_maincpu, XTAL::u(16000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &pktgaldxb_state::prg_map);
 
 	// video hardware
@@ -565,10 +565,10 @@ void pktgaldxb_state::pktgaldxb(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	okim6295_device &oki1(OKIM6295(config, "oki1", 32220000 / 32, okim6295_device::PIN7_HIGH));
+	okim6295_device &oki1(OKIM6295(config, "oki1", XTAL::u(32220000) / 32, okim6295_device::PIN7_HIGH));
 	oki1.add_route(ALL_OUTPUTS, "mono", 0.75);
 
-	OKIM6295(config, m_oki2, 32220000 / 16, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki2, XTAL::u(32220000) / 16, okim6295_device::PIN7_HIGH);
 	m_oki2->add_route(ALL_OUTPUTS, "mono", 0.60);
 }
 

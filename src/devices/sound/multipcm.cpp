@@ -177,7 +177,7 @@ void multipcm_device::write(offs_t offset, uint8_t data)
 
 DEFINE_DEVICE_TYPE(MULTIPCM, multipcm_device, "ymw258f", "Yamaha YMW-258-F")
 
-multipcm_device::multipcm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+multipcm_device::multipcm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	gew_pcm_device(mconfig, MULTIPCM, tag, owner, clock, 28, 224),
 	m_cur_slot(0),
 	m_address(0)

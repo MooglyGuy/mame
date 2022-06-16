@@ -12,7 +12,7 @@
 //  bbd_device_base - constructor
 //-------------------------------------------------
 
-bbd_device_base::bbd_device_base(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, device_type type) :
+bbd_device_base::bbd_device_base(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, device_type type) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_sound_interface(mconfig, *this)
 {
@@ -64,7 +64,7 @@ void bbd_device_base::sound_stream_update(sound_stream &stream)
 // device type definition
 DEFINE_DEVICE_TYPE(MN3004, mn3004_device, "mn3004", "MN3004 BBD")
 
-mn3004_device::mn3004_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mn3004_device::mn3004_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bbd_device_base(mconfig, tag, owner, clock, MN3004)
 {
 	set_bucket_count(512);
@@ -78,7 +78,7 @@ mn3004_device::mn3004_device(const machine_config &mconfig, const char *tag, dev
 // device type definition
 DEFINE_DEVICE_TYPE(MN3005, mn3005_device, "mn3005", "MN3005 BBD")
 
-mn3005_device::mn3005_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mn3005_device::mn3005_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bbd_device_base(mconfig, tag, owner, clock, MN3005)
 {
 	set_bucket_count(4096);
@@ -92,7 +92,7 @@ mn3005_device::mn3005_device(const machine_config &mconfig, const char *tag, dev
 // device type definition
 DEFINE_DEVICE_TYPE(MN3006, mn3006_device, "mn3006", "MN3006 BBD")
 
-mn3006_device::mn3006_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mn3006_device::mn3006_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bbd_device_base(mconfig, tag, owner, clock, MN3006)
 {
 	set_bucket_count(128);
@@ -106,7 +106,7 @@ mn3006_device::mn3006_device(const machine_config &mconfig, const char *tag, dev
 // device type definition
 DEFINE_DEVICE_TYPE(MN3204P, mn3204p_device, "mn3204p", "MN3204P BBD")
 
-mn3204p_device::mn3204p_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mn3204p_device::mn3204p_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bbd_device_base(mconfig, tag, owner, clock, MN3204P)
 {
 	set_bucket_count(512);

@@ -134,12 +134,12 @@ DEFINE_DEVICE_TYPE(Z80DMA, z80dma_device, "z80dma", "Z80 DMA Controller")
 /****************************************************************************
  * z80dma_device - constructor
  ****************************************************************************/
-z80dma_device::z80dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+z80dma_device::z80dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: z80dma_device(mconfig, Z80DMA, tag, owner, clock)
 {
 }
 
-z80dma_device::z80dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+z80dma_device::z80dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_z80daisy_interface(mconfig, *this)
 	, m_out_busreq_cb(*this)

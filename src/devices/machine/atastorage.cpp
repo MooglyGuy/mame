@@ -23,7 +23,7 @@
 #define TIME_FULL_STROKE_SEEK               (attotime::from_usec(13000))
 #define TIME_AVERAGE_ROTATIONAL_LATENCY     (attotime::from_usec(1300))
 
-ata_mass_storage_device_base::ata_mass_storage_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+ata_mass_storage_device_base::ata_mass_storage_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	ata_hle_device_base(mconfig, type, tag, owner, clock),
 	m_can_identify_device(0),
 	m_num_cylinders(0),
@@ -878,7 +878,7 @@ void ata_mass_storage_device_base::process_command()
 //  ide_hdd_device_base - constructor
 //-------------------------------------------------
 
-ide_hdd_device_base::ide_hdd_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+ide_hdd_device_base::ide_hdd_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	ata_mass_storage_device_base(mconfig, type, tag, owner, clock),
 	m_image(*this, "image")
 {
@@ -962,7 +962,7 @@ void ide_hdd_device_base::device_add_mconfig(machine_config &config)
 //  cf_device_base - constructor
 //-------------------------------------------------
 
-cf_device_base::cf_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+cf_device_base::cf_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	ide_hdd_device_base(mconfig, type, tag, owner, clock)
 {
 }

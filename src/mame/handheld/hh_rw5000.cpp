@@ -214,7 +214,7 @@ INPUT_PORTS_END
 void autorace_state::autorace(machine_config &config)
 {
 	// basic machine hardware
-	B6000(config, m_maincpu, 160000); // approximation
+	B6000(config, m_maincpu, XTAL::u(160000)); // approximation
 	m_maincpu->write_str().set(FUNC(autorace_state::write_str));
 	m_maincpu->write_seg().set(FUNC(autorace_state::write_seg));
 	m_maincpu->read_kb().set_ioport("IN.0");
@@ -306,7 +306,7 @@ INPUT_PORTS_END
 void misatk_state::misatk(machine_config &config)
 {
 	// basic machine hardware
-	B6000(config, m_maincpu, 250000); // approximation
+	B6000(config, m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(misatk_state::write_str));
 	m_maincpu->write_seg().set(FUNC(misatk_state::write_seg));
 	m_maincpu->read_kb().set_ioport("IN.0");
@@ -408,7 +408,7 @@ INPUT_PORTS_END
 void mfootb_state::mfootb(machine_config &config)
 {
 	// basic machine hardware
-	B6100(config, m_maincpu, 280000); // approximation
+	B6100(config, m_maincpu, XTAL::u(280000)); // approximation
 	m_maincpu->write_str().set(FUNC(mfootb_state::write_str));
 	m_maincpu->write_seg().set(FUNC(mfootb_state::write_seg));
 	m_maincpu->read_kb().set_ioport("IN.0");
@@ -498,7 +498,7 @@ INPUT_PORTS_END
 void mbaseb_state::mbaseb(machine_config &config)
 {
 	// basic machine hardware
-	B6100(config, m_maincpu, 280000); // approximation
+	B6100(config, m_maincpu, XTAL::u(280000)); // approximation
 	m_maincpu->write_str().set(FUNC(mbaseb_state::write_str));
 	m_maincpu->write_seg().set(FUNC(mbaseb_state::write_seg));
 	m_maincpu->read_kb().set_ioport("IN.0");
@@ -590,7 +590,7 @@ INPUT_PORTS_END
 void gravity_state::gravity(machine_config &config)
 {
 	// basic machine hardware
-	B6100(config, m_maincpu, 250000); // approximation
+	B6100(config, m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(gravity_state::write_str));
 	m_maincpu->write_seg().set(FUNC(gravity_state::write_seg));
 	m_maincpu->read_kb().set_ioport("IN.0");
@@ -703,7 +703,7 @@ INPUT_PORTS_END
 void rw10r_state::rw10r(machine_config &config)
 {
 	// basic machine hardware
-	A5000(config, m_maincpu, 250000); // approximation
+	A5000(config, m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(rw10r_state::write_str));
 	m_maincpu->write_seg().set(FUNC(rw10r_state::write_seg));
 	m_maincpu->read_kb().set(FUNC(rw10r_state::read_kb));
@@ -821,7 +821,7 @@ INPUT_PORTS_END
 void rw18r_state::rw18r(machine_config &config)
 {
 	// basic machine hardware
-	B5000(config, m_maincpu, 250000); // approximation
+	B5000(config, m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(rw18r_state::write_str));
 	m_maincpu->write_seg().set(FUNC(rw18r_state::write_seg));
 	m_maincpu->read_kb().set(FUNC(rw18r_state::read_kb));
@@ -936,7 +936,7 @@ INPUT_PORTS_END
 void rw30r_state::rw30r(machine_config &config)
 {
 	// basic machine hardware
-	B5500(config, m_maincpu, 250000); // approximation
+	B5500(config, m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(rw30r_state::write_str));
 	m_maincpu->write_seg().set(FUNC(rw30r_state::write_seg));
 	m_maincpu->read_kb().set(FUNC(rw30r_state::read_kb));
@@ -952,7 +952,7 @@ void rw30r_state::rw31r(machine_config &config)
 	rw30r(config);
 
 	// basic machine hardware
-	A5500(config.replace(), m_maincpu, 250000); // approximation
+	A5500(config.replace(), m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(rw30r_state::write_str));
 	m_maincpu->write_seg().set(FUNC(rw30r_state::write_seg));
 	m_maincpu->read_kb().set(FUNC(rw30r_state::read_kb));
@@ -1085,7 +1085,7 @@ INPUT_PORTS_END
 void rw24k_state::rw24k(machine_config &config)
 {
 	// basic machine hardware
-	A5900(config, m_maincpu, 250000); // approximation
+	A5900(config, m_maincpu, XTAL::u(250000)); // approximation
 	m_maincpu->write_str().set(FUNC(rw24k_state::write_str));
 	m_maincpu->write_seg().set(FUNC(rw24k_state::write_seg));
 	m_maincpu->read_kb().set(FUNC(rw24k_state::read_kb));

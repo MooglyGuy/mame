@@ -22,7 +22,7 @@ Should mirror $e8-$ef to $fx by logic.
 DEFINE_DEVICE_TYPE(A800_ROM_SPARTADOS,       a800_rom_spartados_device,       "a800_sparta",       "Atari 8-bit SpartaDOS X cart")
 DEFINE_DEVICE_TYPE(A800_ROM_SPARTADOS_128KB, a800_rom_spartados_128kb_device, "a800_sparta_128kb", "Atari 8-bit SpartaDOS X 128KB cart")
 
-a800_rom_spartados_device::a800_rom_spartados_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_spartados_device::a800_rom_spartados_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_bank(0)
 	, m_subcart(*this, "subcart")
@@ -31,7 +31,7 @@ a800_rom_spartados_device::a800_rom_spartados_device(const machine_config &mconf
 
 }
 
-a800_rom_spartados_device::a800_rom_spartados_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_spartados_device::a800_rom_spartados_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_spartados_device(mconfig, A800_ROM_SPARTADOS, tag, owner, clock)
 {
 }

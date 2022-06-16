@@ -79,7 +79,7 @@ void tg100_state::tg100(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	MULTIPCM(config, m_ymw258, 9400000);
+	MULTIPCM(config, m_ymw258, XTAL::u(9400000));
 	m_ymw258->set_addrmap(0, &tg100_state::ymw258_map);
 	m_ymw258->add_route(0, "speaker", 1.0, 0);
 	m_ymw258->add_route(1, "speaker", 1.0, 1);

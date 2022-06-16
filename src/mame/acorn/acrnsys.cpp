@@ -378,7 +378,7 @@ void acrnsys_state::a6502(machine_config &config)
 	//m_ins8154->out_a().set(FUNC(acrnsys_state::ins8154_pa_w));
 	m_ins8154->in_b().set(FUNC(acrnsys_state::kbd_r));
 
-	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard", 0));
+	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard"));
 	keyboard.set_keyboard_callback(FUNC(acrnsys_state::kbd_put));
 }
 
@@ -399,7 +399,7 @@ void acrnsys_state::a6502a(machine_config &config)
 	//m_via6522->cb2_handler().set(FUNC(acrnsys_state::cass_w));
 	m_via6522->irq_handler().set(m_irqs, FUNC(input_merger_device::in_w<0>));
 
-	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard", 0));
+	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard"));
 	keyboard.set_keyboard_callback(FUNC(acrnsys_state::kbd_put));
 }
 
@@ -427,7 +427,7 @@ void acrnsys_state::a6809(machine_config &config)
 	output_latch_device &latch(OUTPUT_LATCH(config, "cent_data_out"));
 	m_centronics->set_output_latch(latch);
 
-	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard", 0));
+	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard"));
 	keyboard.set_keyboard_callback(FUNC(acrnsys_state::kbd_put_pb));
 }
 
@@ -465,7 +465,7 @@ void acrnsys_state::acrnsys2(machine_config &config)
 	a6502(config);
 
 	/* Acorn Bus - 8 Slot Backplane */
-	ACORN_BUS(config, m_bus, 0);
+	ACORN_BUS(config, m_bus);
 	m_bus->set_space(m_maincpu, AS_PROGRAM);
 	m_bus->out_irq_callback().set(m_irqs, FUNC(input_merger_device::in_w<1>));
 	m_bus->out_nmi_callback().set(FUNC(acrnsys_state::bus_nmi_w));
@@ -489,7 +489,7 @@ void acrnsys_state::acrnsys3(machine_config &config)
 	a6502(config);
 
 	/* Acorn Bus - 8 Slot Backplane */
-	ACORN_BUS(config, m_bus, 0);
+	ACORN_BUS(config, m_bus);
 	m_bus->set_space(m_maincpu, AS_PROGRAM);
 	m_bus->out_irq_callback().set(m_irqs, FUNC(input_merger_device::in_w<1>));
 	m_bus->out_nmi_callback().set(FUNC(acrnsys_state::bus_nmi_w));
@@ -513,7 +513,7 @@ void acrnsys_state::acrnsys3_6809(machine_config &config)
 	a6809(config);
 
 	/* Acorn Bus - 8 Slot Backplane */
-	ACORN_BUS(config, m_bus, 0);
+	ACORN_BUS(config, m_bus);
 	m_bus->set_space(m_maincpu, AS_PROGRAM);
 	m_bus->out_irq_callback().set(m_irqs, FUNC(input_merger_device::in_w<1>));
 	m_bus->out_nmi_callback().set(FUNC(acrnsys_state::bus_nmi_w));
@@ -536,7 +536,7 @@ void acrnsys_state::acrnsys4(machine_config &config)
 	a6502(config);
 
 	/* Acorn Bus - 14 Slot Backplane */
-	ACORN_BUS(config, m_bus, 0);
+	ACORN_BUS(config, m_bus);
 	m_bus->set_space(m_maincpu, AS_PROGRAM);
 	m_bus->out_irq_callback().set(m_irqs, FUNC(input_merger_device::in_w<1>));
 	m_bus->out_nmi_callback().set(FUNC(acrnsys_state::bus_nmi_w));
@@ -566,7 +566,7 @@ void acrnsys_state::acrnsys5(machine_config &config)
 	a6502a(config);
 
 	/* Acorn Bus - 7 Slot Backplane */
-	ACORN_BUS(config, m_bus, 0);
+	ACORN_BUS(config, m_bus);
 	m_bus->set_space(m_maincpu, AS_PROGRAM);
 	m_bus->out_irq_callback().set(m_irqs, FUNC(input_merger_device::in_w<1>));
 	m_bus->out_nmi_callback().set(FUNC(acrnsys_state::bus_nmi_w));

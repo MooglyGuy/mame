@@ -27,7 +27,7 @@ class ibm5160_mb_device : public device_t
 {
 public:
 	// construction/destruction
-	ibm5160_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ibm5160_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// inline configuration
 	template <typename T> void set_cputag(T &&tag)
@@ -62,7 +62,7 @@ public:
 	void keyboard_data_w(int state);
 
 protected:
-	ibm5160_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ibm5160_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -142,14 +142,14 @@ class ibm5150_mb_device : public ibm5160_mb_device
 {
 public:
 	// construction/destruction
-	ibm5150_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ibm5150_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void keyboard_clock_w(int state);
 
 	virtual void pc_pit8253_out2_changed(int state) override;
 
 protected:
-	ibm5150_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ibm5150_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -172,12 +172,12 @@ class ec1841_mb_device : public ibm5160_mb_device
 {
 public:
 	// construction/destruction
-	ec1841_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ec1841_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void keyboard_clock_w(int state);
 
 protected:
-	ec1841_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ec1841_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// optional information overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -196,7 +196,7 @@ class ec1840_mb_device : public ec1841_mb_device
 {
 public:
 	// construction/destruction
-	ec1840_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ec1840_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// optional information overrides
@@ -216,7 +216,7 @@ class pc_noppi_mb_device : public ibm5160_mb_device
 {
 public:
 	// construction/destruction
-	pc_noppi_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	pc_noppi_mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint8_t pit_out2() { return m_pit_out2; } // helper for near-clones with multifunction ics instead of 8255s
 
@@ -225,7 +225,7 @@ public:
 	uint8_t pc_ppi_portb_r();
 
 protected:
-	pc_noppi_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pc_noppi_mb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;

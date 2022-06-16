@@ -25,10 +25,10 @@ class bbc_opus3_device:
 {
 public:
 	// construction/destruction
-	bbc_opus3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opus3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	bbc_opus3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opus3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -57,7 +57,7 @@ class bbc_opusa_device : public bbc_opus3_device
 {
 public:
 	// construction/destruction
-	bbc_opusa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_opusa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

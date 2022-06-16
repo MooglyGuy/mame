@@ -45,8 +45,8 @@
 
 namespace {
 
-static constexpr u32 C7M = 7833600;
-static constexpr u32 C15M = (C7M * 2);
+  static constexpr XTAL C7M = XTAL::u(7833600);
+static constexpr XTAL C15M = (C7M * 2);
 
 class macvail_state : public driver_device
 {
@@ -294,7 +294,7 @@ void macvail_state::maclc3_base(machine_config &config)
 	SOFTWARE_LIST(config, "flop35hd_list").set_original("mac_hdflop");
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(m_sonora, FUNC(sonora_device::scc_irq_w));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
@@ -311,7 +311,7 @@ void macvail_state::maclc3_base(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	APPLE_DFAC(config, m_dfac, 22257);
+	APPLE_DFAC(config, m_dfac, XTAL::u(22257));
 	m_dfac->add_route(0, "speaker", 1.0, 0);
 	m_dfac->add_route(1, "speaker", 1.0, 1);
 

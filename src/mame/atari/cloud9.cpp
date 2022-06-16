@@ -463,8 +463,8 @@ uint32_t cloud9_state::screen_update(screen_device &screen, bitmap_ind16 &bitmap
 }
 
 
-static constexpr double MASTER_CLOCK = 10'000'000;
-static constexpr double PIXEL_CLOCK = MASTER_CLOCK / 2;
+static constexpr XTAL MASTER_CLOCK = XTAL::u(10'000'000);
+static constexpr XTAL PIXEL_CLOCK = MASTER_CLOCK / 2;
 static constexpr uint16_t HTOTAL = 320;
 static constexpr uint16_t VTOTAL = 256;
 
@@ -769,7 +769,7 @@ void cloud9_state::cloud9(machine_config &config)
 	PALETTE(config, m_palette).set_entries(64);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_refresh_hz((double)PIXEL_CLOCK / (double)VTOTAL / (double)HTOTAL);
+	m_screen->set_refresh_hz(PIXEL_CLOCK.dvalue() / (double)VTOTAL / (double)HTOTAL);
 	m_screen->set_size(HTOTAL, VTOTAL);
 	m_screen->set_vblank_time(0);          // VBLANK is handled manually
 	m_screen->set_visarea(0, 255, 0, 231);

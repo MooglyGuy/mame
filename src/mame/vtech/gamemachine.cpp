@@ -360,7 +360,7 @@ void gm_state::gamemach(machine_config &config)
 
 	// sound hardware
 	config.device_remove("speaker");
-	NETLIST_SOUND(config, "sound_nl", 48000).set_source(NETLIST_NAME(gamemachine)).add_route(ALL_OUTPUTS, "mono", 1.0);
+	NETLIST_SOUND(config, "sound_nl", XTAL::u(48000)).set_source(NETLIST_NAME(gamemachine)).add_route(ALL_OUTPUTS, "mono", 1.0);
 	NETLIST_STREAM_OUTPUT(config, "sound_nl:cout0", 0, "SPK1.2").set_mult_offset(-10000.0 / 32768.0, 10000.0 * 3.75 / 32768.0);
 
 	NETLIST_LOGIC_INPUT(config, "sound_nl:p08", "P08.IN", 0);

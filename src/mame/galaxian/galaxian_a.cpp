@@ -615,28 +615,28 @@ DEFINE_DEVICE_TYPE(MOONCRST_SOUND, mooncrst_sound_device, "mooncrst_sound", "Moo
 DEFINE_DEVICE_TYPE(BONGO_SOUND, bongo_sound_device, "bongo_sound", "Bongo Custom Sound")
 DEFINE_DEVICE_TYPE(SBHOEI_SOUND, sbhoei_sound_device, "sbhoei_sound", "Space Battle Custom Sound")
 
-galaxian_sound_device::galaxian_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+galaxian_sound_device::galaxian_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: galaxian_sound_device(mconfig, GALAXIAN_SOUND, tag, owner, clock)
 {
 }
 
-galaxian_sound_device::galaxian_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+galaxian_sound_device::galaxian_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_discrete(*this, "discrete")
 {
 }
 
-mooncrst_sound_device::mooncrst_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mooncrst_sound_device::mooncrst_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: galaxian_sound_device(mconfig, MOONCRST_SOUND, tag, owner, clock)
 {
 }
 
-bongo_sound_device::bongo_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bongo_sound_device::bongo_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: galaxian_sound_device(mconfig, BONGO_SOUND, tag, owner, clock)
 {
 }
 
-sbhoei_sound_device::sbhoei_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sbhoei_sound_device::sbhoei_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: galaxian_sound_device(mconfig, SBHOEI_SOUND, tag, owner, clock)
 {
 }

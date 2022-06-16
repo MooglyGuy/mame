@@ -131,7 +131,7 @@ public:
 	void irq5_w(int state);
 
 protected:
-	mc68328_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	mc68328_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_resolve_objects() override ATTR_COLD;
@@ -811,7 +811,7 @@ protected:
 class mc68328_device : public mc68328_base_device
 {
 public:
-	mc68328_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mc68328_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <int Line> auto out_port_j() { return m_out_port_j_cb[Line].bind(); }
 	template <int Line> auto out_port_k() { return m_out_port_k_cb[Line].bind(); }
@@ -1051,7 +1051,7 @@ private:
 class mc68ez328_device : public mc68328_base_device
 {
 public:
-	mc68ez328_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mc68ez328_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

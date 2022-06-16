@@ -604,7 +604,7 @@ void truco_state::truco(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.4);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.4);
 }
 
 

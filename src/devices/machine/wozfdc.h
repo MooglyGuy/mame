@@ -34,7 +34,7 @@ public:
 
 protected:
 	// construction/destruction
-	wozfdc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	wozfdc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -82,7 +82,7 @@ protected:
 class diskii_fdc_device : public wozfdc_device
 {
 public:
-	diskii_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	diskii_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_floppies(floppy_connector *f0, floppy_connector *f1);
 
@@ -93,7 +93,7 @@ protected:
 class appleiii_fdc_device : public wozfdc_device
 {
 public:
-	appleiii_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	appleiii_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_floppies_4(floppy_connector *f0, floppy_connector *f1, floppy_connector *f2, floppy_connector *f3);
 

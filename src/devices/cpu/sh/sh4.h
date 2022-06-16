@@ -251,7 +251,7 @@ public:
 
 protected:
 	// construction/destruction
-	sh34_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness, address_map_constructor internal);
+	sh34_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness, address_map_constructor internal);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -688,7 +688,7 @@ class sh3_base_device : public sh34_base_device
 
 protected:
 	// construction/destruction
-	sh3_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness);
+	sh3_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -1879,7 +1879,7 @@ protected:
 class sh3_device : public sh3_base_device
 {
 public:
-	sh3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 	virtual void sh3_register_map(address_map& map) override ATTR_COLD;
 };
@@ -1887,7 +1887,7 @@ public:
 class sh7708s_device : public sh3_base_device
 {
 public:
-	sh7708s_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7708s_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 	virtual void sh3_register_map(address_map& map) override ATTR_COLD;
 };
@@ -1895,7 +1895,7 @@ public:
 class sh7709_device : public sh3_base_device
 {
 public:
-	sh7709_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7709_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 	virtual void sh3_register_map(address_map& map) override ATTR_COLD;
 };
@@ -1903,7 +1903,7 @@ public:
 class sh7709s_device : public sh3_base_device
 {
 public:
-	sh7709s_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7709s_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 	virtual void sh3_register_map(address_map& map) override ATTR_COLD;
 };
@@ -1912,7 +1912,7 @@ public:
 class sh4_device : public sh4_base_device
 {
 public:
-	sh4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;
@@ -1921,7 +1921,7 @@ protected:
 class sh7091_device : public sh4_base_device
 {
 public:
-	sh7091_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7091_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;
@@ -1930,7 +1930,7 @@ protected:
 class sh7750_device : public sh4_base_device
 {
 public:
-	sh7750_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7750_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;
@@ -1939,7 +1939,7 @@ protected:
 class sh7750s_device : public sh4_base_device
 {
 public:
-	sh7750s_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7750s_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;
@@ -1948,7 +1948,7 @@ protected:
 class sh7750r_device : public sh4_base_device
 {
 public:
-	sh7750r_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7750r_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;
@@ -1957,7 +1957,7 @@ protected:
 class sh7751_device : public sh4_base_device
 {
 public:
-	sh7751_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7751_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;
@@ -1966,7 +1966,7 @@ protected:
 class sh7751r_device : public sh4_base_device
 {
 public:
-	sh7751r_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock, endianness_t endianness = ENDIANNESS_LITTLE);
+	sh7751r_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock, endianness_t endianness = ENDIANNESS_LITTLE);
 
 protected:
 	virtual void sh4_register_map(address_map& map) override ATTR_COLD;

@@ -51,7 +51,7 @@
 class m50734_device : public m740_device
 {
 public:
-	m50734_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m50734_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// port callback configuration
 	auto p0_in_cb() { return m_port_in_cb[0].bind(); }

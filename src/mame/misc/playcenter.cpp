@@ -88,7 +88,7 @@ INPUT_PORTS_END
 
 void playcenter_state::playcenter(machine_config &config)
 {
-	PENTIUM(config, m_maincpu, 166'000'000); // Actually an AMD K6, AMD K6-2 or Intel Celeron
+	PENTIUM(config, m_maincpu, XTAL::u(166'000'000)); // Actually an AMD K6, AMD K6-2 or Intel Celeron
 	m_maincpu->set_addrmap(AS_PROGRAM, &playcenter_state::mem_map);
 
 	PCI_ROOT(config, "pci", 0);

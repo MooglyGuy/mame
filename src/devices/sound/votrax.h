@@ -18,7 +18,7 @@ class votrax_sc01_device :  public device_t,
 {
 public:
 	// construction/destruction
-	votrax_sc01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	votrax_sc01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto ar_callback() { return m_ar_cb.bind(); }
 

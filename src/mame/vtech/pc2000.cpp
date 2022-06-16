@@ -784,7 +784,7 @@ void pc2000_state::pc2000gen(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 3250).add_route(ALL_OUTPUTS, "mono", 1.00);
+	BEEP(config, m_beep, XTAL::u(3250)).add_route(ALL_OUTPUTS, "mono", 1.00);
 
 	GENERIC_CARTSLOT(config, "cartslot", generic_plain_slot, "genius_cart").set_device_load(FUNC(pc2000_state::cart_load));
 
@@ -795,16 +795,20 @@ void pc2000_state::pc2000(machine_config &config)
 {
 	pc2000gen(config);
 
-	HD44780(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+	HD44780(config, m_lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	m_lcdc->set_lcd_size(2, 20);
 }
 
 void pc2000_state::pc2000eur(machine_config &config)
 {
 	pc2000gen(config);
+<<<<<<< HEAD
 
 	SED1278(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
 	m_lcdc->set_default_bios_tag("0b");
+=======
+	SED1278_0B(config, m_lcdc);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_lcdc->set_lcd_size(2, 20);
 }
 

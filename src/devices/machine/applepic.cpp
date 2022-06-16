@@ -31,7 +31,7 @@ static constexpr u8 DMADIR      = 0x04;     // 1 = I/O to RAM, 0 = RAM to I/O
 static constexpr u8 DENxONx     = 0x08;     // 1 = enable this channel when the other channel completes a transfer
 static constexpr int DIOASHIFT  = 0x04;     // right shift amount for I/O offset bits
 
-applepic_device::applepic_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+applepic_device::applepic_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, APPLEPIC, tag, owner, clock)
 	, m_iopcpu(*this, "iopcpu")
 	, m_prd_callback(*this, 0)

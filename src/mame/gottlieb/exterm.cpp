@@ -440,16 +440,16 @@ INPUT_PORTS_END
 void exterm_state::exterm(machine_config &config)
 {
 	/* basic machine hardware */
-	TMS34010(config, m_maincpu, 40000000);
+	TMS34010(config, m_maincpu, XTAL::u(40000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &exterm_state::master_map);
 	m_maincpu->set_halt_on_reset(false);
-	m_maincpu->set_pixel_clock(40000000/8);
+	m_maincpu->set_pixel_clock(XTAL::u(40000000)/8);
 	m_maincpu->set_pixels_per_clock(1);
 	m_maincpu->set_scanline_ind16_callback(FUNC(exterm_state::scanline_update));
 	m_maincpu->set_shiftreg_in_callback(FUNC(exterm_state::to_shiftreg_master));
 	m_maincpu->set_shiftreg_out_callback(FUNC(exterm_state::from_shiftreg_master));
 
-	TMS34010(config, m_slave, 40000000);
+	TMS34010(config, m_slave, XTAL::u(40000000));
 	m_slave->set_addrmap(AS_PROGRAM, &exterm_state::slave_map);
 	m_slave->set_halt_on_reset(true);
 	m_slave->set_pixel_clock(40000000/8);
@@ -467,7 +467,7 @@ void exterm_state::exterm(machine_config &config)
 	PALETTE(config, "palette", FUNC(exterm_state::exterm_palette)).set_format(palette_device::xRGB_555, 2048+32768);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(40000000/8, 318, 0, 256, 264, 0, 240);
+	screen.set_raw(XTAL::u(40000000)/8, 318, 0, 256, 264, 0, 240);
 	screen.set_screen_update("maincpu", FUNC(tms34010_device::tms340x0_ind16));
 	screen.set_palette("palette");
 

@@ -21,7 +21,7 @@
 class acorn_bmu_device : public device_t
 {
 public:
-	acorn_bmu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	acorn_bmu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void scl_w(int state);
 	void sda_w(int state);

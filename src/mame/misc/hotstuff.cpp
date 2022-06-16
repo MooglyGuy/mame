@@ -96,7 +96,7 @@ INPUT_PORTS_END
 
 void hotstuff_state::hotstuff(machine_config &config)
 {
-	M68000(config, m_maincpu, 16000000);
+	M68000(config, m_maincpu, XTAL::u(16000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &hotstuff_state::hotstuff_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
@@ -108,10 +108,10 @@ void hotstuff_state::hotstuff(machine_config &config)
 
 	PALETTE(config, "palette").set_entries(0x200);
 
-	scc8530_device &scc1(SCC8530(config, "scc1", 4915200));
+	scc8530_device &scc1(SCC8530(config, "scc1", XTAL::u(4915200)));
 	scc1.out_int_callback().set_inputline(m_maincpu, M68K_IRQ_4);
 
-	scc8530_device &scc2(SCC8530(config, "scc2", 4915200));
+	scc8530_device &scc2(SCC8530(config, "scc2", XTAL::u(4915200)));
 	scc2.out_int_callback().set_inputline(m_maincpu, M68K_IRQ_5);
 
 	mc146818_device &rtc(MC146818(config, "rtc", XTAL(32'768)));

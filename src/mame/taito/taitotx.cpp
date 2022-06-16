@@ -184,7 +184,7 @@ INPUT_PORTS_END
 void taito_type_x_state::taito_type_x(machine_config &config)
 {
 	// Socket 478
-	PENTIUM4(config, m_maincpu, 100'000'000); /* Wrong, much newer processors, much faster. */
+	PENTIUM4(config, m_maincpu, XTAL::u(100'000'000)); /* Wrong, much newer processors, much faster. */
 	m_maincpu->set_addrmap(AS_PROGRAM, &taito_type_x_state::taito_type_x_map);
 	m_maincpu->set_disable();
 

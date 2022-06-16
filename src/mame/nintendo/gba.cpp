@@ -1448,7 +1448,7 @@ void gba_state::gbadv(machine_config &config)
 	ARM7(config, m_maincpu, 4.194304_MHz_XTAL * 4);
 	m_maincpu->set_addrmap(AS_PROGRAM, &gba_state::gba_map);
 
-	gba_lcd_device &lcd(GBA_LCD(config, "lcd", 0));
+	gba_lcd_device &lcd(GBA_LCD(config, "lcd"));
 	lcd.int_hblank_callback().set(FUNC(gba_state::int_hblank_callback));
 	lcd.int_vblank_callback().set(FUNC(gba_state::int_vblank_callback));
 	lcd.int_vcount_callback().set(FUNC(gba_state::int_vcount_callback));
@@ -1460,10 +1460,10 @@ void gba_state::gbadv(machine_config &config)
 	m_gbsound->add_route(0, "speaker", 0.5, 0);
 	m_gbsound->add_route(1, "speaker", 0.5, 1);
 
-	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_ldac[0], 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
-	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_rdac[0], 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
-	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_ldac[1], 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
-	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_rdac[1], 0).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
+	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_ldac[0]).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
+	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_rdac[0]).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
+	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_ldac[1]).add_route(ALL_OUTPUTS, "speaker", 0.5, 0); // unknown DAC
+	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_rdac[1]).add_route(ALL_OUTPUTS, "speaker", 0.5, 1); // unknown DAC
 
 }
 

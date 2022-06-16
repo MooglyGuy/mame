@@ -14,7 +14,7 @@
 #include "emu.h"
 #include "m68sfdc.h"
 
-m68sfdc_device::m68sfdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+m68sfdc_device::m68sfdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, M68SFDC, tag, owner, clock),
 	m_pia(*this, "pia"),
 	m_ssda(*this, "ssda"),
@@ -841,7 +841,7 @@ void m68sfdc_device::device_add_mconfig(machine_config &config)
 	m_pia->irqa_handler().set(FUNC(m68sfdc_device::handle_nmi));
 	m_pia->irqb_handler().set(FUNC(m68sfdc_device::handle_irq));
 
-	MC6852(config, m_ssda, 0);
+	MC6852(config, m_ssda);
 	m_ssda->set_tx_pull_mode(true);
 }
 

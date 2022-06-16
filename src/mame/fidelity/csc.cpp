@@ -654,7 +654,7 @@ void csc_state::csc(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	S14001A(config, m_speech, 25000); // R/C circuit, around 25khz
+	S14001A(config, m_speech, XTAL::u(25000)); // R/C circuit, around 25khz
 	m_speech->add_route(ALL_OUTPUTS, "speaker", 0.75);
 
 	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.25);
@@ -686,10 +686,10 @@ void csc_state::su9(machine_config &config)
 void csc_state::rsc(machine_config &config)
 {
 	// basic machine hardware
-	M6502(config, m_maincpu, 1'800'000); // measured approx 1.81MHz
+	M6502(config, m_maincpu, XTAL::u(1'800'000)); // measured approx 1.81MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &csc_state::rsc_map);
 
-	auto &irq_clock(CLOCK(config, "irq_clock", 546)); // from 555 timer, measured
+	auto &irq_clock(CLOCK(config, "irq_clock", XTAL::u(546))); // from 555 timer, measured
 	irq_clock.set_pulse_width(attotime::from_usec(38)); // active for 38us
 	irq_clock.signal_handler().set_inputline(m_maincpu, M6502_IRQ_LINE);
 

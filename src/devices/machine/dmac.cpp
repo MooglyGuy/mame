@@ -38,7 +38,7 @@
 DEFINE_DEVICE_TYPE(AMIGA_DMAC_REV1, amiga_dmac_rev1_device, "amiga_dmac_rev1", "Amiga DMAC Rev. 1 DMA Controller")
 DEFINE_DEVICE_TYPE(AMIGA_DMAC_REV2, amiga_dmac_rev2_device, "amiga_dmac_rev2", "Amiga DMAC Rev. 2 DMA Controller")
 
-amiga_dmac_device::amiga_dmac_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool rev1) :
+amiga_dmac_device::amiga_dmac_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool rev1) :
 	device_t(mconfig, type, tag, owner, clock),
 	amiga_autoconfig(),
 	m_cfgout_cb(*this),
@@ -74,12 +74,12 @@ amiga_dmac_device::amiga_dmac_device(const machine_config &mconfig, device_type 
 {
 }
 
-amiga_dmac_rev1_device::amiga_dmac_rev1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+amiga_dmac_rev1_device::amiga_dmac_rev1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	amiga_dmac_device(mconfig, AMIGA_DMAC_REV1, tag, owner, clock, true)
 {
 }
 
-amiga_dmac_rev2_device::amiga_dmac_rev2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+amiga_dmac_rev2_device::amiga_dmac_rev2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	amiga_dmac_device(mconfig, AMIGA_DMAC_REV2, tag, owner, clock, false)
 {
 }

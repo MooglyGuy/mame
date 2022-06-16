@@ -64,7 +64,7 @@ protected:
 	int    m_cpu_space_id;    // CPU space address space id
 	devcb_write_line m_reset_cb;
 
-	m68000_base_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, u32 clock) :
+	m68000_base_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 		cpu_device(mconfig, type, tag, owner, clock),
 		m_interrupt_mixer(true),
 		m_cpu_space_id(AS_CPU_SPACE),

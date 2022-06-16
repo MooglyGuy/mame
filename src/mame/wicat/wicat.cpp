@@ -479,7 +479,7 @@ void wicat_state::wicat(machine_config &config)
 	m_via->writepb_handler().set(FUNC(wicat_state::via_b_w));
 	m_via->irq_handler().set_inputline(m_maincpu, M68K_IRQ_1);
 
-	MM58174(config, m_rtc, 0);
+	MM58174(config, m_rtc);
 
 	// internal terminal
 	SCN2661C(config, m_uart[0], 5.0688_MHz_XTAL);  // connected to terminal board
@@ -547,7 +547,7 @@ void wicat_state::wicat(machine_config &config)
 
 	INPUT_MERGER_ALL_HIGH(config, "dmairq").output_handler().set_inputline(m_videocpu, z8002_device::NMI_LINE);
 
-	IM6402(config, m_kbduart, 0); // IM6402-1IPL
+	IM6402(config, m_kbduart); // IM6402-1IPL
 	m_kbduart->set_rrc(5068800 / 1056); // 74LS393 output?
 	m_kbduart->set_trc(5068800 / 1056);
 	m_kbduart->tro_callback().set("keyboard", FUNC(keytronic_l2207_device::ser_in_w));

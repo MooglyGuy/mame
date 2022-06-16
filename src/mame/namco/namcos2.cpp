@@ -1707,7 +1707,7 @@ void namcos2_state::configure_common_standard(machine_config &config)
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_1);
 
-	NAMCO_C139(config, m_sci, 0);
+	NAMCO_C139(config, m_sci);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_raw(MAIN_OSC_CLOCK/8, 384, 0*8, 36*8, 264, 0*8, 28*8);
@@ -1787,13 +1787,13 @@ void namcos2_state::configure_c45road_standard(machine_config &config)
 
 void namcos2_state::configure_namcos2_sprite_standard(machine_config &config)
 {
-	NAMCOS2_SPRITE(config, m_ns2sprite, 0, m_c116, gfx_namcos2_spr);
+	NAMCOS2_SPRITE(config, m_ns2sprite, m_c116, gfx_namcos2_spr);
 	m_ns2sprite->set_spriteram_tag("spriteram");
 }
 
 void namcos2_state::configure_namcos2_roz_standard(machine_config &config)
 {
-	NAMCOS2_ROZ(config, m_ns2roz, 0);
+	NAMCOS2_ROZ(config, m_ns2roz);
 	m_ns2roz->set_palette(m_c116);
 	m_ns2roz->set_rozram_tag("rozram");
 	m_ns2roz->set_rozctrl_tag("rozctrl");
@@ -2051,7 +2051,7 @@ void namcos2_state::metlhawk(machine_config &config)
 
 	m_screen->set_screen_update(FUNC(namcos2_state::screen_update_metlhawk));
 
-	NAMCOS2_SPRITE_METALHAWK(config, m_ns2sprite, 0, m_c116, gfx_metlhawk_spr);
+	NAMCOS2_SPRITE_METALHAWK(config, m_ns2sprite, m_c116, gfx_metlhawk_spr);
 	m_ns2sprite->set_spriteram_tag("spriteram");
 
 	configure_c123tmap_standard(config);

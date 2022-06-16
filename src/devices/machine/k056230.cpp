@@ -35,7 +35,7 @@ TODO:
 DEFINE_DEVICE_TYPE(K056230, k056230_device, "k056230", "K056230 LANC")
 DEFINE_DEVICE_TYPE(K056230_VIPER, k056230_viper_device, "k056230_viper", "Konami Viper LANC")
 
-k056230_device::k056230_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+k056230_device::k056230_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_ram(*this, "lanc_ram", 0x800U * 4, ENDIANNESS_BIG)
 	, m_irq_cb(*this)

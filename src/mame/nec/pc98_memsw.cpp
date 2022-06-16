@@ -83,7 +83,7 @@
 
 DEFINE_DEVICE_TYPE(PC98_MEMSW, pc98_memsw_device, "pc98_memsw", "NEC PC-98 Memory Switch device")
 
-pc98_memsw_device::pc98_memsw_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc98_memsw_device::pc98_memsw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PC98_MEMSW, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 {

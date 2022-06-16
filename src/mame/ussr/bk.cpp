@@ -69,7 +69,7 @@ static const z80_daisy_config daisy_chain[] =
 void bk_state::bk0010(machine_config &config)
 {
 	/* basic machine hardware */
-	K1801VM1(config, m_maincpu, 3000000);
+	K1801VM1(config, m_maincpu, XTAL::u(3000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &bk_state::bk0010_mem);
 	m_maincpu->set_daisy_config(daisy_chain);
 	m_maincpu->out_reset().set(FUNC(bk_state::reset_w));

@@ -27,7 +27,7 @@
 
 class h83008_device : public h8h_device {
 public:
-	h83008_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_port4()  { return m_read_port [PORT_4].bind(); }
 	auto write_port4() { return m_write_port[PORT_4].bind(); }

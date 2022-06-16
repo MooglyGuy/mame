@@ -716,17 +716,17 @@ void mrgame_state::mrgame(machine_config &config)
 	/* Sound */
 	genpin_audio(config);
 	SPEAKER(config, "speaker", 2).front();
-	DAC_8BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
-	DAC_8BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
+	DAC_8BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
+	DAC_8BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
 
-	dac_8bit_r2r_device &dacvol(DAC_8BIT_R2R(config, "dacvol", 0));
+	dac_8bit_r2r_device &dacvol(DAC_8BIT_R2R(config, "dacvol"));
 	dacvol.set_output_range(0, 1); // unknown DAC
 	dacvol.add_route(0, "ldac", 1.0, DAC_INPUT_RANGE_HI);
 	dacvol.add_route(0, "ldac", -1.0, DAC_INPUT_RANGE_LO);
 	dacvol.add_route(0, "rdac", 1.0, DAC_INPUT_RANGE_HI);
 	dacvol.add_route(0, "rdac", -1.0, DAC_INPUT_RANGE_LO);
 
-	tms5220_device &tms(TMS5220(config, "tms", 672000)); // uses a RC combination. 672k copied from jedi.h
+	tms5220_device &tms(TMS5220(config, "tms", XTAL::u(672000))); // uses a RC combination. 672k copied from jedi.h
 	tms.ready_cb().set_inputline("audiocpu2", Z80_INPUT_LINE_WAIT);
 	tms.add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
 	tms.add_route(ALL_OUTPUTS, "speaker", 1.0, 1);

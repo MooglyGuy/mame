@@ -12,7 +12,7 @@ Toshiba TMP95C061 emulation
 DEFINE_DEVICE_TYPE(TMP95C061, tmp95c061_device, "tmp95c061", "Toshiba TMP95C061")
 
 
-tmp95c061_device::tmp95c061_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+tmp95c061_device::tmp95c061_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	tlcs900h_device(mconfig, TMP95C061, tag, owner, clock),
 	m_an_read(*this, 0),
 	m_port_read(*this, 0),

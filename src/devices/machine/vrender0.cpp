@@ -35,7 +35,7 @@ DEFINE_DEVICE_TYPE(VRENDER0_SOC, vrender0soc_device, "vrender0", "MagicEyes VRen
 //  vrender0soc_device - constructor
 //-------------------------------------------------
 
-vrender0soc_device::vrender0soc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+vrender0soc_device::vrender0soc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, VRENDER0_SOC, tag, owner, clock),
 	m_host_cpu(*this, finder_base::DUMMY_TAG),
 	m_screen(*this, "screen"),
@@ -120,7 +120,7 @@ void vrender0soc_device::frame_map(address_map &map)
 void vrender0soc_device::device_add_mconfig(machine_config &config)
 {
 	for (required_device<vr0uart_device> &uart : m_uart)
-		VRENDER0_UART(config, uart, 3579500);
+		VRENDER0_UART(config, uart, XTAL::u(3579500));
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	// evolution soccer defaults

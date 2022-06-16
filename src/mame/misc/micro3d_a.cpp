@@ -155,7 +155,7 @@ void micro3d_sound_device::noise_sh_w(u8 data)
 
 DEFINE_DEVICE_TYPE(MICRO3D_SOUND, micro3d_sound_device, "micro3d_sound", "Microprose Custom Sound")
 
-micro3d_sound_device::micro3d_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+micro3d_sound_device::micro3d_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MICRO3D_SOUND, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
 	m_dac_data(0),
@@ -164,7 +164,6 @@ micro3d_sound_device::micro3d_sound_device(const machine_config &mconfig, const 
 	m_noise_value(0),
 	m_noise_subcount(0),
 	m_stream(nullptr)
-
 {
 	memset(m_dac, 0, sizeof(m_dac));
 }

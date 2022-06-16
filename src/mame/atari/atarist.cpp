@@ -85,8 +85,8 @@ namespace {
 #define Y1      XTAL(2'457'600)
 
 // 32028400 also exists
-#define Y2      32084988.0
-#define Y2_NTSC 32042400.0
+#define Y2      XTAL::u(32084988)
+#define Y2_NTSC XTAL::u(32042400)
 
 // STBook
 
@@ -1410,7 +1410,7 @@ void st_state::common(machine_config &config)
 	acia_clock.signal_handler().append(m_acia[1], FUNC(acia6850_device::write_rxc));
 
 	// cartridge
-	
+
 	STCART_CONNECTOR(config, m_cart, stcart_intf, nullptr);
 
 	// software lists

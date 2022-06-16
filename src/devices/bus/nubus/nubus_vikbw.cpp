@@ -33,10 +33,10 @@ class nubus_vikbw_device : public device_t,
 {
 public:
 	// construction/destruction
-	nubus_vikbw_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_vikbw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	nubus_vikbw_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_vikbw_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -78,12 +78,12 @@ const tiny_rom_entry *nubus_vikbw_device::device_rom_region() const
 	return ROM_NAME( vikbw );
 }
 
-nubus_vikbw_device::nubus_vikbw_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_vikbw_device::nubus_vikbw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_vikbw_device(mconfig, NUBUS_VIKBW, tag, owner, clock)
 {
 }
 
-nubus_vikbw_device::nubus_vikbw_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_vikbw_device::nubus_vikbw_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_vbl_disable(0)

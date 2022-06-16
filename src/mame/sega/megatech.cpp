@@ -88,7 +88,7 @@ Sonic The Hedgehog 2       171-6215A   837-6963-62       610-0239-62         MPR
 
 #include "layout/generic.h"
 
-#define MASTER_CLOCK        53693100
+#define MASTER_CLOCK        XTAL::u(53693100)
 
 
 

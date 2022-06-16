@@ -29,7 +29,7 @@ class isa16_vga_gfxultra_device :
 {
 public:
 	// construction/destruction
-	isa16_vga_gfxultra_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_vga_gfxultra_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t input_port_0_r();
 
@@ -55,7 +55,7 @@ class isa16_vga_gfxultrapro_device :
 {
 public:
 	// construction/destruction
-	isa16_vga_gfxultrapro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_vga_gfxultrapro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t input_port_0_r();
 
@@ -80,7 +80,7 @@ class isa16_vga_mach64_device :
 {
 public:
 	// construction/destruction
-	isa16_vga_mach64_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_vga_mach64_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t input_port_0_r();
 

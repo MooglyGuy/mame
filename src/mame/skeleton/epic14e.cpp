@@ -272,7 +272,7 @@ void epic14e_state::epic14e(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 0.5);
 
-	I8748(config, "keybmcu", 4608000).set_disable();
+	I8748(config, "keybmcu", XTAL::u(4608000)).set_disable();
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
 	screen.set_color(rgb_t::green());

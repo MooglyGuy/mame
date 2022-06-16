@@ -107,14 +107,14 @@ public:
 	// construction/destruction
 	template <typename T>
 	a800_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: a800_cart_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: a800_cart_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	a800_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	a800_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~a800_cart_slot_device();
 
 	virtual bool is_reset_on_load() const noexcept override { return true; }
@@ -139,7 +139,7 @@ public:
 	auto get_initial_rd_state() { return m_cart->get_initial_rd_state(); }
 
 protected:
-	//a800_cart_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	//a800_cart_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -201,14 +201,14 @@ public:
 	// construction/destruction
 	template <typename T>
 	a5200_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: a5200_cart_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: a5200_cart_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	a5200_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a5200_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~a5200_cart_slot_device();
 
 	virtual bool is_reset_on_load() const noexcept override { return true; }

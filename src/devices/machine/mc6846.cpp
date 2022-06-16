@@ -45,7 +45,7 @@
 
 DEFINE_DEVICE_TYPE(MC6846, mc6846_device, "mc6846", "MC6846 Programmable Timer")
 
-mc6846_device::mc6846_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mc6846_device::mc6846_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MC6846, tag, owner, clock),
 	m_out_port_cb(*this),   // 8-bit output
 	m_out_cp2_cb(*this),    // 1-bit output

@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(CD90_351, cd90_351_device, "cd90_351", "Thomson CD 90-351 Diskette Controller")
 
-cd90_351_device::cd90_351_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cd90_351_device::cd90_351_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CD90_351, tag, owner, clock),
 	thomson_extension_interface(mconfig, *this),
 	m_rom(*this, "rom"),

@@ -712,7 +712,7 @@ void attiny15_device::attiny15_internal_map(address_map &map)
 //  atmega88_device - constructor
 //-------------------------------------------------
 
-atmega88_device::atmega88_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atmega88_device::atmega88_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<3>(mconfig, tag, owner, clock, ATMEGA88, 0x0fff, address_map_constructor(FUNC(atmega88_device::atmega88_internal_map), this))
 {
 }
@@ -721,7 +721,7 @@ atmega88_device::atmega88_device(const machine_config &mconfig, const char *tag,
 //  atmega168_device - constructor
 //-------------------------------------------------
 
-atmega168_device::atmega168_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atmega168_device::atmega168_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<3>(mconfig, tag, owner, clock, ATMEGA168, 0x1fff, address_map_constructor(FUNC(atmega168_device::atmega168_internal_map), this))
 {
 }
@@ -730,7 +730,7 @@ atmega168_device::atmega168_device(const machine_config &mconfig, const char *ta
 //  atmega328_device - constructor
 //-------------------------------------------------
 
-atmega328_device::atmega328_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atmega328_device::atmega328_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<3>(mconfig, tag, owner, clock, ATMEGA328, 0x3fff, address_map_constructor(FUNC(atmega328_device::atmega328_internal_map), this))
 {
 }
@@ -739,7 +739,7 @@ atmega328_device::atmega328_device(const machine_config &mconfig, const char *ta
 //  atmega644_device - constructor
 //-------------------------------------------------
 
-atmega644_device::atmega644_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atmega644_device::atmega644_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<3>(mconfig, tag, owner, clock, ATMEGA644, 0x7fff, address_map_constructor(FUNC(atmega644_device::atmega644_internal_map), this))
 {
 }
@@ -748,7 +748,7 @@ atmega644_device::atmega644_device(const machine_config &mconfig, const char *ta
 //  atmega1280_device - constructor
 //-------------------------------------------------
 
-atmega1280_device::atmega1280_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atmega1280_device::atmega1280_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<6>(mconfig, tag, owner, clock, ATMEGA1280, 0xffff, address_map_constructor(FUNC(atmega1280_device::atmega1280_internal_map), this))
 {
 }
@@ -757,7 +757,7 @@ atmega1280_device::atmega1280_device(const machine_config &mconfig, const char *
 //  atmega2560_device - constructor
 //-------------------------------------------------
 
-atmega2560_device::atmega2560_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atmega2560_device::atmega2560_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<6>(mconfig, tag, owner, clock, ATMEGA2560, 0x1ffff, address_map_constructor(FUNC(atmega2560_device::atmega2560_internal_map), this))
 {
 }
@@ -766,7 +766,7 @@ atmega2560_device::atmega2560_device(const machine_config &mconfig, const char *
 //  attiny15_device - constructor
 //-------------------------------------------------
 
-attiny15_device::attiny15_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+attiny15_device::attiny15_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: avr8_device<2>(mconfig, tag, owner, clock, ATTINY15, 0x01ff, address_map_constructor(FUNC(attiny15_device::attiny15_internal_map), this))
 {
 }
@@ -775,7 +775,7 @@ attiny15_device::attiny15_device(const machine_config &mconfig, const char *tag,
 //  avr8_base_device - constructor
 //-------------------------------------------------
 
-avr8_base_device::avr8_base_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, const device_type type, uint32_t addr_mask, address_map_constructor internal_map)
+avr8_base_device::avr8_base_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const device_type type, uint32_t addr_mask, address_map_constructor internal_map)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_LITTLE, 8, 22)
 	, m_data_config("data", ENDIANNESS_LITTLE, 8, 16, 0, internal_map)

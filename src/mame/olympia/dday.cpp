@@ -630,7 +630,7 @@ void dday_state::machine_reset()
 void dday_state::dday(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 2'000'000);     // 2 MHz ?
+	Z80(config, m_maincpu, XTAL::u(2'000'000));     // 2 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &dday_state::program_map);
 
 	// video hardware
@@ -649,8 +649,8 @@ void dday_state::dday(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	AY8912(config, m_ay1, 1'000'000).add_route(ALL_OUTPUTS, "mono", 0.25);
-	AY8912(config, "ay2", 1'000'000).add_route(ALL_OUTPUTS, "mono", 0.25);
+	AY8912(config, m_ay1, XTAL::u(1'000'000)).add_route(ALL_OUTPUTS, "mono", 0.25);
+	AY8912(config, "ay2", XTAL::u(1'000'000)).add_route(ALL_OUTPUTS, "mono", 0.25);
 }
 
 

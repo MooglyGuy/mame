@@ -18,12 +18,12 @@ std::unique_ptr<util::disasm_interface> m68008fn_device::create_disassembler()
 	return std::make_unique<m68k_disassembler>(m68k_disassembler::TYPE_68008);
 }
 
-m68008_device::m68008_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m68008_device::m68008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m68008_device(mconfig, M68008, tag, owner, clock)
 {
 }
 
-m68008_device::m68008_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+m68008_device::m68008_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: m68000_device(mconfig, type, tag, owner, clock),
 	  m_mmu8(nullptr)
 {
@@ -81,8 +81,13 @@ void m68008_device::update_user_super()
 }
 
 
+<<<<<<< HEAD
 m68008fn_device::m68008fn_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
 	: m68008_device(mconfig, M68008FN, tag, owner, clock)
+=======
+m68008fn_device::m68008fn_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: m68000_base_device(mconfig, tag, owner, clock, M68008FN, 8,22)
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 {
 	m_cpu_space_config.m_addr_width = m_cpu_space_config.m_logaddr_width = 22;
 	m_program_config.m_addr_width = m_program_config.m_logaddr_width = 22;

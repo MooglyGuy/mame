@@ -15,7 +15,7 @@ class centronics_printer_device : public device_t,
 {
 public:
 	// construction/destruction
-	centronics_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	centronics_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void input_strobe(int state) override;
 	virtual void input_data0(int state) override { if (state) m_data |= 0x01; else m_data &= ~0x01; }

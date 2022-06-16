@@ -938,7 +938,7 @@ INPUT_PORTS_END
 
 void namcops2_state::system246(machine_config &config)
 {
-	R5000LE(config, m_maincpu, 294'000'000); // actually R5900 @ 294 MHz
+	R5000LE(config, m_maincpu, XTAL::u(294'000'000)); // actually R5900 @ 294 MHz
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
 	m_maincpu->set_addrmap(AS_PROGRAM, &namcops2_state::ps2_map);

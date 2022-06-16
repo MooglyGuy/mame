@@ -49,7 +49,7 @@ class z80dma_device :   public device_t,
 {
 public:
 	// construction/destruction
-	z80dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	z80dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto out_busreq_callback() { return m_out_busreq_cb.bind(); }
 	auto out_int_callback() { return m_out_int_cb.bind(); }
@@ -90,7 +90,7 @@ protected:
 	static inline constexpr int TM_SEARCH             = 0x02;
 	static inline constexpr int TM_SEARCH_TRANSFER    = 0x03;
 
-	z80dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	z80dma_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

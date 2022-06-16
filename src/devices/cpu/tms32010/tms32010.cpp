@@ -60,7 +60,7 @@ void tms3201x_base_device<HighBits>::tms32015_ram(address_map &map)
 
 
 template <int HighBits>
-tms3201x_base_device<HighBits>::tms3201x_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor data_map)
+tms3201x_base_device<HighBits>::tms3201x_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor data_map)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_BIG, 16, HighBits, -1)
 	, m_data_config("data", ENDIANNESS_BIG, 16, 8, -1, data_map)
@@ -71,19 +71,19 @@ tms3201x_base_device<HighBits>::tms3201x_base_device(const machine_config &mconf
 }
 
 
-tms32010_device::tms32010_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tms32010_device::tms32010_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tms3201x_base_device(mconfig, TMS32010, tag, owner, clock, address_map_constructor(FUNC(tms32010_device::tms32010_ram), this))
 {
 }
 
 
-tms32015_device::tms32015_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tms32015_device::tms32015_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tms3201x_base_device(mconfig, TMS32015, tag, owner, clock, address_map_constructor(FUNC(tms32015_device::tms32015_ram), this))
 {
 }
 
 
-tms32016_device::tms32016_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tms32016_device::tms32016_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tms3201x_base_device(mconfig, TMS32016, tag, owner, clock, address_map_constructor(FUNC(tms32016_device::tms32015_ram), this))
 {
 }

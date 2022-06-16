@@ -30,7 +30,7 @@ DEFINE_DEVICE_TYPE(DS1397,   ds1397_device,   "ds1397",   "DS1397 RAMified RTC")
 //  mc146818_device - constructor
 //-------------------------------------------------
 
-mc146818_device::mc146818_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mc146818_device::mc146818_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc146818_device(mconfig, MC146818, tag, owner, clock)
 {
 	switch (clock)
@@ -45,17 +45,17 @@ mc146818_device::mc146818_device(const machine_config &mconfig, const char *tag,
 	}
 }
 
-ds1287_device::ds1287_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ds1287_device::ds1287_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc146818_device(mconfig, DS1287, tag, owner, clock)
 {
 }
 
-ds1397_device::ds1397_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ds1397_device::ds1397_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc146818_device(mconfig, DS1397, tag, owner, clock)
 {
 }
 
-mc146818_device::mc146818_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+mc146818_device::mc146818_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 	, device_rtc_interface(mconfig, *this)
@@ -71,7 +71,6 @@ mc146818_device::mc146818_device(const machine_config &mconfig, device_type type
 	, m_binary(false)
 	, m_hour(false)
 	, m_sqw_state(false)
-	, m_tuc(0)
 {
 }
 

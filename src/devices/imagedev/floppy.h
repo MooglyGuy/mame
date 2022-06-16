@@ -163,7 +163,7 @@ public:
 protected:
 	struct fs_enum;
 
-	floppy_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	floppy_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -281,7 +281,7 @@ protected:
 #define DECLARE_FLOPPY_IMAGE_DEVICE(Type, Name, Interface) \
 	class Name : public floppy_image_device { \
 	public: \
-		Name(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock); \
+		Name(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock); \
 		virtual ~Name(); \
 		virtual const char *image_interface() const noexcept override { return Interface; } \
 	protected: \
@@ -346,7 +346,7 @@ protected:
 	bool m_strb;
 	bool m_mfm, m_has_mfm;
 
-	mac_floppy_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	mac_floppy_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -358,7 +358,7 @@ protected:
 // 400K GCR
 class oa_d34v_device : public mac_floppy_device {
 public:
-	oa_d34v_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	oa_d34v_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~oa_d34v_device() = default;
 protected:
 	virtual void setup_characteristics() override;
@@ -370,7 +370,7 @@ protected:
 // 400/800K GCR (e.g. dual-sided)
 class mfd51w_device : public mac_floppy_device {
 public:
-	mfd51w_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mfd51w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~mfd51w_device() = default;
 protected:
 	virtual void setup_characteristics() override;
@@ -381,7 +381,7 @@ protected:
 // 400/800K GCR + 1.44 MFM (Superdrive)
 class mfd75w_device : public mac_floppy_device {
 public:
-	mfd75w_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mfd75w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~mfd75w_device() = default;
 
 protected:
@@ -402,7 +402,7 @@ DECLARE_DEVICE_TYPE(MFD75W, mfd75w_device)
 class floppy_sound_device : public samples_device
 {
 public:
-	floppy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	floppy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	void motor(bool on, bool withdisk);
 	void step(int track);
 	bool samples_loaded() { return m_loaded; }
@@ -441,7 +441,7 @@ public:
 
 	template <typename T, typename U>
 	floppy_connector(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt, U &&formats, bool fixed = false)
-		: floppy_connector(mconfig, tag, owner, 0)
+		: floppy_connector(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -452,7 +452,7 @@ public:
 
 	template <typename T>
 	floppy_connector(const machine_config &mconfig, const char *tag, device_t *owner, const char *option, device_type drivetype, bool is_default, T &&formats)
-		: floppy_connector(mconfig, tag, owner, 0)
+		: floppy_connector(mconfig, tag, owner)
 	{
 		option_reset();
 		option_add(option, drivetype);
@@ -462,7 +462,7 @@ public:
 		set_formats(std::forward<T>(formats));
 	}
 
-	floppy_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	floppy_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~floppy_connector();
 
 	template <typename T> void set_formats(T &&_formats) { formats = std::forward<T>(_formats); }

@@ -93,7 +93,7 @@ constexpr u8 CR_CTRO    = 0x80U;
 DEFINE_DEVICE_TYPE(M6500_1, m6500_1_device, "m6500_1", "MOS Technology 6500/1");
 
 
-m6500_1_device::m6500_1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+m6500_1_device::m6500_1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: m6502_mcu_device_base<m6502_device>(mconfig, M6500_1, tag, owner, clock)
 	, m_port_in_cb{ *this, 0xffU }
 	, m_port_out_cb{ *this }

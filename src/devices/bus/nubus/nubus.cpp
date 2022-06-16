@@ -27,12 +27,12 @@ DEFINE_DEVICE_TYPE(NUBUS_SLOT, nubus_slot_device, "nubus_slot", "NuBus slot")
 //-------------------------------------------------
 //  nubus_slot_device - constructor
 //-------------------------------------------------
-nubus_slot_device::nubus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_slot_device::nubus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_slot_device(mconfig, NUBUS_SLOT, tag, owner, clock)
 {
 }
 
-nubus_slot_device::nubus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_slot_device::nubus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_single_card_slot_interface(mconfig, *this),
 	m_nubus(*this, finder_base::DUMMY_TAG),
@@ -67,12 +67,12 @@ void nubus_slot_device::device_start()
 
 DEFINE_DEVICE_TYPE(NUBUS, nubus_device, "nubus", "NuBus")
 
-nubus_device::nubus_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_device::nubus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_device(mconfig, NUBUS, tag, owner, clock)
 {
 }
 
-nubus_device::nubus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_device::nubus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	m_space(*this, finder_base::DUMMY_TAG, -1),

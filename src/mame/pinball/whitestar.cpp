@@ -319,7 +319,7 @@ INTERRUPT_GEN_MEMBER(whitestar_state::whitestar_firq_interrupt)
 void whitestar_state::whitestar(machine_config &config)
 {
 	// basic machine hardware
-	MC6809E(config, m_maincpu, 2000000);
+	MC6809E(config, m_maincpu, XTAL::u(2000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &whitestar_state::whitestar_map);
 	m_maincpu->set_periodic_int(FUNC(whitestar_state::whitestar_firq_interrupt), attotime::from_hz(976));  // value taken from PinMAME
 
@@ -330,7 +330,7 @@ void whitestar_state::whitestar(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	DECOBSMT(config, m_decobsmt, 0);
+	DECOBSMT(config, m_decobsmt);
 	m_decobsmt->add_route(0, "speaker", 1.0, 0);
 	m_decobsmt->add_route(1, "speaker", 1.0, 1);
 

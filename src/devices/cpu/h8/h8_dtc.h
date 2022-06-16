@@ -29,7 +29,7 @@ class h8_dtc_device : public device_t {
 public:
 	enum { DTC_CHAINED = 1000 };
 
-	h8_dtc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h8_dtc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8_dtc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int irq)
 		: h8_dtc_device(mconfig, tag, owner)
 	{

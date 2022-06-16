@@ -32,7 +32,7 @@
 class stx_video_device : public device_t, public device_palette_interface, public device_video_interface
 {
 public:
-	stx_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	stx_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_ram_space(T &&tag, int spacenum) { m_ram_space.set_tag(tag, spacenum); }
 	auto de_callback() { return m_de_callback.bind(); }
@@ -51,7 +51,7 @@ public:
 	uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 
 protected:
-	stx_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	stx_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -103,7 +103,7 @@ protected:
 class ste_video_device : public stx_video_device
 {
 public:
-	ste_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ste_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t shifter_base_low_r();
 	void shifter_base_low_w(uint8_t data);

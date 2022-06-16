@@ -1970,7 +1970,7 @@ GFXDECODE_END
 void _1layer_state::base(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 3'579'545);
+	Z80(config, m_maincpu, XTAL::u(3'579'545));
 	m_maincpu->set_addrmap(AS_PROGRAM, &_1layer_state::program_map);
 
 	TIMER(config, "scantimer").configure_scanline(FUNC(_1layer_state::interrupt), "screen", 0, 1);

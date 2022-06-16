@@ -309,7 +309,7 @@ void tceptor_state::tceptor(machine_config &config)
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_1);
 
-	adc0809_device &adc(ADC0809(config, "adc", 768000)); // unknown clock
+	adc0809_device &adc(ADC0809(config, "adc", XTAL::u(768000))); // unknown clock
 	adc.in_callback<0>().set_constant(0); // unknown
 	adc.in_callback<1>().set_ioport("PEDAL");
 	adc.in_callback<2>().set_ioport("STICKX");
@@ -345,7 +345,7 @@ void tceptor_state::tceptor(machine_config &config)
 	m_cus30->add_route(0, "speaker", 0.40, 0);
 	m_cus30->add_route(1, "speaker", 0.40, 1);
 
-	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac", 0)); // unknown DAC
+	dac_8bit_r2r_device &dac(DAC_8BIT_R2R(config, "dac")); // unknown DAC
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.4, 0);
 	dac.add_route(ALL_OUTPUTS, "speaker", 0.4, 1);
 }

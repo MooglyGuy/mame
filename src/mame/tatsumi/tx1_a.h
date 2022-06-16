@@ -17,7 +17,7 @@
 class tx1_sound_device : public device_t, public device_sound_interface
 {
 public:
-	tx1_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tx1_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void z80_busreq_w(uint16_t data);
 	uint16_t dipswitches_r();
@@ -63,7 +63,7 @@ protected:
 		int idx[3];
 	};
 
-	tx1_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	tx1_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -127,7 +127,7 @@ protected:
 class tx1j_sound_device : public tx1_sound_device
 {
 public:
-	tx1j_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tx1j_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -137,10 +137,10 @@ protected:
 class buggyboy_sound_device : public tx1_sound_device
 {
 public:
-	buggyboy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	buggyboy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	buggyboy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	buggyboy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -167,7 +167,7 @@ protected:
 class buggyboyjr_sound_device : public buggyboy_sound_device
 {
 public:
-	buggyboyjr_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	buggyboyjr_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

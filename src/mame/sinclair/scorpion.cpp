@@ -522,7 +522,7 @@ void scorpion_state::scorpion(machine_config &config)
 		.add_route(0, "speaker2", 0.25, 1)
 		.add_route(2, "speaker2", 0.50, 1);
 
-	BETA_DISK(config, m_beta, 0);
+	BETA_DISK(config, m_beta);
 
 	config.device_remove("exp");
 

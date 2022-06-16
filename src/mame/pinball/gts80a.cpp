@@ -647,7 +647,7 @@ void caveman_state::video_io_map(address_map &map)
 void caveman_state::caveman(machine_config &config)
 {
 	r1v(config);
-	I8088(config, m_videocpu, 5000000);
+	I8088(config, m_videocpu, XTAL::u(5000000));
 	m_videocpu->set_addrmap(AS_PROGRAM, &caveman_state::video_map);
 	m_videocpu->set_addrmap(AS_IO, &caveman_state::video_io_map);
 

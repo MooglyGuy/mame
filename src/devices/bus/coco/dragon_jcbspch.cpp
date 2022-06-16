@@ -41,7 +41,7 @@ DEFINE_DEVICE_TYPE(DRAGON_JCBSPCH, dragon_jcbspch_device, "dragon_jcbspch", "Dra
 //  dragon_jcbspch_device - constructor
 //-------------------------------------------------
 
-dragon_jcbspch_device::dragon_jcbspch_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+dragon_jcbspch_device::dragon_jcbspch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DRAGON_JCBSPCH, tag, owner, clock)
 	, device_cococart_interface(mconfig, *this )
 	, m_eprom(*this, "eprom")

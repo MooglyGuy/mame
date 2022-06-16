@@ -3854,7 +3854,7 @@ INPUT_PORTS_END
 void royalmah_state::royalmah(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 18432000 / 6);        // 3.072 MHz
+	Z80(config, m_maincpu, XTAL::u(18432000) / 6);        // 3.072 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::royalmah_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_state::royalmah_iomap);
 	m_maincpu->set_vblank_int("screen", FUNC(royalmah_state::irq0_line_hold));
@@ -3874,7 +3874,7 @@ void royalmah_state::royalmah(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	AY8910(config, m_ay, 18432000 / 12);
+	AY8910(config, m_ay, XTAL::u(18432000) / 12);
 	m_ay->port_a_read_callback().set(FUNC(royalmah_state::player_1_port_r));
 	m_ay->port_b_read_callback().set(FUNC(royalmah_state::player_2_port_r));
 	m_ay->add_route(ALL_OUTPUTS, "speaker", 0.33);
@@ -3885,7 +3885,7 @@ void royalmah_state::janoh(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::janoh_map);
 }
 
@@ -3893,7 +3893,7 @@ void royalmah_state::janoha(machine_config &config)
 {
 	janoh(config);
 
-	z80_device &sub(Z80(config, "sub", 4000000));        // 4 MHz ?
+	z80_device &sub(Z80(config, "sub", XTAL::u(4000000)));        // 4 MHz ?
 	sub.set_addrmap(AS_PROGRAM, &royalmah_state::janoh_sub_map);
 	sub.set_addrmap(AS_IO, &royalmah_state::janoh_sub_iomap);
 	sub.set_vblank_int("screen", FUNC(royalmah_state::irq0_line_hold));
@@ -3906,21 +3906,21 @@ void royalmah_state::jansou(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::jansou_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_state::royalmah_iomap);
 
-	Z80(config, m_audiocpu, 4000000); // 4.000 MHz
+	Z80(config, m_audiocpu, XTAL::u(4000000)); // 4.000 MHz
 	m_audiocpu->set_addrmap(AS_PROGRAM, &royalmah_state::jansou_sub_map);
 	m_audiocpu->set_addrmap(AS_IO, &royalmah_state::jansou_sub_iomap);
 	m_audiocpu->set_periodic_int(FUNC(royalmah_state::irq0_line_hold), attotime::from_hz(4000000 / 512));
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 }
 
 void royalmah_prgbank_state::dondenmj(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::royalmah_banked_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_prgbank_state::dondenmj_iomap);
 }
@@ -3929,7 +3929,7 @@ void royalmah_prgbank_state::tahjong(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::tahjong_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_prgbank_state::tahjong_iomap);
 }
@@ -3938,7 +3938,7 @@ void royalmah_prgbank_state::makaijan(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::royalmah_banked_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_prgbank_state::makaijan_iomap);
 }
@@ -3947,7 +3947,7 @@ void royalmah_prgbank_state::daisyari(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::royalmah_banked_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_prgbank_state::daisyari_iomap);
 }
@@ -3956,7 +3956,7 @@ void royalmah_prgbank_state::mjclub(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::royalmah_banked_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_prgbank_state::mjclub_iomap);
 }
@@ -4120,7 +4120,7 @@ void royalmah_prgbank_state::mjifb(machine_config &config)
 {
 	mjderngr(config);
 
-	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, 8000000));   // ?
+	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, XTAL::u(8000000)));   // ?
 	tmp.set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::mjifb_map);
 	tmp.port_read<3>().set_ioport("PORT3_5").rshift(6);
 	tmp.port_write<3>().set(FUNC(royalmah_prgbank_state::mjifb_p3_w));
@@ -4140,7 +4140,7 @@ void royalmah_prgbank_state::mjifb(machine_config &config)
 void royalmah_prgbank_state::mjdejavu(machine_config &config)
 {
 	mjderngr(config);
-	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, 8000000));   // ?
+	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, XTAL::u(8000000)));   // ?
 	tmp.set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::mjdejavu_map);
 	tmp.port_read<3>().set_ioport("PORT3_5").rshift(6);
 	tmp.port_write<3>().set(FUNC(royalmah_prgbank_state::mjifb_p3_w));
@@ -4160,7 +4160,7 @@ void royalmah_prgbank_state::mjdejavu(machine_config &config)
 void royalmah_prgbank_state::mjtensin(machine_config &config)
 {
 	mjderngr(config);
-	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, 12000000));  // ?
+	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, XTAL::u(12000000)));  // ?
 	tmp.set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::mjtensin_map);
 	tmp.port_read<3>().set(FUNC(royalmah_prgbank_state::mjtensin_p3_r));
 	tmp.port_write<4>().set(FUNC(royalmah_prgbank_state::mjtensin_p4_w));
@@ -4185,7 +4185,7 @@ void royalmah_prgbank_state::majrjh(machine_config &config)
 void royalmah_prgbank_state::cafetime(machine_config &config)
 {
 	mjderngr(config);
-	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, 12000000));  // ?
+	tmp90841_device &tmp(TMP90841(config.replace(), m_maincpu, XTAL::u(12000000)));  // ?
 	tmp.set_addrmap(AS_PROGRAM, &royalmah_prgbank_state::cafetime_map);
 	tmp.port_write<3>().set(FUNC(royalmah_prgbank_state::cafetime_p3_w));
 	tmp.port_write<4>().set(FUNC(royalmah_prgbank_state::cafetime_p4_w));
@@ -4316,7 +4316,7 @@ void royalmah_prgbank_state::pongboo2(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, "oki", 1'000'000, okim6295_device::PIN7_LOW).add_route(ALL_OUTPUTS, "mono", 0.5); // frequency and pin 7 not verified
+	OKIM6295(config, "oki", XTAL::u(1'000'000), okim6295_device::PIN7_LOW).add_route(ALL_OUTPUTS, "mono", 0.5); // frequency and pin 7 not verified
 }
 
 

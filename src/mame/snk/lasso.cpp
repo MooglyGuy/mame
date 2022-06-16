@@ -936,7 +936,7 @@ void lasso_state::base(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &lasso_state::lasso_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(lasso_state::irq0_line_hold));
 
-	M6502(config, m_audiocpu, 11'289'000/16);
+	M6502(config, m_audiocpu, XTAL::u(11'289'000)/16);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &lasso_state::lasso_audio_map);
 
 	// video hardware
@@ -956,8 +956,8 @@ void lasso_state::base(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	m_soundlatch->data_pending_callback().set_inputline(m_audiocpu, 0);
 
-	SN76489(config, m_sn[0], 11'289'000/4).add_route(ALL_OUTPUTS, "speaker", 0.5); // correct
-	SN76489(config, m_sn[1], 11'289'000/4).add_route(ALL_OUTPUTS, "speaker", 0.5); // "
+	SN76489(config, m_sn[0], XTAL::u(11'289'000)/4).add_route(ALL_OUTPUTS, "speaker", 0.5); // correct
+	SN76489(config, m_sn[1], XTAL::u(11'289'000)/4).add_route(ALL_OUTPUTS, "speaker", 0.5); // "
 }
 
 void lasso_state::lasso(machine_config &config)

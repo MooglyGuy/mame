@@ -44,7 +44,7 @@
 DEFINE_DEVICE_TYPE(TRIDENT_VGA,  tgui9860_device, "trident_vga",  "Trident TGUI9860 VGA i/f")
 DEFINE_DEVICE_TYPE(TVGA9000_VGA, tvga9000_device, "tvga9000_vga", "Trident TVGA9000 VGA i/f")
 
-trident_vga_device::trident_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+trident_vga_device::trident_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, type, tag, owner, clock)
 {
 	m_main_if_space_config = address_space_config("io_regs", ENDIANNESS_LITTLE, 8, 4, 0, address_map_constructor(FUNC(trident_vga_device::io_3bx_3dx_map), this));
@@ -53,13 +53,13 @@ trident_vga_device::trident_vga_device(const machine_config &mconfig, device_typ
 	m_seq_space_config = address_space_config("sequencer_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(trident_vga_device::sequencer_map), this));
 }
 
-tgui9860_device::tgui9860_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tgui9860_device::tgui9860_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: trident_vga_device(mconfig, TRIDENT_VGA, tag, owner, clock)
 {
 	m_version = 0xd3;   // 0xd3 identifies at TGUI9660XGi (set to 0xe3 to identify at TGUI9440AGi)
 }
 
-tvga9000_device::tvga9000_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tvga9000_device::tvga9000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: trident_vga_device(mconfig, TVGA9000_VGA, tag, owner, clock)
 {
 	m_version = 0x43;

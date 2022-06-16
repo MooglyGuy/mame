@@ -146,7 +146,7 @@ public:
 	bool exit_pending() const { return m_exit_pending; }
 	bool hard_reset_pending() const { return m_hard_reset_pending; }
 	const std::string &basename() const { return m_basename; }
-	int sample_rate() const { return m_sample_rate; }
+	XTAL sample_rate() const { return XTAL::u(m_sample_rate); }
 	bool save_or_load_pending() const { return !m_saveload_pending_file.empty(); }
 
 	// RAII-based side effect disable

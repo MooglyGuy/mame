@@ -824,11 +824,11 @@ void f1gp_state::f1gp(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(6'000)); // 100 CPU slices per frame
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->irq_handler().set_inputline("sub", M68K_IRQ_3);
 	m_acia->txd_handler().set("acia", FUNC(acia6850_device::write_rxd)); // loopback for now
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 1'000'000)); // guessed
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(1'000'000))); // guessed
 	acia_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 
@@ -845,15 +845,15 @@ void f1gp_state::f1gp(machine_config &config)
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
 
-	VSYSTEM_SPR2(config, m_spr_old[0], 0, m_palette, gfx_f1gp_spr1);
+	VSYSTEM_SPR2(config, m_spr_old[0], m_palette, gfx_f1gp_spr1);
 	m_spr_old[0]->set_tile_indirect_cb(FUNC(f1gp2_state::tile_callback<0>));
 	m_spr_old[0]->set_pritype(2);
 
-	VSYSTEM_SPR2(config, m_spr_old[1], 0, m_palette, gfx_f1gp_spr2);
+	VSYSTEM_SPR2(config, m_spr_old[1], m_palette, gfx_f1gp_spr2);
 	m_spr_old[1]->set_tile_indirect_cb(FUNC(f1gp2_state::tile_callback<1>));
 	m_spr_old[1]->set_pritype(2);
 
-	K053936(config, m_k053936, 0);
+	K053936(config, m_k053936);
 	m_k053936->set_wrap(1);
 	m_k053936->set_offsets(-58, -2);
 
@@ -875,22 +875,22 @@ void f1gp_state::f1gp(machine_config &config)
 void f1gp_state::f1gpbl(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 10'000'000); // 10 MHz ???
+	M68000(config, m_maincpu, XTAL::u(10'000'000)); // 10 MHz ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &f1gp_state::f1gpbl_cpu1_map);
 	m_maincpu->set_vblank_int("screen", FUNC(f1gp_state::irq1_line_hold));
 
-	m68000_device &sub(M68000(config, "sub", 10'000'000));    // 10 MHz ???
+	m68000_device &sub(M68000(config, "sub", XTAL::u(10'000'000)));    // 10 MHz ???
 	sub.set_addrmap(AS_PROGRAM, &f1gp_state::f1gpbl_cpu2_map);
 	sub.set_vblank_int("screen", FUNC(f1gp_state::irq1_line_hold));
 
 	// NO sound CPU
 	config.set_maximum_quantum(attotime::from_hz(6'000)); // 100 CPU slices per frame
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->irq_handler().set_inputline("sub", M68K_IRQ_3);
 	m_acia->txd_handler().set("acia", FUNC(acia6850_device::write_rxd)); // loopback for now
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 1'000'000)); // guessed
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(1'000'000))); // guessed
 	acia_clock.signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 
@@ -905,12 +905,12 @@ void f1gp_state::f1gpbl(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_f1gpbl);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	okim6295_device &oki(OKIM6295(config, "oki", 1'000'000, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
+	okim6295_device &oki(OKIM6295(config, "oki", XTAL::u(1'000'000), okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
 	oki.add_route(ALL_OUTPUTS, "mono", 1.00);
 }
 
@@ -931,7 +931,7 @@ void f1gp2_state::f1gp2(machine_config &config)
 	config.device_remove("vsystem_spr_old1");
 	config.device_remove("vsystem_spr_old2");
 
-	VSYSTEM_SPR(config, m_spr, 0, m_palette, gfx_f1gp2_spr);
+	VSYSTEM_SPR(config, m_spr, m_palette, gfx_f1gp2_spr);
 	m_spr->set_tile_indirect_cb(FUNC(f1gp2_state::tile_callback<0>));
 
 	m_k053936->set_offsets(-48, -21);

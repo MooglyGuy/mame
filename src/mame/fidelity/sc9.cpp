@@ -119,7 +119,7 @@ void sc9_state::machine_start()
 INPUT_CHANGED_MEMBER(sc9_state::sc9c_change_cpu_freq)
 {
 	// SC9(C01) was released with 1.5MHz, 1.6MHz, or 1.9MHz CPU
-	static const u32 freq[3] = { 1'500'000, 1'600'000, 1'900'000 };
+	static const XTAL freq[3] = { XTAL::u(1'500'000), XTAL::u(1'600'000), XTAL::u(1'900'000) };
 	m_maincpu->set_unscaled_clock(freq[newval % 3]);
 }
 
@@ -236,7 +236,7 @@ void sc9_state::sc9d(machine_config &config)
 	M6502(config, m_maincpu, 3.9_MHz_XTAL / 2); // R6502AP, 3.9MHz resonator
 	m_maincpu->set_addrmap(AS_PROGRAM, &sc9_state::sc9d_map);
 
-	auto &irq_clock(CLOCK(config, "irq_clock", 600)); // from 555 timer (22nF, 102K, 2.7K), ideal frequency is 600Hz
+	auto &irq_clock(CLOCK(config, "irq_clock", XTAL::u(600))); // from 555 timer (22nF, 102K, 2.7K), ideal frequency is 600Hz
 	irq_clock.set_pulse_width(attotime::from_usec(41)); // active for 41us
 	irq_clock.signal_handler().set_inputline(m_maincpu, M6502_IRQ_LINE);
 
@@ -262,7 +262,7 @@ void sc9_state::sc9b(machine_config &config)
 	sc9d(config);
 
 	// basic machine hardware
-	m_maincpu->set_clock(1'500'000); // from ceramic resonator "681 JSA", measured
+	m_maincpu->set_clock(XTAL::u(1'500'000)); // from ceramic resonator "681 JSA", measured
 	m_maincpu->set_addrmap(AS_PROGRAM, &sc9_state::sc9_map);
 }
 

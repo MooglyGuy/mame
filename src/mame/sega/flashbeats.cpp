@@ -130,7 +130,7 @@ void flashbeats_state::flashbeats(machine_config &config)
 	m_maincpu->read_port6().set(FUNC(flashbeats_state::p6_r));
 	m_maincpu->write_port6().set(FUNC(flashbeats_state::p6_w));
 
-	M68000(config, m_scspcpu, 11289600);
+	M68000(config, m_scspcpu, XTAL::u(11289600));
 	m_scspcpu->set_addrmap(AS_PROGRAM, &flashbeats_state::main_scsp_map);
 
 	EEPROM_93C46_16BIT(config, "eeprom");
@@ -150,7 +150,7 @@ void flashbeats_state::flashbeats(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	SCSP(config, m_scsp, 22579200); // TODO : Unknown clock, divider
+	SCSP(config, m_scsp, XTAL::u(22579200)); // TODO : Unknown clock, divider
 	m_scsp->set_addrmap(0, &flashbeats_state::scsp_mem);
 	m_scsp->irq_cb().set(FUNC(flashbeats_state::scsp_irq));
 	m_scsp->add_route(0, "speaker", 1.0, 0);

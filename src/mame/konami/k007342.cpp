@@ -47,7 +47,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(K007342, k007342_device, "k007342", "K007342 Video Controller")
 
-k007342_device::k007342_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+k007342_device::k007342_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, K007342, tag, owner, clock),
 	device_gfx_interface(mconfig, *this),
 	m_ram(nullptr),

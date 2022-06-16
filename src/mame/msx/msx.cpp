@@ -827,4 +827,3 @@ void msx2p_base_state::turbor_add_softlists(machine_config &config)
 		SOFTWARE_LIST(config, "msx1_flop_list").set_compatible("msx1_flop");
 	}
 }
-

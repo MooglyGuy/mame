@@ -18,7 +18,7 @@
 
 DEFINE_DEVICE_TYPE(H8_PORT, h8_port_device, "h8_digital_port", "H8 digital port")
 
-h8_port_device::h8_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8_port_device::h8_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, H8_PORT, tag, owner, clock),
 	m_cpu(*this, DEVICE_SELF_OWNER), m_address(0), m_default_ddr(0), m_ddr(0), m_pcr(0), m_odr(0), m_mask(0), m_dr(0), m_last_output(0)
 {

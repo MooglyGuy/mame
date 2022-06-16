@@ -58,10 +58,10 @@ INPUT_PORTS_END
 
 void photoplaysx_state::photoplaysx(machine_config &config)
 {
-	PENTIUM4(config, m_maincpu, 100'000'000); // Actually an Intel CELERON 2 GHz / 128 / 400 (SL6VR)
+	PENTIUM4(config, m_maincpu, XTAL::u(100'000'000)); // Actually an Intel CELERON 2 GHz / 128 / 400 (SL6VR)
 	m_maincpu->set_addrmap(AS_PROGRAM, &photoplaysx_state::photoplaysx_map);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

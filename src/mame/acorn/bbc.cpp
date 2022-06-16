@@ -1157,7 +1157,7 @@ void bbc_state::bbca(machine_config &config)
 	m_cassette->set_interface("bbc_cass");
 
 	/* acia */
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set(FUNC(bbc_state::write_txd));
 	m_acia->rts_handler().set(FUNC(bbc_state::write_rts));
 	m_acia->irq_handler().set(m_irqs, FUNC(input_merger_device::in_w<0>));
@@ -1204,10 +1204,10 @@ void bbc_state::bbcb(machine_config &config)
 	m_ram->set_default_size("32K");
 
 	/* speech hardware */
-	TMS5220(config, m_tms, 640000);
+	TMS5220(config, m_tms, XTAL::u(640000));
 	m_tms->add_route(ALL_OUTPUTS, "mono", 1.0);
 
-	TMS6100(config, "vsm", 0);
+	TMS6100(config, "vsm");
 	m_tms->m0_cb().set("vsm", FUNC(tms6100_device::m0_w));
 	m_tms->m1_cb().set("vsm", FUNC(tms6100_device::m1_w));
 	m_tms->addr_cb().set("vsm", FUNC(tms6100_device::add_w));
@@ -1246,7 +1246,7 @@ void bbc_state::bbcb(machine_config &config)
 	m_adlc->out_txd_cb().set("econet", FUNC(econet_device::host_data_w));
 	m_adlc->out_irq_cb().set(FUNC(bbc_state::adlc_irq_w));
 
-	econet_device &econet(ECONET(config, "econet", 0));
+	econet_device &econet(ECONET(config, "econet"));
 	econet.clk_wr_callback().set(m_adlc, FUNC(mc6854_device::txc_w));
 	econet.clk_wr_callback().append(m_adlc, FUNC(mc6854_device::rxc_w));
 	econet.data_wr_callback().set(m_adlc, FUNC(mc6854_device::set_rx));
@@ -1704,7 +1704,7 @@ void bbcm_state::bbcm(machine_config &config)
 	m_cassette->set_interface("bbc_cass");
 
 	/* acia */
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set(FUNC(bbc_state::write_txd));
 	m_acia->rts_handler().set(FUNC(bbc_state::write_rts));
 	m_acia->irq_handler().set(m_irqs, FUNC(input_merger_device::in_w<0>));
@@ -1754,7 +1754,7 @@ void bbcm_state::bbcm(machine_config &config)
 	m_adlc->out_txd_cb().set("econet", FUNC(econet_device::host_data_w));
 	m_adlc->out_irq_cb().set(FUNC(bbc_state::adlc_irq_w));
 
-	econet_device &econet(ECONET(config, "econet", 0));
+	econet_device &econet(ECONET(config, "econet"));
 	econet.clk_wr_callback().set(m_adlc, FUNC(mc6854_device::txc_w));
 	econet.clk_wr_callback().append(m_adlc, FUNC(mc6854_device::rxc_w));
 	econet.data_wr_callback().set(m_adlc, FUNC(mc6854_device::set_rx));
@@ -2053,7 +2053,7 @@ void bbcm_state::bbcmc(machine_config &config)
 	FLOPPY_CONNECTOR(config, "wd_fdc:0", bbc_floppies, "35dd", bbc_state::floppy_formats).enable_sound(true);
 	FLOPPY_CONNECTOR(config, "wd_fdc:1", bbc_floppies, "35dd", bbc_state::floppy_formats).enable_sound(true);
 
-	I2C_PCD8572(config, "i2cmem", 0);
+	I2C_PCD8572(config, "i2cmem");
 	config.device_remove("rtc");
 
 	/* user via */

@@ -19,7 +19,7 @@ public:
 
 	typedef device_delegate<void (u8 layer, u32 &code)> gp9001_cb_delegate;
 
-	gp9001vdp_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	gp9001vdp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename... T> void set_tile_callback(T &&... args) { m_gp9001_cb.set(std::forward<T>(args)...); }
 

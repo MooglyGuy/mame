@@ -64,7 +64,7 @@ public:
 	void go_w(int state);
 
 protected:
-	jaguar_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u8 version, bool isdsp, address_map_constructor io_map);
+	jaguar_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u8 version, bool isdsp, address_map_constructor io_map);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -269,7 +269,7 @@ class jaguargpu_cpu_device : public jaguar_cpu_device
 {
 public:
 	// construction/destruction
-	jaguargpu_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	jaguargpu_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void io_map(address_map &map) ATTR_COLD;
 
@@ -286,7 +286,7 @@ class jaguardsp_cpu_device : public jaguar_cpu_device
 {
 public:
 	// construction/destruction
-	jaguardsp_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	jaguardsp_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void io_map(address_map &map) ATTR_COLD;
 

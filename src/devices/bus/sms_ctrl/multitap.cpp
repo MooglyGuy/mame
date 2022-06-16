@@ -59,7 +59,7 @@ private:
 //  sms_multitap_device - constructor
 //-------------------------------------------------
 
-sms_multitap_device::sms_multitap_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sms_multitap_device::sms_multitap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_MULTITAP, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_subctrl_ports(*this, "ctrl%u", 1U),

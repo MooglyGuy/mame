@@ -203,12 +203,12 @@ ROM_END
 //  hd44780_device - constructor
 //-------------------------------------------------
 
-hd44780_device::hd44780_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hd44780_device::hd44780_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: hd44780_device(mconfig, HD44780, tag, owner, clock)
 {
 }
 
-hd44780_device::hd44780_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+hd44780_device::hd44780_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_pixel_update_cb(*this)
 	, m_busy_factor(1.0)
@@ -222,12 +222,12 @@ hd44780_device::hd44780_device(const machine_config &mconfig, device_type type, 
 {
 }
 
-hd44780u_device::hd44780u_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hd44780u_device::hd44780u_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd44780_device(mconfig, HD44780U, tag, owner, clock)
 {
 }
 
-sed1278_device::sed1278_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sed1278_device::sed1278_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd44780_device(mconfig, SED1278, tag, owner, clock)
 {
 }

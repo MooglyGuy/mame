@@ -259,7 +259,7 @@ class dcs_audio_2k_device : public dcs_audio_device
 {
 public:
 	// construction/destruction
-	dcs_audio_2k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs_audio_2k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -273,7 +273,7 @@ class dcs_audio_2k_uart_device : public dcs_audio_device
 {
 public:
 	// construction/destruction
-	dcs_audio_2k_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs_audio_2k_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -287,7 +287,7 @@ class dcs_audio_8k_device : public dcs_audio_device
 {
 public:
 	// construction/destruction
-	dcs_audio_8k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs_audio_8k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -301,7 +301,7 @@ class dcs_audio_wpc_device : public dcs_audio_device
 {
 public:
 	// construction/destruction
-	dcs_audio_wpc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs_audio_wpc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -317,7 +317,7 @@ class dcs2_audio_device : public dcs_audio_device
 {
 protected:
 	// construction/destruction
-	dcs2_audio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	dcs2_audio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -332,7 +332,7 @@ class dcs2_audio_2115_device : public dcs2_audio_device
 {
 public:
 	// construction/destruction
-	dcs2_audio_2115_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs2_audio_2115_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -346,7 +346,7 @@ class dcs2_audio_2104_device : public dcs2_audio_device
 {
 public:
 	// construction/destruction
-	dcs2_audio_2104_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs2_audio_2104_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -360,7 +360,7 @@ class dcs2_audio_dsio_device : public dcs2_audio_device
 {
 public:
 	// construction/destruction
-	dcs2_audio_dsio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dcs2_audio_dsio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -374,18 +374,29 @@ class dcs2_audio_denver_device : public dcs2_audio_device
 {
 protected:
 	// construction/destruction
+<<<<<<< HEAD
 	dcs2_audio_denver_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
 
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
+=======
+	dcs2_audio_denver_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+protected:
+	// optional information overrides
+	virtual void device_add_mconfig(machine_config &config) override;
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 };
 
 class dcs2_audio_denver_5ch_device : public dcs2_audio_denver_device
 {
 public:
 	// construction/destruction
+<<<<<<< HEAD
 	dcs2_audio_denver_5ch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
 
+=======
+	dcs2_audio_denver_5ch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 protected:
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -395,8 +406,12 @@ class dcs2_audio_denver_2ch_device : public dcs2_audio_denver_device
 {
 public:
 	// construction/destruction
+<<<<<<< HEAD
 	dcs2_audio_denver_2ch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
 
+=======
+	dcs2_audio_denver_2ch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+>>>>>>> 45d4cd52a81 (full xtal conversion)
 protected:
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

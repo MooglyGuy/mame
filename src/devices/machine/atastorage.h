@@ -40,7 +40,7 @@ public:
 	void set_dma_transfer_time(const attotime time) { m_dma_transfer_time = time; }
 
 protected:
-	ata_mass_storage_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ata_mass_storage_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -94,7 +94,7 @@ class ide_hdd_device_base : public ata_mass_storage_device_base
 {
 protected:
 	// construction/destruction
-	ide_hdd_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ide_hdd_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -118,7 +118,7 @@ class cf_device_base : public ide_hdd_device_base
 {
 protected:
 	// construction/destruction
-	cf_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	cf_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

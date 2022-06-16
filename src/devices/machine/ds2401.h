@@ -17,12 +17,7 @@ class ds2401_device : public device_t
 {
 public:
 	// construction/destruction
-	ds2401_device(const machine_config &mconfig, const char *tag, device_t *owner)
-		: ds2401_device(mconfig, tag, owner, uint32_t(0))
-	{
-	}
-
-	ds2401_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ds2401_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void write(int state);
 	int read();

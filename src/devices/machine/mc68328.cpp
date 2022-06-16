@@ -47,7 +47,7 @@ DEFINE_DEVICE_TYPE(MC68EZ328, mc68ez328_device, "mc68ez328", "MC68EZ328 DragonBa
 
 const u32 mc68328_base_device::VCO_DIVISORS[8] = { 2, 4, 8, 16, 1, 1, 1, 1 };
 
-mc68328_base_device::mc68328_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+mc68328_base_device::mc68328_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: m68000_device(mconfig, type, tag, owner, clock)
 	, m_pwm(nullptr)
 	, m_rtc(nullptr)
@@ -77,7 +77,7 @@ mc68328_base_device::mc68328_base_device(const machine_config &mconfig, device_t
 {
 }
 
-mc68328_device::mc68328_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc68328_device::mc68328_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc68328_base_device(mconfig, MC68328, tag, owner, clock)
 	, m_out_port_j_cb(*this)
 	, m_out_port_k_cb(*this)
@@ -94,7 +94,7 @@ mc68328_device::mc68328_device(const machine_config &mconfig, const char *tag, d
 	m_uopcodes_config.m_internal_map = imap;
 }
 
-mc68ez328_device::mc68ez328_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc68ez328_device::mc68ez328_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc68328_base_device(mconfig, MC68EZ328, tag, owner, clock)
 {
 	m_cpu_space_config.m_internal_map = address_map_constructor(FUNC(mc68ez328_device::cpu_space_map), this);
