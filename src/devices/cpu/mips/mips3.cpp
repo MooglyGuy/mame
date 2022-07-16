@@ -1156,7 +1156,7 @@ bool mips3_device::memory_translate(int spacenum, int intention, offs_t &address
 	target_space = &space(spacenum);
 
 	/* only applies to the program address space */
-	if (spacenum == AS_PROGRAM)
+	if (spacenum == AS_PROGRAM && !(intention & TRANSLATE_DEBUG_MASK))
 	{
 		const vtlb_entry *table = vtlb_table();
 		vtlb_entry entry = table[address >> MIPS3_MIN_PAGE_SHIFT];
@@ -3906,8 +3906,28 @@ void mips3_device::handle_idt(uint32_t op)
 {
 	switch (op & 0x1f)
 	{
+		case 0: /* MAD */
+			if (RSREG != 0 && RTREG != 0)
+			{
+				int64_t temp64 = (int64_t)(int32_t)RSVAL32 * (int64_t)(int32_t)RTVAL32;
+				temp64 += ((int64_t)m_core->r[REG_HI] << 32) | m_core->r[REG_LO];
+				m_core->r[REG_LO] = (int32_t)temp64;
+				m_core->r[REG_HI] = (int32_t)(temp64 >> 32);
+				m_core->icount -= 3;
+			}
+			break;
+		case 1: /* MADU */
+			if (RSREG != 0 && RTREG != 0)
+			{
+				uint64_t temp64 = (uint64_t)RSVAL32 * (uint64_t)RTVAL32;
+				temp64 += ((uint64_t)m_core->r[REG_HI] << 32) | m_core->r[REG_LO];
+				m_core->r[REG_LO] = (uint32_t)temp64;
+				m_core->r[REG_HI] = (uint32_t)(temp64 >> 32);
+				m_core->icount -= 3;
+			}
+			break;
 		case 2: /* MUL */
-			RDVAL64 = (int32_t)((int32_t)RSVAL32 * (int32_t)RTVAL32);
+			if (RDREG) RDVAL64 = (int32_t)((int32_t)RSVAL32 * (int32_t)RTVAL32);
 			m_core->icount -= 3;
 			break;
 		default:
