@@ -1156,7 +1156,7 @@ bool mips3_device::memory_translate(int spacenum, int intention, offs_t &address
 	target_space = &space(spacenum);
 
 	/* only applies to the program address space */
-	if (spacenum == AS_PROGRAM)
+	if (spacenum == AS_PROGRAM && !(intention & TRANSLATE_DEBUG_MASK))
 	{
 		const vtlb_entry *table = vtlb_table();
 		vtlb_entry entry = table[address >> MIPS3_MIN_PAGE_SHIFT];
