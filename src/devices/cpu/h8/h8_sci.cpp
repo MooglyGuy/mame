@@ -15,7 +15,7 @@
 #define LOG_STATE (1 << 6U)  // State machine states
 #define LOG_TICK  (1 << 7U)  // Clock ticks
 
-#define VERBOSE (LOG_DATA)
+#define VERBOSE (0)
 
 #include "logmacro.h"
 
