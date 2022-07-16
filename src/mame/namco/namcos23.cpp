@@ -1464,6 +1464,35 @@ It can also be used with Final Furlong when wired correctly.
 
 #include <cfloat>
 
+#define LOG_PROJ_MAT		(1 << 1U)
+#define LOG_3D_STATE_ERR	(1 << 2U)
+#define LOG_3D_STATE_UNK	(1 << 3U)
+#define LOG_MATRIX_ERR		(1 << 4U)
+#define LOG_MATRIX_UNK		(1 << 5U)
+#define LOG_VEC_ERR			(1 << 6U)
+#define LOG_VEC_UNK			(1 << 7U)
+#define LOG_RENDER_ERR		(1 << 8U)
+#define LOG_RENDER_INFO		(1 << 9U)
+#define LOG_MODEL_ERR		(1 << 10U)
+#define LOG_MODEL_INFO		(1 << 11U)
+#define LOG_MODELS			(1 << 12U)
+#define LOG_C435_PIO_UNK	(1 << 13U)
+#define LOG_C435_UNK		(1 << 14U)
+#define LOG_C417_UNK		(1 << 15U)
+#define LOG_C417_ACK		(1 << 16U)
+#define LOG_C412_UNK		(1 << 17U)
+#define LOG_C421_UNK		(1 << 18U)
+#define LOG_C422_IRQ		(1 << 19U)
+#define LOG_C422_UNK		(1 << 20U)
+#define LOG_C361_UNK		(1 << 21U)
+#define LOG_CTL_UNK			(1 << 22U)
+#define LOG_MCU				(1 << 23U)
+#define LOG_SH2				(1 << 24U)
+#define LOG_SUBIRQ			(1 << 25U)
+#define VERBOSE (LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO \
+				| LOG_MODEL_ERR | LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK \
+				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ)
+#include "logmacro.h"
 
 namespace {
 
@@ -1492,6 +1521,8 @@ namespace {
 #define MAIN_C450_IRQ   0x20
 #define MAIN_C451_IRQ   0x40
 
+#define DUMP_MODELS 0
+
 enum { MODEL, FLUSH };
 
 enum { RENDER_MAX_ENTRIES = 1000, POLY_MAX_ENTRIES = 10000 };
@@ -1515,6 +1546,7 @@ struct namcos23_render_entry
 struct namcos23_render_data
 {
 	running_machine *machine;
+	uint32_t rgb;
 	const pen_t *pens;
 	bitmap_rgb32 *bitmap;
 	uint32_t (*texture_lookup)(running_machine &machine, const pen_t *pens, float x, float y);
@@ -1850,7 +1882,7 @@ namcos23_renderer::namcos23_renderer(namcos23_state &state)
 {
 }
 
-// 3D hardware, to throw at least in part in video/namcos23.c
+// 3D hardware, to throw at least in part in namcos23_v.cpp
 
 inline int32_t namcos23_state::u32_to_s24(uint32_t v)
 {
@@ -1936,12 +1968,22 @@ void namcos23_state::c435_state_set_projection_matrix_line(const uint16_t *param
 		util::stream_format(buf, " %f", f24_to_f32((param[2*i+1] << 16) | param[2*i+2]));
 	buf << "\n";
 	logerror(std::move(buf).str());
+	LOGMASKED(LOG_PROJ_MAT, "%s: %s", machine().describe_context(), std::move(buf).str());
 }
 
 void namcos23_state::c435_state_set(uint16_t type, const uint16_t *param)
 {
 	switch(type) {
 	case 0x0001: c435_state_set_interrupt(param); break;
+	case 0x0046: {
+		char buf[4096];
+		char *p = buf;
+		p += sprintf(p, "unknown matrix(?) set (type 46):");
+		for(int i=0; i<6; i++)
+			p += sprintf(p, " %f", f24_to_f32((param[2*i+1] << 16) | param[2*i+2]));
+		p += sprintf(p, "\n");
+		LOGMASKED(LOG_3D_STATE_UNK, "%s: %s", machine().describe_context(), buf);
+	}	break;
 	case 0x00c8: c435_state_set_projection_matrix_line(param); break;
 	default: {
 		std::ostringstream buf;
@@ -1949,7 +1991,7 @@ void namcos23_state::c435_state_set(uint16_t type, const uint16_t *param)
 		for(int i=0; i<c435_get_state_entry_size(type); i++)
 			util::stream_format(buf, " %04x", param[i]);
 		buf << "\n";
-		logerror(std::move(buf).str());
+		LOGMASKED(LOG_3D_STATE_UNK, "%s: %s", machine().describe_context(), std::move(buf).str());
 		break;
 	}
 	}
@@ -1981,7 +2023,7 @@ int namcos23_state::c435_get_state_entry_size(uint16_t type)
 	case 0x00c6: return 13;
 	case 0x00c8: return 17;
 	default:
-		logerror("WARNING: Unknown size for state type %04x\n", type);
+		LOGMASKED(LOG_3D_STATE_UNK, "%s: WARNING: Unknown size for state type %04x\n", machine().describe_context(), type);
 		return -1;
 	}
 }
@@ -1989,54 +2031,76 @@ int namcos23_state::c435_get_state_entry_size(uint16_t type)
 void namcos23_state::c435_matrix_matrix_mul() // 0.0
 {
 	if((m_c435_buffer[0] & 0xf) != 4) {
-		logerror("WARNING: c435_matrix_matrix_mul with size %d\n", m_c435_buffer[0] & 0xf);
+		LOGMASKED(LOG_MATRIX_ERR, "%s: WARNING: c435_matrix_matrix_mul with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
-	if(m_c435_buffer[0] != 0x0004)
-		logerror("WARNING: c435_matrix_matrix_mul header %04x\n", m_c435_buffer[0]);
+	bool transpose = BIT(m_c435_buffer[0], 10);
+	if((m_c435_buffer[0] & ~0x400) != 0x0004)
+		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if(m_c435_buffer[3] != 0xffff)
-		logerror("WARNING: c435_matrix_matrix_mul with +2=%04x\n", m_c435_buffer[3]);
+		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul with +2=%04x\n", machine().describe_context(), m_c435_buffer[3]);
 
 	int16_t *t        = c435_getm(m_c435_buffer[1]);
-	const int16_t *m2 = c435_getm(m_c435_buffer[2]);
-	const int16_t *m1 = c435_getm(m_c435_buffer[4]);
+	int16_t m2[9];
+	int16_t m1[9];
+	memcpy(m1, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
+	memcpy(m2, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
 
-	t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
-	t[1] = int16_t((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
-	t[2] = int16_t((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
-	t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[1] + m1[5]*m2[2]) >> 14);
-	t[4] = int16_t((m1[3]*m2[3] + m1[4]*m2[4] + m1[5]*m2[5]) >> 14);
-	t[5] = int16_t((m1[3]*m2[6] + m1[4]*m2[7] + m1[5]*m2[8]) >> 14);
-	t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[1] + m1[8]*m2[2]) >> 14);
-	t[7] = int16_t((m1[6]*m2[3] + m1[7]*m2[4] + m1[8]*m2[5]) >> 14);
-	t[8] = int16_t((m1[6]*m2[6] + m1[7]*m2[7] + m1[8]*m2[8]) >> 14);
+	if (transpose)
+	{
+		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
+		t[1] = int16_t((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
+		t[2] = int16_t((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
+		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[1] + m1[5]*m2[2]) >> 14);
+		t[4] = int16_t((m1[3]*m2[3] + m1[4]*m2[4] + m1[5]*m2[5]) >> 14);
+		t[5] = int16_t((m1[3]*m2[6] + m1[4]*m2[7] + m1[5]*m2[8]) >> 14);
+		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[1] + m1[8]*m2[2]) >> 14);
+		t[7] = int16_t((m1[6]*m2[3] + m1[7]*m2[4] + m1[8]*m2[5]) >> 14);
+		t[8] = int16_t((m1[6]*m2[6] + m1[7]*m2[7] + m1[8]*m2[8]) >> 14);
+	}
+	else
+	{
+		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[3] + m1[2]*m2[6]) >> 14);
+		t[1] = int16_t((m1[0]*m2[1] + m1[1]*m2[4] + m1[2]*m2[7]) >> 14);
+		t[2] = int16_t((m1[0]*m2[2] + m1[1]*m2[5] + m1[2]*m2[8]) >> 14);
+		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[3] + m1[5]*m2[6]) >> 14);
+		t[4] = int16_t((m1[3]*m2[1] + m1[4]*m2[4] + m1[5]*m2[7]) >> 14);
+		t[5] = int16_t((m1[3]*m2[2] + m1[4]*m2[5] + m1[5]*m2[8]) >> 14);
+		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[3] + m1[8]*m2[6]) >> 14);
+		t[7] = int16_t((m1[6]*m2[1] + m1[7]*m2[4] + m1[8]*m2[7]) >> 14);
+		t[8] = int16_t((m1[6]*m2[2] + m1[7]*m2[5] + m1[8]*m2[8]) >> 14);
+	}
 }
 
 void namcos23_state::c435_matrix_vector_mul() // 0.1
 {
 	if((m_c435_buffer[0] & 0xf) != 4) {
-		logerror("WARNING: c435_matrix_vector_mul with size %d\n", m_c435_buffer[0] & 0xf);
+		LOGMASKED(LOG_VEC_ERR, "%s: WARNING: c435_matrix_vector_mul with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
 
-	if(m_c435_buffer[0] != 0x0814 && m_c435_buffer[0] != 0x1014)
-		logerror("WARNING: c435_matrix_vector_mul header %04x\n", m_c435_buffer[0]);
-
+	if(m_c435_buffer[0] != 0x0814 && m_c435_buffer[0] != 0x1014 && m_c435_buffer[0] != 0x0414)
+		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_matrix_vector_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
 	if(m_c435_buffer[3] != 0xffff) {
 		int32_t *t        = c435_getv(m_c435_buffer[1]);
 		const int16_t *m  = c435_getm(m_c435_buffer[2]);
-		const int32_t *vt = c435_getv(m_c435_buffer[3]);
-		const int32_t *v  = c435_getv(m_c435_buffer[4]);
+		int32_t vt[3];
+		int32_t v[3];
+		//const int32_t *vt = c435_getv(m_c435_buffer[3]);
+		//const int32_t *v  = c435_getv(m_c435_buffer[4]);
+		memcpy(vt, c435_getv(m_c435_buffer[3]), sizeof(int32_t) * 3);
+		memcpy(v, c435_getv(m_c435_buffer[4]), sizeof(int32_t) * 3);
 
 		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) + vt[0];
 		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) + vt[1];
 		t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) + vt[2];
-
 	} else {
 		int32_t *t       = c435_getv(m_c435_buffer[1]);
 		const int16_t *m = c435_getm(m_c435_buffer[2]);
-		const int32_t *v = c435_getv(m_c435_buffer[4]);
+		//const int32_t *v = c435_getv(m_c435_buffer[4]);
+		int32_t v[3];
+		memcpy(v, c435_getv(m_c435_buffer[4]), sizeof(int32_t) * 3);
 
 		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
 		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
@@ -2047,12 +2111,12 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 void namcos23_state::c435_matrix_set() // 0.4
 {
 	if((m_c435_buffer[0] & 0xf) != 10) {
-		logerror("WARNING: c435_matrix_set with size %d\n", m_c435_buffer[0] & 0xf);
+		LOGMASKED(LOG_MATRIX_ERR, "%s: WARNING: c435_matrix_set with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
 
 	if(m_c435_buffer[0] != 0x004a)
-		logerror("WARNING: c435_matrix_set header %04x\n", m_c435_buffer[0]);
+		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
 	int16_t *t = c435_getm(m_c435_buffer[1]);
 	for(int i=0; i<9; i++)
@@ -2062,11 +2126,11 @@ void namcos23_state::c435_matrix_set() // 0.4
 void namcos23_state::c435_vector_set() // 0.5
 {
 	if((m_c435_buffer[0] & 0xf) != 7) {
-		logerror("WARNING: c435_vector_set with size %d\n", m_c435_buffer[0] & 0xf);
+		LOGMASKED(LOG_VEC_ERR, "%s: WARNING: c435_vector_set with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
 	if(m_c435_buffer[0] != 0x057)
-		logerror("WARNING: c435_vector_set header %04x\n", m_c435_buffer[0]);
+		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_vector_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
 	int32_t *t = c435_getv(m_c435_buffer[1]);
 	for(int i=0; i<3; i++)
@@ -2076,7 +2140,7 @@ void namcos23_state::c435_vector_set() // 0.5
 void namcos23_state::c435_scaling_set() // 4.4
 {
 	if((m_c435_buffer[0] & 0xff) != 1) {
-		logerror("WARNING: c435_scaling_set with size %d\n", m_c435_buffer[0] & 0xff);
+		LOGMASKED(LOG_VEC_ERR, "%s: WARNING: c435_scaling_set with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xff);
 		return;
 	}
 	m_scaling = m_c435_buffer[1];
@@ -2085,13 +2149,13 @@ void namcos23_state::c435_scaling_set() // 4.4
 void namcos23_state::c435_state_set() // 4.f
 {
 	if((m_c435_buffer[0] & 0xff) == 0) {
-		logerror("WARNING: c435_state_set with zero size\n");
+		LOGMASKED(LOG_3D_STATE_ERR, "%s: WARNING: c435_state_set with zero size\n", machine().describe_context());
 		return;
 	}
 	int size = c435_get_state_entry_size(m_c435_buffer[1]);
 	if(size != (m_c435_buffer[0] & 0xff)-1)
 	{
-		logerror("WARNING: c435_state_set size disagreement (type=%04x, got %d, expected %d)\n", m_c435_buffer[1], (m_c435_buffer[0] & 0xff)-1, size);
+		LOGMASKED(LOG_3D_STATE_ERR, "%s: WARNING: c435_state_set size disagreement (type=%04x, got %d, expected %d)\n", machine().describe_context(), m_c435_buffer[1], (m_c435_buffer[0] & 0xff)-1, size);
 		return;
 	}
 
@@ -2101,17 +2165,17 @@ void namcos23_state::c435_state_set() // 4.f
 void namcos23_state::c435_render() // 8
 {
 	if((m_c435_buffer[0] & 0xf) != 3) {
-		logerror("WARNING: c435_render with size %d, header %04x\n", m_c435_buffer[0] & 0xf, m_c435_buffer[0]);
+		LOGMASKED(LOG_RENDER_ERR, "%s: WARNING: c435_render with size %d, header %04x\n", machine().describe_context(), m_c435_buffer[0] & 0xf, m_c435_buffer[0]);
 		return;
 	}
 
 	render_t &render = m_render;
 	bool use_scaling = m_c435_buffer[0] & 0x0080;
 
-	logerror("render model %x %swith matrix %x and vector %x\n", m_c435_buffer[1], use_scaling ? "scaled " : "", m_c435_buffer[2], m_c435_buffer[3]);
+	LOGMASKED(LOG_RENDER_INFO, "%s: render model %x %swith matrix %x and vector %x\n", machine().describe_context(), m_c435_buffer[1], use_scaling ? "scaled " : "", m_c435_buffer[2], m_c435_buffer[3]);
 
 	if(render.count[render.cur] >= RENDER_MAX_ENTRIES) {
-		logerror("WARNING: render buffer full\n");
+		LOGMASKED(LOG_RENDER_ERR, "%s: WARNING: render buffer full\n", machine().describe_context());
 		return;
 	}
 
@@ -2125,16 +2189,14 @@ void namcos23_state::c435_render() // 8
 	re->model.scaling = use_scaling ? m_scaling / 16384.0 : 1.0;
 	memcpy(re->model.m, m, sizeof(re->model.m));
 	memcpy(re->model.v, v, sizeof(re->model.v));
-	//  re->model.v[2] *= 768/420.0;
 
-	if(0)
-		logerror("Render %04x (%f %f %f %f %f %f %f %f %f) (%f %f %f) %f\n",
-				re->model.model,
-				re->model.m[0]/16384.0, re->model.m[1]/16384.0, re->model.m[2]/16384.0,
-				re->model.m[3]/16384.0, re->model.m[4]/16384.0, re->model.m[5]/16384.0,
-				re->model.m[6]/16384.0, re->model.m[7]/16384.0, re->model.m[8]/16384.0,
-				re->model.v[0]/16384.0, re->model.v[1]/16384.0, re->model.v[2]/16384.0,
-				re->model.scaling);
+	LOGMASKED(LOG_MODEL_INFO, "%s: Render %04x (%f %f %f %f %f %f %f %f %f) (%f %f %f) %f\n", machine().describe_context(),
+			re->model.model,
+			re->model.m[0]/16384.0, re->model.m[1]/16384.0, re->model.m[2]/16384.0,
+			re->model.m[3]/16384.0, re->model.m[4]/16384.0, re->model.m[5]/16384.0,
+			re->model.m[6]/16384.0, re->model.m[7]/16384.0, re->model.m[8]/16384.0,
+			re->model.v[0]/16384.0, re->model.v[1]/16384.0, re->model.v[2]/16384.0,
+			re->model.scaling);
 
 	render.count[render.cur]++;
 }
@@ -2142,7 +2204,7 @@ void namcos23_state::c435_render() // 8
 void namcos23_state::c435_flush() // c
 {
 	if((m_c435_buffer[0] & 0xf) != 0) {
-		logerror("WARNING: c435_flush with size %d\n", m_c435_buffer[0] & 0xf);
+		LOGMASKED(LOG_RENDER_ERR, "%s: WARNING: c435_flush with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
 
@@ -2155,6 +2217,7 @@ void namcos23_state::c435_flush() // c
 
 void namcos23_state::c435_pio_w(uint16_t data)
 {
+	LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 PIO: %x\n", machine().describe_context(), data);
 	m_c435_buffer[m_c435_buffer_pos++] = data;
 	uint16_t h = m_c435_buffer[0];
 	int psize;
@@ -2163,7 +2226,10 @@ void namcos23_state::c435_pio_w(uint16_t data)
 	else
 		psize = h & 0xf;
 	if(m_c435_buffer_pos < psize+1)
+	{
+		//LOGMASKED(LOG_C435_PIO_UNK, "C435 PIO early-out, want size %x (currently %x)\n", psize+1, m_c435_buffer_pos);
 		return;
+	}
 
 	bool known = true;
 	switch(h & 0xc000) {
@@ -2195,7 +2261,7 @@ void namcos23_state::c435_pio_w(uint16_t data)
 		for(int i=0; i<m_c435_buffer_pos; i++)
 			util::stream_format(buf, " %04x", m_c435_buffer[i]);
 		buf << "\n";
-		logerror(std::move(buf).str());
+		LOGMASKED(LOG_C435_PIO_UNK, "%s: %s", machine().describe_context(), std::move(buf).str());
 	}
 
 	m_c435_buffer_pos = 0;
@@ -2216,7 +2282,7 @@ uint32_t namcos23_state::c435_r(offs_t offset, uint32_t mem_mask)
 		return 1; // Busy flag
 	}
 
-	logerror("c435_r %02x @ %08x (%08x, %08x)\n", offset, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C435_UNK, "%s: c435 unknown read %02x & %08x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 	return 0;
 }
 
@@ -2233,8 +2299,11 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 		if(data & 1)
 			c435_dma(space, m_c435_address, m_c435_size);
 		break;
+	case 0x18:
+		m_c435_buffer_pos = 0;
+		break;
 	default:
-		logerror("c435_w %02x, %08x @ %08x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C435_UNK, "%s: c435 unknown write %02x = %08x & %08x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 	}
 }
@@ -2259,9 +2328,18 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 
 	for(int x = extent.startx; x < extent.stopx; x++) {
 		const float z = w ? 1/w : 0;
-		const uint32_t pcol = rd.texture_lookup(*rd.machine, rd.pens, u*z, v*z);
+		const uint32_t tex_rgb = rd.texture_lookup(*rd.machine, rd.pens, u*z, v*z);
+		const uint8_t tr(tex_rgb >> 16);
+		const uint8_t tg(tex_rgb >> 8);
+		const uint8_t tb(tex_rgb);
+		const uint8_t vr(rd.rgb >> 16);
+		const uint8_t vg(rd.rgb >> 8);
+		const uint8_t vb(rd.rgb);
+		const uint8_t r = (uint8_t)((vr / 255.f) * tr);
+		const uint8_t g = (uint8_t)((vg / 255.f) * tg);
+		const uint8_t b = (uint8_t)((vb / 255.f) * tb);
 		float ll = l*z;
-		*img = (light(pcol >> 16, ll) << 16) | (light(pcol >> 8, ll) << 8) | light(pcol, ll);
+		*img = 0xff000000 | (light(r, ll) << 16) | (light(g, ll) << 8) | light(b, ll);
 
 		w += dw;
 		u += du;
@@ -2280,9 +2358,9 @@ void namcos23_state::render_apply_transform(int32_t xi, int32_t yi, int32_t zi, 
 
 void namcos23_state::render_apply_matrot(int32_t xi, int32_t yi, int32_t zi, const namcos23_render_entry *re, int32_t &x, int32_t &y, int32_t &z)
 {
-	x = (re->model.m[0]*xi + re->model.m[3]*yi + re->model.m[6]*zi) >> 14;
-	y = (re->model.m[1]*xi + re->model.m[4]*yi + re->model.m[7]*zi) >> 14;
-	z = (re->model.m[2]*xi + re->model.m[5]*yi + re->model.m[8]*zi) >> 14;
+	x = (re->model.m[0]*xi + re->model.m[1]*yi + re->model.m[2]*zi) >> 14;
+	y = (re->model.m[3]*xi + re->model.m[4]*yi + re->model.m[5]*zi) >> 14;
+	z = (re->model.m[6]*xi + re->model.m[7]*yi + re->model.m[8]*zi) >> 14;
 }
 
 void namcos23_state::render_project(poly_vertex &pv)
@@ -2325,20 +2403,22 @@ static uint32_t render_texture_lookup_nocache_point(running_machine &machine, co
 void namcos23_state::render_one_model(const namcos23_render_entry *re)
 {
 	render_t &render = m_render;
-	if(re->model.model < 0x80) {
-		logerror("WARNING: model %02x requested\n", re->model.model);
-		return;
-	}
 
-	if(re->model.model == 3486)
-		return;
+	//if(re->model.model == 3486)
+		//return;
+
+	//if(re->model.model < 0x0a || re->model.model > 0xa)
+		//return;
+
+	LOGMASKED(LOG_MODELS, "%s: Drawing model %04x\n", machine().describe_context(), re->model.model);
 
 	uint32_t adr = m_ptrom[re->model.model];
 	if(adr >= m_ptrom_limit) {
-		logerror("WARNING: model %04x base address %08x out-of-bounds - pointram?\n", re->model.model, adr);
+		LOGMASKED(LOG_MODEL_ERR, "%s: WARNING: model %04x base address %08x out-of-bounds - pointram?\n", machine().describe_context(), re->model.model, adr);
 		return;
 	}
 
+	int section = 0;
 	while(adr < m_ptrom_limit) {
 		poly_vertex pv[15];
 
@@ -2349,10 +2429,16 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		uint8_t color = (h >> 24) & 0x7f;
 		int lmode = (type >> 19) & 3;
 		int ne = (type >> 8) & 15;
+		//logerror("Model %04x, section %d: type %08x, h %08x, lmode %d, ne %d\n", re->model.model, section, type, h, lmode, ne);
+		section++;
 
 		// Something to do with Z-sorting at least?
+		//float z_add = 0.f;
 		if(type & 0x00001000)
+		{
 			adr++;
+			//z_add = (m_ptrom[adr++] >> 16) / 16384.f;
+		}
 
 		uint32_t light = 0;
 		uint32_t extptr = 0;
@@ -2367,106 +2453,143 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		float minz = FLT_MAX;
 		float maxz = FLT_MIN;
 
-		for(int i=0; i<ne; i++) {
-			uint32_t v1 = m_ptrom[adr++];
-			uint32_t v2 = m_ptrom[adr++];
-			uint32_t v3 = m_ptrom[adr++];
+		static const int indices[2][3] = { { 0, 1, 2 }, { 0, 2, 3 } };
+		if (ne != 3 && ne != 4)
+			logerror("ne: %d\n", ne);
+		for(int i=0; i<ne - 2; i++) {
+			int vertex_count = 0;
+			for(int j=0; j<3; j++, vertex_count++) {
+				uint32_t v1, v2, v3;
+				if (ne == 4) {
+					v1 = m_ptrom[adr+(indices[i][j])*3+0];
+					v2 = m_ptrom[adr+(indices[i][j])*3+1];
+					v3 = m_ptrom[adr+(indices[i][j])*3+2];
+				}
+				else
+				{
+					v1 = m_ptrom[adr+(i+j)*3+0];
+					v2 = m_ptrom[adr+(i+j)*3+1];
+					v3 = m_ptrom[adr+(i+j)*3+2];
+				}
 
-			render_apply_transform(u32_to_s24(v1), u32_to_s24(v2), u32_to_s24(v3), re, pv[i]);
-			pv[i].p[1] = (((v1 >> 20) & 0xf00) | ((v2 >> 24 & 0xff))) + 0.5;
-			pv[i].p[2] = (((v1 >> 16) & 0xf00) | ((v3 >> 24 & 0xff))) + 0.5f + tbase;
+				render_apply_transform(u32_to_s24(v1), u32_to_s24(v2), u32_to_s24(v3), re, pv[j]);
+				pv[j].p[1] = (((v1 >> 20) & 0xf00) | ((v2 >> 24 & 0xff))) + 0.5;
+				pv[j].p[2] = (((v1 >> 16) & 0xf00) | ((v3 >> 24 & 0xff))) + 0.5f + tbase;
+				//logerror("XYZ[%d][%d][%d]: %f, %f, %f\n", section, i, j, pv[j].x, pv[j].y, pv[j].p[0]);
 
-			if(pv[i].p[0] > maxz)
-				maxz = pv[i].p[0];
-			if(pv[i].p[0] < minz)
-				minz = pv[i].p[0];
+				if(pv[i].p[0] > maxz)
+					maxz = pv[i].p[0];
+				if(pv[i].p[0] < minz)
+					minz = pv[i].p[0];
 
-			switch(lmode) {
-			case 0:
-				pv[i].p[3] = ((light >> (8*(3-i))) & 0xff) / 64.0;
-				break;
-			case 1:
-				pv[i].p[3] = ((light >> (8*(3-i))) & 0xff) / 64.0;
-				break;
-			case 2:
-				pv[i].p[3] = 1.0;
-				break;
-			case 3: {
-				uint32_t norm = m_ptrom[extptr++];
-				int32_t nx = u32_to_s10(norm >> 20);
-				int32_t ny = u32_to_s10(norm >> 10);
-				int32_t nz = u32_to_s10(norm);
-				int32_t nrx, nry, nrz;
-				render_apply_matrot(nx, ny, nz, re, nrx, nry, nrz);
-				float lsi = float(nrx*m_light_vector[0] + nry*m_light_vector[1] + nrz*m_light_vector[2])/4194304.0f;
-				if(lsi < 0)
-					lsi = 0;
+				switch(lmode) {
+				case 0:
+					pv[j].p[3] = ((light >> (8*(3-(i+j)))) & 0xff) / 64.0;
+					break;
+				case 1:
+					pv[j].p[3] = ((light >> (8*(3-(i+j)))) & 0xff) / 64.0;
+					break;
+				case 2:
+					pv[j].p[3] = 1.0;
+					break;
+				case 3: {
+					uint32_t norm = m_ptrom[extptr+i+j];
+					int32_t nx = u32_to_s10(norm >> 20);
+					int32_t ny = u32_to_s10(norm >> 10);
+					int32_t nz = u32_to_s10(norm);
+					int32_t nrx, nry, nrz;
+					render_apply_matrot(nx, ny, nz, re, nrx, nry, nrz);
+					float lsi = float(nrx*m_light_vector[0] + nry*m_light_vector[1] + nrz*m_light_vector[2])/4194304.0f;
+					if(lsi < 0)
+						lsi = 0;
 
-				// Mapping taken out of a hat
-				pv[i].p[3] = 0.25f+1.5f*lsi;
-				break;
+					// Mapping taken out of a hat
+					pv[j].p[3] = 0.25f+1.5f*lsi;
+				}	break;
+				}
 			}
+
+			namcos23_poly_entry *p = render.polys + render.poly_count;
+
+			// Should be unnecessary now that frustum clipping happens, but this still culls polys behind the camera
+			p->vertex_count = render.polymgr->zclip_if_less<4>(3, pv, p->pv, 0.00001f);
+			//memcpy(p->pv, pv, sizeof(poly_vertex) * vertex_count);
+			//p->vertex_count = vertex_count;
+
+			// Project if you don't clip on the near plane
+			if(p->vertex_count >= 3) {
+				// Project the eye points
+				frustum_clip_vertex<float, 3> clipVerts[10];
+				for(int j=0; j<p->vertex_count; j++) {
+					// Construct a frustum clipping vert from the NDCoords
+					const float Z = p->pv[j].p[0];
+					clipVerts[j].x = p->pv[j].x / Z;
+					clipVerts[j].y = p->pv[j].y / Z;
+					clipVerts[j].z = Z;
+					clipVerts[j].w = Z;
+					clipVerts[j].p[0] = p->pv[j].p[1];
+					clipVerts[j].p[1] = p->pv[j].p[2];
+					clipVerts[j].p[2] = p->pv[j].p[3];
+				}
+
+				// Clip against all edges of the view frustum
+				int num_vertices = frustum_clip_all<float, 3>(clipVerts, p->vertex_count, clipVerts);
+
+				if (num_vertices != 0)
+				{
+					// Push the results back into the main vertices
+					for (int j=0; j < num_vertices; j++)
+					{
+						p->pv[j].x = clipVerts[j].x;
+						p->pv[j].y = clipVerts[j].y;
+						p->pv[j].p[0] = clipVerts[j].w;
+						p->pv[j].p[1] = clipVerts[j].p[0];
+						p->pv[j].p[2] = clipVerts[j].p[1];
+						p->pv[j].p[3] = clipVerts[j].p[2];
+					}
+					p->vertex_count = num_vertices;
+
+					// This is our poor-man's projection matrix
+					for(int j=0; j<p->vertex_count; j++)
+					{
+						render_project(p->pv[j]);
+
+						float w = p->pv[j].p[0];
+						p->pv[j].p[1] *= w;
+						p->pv[j].p[2] *= w;
+						p->pv[j].p[3] *= w;
+					}
+
+					const float x10 = p->pv[1].x - p->pv[0].x;
+					const float x20 = p->pv[2].x - p->pv[0].x;
+					const float y10 = p->pv[1].y - p->pv[0].y;
+					const float y20 = p->pv[2].y - p->pv[0].y;
+					const float z10 = p->pv[1].p[0] - p->pv[0].p[0];
+					const float z20 = p->pv[2].p[0] - p->pv[0].p[0];
+					const float nx = y10 * z20 - z10 * y20;
+					const float ny = z10 * x20 - x10 * z20;
+					const float nz = x10 * y20 - y10 * x20;
+					const float nl = sqrtf(nx * nx + ny * ny + nz * nz);
+					const float nzn = nz / nl;
+					if (nzn >= 0)
+					{
+						continue;
+					}
+
+					// Compute an odd sorta'-Z thing that can situate the polygon wherever you want in Z-depth
+					p->zkey = 0.5f*(minz+maxz);
+					//logerror("model %04x section %d tri %d, zkey %f\n", p->zkey);
+					p->front = true;//!(h & 0x00000001);
+					p->rd.machine = &machine();
+					p->rd.texture_lookup = render_texture_lookup_nocache_point;
+					p->rd.pens = m_palette->pens() + (color << 8);
+					p->rd.rgb = h * 0x00ffffff;
+					render.poly_count++;
+				}
 			}
 		}
 
-		namcos23_poly_entry *p = render.polys + render.poly_count;
-
-		// Should be unnecessary now that frustum clipping happens, but this still culls polys behind the camera
-		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.00001f);
-
-		// Project if you don't clip on the near plane
-		if(p->vertex_count >= 3) {
-			// Project the eye points
-			frustum_clip_vertex<float, 3> clipVerts[10];
-			for(int i=0; i<p->vertex_count; i++) {
-				// Construct a frustum clipping vert from the NDCoords
-				const float Z = p->pv[i].p[0];
-				clipVerts[i].x = p->pv[i].x / Z;
-				clipVerts[i].y = p->pv[i].y / Z;
-				clipVerts[i].z = Z;
-				clipVerts[i].w = Z;
-				clipVerts[i].p[0] = p->pv[i].p[1];
-				clipVerts[i].p[1] = p->pv[i].p[2];
-				clipVerts[i].p[2] = p->pv[i].p[3];
-			}
-
-			// Clip against all edges of the view frustum
-			int num_vertices = frustum_clip_all<float, 3>(clipVerts, p->vertex_count, clipVerts);
-
-			if (num_vertices != 0)
-			{
-				// Push the results back into the main vertices
-				for (int i=0; i < num_vertices; i++)
-				{
-					p->pv[i].x = clipVerts[i].x;
-					p->pv[i].y = clipVerts[i].y;
-					p->pv[i].p[0] = clipVerts[i].w;
-					p->pv[i].p[1] = clipVerts[i].p[0];
-					p->pv[i].p[2] = clipVerts[i].p[1];
-					p->pv[i].p[3] = clipVerts[i].p[2];
-				}
-				p->vertex_count = num_vertices;
-
-				// This is our poor-man's projection matrix
-				for(int i=0; i<p->vertex_count; i++)
-				{
-					render_project(p->pv[i]);
-
-					float w = p->pv[i].p[0];
-					p->pv[i].p[1] *= w;
-					p->pv[i].p[2] *= w;
-					p->pv[i].p[3] *= w;
-				}
-
-				// Compute an odd sorta'-Z thing that can situate the polygon wherever you want in Z-depth
-				p->zkey = 0.5f*(minz+maxz);
-				p->front = !(h & 0x00000001);
-				p->rd.machine = &machine();
-				p->rd.texture_lookup = render_texture_lookup_nocache_point;
-				p->rd.pens = m_palette->pens() + (color << 8);
-				render.poly_count++;
-			}
-		}
+		adr += ne*3;
 
 		if(type & 0x000010000)
 			break;
@@ -2613,6 +2736,7 @@ void namcos23_state::video_start()
 
 uint32_t namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
+	logerror("***SCREEN UPDATE***\n");
 	update_mixer();
 	bitmap.fill(m_c404.bgcolor, cliprect);
 
@@ -2725,7 +2849,7 @@ uint16_t namcos23_state::c417_r(offs_t offset, uint16_t mem_mask)
 		return m_ptrom[m_c417.pointrom_adr];
 	}
 
-	logerror("c417_r %x @ %04x (%08x, %08x)\n", offset, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C417_UNK, "%s: c417 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 	return 0;
 }
 
@@ -2749,11 +2873,11 @@ void namcos23_state::c417_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		COMBINE_DATA(m_c417.ram + m_c417.adr);
 		break;
 	case 7:
-		logerror("c417_w: ack IRQ 2 (%x)\n", data);
+		LOGMASKED(LOG_C417_ACK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
 		update_main_interrupts(m_main_irqcause & ~MAIN_C435_IRQ);
 		break;
 	default:
-		logerror("c417_w %x, %04x @ %04x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C417_UNK, "%s: c417 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 	}
 }
@@ -2808,7 +2932,7 @@ uint16_t namcos23_state::c412_r(offs_t offset, uint16_t mem_mask)
 		return m_c412.status_c;
 	}
 
-	logerror("c412_r %x @ %04x (%08x, %08x)\n", offset, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C412_UNK, "%s: c412 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 	return 0;
 }
 
@@ -2830,7 +2954,7 @@ void namcos23_state::c412_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		m_c412.adr += 2;
 		break;
 	default:
-		logerror("c412_w %x, %04x @ %04x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C412_UNK, "%s: c412 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 	}
 }
@@ -2875,7 +2999,7 @@ uint16_t namcos23_state::c421_r(offs_t offset, uint16_t mem_mask)
 		return m_c421.adr;
 	}
 
-	logerror("c421_r %x @ %04x (%08x, %08x)\n", offset, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 	return 0;
 }
 
@@ -2893,7 +3017,7 @@ void namcos23_state::c421_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		m_c421.adr = (data & mem_mask) | (m_c421.adr & (0xffffffff ^ mem_mask));
 		break;
 	default:
-		logerror("c421_w %x, %04x @ %04x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 	}
 }
@@ -2912,17 +3036,17 @@ void namcos23_state::c422_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 	switch(offset) {
 	case 1:
 		if(data == 0xfffb) {
-			logerror("c422_w: raise IRQ 3\n");
+			LOGMASKED(LOG_C422_IRQ, "%s: c422_w: raise IRQ 3\n", machine().describe_context());
 			update_main_interrupts(m_main_irqcause | MAIN_C422_IRQ);
 		}
 		else if(data == 0x000f) {
-			logerror("c422_w: ack IRQ 3\n");
+			LOGMASKED(LOG_C422_IRQ, "%s: c422_w: ack IRQ 3\n", machine().describe_context());
 			update_main_interrupts(m_main_irqcause & ~MAIN_C422_IRQ);
 		}
 		break;
 
 	default:
-		logerror("c422_w: %04x @ %x\n", data, offset);
+		LOGMASKED(LOG_C422_UNK, "%s: c422 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 
@@ -2964,7 +3088,7 @@ void namcos23_state::c361_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		break;
 
 	default:
-		logerror("c361_w %x, %04x @ %04x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C361_UNK, "%s: c361 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 	}
 }
@@ -2982,7 +3106,7 @@ uint16_t namcos23_state::c361_r(offs_t offset, uint16_t mem_mask)
 		return m_screen->vblank() ? 1 : 0;
 	}
 
-	logerror("c361_r %x @ %04x (%08x, %08x)\n", offset, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C361_UNK, "%s: c361 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 	return 0xffff;
 }
 
@@ -3014,11 +3138,11 @@ void namcos23_state::ctl_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 
 	case 6: // gmen wars spams this heavily with 0 prior to starting the GMEN board test
 		if(data != 0)
-			logerror("ctl_w %x, %04x @ %04x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+			LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 
 	default:
-		logerror("ctl_w %x, %04x @ %04x (%08x, %08x)\n", offset, data, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 		break;
 	}
 }
@@ -3036,7 +3160,7 @@ uint16_t namcos23_state::ctl_r(offs_t offset, uint16_t mem_mask)
 	}
 	}
 
-	logerror("ctl_r %x @ %04x (%08x, %08x)\n", offset, mem_mask, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
 	return 0xffff;
 }
 
@@ -3055,7 +3179,7 @@ void namcos23_state::mcuen_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 	case 5:
 		// boot/start the audio mcu
 		if(data) {
-			logerror("mcuen_w: booting H8/3002\n");
+			LOGMASKED(LOG_MCU, "%s: mcuen_w: booting H8/3002\n", machine().describe_context());
 
 			// Panic Park: writing 1 when it's already running means reboot?
 			if(m_subcpu_running) {
@@ -3065,7 +3189,7 @@ void namcos23_state::mcuen_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 			m_subcpu->set_input_line(INPUT_LINE_RESET, CLEAR_LINE);
 			m_subcpu_running = true;
 		} else {
-			logerror("mcuen_w: stopping H8/3002\n");
+			LOGMASKED(LOG_MCU, "%s: mcuen_w: stopping H8/3002\n", machine().describe_context());
 			m_subcpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
 			m_subcpu_running = false;
 		}
@@ -3173,7 +3297,7 @@ void namcos23_state::s23_map(address_map &map)
 
 uint32_t namcos23_state::gmen_trigger_sh2()
 {
-	logerror("gmen_trigger_sh2: booting SH-2\n");
+	LOGMASKED(LOG_SH2, "%s: gmen_trigger_sh2: booting SH-2\n", machine().describe_context());
 	m_gmen_sh2->set_input_line(INPUT_LINE_RESET, CLEAR_LINE);
 
 	return 0;
@@ -3239,7 +3363,7 @@ void namcos23_state::sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t
 	if((mem_mask == 0xffff) && (data == 0x3170)) {
 		update_main_interrupts(m_main_irqcause | MAIN_SUBCPU_IRQ);
 	} else {
-		logerror("Unknown write %x to sub_interrupt_main_w!\n", data);
+		LOGMASKED(LOG_SUBIRQ, "%s: Unknown write %x to sub_interrupt_main_w!\n", machine().describe_context(), data);
 	}
 }
 
