@@ -1456,6 +1456,7 @@ It can also be used with Final Furlong when wired correctly.
 #include "machine/nvram.h"
 #include "machine/rtc4543.h"
 #include "sound/c352.h"
+#include "video/rgbutil.h"
 #include "video/poly.h"
 #include "emupal.h"
 #include "screen.h"
@@ -1489,9 +1490,12 @@ It can also be used with Final Furlong when wired correctly.
 #define LOG_MCU				(1 << 23U)
 #define LOG_SH2				(1 << 24U)
 #define LOG_SUBIRQ			(1 << 25U)
-#define VERBOSE (LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO \
+#define LOG_SPRITES			(1 << 26U)
+#define LOG_ALL (LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO \
 				| LOG_MODEL_ERR | LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK \
-				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ)
+				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES)
+
+#define VERBOSE (LOG_ALL)
 #include "logmacro.h"
 
 namespace {
@@ -1523,7 +1527,7 @@ namespace {
 
 #define DUMP_MODELS 0
 
-enum { MODEL, FLUSH };
+enum { MODEL, DIRECT, SPRITE, FLUSH };
 
 enum { RENDER_MAX_ENTRIES = 1000, POLY_MAX_ENTRIES = 10000 };
 
@@ -1540,6 +1544,31 @@ struct namcos23_render_entry
 			int32_t v[3];
 			float scaling;
 		} model;
+
+		struct
+		{
+			uint16_t d[28];
+		} direct;
+
+		struct
+		{
+			int16_t xpos;
+			int16_t ypos;
+			int16_t xsize;
+			int16_t ysize;
+			uint8_t rows;
+			uint8_t cols;
+			uint8_t linktype;
+			uint8_t translucency;
+			uint16_t code;
+			uint8_t xflip;
+			uint8_t yflip;
+			uint8_t cz;
+			uint8_t prioverchar;
+			uint32_t zcoord;
+			uint8_t color;
+			uint8_t fade_enabled;
+		} sprite;
 	};
 };
 
@@ -1548,7 +1577,20 @@ struct namcos23_render_data
 	running_machine *machine;
 	uint32_t rgb;
 	const pen_t *pens;
-	bitmap_rgb32 *bitmap;
+	bitmap_argb32 *bitmap;
+	bool direct;
+	bool texture_enable;
+	bool light_enable;
+	bool sprite;
+	const uint8_t *sprite_source;
+	uint8_t sprite_alpha;
+	uint8_t sprite_line_modulo;
+	uint8_t sprite_xflip;
+	uint8_t sprite_yflip;
+	uint8_t sprite_fogfactor;
+	uint8_t sprite_fadefactor;
+	rgbaint_t sprite_fogcolor;
+	rgbaint_t sprite_fadecolor;
 	uint32_t (*texture_lookup)(running_machine &machine, const pen_t *pens, float x, float y);
 };
 
@@ -1558,8 +1600,9 @@ class namcos23_renderer : public poly_manager<float, namcos23_render_data, 4>
 {
 public:
 	namcos23_renderer(namcos23_state &state);
-	void render_flush(bitmap_rgb32& bitmap);
+	void render_flush(bitmap_argb32& bitmap);
 	void render_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
+	void render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
 	float* zBuffer() { return m_zBuffer; }
 
 private:
@@ -1584,6 +1627,7 @@ struct c417_t
 	uint16_t ram[0x10000];
 	uint16_t adr;
 	uint32_t pointrom_adr;
+	uint16_t unk;
 };
 
 struct c412_t
@@ -1618,8 +1662,21 @@ struct c361_t
 struct c404_t
 {
 	rgb_t bgcolor;
+	uint8_t fog_r;
+	uint8_t fog_g;
+	uint8_t fog_b;
+	uint8_t screen_fade_r;
+	uint8_t screen_fade_g;
+	uint8_t screen_fade_b;
+	uint8_t screen_fade_factor;
+	uint8_t mixer_flags;
 	uint16_t palbase;
 	uint8_t layer;
+	uint16_t spritedata_idx;
+	struct
+	{
+		uint16_t d[4];
+	} sprites[0x280];
 };
 
 struct render_t
@@ -1649,7 +1706,7 @@ public:
 		m_gammaram(*this, "gammaram"),
 		m_charram(*this, "charram"),
 		m_textram(*this, "textram"),
-		m_czattr(*this, "czattr"),
+		m_czattr(*this, "czattr", 0x10, ENDIANNESS_BIG),
 		m_gmen_sh2(*this, "gmen_sh2"),
 		m_gmen_sh2_shared(*this, "gmen_sh2_shared"),
 		m_gfxdecode(*this, "gfxdecode"),
@@ -1678,8 +1735,10 @@ public:
 	const uint16_t *m_tmlrom;
 	const uint8_t *m_tmhrom;
 	const uint8_t *m_texrom;
+	const uint8_t *m_sprrom;
 	uint32_t m_tileid_mask;
 	uint32_t m_tile_mask;
+	uint32_t m_sprite_mask;
 
 protected:
 	virtual void machine_start() override;
@@ -1693,6 +1752,7 @@ private:
 	void textram_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	void textchar_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	void paletteram_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
+	void sprites_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	uint16_t c417_r(offs_t offset, uint16_t mem_mask = ~0);
 	void c417_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	uint16_t c412_ram_r(offs_t offset);
@@ -1714,24 +1774,33 @@ private:
 	void sub_comm_w(offs_t offset, uint16_t data);
 	uint32_t c435_r(offs_t offset, uint32_t mem_mask = ~0);
 	void c435_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
+	uint32_t czattr_r(offs_t offset, uint32_t mem_mask = ~0);
+	void czattr_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	uint32_t gmen_trigger_sh2();
 	uint32_t sh2_shared_r(offs_t offset);
 	void sh2_shared_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	void sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	uint16_t sharedram_sub_r(offs_t offset);
 	void sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint8_t mcu_p8_r();
-	void mcu_p8_w(uint8_t data);
-	uint8_t mcu_pa_r();
-	void mcu_pa_w(uint8_t data);
-	uint8_t mcu_pb_r();
-	void mcu_pb_w(uint8_t data);
-	uint8_t mcu_p6_r();
-	void mcu_p6_w(uint8_t data);
-	uint8_t iob_p4_r();
-	void iob_p4_w(uint8_t data);
-	uint8_t iob_p6_r();
-	void iob_p6_w(uint8_t data);
+<<<<<<< HEAD
+	uint16_t mcu_p4_r();
+	void mcu_p4_w(uint16_t data);
+	uint16_t mcu_p6_r();
+	void mcu_p6_w(uint16_t data);
+	uint16_t mcu_p7_r();
+	void mcu_p7_w(uint16_t data);
+	uint16_t mcu_p8_r();
+	void mcu_p8_w(uint16_t data);
+	uint16_t mcu_p9_r();
+	void mcu_p9_w(uint16_t data);
+	uint16_t mcu_pa_r();
+	void mcu_pa_w(uint16_t data);
+	uint16_t mcu_pb_r();
+	void mcu_pb_w(uint16_t data);
+	uint16_t iob_p4_r();
+	void iob_p4_w(uint16_t data);
+	uint16_t iob_p6_r();
+	void iob_p6_w(uint16_t data);
 	uint8_t iob_gun_r(offs_t offset);
 	uint16_t iob_analog_r(offs_t offset);
 	void c435_state_pio_w(uint16_t data);
@@ -1767,13 +1836,17 @@ private:
 	void c435_flush();
 
 	void c435_pio_w(uint16_t data);
+	void c435_sprite_w(uint16_t data);
 	void c435_dma(address_space &space, uint32_t adr, uint32_t size);
 
 	void render_apply_transform(int32_t xi, int32_t yi, int32_t zi, const namcos23_render_entry *re, poly_vertex &pv);
 	void render_apply_matrot(int32_t xi, int32_t yi, int32_t zi, const namcos23_render_entry *re, int32_t &x, int32_t &y, int32_t &z);
 	void render_project(poly_vertex &pv);
 	void render_one_model(const namcos23_render_entry *re);
-	void render_run(bitmap_rgb32 &bitmap);
+	void render_direct_poly(const namcos23_render_entry *re);
+	void render_sprite(const namcos23_render_entry *re);
+	void render_sprite_tile(uint32_t code, uint32_t color, int xflip, int yflip, int sx, int sy, int xscale, int yscale, int cz_factor, int fade_enabled, uint8_t alpha);
+	void render_run();
 
 	void gmen_mips_map(address_map &map);
 	void gmen_sh2_map(address_map &map);
@@ -1823,9 +1896,17 @@ private:
 	bool m_subcpu_running;
 	uint32_t m_c435_address;
 	uint32_t m_c435_size;
+	uint16_t m_c435_direct_buf[28];
+	uint16_t m_c435_direct_vertex[6];
+	uint16_t m_c435_direct_vert_pos;
+	uint16_t m_c435_direct_buf_pos;
+	uint16_t m_c435_pio_mode;
+	uint16_t m_c435_sprite_target;
+	uint16_t m_c435_spritedata[0x10000];
 	const uint32_t *m_ptrom;
 	uint32_t m_ptrom_limit;
 	uint8_t m_mcu_unk;
+	bitmap_argb32 m_3d_bitmap;
 
 	int m_vblank_count;
 
@@ -2017,6 +2098,7 @@ int namcos23_state::c435_get_state_entry_size(uint16_t type)
 	switch(type) {
 	case 0x0001: return 1;
 	case 0x0009: return 19;
+	case 0x000a: return 45;
 	case 0x0042: return 41;
 	case 0x0046: return 13;
 	case 0x00c0: return 33;
@@ -2039,6 +2121,8 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if(m_c435_buffer[3] != 0xffff)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul with +2=%04x\n", machine().describe_context(), m_c435_buffer[3]);
+
+	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_matrix_mul (%04x): Matrix %d = Matrix %d * Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4]);
 
 	int16_t *t        = c435_getm(m_c435_buffer[1]);
 	int16_t m2[9];
@@ -2070,6 +2154,9 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		t[7] = int16_t((m1[6]*m2[1] + m1[7]*m2[4] + m1[8]*m2[7]) >> 14);
 		t[8] = int16_t((m1[6]*m2[2] + m1[7]*m2[5] + m1[8]*m2[8]) >> 14);
 	}
+	LOGMASKED(LOG_MATRIX_UNK, "result: %04x    %04x    %04x\n", (uint16_t)t[0], (uint16_t)t[1], (uint16_t)t[2]);
+	LOGMASKED(LOG_MATRIX_UNK, "        %04x    %04x    %04x\n", (uint16_t)t[3], (uint16_t)t[4], (uint16_t)t[5]);
+	LOGMASKED(LOG_MATRIX_UNK, "        %04x    %04x    %04x\n", (uint16_t)t[6], (uint16_t)t[7], (uint16_t)t[8]);
 }
 
 void namcos23_state::c435_matrix_vector_mul() // 0.1
@@ -2092,10 +2179,13 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		memcpy(vt, c435_getv(m_c435_buffer[3]), sizeof(int32_t) * 3);
 		memcpy(v, c435_getv(m_c435_buffer[4]), sizeof(int32_t) * 3);
 
+		LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_vector_mul (%04x): Vector %d = Matrix %d * Vector %d + Vector %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4], m_c435_buffer[3]);
 		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) + vt[0];
 		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) + vt[1];
 		t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) + vt[2];
+		LOGMASKED(LOG_MATRIX_UNK, "result: %08x %08x %08x\n", (uint32_t)t[0], (uint32_t)t[1], (uint32_t)t[2]);
 	} else {
+		LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_vector_mul (%04x): Vector %d = Matrix %d * Vector %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4]);
 		int32_t *t       = c435_getv(m_c435_buffer[1]);
 		const int16_t *m = c435_getm(m_c435_buffer[2]);
 		//const int32_t *v = c435_getv(m_c435_buffer[4]);
@@ -2105,6 +2195,7 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
 		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
 		t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+		LOGMASKED(LOG_MATRIX_UNK, "result: %08x %08x %08x\n", (uint32_t)t[0], (uint32_t)t[1], (uint32_t)t[2]);
 	}
 }
 
@@ -2117,6 +2208,8 @@ void namcos23_state::c435_matrix_set() // 0.4
 
 	if(m_c435_buffer[0] != 0x004a)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
+
+	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_set (%04x): Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1]);
 
 	int16_t *t = c435_getm(m_c435_buffer[1]);
 	for(int i=0; i<9; i++)
@@ -2132,6 +2225,8 @@ void namcos23_state::c435_vector_set() // 0.5
 	if(m_c435_buffer[0] != 0x057)
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_vector_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
+	LOGMASKED(LOG_MATRIX_UNK, "c435_vector_set (%04x): Vector2 %d\n", m_c435_buffer[0], m_c435_buffer[1]);
+
 	int32_t *t = c435_getv(m_c435_buffer[1]);
 	for(int i=0; i<3; i++)
 		t[i] = u32_to_s24((m_c435_buffer[2*i+2] << 16) | m_c435_buffer[2*i+3]);
@@ -2143,6 +2238,8 @@ void namcos23_state::c435_scaling_set() // 4.4
 		LOGMASKED(LOG_VEC_ERR, "%s: WARNING: c435_scaling_set with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xff);
 		return;
 	}
+
+	LOGMASKED(LOG_MATRIX_UNK, "c435_scaling_set (%04x): %04x\n", m_c435_buffer[0], m_c435_buffer[1]);
 	m_scaling = m_c435_buffer[1];
 }
 
@@ -2214,6 +2311,29 @@ void namcos23_state::c435_flush() // c
 	render.count[render.cur]++;
 }
 
+void namcos23_state::c435_sprite_w(uint16_t data)
+{
+	// Ignore the first two values
+	if (m_c435_buffer_pos >= 2)
+	{
+		if (m_c435_buffer_pos < 4)
+		{
+			LOGMASKED(LOG_SPRITES, "c435_sprite_w: Sprite data target address: %04x\n", data);
+			m_c435_sprite_target = data;
+		}
+		else
+		{
+			uint16_t buf_idx = m_c435_buffer_pos - 4;
+			LOGMASKED(LOG_SPRITES, "c435_sprite_w: Sprite data area %04x write: %04x\n", m_c435_sprite_target + buf_idx, data);
+			m_c435_spritedata[m_c435_sprite_target + buf_idx] = data;
+		}
+	}
+	else
+	{
+		LOGMASKED(LOG_SPRITES, "c435_sprite_w: Sprite data lead-off (ignored, %04x)\n", data);
+	}
+	m_c435_buffer_pos++;
+}
 
 void namcos23_state::c435_pio_w(uint16_t data)
 {
@@ -2271,18 +2391,41 @@ void namcos23_state::c435_dma(address_space &space, uint32_t adr, uint32_t size)
 {
 	adr &= 0x1fffffff;
 
-	for(int pos=0; pos < size; pos += 2)
-		c435_pio_w(space.read_word(adr+pos));
+	if (BIT(m_c435_pio_mode, 0))
+	{
+		for(int pos=0; pos < size; pos += 2)
+			c435_sprite_w(space.read_word(adr+pos));
+	}
+	else
+	{
+		for(int pos=0; pos < size; pos += 2)
+			c435_pio_w(space.read_word(adr+pos));
+	}
+}
+
+uint32_t namcos23_state::czattr_r(offs_t offset, uint32_t mem_mask)
+{
+	uint32_t *czattr = (uint32_t *)m_czattr.target();
+	LOGMASKED(LOG_C435_UNK, "%s: czattr[%d] read: %08x & %08x\n", machine().describe_context(), offset, czattr[offset], mem_mask);
+	return czattr[offset];
+}
+
+void namcos23_state::czattr_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask)
+{
+	uint32_t *czattr = (uint32_t *)m_czattr.target();
+	LOGMASKED(LOG_C435_UNK, "%s: czattr[%d] write: %08x & %08x\n", machine().describe_context(), offset, czattr[offset], mem_mask);
+	COMBINE_DATA(&czattr[offset]);
 }
 
 uint32_t namcos23_state::c435_r(offs_t offset, uint32_t mem_mask)
 {
 	switch(offset) {
 	case 0xa:
+		LOGMASKED(LOG_C435_UNK, "%s: c435 read busy flag %08x\n", machine().describe_context(), offset);
 		return 1; // Busy flag
 	}
 
-	LOGMASKED(LOG_C435_UNK, "%s: c435 unknown read %02x & %08x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C435_UNK, "%s: c435 unknown read %02x & %08x\n", machine().describe_context(), offset, mem_mask);
 	return 0;
 }
 
@@ -2290,26 +2433,80 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 {
 	switch(offset) {
 	case 0x7:
+		LOGMASKED(LOG_C435_UNK, "%s: c435 write address: %08x & %08x\n", machine().describe_context(), data, mem_mask);
 		COMBINE_DATA(&m_c435_address);
 		break;
 	case 0x8:
+		LOGMASKED(LOG_C435_UNK, "%s: c435 write size: %08x & %08x\n", machine().describe_context(), data, mem_mask);
 		COMBINE_DATA(&m_c435_size);
 		break;
 	case 0x9:
+		LOGMASKED(LOG_C435_UNK, "%s: c435 write DMA: %08x & %08x\n", machine().describe_context(), data, mem_mask);
 		if(data & 1)
 			c435_dma(space, m_c435_address, m_c435_size);
 		break;
+	case 0x17:
+		LOGMASKED(LOG_C435_UNK, "%s: PIO mode write: %08x & %08x (%s mode)\n", machine().describe_context(), data, mem_mask, BIT(data, 0) ? "sprite" : "command");
+		COMBINE_DATA(&m_c435_pio_mode);
+		break;
 	case 0x18:
+		LOGMASKED(LOG_C435_UNK, "%s: clear buffer pos: %08x & %08x\n", machine().describe_context(), data, mem_mask);
 		m_c435_buffer_pos = 0;
 		break;
 	default:
-		LOGMASKED(LOG_C435_UNK, "%s: c435 unknown write %02x = %08x & %08x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C435_UNK, "%s: c435 unknown write %02x = %08x & %08x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 }
 
 
 
+void namcos23_renderer::render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
+{
+	const namcos23_render_data& rd = object;
+
+	int y_index = extent.param[1].start - rd.sprite_yflip;
+	float x_index = extent.param[0].start - rd.sprite_xflip;
+	float dx = extent.param[0].dpdx;
+	const pen_t *pal = rd.pens;
+	//int prioverchar = extra.prioverchar;
+	int alphafactor = rd.sprite_alpha;
+	int fogfactor = 0xff - rd.sprite_fogfactor;
+	int fadefactor = 0xff - rd.sprite_fadefactor;
+	rgbaint_t fogcolor(rd.sprite_fogcolor);
+	rgbaint_t fadecolor(rd.sprite_fadecolor);
+	uint8_t *const source = (u8 *)rd.sprite_source + y_index * rd.sprite_line_modulo;
+	uint32_t *const dest = &object.bitmap->pix(scanline);
+	//u8 *const primap = &extra.primap->pix(scanline);
+
+	for (int x = extent.startx; x < extent.stopx; x++)
+	{
+		int pen = source[(int)x_index];
+		if (pen != 0xff)
+		{
+			rgbaint_t rgb(pal[pen]);
+
+			if (fogfactor != 0xff)
+			{
+				rgb.blend(fogcolor, fogfactor);
+			}
+
+			if (fadefactor != 0xff)
+			{
+				rgb.blend(fadecolor, fadefactor);
+			}
+
+			if (alphafactor != 0xff)
+			{
+				rgb.blend(rgbaint_t(dest[x]), alphafactor);
+			}
+
+			dest[x] = 0xff000000 | rgb.to_rgba();
+			//primap[x] = (primap[x] & ~1) | prioverchar;
+		}
+		x_index += dx;
+	}
+}
 
 void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
 {
@@ -2328,18 +2525,24 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 
 	for(int x = extent.startx; x < extent.stopx; x++) {
 		const float z = w ? 1/w : 0;
-		const uint32_t tex_rgb = rd.texture_lookup(*rd.machine, rd.pens, u*z, v*z);
-		const uint8_t tr(tex_rgb >> 16);
-		const uint8_t tg(tex_rgb >> 8);
-		const uint8_t tb(tex_rgb);
-		const uint8_t vr(rd.rgb >> 16);
-		const uint8_t vg(rd.rgb >> 8);
-		const uint8_t vb(rd.rgb);
-		const uint8_t r = (uint8_t)((vr / 255.f) * tr);
-		const uint8_t g = (uint8_t)((vg / 255.f) * tg);
-		const uint8_t b = (uint8_t)((vb / 255.f) * tb);
-		float ll = l*z;
-		*img = 0xff000000 | (light(r, ll) << 16) | (light(g, ll) << 8) | light(b, ll);
+		uint8_t vr(rd.rgb >> 16);
+		uint8_t vg(rd.rgb >> 8);
+		uint8_t vb(rd.rgb);
+
+		const uint32_t tex_rgb = rd.texture_enable ? rd.texture_lookup(*rd.machine, rd.pens, u*z, v*z) : rd.pens[0];
+		const uint8_t tr = tex_rgb >> 16;
+		const uint8_t tg = tex_rgb >> 8;
+		const uint8_t tb = tex_rgb;
+		vr = (uint8_t)((vr / 255.f) * tr);
+		vg = (uint8_t)((vg / 255.f) * tg);
+		vb = (uint8_t)((vb / 255.f) * tb);
+
+		if (rd.light_enable) {
+			float ll = l*z;
+			*img = 0xff000000 | (light(vr, ll) << 16) | (light(vg, ll) << 8) | light(vb, ll);
+		} else {
+			*img = 0xff000000 | (vr << 16) | (vg << 8) | vb;
+		}
 
 		w += dw;
 		u += du;
@@ -2400,6 +2603,140 @@ static uint32_t render_texture_lookup_nocache_point(running_machine &machine, co
 	return pens[color];
 }
 
+void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
+{
+	render_t &render = m_render;
+
+	static const int indices[2][3] = { { 0, 1, 2 }, { 0, 2, 3 } };
+	float tbase = (re->direct.d[2] & 0x000f) << 12;
+	for (int i = 0; i < 2; i++) {
+		namcos23_poly_entry *p = render.polys + render.poly_count;
+		p->vertex_count = 3;
+
+		bool has_texture = false;
+		for (int j = 0; j < 3; j++) {
+			p->pv[j].x = (int16_t)re->direct.d[4 + indices[i][j] * 6 + 2] + 320;
+			p->pv[j].y = (int16_t)re->direct.d[4 + indices[i][j] * 6 + 3] + 240;
+			p->pv[j].p[0] = 1.0f;
+
+			const uint16_t u = re->direct.d[4 + indices[i][j] * 6 + 0];
+			const uint16_t v = re->direct.d[4 + indices[i][j] * 6 + 1];
+			p->pv[j].p[1] = (u >> 4) + 0.5;
+			p->pv[j].p[2] = (v >> 4) + 0.5 + tbase;
+			has_texture = has_texture || u != 0 || v != 0;
+		}
+
+		p->zkey = 0.5f;
+		p->front = true;
+		p->rd.machine = &machine();
+		p->rd.texture_lookup = render_texture_lookup_nocache_point;
+		p->rd.pens = m_palette->pens() + (re->direct.d[2] & 0x7f00);
+		p->rd.texture_enable = has_texture;
+		p->rd.light_enable = false;
+		p->rd.direct = true;
+		p->rd.sprite = false;
+		p->rd.rgb = 0x00ffffff;
+		render.poly_count++;
+	}
+}
+
+void namcos23_state::render_sprite(const namcos23_render_entry *re)
+{
+	int offset = 0;
+
+	for (int row = 0; row < re->sprite.rows; row++)
+	{
+		for (int col = 0; col < re->sprite.cols; col++)
+		{
+			uint32_t code = re->sprite.code;
+			//if (re->sprite.linktype == 0xff)
+				code += offset;
+			//else
+			//	code += nthword(&m_state.m_spriteram[0x800/4], offset + node->data.sprite.linktype*4);
+
+			render_sprite_tile(code,
+				re->sprite.color,
+				re->sprite.xflip,
+				re->sprite.yflip,
+				re->sprite.xpos + col * re->sprite.xsize,
+				re->sprite.ypos + row * re->sprite.ysize,
+				(re->sprite.xsize << 16) / 32,
+				(re->sprite.ysize << 16) / 32,
+				re->sprite.cz,
+				//node->data.sprite.prioverchar,
+				re->sprite.fade_enabled,
+				0xff - re->sprite.translucency);
+			offset++;
+		}
+	}
+}
+
+void namcos23_state::render_sprite_tile(uint32_t code, uint32_t color, int xflip, int yflip,
+	int sx, int sy, int xscale, int yscale, int cz_factor, int fade_enabled, uint8_t alpha)
+{
+	render_t &render = m_render;
+
+	gfx_element *gfx = m_gfxdecode->gfx(1);
+	int sprite_screen_height = (yscale * gfx->height() + 0x8000) >> 16;
+	int sprite_screen_width = (xscale * gfx->width() + 0x8000) >> 16;
+	if (sprite_screen_width && sprite_screen_height)
+	{
+		float fsx = sx;
+		float fsy = sy;
+		float fwidth = gfx->width();
+		float fheight = gfx->height();
+		float fsw = sprite_screen_width;
+		float fsh = sprite_screen_height;
+
+		namcos23_poly_entry *p = render.polys + render.poly_count;
+		p->vertex_count = 4;
+
+		p->pv[0].x = fsx;
+		p->pv[0].y = fsy;
+		p->pv[0].p[0] = 0;
+		p->pv[0].p[1] = 0;
+		p->pv[1].x = fsx + fsw;
+		p->pv[1].y = fsy;
+		p->pv[1].p[0] = fwidth;
+		p->pv[1].p[1] = 0;
+		p->pv[2].x = fsx + fsw;
+		p->pv[2].y = fsy + fsh;
+		p->pv[2].p[0] = fwidth;
+		p->pv[2].p[1] = fheight;
+		p->pv[3].x = fsx;
+		p->pv[3].y = fsy + fsh;
+		p->pv[3].p[0] = 0;
+		p->pv[3].p[1] = fheight;
+
+		p->rd.pens = m_palette->pens() + gfx->granularity() * (color & 0x7f);
+		p->zkey = 0.5f;
+		p->front = true;
+		p->rd.machine = &machine();
+		p->rd.sprite = true;
+		p->rd.sprite_source = gfx->get_data(code % gfx->elements());
+		p->rd.sprite_alpha = alpha;
+		p->rd.sprite_line_modulo = gfx->rowbytes();
+		p->rd.sprite_xflip = xflip;
+		p->rd.sprite_yflip = yflip;
+
+		// global fade
+		if (m_c404.mixer_flags & 2 || fade_enabled)
+		{
+			p->rd.sprite_fadefactor = m_c404.screen_fade_factor;
+			p->rd.sprite_fadecolor.set(0, m_c404.screen_fade_r, m_c404.screen_fade_g, m_c404.screen_fade_b);
+		}
+
+		// sprite fog
+		if (~color & 0x80 && cz_factor > 0)
+		{
+			p->rd.sprite_fogfactor = cz_factor;
+			p->rd.sprite_fogcolor.set(0, m_c404.fog_r, m_c404.fog_g, m_c404.fog_b);
+		}
+
+		render.poly_count++;
+	}
+}
+
 void namcos23_state::render_one_model(const namcos23_render_entry *re)
 {
 	render_t &render = m_render;
@@ -2448,14 +2785,16 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			adr += ne;
 		}
 		else
+		{
 			light = m_ptrom[adr++];
+		}
 
 		float minz = FLT_MAX;
 		float maxz = FLT_MIN;
 
 		static const int indices[2][3] = { { 0, 1, 2 }, { 0, 2, 3 } };
-		if (ne != 3 && ne != 4)
-			logerror("ne: %d\n", ne);
+		//if (ne != 3 && ne != 4)
+			//logerror("ne: %d\n", ne);
 		for(int i=0; i<ne - 2; i++) {
 			int vertex_count = 0;
 			for(int j=0; j<3; j++, vertex_count++) {
@@ -2484,16 +2823,16 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 
 				switch(lmode) {
 				case 0:
-					pv[j].p[3] = ((light >> (8*(3-(i+j)))) & 0xff) / 64.0;
+					pv[j].p[3] = ((light >> (8*(3-indices[i][j]))) & 0xff) / 64.0;
 					break;
 				case 1:
-					pv[j].p[3] = ((light >> (8*(3-(i+j)))) & 0xff) / 64.0;
+					pv[j].p[3] = ((light >> (8*(3-indices[i][j]))) & 0xff) / 64.0;
 					break;
 				case 2:
 					pv[j].p[3] = 1.0;
 					break;
 				case 3: {
-					uint32_t norm = m_ptrom[extptr+i+j];
+					uint32_t norm = m_ptrom[extptr+indices[i][j]];
 					int32_t nx = u32_to_s10(norm >> 20);
 					int32_t ny = u32_to_s10(norm >> 10);
 					int32_t nz = u32_to_s10(norm);
@@ -2513,6 +2852,7 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 
 			// Should be unnecessary now that frustum clipping happens, but this still culls polys behind the camera
 			p->vertex_count = render.polymgr->zclip_if_less<4>(3, pv, p->pv, 0.00001f);
+			//logerror("vertex count after z-clipping: %d\n", p->vertex_count);
 			//memcpy(p->pv, pv, sizeof(poly_vertex) * vertex_count);
 			//p->vertex_count = vertex_count;
 
@@ -2534,6 +2874,7 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 
 				// Clip against all edges of the view frustum
 				int num_vertices = frustum_clip_all<float, 3>(clipVerts, p->vertex_count, clipVerts);
+				//logerror("vertex count after frustum clipping: %d\n", num_vertices);
 
 				if (num_vertices != 0)
 				{
@@ -2549,17 +2890,6 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 					}
 					p->vertex_count = num_vertices;
 
-					// This is our poor-man's projection matrix
-					for(int j=0; j<p->vertex_count; j++)
-					{
-						render_project(p->pv[j]);
-
-						float w = p->pv[j].p[0];
-						p->pv[j].p[1] *= w;
-						p->pv[j].p[2] *= w;
-						p->pv[j].p[3] *= w;
-					}
-
 					const float x10 = p->pv[1].x - p->pv[0].x;
 					const float x20 = p->pv[2].x - p->pv[0].x;
 					const float y10 = p->pv[1].y - p->pv[0].y;
@@ -2571,9 +2901,21 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 					const float nz = x10 * y20 - y10 * x20;
 					const float nl = sqrtf(nx * nx + ny * ny + nz * nz);
 					const float nzn = nz / nl;
-					if (nzn >= 0)
+					if (nzn < 0)
 					{
+						//logerror("back-facing, ignoring\n");
 						continue;
+					}
+
+					// This is our poor-man's projection matrix
+					for(int j=0; j<p->vertex_count; j++)
+					{
+						render_project(p->pv[j]);
+
+						float w = p->pv[j].p[0];
+						p->pv[j].p[1] *= w;
+						p->pv[j].p[2] *= w;
+						p->pv[j].p[3] *= w;
 					}
 
 					// Compute an odd sorta'-Z thing that can situate the polygon wherever you want in Z-depth
@@ -2583,7 +2925,11 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 					p->rd.machine = &machine();
 					p->rd.texture_lookup = render_texture_lookup_nocache_point;
 					p->rd.pens = m_palette->pens() + (color << 8);
-					p->rd.rgb = h * 0x00ffffff;
+					p->rd.rgb = 0x00ffffff;
+					p->rd.direct = false;
+					p->rd.sprite = false;
+					p->rd.texture_enable = true;
+					p->rd.light_enable = true;
 					render.poly_count++;
 				}
 			}
@@ -2604,10 +2950,10 @@ static int render_poly_compare(const void *i1, const void *i2)
 	if(p1->front != p2->front)
 		return p1->front ? 1 : -1;
 
-	return p1->zkey < p2->zkey ? 1 : p1->zkey > p2->zkey ? -1 : 0;
+	return p1->zkey < p2->zkey ? -1 : p1->zkey > p2->zkey ? 1 : 0;
 }
 
-void namcos23_renderer::render_flush(bitmap_rgb32& bitmap)
+void namcos23_renderer::render_flush(bitmap_argb32& bitmap)
 {
 	render_t &render = m_state.m_render;
 
@@ -2628,7 +2974,9 @@ void namcos23_renderer::render_flush(bitmap_rgb32& bitmap)
 		extra.bitmap = &bitmap;
 
 		// We should probably split the polygons into triangles ourselves to insure everything is being rendered properly
-		if (p->vertex_count == 3)
+		if (p->rd.sprite)
+			render_triangle_fan<2>(scissor, render_delegate(&namcos23_renderer::render_sprite_scanline, this), 4, p->pv);
+		else if (p->vertex_count == 3)
 			render_triangle<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), p->pv[0], p->pv[1], p->pv[2]);
 		else if (p->vertex_count == 4)
 			render_polygon<4, 4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), p->pv);
@@ -2640,9 +2988,70 @@ void namcos23_renderer::render_flush(bitmap_rgb32& bitmap)
 	render.poly_count = 0;
 }
 
-void namcos23_state::render_run(bitmap_rgb32 &bitmap)
+void namcos23_state::render_run()
 {
 	render_t &render = m_render;
+
+	uint16_t sprite_count = (m_c435_spritedata[4] == 0xffff ? 0 : (m_c435_spritedata[4] + 1));
+	for (int i = 0; i < sprite_count; i++) {
+		namcos23_render_entry *re = render.entries[!render.cur] + render.count[!render.cur];
+
+		uint16_t *data = &m_c435_spritedata[0x4000 + i * 16];
+		re->type = SPRITE;
+		re->sprite.xpos = (int16_t)data[0] - (int16_t)m_c435_spritedata[20];
+		re->sprite.ypos = (int16_t)data[2] - (int16_t)m_c435_spritedata[24];
+		re->sprite.xsize = (int16_t)data[4];
+		re->sprite.ysize = (int16_t)data[6];
+		re->sprite.rows = data[10] & 7;
+		re->sprite.cols = (data[10] >> 4) & 7;
+		re->sprite.linktype = data[8] & 0xff;
+		re->sprite.translucency = data[14] >> 8;
+		re->sprite.code = data[12];
+		re->sprite.xflip = BIT(data[10], 7);
+		re->sprite.yflip = BIT(data[10], 3);
+		re->sprite.zcoord = ((m_c404.sprites[i].d[0] << 16) | m_c404.sprites[i].d[1]) & 0x00ffffff;
+		re->sprite.color = m_c404.sprites[i].d[2] & 0xff;
+		re->sprite.cz = m_c404.sprites[i].d[3] & 0xff;
+		re->sprite.fade_enabled = BIT(m_c404.sprites[i].d[3], 15);
+		re->sprite.prioverchar = (re->sprite.cz == 0xfe) ? 1 : 0;
+
+		if (re->sprite.rows == 0)
+			re->sprite.rows = 8;
+		if (re->sprite.cols == 0)
+			re->sprite.cols = 8;
+
+		// right justify
+		if (BIT(data[10], 9))
+			re->sprite.xpos -= re->sprite.xsize * re->sprite.cols - 1;
+
+		// bottom justify
+		if (BIT(data[10], 8))
+			re->sprite.ypos -= re->sprite.ysize * re->sprite.rows - 1;
+
+		if (re->sprite.yflip)
+		{
+			re->sprite.ypos += re->sprite.ysize * re->sprite.rows - 1;
+			re->sprite.ysize = -re->sprite.ysize;
+		}
+
+		if (re->sprite.xflip)
+		{
+			re->sprite.xpos += re->sprite.xsize * re->sprite.cols - 1;
+			re->sprite.xsize = -re->sprite.xsize;
+		}
+
+		if (re->sprite.xsize && re->sprite.ysize)
+		{
+			render.count[!render.cur]++;
+		}
+	}
+
+	if (sprite_count > 0) {
+		namcos23_render_entry *re = render.entries[!render.cur] + render.count[!render.cur];
+		re->type = FLUSH;
+		render.count[!render.cur]++;
+	}
+
 	const namcos23_render_entry *re = render.entries[!render.cur];
 
 	render.poly_count = 0;
@@ -2651,19 +3060,40 @@ void namcos23_state::render_run(bitmap_rgb32 &bitmap)
 		case MODEL:
 			render_one_model(re);
 			break;
+		case DIRECT:
+			render_direct_poly(re);
+			break;
+		case SPRITE:
+			render_sprite(re);
+			break;
 		case FLUSH:
-			render.polymgr->render_flush(bitmap);
+			render.polymgr->render_flush(m_3d_bitmap);
 			break;
 		}
 		re++;
 	}
-	render.polymgr->render_flush(bitmap);
+	render.polymgr->render_flush(m_3d_bitmap);
 	render.polymgr->wait();
 }
 
 
 
-// C404 (gamma/palette)
+// C404 (gamma/palette/sprites)
+
+void namcos23_state::sprites_w(offs_t offset, uint16_t data, uint16_t mem_mask)
+{
+	switch (offset)
+	{
+		case 0:
+			m_c404.spritedata_idx = data >> 1;
+			break;
+		case 1:
+			m_c404.sprites[(m_c404.spritedata_idx >> 2) % 0x280].d[m_c404.spritedata_idx & 3] = data;
+			m_c404.spritedata_idx++;
+			break;
+	}
+	LOGMASKED(LOG_SPRITES, "%s: sprites_w: %d = %04x\n", machine().describe_context(), offset, data);
+}
 
 void namcos23_state::update_mixer()
 {
@@ -2673,9 +3103,17 @@ void namcos23_state::update_mixer()
 	// 0a - background color blue
 	// 1b - text layer palette base
 	// 1f - layer enable (d0: polygons, d1: sprites, d2: text)
-	m_c404.bgcolor = rgb_t(nthword(m_gammaram,0x08), nthword(m_gammaram,0x09), nthword(m_gammaram,0x0a));
-	m_c404.palbase = nthword(m_gammaram, 0x1b) << 8 & 0x7f00;
-	m_c404.layer = nthword(m_gammaram, 0x1f) & 0xff;
+	m_c404.fog_r              = nthword(m_gammaram, 0x05);
+	m_c404.fog_g              = nthword(m_gammaram, 0x06);
+	m_c404.fog_b              = nthword(m_gammaram, 0x07);
+	m_c404.bgcolor            = rgb_t(nthword(m_gammaram, 0x08), nthword(m_gammaram, 0x09), nthword(m_gammaram, 0x0a));
+	m_c404.screen_fade_r      = nthword(m_gammaram, 0x16);
+	m_c404.screen_fade_g      = nthword(m_gammaram, 0x17);
+	m_c404.screen_fade_b      = nthword(m_gammaram, 0x18);
+	m_c404.screen_fade_factor = nthword(m_gammaram, 0x19);
+	m_c404.mixer_flags        = nthword(m_gammaram, 0x1a);
+	m_c404.palbase            = nthword(m_gammaram, 0x1b) << 8 & 0x7f00;
+	m_c404.layer              = nthword(m_gammaram, 0x1f) & 0xff;
 }
 
 void namcos23_state::paletteram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
@@ -2710,6 +3148,7 @@ TILE_GET_INFO_MEMBER(namcos23_state::TextTilemapGetInfo)
 void namcos23_state::textram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 {
 	COMBINE_DATA( &m_textram[offset] );
+	if (machine().input().code_pressed(KEYCODE_K)) LOGMASKED(LOG_SUBIRQ, "textram_w[%04x] = %08x & %08x\n", offset*2, data, mem_mask);
 	m_bgtilemap->mark_tile_dirty(offset*2);
 	m_bgtilemap->mark_tile_dirty((offset*2)+1);
 }
@@ -2717,6 +3156,7 @@ void namcos23_state::textram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 void namcos23_state::textchar_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 {
 	COMBINE_DATA(&m_charram[offset]);
+	if (machine().input().code_pressed(KEYCODE_K)) LOGMASKED(LOG_SUBIRQ, "charram_w[%05x] = %08x & %08x\n", offset*2, data, mem_mask);
 	m_gfxdecode->gfx(0)->mark_dirty(offset/32);
 }
 
@@ -2740,7 +3180,16 @@ uint32_t namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitm
 	update_mixer();
 	bitmap.fill(m_c404.bgcolor, cliprect);
 
-	render_run(bitmap);
+	for (int y = cliprect.min_y; y <= cliprect.max_y; y++) {
+		uint32_t *src = &m_3d_bitmap.pix(y, cliprect.min_x);
+		uint32_t *dst = &bitmap.pix(y, cliprect.min_x);
+		for (int x = cliprect.min_x; x <= cliprect.max_x; x++, src++, dst++) {
+			uint32_t srcpix = *src;
+			if (srcpix & 0xff000000) {
+				*dst = srcpix;
+			}
+		}
+	}
 
 	m_bgtilemap->set_palette_offset(m_c404.palbase);
 	if(m_c404.layer & 4)
@@ -2766,24 +3215,37 @@ uint32_t namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitm
 
 void namcos23_state::update_main_interrupts(uint32_t cause)
 {
+	uint32_t old = m_main_irqcause;
 	uint32_t changed = cause ^ m_main_irqcause;
 	m_main_irqcause = cause;
 
 	// level 2: vblank
 	if(changed & MAIN_VBLANK_IRQ)
+	{
+		if (m_main_irqcause & MAIN_VBLANK_IRQ) LOGMASKED(LOG_C417_UNK, "Raising IRQ0, main VBL\n");
+		else if (old & MAIN_VBLANK_IRQ) LOGMASKED(LOG_C417_UNK, "Lowering IRQ0, main VBL\n");
 		m_maincpu->set_input_line(MIPS3_IRQ0, (cause & MAIN_VBLANK_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
 
 	// level 3: C361/subcpu
 	if(changed & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
+	{
+		if (m_main_irqcause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_UNK, "Raising IRQ1, C361(%d) || SubCPU(%d)\n", (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
+		else if (old & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_UNK, "Lowering IRQ1\n");
 		m_maincpu->set_input_line(MIPS3_IRQ1, (cause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) ? ASSERT_LINE : CLEAR_LINE);
+	}
 
 	// level 4: C435
 	if(changed & MAIN_C435_IRQ)
+	{
 		m_maincpu->set_input_line(MIPS3_IRQ2, (cause & MAIN_C435_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
 
 	// level 5: C422
 	if(changed & MAIN_C422_IRQ)
+	{
 		m_maincpu->set_input_line(MIPS3_IRQ3, (cause & MAIN_C422_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
 
 	// crszone(sys23ev2) has a different configuration, are they hardwired or configured by software? (where?)..
 	// level 3: C422/subcpu
@@ -2799,6 +3261,8 @@ INTERRUPT_GEN_MEMBER(namcos23_state::interrupt)
 		update_main_interrupts(m_main_irqcause | MAIN_VBLANK_IRQ);
 	}
 
+	m_3d_bitmap.fill(0);
+	render_run();
 	m_render.cur = !m_render.cur;
 	m_render.count[m_render.cur] = 0;
 }
@@ -2809,6 +3273,20 @@ void namcos23_state::sub_irq(int state)
 	m_adc->adtrg_w(state);
 	m_sub_port8 = (m_sub_port8 & ~0x02) | (~state << 1 & 2); // IRQ1 pin
 	m_sub_portb = (m_sub_portb & 0x7f) | (state << 7);
+
+	/*if (state)
+	{
+		m_ctl_vbl_active = true;
+		update_main_interrupts(m_main_irqcause | MAIN_VBLANK_IRQ);
+
+		m_render.cur = !m_render.cur;
+		m_render.count[m_render.cur] = 0;
+	}
+	else
+	{
+		m_ctl_vbl_active = false;
+		update_main_interrupts(m_main_irqcause &~ MAIN_VBLANK_IRQ);
+	}*/
 }
 
 
@@ -2832,24 +3310,37 @@ uint16_t namcos23_state::c417_r(offs_t offset, uint16_t mem_mask)
 	   0:  xcpreq
 	*/
 	case 0:
-		return 0x8e | (m_screen->vblank() ? 0x0000 : 0x8000);
+	{
+		uint16_t data = 0x008e | (m_screen->vblank() ? 0x8000 : 0x0000);
+		//LOGMASKED(LOG_C417_UNK, "%s: c417 status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+		return data;
+	}
 	case 1:
+		LOGMASKED(LOG_C417_UNK, "%s: c417 address read: %04x & %04x\n", machine().describe_context(), m_c417.adr, mem_mask);
 		return m_c417.adr;
 	case 4:
-		//logerror("c417_r %04x = %04x (%08x, %08x)\n", c417.adr, c417.ram[c417.adr], m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C417_UNK, "%s: c417 ram[%04x] read: %04x & %04x\n", machine().describe_context(), m_c417.adr, m_c417.ram[m_c417.adr], mem_mask);
 		return m_c417.ram[m_c417.adr];
 	case 5:
 		if(m_c417.pointrom_adr >= m_ptrom_limit)
+		{
+			LOGMASKED(LOG_C417_UNK, "%s: c417 point rom (over-limit) msw read: %04x & %04x\n", machine().describe_context(), 0xffff, mem_mask);
 			return 0xffff;
+		}
+		LOGMASKED(LOG_C417_UNK, "%s: c417 point rom[%06x] msw read: %04x & %04x\n", machine().describe_context(), m_c417.pointrom_adr, m_ptrom[m_c417.pointrom_adr] >> 16, mem_mask);
 		return m_ptrom[m_c417.pointrom_adr] >> 16;
 	case 6:
 		if(m_c417.pointrom_adr >= m_ptrom_limit)
+		{
+			LOGMASKED(LOG_C417_UNK, "%s: c417 point rom (over-limit) lsw read: %04x & %04x\n", machine().describe_context(), 0xffff, mem_mask);
 			return 0xffff;
+		}
 		// TODO: rapid river wants auto-inc in some way here (NGs point ROM self test otherwise)
+		LOGMASKED(LOG_C417_UNK, "%s: c417 point rom[%06x] lsw read: %04x & %04x\n", machine().describe_context(), m_c417.pointrom_adr, (uint16_t)m_ptrom[m_c417.pointrom_adr], mem_mask);
 		return m_ptrom[m_c417.pointrom_adr];
 	}
 
-	LOGMASKED(LOG_C417_UNK, "%s: c417 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C417_UNK, "%s: c417 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
 	return 0;
 }
 
@@ -2860,24 +3351,30 @@ void namcos23_state::c417_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		c435_pio_w(data);
 		break;
 	case 1:
+		LOGMASKED(LOG_C417_UNK, "%s: c417_w: address set: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		COMBINE_DATA(&m_c417.adr);
 		break;
 	case 2:
 		m_c417.pointrom_adr = (m_c417.pointrom_adr << 16) | data;
+		LOGMASKED(LOG_C417_UNK, "%s: c417_w: pointrom lsw set: %04x & %04x (now %08x)\n", machine().describe_context(), data, mem_mask, m_c417.pointrom_adr);
 		break;
 	case 3:
+		LOGMASKED(LOG_C417_UNK, "%s: c417_w: pointrom address clear: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		m_c417.pointrom_adr = 0;
 		break;
 	case 4:
-		//logerror("c417_w %04x = %04x (%08x, %08x)\n", m_c417.adr, data, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+		//LOGMASKED(LOG_C417_UNK, "%s: c417_w %04x = %04x\n", machine().describe_context(), m_c417.adr, data);
+		//LOGMASKED(LOG_C417_UNK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
+		LOGMASKED(LOG_C417_UNK, "%s: c417_w: RAM[%04x] = %04x & %04x\n", machine().describe_context(), m_c417.adr, data, mem_mask);
 		COMBINE_DATA(m_c417.ram + m_c417.adr);
 		break;
 	case 7:
 		LOGMASKED(LOG_C417_ACK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
+		COMBINE_DATA(&m_c417.unk);
 		update_main_interrupts(m_main_irqcause & ~MAIN_C435_IRQ);
 		break;
 	default:
-		LOGMASKED(LOG_C417_UNK, "%s: c417 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C417_UNK, "%s: c417 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 }
@@ -2932,7 +3429,7 @@ uint16_t namcos23_state::c412_r(offs_t offset, uint16_t mem_mask)
 		return m_c412.status_c;
 	}
 
-	LOGMASKED(LOG_C412_UNK, "%s: c412 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C412_UNK, "%s: c412 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
 	return 0;
 }
 
@@ -2954,7 +3451,7 @@ void namcos23_state::c412_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		m_c412.adr += 2;
 		break;
 	default:
-		LOGMASKED(LOG_C412_UNK, "%s: c412 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C412_UNK, "%s: c412 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 }
@@ -2999,7 +3496,7 @@ uint16_t namcos23_state::c421_r(offs_t offset, uint16_t mem_mask)
 		return m_c421.adr;
 	}
 
-	LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
 	return 0;
 }
 
@@ -3017,7 +3514,7 @@ void namcos23_state::c421_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		m_c421.adr = (data & mem_mask) | (m_c421.adr & (0xffffffff ^ mem_mask));
 		break;
 	default:
-		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 }
@@ -3028,6 +3525,7 @@ void namcos23_state::c421_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 
 uint16_t namcos23_state::c422_r(offs_t offset)
 {
+	LOGMASKED(LOG_C422_UNK, "%s: c422 reg[%d] read: %04x\n", machine().describe_context(), offset, m_c422.regs[offset]);
 	return m_c422.regs[offset];
 }
 
@@ -3060,35 +3558,51 @@ void namcos23_state::c422_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 TIMER_CALLBACK_MEMBER(namcos23_state::c361_timer_cb)
 {
 	if(m_c361.scanline != 0x1ff) {
+		LOGMASKED(LOG_C361_UNK, "c361 timer callback, scanline %d\n", m_c361.scanline);
 		// need to do a partial update here, but doesn't work properly yet
-		//m_screen->update_partial(m_screen->vpos());
+		m_screen->update_partial(m_screen->vpos());
 		update_main_interrupts(m_main_irqcause | MAIN_C361_IRQ);
 
 		// TC2 indicates it's probably one-shot since it resets it each VBL...
 		//c361.timer->adjust(m_screen->time_until_pos(c361.scanline));
 	}
 	else
+	{
+		LOGMASKED(LOG_C361_UNK, "c361 timer callback, clearing irq\n", m_c361.scanline);
 		update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
+	}
 }
 
 void namcos23_state::c361_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
 	switch(offset) {
 	case 0:
+		LOGMASKED(LOG_C361_UNK, "%s: c361 set scroll X, %04x (scanline %d)\n", machine().describe_context(), data, m_screen->vpos());
 		m_bgtilemap->set_scrollx(0, data&0xfff);
 		break;
 
 	case 1:
+		LOGMASKED(LOG_C361_UNK, "%s: c361 set scroll Y, %04x (scanline %d)\n", machine().describe_context(), data, m_screen->vpos());
 		m_bgtilemap->set_scrolly(0, data&0xfff);
 		break;
 
 	case 4: // interrupt control
-		m_c361.scanline = data & 0x1ff;
-		m_c361.timer->adjust(m_screen->time_until_pos(m_c361.scanline));
+		LOGMASKED(LOG_C361_UNK, "%s: c361 scanline write, %04x\n", machine().describe_context(), data);
+		if (data != 0x1ff)
+		{
+			m_c361.scanline = data & 0x1ff;
+			m_c361.timer->adjust(m_screen->time_until_pos(m_c361.scanline));
+		}
+		else
+		{
+			m_c361.scanline = 0;
+			m_c361.timer->adjust(attotime::never);
+			update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
+		}
 		break;
 
 	default:
-		LOGMASKED(LOG_C361_UNK, "%s: c361 unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_C361_UNK, "%s: c361 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 }
@@ -3099,14 +3613,22 @@ uint16_t namcos23_state::c361_r(offs_t offset, uint16_t mem_mask)
 	// current raster position
 	// how does it work exactly? it's not understood in namcos22 either (also has a c361)
 	case 5:
+	{
 		update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
-		return (m_screen->vpos()*2) | (m_screen->vblank() ? 1 : 0);
+		uint16_t data = (m_screen->vpos()*2) | (m_screen->vblank() ? 1 : 0);
+		//LOGMASKED(LOG_C361_UNK, "%s: c361 vpos read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+		return data;
+	}
 	case 6:
+	{
 		update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
-		return m_screen->vblank() ? 1 : 0;
+		uint16_t data = m_screen->vblank() ? 1 : 0;
+		//LOGMASKED(LOG_C361_UNK, "%s: c361 vbl read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+		return data;
+	}
 	}
 
-	LOGMASKED(LOG_C361_UNK, "%s: c361 unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_C361_UNK, "%s: c361 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
 	return 0xffff;
 }
 
@@ -3137,12 +3659,27 @@ void namcos23_state::ctl_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		break;
 
 	case 6: // gmen wars spams this heavily with 0 prior to starting the GMEN board test
-		if(data != 0)
-			LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		logerror("Queueing %04x at direct buf %d\n", data, m_c435_direct_buf_pos);
+		m_c435_direct_buf[m_c435_direct_buf_pos++] = data;
+		if (m_c435_direct_buf_pos >= 28) {
+			render_t &render = m_render;
+			namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
+			if (BIT(m_c435_direct_buf[0], 15)) {
+				re->type = FLUSH;
+				logerror("Flushing\n");
+			} else {
+				re->type = DIRECT;
+				memcpy(re->direct.d, m_c435_direct_buf, sizeof(m_c435_direct_buf));
+			}
+			render.count[render.cur]++;
+			m_c435_direct_buf_pos = 0;
+		}
+		//if(data != 0)
+			//LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 
 	default:
-		LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x ($ra %08x)\n", machine().describe_context(), offset, data, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+		LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	}
 }
@@ -3152,15 +3689,20 @@ uint16_t namcos23_state::ctl_r(offs_t offset, uint16_t mem_mask)
 	switch(offset) {
 	// 0100 set freezes gorgon (polygon fifo flag)
 	case 1:
-		return 0x0000 | ioport("DSW")->read() | ((m_main_irqcause & MAIN_C361_IRQ) ? 0x400 : 0);
+	{
+		uint16_t data = 0x0000 | ioport("DSW")->read() | ((m_main_irqcause & MAIN_C361_IRQ) ? 0x400 : 0);
+		LOGMASKED(LOG_CTL_UNK, "%s: ctl status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+		return data;
+	}
 	case 2: case 3: {
 		uint16_t res = m_ctl_inp_buffer[offset-2] & 0x800 ? 0xffff : 0x0000;
 		m_ctl_inp_buffer[offset-2] = (m_ctl_inp_buffer[offset-2] << 1) | 1;
+		//LOGMASKED(LOG_CTL_UNK, "%s: ctl input buffer[%04x] read: %04x & %04x (%04x)\n", machine().describe_context(), offset-2, res, mem_mask, m_ctl_inp_buffer[offset-2]);
 		return res;
 	}
 	}
 
-	LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown read %x & %04x ($ra %08x)\n", machine().describe_context(), offset, mem_mask, (uint32_t)m_maincpu->state_int(MIPS3_R31));
+	LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
 	return 0xffff;
 }
 
@@ -3218,11 +3760,13 @@ uint16_t namcos23_state::sub_comm_r(offs_t offset)
 		// data ready is signalled thru MIPS irq 4
 		// 3f0fa8 (phys address) is where data pops up in TC2 & PP
 		// PC=0xbfc03838 bit 7 high => fail (data loaded must be parsed somehow)
+		LOGMASKED(LOG_MCU, "%s: sub_comm_r status read: %04x\n", machine().describe_context(), 3);
 		return 1 | 2;
 	}
 
 	m_maincpu->set_input_line(MIPS3_IRQ4, CLEAR_LINE);
 	// data rx, TBD
+	LOGMASKED(LOG_MCU, "%s: sub_comm_r data read: %04x\n", machine().describe_context(), m_mcu_unk);
 	return m_mcu_unk; //machine().rand();
 }
 
@@ -3232,6 +3776,7 @@ void namcos23_state::sub_comm_w(offs_t offset, uint16_t data)
 	{
 		// data tx
 		m_mcu_unk = data & 0xff;
+		LOGMASKED(LOG_MCU, "%s: sub_comm_w data write: %04x\n", machine().describe_context(), m_mcu_unk);
 		m_maincpu->set_input_line(MIPS3_IRQ4, ASSERT_LINE);
 	}
 }
@@ -3246,17 +3791,18 @@ void namcos23_state::gorgon_map(address_map &map)
 	map(0x02000000, 0x0200000f).rw(FUNC(namcos23_state::c417_r), FUNC(namcos23_state::c417_w));
 	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
-	map(0x06080000, 0x0608000f).ram().share("czattr");
+	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::czattr_r), FUNC(namcos23_state::czattr_w));
 	map(0x06080200, 0x060803ff).ram(); // PCZ Convert RAM (C406) (should be banked)
 	map(0x06108000, 0x061087ff).ram().share("gammaram"); // Gamma RAM (C404)
 	map(0x06110000, 0x0613ffff).ram().w(FUNC(namcos23_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
+	map(0x06300000, 0x06300007).w(FUNC(namcos23_state::sprites_w));
 	map(0x06400000, 0x0641dfff).ram().w(FUNC(namcos23_state::textchar_w)).share("charram"); // Text CGRAM (C361)
 	map(0x0641e000, 0x0641ffff).ram().w(FUNC(namcos23_state::textram_w)).share("textram"); // Text VRAM (C361)
 	map(0x06420000, 0x0642000f).rw(FUNC(namcos23_state::c361_r), FUNC(namcos23_state::c361_w)); // C361
 	map(0x08000000, 0x087fffff).rom().region("data", 0); // data ROMs
 	map(0x0c000000, 0x0c00ffff).ram().share("nvram"); // Backup RAM
 	map(0x0d000000, 0x0d00000f).rw(FUNC(namcos23_state::ctl_r), FUNC(namcos23_state::ctl_w)); // write for LEDs at d000000, watchdog at d000004
-	map(0x0e000000, 0x0e007fff).ram(); // C405 RAM - what is this?
+	//map(0x0e000000, 0x0e007fff).ram(); // C405 RAM - what is this?
 	map(0x0f000000, 0x0f000003).rw(FUNC(namcos23_state::sub_comm_r), FUNC(namcos23_state::sub_comm_w)); // not sure
 	map(0x0f200000, 0x0f203fff).ram(); // C422 RAM
 	map(0x0f300000, 0x0f30000f).rw(FUNC(namcos23_state::c422_r), FUNC(namcos23_state::c422_w)); // C422 registers
@@ -3353,7 +3899,6 @@ void namcos23_state::sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_
 uint16_t namcos23_state::sharedram_sub_r(offs_t offset)
 {
 	uint16_t *shared16 = reinterpret_cast<uint16_t *>(m_shared_ram.target());
-
 	return shared16[BYTE_XOR_BE(offset)];
 }
 
@@ -3368,6 +3913,32 @@ void namcos23_state::sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t
 }
 
 
+uint16_t namcos23_state::mcu_p4_r()
+{
+	return m_sub_porta;
+}
+
+void namcos23_state::mcu_p4_w(uint16_t data)
+{
+}
+
+uint16_t namcos23_state::mcu_p7_r()
+{
+	return m_sub_porta;
+}
+
+void namcos23_state::mcu_p7_w(uint16_t data)
+{
+}
+
+uint16_t namcos23_state::mcu_p9_r()
+{
+	return m_sub_porta;
+}
+
+void namcos23_state::mcu_p9_w(uint16_t data)
+{
+}
 
 // Port 6
 
@@ -3441,7 +4012,20 @@ void namcos23_state::s23h8rwmap(address_map &map)
 	map(0x300030, 0x300031).nopw(); // timecrs2 writes this when writing to the sync shared ram location, motoxgo doesn't
 }
 
-
+void namcos23_state::s23h8iomap(address_map &map)
+{
+	map(h8_device::PORT_4, h8_device::PORT_4).rw(FUNC(namcos23_state::mcu_p4_r), FUNC(namcos23_state::mcu_p4_w));
+	map(h8_device::PORT_6, h8_device::PORT_6).rw(FUNC(namcos23_state::mcu_p6_r), FUNC(namcos23_state::mcu_p6_w));
+	map(h8_device::PORT_7, h8_device::PORT_7).rw(FUNC(namcos23_state::mcu_p7_r), FUNC(namcos23_state::mcu_p7_w));
+	map(h8_device::PORT_8, h8_device::PORT_8).rw(FUNC(namcos23_state::mcu_p8_r), FUNC(namcos23_state::mcu_p8_w));
+	map(h8_device::PORT_9, h8_device::PORT_9).rw(FUNC(namcos23_state::mcu_p9_r), FUNC(namcos23_state::mcu_p9_w));
+	map(h8_device::PORT_A, h8_device::PORT_A).rw(FUNC(namcos23_state::mcu_pa_r), FUNC(namcos23_state::mcu_pa_w));
+	map(h8_device::PORT_B, h8_device::PORT_B).rw(FUNC(namcos23_state::mcu_pb_r), FUNC(namcos23_state::mcu_pb_w));
+	map(h8_device::ADC_0, h8_device::ADC_0).noprw();
+	map(h8_device::ADC_1, h8_device::ADC_1).noprw();
+	map(h8_device::ADC_2, h8_device::ADC_2).noprw();
+	map(h8_device::ADC_3, h8_device::ADC_3).noprw();
+}
 
 
 /***************************************************************************
@@ -3492,6 +4076,16 @@ void namcos23_state::s23iobrdmap(address_map &map)
 	map(0xc000, 0xfb7f).ram();
 }
 
+void namcos23_state::s23iobrdiomap(address_map &map)
+{
+	map(h8_device::PORT_4, h8_device::PORT_4).rw(FUNC(namcos23_state::iob_p4_r), FUNC(namcos23_state::iob_p4_w));
+	map(h8_device::PORT_5, h8_device::PORT_5).noprw();   // bit 2 = status LED to indicate transmitting packet to main
+	map(h8_device::PORT_6, h8_device::PORT_6).rw(FUNC(namcos23_state::iob_p6_r), FUNC(namcos23_state::iob_p6_w));
+	map(h8_device::PORT_8, h8_device::PORT_8).noprw();   // unknown - used on ASCA-5 only
+	map(h8_device::PORT_9, h8_device::PORT_9).noprw();   // unknown - used on ASCA-5 only
+	map(h8_device::ADC_0, h8_device::ADC_3).r(FUNC(namcos23_state::iob_analog_r));
+	map(h8_device::ADC_4, h8_device::ADC_7).noprw();
+}
 
 void namcos23_state::motoxgo_exio_map(address_map &map)
 {
@@ -3843,6 +4437,8 @@ void namcos23_state::machine_start()
 	m_c361.timer->adjust(attotime::never);
 
 	m_maincpu->add_fastram(0, m_mainram.bytes()-1, false, reinterpret_cast<uint32_t *>(memshare("mainram")->ptr()));
+
+	m_3d_bitmap.allocate(640, 480);
 }
 
 
@@ -3851,6 +4447,9 @@ void namcos23_state::machine_reset()
 	m_vblank_count = 0;
 	m_c435_buffer_pos = 0;
 	m_subcpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
+
+	m_c417.unk = 0;
+	m_c435_direct_buf_pos = 0;
 }
 
 MACHINE_RESET_MEMBER(namcos23_state,gmen)
@@ -3874,6 +4473,14 @@ void namcos23_state::init_s23()
 	m_tile_mask = memregion("textile")->bytes()/256 - 1;
 	m_ptrom_limit = memregion("pointrom")->bytes()/4;
 
+	if (!strcmp(machine().system().name, "rapidrvr") ||
+		!strcmp(machine().system().name, "rapidrvrv2c") ||
+		!strcmp(machine().system().name, "rapidrvrp") ||
+		!strcmp(machine().system().name, "finfurl")) {
+		m_sprrom = memregion("sprites")->base();
+		m_sprite_mask = memregion("sprites")->bytes() - 1;
+	}
+
 	m_jvssense = 1;
 	m_main_irqcause = 0;
 	m_ctl_vbl_active = false;
@@ -3888,6 +4495,27 @@ void namcos23_state::init_s23()
 
 
 #define XOR(a) WORD2_XOR_BE(a)
+
+static const gfx_layout namcos23_sprite_layout =
+{
+	32,32,
+	RGN_FRAC(1,1),
+	8,
+	{ 0,1,2,3,4,5,6,7 },
+	{
+		0*8,1*8,2*8,3*8,4*8,5*8,6*8,7*8,
+		8*8,9*8,10*8,11*8,12*8,13*8,14*8,15*8,
+		16*8,17*8,18*8,19*8,20*8,21*8,22*8,23*8,
+		24*8,25*8,26*8,27*8,28*8,29*8,30*8,31*8
+	},
+	{
+		0*32*8,1*32*8,2*32*8,3*32*8,4*32*8,5*32*8,6*32*8,7*32*8,
+		8*32*8,9*32*8,10*32*8,11*32*8,12*32*8,13*32*8,14*32*8,15*32*8,
+		16*32*8,17*32*8,18*32*8,19*32*8,20*32*8,21*32*8,22*32*8,23*32*8,
+		24*32*8,25*32*8,26*32*8,27*32*8,28*32*8,29*32*8,30*32*8,31*32*8
+	},
+	32*32*8
+};
 
 static const gfx_layout namcos23_cg_layout =
 {
@@ -3905,6 +4533,10 @@ static GFXDECODE_START( gfx_namcos23 )
 	GFXDECODE_ENTRY( nullptr, 0, namcos23_cg_layout, 0, 0x800 )
 GFXDECODE_END
 
+static GFXDECODE_START( gfx_gorgon )
+	GFXDECODE_ENTRY( nullptr,   0, namcos23_cg_layout,     0, 0x800 )
+	GFXDECODE_ENTRY( "sprites", 0, namcos23_sprite_layout, 0,  0x80 )
+GFXDECODE_END
 
 void namcos23_state::gorgon(machine_config &config)
 {
@@ -3979,7 +4611,7 @@ void namcos23_state::gorgon(machine_config &config)
 
 	PALETTE(config, m_palette).set_entries(0x8000);
 
-	GFXDECODE(config, m_gfxdecode, m_palette, gfx_namcos23);
+	GFXDECODE(config, m_gfxdecode, m_palette, gfx_gorgon);
 
 	/* sound hardware */
 	SPEAKER(config, "lspeaker").front_left();
