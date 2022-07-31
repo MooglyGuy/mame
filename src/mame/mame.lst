@@ -33876,6 +33876,9 @@ nss_smw                         // 1991 Nintendo
 nss_ssoc                        // 1992 Human Inc.
 nss_sten                        // 199? Nintendo
 
+@source:skeleton/nuon.cpp
+nuondev                         // 2000 VM Labs Inc.
+
 @source:konami/nwk-tr.cpp
 racingj                         // GX676 (c)1998
 racingj2                        // GX888 (c)1999 (EAE)

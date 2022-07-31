@@ -3121,8 +3121,16 @@ end
 
 
 --------------------------------------------------
--- VM Labs Nuon, disassembler only
+-- VM Labs Nuon
+--@src/devices/cpu/nuon/nuon.h,CPUS["NUON"] = true
 --------------------------------------------------
+
+if CPUS["NUON"] then
+	files {
+		MAME_DIR .. "src/devices/cpu/nuon/nuon.cpp",
+		MAME_DIR .. "src/devices/cpu/nuon/nuon.h",
+	}
+end
 
 if opt_tool(CPUS, "NUON") then
 	table.insert(disasm_files , MAME_DIR .. "src/devices/cpu/nuon/nuondasm.cpp")
