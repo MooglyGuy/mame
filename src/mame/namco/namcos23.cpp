@@ -1495,7 +1495,7 @@ It can also be used with Final Furlong when wired correctly.
 				| LOG_MODEL_ERR | LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK \
 				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES)
 
-#define VERBOSE (LOG_ALL)
+#define VERBOSE (LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_MODEL_ERR | LOG_C435_PIO_UNK | LOG_C435_UNK)
 #include "logmacro.h"
 
 namespace {
@@ -1608,7 +1608,7 @@ public:
 	namcos23_renderer(namcos23_state &state);
 	void render_flush(bitmap_argb32& bitmap);
 	void render_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
-	//void render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
+	void render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
 	float* zBuffer() { return m_zBuffer; }
 
 private:
@@ -2077,6 +2077,9 @@ void namcos23_state::c435_state_set(uint16_t type, const uint16_t *param)
 {
 	switch(type) {
 	case 0x0001: c435_state_set_interrupt(param); break;
+	case 0x0036: {
+		LOGMASKED(LOG_3D_STATE_UNK, "%s: unknown state set (type 36)\n", machine().describe_context());
+	}	break;
 	case 0x0046: {
 		char buf[4096];
 		char *p = buf;
@@ -2118,6 +2121,7 @@ int namcos23_state::c435_get_state_entry_size(uint16_t type)
 {
 	switch(type) {
 	case 0x0001: return 1;
+	case 0x0002: return 53;
 	case 0x0009: return 19;
 	case 0x000a: return 45;
 	case 0x0042: return 41;
@@ -2137,7 +2141,7 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		LOGMASKED(LOG_MATRIX_ERR, "%s: WARNING: c435_matrix_matrix_mul with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
-	bool transpose = BIT(m_c435_buffer[0], 10);
+	bool transpose = true;//BIT(m_c435_buffer[0], 10);
 	if((m_c435_buffer[0] & ~0x400) != 0x0004)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if(m_c435_buffer[3] != 0xffff)
@@ -2187,8 +2191,12 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		return;
 	}
 
+	bool extra_logging = true;
 	if(m_c435_buffer[0] != 0x0814 && m_c435_buffer[0] != 0x1014 && m_c435_buffer[0] != 0x0414)
+	{
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_matrix_vector_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
+		//extra_logging = true;
+	}
 
 	if(m_c435_buffer[3] != 0xffff) {
 		int32_t *t        = c435_getv(m_c435_buffer[1]);
@@ -2201,9 +2209,24 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		memcpy(v, c435_getv(m_c435_buffer[4]), sizeof(int32_t) * 3);
 
 		LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_vector_mul (%04x): Vector %d = Matrix %d * Vector %d + Vector %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4], m_c435_buffer[3]);
-		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) + vt[0];
-		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) + vt[1];
-		t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) + vt[2];
+		if (BIT(m_c435_buffer[0], 12))
+		{
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) - vt[0];
+			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) - vt[1];
+			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) - vt[2];
+		}
+		else
+		{
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) + vt[0];
+			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) + vt[1];
+			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) + vt[2];
+		}
+		if (extra_logging)
+		{
+			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x   %08x   %08x\n", m[0], m[1], m[2], (uint32_t)v[0], (uint32_t)vt[0]);
+			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x * %08x + %08x\n", m[3], m[4], m[5], (uint32_t)v[1], (uint32_t)vt[1]);
+			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x   %08x   %08x\n", m[6], m[7], m[8], (uint32_t)v[2], (uint32_t)vt[2]);
+		}
 		LOGMASKED(LOG_MATRIX_UNK, "result: %08x %08x %08x\n", (uint32_t)t[0], (uint32_t)t[1], (uint32_t)t[2]);
 	} else {
 		LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_vector_mul (%04x): Vector %d = Matrix %d * Vector %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4]);
@@ -2216,6 +2239,12 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
 		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
 		t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+		if (extra_logging)
+		{
+			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x   %08x\n", m[0], m[1], m[2], (uint32_t)v[0]);
+			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x * %08x\n", m[3], m[4], m[5], (uint32_t)v[1]);
+			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x   %08x\n", m[6], m[7], m[8], (uint32_t)v[2]);
+		}
 		LOGMASKED(LOG_MATRIX_UNK, "result: %08x %08x %08x\n", (uint32_t)t[0], (uint32_t)t[1], (uint32_t)t[2]);
 	}
 }
@@ -2230,11 +2259,13 @@ void namcos23_state::c435_matrix_set() // 0.4
 	if(m_c435_buffer[0] != 0x004a)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
-	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_set (%04x): Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1]);
-
 	int16_t *t = c435_getm(m_c435_buffer[1]);
 	for(int i=0; i<9; i++)
 		t[i] = m_c435_buffer[i+2];
+	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_set (%04x): Matrix %d:\n", m_c435_buffer[0], m_c435_buffer[1]);
+	LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x\n", t[0], t[1], t[2]);
+	LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x\n", t[3], t[4], t[5]);
+	LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x\n", t[6], t[7], t[8]);
 }
 
 void namcos23_state::c435_vector_set() // 0.5
@@ -2246,11 +2277,11 @@ void namcos23_state::c435_vector_set() // 0.5
 	if(m_c435_buffer[0] != 0x057)
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_vector_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
-	LOGMASKED(LOG_MATRIX_UNK, "c435_vector_set (%04x): Vector2 %d\n", m_c435_buffer[0], m_c435_buffer[1]);
-
 	int32_t *t = c435_getv(m_c435_buffer[1]);
 	for(int i=0; i<3; i++)
 		t[i] = u32_to_s24((m_c435_buffer[2*i+2] << 16) | m_c435_buffer[2*i+3]);
+
+	LOGMASKED(LOG_VEC_UNK, "c435_vector_set (%04x): Vector %d = %08x %08x %08x\n", m_c435_buffer[0], m_c435_buffer[1], t[0], t[1], t[2]);
 }
 
 void namcos23_state::c435_scaling_set() // 4.4
@@ -2386,19 +2417,19 @@ void namcos23_state::c435_pio_w(uint16_t data)
 
 	case 0x4000:
 		switch(h & 0x3f00) {
-		case 0x0400: c435_scaling_set(); break;
-		case 0x0f00: c435_state_set(); break;
+		case 0x0400: LOGMASKED(LOG_C435_PIO_UNK, "%s: Scaling Set\n", machine().describe_context()); c435_scaling_set(); break;
+		case 0x0f00: LOGMASKED(LOG_C435_PIO_UNK, "%s: State Set\n", machine().describe_context()); c435_state_set(); break;
 		default: known = false; break;
 		}
 		break;
 
-	case 0x8000: c435_render(); break;
-	case 0xc000: c435_flush(); break;
+	case 0x8000: LOGMASKED(LOG_C435_PIO_UNK, "%s: Render\n", machine().describe_context()); c435_render(); break;
+	case 0xc000: LOGMASKED(LOG_C435_PIO_UNK, "%s: Flush\n", machine().describe_context()); c435_flush(); break;
 	}
 
 	if(!known) {
 		std::ostringstream buf;
-		buf << "c435 -";
+		buf << "Unknown c435 -";
 		for(int i=0; i<m_c435_buffer_pos; i++)
 			util::stream_format(buf, " %04x", m_c435_buffer[i]);
 		buf << "\n";
@@ -2578,7 +2609,7 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 
 
 
-/*void namcos23_renderer::render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
+void namcos23_renderer::render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
 {
 	const namcos23_render_data& rd = object;
 
@@ -2587,10 +2618,10 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 	float dx = extent.param[0].dpdx;
 	const pen_t *pal = rd.pens;
 	//int prioverchar = extra.prioverchar;
-	int fogfactor = 0xff - rd.fogfactor;
-	int fadefactor = 0xff - rd.fadefactor;
-	rgbaint_t fogcolor(rd.fogcolor);
-	rgbaint_t fadecolor(rd.fadecolor);
+	//int fogfactor = 0xff - rd.fogfactor;
+	//int fadefactor = 0xff - rd.fadefactor;
+	//rgbaint_t fogcolor(rd.fogcolor);
+	//rgbaint_t fadecolor(rd.fadecolor);
 	uint8_t *const source = (u8 *)rd.sprite_source + y_index * rd.sprite_line_modulo;
 	uint32_t *const dest = &object.bitmap->pix(scanline);
 	//u8 *const primap = &extra.primap->pix(scanline);
@@ -2602,7 +2633,7 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 		{
 			rgbaint_t rgb(pal[pen]);
 
-			if (fogfactor != 0xff)
+			/*if (fogfactor != 0xff)
 			{
 				rgb.blend(fogcolor, fogfactor);
 			}
@@ -2615,14 +2646,14 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 			if (rd.alphafactor != 0xff)
 			{
 				rgb.blend(rgbaint_t(dest[x]), rd.alphafactor);
-			}
+			}*/
 
 			dest[x] = 0xff000000 | rgb.to_rgba();
 			//primap[x] = (primap[x] & ~1) | prioverchar;
 		}
 		x_index += dx;
 	}
-}*/
+}
 
 void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
 {
@@ -3203,7 +3234,7 @@ void namcos23_renderer::render_flush(bitmap_argb32& bitmap)
 		if (p->rd.sprite)
 		{
 			//printf("S");
-			//render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_sprite_scanline, this), 4, p->pv);
+			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_sprite_scanline, this), 4, p->pv);
 		}
 		else if (p->vertex_count == 3)
 		{
