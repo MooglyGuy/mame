@@ -78,6 +78,8 @@ of save-state is also needed.
 #include "speaker.h"
 
 
+namespace {
+
 #define MASTER_CLOCK        (XTAL(12'000'000))
 #define SOUND_CLOCK         (XTAL(3'579'545))
 
@@ -97,8 +99,6 @@ public:
 	template <int N> DECLARE_CUSTOM_INPUT_MEMBER(wmg_mux_r);
 
 private:
-	virtual void driver_init() override;
-
 	u8 wmg_nvram_r(offs_t offset);
 	void wmg_nvram_w(offs_t offset, u8 data);
 	u8 wmg_pia_0_r(offs_t offset);
@@ -497,17 +497,6 @@ u8 wmg_state::wmg_pia_0_r(offs_t offset)
 
 /*************************************
  *
- *  Driver Initialisation
- *
- *************************************/
-void wmg_state::driver_init()
-{
-	m_blitter_config = WILLIAMS_BLITTER_SC1;
-	m_blitter_clip_address = 0xc000;
-}
-
-/*************************************
- *
  *  Machine Driver
  *
  *************************************/
@@ -565,6 +554,9 @@ void wmg_state::wmg(machine_config &config)
 	pia2.writepa_handler().set("dac", FUNC(dac_byte_interface::data_w));
 	pia2.irqa_handler().set("soundirq", FUNC(input_merger_any_high_device::in_w<0>));
 	pia2.irqb_handler().set("soundirq", FUNC(input_merger_any_high_device::in_w<1>));
+
+	m_blitter_config = WILLIAMS_BLITTER_SC1;
+	m_blitter_clip_address = 0xc000;
 }
 
 /*************************************
@@ -595,6 +587,8 @@ ROM_START( wmg )
 	ROM_LOAD( "decoder.4",       0x0000, 0x0200, CRC(e6631c23) SHA1(9988723269367fb44ef83f627186a1c88cf7877e) )
 	ROM_LOAD( "decoder.6",       0x0200, 0x0200, CRC(83faf25e) SHA1(30002643d08ed983a6701a7c4b5ee74a2f4a1adb) )
 ROM_END
+
+} // anonymous namespace
 
 
 /*******************************************************

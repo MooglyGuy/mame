@@ -22,6 +22,9 @@
 #include "bus/rs232/rs232.h"
 #include "bus/rs232/keyboard.h"
 
+
+namespace {
+
 class duet16_state : public driver_device
 {
 public:
@@ -391,7 +394,7 @@ void duet16_state::duet16(machine_config &config)
 	bgpit.out_handler<2>().set("kbusart", FUNC(i8251_device::write_txc));
 	bgpit.out_handler<2>().append("kbusart", FUNC(i8251_device::write_rxc));
 
-	ptm6840_device &itm(PTM6840(config, "itm", 0));
+	ptm6840_device &itm(PTM6840(config, "itm", 8_MHz_XTAL / 8));
 	itm.set_external_clocks(0.0, 0.0, (8_MHz_XTAL / 8).dvalue()); // C3 = 1MHz
 	itm.o3_callback().set("itm", FUNC(ptm6840_device::set_c1)); // C1 = C2 = O3
 	itm.o3_callback().append("itm", FUNC(ptm6840_device::set_c2));
@@ -456,5 +459,8 @@ ROM_START(duet16)
 	ROM_REGION(0x400, "i8741", 0)
 	ROM_LOAD("duet16_key_8741ak001b_z.bin", 0x000, 0x400, CRC(d23ee68d) SHA1(3b6a86fe2a304823c5385cd673f9580a35199dac))
 ROM_END
+
+} // anonymous namespace
+
 
 COMP( 1983, duet16, 0, 0, duet16, 0, duet16_state, empty_init, "Panafacom (Panasonic/Fujitsu)", "Duet-16", MACHINE_NOT_WORKING | MACHINE_NO_SOUND)

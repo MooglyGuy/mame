@@ -81,7 +81,8 @@ class xbox_superio_device : public device_t, public lpcbus_device_interface
 public:
 	xbox_superio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
 	virtual void map_extra(address_space *memory_space, address_space *io_space) override;
-	virtual void set_host(int index, lpcbus_host_interface *host) override;
+	virtual uint32_t dma_transfer(int channel, dma_operation operation, dma_size size, uint32_t data) override;
+	virtual void set_host(int device_index, lpcbus_host_interface *host) override;
 
 	uint8_t read(offs_t offset);
 	void write(offs_t offset, uint8_t data);
@@ -151,23 +152,23 @@ protected:
 	const debugger_constants *debugc_bios;
 
 private:
-	void dump_string_command(const std::vector<std::string> &params);
-	void dump_process_command(const std::vector<std::string> &params);
-	void dump_list_command(const std::vector<std::string> &params);
-	void dump_dpc_command(const std::vector<std::string> &params);
-	void dump_timer_command(const std::vector<std::string> &params);
-	void curthread_command(const std::vector<std::string> &params);
-	void threadlist_command(const std::vector<std::string> &params);
-	void generate_irq_command(const std::vector<std::string> &params);
-	void nv2a_combiners_command(const std::vector<std::string> &params);
-	void nv2a_wclipping_command(const std::vector<std::string> &params);
-	void waitvblank_command(const std::vector<std::string> &params);
-	void grab_texture_command(const std::vector<std::string> &params);
-	void grab_vprog_command(const std::vector<std::string> &params);
-	void vprogdis_command(const std::vector<std::string> &params);
-	void vdeclaration_command(const std::vector<std::string> &params);
-	void help_command(const std::vector<std::string> &params);
-	void xbox_debug_commands(const std::vector<std::string> &params);
+	void dump_string_command(const std::vector<std::string_view> &params);
+	void dump_process_command(const std::vector<std::string_view> &params);
+	void dump_list_command(const std::vector<std::string_view> &params);
+	void dump_dpc_command(const std::vector<std::string_view> &params);
+	void dump_timer_command(const std::vector<std::string_view> &params);
+	void curthread_command(const std::vector<std::string_view> &params);
+	void threadlist_command(const std::vector<std::string_view> &params);
+	void generate_irq_command(const std::vector<std::string_view> &params);
+	void nv2a_combiners_command(const std::vector<std::string_view> &params);
+	void nv2a_wclipping_command(const std::vector<std::string_view> &params);
+	void waitvblank_command(const std::vector<std::string_view> &params);
+	void grab_texture_command(const std::vector<std::string_view> &params);
+	void grab_vprog_command(const std::vector<std::string_view> &params);
+	void vprogdis_command(const std::vector<std::string_view> &params);
+	void vdeclaration_command(const std::vector<std::string_view> &params);
+	void help_command(const std::vector<std::string_view> &params);
+	void xbox_debug_commands(const std::vector<std::string_view> &params);
 	int find_bios_index();
 	bool find_bios_hash(int bios, uint32_t &crc32);
 	void find_debug_params();

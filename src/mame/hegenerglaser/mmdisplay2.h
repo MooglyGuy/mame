@@ -6,8 +6,8 @@
 
 *********************************************************************/
 
-#ifndef MAME_VIDEO_MMDISPLAY2_H
-#define MAME_VIDEO_MMDISPLAY2_H
+#ifndef MAME_HEGENERGLASER_MMDISPLAY2_H
+#define MAME_HEGENERGLASER_MMDISPLAY2_H
 
 #pragma once
 
@@ -42,11 +42,11 @@ private:
 	void lcd_palette(palette_device &palette) const;
 	HD44780_PIXEL_UPDATE(lcd_pixel_update);
 
-	u8 m_latch = 0;
-	u8 m_ctrl = 0;
+	u8 m_latch;
+	u8 m_ctrl;
 };
 
 
 DECLARE_DEVICE_TYPE(MEPHISTO_DISPLAY_MODULE2, mephisto_display2_device)
 
-#endif // MAME_VIDEO_MMDISPLAY2_H
+#endif // MAME_HEGENERGLASER_MMDISPLAY2_H

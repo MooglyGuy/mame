@@ -327,7 +327,7 @@ extern int i386_parity_table[256];
 #define MMX(n)              (*((MMX_REG *)(&m_x87_reg[(n)].low)))
 #define XMM(n)              m_sse_reg[(n)]
 
-#define VTLB_FLAG_DIRTY     0x100
+#define FLAG_DIRTY     0x100 // VTLB flag
 #define CYCLES_NUM(x)       (m_cycles -= (x))
 
 #define FAULT(fault,error)  {m_ext = 1; i386_trap_with_error(fault,0,0,error); return;}
@@ -367,8 +367,6 @@ extern MODRM_TABLE i386_MODRM_table[256];
 #define STORE_RM8(x, value)     (REG8(i386_MODRM_table[x].rm.b) = value)
 #define STORE_RM16(x, value)    (REG16(i386_MODRM_table[x].rm.w) = value)
 #define STORE_RM32(x, value)    (REG32(i386_MODRM_table[x].rm.d) = value)
-
-#define SWITCH_ENDIAN_32(x) (((((x) << 24) & (0xff << 24)) | (((x) << 8) & (0xff << 16)) | (((x) >> 8) & (0xff << 8)) | (((x) >> 24) & (0xff << 0))))
 
 /***********************************************************************************/
 

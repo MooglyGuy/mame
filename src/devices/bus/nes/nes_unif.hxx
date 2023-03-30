@@ -479,13 +479,13 @@ void nes_cart_slot_device::call_load_unif()
 	// SETUP steps 5/6: allocate pointers for PRG/VROM and load the data!
 	if (prg_size == 0x4000)
 	{
-		m_cart->prg_alloc(0x8000, tag());
+		m_cart->prg_alloc(0x8000);
 		memcpy(m_cart->get_prg_base(), &temp_prg[0], 0x4000);
 		memcpy(m_cart->get_prg_base() + 0x4000, m_cart->get_prg_base(), 0x4000);
 	}
 	else
 	{
-		m_cart->prg_alloc(prg_size, tag());
+		m_cart->prg_alloc(prg_size);
 		memcpy(m_cart->get_prg_base(), &temp_prg[0], prg_size);
 	}
 
@@ -494,20 +494,17 @@ void nes_cart_slot_device::call_load_unif()
 
 	if (vrom_size)
 	{
-		m_cart->vrom_alloc(vrom_size, tag());
+		m_cart->vrom_alloc(vrom_size);
 		memcpy(m_cart->get_vrom_base(), &temp_chr[0], vrom_size);
 	}
 
 #if SPLIT_PRG
 	{
-		FILE *prgout;
-		char outname[255];
-
-		sprintf(outname, "%s.prg", filename());
-		prgout = fopen(outname, "wb");
+		auto outname  = std::string(filename()) + ".prg";
+		auto prgout = fopen(outname.c_str(), "wb");
 		if (prgout)
 		{
-			fwrite(m_cart->get_prg_base(), 1, 0x4000 * m_cart->get_prg_size(), prgout);
+			::fwrite(m_cart->get_prg_base(), 1, 0x4000 * m_cart->get_prg_size(), prgout);
 			osd_printf_error("Created PRG chunk\n");
 		}
 
@@ -518,19 +515,18 @@ void nes_cart_slot_device::call_load_unif()
 #if SPLIT_CHR
 	if (state->m_chr_chunks > 0)
 	{
-		FILE *chrout;
-		char outname[255];
-
-		sprintf(outname, "%s.chr", filename());
-		chrout= fopen(outname, "wb");
+		auto outname  = std::string(filename()) + ".chr";
+		auto chrout = fopen(outname.c_str(), "wb");
 		if (chrout)
 		{
-			fwrite(m_cart->get_vrom_base(), 1, m_cart->get_vrom_size(), chrout);
+			::fwrite(m_cart->get_vrom_base(), 1, m_cart->get_vrom_size(), chrout);
 			osd_printf_error("Created CHR chunk\n");
 		}
+
 		fclose(chrout);
 	}
 #endif
+
 	// SETUP steps 7: allocate the remaining pointer, when needed
 	if (vram_size)
 		m_cart->vram_alloc(vram_size);

@@ -113,9 +113,13 @@ TODO:
 #include "softlist_dev.h"
 #include "speaker.h"
 
+#include "utf8.h"
+
 #define VERBOSE 0
 #include "logmacro.h"
 
+
+namespace {
 
 class exelv_state : public driver_device
 {
@@ -958,6 +962,8 @@ ROM_START(exeltel)
 	ROM_REGION(0x8000, "vsm", 0)
 	ROM_LOAD("cm62312.bin", 0x0000, 0x4000, CRC(93b817de) SHA1(03863087a071b8f22d36a52d18243f1c33e17ff7)) /* system speech ROM */
 ROM_END
+
+} // anonymous namespace
 
 
 //   YEAR   NAME     PARENT  COMPAT  MACHINE  INPUT  CLASS        INIT        COMPANY       FULLNAME   FLAGS

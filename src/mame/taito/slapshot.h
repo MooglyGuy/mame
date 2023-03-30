@@ -5,8 +5,8 @@
     Slapshot / Operation Wolf 3
 
 *************************************************************************/
-#ifndef MAME_INCLUDES_SLAPSHOT_H
-#define MAME_INCLUDES_SLAPSHOT_H
+#ifndef MAME_TAITO_SLAPSHOT_H
+#define MAME_TAITO_SLAPSHOT_H
 
 #pragma once
 
@@ -38,7 +38,7 @@ public:
 	void opwolf3(machine_config &config);
 	void slapshot(machine_config &config);
 
-	void driver_init() override;
+	void driver_init();
 
 protected:
 	virtual void machine_start() override;
@@ -113,4 +113,4 @@ private:
 	void sound_map(address_map &map);
 };
 
-#endif // MAME_INCLUDES_SLAPSHOT_H
+#endif // MAME_TAITO_SLAPSHOT_H

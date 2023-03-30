@@ -1,8 +1,8 @@
 // license:BSD-3-Clause
 // copyright-holders:F. Ulivi
 
-#ifndef MAME_MACHINE_IMDS2IOC_H
-#define MAME_MACHINE_IMDS2IOC_H
+#ifndef MAME_INTEL_IMDS2IOC_H
+#define MAME_INTEL_IMDS2IOC_H
 
 #include "cpu/i8085/i8085.h"
 #include "cpu/mcs48/mcs48.h"
@@ -67,7 +67,6 @@ private:
 	void pio_port_p2_w(uint8_t data);
 	DECLARE_WRITE_LINE_MEMBER(pio_lpt_ack_w);
 	DECLARE_WRITE_LINE_MEMBER(pio_lpt_busy_w);
-	DECLARE_WRITE_LINE_MEMBER(pio_lpt_select_w);
 
 	I8275_DRAW_CHARACTER_MEMBER(crtc_display_pixels);
 
@@ -128,4 +127,4 @@ private:
 
 DECLARE_DEVICE_TYPE(IMDS2IOC, imds2ioc_device)
 
-#endif // MAME_MACHINE_IMDS2IOC_H
+#endif // MAME_INTEL_IMDS2IOC_H

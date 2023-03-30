@@ -6,8 +6,8 @@
     (32-bit blitter variant)
 
 **************************************************************************/
-#ifndef MAME_INCLUDES_ITECH32_H
-#define MAME_INCLUDES_ITECH32_H
+#ifndef MAME_ITECH_ITECH32_H
+#define MAME_ITECH_ITECH32_H
 
 #pragma once
 
@@ -227,9 +227,8 @@ public:
 
 	void drivedge(machine_config &config);
 
-	virtual void driver_init() override;
-
 protected:
+	virtual void driver_start() override;
 	virtual void machine_start() override;
 	virtual void machine_reset() override;
 
@@ -288,8 +287,8 @@ public:
 	void shoottv(machine_config &config);
 
 private:
-	void driver_init() override;
-	void video_start() override;
+	virtual void driver_start() override;
+	virtual void video_start() override;
 
 	void update_interrupts(int vint, int xint, int qint) override;
 
@@ -304,4 +303,4 @@ private:
 	emu_timer *m_gun_timer = nullptr;
 };
 
-#endif // MAME_INCLUDES_ITECH32_H
+#endif // MAME_ITECH_ITECH32_H

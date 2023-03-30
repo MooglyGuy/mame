@@ -11,17 +11,19 @@
 
 #include "emu.h"
 
+#include "adbmodem.h"
+#include "macadb.h"
 #include "macrtc.h"
+#include "mactoolbox.h"
 
 #include "bus/nscsi/devices.h"
 #include "bus/nubus/cards.h"
 #include "bus/nubus/nubus.h"
-#include "cpu/m68000/m68000.h"
+#include "cpu/m68000/m68040.h"
 #include "machine/6522via.h"
 #include "machine/applefdintf.h"
 #include "machine/dp83932c.h"
-#include "macadb.h"
-#include "machine/ncr5390.h"
+#include "machine/ncr53c90.h"
 #include "machine/nscsi_bus.h"
 #include "machine/ram.h"
 #include "machine/swim1.h"
@@ -52,12 +54,13 @@ public:
 		m_via1(*this, "via1"),
 		m_via2(*this, "via2"),
 		m_macadb(*this, "macadb"),
+		m_adbmodem(*this, "adbmodem"),
 		m_ram(*this, RAM_TAG),
 		m_swim(*this, "fdc"),
 		m_floppy(*this, "fdc:%d", 0U),
 		m_rtc(*this,"rtc"),
 		m_scsibus1(*this, "scsi1"),
-		m_ncr1(*this, "scsi1:7:ncr5394"),
+		m_ncr1(*this, "scsi1:7:ncr53c96"),
 		m_sonic(*this, "sonic"),
 		m_screen(*this, "screen"),
 		m_palette(*this, "palette"),
@@ -77,13 +80,14 @@ public:
 private:
 	required_device<m68040_device> m_maincpu;
 	required_device<via6522_device> m_via1, m_via2;
-	optional_device<macadb_device> m_macadb;
+	required_device<macadb_device> m_macadb;
+	required_device<adbmodem_device> m_adbmodem;
 	required_device<ram_device> m_ram;
 	required_device<applefdintf_device> m_swim;
 	required_device_array<floppy_connector, 2> m_floppy;
 	required_device<rtc3430042_device> m_rtc;
 	required_device<nscsi_bus_device> m_scsibus1;
-	required_device<ncr53cf94_device> m_ncr1;
+	required_device<ncr53c96_device> m_ncr1;
 	required_device<dp83932c_device> m_sonic;
 	required_device<screen_device> m_screen;
 	required_device<palette_device> m_palette;
@@ -156,7 +160,6 @@ private:
 	DECLARE_WRITE_LINE_MEMBER(mac_via_irq);
 	DECLARE_WRITE_LINE_MEMBER(mac_via2_irq);
 	TIMER_CALLBACK_MEMBER(mac_6015_tick);
-	WRITE_LINE_MEMBER(via_cb2_w) { m_macadb->adb_data_w(state); }
 	int m_via_interrupt = 0, m_via2_interrupt = 0, m_scc_interrupt = 0, m_last_taken_interrupt = 0;
 
 	uint32_t rom_switch_r(offs_t offset);
@@ -193,6 +196,8 @@ private:
 
 	uint8_t mac_5396_r(offs_t offset);
 	void mac_5396_w(offs_t offset, uint8_t data);
+	uint16_t mac_5396_dma_r(offs_t offset);
+	void mac_5396_dma_w(offs_t offset, uint16_t data);
 };
 
 void macquadra_state::field_interrupts()
@@ -741,7 +746,7 @@ void macquadra_state::mac_via_sync()
 uint32_t macquadra_state::rom_switch_r(offs_t offset)
 {
 	// disable the overlay
-	if (m_overlay)
+	if (m_overlay && !machine().side_effects_disabled())
 	{
 		address_space& space = m_maincpu->space(AS_PROGRAM);
 		const u32 memory_end = m_ram->size() - 1;
@@ -765,29 +770,32 @@ TIMER_CALLBACK_MEMBER(macquadra_state::mac_6015_tick)
 
 uint8_t macquadra_state::mac_5396_r(offs_t offset)
 {
-	if (offset < 0x100)
-	{
-		return m_ncr1->read(offset>>4);
-	}
-	else    // pseudo-DMA: read from the FIFO
-	{
-		return m_ncr1->dma_r();
-	}
-
-	// never executed
-	return 0;
+	return m_ncr1->read(offset>>4);
 }
 
 void macquadra_state::mac_5396_w(offs_t offset, uint8_t data)
 {
-	if (offset < 0x100)
-	{
-		m_ncr1->write(offset>>4, data);
-	}
-	else    // pseudo-DMA: write to the FIFO
-	{
-		m_ncr1->dma_w(data);
-	}
+	m_ncr1->write(offset>>4, data);
+}
+
+uint16_t macquadra_state::mac_5396_dma_r(offs_t offset)
+{
+	// HACK: Extra time is necessary to avoid underrunning the FIFO at 4 MB/sec transfer rates claimed to
+	// be typical for Apple HDDs of the period.
+	// Likely due to inaccurate 68040 bus timings or wait states; DAFB documentation is clear that there is
+	// no "magic latch" like the 5380 machines use.
+	if (!machine().side_effects_disabled() && BIT(offset << 1, 18))
+		m_maincpu->adjust_icount(-4);
+
+	return m_ncr1->dma16_swap_r();
+}
+
+void macquadra_state::mac_5396_dma_w(offs_t offset, uint16_t data)
+{
+	if (!machine().side_effects_disabled() && BIT(offset << 1, 18))
+		m_maincpu->adjust_icount(-4);
+
+	m_ncr1->dma16_swap_w(data);
 }
 
 /***************************************************************************
@@ -802,7 +810,8 @@ void macquadra_state::quadra700_map(address_map &map)
 // 50008000 = Ethernet MAC ID PROM
 // 5000a000 = Sonic (DP83932) ethernet
 // 5000f000 = SCSI cf96, 5000f402 = SCSI #2 cf96
-	map(0x5000f000, 0x5000f401).rw(FUNC(macquadra_state::mac_5396_r), FUNC(macquadra_state::mac_5396_w)).mirror(0x00fc0000);
+	map(0x5000f000, 0x5000f0ff).rw(FUNC(macquadra_state::mac_5396_r), FUNC(macquadra_state::mac_5396_w)).mirror(0x00fc0000);
+	map(0x5000f100, 0x5000f101).rw(FUNC(macquadra_state::mac_5396_dma_r), FUNC(macquadra_state::mac_5396_dma_w)).select(0x00fc0000);
 	map(0x5000c000, 0x5000dfff).rw(FUNC(macquadra_state::mac_scc_r), FUNC(macquadra_state::mac_scc_2_w)).mirror(0x00fc0000);
 	map(0x50014000, 0x50015fff).rw(m_easc, FUNC(asc_device::read), FUNC(asc_device::write)).mirror(0x00fc0000);
 	map(0x5001e000, 0x5001ffff).rw(FUNC(macquadra_state::swim_r), FUNC(macquadra_state::swim_w)).mirror(0x00fc0000);
@@ -820,8 +829,7 @@ uint8_t macquadra_state::mac_via_in_a()
 
 uint8_t macquadra_state::mac_via_in_b()
 {
-	int val = m_macadb->get_adb_state()<<4;
-	val |= m_rtc->data_r();
+	int val = m_rtc->data_r();
 
 	if (!m_adb_irq_pending)
 	{
@@ -849,7 +857,7 @@ void macquadra_state::mac_via_out_a(uint8_t data)
 void macquadra_state::mac_via_out_b(uint8_t data)
 {
 //  printf("%s VIA1 OUT B: %02x\n", machine().describe_context().c_str(), data);
-	m_macadb->mac_adb_newaction((data & 0x30) >> 4);
+	m_adbmodem->set_via_state((data & 0x30) >> 4);
 
 	m_rtc->ce_w((data & 0x04)>>2);
 	m_rtc->data_w(data & 0x01);
@@ -912,6 +920,7 @@ void macquadra_state::macqd700(machine_config &config)
 	/* basic machine hardware */
 	M68040(config, m_maincpu, 50_MHz_XTAL / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &macquadra_state::quadra700_map);
+	m_maincpu->set_dasm_override(std::function(&mac68k_dasm_override), "mac68k_dasm_override");
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_refresh_hz(75.08);
@@ -941,15 +950,15 @@ void macquadra_state::macqd700(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi1:1", mac_scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi1:2", mac_scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi1:3", mac_scsi_devices, nullptr);
-	NSCSI_CONNECTOR(config, "scsi1:4", mac_scsi_devices, nullptr);
+	NSCSI_CONNECTOR(config, "scsi1:4", mac_scsi_devices, "cdrom");
 	NSCSI_CONNECTOR(config, "scsi1:5", mac_scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi1:6", mac_scsi_devices, "harddisk");
-	NSCSI_CONNECTOR(config, "scsi1:7").option_set("ncr5394", NCR53CF94).clock(50_MHz_XTAL / 2).machine_config(
+	NSCSI_CONNECTOR(config, "scsi1:7").option_set("ncr53c96", NCR53C96).clock(50_MHz_XTAL / 2).machine_config(
 		[this] (device_t *device)
 		{
-			ncr53cf94_device &adapter = downcast<ncr53cf94_device &>(*device);
+			ncr53c96_device &adapter = downcast<ncr53c96_device &>(*device);
 
-			adapter.set_busmd(ncr53cf94_device::BUSMD_0);
+			adapter.set_busmd(ncr53c96_device::BUSMD_1);
 			adapter.irq_handler_cb().set(*this, FUNC(macquadra_state::irq_539x_1_w));
 			adapter.drq_handler_cb().set(*this, FUNC(macquadra_state::drq_539x_1_w));
 		});
@@ -974,7 +983,6 @@ void macquadra_state::macqd700(machine_config &config)
 	m_via1->writepa_handler().set(FUNC(macquadra_state::mac_via_out_a));
 	m_via1->writepb_handler().set(FUNC(macquadra_state::mac_via_out_b));
 	m_via1->irq_handler().set(FUNC(macquadra_state::mac_via_irq));
-	m_via1->cb2_handler().set(FUNC(macquadra_state::via_cb2_w));
 
 	R65NC22(config, m_via2, C7M/10);
 	m_via2->readpa_handler().set(FUNC(macquadra_state::mac_via2_in_a));
@@ -983,15 +991,21 @@ void macquadra_state::macqd700(machine_config &config)
 	m_via2->writepb_handler().set(FUNC(macquadra_state::mac_via2_out_b));
 	m_via2->irq_handler().set(FUNC(macquadra_state::mac_via2_irq));
 
+	ADBMODEM(config, m_adbmodem, C7M);
+	m_adbmodem->via_clock_callback().set(m_via1, FUNC(via6522_device::write_cb1));
+	m_adbmodem->via_data_callback().set(m_via1, FUNC(via6522_device::write_cb2));
+	m_adbmodem->linechange_callback().set(m_macadb, FUNC(macadb_device::adb_linechange_w));
+	m_adbmodem->irq_callback().set(FUNC(macquadra_state::adb_irq_w));
+	m_via1->cb2_handler().set(m_adbmodem, FUNC(adbmodem_device::set_via_data));
+	config.set_maximum_quantum(attotime::from_hz(1000000));
+
 	MACADB(config, m_macadb, C15M);
-	m_macadb->via_clock_callback().set(m_via1, FUNC(via6522_device::write_cb1));
-	m_macadb->via_data_callback().set(m_via1, FUNC(via6522_device::write_cb2));
-	m_macadb->adb_irq_callback().set(FUNC(macquadra_state::adb_irq_w));
+	m_macadb->adb_data_callback().set(m_adbmodem, FUNC(adbmodem_device::set_adb_line));
 
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
 	ASC(config, m_easc, 22.5792_MHz_XTAL, asc_device::asc_type::EASC);
-//  m_easc->irqf_callback().set(FUNC(macquadra_state::mac_asc_irq));
+	m_easc->irqf_callback().set(m_via2, FUNC(via6522_device::write_cb1)).invert();
 	m_easc->add_route(0, "lspeaker", 1.0);
 	m_easc->add_route(1, "rspeaker", 1.0);
 
@@ -1000,6 +1014,7 @@ void macquadra_state::macqd700(machine_config &config)
 	m_ram->set_default_size("4M");
 	m_ram->set_extra_options("8M,16M,32M,64M,68M,72M,80M,96M,128M");
 
+	SOFTWARE_LIST(config, "hdd_list").set_original("mac_hdd");
 	SOFTWARE_LIST(config, "flop35_list").set_original("mac_flop");
 	SOFTWARE_LIST(config, "flop35hd_list").set_original("mac_hdflop");
 }

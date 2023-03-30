@@ -27,6 +27,10 @@
 
 #include "formats/svi_cas.h"
 
+#include "utf8.h"
+
+
+namespace {
 
 //**************************************************************************
 //  CONSTANTS & MACROS
@@ -609,6 +613,8 @@ ROM_END
 #define rom_svi318n rom_svi318
 #define rom_svi328  rom_svi318
 #define rom_svi328n rom_svi318
+
+} // anonymous namespace
 
 
 //**************************************************************************

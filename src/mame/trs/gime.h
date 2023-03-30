@@ -9,8 +9,8 @@
 
 ***************************************************************************/
 
-#ifndef MAME_VIDEO_GIME_H
-#define MAME_VIDEO_GIME_H
+#ifndef MAME_TRS_GIME_H
+#define MAME_TRS_GIME_H
 
 #pragma once
 
@@ -126,6 +126,7 @@ protected:
 	};
 
 	// statics
+	static const uint8_t lowres_font[];
 	static const uint8_t hires_font[128][12];
 
 	// callbacks
@@ -289,4 +290,4 @@ public:
 DECLARE_DEVICE_TYPE(GIME_NTSC, gime_ntsc_device)
 DECLARE_DEVICE_TYPE(GIME_PAL, gime_pal_device)
 
-#endif //MAME_VIDEO_GIME_H
+#endif //MAME_TRS_GIME_H

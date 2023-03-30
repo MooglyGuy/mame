@@ -267,10 +267,10 @@ void mcs51_cpu_device::data_internal(address_map &map)
 
 
 
-mcs51_cpu_device::mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features)
+mcs51_cpu_device::mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor program_map, address_map_constructor data_map, int program_width, int data_width, uint8_t features)
 	: cpu_device(mconfig, type, tag, owner, clock)
-	, m_program_config("program", ENDIANNESS_LITTLE, 8, 16, 0, address_map_constructor(FUNC(mcs51_cpu_device::program_internal), this))
-	, m_data_config("data", ENDIANNESS_LITTLE, 8, 9, 0, address_map_constructor(FUNC(mcs51_cpu_device::data_internal), this))
+	, m_program_config("program", ENDIANNESS_LITTLE, 8, 16, 0, program_map)
+	, m_data_config("data", ENDIANNESS_LITTLE, 8, 9, 0, data_map)
 	, m_io_config("io", ENDIANNESS_LITTLE, 8, (features & FEATURE_DS5002FP) ? 17 : 16, 0)
 	, m_pc(0)
 	, m_features(features)
@@ -292,6 +292,12 @@ mcs51_cpu_device::mcs51_cpu_device(const machine_config &mconfig, device_type ty
 	/* default to standard cmos interfacing */
 	for (auto & elem : m_forced_inputs)
 		elem = 0;
+}
+
+
+mcs51_cpu_device::mcs51_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features)
+	: mcs51_cpu_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(mcs51_cpu_device::program_internal), this), address_map_constructor(FUNC(mcs51_cpu_device::data_internal), this), program_width, data_width, features)
+{
 }
 
 
@@ -1820,9 +1826,21 @@ void mcs51_cpu_device::check_irqs()
 		return;
 	}
 
-	// Hack to work around polling latency issue with JB INT0/INT1
-	if (m_last_op == 0x20 && ((int_vec == V_IE0 && m_last_bit == 0xb2) || (int_vec == V_IE1 && m_last_bit == 0xb3)))
-		PC = PPC + 3;
+	// indicate we took the external IRQ
+	if (int_vec == V_IE0)
+	{
+		// Hack to work around polling latency issue with JB INT0
+		if (m_last_op == 0x20 && m_last_bit == 0xb2)
+			PC = PPC + 3;
+		standard_irq_callback(0, PC);
+	}
+	else if (int_vec == V_IE1)
+	{
+		// Hack to work around polling latency issue with JB INT1
+		if (m_last_op == 0x20 && m_last_bit == 0xb3)
+			PC = PPC + 3;
+		standard_irq_callback(1, PC);
+	}
 
 	//Save current pc to stack, set pc to new interrupt vector
 	push_pc();
@@ -1843,10 +1861,6 @@ void mcs51_cpu_device::check_irqs()
 			//External Int Flag only cleared when configured as Edge Triggered..
 			if(GET_IT0)  /* for some reason having this, breaks alving dmd games */
 				SET_IE0(0);
-
-			/* indicate we took the external IRQ */
-			standard_irq_callback(0);
-
 			break;
 		case V_TF0:
 			//Timer 0 - Always clear Flag
@@ -1856,9 +1870,6 @@ void mcs51_cpu_device::check_irqs()
 			//External Int Flag only cleared when configured as Edge Triggered..
 			if(GET_IT1)  /* for some reason having this, breaks alving dmd games */
 				SET_IE1(0);
-			/* indicate we took the external IRQ */
-			standard_irq_callback(1);
-
 			break;
 		case V_TF1:
 			//Timer 1 - Always clear Flag

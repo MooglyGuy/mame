@@ -18,7 +18,9 @@ public:
 	~handler_entry_read_delegate() = default;
 
 	uX read(offs_t offset, uX mem_mask) const override;
+	uX read_interruptible(offs_t offset, uX mem_mask) const override;
 	std::pair<uX, u16> read_flags(offs_t offset, uX mem_mask) const override;
+	u16 lookup_flags(offs_t offset, uX mem_mask) const override;
 
 	std::string name() const override;
 
@@ -77,7 +79,9 @@ public:
 	~handler_entry_write_delegate() = default;
 
 	void write(offs_t offset, uX data, uX mem_mask) const override;
+	void write_interruptible(offs_t offset, uX data, uX mem_mask) const override;
 	u16 write_flags(offs_t offset, uX data, uX mem_mask) const override;
+	u16 lookup_flags(offs_t offset, uX mem_mask) const override;
 
 	std::string name() const override;
 
@@ -141,7 +145,9 @@ public:
 	~handler_entry_read_ioport() = default;
 
 	uX read(offs_t offset, uX mem_mask) const override;
+	uX read_interruptible(offs_t offset, uX mem_mask) const override;
 	std::pair<uX, u16> read_flags(offs_t offset, uX mem_mask) const override;
+	u16 lookup_flags(offs_t offset, uX mem_mask) const override;
 
 	std::string name() const override;
 
@@ -158,7 +164,9 @@ public:
 	~handler_entry_write_ioport() = default;
 
 	void write(offs_t offset, uX data, uX mem_mask) const override;
+	void write_interruptible(offs_t offset, uX data, uX mem_mask) const override;
 	u16 write_flags(offs_t offset, uX data, uX mem_mask) const override;
+	u16 lookup_flags(offs_t offset, uX mem_mask) const override;
 
 	std::string name() const override;
 

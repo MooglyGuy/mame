@@ -64,15 +64,13 @@ uint32_t i386_device::i386_shift_rotate32(uint8_t modrm, uint32_t value, uint8_t
 		switch( (modrm >> 3) & 0x7 )
 		{
 			case 0:         /* ROL rm32, i8 */
-				dst = ((src & ((uint32_t)0xffffffff >> shift)) << shift) |
-						((src & ((uint32_t)0xffffffff << (32-shift))) >> (32-shift));
+				dst = rotl_32(src, shift);
 				m_CF = dst & 0x1;
 				m_OF = (dst & 1) ^ (dst >> 31);
 				CYCLES_RM(modrm, CYCLES_ROTATE_REG, CYCLES_ROTATE_MEM);
 				break;
 			case 1:         /* ROR rm32, i8 */
-				dst = ((src & ((uint32_t)0xffffffff << shift)) >> shift) |
-						((src & ((uint32_t)0xffffffff >> (32-shift))) << (32-shift));
+				dst = rotr_32(src, shift);
 				m_CF = (dst >> 31) & 0x1;
 				m_OF = ((dst >> 31) ^ (dst >> 30)) & 1;
 				CYCLES_RM(modrm, CYCLES_ROTATE_REG, CYCLES_ROTATE_MEM);
@@ -3020,7 +3018,7 @@ void i386_device::i386_group0F00_32()          // Opcode 0x0f 00
 				i386_load_protected_mode_segment(&seg,nullptr);
 
 				uint32_t addr = ((seg.selector & 4) ? m_ldtr.base : m_gdtr.base) + (seg.selector & ~7) + 5;
-				i386_translate_address(TRANSLATE_READ, &addr, nullptr);
+				i386_translate_address(TR_READ, false, &addr, nullptr);
 				m_program->write_byte(addr, (seg.flags & 0xff) | 2);
 
 				m_task.limit = seg.limit;

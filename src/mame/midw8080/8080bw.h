@@ -6,8 +6,8 @@
     8080-based black and white hardware
 
 ****************************************************************************/
-#ifndef MAME_INCLUDES_8080BW_H
-#define MAME_INCLUDES_8080BW_H
+#ifndef MAME_MIDW8080_8080BW_H
+#define MAME_MIDW8080_8080BW_H
 
 #pragma once
 
@@ -126,6 +126,7 @@ protected:
 
 	DECLARE_MACHINE_START(extra_8080bw_vh);
 	DECLARE_MACHINE_START(extra_8080bw_sh);
+	DECLARE_MACHINE_START(extra_8080bw);
 
 	uint32_t screen_update_invadpt2(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 
@@ -187,7 +188,6 @@ private:
 	uint8_t schaser_scattered_colorram_r(offs_t offset);
 	void schaser_scattered_colorram_w(offs_t offset, uint8_t data);
 
-	DECLARE_MACHINE_START(extra_8080bw);
 	DECLARE_MACHINE_START(sflush);
 	DECLARE_MACHINE_START(schaser);
 	DECLARE_MACHINE_START(schasercv);
@@ -430,6 +430,31 @@ private:
 };
 
 
+/*************************************/
+/* SNK Ozma Wars                     */
+/*************************************/
+
+class ozmawars_state : public _8080bw_state
+{
+public:
+	ozmawars_state(const machine_config &mconfig, device_type type, const char *tag)
+		: _8080bw_state(mconfig, type, tag)
+		{ }
+
+	void ozmawars(machine_config &config);
+	void ozmawars_samples_audio(machine_config &config);
+
+private:
+	void ozmawars_port03_w(uint8_t data);
+	void ozmawars_port04_w(uint8_t data);
+	void ozmawars_port05_w(uint8_t data);
+	void ozmawars_io_map(address_map &map);
+	u8 m_port03 = 0;
+	u8 m_port05 = 0;
+	bool m_sound_enable = 0;
+};
+
+
 /*******************************************************/
 /* Wing Yosaku to Donbei                               */
 /*******************************************************/
@@ -627,4 +652,4 @@ private:
 	required_device<eeprom_serial_93cxx_device> m_eeprom;
 };
 
-#endif // MAME_INCLUDES_8080BW_H
+#endif // MAME_MIDW8080_8080BW_H

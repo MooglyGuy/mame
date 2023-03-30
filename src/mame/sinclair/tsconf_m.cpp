@@ -72,12 +72,12 @@ void tsconf_state::tsconf_update_bank0()
 
 	if (W0_RAM)
 	{
-		m_banks[0]->set_entry(page0);
+		m_bank_ram[0]->set_entry(page0);
 		m_bank0_rom.disable();
 	}
 	else
 	{
-		m_banks[4]->set_entry(page0 & 0x1f);
+		m_bank_rom[0]->set_entry(page0 & 0x1f);
 		m_bank0_rom.select(0);
 	}
 }
@@ -154,27 +154,27 @@ void tsconf_state::spectrum_update_screen(screen_device &screen, bitmap_ind16 &b
 	}
 }
 
-void tsconf_state::tsconf_UpdateZxScreenBitmap(screen_device &screen_d, bitmap_ind16 &bitmap, const rectangle &screen)
+void tsconf_state::tsconf_UpdateZxScreenBitmap(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect)
 {
 	u8 pal_offset = m_regs[PAL_SEL] << 4;
 	u8 *screen_location = m_ram->pointer() + PAGE4K(m_regs[V_PAGE]);
 	u8 *attrs_location = m_ram->pointer() + PAGE4K(m_regs[V_PAGE]) + 0x1800;
-	bool invert_attrs = u64(screen_d.frame_number() / m_frame_invert_count) & 1;
-	for (u16 vpos = screen.top(); vpos <= screen.bottom(); vpos++)
+	bool invert_attrs = u64(screen.frame_number() / m_frame_invert_count) & 1;
+	for (u16 vpos = cliprect.top(); vpos <= cliprect.bottom(); vpos++)
 	{
-		u16 hpos = screen.left();
+		u16 hpos = cliprect.left();
 		u16 x = hpos - get_screen_area().left();
 		u16 y = vpos - get_screen_area().top();
 		u8 *scr = &screen_location[((y & 7) << 8) | ((y & 0x38) << 2) | ((y & 0xc0) << 5) | (x >> 3)];
 		u8 *attr = &attrs_location[((y & 0xf8) << 2) | (x >> 3)];
 		u16 *pix = &(bitmap.pix(vpos, hpos));
-		while (hpos <= screen.right())
+		while (hpos <= cliprect.right())
 		{
 			u16 ink = pal_offset | ((*attr >> 3) & 0x08) | (*attr & 0x07);
 			u16 pap = pal_offset | ((*attr >> 3) & 0x0f);
 			u8 pix8 = (invert_attrs && (*attr & 0x80)) ? ~*scr : *scr;
 
-			for (u8 b = 0x80 >> (x & 0x07); b != 0 && hpos <= screen.right(); b >>= 1, x++, hpos++)
+			for (u8 b = 0x80 >> (x & 0x07); b != 0 && hpos <= cliprect.right(); b >>= 1, x++, hpos++)
 				*pix++ = (pix8 & b) ? ink : pap;
 			scr++;
 			attr++;
@@ -182,13 +182,13 @@ void tsconf_state::tsconf_UpdateZxScreenBitmap(screen_device &screen_d, bitmap_i
 	}
 }
 
-void tsconf_state::tsconf_UpdateTxtBitmap(bitmap_ind16 &bitmap, const rectangle &screen)
+void tsconf_state::tsconf_UpdateTxtBitmap(bitmap_ind16 &bitmap, const rectangle &cliprect)
 {
 	u8 *font_location = m_ram->pointer() + PAGE4K(m_regs[V_PAGE] ^ 0x01);
 	u8 pal_offset = m_regs[PAL_SEL] << 4;
-	for (u16 vpos = screen.top(); vpos <= screen.bottom(); vpos++)
+	for (u16 vpos = cliprect.top(); vpos <= cliprect.bottom(); vpos++)
 	{
-		u16 hpos = screen.left();
+		u16 hpos = cliprect.left();
 		u16 x = hpos - get_screen_area().left();
 		u16 y = vpos - get_screen_area().top();
 		u16 y_offset = (OFFS_512(G_Y_OFFS_L) + y) & 0x1ff;
@@ -196,28 +196,28 @@ void tsconf_state::tsconf_UpdateTxtBitmap(bitmap_ind16 &bitmap, const rectangle 
 		// TODO? u16 x_offset = OFFS_512(G_X_OFFS_L);
 		u8 *text_location = m_ram->pointer() + PAGE4K(m_regs[V_PAGE]) + (y_offset / 8 * 256 + x / 8);
 		u16 *pix = &(bitmap.pix(vpos, hpos));
-		while (hpos <= screen.right())
+		while (hpos <= cliprect.right())
 		{
 			u8 font_color = *(text_location + 128) & 0x0f;
 			u8 bg_color = (*(text_location + 128) & 0xf0) >> 4;
 			u8 char_x = *(font_location + (*text_location * 8) + (y_offset % 8));
-			for (u8 b = 0x80 >> (x & 0x07); b != 0 && hpos <= screen.right(); b >>= 1, x++, hpos++)
+			for (u8 b = 0x80 >> (x & 0x07); b != 0 && hpos <= cliprect.right(); b >>= 1, x++, hpos++)
 				*pix++ = pal_offset | ((char_x & b) ? font_color : bg_color);
 			text_location++;
 		}
 	}
 }
 
-void tsconf_state::tsconf_UpdateGfxBitmap(bitmap_ind16 &bitmap, const rectangle &screen)
+void tsconf_state::tsconf_UpdateGfxBitmap(bitmap_ind16 &bitmap, const rectangle &cliprect)
 {
 	u8 pal_offset = m_regs[PAL_SEL] << 4;
-	for (u16 vpos = screen.top(); vpos <= screen.bottom(); vpos++)
+	for (u16 vpos = cliprect.top(); vpos <= cliprect.bottom(); vpos++)
 	{
 		u16 y_offset = (0x200 + OFFS_512(G_Y_OFFS_L) + m_gfx_y_frame_offset + vpos) & 0x1ff;
-		u16 x_offset = (OFFS_512(G_X_OFFS_L) + (screen.left() - get_screen_area().left())) & 0x1ff;
+		u16 x_offset = (OFFS_512(G_X_OFFS_L) + (cliprect.left() - get_screen_area().left())) & 0x1ff;
 		u8 *video_location = m_ram->pointer() + PAGE4K(m_regs[V_PAGE]) + ((y_offset * 512 + x_offset) >> (2 - VM));
-		u16 *bm = &(bitmap.pix(vpos, screen.left()));
-		s16 width = screen.width();
+		u16 *bm = &(bitmap.pix(vpos, cliprect.left()));
+		s16 width = cliprect.width();
 		if (VM == VM_16C)
 		{
 			if (x_offset & 1)
@@ -508,15 +508,15 @@ void tsconf_state::tsconf_port_xxaf_w(offs_t port, u8 data)
 		break;
 
 	case PAGE1:
-		m_banks[1]->set_entry(data);
+		m_bank_ram[1]->set_entry(data);
 		break;
 
 	case PAGE2:
-		m_banks[2]->set_entry(data);
+		m_bank_ram[2]->set_entry(data);
 		break;
 
 	case PAGE3:
-		m_banks[3]->set_entry(data);
+		m_bank_ram[3]->set_entry(data);
 		break;
 
 	case DMAS_ADDRESS_L:
@@ -613,7 +613,7 @@ void tsconf_state::tsconf_port_xxaf_w(offs_t port, u8 data)
 
 	case SYS_CONFIG:
 		// 0 - 3.5MHz, 1 - 7MHz, 2 - 14MHz, 3 - reserved
-		m_maincpu->set_clock(3.5_MHz_XTAL * (1 << (data & 0x03)));
+		m_maincpu->set_clock_scale(1 << (data & 0x03));
 		m_regs[CACHE_CONFIG] = BIT(data, 2) ? 0x0f : 0x00;
 		break;
 
@@ -640,13 +640,9 @@ void tsconf_state::tsconf_port_xxaf_w(offs_t port, u8 data)
 u8 tsconf_state::tsconf_port_f7_r(offs_t offset)
 {
 	// BFF7
-	u8 data = 0xff;
-	if (m_port_f7_ext == PS2KEYBOARDS_LOG && m_port_f7_gluk_reg == 0xf0)
-		data = m_keyboard->read();
-	else if (m_port_f7_ext != DISABLED)
-		data = m_glukrs->read(m_port_f7_gluk_reg);
-
-	return data;
+	return  (m_port_f7_ext == PS2KEYBOARDS_LOG && m_glukrs->address_r() == 0xf0)
+		? m_keyboard->read()
+		: m_glukrs->data_r();
 }
 
 void tsconf_state::tsconf_port_f7_w(offs_t offset, u8 data)
@@ -654,18 +650,23 @@ void tsconf_state::tsconf_port_f7_w(offs_t offset, u8 data)
 	auto m_l = offset >> 12;
 	if (m_l == 6) // EF
 	{
-		m_port_f7_ext = (data & 0x80) ? CONF_VERSION : DISABLED;
+		m_glukrs->disable();
+		if (BIT(data, 7))
+		{
+			m_glukrs->enable();
+			m_port_f7_ext = CONF_VERSION;
+		}
 	}
-	else if (m_port_f7_ext != DISABLED)
+	else if (m_glukrs->is_active())
 	{
 		if (m_l == 5) // DF
 		{
 			// 0x0E..0xEF
-			m_port_f7_gluk_reg = data;
+			m_glukrs->address_w(data);
 		}
 		else if (m_l == 3) // BF
 		{
-			if (m_port_f7_gluk_reg == 0xf0)
+			if (m_glukrs->address_r() == 0xf0)
 			{
 				u8 m_fx[0xf] = {0xff};
 				m_port_f7_ext = static_cast<gluk_ext>(data);
@@ -684,17 +685,19 @@ void tsconf_state::tsconf_port_f7_w(offs_t offset, u8 data)
 				case PS2KEYBOARDS_LOG:
 					break;
 				default:
-					logerror("Gluk extention not supported %x\n", m_port_f7_gluk_reg);
+					logerror("Gluk extention not supported %x\n", m_port_f7_ext);
 					break;
 				}
 				for (u8 i = 0; i < 0xf; i++)
 				{
-					m_glukrs->write(0xf0 + i, m_fx[i]);
+					m_glukrs->address_w(0xf0 + i);
+					m_glukrs->data_w(m_fx[i]);
 				}
+				m_glukrs->address_w(0xf0);
 			}
 			else
 			{
-				m_glukrs->write(m_port_f7_gluk_reg, data);
+				m_glukrs->data_w(data);
 			}
 		}
 	}
@@ -708,7 +711,7 @@ void tsconf_state::tsconf_port_77_zctr_w(offs_t port, u8 data)
 
 u8 tsconf_state::tsconf_port_77_zctr_r(offs_t port)
 {
-	return 0x02 | !m_sdcard->get_card_present();
+	return 0x02 | (m_sdcard->get_card_present() ? 0x00 : 0x01);
 }
 
 void tsconf_state::tsconf_port_57_zctr_w(offs_t port, u8 data)
@@ -726,8 +729,14 @@ void tsconf_state::tsconf_port_57_zctr_w(offs_t port, u8 data)
 
 u8 tsconf_state::tsconf_port_57_zctr_r(offs_t port)
 {
-	tsconf_port_57_zctr_w(0, 0xff);
-	return m_zctl_cs ? 0xff : m_zctl_di;
+	if (m_zctl_cs)
+		return 0xff;
+
+	u8 data = m_zctl_di;
+	if (!machine().side_effects_disabled())
+		tsconf_port_57_zctr_w(0, 0xff);
+
+	return data;
 }
 
 void tsconf_state::tsconf_spi_miso_w(u8 data)
@@ -736,15 +745,48 @@ void tsconf_state::tsconf_spi_miso_w(u8 data)
 	m_zctl_di |= data;
 }
 
+IRQ_CALLBACK_MEMBER(tsconf_state::irq_vector)
+{
+	u8 vector = 0xff;
+	if (m_int_mask & 1)
+		m_int_mask &= ~1;
+	else if (m_int_mask & 2)
+	{
+		m_int_mask &= ~2;
+		vector = 0xfd;
+	}
+	else if (m_int_mask & 4)
+	{
+		m_int_mask &= ~4;
+		vector = 0xfb;
+	}
+
+	if (!m_int_mask)
+		m_maincpu->set_input_line(0, CLEAR_LINE);
+
+	return vector;
+}
+
+TIMER_CALLBACK_MEMBER(tsconf_state::irq_on)
+{
+	m_maincpu->set_input_line(INPUT_LINE_IRQ0, ASSERT_LINE);
+	m_irq_off_timer->adjust(attotime::from_ticks(32, m_maincpu->unscaled_clock()));
+}
+
+TIMER_CALLBACK_MEMBER(tsconf_state::irq_off)
+{
+	m_int_mask = 0;
+	m_maincpu->set_input_line(0, CLEAR_LINE);
+}
+
 void tsconf_state::update_frame_timer()
 {
 	u16 vpos = OFFS_512(VS_INT_L);
 	u16 hpos = m_regs[HS_INT];
-	if (hpos > 0 && vpos <= 319 && hpos <= 223)
-		// Only if not overlapping with scanline. Otherwise we need to prioritize.
-		m_frame_irq_timer->adjust(m_screen->time_until_pos(vpos, hpos << 1));
-	else
-		m_frame_irq_timer->adjust(attotime::never);
+	attotime at = (BIT(m_regs[INT_MASK], 0) && vpos <= 319 && hpos <= 223) ? m_screen->time_until_pos(vpos, hpos << 1) : m_screen->time_until_pos(0, 0);
+	if (at >= m_screen->frame_period())
+		at = attotime::zero;
+	m_frame_irq_timer->adjust(at);
 
 	m_gfx_y_frame_offset = -get_screen_area().top();
 }
@@ -752,43 +794,35 @@ void tsconf_state::update_frame_timer()
 INTERRUPT_GEN_MEMBER(tsconf_state::tsconf_vblank_interrupt)
 {
 	update_frame_timer();
-	m_line_irq_timer->adjust(attotime::zero);
+	m_scanline_irq_timer->adjust(attotime::zero);
 }
 
 void tsconf_state::dma_ready(int line)
 {
 	if (BIT(m_regs[INT_MASK], 4))
 	{
-		m_maincpu->set_input_line_and_vector(line, ASSERT_LINE, 0xfb);
-		m_irq_off_timer->adjust(m_maincpu->clocks_to_attotime(32 * (1 << (m_regs[SYS_CONFIG] & 0x03))));
+		m_int_mask |= 4;
+		m_irq_on_timer->adjust(attotime::zero);
 	}
 }
 
 TIMER_CALLBACK_MEMBER(tsconf_state::irq_frame)
 {
 	if (BIT(m_regs[INT_MASK], 0))
-	{
-		m_maincpu->set_input_line_and_vector(0, ASSERT_LINE, 0xff);
-		m_irq_off_timer->adjust(m_maincpu->clocks_to_attotime(32 * (1 << (m_regs[SYS_CONFIG] & 0x03))));
-	}
+		m_int_mask |= 1;
+	m_irq_on_timer->adjust(attotime::zero);
 }
 
 TIMER_CALLBACK_MEMBER(tsconf_state::irq_scanline)
 {
-	u16 screen_vpos = m_screen->vpos();
-	m_line_irq_timer->adjust(m_screen->time_until_pos(screen_vpos + 1));
 	if (BIT(m_regs[INT_MASK], 1))
 	{
-		m_maincpu->set_input_line_and_vector(0, ASSERT_LINE, 0xfd);
-		// Not quite precise. Scanline can't be skipped.
-		m_irq_off_timer->adjust(m_maincpu->clocks_to_attotime(32 * (1 << (m_regs[SYS_CONFIG] & 0x03))));
-	}
-	if (BIT(m_regs[INT_MASK], 0) && OFFS_512(VS_INT_L) == screen_vpos && m_regs[HS_INT] == 0)
-	{
-		m_maincpu->set_input_line_and_vector(0, ASSERT_LINE, 0xff);
-		m_irq_off_timer->adjust(m_maincpu->clocks_to_attotime(32 * (1 << (m_regs[SYS_CONFIG] & 0x03))));
+		m_int_mask |= 2;
+		m_irq_on_timer->adjust(attotime::zero);
 	}
 
+	u16 screen_vpos = m_screen->vpos();
+	m_scanline_irq_timer->adjust(m_screen->time_until_pos(screen_vpos + 1));
 	m_screen->update_now();
 	for (const auto &[reg, val] : m_scanline_delayed_regs_update)
 	{
@@ -811,30 +845,34 @@ TIMER_CALLBACK_MEMBER(tsconf_state::irq_scanline)
 
 u8 tsconf_state::beta_neutral_r(offs_t offset)
 {
-	return m_program->read_byte(offset);
+	return m_program.read_byte(offset);
 }
 
 u8 tsconf_state::beta_enable_r(offs_t offset)
 {
-	if (!W0_RAM && m_banks[4]->entry() == 3)
+	if (!machine().side_effects_disabled())
 	{
-		if (m_beta->started() /*&& !m_beta->is_active()*/)
+		if (!W0_RAM && m_bank_rom[0]->entry() == 3)
 		{
-			m_beta->enable();
-			tsconf_update_bank0();
+			if (m_beta->started() && !m_beta->is_active())
+			{
+				m_beta->enable();
+				tsconf_update_bank0();
+			}
 		}
 	}
-
-	return m_program->read_byte(offset + 0x3d00);
+	return m_program.read_byte(offset + 0x3d00);
 }
 
 u8 tsconf_state::beta_disable_r(offs_t offset)
 {
-	if (m_beta->started() && m_beta->is_active())
+	if (!machine().side_effects_disabled())
 	{
-		m_beta->disable();
-		tsconf_update_bank0();
+		if (m_beta->started() && m_beta->is_active())
+		{
+			m_beta->disable();
+			tsconf_update_bank0();
+		}
 	}
-
-	return m_program->read_byte(offset + 0x4000);
+	return m_program.read_byte(offset + 0x4000);
 }

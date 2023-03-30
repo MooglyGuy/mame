@@ -95,6 +95,10 @@ TODO
 #include "softlist_dev.h"
 #include "speaker.h"
 
+#include "utf8.h"
+
+
+namespace {
 
 #define MAIN_CLOCK           14_MHz_XTAL
 #define AY_CLOCK             MAIN_CLOCK / 8     /* 1.75 Mhz */
@@ -878,6 +882,9 @@ ROM_START( squale )
 
 	// place ROM v1.2 signature here.
 ROM_END
+
+} // anonymous namespace
+
 
 /* Driver */
 

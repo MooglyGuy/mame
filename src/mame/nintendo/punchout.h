@@ -5,12 +5,12 @@
     Punch Out / Super Punch Out / Arm Wrestling
 
 ***************************************************************************/
-#ifndef MAME_INCLUDES_PUNCHOUT_H
-#define MAME_INCLUDES_PUNCHOUT_H
+#ifndef MAME_NINTENDO_PUNCHOUT_H
+#define MAME_NINTENDO_PUNCHOUT_H
 
 #pragma once
 
-#include "cpu/m6502/n2a03.h"
+#include "cpu/m6502/rp2a03.h"
 #include "machine/rp5c01.h"
 #include "machine/rp5h01.h"
 #include "sound/vlm5030.h"
@@ -45,7 +45,7 @@ public:
 
 private:
 	required_device<cpu_device> m_maincpu;
-	required_device<n2a03_device> m_audiocpu;
+	required_device<rp2a03_device> m_audiocpu;
 	optional_device<rp5c01_device> m_rtc;
 	optional_device<rp5h01_device> m_rp5h01;
 	required_device<vlm5030_device> m_vlm;
@@ -109,4 +109,4 @@ private:
 	void spnchout_io_map(address_map &map);
 };
 
-#endif // MAME_INCLUDES_PUNCHOUT_H
+#endif // MAME_NINTENDO_PUNCHOUT_H

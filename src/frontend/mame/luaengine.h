@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include <condition_variable>
 #include <functional>
 #include <map>
 #include <memory>
@@ -21,6 +20,7 @@
 #include <tuple>
 #include <vector>
 
+#define SOL_USING_CXX_LUA 1
 #ifdef MAME_DEBUG
 #define SOL_ALL_SAFETIES_ON 1
 #else
@@ -144,6 +144,8 @@ private:
 
 	class buffer_helper;
 	struct addr_space;
+	class palette_wrapper;
+	template <typename T> class bitmap_helper;
 	class tap_helper;
 	class addr_space_change_notif;
 	class symbol_table_wrapper;
@@ -156,15 +158,6 @@ private:
 		unsigned int valcount;
 		unsigned int blockcount;
 		unsigned int stride;
-	};
-
-	struct context
-	{
-		context() { busy = false; yield = false; }
-		std::string result;
-		std::condition_variable sync;
-		bool busy;
-		bool yield;
 	};
 
 	// internal state

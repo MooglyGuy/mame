@@ -37,6 +37,7 @@
 #include "machine/bcreader.h"
 
 #include "crsshair.h"
+#include "dinetwork.h"
 #include "dipty.h"
 #include "emuopts.h"
 
@@ -107,7 +108,7 @@ void menu_main::menu_activated()
     populate - populate main menu items
 -------------------------------------------------*/
 
-void menu_main::populate(float &customtop, float &custombottom)
+void menu_main::populate()
 {
 	m_phase = machine().phase();
 
@@ -205,7 +206,7 @@ void menu_main::populate(float &customtop, float &custombottom)
     handle - handle main menu events
 -------------------------------------------------*/
 
-void menu_main::handle(event const *ev)
+bool menu_main::handle(event const *ev)
 {
 	// process the menu
 	if (ev && (ev->iptkey == IPT_UI_SELECT))
@@ -320,12 +321,14 @@ void menu_main::handle(event const *ev)
 
 		case DISMISS:
 			stack_pop();
-			return;
+			break;
 
 		default:
 			fatalerror("ui::menu_main::handle - unknown reference\n");
 		}
 	}
+
+	return false;
 }
 
 } // namespace ui

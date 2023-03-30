@@ -5,8 +5,8 @@
     Chequered Flag
 
 *************************************************************************/
-#ifndef MAME_INCLUDES_CHQFLAG_H
-#define MAME_INCLUDES_CHQFLAG_H
+#ifndef MAME_KONAMI_CHQFLAG_H
+#define MAME_KONAMI_CHQFLAG_H
 
 #pragma once
 
@@ -46,7 +46,6 @@ private:
 	void k007232_extvolume_w(uint8_t data);
 	void volume_callback0(uint8_t data);
 	void volume_callback1(uint8_t data);
-	DECLARE_WRITE_LINE_MEMBER(background_brt_w);
 	K051316_CB_MEMBER(zoom_callback_1);
 	K051316_CB_MEMBER(zoom_callback_2);
 	K051960_CB_MEMBER(sprite_callback);
@@ -79,4 +78,4 @@ private:
 	void update_background_shadows(uint8_t data);
 };
 
-#endif // MAME_INCLUDES_CHQFLAG_H
+#endif // MAME_KONAMI_CHQFLAG_H

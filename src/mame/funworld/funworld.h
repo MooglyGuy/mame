@@ -1,7 +1,7 @@
 // license:BSD-3-Clause
 // copyright-holders:Roberto Fresca, Peter Ferrie
-#ifndef MAME_INCLUDES_FUNWORLD_H
-#define MAME_INCLUDES_FUNWORLD_H
+#ifndef MAME_FUNWORLD_FUNWORLD_H
+#define MAME_FUNWORLD_FUNWORLD_H
 
 #pragma once
 
@@ -149,7 +149,7 @@ public:
 
 	void multiwin(machine_config& config);
 
-	void driver_init() override;
+	void driver_init();
 
 protected:
 	virtual void video_start() override;
@@ -167,7 +167,7 @@ public:
 
 	void royalcrdf(machine_config& config);
 
-	void driver_init() override;
+	void driver_init();
 
 private:
 	uint8_t royalcrdf_opcode_r(offs_t offset);
@@ -189,7 +189,7 @@ public:
 	void intrgmes(machine_config &config);
 
 protected:
-	virtual void driver_init() override;
+	virtual void driver_start() override;
 	virtual void machine_reset() override;
 
 private:
@@ -206,4 +206,4 @@ private:
 	bool m_crtc_selected;
 };
 
-#endif // MAME_INCLUDES_FUNWORLD_H
+#endif // MAME_FUNWORLD_FUNWORLD_H

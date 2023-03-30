@@ -34,7 +34,6 @@
 #include "machine/nvram.h"
 #include "machine/pcf8573.h"
 #include "machine/scn_pci.h"
-#include "machine/bankdev.h"
 #include "sound/beep.h"
 #include "sound/pcd3311.h"
 #include "video/saa5240.h"
@@ -44,6 +43,7 @@
 #include "emupal.h"
 #include "screen.h"
 #include "speaker.h"
+#include "utf8.h"
 
 #include "accomm.lh"
 

@@ -10,9 +10,20 @@
 #include <cassert>
 
 
-/***************************************************************************
- TYPE DEFINITIONS
- ***************************************************************************/
+//**************************************************************************
+//  MACROS
+//**************************************************************************
+
+#define DEVICE_IMAGE_LOAD_MEMBER(_name)             image_init_result _name(device_image_interface &image)
+#define DECLARE_DEVICE_IMAGE_LOAD_MEMBER(_name)     DEVICE_IMAGE_LOAD_MEMBER(_name)
+
+#define DEVICE_IMAGE_UNLOAD_MEMBER(_name)           void _name(device_image_interface &image)
+#define DECLARE_DEVICE_IMAGE_UNLOAD_MEMBER(_name)   DEVICE_IMAGE_UNLOAD_MEMBER(_name)
+
+
+//**************************************************************************
+//  TYPE DEFINITIONS
+//**************************************************************************
 
 class device_generic_cart_interface : public device_interface
 {
@@ -50,6 +61,38 @@ public:
 			remain ^= chunk;
 			start ^= chunk;
 		}
+	}
+
+	// TODO: find a better home for this helper
+	template <typename T, typename U>
+	static T map_non_power_of_two(T count, U &&map)
+	{
+		if (T(0) >= count)
+			return T(0);
+
+		T const max(count - 1);
+		T mask(max);
+		for (unsigned i = 1; (sizeof(T) * 8) > i; i <<= 1)
+			mask = T(std::make_unsigned_t<T>(mask) | (std::make_unsigned_t<T>(mask) >> i));
+		int bits(0);
+		while (BIT(mask, bits))
+			++bits;
+
+		for (T entry = T(0); mask >= entry; ++entry)
+		{
+			T mapped(entry);
+			int b(bits - 1);
+			while (max < mapped)
+			{
+				while (BIT(max, b))
+					--b;
+				assert(0 <= b);
+				mapped = T(std::make_unsigned_t<T>(mapped) & ~(std::make_unsigned_t<T>(1) << b--));
+			}
+			map(entry, mapped);
+		}
+
+		return mask;
 	}
 
 	// construction/destruction
@@ -106,6 +149,9 @@ class generic_slot_device : public device_t,
 								public device_single_card_slot_interface<device_generic_cart_interface>
 {
 public:
+	typedef device_delegate<image_init_result (device_image_interface &)> load_delegate;
+	typedef device_delegate<void (device_image_interface &)> unload_delegate;
+
 	virtual ~generic_slot_device();
 
 	template <typename... T> void set_device_load(T &&... args) { m_device_image_load.set(std::forward<T>(args)...); }

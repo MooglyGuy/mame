@@ -2923,6 +2923,7 @@ void taitof2_state::megab(machine_config &config)
 	/* video hardware */
 	MCFG_VIDEO_START_OVERRIDE(taitof2_state,megab)
 	m_screen->set_screen_update(FUNC(taitof2_state::screen_update_pri));
+	m_screen->screen_vblank().set(FUNC(taitof2_state::screen_vblank_partial_buffer_delayed));
 
 	TC0100SCN(config, m_tc0100scn[0], 0);
 	m_tc0100scn[0]->set_offsets(3, 0);
@@ -4630,7 +4631,6 @@ ROM_START( growlp )
 	ROM_REGION( 0x080000, "ymsnd:adpcmb", 0 )   /* Delta-T samples */
 	ROM_LOAD( "growl_ic21_ch-b-0_d743.bin",   0x00000, 0x40000, CRC(7a7eab62) SHA1(268d900f84162ba655cb652a1c1865dfc25da4de) )
 	ROM_LOAD( "growl_ic22_ch-b-1_a5f1.bin",   0x40000, 0x40000, CRC(567df833) SHA1(1ad019a9f938ebe2f09bc68b57b6c2623ecd9f46) )
-
 ROM_END
 
 ROM_START( mjnquest )   /* Mahjong Quest */

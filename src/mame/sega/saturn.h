@@ -1,7 +1,7 @@
 // license:LGPL-2.1+
 // copyright-holders:David Haywood, Angelo Salese, Olivier Galibert, Mariusz Wojcieszek, R. Belmont
-#ifndef MAME_INCLUDES_SATURN_H
-#define MAME_INCLUDES_SATURN_H
+#ifndef MAME_SEGA_SATURN_H
+#define MAME_SEGA_SATURN_H
 
 #pragma once
 
@@ -11,9 +11,6 @@
 #include "cpu/m68000/m68000.h"
 #include "cpu/sh/sh2.h"
 
-#include "debug/debugcon.h"
-#include "debug/debugcmd.h"
-
 #include "315-5881_crypt.h"
 #include "315-5838_317-0229_comp.h"
 #include "machine/sega_scu.h"
@@ -22,7 +19,6 @@
 
 #include "sound/scsp.h"
 
-#include "debugger.h"
 #include "emupal.h"
 #include "screen.h"
 
@@ -443,11 +439,6 @@ protected:
 //  DECLARE_WRITE_LINE_MEMBER(scudsp_end_w);
 //  uint16_t scudsp_dma_r(offs_t offset);
 //  void scudsp_dma_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-
-//  void debug_scudma_command(int ref, const std::vector<std::string> &params);
-//  void debug_scuirq_command(int ref, const std::vector<std::string> &params);
-//  void debug_help_command(int ref, const std::vector<std::string> &params);
-//  void debug_commands(int ref, const std::vector<std::string> &params);
 };
 
 
@@ -465,4 +456,4 @@ protected:
 
 extern gfx_decode_entry const gfx_stv[];
 
-#endif // MAME_INCLUDES_SATURN_H
+#endif // MAME_SEGA_SATURN_H

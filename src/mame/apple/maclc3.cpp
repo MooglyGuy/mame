@@ -17,19 +17,21 @@
 
 #include "emu.h"
 
+#include "cuda.h"
+#include "egret.h"
+#include "macadb.h"
+#include "macscsi.h"
+#include "mactoolbox.h"
+#include "sonora.h"
+
 #include "bus/nscsi/devices.h"
 #include "bus/rs232/rs232.h"
-#include "cpu/m68000/m68000.h"
+#include "cpu/m68000/m68030.h"
 #include "machine/ram.h"
 #include "machine/timer.h"
 #include "machine/z80scc.h"
 #include "machine/nscsi_bus.h"
 #include "machine/ncr5380.h"
-#include "cuda.h"
-#include "egret.h"
-#include "macadb.h"
-#include "macscsi.h"
-#include "sonora.h"
 
 #include "emupal.h"
 #include "screen.h"
@@ -79,9 +81,6 @@ private:
 
 	virtual void machine_start() override;
 
-	WRITE_LINE_MEMBER(adb_irq_w) { m_adb_irq_pending = state; }
-	int m_adb_irq_pending = 0;
-
 	u16 scc_r(offs_t offset)
 	{
 		u16 result = m_scc->dc_ab_r(offset);
@@ -112,8 +111,6 @@ private:
 void macvail_state::machine_start()
 {
 	m_sonora->set_ram_info((u32 *) m_ram->pointer(), m_ram->size());
-
-	save_item(NAME(m_adb_irq_pending));
 }
 
 /***************************************************************************
@@ -218,6 +215,7 @@ INPUT_PORTS_END
 void macvail_state::maclc3_base(machine_config &config)
 {
 	M68030(config, m_maincpu, 25000000);
+	m_maincpu->set_dasm_override(std::function(&mac68k_dasm_override), "mac68k_dasm_override");
 
 	RAM(config, m_ram);
 	m_ram->set_default_size("4M");
@@ -266,11 +264,9 @@ void macvail_state::maclc3_base(machine_config &config)
 
 	SONORA(config, m_sonora, C15M);
 	m_sonora->set_maincpu_tag("maincpu");
-	m_sonora->set_rom_tag(":bootrom");
+	m_sonora->set_rom_tag("bootrom");
 
 	MACADB(config, m_macadb, C15M);
-	m_macadb->adb_irq_callback().set(FUNC(macvail_state::adb_irq_w));
-	m_macadb->set_mcu_mode(true);
 }
 
 void macvail_state::maclc3(machine_config &config)
@@ -324,4 +320,4 @@ ROM_END
 } // anonymous namespace
 
 COMP(1993, maclc3, 0, 0, maclc3, macadb, macvail_state, empty_init, "Apple Computer", "Macintosh LC III", MACHINE_SUPPORTS_SAVE | MACHINE_IMPERFECT_SOUND)
-COMP(1993, maclc520, 0, 0, maclc520, macadb, macvail_state, empty_init, "Apple Computer", "Macintosh LC 520", MACHINE_NOT_WORKING)
+COMP(1993, maclc520, 0, 0, maclc520, macadb, macvail_state, empty_init, "Apple Computer", "Macintosh LC 520", MACHINE_SUPPORTS_SAVE | MACHINE_IMPERFECT_SOUND)

@@ -20,6 +20,7 @@
 #include "fileio.h"
 #include "http.h"
 #include "image.h"
+#include "main.h"
 #include "natkeyboard.h"
 #include "network.h"
 #include "render.h"
@@ -147,12 +148,13 @@ void running_machine::start()
 	// initialize UI input
 	m_ui_input = std::make_unique<ui_input_manager>(*this);
 
-	// init the osd layer
+	// init the OSD layer
 	m_manager.osd().init(*this);
 
-	// create the video manager
+	// create the video manager and UI manager
 	m_video = std::make_unique<video_manager>(*this);
 	m_ui = manager().create_ui(*this);
+	m_ui->set_startup_text("Initializing...", true);
 
 	// initialize the base time (needed for doing record/playback)
 	::time(&m_base_time);
@@ -1133,7 +1135,7 @@ void running_machine::nvram_load()
 	for (device_nvram_interface &nvram : nvram_interface_enumerator(root_device()))
 	{
 		emu_file file(options().nvram_directory(), OPEN_FLAG_READ);
-		if (!file.open(nvram_filename(nvram.device())))
+		if (nvram.nvram_backup_enabled() && !file.open(nvram_filename(nvram.device())))
 		{
 			if (!nvram.nvram_load(file))
 				osd_printf_error("Error reading NVRAM file %s\n", file.filename());

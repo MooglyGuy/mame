@@ -20,10 +20,11 @@
 
 #include "corestr.h"
 #include "opresolv.h"
+#include "path.h"
 #include "zippath.h"
 
 #include <algorithm>
-#include <cctype>
+#include <cstdarg>
 #include <cstring>
 #include <regex>
 #include <sstream>
@@ -140,8 +141,7 @@ void device_image_interface::set_image_filename(std::string_view filename)
 
 bool device_image_interface::is_filetype(std::string_view candidate_filetype) const
 {
-	return std::equal(m_filetype.begin(), m_filetype.end(), candidate_filetype.begin(), candidate_filetype.end(),
-						[] (unsigned char c1, unsigned char c2) { return std::tolower(c1) == c2; });
+	return util::streqlower(m_filetype, candidate_filetype);
 }
 
 
@@ -562,15 +562,20 @@ std::vector<u32> device_image_interface::determine_open_plan(bool is_create)
 {
 	std::vector<u32> open_plan;
 
-	// emit flags into a vector
-	if (!is_create && is_readable() && is_writeable())
-		open_plan.push_back(OPEN_FLAG_READ | OPEN_FLAG_WRITE);
-	if (!is_create && !is_readable() && is_writeable())
-		open_plan.push_back(OPEN_FLAG_WRITE);
-	if (!is_create && is_readable())
-		open_plan.push_back(OPEN_FLAG_READ);
-	if (is_create && is_writeable() && is_creatable())
-		open_plan.push_back(OPEN_FLAG_READ | OPEN_FLAG_WRITE | OPEN_FLAG_CREATE);
+	if (!is_create)
+	{
+		if (is_writeable())
+			open_plan.push_back(is_readable() ? (OPEN_FLAG_READ | OPEN_FLAG_WRITE) : OPEN_FLAG_WRITE);
+		if (is_readable())
+			open_plan.push_back(OPEN_FLAG_READ);
+	}
+	else if (is_writeable() && is_creatable())
+	{
+		if (is_readable())
+			open_plan.push_back(OPEN_FLAG_READ | OPEN_FLAG_WRITE | OPEN_FLAG_CREATE);
+		else
+			open_plan.push_back(OPEN_FLAG_WRITE | OPEN_FLAG_CREATE);
+	}
 
 	return open_plan;
 }

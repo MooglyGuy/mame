@@ -31,15 +31,22 @@
 ***************************************************************************/
 
 #include "emu.h"
+
 #include "cpu/m6502/m6502.h"
 #include "machine/bankdev.h"
 #include "machine/ram.h"
 #include "machine/kb3600.h"
 #include "sound/sn76496.h"
 #include "sound/spkrdev.h"
+
 #include "emupal.h"
 #include "screen.h"
 #include "speaker.h"
+
+#include "utf8.h"
+
+
+namespace {
 
 enum
 {
@@ -643,6 +650,7 @@ void laser3k_state::dhgr_update(screen_device &screen, bitmap_ind16 &bitmap, con
 			}
 			else
 			{
+				// FIXME: this is unreachable - loop bound is checks (col < 40) so these columns can never be copied
 				vram_row[1+(col*2)+0] = vram[offset+0x2000];
 				vram_row[1+(col*2)+1] = vram[offset+0x2001];
 			}
@@ -1008,6 +1016,9 @@ ROM_START(las3000)
 	ROM_REGION(0x100, "fdc", 0)
 	ROM_LOAD ( "l3kdisk.rom", 0x0000, 0x0100, CRC(2d4b1584) SHA1(989780b77e100598124df7b72663e5a31a3339c0))
 ROM_END
+
+} // anonymous namespace
+
 
 //    YEAR  NAME     PARENT  COMPAT  MACHINE  INPUT    CLASS          INIT        COMPANY             FULLNAME      FLAGS
 COMP( 1983, las3000, 0,      0,      laser3k, laser3k, laser3k_state, empty_init, "Video Technology", "Laser 3000", MACHINE_NOT_WORKING )

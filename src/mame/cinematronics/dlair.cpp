@@ -51,6 +51,8 @@
 #include "dlair.lh"
 
 
+namespace {
+
 class dlair_state : public driver_device
 {
 public:
@@ -167,8 +169,6 @@ private:
  *  Globals
  *
  *************************************/
-
-
 
 static const uint8_t led_map[16] =
 	{ 0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7c,0x07,0x7f,0x67,0x77,0x7c,0x39,0x5e,0x79,0x00 };
@@ -1028,6 +1028,7 @@ void dlair_state::init_variable()
 //  m_laserdisc_type = LASERDISC_TYPE_VARIABLE;
 }
 
+} // anonymous namespace
 
 
 /*************************************

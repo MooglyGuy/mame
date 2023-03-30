@@ -42,6 +42,8 @@
 #include "vboy.lh"
 
 
+namespace {
+
 #define READ_BGMAP(bgoffs) m_bgmap[(bgoffs) & 0xffff]
 #define READ_WORLD(wldoffs)   READ_BGMAP((0x1d800 >> 1) + wldoffs)
 #define READ_COLTAB1(wldoffs) READ_BGMAP((0x1dc00 >> 1) + wldoffs)
@@ -1270,7 +1272,6 @@ void vboy_state::vboy(machine_config &config)
 
 	/* cartridge */
 	VBOY_CART_SLOT(config, m_cart, vboy_carts, nullptr);
-	m_cart->set_must_be_loaded(true);
 	m_cart->intcro().set_inputline(m_maincpu, 2);
 	m_cart->set_exp(m_maincpu, AS_PROGRAM, 0x0400'0000);
 	m_cart->set_chip(m_maincpu, AS_PROGRAM, 0x0600'0000);
@@ -1291,6 +1292,9 @@ void vboy_state::vboy(machine_config &config)
 ROM_START( vboy )
 	ROM_REGION( 0x2000000, "maincpu", ROMREGION_ERASEFF )
 ROM_END
+
+} // anonymous namespace
+
 
 /* Driver */
 

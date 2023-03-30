@@ -14,10 +14,13 @@
 
 #include "options.h"
 
-#include <lua.hpp>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 
 #include <cassert>
 #include <system_error>
+#include <type_traits>
 
 
 
@@ -125,6 +128,51 @@ public:
 		assert(!m_prepared);
 		return proxy(*this, size);
 	}
+};
+
+
+class lua_engine::palette_wrapper
+{
+public:
+	palette_wrapper(uint32_t numcolors, uint32_t numgroups) : m_palette(palette_t::alloc(numcolors, numgroups))
+	{
+	}
+
+	palette_wrapper(palette_t &pal) : m_palette(&pal)
+	{
+		m_palette->ref();
+	}
+
+	palette_wrapper(palette_wrapper const &that) : m_palette(that.m_palette)
+	{
+		m_palette->ref();
+	}
+
+	~palette_wrapper()
+	{
+		m_palette->deref();
+	}
+
+	palette_wrapper &operator=(palette_wrapper const &that)
+	{
+		that.m_palette->ref();
+		m_palette->deref();
+		m_palette = that.m_palette;
+		return *this;
+	}
+
+	palette_t const &palette() const
+	{
+		return *m_palette;
+	}
+
+	palette_t &palette()
+	{
+		return *m_palette;
+	}
+
+private:
+	palette_t *m_palette;
 };
 
 
@@ -413,7 +461,10 @@ protected:
 			result = sol::stack::push(L, i.ix + 1);
 		else
 			result = T::push_key(L, i.it, i.ix);
-		result += sol::stack::push_reference(L, T::unwrap(i.it));
+		if constexpr (std::is_reference_v<decltype(T::unwrap(i.it))>)
+			result += sol::stack::push_reference(L, std::ref(T::unwrap(i.it)));
+		else
+			result += sol::stack::push_reference(L, T::unwrap(i.it));
 		++i;
 		return result;
 	}
@@ -434,9 +485,16 @@ public:
 		T &self(immutable_sequence_helper::get_self(L));
 		std::ptrdiff_t const index(sol::stack::unqualified_get<std::ptrdiff_t>(L, 2));
 		if ((0 >= index) || (self.items().size() < index))
+		{
 			return sol::stack::push(L, sol::lua_nil);
+		}
 		else
-			return sol::stack::push_reference(L, T::unwrap(std::next(self.items().begin(), index - 1)));
+		{
+			if constexpr (std::is_reference_v<decltype(T::unwrap(std::next(self.items().begin(), index - 1)))>)
+				return sol::stack::push_reference(L, std::ref(T::unwrap(std::next(self.items().begin(), index - 1))));
+			else
+				return sol::stack::push_reference(L, T::unwrap(std::next(self.items().begin(), index - 1)));
+		}
 	}
 
 	static int index_of(lua_State *L)

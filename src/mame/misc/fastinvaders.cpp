@@ -22,6 +22,8 @@ http://www.citylan.it/wiki/index.php/Fast_Invaders_%288275_version%29
 #include "screen.h"
 
 
+namespace {
+
 class fastinvaders_state : public driver_device
 {
 public:
@@ -451,7 +453,7 @@ DECLARE_WRITE_LINE_MEMBER( fastinvaders_state::vsync)
 		m_maincpu->set_input_line(I8085_RST75_LINE, ASSERT_LINE);
 		m_maincpu->set_input_line(I8085_RST75_LINE, CLEAR_LINE);
 		//machine().scheduler().abort_timeslice(); // transfer occurs immediately
-		//machine().scheduler().boost_interleave(attotime::zero, attotime::from_usec(100)); // smooth things out a bit
+		//machine().scheduler().perfect_quantum(attotime::from_usec(100)); // smooth things out a bit
 		m_av=0;
 	}
 }
@@ -772,6 +774,9 @@ ROM_START( fi6845 )
 	ROM_REGION( 0x0100, "prom", 0 )
 	ROM_LOAD( "93427.bin",     0x0000, 0x0100, CRC(f59c8573) SHA1(5aed4866abe1690fd0f088af1cfd99b3c85afe9a) )
 ROM_END
+
+} // anonymous namespace
+
 
 //   YEAR   NAME    PARENT  MACHINE            INPUT         STATE               INIT         ROT     COMPANY       FULLNAME                        FLAGS
 GAME( 1979, fi6845, 0,      fastinvaders_6845, fastinvaders, fastinvaders_state, init_fi6845, ROT270, "Fiberglass", "Fast Invaders (6845 version)", MACHINE_NOT_WORKING | MACHINE_NO_SOUND )

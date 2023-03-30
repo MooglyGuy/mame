@@ -458,12 +458,11 @@ static uint8_t dec_7seg(int data)
 /* Display a seven digit counter on layout - Index points to less significant digit*/
 void videopkr_state::count_7dig(unsigned long data, uint8_t index)
 {
-	uint8_t i;
-	char strn[8];
-	sprintf(strn,"%7lu",data);
-
-	for (i = 0; i < 7; i++)
-		m_digits[index+i] = dec_7seg((strn[6 - i] | 0x10) - 0x30);
+	for (auto i = 0; i < 7; i++)
+	{
+		m_digits[index+i] = dec_7seg(data % 10);
+		data /= 10;
+	}
 }
 
 void videopkr_state::videopkr_palette(palette_device &palette) const
@@ -1408,7 +1407,7 @@ ROM_START( videopkr )
 
 	ROM_REGION( 0x0100, "proms", 0 )
 	ROM_LOAD( "vpbjorg.col",    0x0000, 0x0100, CRC(09abf5f1) SHA1(f2d6b4f2f08b47b93728dafb50576d5ca859255f) )
-	ROM_END
+ROM_END
 
 ROM_START( blckjack )
 	ROM_REGION( 0x1000, "maincpu", 0 )

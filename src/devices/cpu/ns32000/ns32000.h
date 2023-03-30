@@ -35,7 +35,7 @@ protected:
 
 	// device_memory_interface overrides
 	virtual space_config_vector memory_space_config() const override;
-	virtual bool memory_translate(int spacenum, int intention, offs_t &address) override;
+	virtual bool memory_translate(int spacenum, int intention, offs_t &address, address_space *&target_space) override;
 
 	// device_state_interface overrides
 	virtual void state_string_export(device_state_entry const &entry, std::string &str) const override;
@@ -120,7 +120,7 @@ protected:
 
 	// memory accessors
 	template <typename T> T mem_read(unsigned st, u32 address, bool user = false, bool pfs = false);
-	template <typename T> void mem_write(unsigned st, u32 address, T data, bool user = false);
+	template <typename T> void mem_write(unsigned st, u32 address, u64 data, bool user = false);
 
 	// instruction fetch/decode helpers
 	template <typename T> T fetch(unsigned &bytes);

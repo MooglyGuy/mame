@@ -360,7 +360,7 @@ cdrom_file::~cdrom_file()
 ***************************************************************************/
 
 /**
- * @fn  std::error_condition read_partial_sector(void *dest, uint32_t lbasector, uint32_t chdsector, uint32_t tracknum, uint32_t startoffs, uint32_t length)
+ * @fn  std::error_condition read_partial_sector(void *dest, uint32_t lbasector, uint32_t chdsector, uint32_t tracknum, uint32_t startoffs, uint32_t length, bool phys)
  *
  * @brief   Reads partial sector.
  *
@@ -370,6 +370,7 @@ cdrom_file::~cdrom_file()
  * @param   tracknum        The tracknum.
  * @param   startoffs       The startoffs.
  * @param   length          The length.
+ * @param   phys            true to physical.
  *
  * @return  The partial sector.
  */
@@ -421,7 +422,7 @@ std::error_condition cdrom_file::read_partial_sector(void *dest, uint32_t lbasec
 		sourcefileoffset += chdsector * bytespersector + startoffs;
 
 		if (EXTRA_VERBOSE)
-			printf("Reading sector %d from track %d at offset %lu\n", chdsector, tracknum, (unsigned long)sourcefileoffset);
+			printf("Reading %u bytes from sector %d from track %d at offset %lu\n", (unsigned)length, chdsector, tracknum + 1, (unsigned long)sourcefileoffset);
 
 		size_t actual;
 		result = srcfile.seek(sourcefileoffset, SEEK_SET);
@@ -437,9 +438,7 @@ std::error_condition cdrom_file::read_partial_sector(void *dest, uint32_t lbasec
 		uint8_t *buffer = (uint8_t *)dest - startoffs;
 		for (int swapindex = startoffs; swapindex < 2352; swapindex += 2 )
 		{
-			int swaptemp = buffer[ swapindex ];
-			buffer[ swapindex ] = buffer[ swapindex + 1 ];
-			buffer[ swapindex + 1 ] = swaptemp;
+			std::swap(buffer[ swapindex ], buffer[ swapindex + 1 ]);
 		}
 	}
 	return result;
@@ -484,6 +483,7 @@ bool cdrom_file::read_data(uint32_t lbasector, void *buffer, uint32_t datatype, 
 
 	if ((datatype == tracktype) || (datatype == CD_TRACK_RAW_DONTCARE))
 	{
+		assert(cdtoc.tracks[tracknum].datasize != 0);
 		return !read_partial_sector(buffer, lbasector, chdsector, tracknum, 0, cdtoc.tracks[tracknum].datasize, phys);
 	}
 	else
@@ -570,7 +570,7 @@ bool cdrom_file::read_subcode(uint32_t lbasector, void *buffer, bool phys)
 		return false;
 
 	// read the data
-	std::error_condition err = read_partial_sector(buffer, lbasector, chdsector, tracknum, cdtoc.tracks[tracknum].datasize, cdtoc.tracks[tracknum].subsize);
+	std::error_condition err = read_partial_sector(buffer, lbasector, chdsector, tracknum, cdtoc.tracks[tracknum].datasize, cdtoc.tracks[tracknum].subsize, phys);
 	return !err;
 }
 

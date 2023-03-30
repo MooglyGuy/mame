@@ -1,7 +1,7 @@
 // license:BSD-3-Clause
 // copyright-holders:Ernesto Corvi
-#ifndef MAME_INCLUDES_NAMCOS1_H
-#define MAME_INCLUDES_NAMCOS1_H
+#ifndef MAME_NAMCO_NAMCOS1_H
+#define MAME_NAMCO_NAMCOS1_H
 
 #pragma once
 
@@ -70,7 +70,7 @@ protected:
 	virtual void machine_start() override;
 	virtual void machine_reset() override;
 	virtual void video_start() override;
-	void driver_init() override;
+	void driver_init();
 
 private:
 	required_device<mc6809e_device> m_maincpu;
@@ -156,4 +156,4 @@ private:
 	void virtual_map(address_map &map);
 };
 
-#endif // MAME_INCLUDES_NAMCOS1_H
+#endif // MAME_NAMCO_NAMCOS1_H

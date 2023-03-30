@@ -6,8 +6,8 @@
 
 *********************************************************************/
 
-#ifndef MAME_VIDEO_MMDISPLAY1_H
-#define MAME_VIDEO_MMDISPLAY1_H
+#ifndef MAME_HEGENERGLASER_MMDISPLAY1_H
+#define MAME_HEGENERGLASER_MMDISPLAY1_H
 
 #pragma once
 
@@ -34,12 +34,12 @@ private:
 
 	void update_lcd();
 
-	int m_strobe = 0;
-	u8 m_digit_idx = 0;
-	u8 m_digit_data[4] = { 0, 0, 0, 0 };
+	int m_strobe;
+	u8 m_digit_idx;
+	u8 m_digit_data[4];
 };
 
 
 DECLARE_DEVICE_TYPE(MEPHISTO_DISPLAY_MODULE1, mephisto_display1_device)
 
-#endif // MAME_VIDEO_MMDISPLAY1_H
+#endif // MAME_HEGENERGLASER_MMDISPLAY1_H

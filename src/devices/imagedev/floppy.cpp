@@ -220,11 +220,6 @@ floppy_connector::~floppy_connector()
 {
 }
 
-void floppy_connector::set_formats(std::function<void (format_registration &fr)> _formats)
-{
-	formats = _formats;
-}
-
 void floppy_connector::device_start()
 {
 }
@@ -318,7 +313,13 @@ void floppy_image_device::setup_led_cb(led_cb cb)
 	cur_led_cb = cb;
 }
 
-void floppy_image_device::fs_enum::add(const floppy_image_format_t &type, u32 image_size, const char *name, const char *description)
+floppy_image_device::fs_enum::fs_enum(floppy_image_device *fid)
+	: fs::manager_t::floppy_enumerator(fid->form_factor, fid->variants)
+	, m_fid(fid)
+{
+}
+
+void floppy_image_device::fs_enum::add_format(const floppy_image_format_t &type, u32 image_size, const char *name, const char *description)
 {
 	m_fid->m_fs.emplace_back(fs_info(m_manager, &type, image_size, name, description));
 }
@@ -346,7 +347,7 @@ void floppy_image_device::register_formats()
 	for(const fs::manager_t *fmt : fr.m_fs)
 	{
 		fse.m_manager = fmt;
-		fmt->enumerate_f(fse, form_factor, variants);
+		fmt->enumerate_f(fse);
 		m_fs_managers.push_back(fmt);
 	}
 }
@@ -619,7 +620,7 @@ image_init_result floppy_image_device::call_load()
 	init_floppy_load(output_format != nullptr);
 
 	if (!cur_load_cb.isnull())
-		return cur_load_cb(this);
+		cur_load_cb(this);
 
 	flux_image_prepare();
 
@@ -1538,7 +1539,7 @@ void floppy_sound_device::device_start()
 {
 	// What kind of drive do we have?
 	bool is525 = strstr(tag(), "525") != nullptr;
-	set_samples_names(is525? floppy525_sample_names : floppy35_sample_names);
+	set_samples_names(is525 ? floppy525_sample_names : floppy35_sample_names);
 
 	m_motor_on = false;
 
@@ -1576,13 +1577,16 @@ void floppy_sound_device::motor(bool running, bool withdisk)
 		if ((m_spin_playback_sample==QUIET || m_spin_playback_sample==SPIN_END) && running) // motor was either off or already spinning down
 		{
 			m_spin_samplepos = 0;
-			m_spin_playback_sample = withdisk? SPIN_START_LOADED : SPIN_START_EMPTY; // (re)start the motor sound
+			m_spin_playback_sample = withdisk ? SPIN_START_LOADED : SPIN_START_EMPTY; // (re)start the motor sound
 		}
 		else
 		{
 			// Motor has been running and is turned off now
 			if ((m_spin_playback_sample == SPIN_EMPTY || m_spin_playback_sample == SPIN_LOADED) && !running)
+			{
+				m_spin_samplepos = 0;
 				m_spin_playback_sample = SPIN_END; // go to spin down sound when loop is finished
+			}
 		}
 	}
 	m_motor_on = running;
@@ -1728,7 +1732,7 @@ void floppy_sound_device::sound_stream_update(sound_stream &stream, std::vector<
 					// Spindown sample over, be quiet or restart if the
 					// motor has been restarted
 					if (m_motor_on)
-						m_spin_playback_sample = m_with_disk? SPIN_START_LOADED : SPIN_START_EMPTY;
+						m_spin_playback_sample = m_with_disk ? SPIN_START_LOADED : SPIN_START_EMPTY;
 					else
 						m_spin_playback_sample = QUIET;
 					break;

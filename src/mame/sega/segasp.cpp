@@ -46,28 +46,33 @@ Bingo Galaxy (satellite)                    837-14481    C            ROM  JP   
 Bingo Galaxy (satellite)                    837-14789    F*           ROM  JP     not used        AAFE-xxxxxxxxxxx, game is same as above
 Bingo Parade                                ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx, Medal
 Brick People / Block People                 834-14881                 ROM  ANY    253-5508-0558   AAFE-01F67905202, AAFE-01F68275202
+Dinosaur King                               834-14493                 no   JP     ???-????-????   AAFE-xxxxxxxxxxx
 Dinosaur King                               834-14493-01 D            ROM  US     253-5508-0408   AAFE-01D1132xxxx, AAFE-01D15924816
+Dinosaur King (tournament mode update)      834-14622                 no   JP     ???-????-????   AAFE-xxxxxxxxxxx
 Dinosaur King - Operation: Dinosaur Rescue  837-14434-91              ROM  US/EXP 253-5508-0408   AAFE-01A30164715, AAFE-01B92094811
 - // -                                      834-14662-01    MDA-C0021 CF                          AAFE-01B87574811
 Dinosaur King 2                             ???-?????                 no          253-5508-0408   AAFE-xxxxxxxxxxx
+Dinosaur King 2 Ver 2.5                     834-14739       MDA-C0030 no   JP     253-5508-0408   AAFE-xxxxxxxxxxx
 Dinosaur King 2 Ver 2.5                     834-14792-02 F  MDA-C0047 CF   EXP    253-5508-0408   AAFE-01D73384904
 Dinosaur King 2 Ver 2.501 China             ???-?????       MDA-C0081 CF   EXP    253-5508-0408   AAFE-xxxxxxxxxxx
 Dinosaur King Ver 4.000                     ???-?????       MDA-C0061 CF   JP     253-5508-0408   AAFE-xxxxxxxxxxx
 Disney: Magical Dream Dance on Stage        ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx
 Future Police Patrol Chase                  ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx
+Heat Up Hockey Image                        834000201  TSB0-SEGA00001 CF   JP     ???-????-????   AAFE-xxxxxxxxxxx
 Issyouni Turbo Drive                        ???-?????                 no          ???-????-????   AAFE-01E91305101
 Issyouni Wanwan (INW 2K7 1ST)               834-14747                 no          ???-????-????   AAFE-xxxxxxxxxxx
 Issyouni Wanwan Waiwai Puppy (INW PUPPY)    834-14826       MDA-C0052 no          ???-????-????   AAFE-xxxxxxxxxxx
 King of Beetle: Battle Terminal             ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx
+Kouchu ouja Mushiking Popo no boukenhen     834-14583                 no   JP     ???-????-????   AAFE-xxxxxxxxxxx
 Love & Berry 2K5 Spring/Summer              834-14535       MDA-C0003 no   JP     ???-????-????   AAFE-xxxxxxxxxxx
+Love & Berry 2K5 Autumn/Winter              834-14556                 no   JP     ???-????-????   AAFE-xxxxxxxxxxx
 Love & Berry Ver 1.003                      834-14661-02              ROM  EXP    253-5508-0446   AAFE-01D84934906
 Love & Berry Ver 2.000                      834-14661-02              ROM  EXP    253-5508-0446   AAFE-01D8493xxxx
 Love & Berry 3 EXP Ver 1.002                834-14661-01    MDA-C0042 CF   US/EXP 253-5508-0446   AAFE-01D64704904
 Love & Berry 3 CHN                          ???-?????       MDA-C0071 CF   EXP    253-5508-0446   AAFE-01G15765216
+Magical Poppins (Medalink)                  837-14700    F*           ROM  JP     253-5508-0474J  AAFE-xxxxxxxxxxx, Satellite Medal
 Manpuku Suizokukan                          8340004      F            ROM  JP     253-5508-0640JN AAFE-01E32815002
-Marine & Marine                             ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx
-Medalink                                    837-14699                 no
-Medalink                                    837-14700                 no
+Marine & Marine 2K7 1ST                     834-14749                 no          ???-????-????   AAFE-xxxxxxxxxxx
 Mirage World (SP MRW SATL)                  834-14713                 ROM  ANY    ???-????-????   AAFG-01A3xxxxxxx, Medal
 Monopoly: The Medal                         ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx, Medal
 Monopoly: The Medal 2nd Edition             ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx, Medal
@@ -79,8 +84,10 @@ Tetris Giant / Tetris Dekaris               834-14970    G  MDA-C0076 CF   ANY  
 Tetris Giant / Tetris Dekaris Ver.2.000     834-14970    G            ROM  ANY    253-5508-0604   AAFE-xxxxxxxxxxx
 Thomas: The Tank Engine                     ???-?????                 no          ???-????-????   AAFE-xxxxxxxxxxx
 UNO the Medal (Medalink)                    837-14804    F*           ROM  JP     253-5508-0526J  AAFE-01G00225212, Satellite Medal
+Western Dream Gold (Medalink)               837-14699    F*           ROM  JP     253-5508-0473J  AAFE-xxxxxxxxxxx, Satellite Medal
 Yataimura Kingyosukui (1-player, Japan)     8340003      D            ROM  JP     253-5509-5151J  AAFE-01C68774814
 Yataimura Kingyosukui (4-player, China)     837-14875                 CF   EXP    253-5508-0563J  AAFE-xxxxxxxxxxx
+Yataimura Shateki (1-player, Japan)         834000301    D            ROM  JP     253-5508-0628J  AAFE-01C37464814
 Unknown                                     834-14865                      JAP
 
 REV PCB       IC6s      Flash       AU1500
@@ -548,6 +555,22 @@ ROM_START( lovebero )
 	ROM_LOAD( "317-0446-com.ic15", 0, 0x800, CRC(9e519dc6) SHA1(69a1efc81c9dc44fcb8fc9c17bd7f879d3259950) )
 ROM_END
 
+ROM_START( magicpop )
+	SEGASP_BIOS
+	ROM_DEFAULT_BIOS( "v201" )
+	SEGASP_JP
+	SEGASP_MISC
+
+	ROM_REGION( 0x08000000, "rom_board", ROMREGION_ERASEFF)
+	ROM_LOAD( "ic62",  0x00000000, 0x4000000, CRC(f52306db) SHA1(4a12d12d0c14cd6363b4ccb384ae5719b43c627c) )
+	ROM_LOAD( "ic63",  0x04000000, 0x4000000, CRC(1e5bad78) SHA1(cc254e8bfc874dadf58af9f0562c9b81842fff09) )
+
+	ROM_PARAMETER( ":rom_board:id", "5502" )  // 2x 512Mbit FlashROMs
+
+	ROM_REGION( 0x800, "pic_readout", 0 )
+	ROM_LOAD( "317-0474-jpn.ic15", 0, 0x800, BAD_DUMP CRC(711ba0aa) SHA1(b413889e80e7660ac8ac735bbb0f35485ba6cde6) )
+ROM_END
+
 ROM_START( manpuku )
 	SEGASP_BIOS
 	ROM_DEFAULT_BIOS( "v201" )
@@ -615,6 +638,28 @@ ROM_START( puyomedal )
 	ROM_LOAD( "317-0568-jpn.ic15", 0, 0x800, CRC(313e6987) SHA1(9bec2a2806e4ba018518b9f3cc157c35d08a0490) )
 ROM_END
 
+ROM_START( shateki )
+	SEGASP_BIOS
+	ROM_DEFAULT_BIOS( "v201" )
+	SEGASP_JP
+	SEGASP_MISC
+
+	ROM_REGION( 0x08000000, "rom_board", ROMREGION_ERASE)
+	ROM_LOAD( "ic62",  0x00000000, 0x01000000, CRC(c463ae32) SHA1(7f4aca80c0a49caa589d1338464b71c4d33f0bd6) )
+	ROM_LOAD( "ic63",  0x01000000, 0x01000000, CRC(2acf1456) SHA1(028eae0ff11857e991f26355c1f405e3bcbd33f3) )
+	ROM_LOAD( "ic64",  0x02000000, 0x01000000, CRC(fd04ebf8) SHA1(07f6287697deccb1e9c3f1da22c4d8336dfbc41e) )
+	ROM_LOAD( "ic65",  0x03000000, 0x01000000, CRC(0c0ed06b) SHA1(1ed0d1624ad304095323aacaab53519fe62b8330) )
+	ROM_LOAD( "ic66s", 0x04000000, 0x01000000, CRC(3a9f33cc) SHA1(af4c96ea3b539d631d15b7a66efdf985cd78f87c) ) // 4 below ROMs leftovers junk from some other game
+	ROM_LOAD( "ic67s", 0x05000000, 0x01000000, CRC(8e08cf8b) SHA1(51da97b769823773d1b2bc7e7f40a5b51543642d) ) // keep them for now, may worth to remove later
+	ROM_LOAD( "ic68s", 0x06000000, 0x01000000, CRC(14734999) SHA1(cd763fcd4bab5a3cfb09b4054c5358b70249f9b5) )
+	ROM_LOAD( "ic69s", 0x07000000, 0x01000000, CRC(6c0cd4c5) SHA1(63963a3f8f1f90c8c78f0dc1f215666d3b7b1151) )
+
+	ROM_PARAMETER( ":rom_board:id", "5502" )  // actually 8x 128Mbit FlashROMs
+
+	ROM_REGION( 0x800, "pic_readout", 0 )
+	ROM_LOAD( "317-0628-jpn.ic15", 0, 0x800, CRC(c02f7424) SHA1(901e7f17a8e9e2e265ce4b2ec2cc56649ae57b17) )
+ROM_END
+
 ROM_START( tetgiant )
 	SEGASP_BIOS
 	ROM_DEFAULT_BIOS( "v201" )
@@ -645,6 +690,22 @@ ROM_START( unomedal )
 
 	ROM_REGION( 0x800, "pic_readout", 0 )
 	ROM_LOAD( "317-0526-jpn.ic15", 0, 0x800, CRC(14232fb7) SHA1(5fb8f832c760081aec6fdaa3be8535e3d641ae13) )
+ROM_END
+
+ROM_START( westdrmg )
+	SEGASP_BIOS
+	ROM_DEFAULT_BIOS( "v201" )
+	SEGASP_JP
+	SEGASP_MISC
+
+	ROM_REGION( 0x08000000, "rom_board", ROMREGION_ERASEFF)
+	ROM_LOAD( "ic62",  0x00000000, 0x4000000, CRC(67bde24c) SHA1(a236b69af04d3794092955918f217bf5cfbdde04) )
+	ROM_LOAD( "ic63",  0x04000000, 0x4000000, CRC(f5901eab) SHA1(9a5a0ba3f444647d40866aa48f4b3b885c66edf7) )
+
+	ROM_PARAMETER( ":rom_board:id", "5502" )  // 2x 512Mbit FlashROMs
+
+	ROM_REGION( 0x800, "pic_readout", 0 )
+	ROM_LOAD( "317-0473-jpn.ic15", 0, 0x800, BAD_DUMP CRC(8ec686b0) SHA1(a9e636df399654aeab5b35e44c9db8321c8cbd5a) )
 ROM_END
 
 
@@ -733,6 +794,25 @@ ROM_START( dinoki4 )
 
 	ROM_REGION( 0x800, "pic_readout", 0 )
 	ROM_LOAD( "317-0408-com.ic15", 0, 0x800, CRC(f77c49dc) SHA1(e10173bbbd5930ed159cec9a7dba308e2a3f3c43) )
+ROM_END
+
+ROM_START( huhimage )
+	SEGASP_BIOS
+	ROM_DEFAULT_BIOS( "v200" )
+	SEGASP_JP
+	SEGASP_MISC
+
+	ROM_REGION( 0x08000000, "rom_board", ROMREGION_ERASEFF)
+
+	// TSB0-SEGA00001
+	DISK_REGION( "cflash" )
+	DISK_IMAGE( "tsb0-sega00001", 0, SHA1(2e5703783e5200ef37845d3ca1f862c3541cc21d) )
+
+	ROM_PARAMETER( ":rom_board:id", "5508" )  // 8x 512Mbit FlashROMs
+
+	// original PIC missing, brute forced key
+	ROM_REGION( 0x800, "pic_readout", 0 )
+	ROM_LOAD( "317-unknown-jpn.ic15", 0, 0x800, BAD_DUMP CRC(634e1994) SHA1(6ae6538fc5f256bc0de86f57ffd72196a147accf) )
 ROM_END
 
 ROM_START( kingyoch )
@@ -827,17 +907,21 @@ GAME( 2005, dinoking,segasp,     segasp,    segasp, segasp_state, init_segasp, R
 GAME( 2009, kingyo,segasp,       segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Yataimura Kingyosukui (1-player, Japan, Ver 1.005)", GAME_FLAGS ) // キッズ屋台村 金魚すくい
 GAME( 2006, lovebery,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Love And Berry - 1st-2nd Collection (Export, Ver 2.000)", GAME_FLAGS )
 GAME( 2006, lovebero,lovebery,   segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Love And Berry - 1st-2nd Collection (Export, Ver 1.003)", GAME_FLAGS )
+GAME( 2009, magicpop,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Magical Poppins", GAME_FLAGS )
 GAME( 2013, manpuku,segasp,      segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Manpuku Suizokukan", GAME_FLAGS ) // まんぷくすいぞくかん
 GAME( 2007, mirworld,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Mirage World (satellite)", GAME_FLAGS )
 GAME( 2007, ochaken, segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Ocha-Ken Hot Medal", GAME_FLAGS )
 GAME( 2009, puyomedal,segasp,    segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Puyo Puyo! The Medal Edition", GAME_FLAGS )
+GAME( 2010, shateki,segasp,      segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Yataimura Shateki (1-player, Japan, Ver 1.000)", GAME_FLAGS )
 GAME( 2009, tetgiant,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Tetris Giant / Tetris Dekaris (Ver.2.000)", GAME_FLAGS )
 GAME( 2009, unomedal,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "UNO the Medal", GAME_FLAGS )
+GAME( 2009, westdrmg,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Western Dream Gold", GAME_FLAGS )
 // These use a CF card
 GAME( 2006, dinokior,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Dinosaur King - Operation: Dinosaur Rescue (USA, Export) (MDA-C0021)", GAME_FLAGS )
 GAME( 2008, dinoki25,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Dinosaur King - D-Team VS. the Alpha Fortress (Export, Ver 2.500) (MDA-C0047)", GAME_FLAGS )
 GAME( 2010, dinokich,dinoki25,   segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Konglongwang - D-Kids VS Alpha Yaosai (China, Ver 2.501) (MDA-C0081)", GAME_FLAGS ) // D-Kids VS 亚法要塞
 GAME( 2008, dinoki4,segasp,      segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Kodai Ouja Kyouryuu King - Mezame yo! Arata-naru Chikara!! (Japan, Ver 4.000) (MDA-C0061)", GAME_FLAGS ) // Ancient Ruler Dinosaur King - Wake up! New Power!!
+GAME( 2019, huhimage,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Heat Up Hockey Image (Ver.1.003R)", GAME_FLAGS )
 GAME( 2009, kingyoch,kingyo,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Yataimura Kingyosukui (4-player, China, Ver 1.000)", GAME_FLAGS )
 GAME( 2007, loveber3,segasp,     segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Love And Berry - 3rd-5th Collection (USA, Export, Ver 1.002) (MDA-C0042)", GAME_FLAGS )
 GAME( 2010, loveber3cn,loveber3, segasp,    segasp, segasp_state, init_segasp, ROT0, "Sega", "Love And Berry - 3rd-5th Collection (China, Ver 1.001) (MDA-C0071)", GAME_FLAGS )

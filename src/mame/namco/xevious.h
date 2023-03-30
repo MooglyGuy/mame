@@ -1,8 +1,8 @@
 // license:BSD-3-Clause
 // copyright-holders:Nicola Salmoria
 
-#ifndef MAME_INCLUDES_XEVIOUS
-#define MAME_INCLUDES_XEVIOUS
+#ifndef MAME_NAMCO_XEVIOUS_H
+#define MAME_NAMCO_XEVIOUS_H
 
 #pragma once
 
@@ -70,11 +70,10 @@ public:
 	{
 	}
 
-	void driver_init() override;
-
 	void battles(machine_config &config);
 
 protected:
+	virtual void driver_start() override;
 	virtual void machine_reset() override;
 
 private:
@@ -107,4 +106,4 @@ private:
 	char m_sound_played = 0;
 };
 
-#endif // MAME_INCLUDES_XEVIOUS
+#endif // MAME_NAMCO_XEVIOUS_H

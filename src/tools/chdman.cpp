@@ -13,8 +13,10 @@
 #include "bitmap.h"
 #include "cdrom.h"
 #include "corefile.h"
+#include "coretmpl.h"
 #include "hashing.h"
 #include "md5.h"
+#include "path.h"
 #include "strformat.h"
 #include "vbiparse.h"
 
@@ -516,8 +518,8 @@ public:
 				uint32_t samples = (uint64_t(m_info.rate) * uint64_t(effframe + 1) * uint64_t(1000000) + m_info.fps_times_1million - 1) / uint64_t(m_info.fps_times_1million) - first_sample;
 
 				// loop over channels and read the samples
-				int channels = unsigned((std::min<std::size_t>)(m_info.channels, std::size(m_audio)));
-				int16_t *samplesptr[std::size(m_audio)];
+				int channels = unsigned(std::min<std::size_t>(m_info.channels, std::size(m_audio)));
+				EQUIVALENT_ARRAY(m_audio, int16_t *) samplesptr;
 				for (int chnum = 0; chnum < channels; chnum++)
 				{
 					// read the sound samples
@@ -1398,9 +1400,6 @@ void output_track_metadata(int mode, util::core_file &file, int tracknum, const 
 	// non-CUE mode
 	else if (mode == MODE_NORMAL)
 	{
-		// header on the first track
-		if (tracknum == 0)
-			file.printf("CD_ROM\n\n\n");
 		file.printf("// Track %d\n", tracknum + 1);
 
 		// write out the track type
@@ -2430,8 +2429,7 @@ static void do_extract_cd(parameters_map &params)
 	int chop = default_name.find_last_of('.');
 	if (chop != -1)
 		default_name.erase(chop, default_name.size());
-	char basename[128];
-	strncpy(basename, default_name.c_str(), 127);
+	std::string basename = default_name;
 	default_name.append(".bin");
 	std::string *output_bin_file_str;
 	if (output_bin_file_fnd == params.end())
@@ -2485,6 +2483,42 @@ static void do_extract_cd(parameters_map &params)
 		{
 			output_toc_file->printf("%d\n", toc.numtrks);
 		}
+		else if (mode == MODE_NORMAL)
+		{
+			bool mode1 = false;
+			bool mode2 = false;
+			bool cdda = false;
+
+			for (int tracknum = 0; tracknum < toc.numtrks; tracknum++)
+			{
+				switch (toc.tracks[tracknum].trktype)
+				{
+					case cdrom_file::CD_TRACK_MODE1:
+					case cdrom_file::CD_TRACK_MODE1_RAW:
+						mode1 = true;
+						break;
+
+					case cdrom_file::CD_TRACK_MODE2:
+					case cdrom_file::CD_TRACK_MODE2_FORM1:
+					case cdrom_file::CD_TRACK_MODE2_FORM2:
+					case cdrom_file::CD_TRACK_MODE2_FORM_MIX:
+					case cdrom_file::CD_TRACK_MODE2_RAW:
+						mode2 = true;
+						break;
+
+					case cdrom_file::CD_TRACK_AUDIO:
+						cdda = true;
+						break;
+				}
+			}
+
+			if (mode2)
+				output_toc_file->printf("CD_ROM_XA\n\n\n");
+			else if (cdda && !mode1)
+				output_toc_file->printf("CD_DA\n\n\n");
+			else
+				output_toc_file->printf("CD_ROM\n\n\n");
+		}
 
 		// iterate over tracks and copy all data
 		uint64_t outputoffs = 0;
@@ -2492,17 +2526,15 @@ static void do_extract_cd(parameters_map &params)
 		std::vector<uint8_t> buffer;
 		for (int tracknum = 0; tracknum < toc.numtrks; tracknum++)
 		{
-			std::string trackbin_name(basename);
+			std::string trackbin_name = basename;
 
 			if (mode == MODE_GDI)
 			{
-				char temp[11];
-				sprintf(temp, "%02d", tracknum+1);
-				trackbin_name.append(temp);
+				trackbin_name += util::string_format("%02d", tracknum+1);
 				if (toc.tracks[tracknum].trktype == cdrom_file::CD_TRACK_AUDIO)
-					trackbin_name.append(".raw");
+					trackbin_name += ".raw";
 				else
-					trackbin_name.append(".bin");
+					trackbin_name += ".bin";
 
 				output_bin_file.reset();
 

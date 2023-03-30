@@ -7,13 +7,20 @@ Skeleton driver for Ann Arbor Ambassador terminal.
 ************************************************************************************************************************************/
 
 #include "emu.h"
+
 #include "bus/rs232/rs232.h"
 #include "cpu/z80/z80.h"
 #include "machine/74259.h"
 #include "machine/input_merger.h"
 #include "machine/scn_pci.h"
 #include "machine/nvram.h"
+
 #include "screen.h"
+
+#include "utf8.h"
+
+
+namespace {
 
 class aaa_state : public driver_device
 {
@@ -294,5 +301,8 @@ ROM_START( aaa )
 	ROM_REGION(0x1000, "font", 0)
 	ROM_LOAD( "202510b.bin",  0x0000, 0x1000, CRC(deda4aa4) SHA1(0bce5a8dc260ba51f3e431d8da408eac1f41acf7) )
 ROM_END
+
+} // anonymous namespace
+
 
 COMP( 1981, aaa, 0, 0, aaa, aaa, aaa_state, empty_init, "Ann Arbor", "Ambassador", MACHINE_IS_SKELETON )

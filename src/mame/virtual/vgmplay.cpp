@@ -11,7 +11,7 @@
 #include "imagedev/snapquik.h"
 
 #include "cpu/h6280/h6280.h"
-#include "cpu/m6502/n2a03.h"
+#include "cpu/m6502/rp2a03.h"
 #include "cpu/m68000/m68000.h"
 #include "cpu/sh/sh2.h"
 #include "sound/ay8910.h"
@@ -430,6 +430,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(key_pressed);
 
 	template<int Index> void upd7759_reset_w(uint8_t data);
+	template<int Index> void upd7759_start_w(uint8_t data);
 	template<int Index> void upd7759_data_w(uint8_t data);
 	template<int Index> DECLARE_WRITE_LINE_MEMBER(upd7759_drq_w);
 	template<int Index> void okim6258_clock_w(offs_t offset, uint8_t data, uint8_t mem_mask = ~0);
@@ -500,7 +501,7 @@ private:
 	required_device<sega_32x_ntsc_device> m_sega32x;
 	required_device_array<ay8910_device, 2> m_ay8910;
 	required_device_array<gameboy_sound_device, 2> m_dmg;
-	required_device_array<n2a03_device, 2> m_nescpu;
+	required_device_array<rp2a03_device, 2> m_nescpu;
 	required_device_array<multipcm_device, 2> m_multipcm;
 	required_device_array<upd7759_device, 2> m_upd7759;
 	required_device_array<okim6258_device, 2> m_okim6258;
@@ -2955,8 +2956,6 @@ QUICKLOAD_LOAD_MEMBER(vgmplay_state::load_file)
 		setup_device(*m_upd7759[1], 1, CT_UPD7759, 0x8c, 0x161);
 		m_upd7759_md[0] = r32(0x8c) & 0x80000000 ? 0 : 1;
 		m_upd7759_md[1] = r32(0x8c) & 0x80000000 ? 0 : 1;
-		m_upd7759[0]->md_w(m_upd7759_md[0]);
-		m_upd7759[1]->md_w(m_upd7759_md[1]);
 
 		setup_device(*m_okim6258[0], 0, CT_OKIM6258, 0x90, 0x161);
 		setup_device(*m_okim6258[1], 1, CT_OKIM6258, 0x90, 0x161);
@@ -3122,6 +3121,18 @@ void vgmplay_state::upd7759_reset_w(uint8_t data)
 		if (!reset)
 			std::queue<uint8_t>().swap(m_upd7759_slave_data[Index]);
 	}
+}
+
+template<int Index>
+void vgmplay_state::upd7759_start_w(uint8_t data)
+{
+	int start = data != 0;
+
+	// substitute ST with MD when in slave mode
+	if (m_upd7759_md[Index])
+		m_upd7759[Index]->start_w(start);
+	else
+		m_upd7759[Index]->md_w(!start);
 }
 
 template<int Index>
@@ -3392,11 +3403,11 @@ void vgmplay_state::soundchips_map(address_map &map)
 	map(vgmplay_device::A_MULTIPCM_1 + 4, vgmplay_device::A_MULTIPCM_1 + 7).w("vgmplay", FUNC(vgmplay_device::multipcm_bank_hi_w<1>));
 	map(vgmplay_device::A_MULTIPCM_1 + 8, vgmplay_device::A_MULTIPCM_1 + 11).w("vgmplay", FUNC(vgmplay_device::multipcm_bank_lo_w<1>));
 	map(vgmplay_device::A_UPD7759_0 + 0, vgmplay_device::A_UPD7759_0 + 0).w(FUNC(vgmplay_state::upd7759_reset_w<0>));
-	map(vgmplay_device::A_UPD7759_0 + 1, vgmplay_device::A_UPD7759_0 + 1).lw8(NAME([this](uint8_t data) {m_upd7759[0]->start_w(data != 0); }));
+	map(vgmplay_device::A_UPD7759_0 + 1, vgmplay_device::A_UPD7759_0 + 1).w(FUNC(vgmplay_state::upd7759_start_w<0>));
 	map(vgmplay_device::A_UPD7759_0 + 2, vgmplay_device::A_UPD7759_0 + 2).w(FUNC(vgmplay_state::upd7759_data_w<0>));
 	map(vgmplay_device::A_UPD7759_0 + 3, vgmplay_device::A_UPD7759_0 + 3).w("vgmplay", FUNC(vgmplay_device::upd7759_bank_w<0>));
 	map(vgmplay_device::A_UPD7759_1 + 0, vgmplay_device::A_UPD7759_1 + 0).w(FUNC(vgmplay_state::upd7759_reset_w<1>));
-	map(vgmplay_device::A_UPD7759_1 + 1, vgmplay_device::A_UPD7759_1 + 1).lw8(NAME([this](uint8_t data) {m_upd7759[1]->start_w(data != 0); }));
+	map(vgmplay_device::A_UPD7759_1 + 1, vgmplay_device::A_UPD7759_1 + 1).w(FUNC(vgmplay_state::upd7759_start_w<1>));
 	map(vgmplay_device::A_UPD7759_1 + 2, vgmplay_device::A_UPD7759_1 + 2).w(FUNC(vgmplay_state::upd7759_data_w<1>));
 	map(vgmplay_device::A_UPD7759_1 + 3, vgmplay_device::A_UPD7759_1 + 3).w("vgmplay", FUNC(vgmplay_device::upd7759_bank_w<1>));
 	map(vgmplay_device::A_OKIM6258_0 + 0x0, vgmplay_device::A_OKIM6258_0 + 0x0).w(m_okim6258[0], FUNC(okim6258_device::ctrl_w));
@@ -3845,13 +3856,13 @@ void vgmplay_state::vgmplay(machine_config &config)
 	m_dmg[1]->add_route(0, m_mixer, 1, AUTO_ALLOC_INPUT, 0);
 	m_dmg[1]->add_route(0, m_mixer, 1, AUTO_ALLOC_INPUT, 1);
 
-	N2A03(config, m_nescpu[0], 0);
+	RP2A03G(config, m_nescpu[0], 0);
 	m_nescpu[0]->set_addrmap(AS_PROGRAM, &vgmplay_state::nescpu_map<0>);
 	m_nescpu[0]->set_disable();
 	m_nescpu[0]->add_route(ALL_OUTPUTS, m_mixer, 0.50, AUTO_ALLOC_INPUT, 0);
 	m_nescpu[0]->add_route(ALL_OUTPUTS, m_mixer, 0.50, AUTO_ALLOC_INPUT, 1);
 
-	N2A03(config, m_nescpu[1], 0);
+	RP2A03G(config, m_nescpu[1], 0);
 	m_nescpu[1]->set_addrmap(AS_PROGRAM, &vgmplay_state::nescpu_map<1>);
 	m_nescpu[1]->set_disable();
 	m_nescpu[1]->add_route(ALL_OUTPUTS, m_mixer, 0.50, AUTO_ALLOC_INPUT, 0);

@@ -30,15 +30,21 @@
 ****************************************************************************/
 
 #include "emu.h"
+
 #include "cpu/z80/z80.h"
 #include "machine/nvram.h"
 #include "machine/rp5c15.h"
 #include "sound/spkrdev.h"
 #include "video/hd44780.h"
+
 #include "emupal.h"
 #include "screen.h"
 #include "speaker.h"
 
+#include "utf8.h"
+
+
+namespace {
 
 class lcmate2_state : public driver_device
 {
@@ -268,6 +274,9 @@ ROM_START( lcmate2 )
 	ROM_LOAD( "u2.bin",  0x00000, 0x08000, CRC(521931b9) SHA1(743a6e2928c4365fbf5ed9a173e2c1bfe695850f) )
 	ROM_LOAD( "u3.bin",  0x20000, 0x20000, CRC(84fe767a) SHA1(8dd306f203e1220f0eab1a284be3095e2642c5b6) ) // spell library
 ROM_END
+
+} // anonymous namespace
+
 
 /* Driver */
 

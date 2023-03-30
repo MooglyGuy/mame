@@ -5,8 +5,8 @@
  * includes/tsconfig.h
  *
  ****************************************************************************/
-#ifndef MAME_INCLUDES_TSCONF_H
-#define MAME_INCLUDES_TSCONF_H
+#ifndef MAME_SINCLAIR_TSCONF_H
+#define MAME_SINCLAIR_TSCONF_H
 
 #pragma once
 
@@ -14,10 +14,10 @@
 
 #include "beta_m.h"
 
-#include "machine/glukrs.h"
+#include "glukrs.h"
 #include "machine/pckeybrd.h"
 #include "machine/spi_sdcard.h"
-#include "machine/tsconfdma.h"
+#include "tsconfdma.h"
 
 #include "tilemap.h"
 
@@ -28,7 +28,6 @@ public:
 	tsconf_state(const machine_config &mconfig, device_type type, const char *tag)
 		: spectrum_128_state(mconfig, type, tag),
 		  m_bank0_rom(*this, "bank0_rom"),
-		  m_banks(*this, "bank%u", 0U),
 		  m_keyboard(*this, "pc_keyboard"),
 		  m_beta(*this, BETA_DISK_TAG),
 		  m_dma(*this, "dma"),
@@ -47,10 +46,12 @@ public:
 	static constexpr u16 with_vblank(u16 pixclocks) { return 32 + pixclocks; }
 
 protected:
-	virtual void video_start() override;
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	void video_start() override;
+	void machine_start() override;
+	void machine_reset() override;
 
+	TIMER_CALLBACK_MEMBER(irq_on) override;
+	TIMER_CALLBACK_MEMBER(irq_off) override;
 	TIMER_CALLBACK_MEMBER(irq_frame);
 	TIMER_CALLBACK_MEMBER(irq_scanline);
 
@@ -63,8 +64,6 @@ private:
 		RDCFG = 0x03,
 		CONFIG = 0x0e,
 		SPIFL = 0x10,
-
-		DISABLED = 0xff
 	};
 
 	enum tilemaps : u8
@@ -135,9 +134,11 @@ private:
 
 	void update_frame_timer();
 	emu_timer *m_frame_irq_timer = nullptr;
-	emu_timer *m_line_irq_timer = nullptr;
+	emu_timer *m_scanline_irq_timer = nullptr;
 
 	INTERRUPT_GEN_MEMBER(tsconf_vblank_interrupt);
+	IRQ_CALLBACK_MEMBER(irq_vector);
+	u8 m_int_mask;
 
 	DECLARE_VIDEO_START(tsconf);
 	TILE_GET_INFO_MEMBER(get_tile_info_txt);
@@ -191,9 +192,8 @@ private:
 	std::map<tsconf_regs, u8> m_scanline_delayed_regs_update;
 	u8 m_regs[0x100];
 
-	address_space *m_program = nullptr;
+	memory_access<16, 0, 0, ENDIANNESS_LITTLE>::specific m_program;
 	memory_view m_bank0_rom;
-	required_memory_bank_array<5> m_banks; // 0..3 - RAM, 4 - ROM
 
 	required_device<at_keyboard_device> m_keyboard;
 
@@ -205,7 +205,6 @@ private:
 
 	required_device<glukrs_device> m_glukrs;
 	gluk_ext m_port_f7_ext{};
-	u8 m_port_f7_gluk_reg = 0;
 
 	s16 m_gfx_y_frame_offset = 0;
 	required_device<device_palette_interface> m_palette;
@@ -219,4 +218,4 @@ private:
 
 INPUT_PORTS_EXTERN(tsconf);
 
-#endif // MAME_INCLUDES_TSCONF_H
+#endif // MAME_SINCLAIR_TSCONF_H

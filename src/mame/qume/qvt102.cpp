@@ -43,6 +43,8 @@
 #include "speaker.h"
 
 
+namespace {
+
 //**************************************************************************
 //  TYPE DEFINITIONS
 //**************************************************************************
@@ -421,7 +423,7 @@ void qvt102_state::mcu_p2_w(uint8_t data)
 	// the boost lasts for the critical section of the IRQ handler.
 	//
 	if (m_kbd_data)
-		machine().scheduler().boost_interleave(attotime::zero, attotime::from_usec(350));
+		machine().scheduler().perfect_quantum(attotime::from_usec(350));
 
 	m_irqs->in_w<2>(m_kbd_data);
 }
@@ -719,6 +721,8 @@ ROM_START( qvt102a )
 	ROM_REGION(0x400, "kbdmcu", 0)
 	ROM_LOAD("k301.u302", 0x000, 0x400, CRC(67564b20) SHA1(5897ff920f8fae4aa498d3a4dfd45b58183c041d))
 ROM_END
+
+} // anonymous namespace
 
 
 //**************************************************************************

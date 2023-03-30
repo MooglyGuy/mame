@@ -29,6 +29,9 @@
 #include "screen.h"
 #include "speaker.h"
 
+
+namespace {
+
 class clcd_state : public driver_device
 {
 public:
@@ -422,7 +425,7 @@ public:
 		m_iec->host_clk_w(!BIT(data, 4));
 		m_iec->host_data_w(!BIT(data, 5));
 
-		machine().scheduler().boost_interleave(attotime::zero, attotime::from_usec(2000));
+		machine().scheduler().perfect_quantum(attotime::from_usec(2000));
 	}
 
 	WRITE_LINE_MEMBER(write_sl)
@@ -803,6 +806,8 @@ ROM_START( clcd )
 	ROM_LOAD( "lcd-char-rom.u16",   0x00000, 0x800, CRC(7b6d3867) SHA1(cb594801438849f933ddc3e64b03b56f42f59f09))
 	ROM_IGNORE(0x800)
 ROM_END
+
+} // anonymous namespace
 
 
 /*    YEAR  NAME  PARENT  COMPAT  MACHINE  INPUT  CLASS       INIT        COMPANY                        FULLNAME           FLAGS */

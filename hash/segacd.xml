@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE softwarelist SYSTEM "softwarelist.dtd">
 <!--
-license:CC0
+license:CC0-1.0
 -->
 <softwarelist name="segacd" description="Sega CD CD-ROMs">
 
@@ -5459,7 +5459,7 @@ Requires [disc swap]
 		<description>ESPN NBA Hangtime '95 (USA)</description>
 		<year>1994</year>
 		<publisher>Sony Imagesoft</publisher>
-		<info name="serial" value="T-93245 "/>
+		<info name="serial" value="T-93245"/>
 		<part name="cdrom" interface="scd_cdrom">
 			<diskarea name="cdrom">
 				<disk name="espn nba hangtime '95 (usa)" sha1="86f1f4ee8da0f04109cf20b6b8ad455900562abe"/>

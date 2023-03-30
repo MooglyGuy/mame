@@ -29,6 +29,8 @@
 #include "speaker.h"
 
 
+namespace {
+
 class pcjr_state : public driver_device
 {
 public:
@@ -52,7 +54,6 @@ public:
 private:
 	virtual void machine_start() override;
 	virtual void machine_reset() override;
-	virtual void driver_init() override;
 
 	void ibmpcjr_io(address_map &map);
 	void ibmpcjr_map(address_map &map);
@@ -122,13 +123,10 @@ static INPUT_PORTS_START( ibmpcjr )
 	PORT_BIT ( 0x07, 0x07,   IPT_UNUSED )
 INPUT_PORTS_END
 
-void pcjr_state::driver_init()
-{
-	m_maincpu->space(AS_PROGRAM).install_ram(0, m_ram->size() - 1, m_ram->pointer());
-}
-
 void pcjr_state::machine_start()
 {
+	m_maincpu->space(AS_PROGRAM).install_ram(0, m_ram->size() - 1, m_ram->pointer());
+
 	m_pc_int_delay_timer = timer_alloc(FUNC(pcjr_state::delayed_irq), this);
 	m_pcjr_watchdog = timer_alloc(FUNC(pcjr_state::watchdog_expired), this);
 	m_keyb_signal_timer = timer_alloc(FUNC(pcjr_state::kb_signal), this);
@@ -726,6 +724,9 @@ ROM_START( ibmpcjx )
 	ROM_REGION(0x38000,"kanji", 0)
 	ROM_LOAD("kanji.rom",     0x00000, 0x38000, BAD_DUMP CRC(eaa6e3c3) SHA1(35554587d02d947fae8446964b1886fff5c9d67f)) // hand-made rom
 ROM_END
+
+} // anonymous namespace
+
 
 //    YEAR  NAME     PARENT   COMPAT  MACHINE  INPUT    CLASS       INIT        COMPANY                            FULLNAME     FLAGS
 COMP( 1983, ibmpcjr, ibm5150, 0,      ibmpcjr, ibmpcjr, pcjr_state, empty_init, "International Business Machines", "IBM PC Jr", MACHINE_IMPERFECT_COLORS )

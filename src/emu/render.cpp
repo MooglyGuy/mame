@@ -431,6 +431,7 @@ void render_texture::get_scaled(u32 dwidth, u32 dheight, render_texinfo &texinfo
 		texinfo.base = m_bitmap->raw_pixptr(m_sbounds.top(), m_sbounds.left());
 		texinfo.rowpixels = m_bitmap->rowpixels();
 		texinfo.width = swidth;
+		texinfo.width_margin = m_sbounds.left();
 		texinfo.height = sheight;
 		// palette will be set later
 		texinfo.seqid = ++m_curseq;
@@ -691,7 +692,7 @@ const rgb_t *render_container::bcg_lookup_table(int texformat, u32 &out_length, 
 				m_bcglookup.resize(palette->max_index());
 				recompute_lookups();
 			}
-			assert (palette == &m_palclient->palette());
+			assert(palette == &m_palclient->palette());
 			out_length = palette->max_index();
 			return &m_bcglookup[0];
 
@@ -1013,9 +1014,9 @@ void render_target::set_bounds(s32 width, s32 height, float pixel_aspect)
 	m_width = width;
 	m_height = height;
 	m_bounds.x0 = m_bounds.y0 = 0;
-	m_bounds.x1 = (float)width;
-	m_bounds.y1 = (float)height;
-	m_pixel_aspect = pixel_aspect != 0.0? pixel_aspect : 1.0;
+	m_bounds.x1 = float(width);
+	m_bounds.y1 = float(height);
+	m_pixel_aspect = pixel_aspect != 0.0F ? pixel_aspect : 1.0F;
 }
 
 
@@ -1705,14 +1706,6 @@ void render_target::load_additional_layout_files(const char *basename, bool have
 		else
 			m_external_artwork = true;
 
-		// if a default view has been specified, use that as a fallback
-		bool have_default = false;
-		if (system.default_layout)
-			have_default |= load_layout_file(nullptr, *system.default_layout);
-		m_manager.machine().config().apply_default_layouts(
-				[this, &have_default] (device_t &dev, internal_layout const &layout)
-				{ have_default |= load_layout_file(nullptr, layout, &dev); });
-
 		// try to load another file based on the parent driver name
 		int cloneof = driver_list::clone(system);
 		while (0 <= cloneof)
@@ -1729,6 +1722,14 @@ void render_target::load_additional_layout_files(const char *basename, bool have
 			const game_driver &parent(driver_list::driver(cloneof));
 			cloneof = driver_list::clone(parent);
 		}
+
+		// if a default view has been specified, use that as a fallback
+		bool have_default = false;
+		if (system.default_layout)
+			have_default |= load_layout_file(nullptr, *system.default_layout);
+		m_manager.machine().config().apply_default_layouts(
+				[this, &have_default] (device_t &dev, internal_layout const &layout)
+				{ have_default |= load_layout_file(nullptr, layout, &dev); });
 
 		have_artwork |= m_external_artwork;
 
