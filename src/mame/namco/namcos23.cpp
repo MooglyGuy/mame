@@ -3933,7 +3933,7 @@ void namcos23_state::gorgon_map(address_map &map)
 	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
 	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::gorgon_czattr_r), FUNC(namcos23_state::gorgon_czattr_w)); // CZ Attribute RAM
-	map(0x06080000, 0x060801ff).rw(FUNC(namcos23_state::gorgon_czram_r), FUNC(namcos23_state::gorgon_czram_w)); // PCZ Convert RAM (C406)
+	map(0x06080200, 0x060803ff).rw(FUNC(namcos23_state::gorgon_czram_r), FUNC(namcos23_state::gorgon_czram_w)); // PCZ Convert RAM (C406)
 	map(0x06108000, 0x061087ff).ram().share("gammaram"); // Gamma RAM (C404)
 	map(0x06110000, 0x0613ffff).ram().w(FUNC(namcos23_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
 	map(0x06300000, 0x06300007).w(FUNC(namcos23_state::sprites_w));
