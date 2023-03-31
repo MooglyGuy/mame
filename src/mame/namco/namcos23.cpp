@@ -1495,7 +1495,7 @@ It can also be used with Final Furlong when wired correctly.
 				| LOG_MODEL_ERR | LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK \
 				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES)
 
-#define VERBOSE (LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_MODEL_ERR | LOG_C435_PIO_UNK | LOG_C435_UNK)
+#define VERBOSE (0)
 #include "logmacro.h"
 
 namespace {
@@ -1527,7 +1527,7 @@ namespace {
 
 #define DUMP_MODELS 0
 
-enum { MODEL, DIRECT, SPRITE, FLUSH };
+enum { MODEL, DIRECT, SPRITE };
 
 enum { RENDER_MAX_ENTRIES = 1000, POLY_MAX_ENTRIES = 10000 };
 
@@ -1641,7 +1641,7 @@ struct c412_t
 	uint16_t sdram_a[0x100000]; // Framebuffers, probably
 	uint16_t sdram_b[0x100000];
 	uint16_t sram[0x20000];     // Ram-based tiles for rendering
-	uint16_t pczram[0x200];     // Ram-based tilemap for rendering, or something else
+	uint16_t pczram[0x200];     // PCZ Convert RAM
 	uint32_t adr;
 	uint16_t status_c;
 };
@@ -1749,6 +1749,7 @@ public:
 	uint32_t m_tileid_mask;
 	uint32_t m_tile_mask;
 	uint32_t m_sprite_mask;
+	bool m_has_sprites;
 
 protected:
 	virtual void machine_start() override;
@@ -1784,10 +1785,6 @@ private:
 	void sub_comm_w(offs_t offset, uint16_t data);
 	uint32_t c435_r(offs_t offset, uint32_t mem_mask = ~0);
 	void c435_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	uint16_t czattr_r(offs_t offset, uint16_t mem_mask = ~0);
-	void czattr_w(address_space &space, offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint32_t czram_r(offs_t offset, uint32_t mem_mask = ~0);
-	void czram_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	uint32_t gmen_trigger_sh2();
 	uint32_t sh2_shared_r(offs_t offset);
 	void sh2_shared_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
@@ -1816,6 +1813,11 @@ private:
 	uint16_t iob_analog_r(offs_t offset);
 	void c435_state_pio_w(uint16_t data);
 	void c435_state_reset_w(uint16_t data);
+
+	uint16_t gorgon_czattr_r(offs_t offset, uint16_t mem_mask = ~0);
+	void gorgon_czattr_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
+	uint16_t gorgon_czram_r(offs_t offset, uint16_t mem_mask = ~0);
+	void gorgon_czram_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 
 	void recalc_czram();
 	TILE_GET_INFO_MEMBER(TextTilemapGetInfo);
@@ -1912,6 +1914,7 @@ private:
 	uint16_t m_c435_direct_vertex[6];
 	uint16_t m_c435_direct_vert_pos;
 	uint16_t m_c435_direct_buf_pos;
+	bool m_c435_direct_buf_nonempty;
 	uint16_t m_c435_pio_mode;
 	uint16_t m_c435_sprite_target;
 	uint16_t m_c435_spritedata[0x10000];
@@ -2141,7 +2144,7 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		LOGMASKED(LOG_MATRIX_ERR, "%s: WARNING: c435_matrix_matrix_mul with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
-	bool transpose = true;//BIT(m_c435_buffer[0], 10);
+	bool transpose = BIT(m_c435_buffer[0], 10);
 	if((m_c435_buffer[0] & ~0x400) != 0x0004)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if(m_c435_buffer[3] != 0xffff)
@@ -2150,13 +2153,13 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_matrix_mul (%04x): Matrix %d = Matrix %d * Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4]);
 
 	int16_t *t        = c435_getm(m_c435_buffer[1]);
-	int16_t m2[9];
 	int16_t m1[9];
-	memcpy(m1, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
-	memcpy(m2, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
+	int16_t m2[9];
 
 	if (transpose)
 	{
+		memcpy(m1, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
+		memcpy(m2, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
 		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
 		t[1] = int16_t((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
 		t[2] = int16_t((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
@@ -2169,15 +2172,17 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 	}
 	else
 	{
-		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[3] + m1[2]*m2[6]) >> 14);
-		t[1] = int16_t((m1[0]*m2[1] + m1[1]*m2[4] + m1[2]*m2[7]) >> 14);
-		t[2] = int16_t((m1[0]*m2[2] + m1[1]*m2[5] + m1[2]*m2[8]) >> 14);
-		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[3] + m1[5]*m2[6]) >> 14);
-		t[4] = int16_t((m1[3]*m2[1] + m1[4]*m2[4] + m1[5]*m2[7]) >> 14);
-		t[5] = int16_t((m1[3]*m2[2] + m1[4]*m2[5] + m1[5]*m2[8]) >> 14);
-		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[3] + m1[8]*m2[6]) >> 14);
-		t[7] = int16_t((m1[6]*m2[1] + m1[7]*m2[4] + m1[8]*m2[7]) >> 14);
-		t[8] = int16_t((m1[6]*m2[2] + m1[7]*m2[5] + m1[8]*m2[8]) >> 14);
+		memcpy(m2, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
+		memcpy(m1, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
+		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
+		t[1] = int16_t((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
+		t[2] = int16_t((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
+		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[1] + m1[5]*m2[2]) >> 14);
+		t[4] = int16_t((m1[3]*m2[3] + m1[4]*m2[4] + m1[5]*m2[5]) >> 14);
+		t[5] = int16_t((m1[3]*m2[6] + m1[4]*m2[7] + m1[5]*m2[8]) >> 14);
+		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[1] + m1[8]*m2[2]) >> 14);
+		t[7] = int16_t((m1[6]*m2[3] + m1[7]*m2[4] + m1[8]*m2[5]) >> 14);
+		t[8] = int16_t((m1[6]*m2[6] + m1[7]*m2[7] + m1[8]*m2[8]) >> 14);
 	}
 	LOGMASKED(LOG_MATRIX_UNK, "result: %04x    %04x    %04x\n", (uint16_t)t[0], (uint16_t)t[1], (uint16_t)t[2]);
 	LOGMASKED(LOG_MATRIX_UNK, "        %04x    %04x    %04x\n", (uint16_t)t[3], (uint16_t)t[4], (uint16_t)t[5]);
@@ -2203,8 +2208,6 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		const int16_t *m  = c435_getm(m_c435_buffer[2]);
 		int32_t vt[3];
 		int32_t v[3];
-		//const int32_t *vt = c435_getv(m_c435_buffer[3]);
-		//const int32_t *v  = c435_getv(m_c435_buffer[4]);
 		memcpy(vt, c435_getv(m_c435_buffer[3]), sizeof(int32_t) * 3);
 		memcpy(v, c435_getv(m_c435_buffer[4]), sizeof(int32_t) * 3);
 
@@ -2236,9 +2239,19 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		int32_t v[3];
 		memcpy(v, c435_getv(m_c435_buffer[4]), sizeof(int32_t) * 3);
 
-		t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
-		t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
-		t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+		if (BIT(m_c435_buffer[0], 10))
+		{
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
+			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
+			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+		}
+		else
+		{
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
+			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
+			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+		}
+
 		if (extra_logging)
 		{
 			LOGMASKED(LOG_MATRIX_UNK, "    %04x %04x %04x   %08x\n", m[0], m[1], m[2], (uint32_t)v[0]);
@@ -2357,10 +2370,7 @@ void namcos23_state::c435_flush() // c
 		return;
 	}
 
-	render_t &render = m_render;
-	namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
-	re->type = FLUSH;
-	render.count[render.cur]++;
+	LOGMASKED(LOG_RENDER_INFO, "%s: Skipping c435_flush flush request (we flush after all processing is done)\n", machine().describe_context());
 }
 
 void namcos23_state::c435_sprite_w(uint16_t data)
@@ -2455,14 +2465,14 @@ void namcos23_state::c435_dma(address_space &space, uint32_t adr, uint32_t size)
 	}
 }
 
-uint16_t namcos23_state::czattr_r(offs_t offset, uint16_t mem_mask)
+uint16_t namcos23_state::gorgon_czattr_r(offs_t offset, uint16_t mem_mask)
 {
 	uint16_t *czattr = (uint16_t *)m_czattr.target();
 	LOGMASKED(LOG_C435_UNK, "%s: czattr[%d] read: %04x & %04x\n", machine().describe_context(), offset, czattr[offset], mem_mask);
 	return czattr[offset];
 }
 
-void namcos23_state::czattr_w(address_space &space, offs_t offset, uint16_t data, uint16_t mem_mask)
+void namcos23_state::gorgon_czattr_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
 	uint16_t *czattr = (uint16_t *)m_czattr.target();
 	uint16_t prev = czattr[offset];
@@ -2480,27 +2490,22 @@ void namcos23_state::czattr_w(address_space &space, offs_t offset, uint16_t data
 	}
 }
 
-uint32_t namcos23_state::czram_r(offs_t offset, uint32_t mem_mask)
+uint16_t namcos23_state::gorgon_czram_r(offs_t offset, uint16_t mem_mask)
 {
 	uint16_t *czattr = (uint16_t *)m_czattr.target();
 	int bank = czattr[5] & 3;
-	return (m_banked_czram[bank][offset * 2] << 16) | m_banked_czram[bank][offset * 2 + 1];
+	return m_banked_czram[bank][offset & 0xff];
 }
 
-void namcos23_state::czram_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask)
+void namcos23_state::gorgon_czram_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
 	uint16_t *czattr = (uint16_t *)m_czattr.target();
-	for (int bank = 0; bank < 4; bank++)
-	{
+	for(int bank = 0; bank < 4; bank++) {
 		// write enable bit
-		if (~czattr[4] >> (bank * 4) & 1)
-		{
-			u32 prev = (m_banked_czram[bank][offset * 2] << 16) | m_banked_czram[bank][offset * 2 + 1];
-			u32 temp = prev;
-			COMBINE_DATA(&temp);
-			m_banked_czram[bank][offset * 2] = temp >> 16;
-			m_banked_czram[bank][offset * 2 + 1] = temp & 0xffff;
-			m_cz_was_written[bank] |= (prev ^ temp);
+		if (~czattr[4] >> (bank * 4) & 1) {
+			const uint16_t old = m_banked_czram[bank][offset & 0xff];
+			COMBINE_DATA(&m_banked_czram[bank][offset & 0xff]);
+			m_cz_was_written[bank] |= (old ^ m_banked_czram[bank][offset & 0xff]);
 		}
 	}
 }
@@ -2594,8 +2599,11 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 			c435_dma(space, m_c435_address, m_c435_size);
 		break;
 	case 0x17:
-		LOGMASKED(LOG_C435_UNK, "%s: PIO mode write: %08x & %08x (%s mode)\n", machine().describe_context(), data, mem_mask, BIT(data, 0) ? "sprite" : "command");
-		COMBINE_DATA(&m_c435_pio_mode);
+		if (m_has_sprites)
+		{
+			LOGMASKED(LOG_C435_UNK, "%s: PIO mode write: %08x & %08x (%s mode)\n", machine().describe_context(), data, mem_mask, BIT(data, 0) ? "sprite" : "command");
+			COMBINE_DATA(&m_c435_pio_mode);
+		}
 		break;
 	case 0x18:
 		LOGMASKED(LOG_C435_UNK, "%s: clear buffer pos: %08x & %08x\n", machine().describe_context(), data, mem_mask);
@@ -2606,8 +2614,6 @@ void namcos23_state::c435_w(address_space &space, offs_t offset, uint32_t data, 
 		break;
 	}
 }
-
-
 
 void namcos23_renderer::render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
 {
@@ -2673,7 +2679,6 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 
 	uint32_t *dest = &object.bitmap->pix(scanline, 0);
 
-	//printf("Scanline at %d, direct:%d, z:%f, dz:%f, u:%f, v:%f, du:%f, dv:%f\n", scanline, rd.direct, z, dz, u, v, du, dv);
 	for(int x = extent.startx; x < extent.stopx; x++) {
 		float ooz = 1.0f / z;
 		int tx = (int)(u * ooz);
@@ -2681,20 +2686,6 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 		const uint32_t tex_rgb = rd.texture_lookup(*rd.machine, rd.pens, tx, ty);
 
 		rgbaint_t rgb(tex_rgb);
-		/*switch ((rd.type >> 19) & 3) {
-		case 0:
-			rgb.set(0xffff0000);
-			break;
-		case 1:
-			rgb.set(0xffffff00);
-			break;
-		case 2:
-			rgb.set(0xff00ff00);
-			break;
-		case 3:
-			rgb.set(0xff0000ff);
-			break;
-		}*/
 
 		// apply shading before fog
 		//int shade = i*ooz;
@@ -2795,7 +2786,6 @@ void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 	u32 zsort = ((re->direct.d[1] & 0xfff) << 12) | (re->direct.d[0] & 0xfff);
 	uint32_t cztype = re->direct.d[3] & 3;
 	uint32_t flags = ((re->direct.d[3] << 6) & 0x1fff) | cztype;
-	uint32_t color = re->direct.d[2] >> 8;
 
 	static const int indices[2][3] = { { 0, 1, 2 }, { 0, 2, 3 } };
 	for (int i = 0; i < 2; i++) {
@@ -2838,12 +2828,11 @@ void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 			p->pv[j].y = ((int16_t)src[3] + 240);
 		}
 
-		//node->data.quad.cz_adjust = m_cz_adjust;
 		p->zkey = (zsort / (float)0x1000000);
-		p->front = true;
+		p->front = false;
 		p->rd.machine = &machine();
 		p->rd.texture_lookup = render_texture_lookup_nocache_point;
-		p->rd.pens = &m_palette->pen((color & 0x7f) << 8);
+		p->rd.pens = m_palette->pens() + (re->direct.d[2] & 0x7f00);
 		p->rd.light_enable = false;
 		p->rd.direct = true;
 		p->rd.sprite = false;
@@ -2866,36 +2855,6 @@ void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 		p->rd.pfade_enabled = m_c404.poly_fade_r != 0xff || m_c404.poly_fade_g != 0xff || m_c404.poly_fade_b != 0xff;
 		p->rd.polycolor.set(0, m_c404.poly_fade_r, m_c404.poly_fade_g, m_c404.poly_fade_b);
 
-		// poly fog
-		uint16_t *czattr = (uint16_t *)m_czattr.target();
-		if (~color & 0x80)
-		{
-			int cztype = flags & 3;
-			int bank = czattr[6] >> (cztype * 2) & 3;
-			int bank_enabled = czattr[4] >> (bank * 4) & 4;
-
-			if (bank_enabled)
-			{
-				int16_t delta = czattr[bank];
-				// sign-extend
-				if (delta < 0) delta |= 0xff00;
-				else delta &= 0x00ff;
-
-				p->rd.fogcolor.set(0, m_c404.fog_r, m_c404.fog_g, m_c404.fog_b);
-
-				int cz = ((flags & 0x1fff00) /*+ cz_adjust*/) >> 8;
-				if (cz < 0) cz = 0;
-				else if (cz > 0x1fff) cz = 0x1fff;
-
-				int fogfactor = m_recalc_czram[bank][cz] + delta;
-				if (fogfactor > 0)
-				{
-					if (fogfactor > 0xff) fogfactor = 0xff;
-					p->rd.fogfactor = fogfactor;
-				}
-			}
-		}
-
 		render.poly_count++;
 	}
 }
@@ -2912,7 +2871,7 @@ void namcos23_state::render_sprite(const namcos23_render_entry *re)
 			//if (re->sprite.linktype == 0xff)
 				code += offset;
 			//else
-			//	code += nthword(&m_state.m_spriteram[0x800/4], offset + node->data.sprite.linktype*4);
+			//	code += nthword(&m_c435_spritedata[0x4000], offset + node->data.sprite.linktype*4);
 
 			render_sprite_tile(code,
 				re->sprite.color,
@@ -3001,8 +2960,8 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 {
 	render_t &render = m_render;
 
-	if(re->model.model == 3486)
-		return;
+	//if(re->model.model == 3486)
+		//return;
 
 	//if(re->model.model < 0x0a || re->model.model > 0xa)
 		//return;
@@ -3026,13 +2985,11 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		uint8_t color = (h >> 24) & 0x7f;
 		int lmode = (type >> 19) & 3;
 		int ne = (type >> 8) & 15;
-		//logerror("Model %04x, section %d: type %08x, h %08x, lmode %d, ne %d\n", re->model.model, section, type, h, lmode, ne);
 		section++;
 
-		// Something to do with Z-sorting at least?
+		// Something to do with Z-sorting?
 		//float z_add = 0.f;
-		if(type & 0x00001000)
-		{
+		if(type & 0x00001000) {
 			adr++;
 			//z_add = (m_ptrom[adr++] >> 16) / 16384.f;
 		}
@@ -3043,18 +3000,14 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		if(lmode == 3) {
 			extptr = adr;
 			adr += ne;
-		}
-		else
-		{
+		} else {
 			light = m_ptrom[adr++];
 		}
 
 		float minz = FLT_MAX;
 		float maxz = FLT_MIN;
 
-		//if (ne != 3 && ne != 4)
-			//logerror("ne: %d\n", ne);
-		for(int i=0; i<ne; i++) {
+		for(int i = 0; i < ne; i++) {
 			uint32_t v1 = m_ptrom[adr++];
 			uint32_t v2 = m_ptrom[adr++];
 			uint32_t v3 = m_ptrom[adr++];
@@ -3093,105 +3046,42 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		}
 		namcos23_poly_entry *p = render.polys + render.poly_count;
 
-		// Should be unnecessary now that frustum clipping happens, but this still culls polys behind the camera
-		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.00001f);
-		//logerror("vertex count after z-clipping: %d\n", p->vertex_count);
-		//memcpy(p->pv, pv, sizeof(poly_vertex) * vertex_count);
-		//p->vertex_count = vertex_count;
+		// Should be unnecessary once frustum clipping happens correctly, but this will at least cull polys behind the camera
+		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.1f);
 
 		// Project if you don't clip on the near plane
 		if(p->vertex_count >= 3) {
-			//const float z10 = p->pv[1].p[0] - p->pv[0].p[0];
-			//const float z20 = p->pv[2].p[0] - p->pv[0].p[0];
-			/*const float x10 = p->pv[1].x - p->pv[0].x;
-			const float x20 = p->pv[2].x - p->pv[0].x;
-			const float y10 = p->pv[1].y - p->pv[0].y;
-			const float y20 = p->pv[2].y - p->pv[0].y;
-			const float nz = x10 * y20 - y10 * x20;
-			if (nz < 0)
-			{
-				//logerror("back-facing, ignoring\n");
-				continue;
-			}*/
+			// This is our poor-man's projection matrix
+			for(int i = 0; i < p->vertex_count; i++) {
+				const float z = p->pv[i].p[0] != 0.f ? p->pv[i].p[0] : 1.f;
+				p->pv[i].x /= z;
+				p->pv[i].y /= z;
+				if(z > maxz)
+					maxz = pv[i].p[0];
+				if(z < minz)
+					minz = pv[i].p[0];
 
-			// Project the eye points
-			frustum_clip_vertex<float, 3> clipVerts[10];
-			for(int i=0; i<p->vertex_count; i++) {
-				// Construct a frustum clipping vert from the NDCoords
-				const float Z = p->pv[i].p[0];
-				clipVerts[i].x = p->pv[i].x / Z;
-				clipVerts[i].y = p->pv[i].y / Z;
-				clipVerts[i].z = Z;
-				clipVerts[i].w = Z;
-				clipVerts[i].p[0] = p->pv[i].p[1];
-				clipVerts[i].p[1] = p->pv[i].p[2];
-				clipVerts[i].p[2] = p->pv[i].p[3];
+				render_project(p->pv[i]);
+
+				float w = p->pv[i].p[0];
+				p->pv[i].p[1] *= w;
+				p->pv[i].p[2] *= w;
+				p->pv[i].p[3] *= w;
 			}
 
-			// Clip against all edges of the view frustum
-			int num_vertices = p->vertex_count;//frustum_clip_all<float, 3>(clipVerts, p->vertex_count, clipVerts);
-			//logerror("vertex count after frustum clipping: %d\n", num_vertices);
-
-			if (num_vertices != 0)
-			{
-				// Push the results back into the main vertices
-				for (int i=0; i < num_vertices; i++)
-				{
-					p->pv[i].x = clipVerts[i].x;
-					p->pv[i].y = clipVerts[i].y;
-					p->pv[i].p[0] = clipVerts[i].w;
-					p->pv[i].p[1] = clipVerts[i].p[0];
-					p->pv[i].p[2] = clipVerts[i].p[1];
-					p->pv[i].p[3] = clipVerts[i].p[2];
-
-					if(clipVerts[i].z > maxz)
-						maxz = pv[i].p[0];
-					if(clipVerts[i].z < minz)
-						minz = pv[i].p[0];
-				}
-				p->vertex_count = num_vertices;
-
-				/*const float x10 = p->pv[1].x - p->pv[0].x;
-				const float x20 = p->pv[2].x - p->pv[0].x;
-				const float y10 = p->pv[1].y - p->pv[0].y;
-				const float y20 = p->pv[2].y - p->pv[0].y;
-				const float z10 = p->pv[1].p[0] - p->pv[0].p[0];
-				const float z20 = p->pv[2].p[0] - p->pv[0].p[0];
-				const float nz = x10 * y20 - y10 * x20;
-				if (nz < 0)
-				{
-					//logerror("back-facing, ignoring\n");
-					continue;
-				}*/
-
-				// This is our poor-man's projection matrix
-				for(int i=0; i<p->vertex_count; i++)
-				{
-					render_project(p->pv[i]);
-
-					float w = p->pv[i].p[0];
-					p->pv[i].p[1] *= w;
-					p->pv[i].p[2] *= w;
-					p->pv[i].p[3] *= w;
-				}
-
-				// Compute an odd sorta'-Z thing that can situate the polygon wherever you want in Z-depth
-				p->zkey = 0.5f*(minz+maxz);
-				//logerror("model %04x section %d tri %d, zkey %f\n", p->zkey);
-				p->front = !(h & 0x00000001);
-				p->rd.machine = &machine();
-				p->rd.texture_lookup = render_texture_lookup_nocache_point;
-				p->rd.pens = m_palette->pens() + (color << 8);
-				p->rd.rgb = 0x00ffffff;
-				p->rd.direct = false;
-				p->rd.sprite = false;
-				p->rd.light_enable = true;
-				p->rd.h = h;
-				p->rd.type = type;
-				if (machine().input().code_pressed(KEYCODE_L))
-					printf("zkey: %f\n", p->zkey);
-				render.poly_count++;
-			}
+			// Compute an odd sorta'-Z thing that can situate the polygon wherever you want in Z-depth
+			p->zkey = minz + 0.5f * (maxz - minz);
+			p->front = !(h & 0x00000001);
+			p->rd.machine = &machine();
+			p->rd.texture_lookup = render_texture_lookup_nocache_point;
+			p->rd.pens = m_palette->pens() + (color << 8);
+			p->rd.rgb = 0x00ffffff;
+			p->rd.direct = false;
+			p->rd.sprite = false;
+			p->rd.light_enable = true;
+			p->rd.h = h;
+			p->rd.type = type;
+			render.poly_count++;
 		}
 
 		if(type & 0x000010000)
@@ -3204,8 +3094,8 @@ static int render_poly_compare(const void *i1, const void *i2)
 	const namcos23_poly_entry *p1 = *(const namcos23_poly_entry **)i1;
 	const namcos23_poly_entry *p2 = *(const namcos23_poly_entry **)i2;
 
-	//if(p1->front != p2->front)
-		//return p1->front ? 1 : -1;
+	if(p1->front != p2->front)
+		return p1->front ? 1 : -1;
 
 	return p1->zkey < p2->zkey ? 1 : p1->zkey > p2->zkey ? -1 : 0;
 }
@@ -3232,30 +3122,15 @@ void namcos23_renderer::render_flush(bitmap_argb32& bitmap)
 
 		// We should probably split the polygons into triangles ourselves to insure everything is being rendered properly
 		if (p->rd.sprite)
-		{
-			//printf("S");
 			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_sprite_scanline, this), 4, p->pv);
-		}
 		else if (p->vertex_count == 3)
-		{
-			//printf("3");
 			render_triangle<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), p->pv[0], p->pv[1], p->pv[2]);
-		}
 		else if (p->vertex_count == 4)
-		{
-			//printf("4");
 			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), 4, p->pv);
-		}
 		else if (p->vertex_count == 5)
-		{
-			//printf("5");
 			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), 5, p->pv);
-		}
 		else if (p->vertex_count == 6)
-		{
-			//printf("6");
 			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), 6, p->pv);
-		}
 	}
 	render.poly_count = 0;
 }
@@ -3264,7 +3139,7 @@ void namcos23_state::render_run()
 {
 	render_t &render = m_render;
 
-	uint16_t sprite_count = (m_c435_spritedata[4] == 0xffff ? 0 : (m_c435_spritedata[4] + 1));
+	uint16_t sprite_count = ((m_c435_spritedata[4] == 0xffff || !m_has_sprites) ? 0 : (m_c435_spritedata[4] + 1));
 	for (int i = 0; i < sprite_count; i++) {
 		namcos23_render_entry *re = render.entries[!render.cur] + render.count[!render.cur];
 
@@ -3318,16 +3193,10 @@ void namcos23_state::render_run()
 		}
 	}
 
-	if (sprite_count > 0) {
-		namcos23_render_entry *re = render.entries[!render.cur] + render.count[!render.cur];
-		re->type = FLUSH;
-		render.count[!render.cur]++;
-	}
-
 	const namcos23_render_entry *re = render.entries[!render.cur];
 
 	render.poly_count = 0;
-	for(int i=0; i<render.count[!render.cur]; i++) {
+	for(int i = 0; i < render.count[!render.cur]; i++) {
 		switch(re->type) {
 		case MODEL:
 			render_one_model(re);
@@ -3337,9 +3206,6 @@ void namcos23_state::render_run()
 			break;
 		case SPRITE:
 			render_sprite(re);
-			break;
-		case FLUSH:
-			//render.polymgr->render_flush(m_3d_bitmap);
 			break;
 		}
 		re++;
@@ -3449,7 +3315,8 @@ uint32_t namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitm
 {
 	logerror("***SCREEN UPDATE***\n");
 	update_mixer();
-	recalc_czram();
+	if (m_has_sprites)
+		recalc_czram();
 	bitmap.fill(m_c404.bgcolor, cliprect);
 
 	for (int y = cliprect.min_y; y <= cliprect.max_y; y++) {
@@ -3583,7 +3450,7 @@ uint16_t namcos23_state::c417_r(offs_t offset, uint16_t mem_mask)
 	*/
 	case 0:
 	{
-		uint16_t data = 0x008e | (m_screen->vblank() ? 0x8000 : 0x0000);
+		uint16_t data = 0x008e | (m_screen->vblank() ? 0x0000 : 0x8000);
 		//LOGMASKED(LOG_C417_UNK, "%s: c417 status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		return data;
 	}
@@ -3663,9 +3530,9 @@ uint16_t namcos23_state::c412_ram_r(offs_t offset)
 	else if(offset < 0x200000)
 		return m_c412.sdram_b[offset & 0xfffff];
 	else if(offset < 0x220000)
-		return m_c412.sram   [offset & 0x1ffff];
+		return m_c412.sram[offset & 0x1ffff];
 	else if(offset < 0x220200)
-		return m_c412.pczram [offset & 0x001ff];
+		return m_c412.pczram[offset & 0x1ff];
 
 	return 0xffff;
 }
@@ -3680,7 +3547,7 @@ void namcos23_state::c412_ram_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 	else if(offset < 0x220000)
 		COMBINE_DATA(m_c412.sram    + (offset & 0x1ffff));
 	else if(offset < 0x220200)
-		COMBINE_DATA(m_c412.pczram  + (offset & 0x001ff));
+		COMBINE_DATA(m_c412.pczram  + (offset & 0x1ff));
 }
 
 uint16_t namcos23_state::c412_r(offs_t offset, uint16_t mem_mask)
@@ -3933,17 +3800,19 @@ void namcos23_state::ctl_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 	case 6: // gmen wars spams this heavily with 0 prior to starting the GMEN board test
 		logerror("Queueing %04x at direct buf %d\n", data, m_c435_direct_buf_pos);
 		m_c435_direct_buf[m_c435_direct_buf_pos++] = data;
-		if (m_c435_direct_buf_pos >= 28) {
-			render_t &render = m_render;
-			namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
-			if (BIT(m_c435_direct_buf[0], 15)) {
-				re->type = FLUSH;
-				logerror("Flushing\n");
-			} else {
-				re->type = DIRECT;
-				memcpy(re->direct.d, m_c435_direct_buf, sizeof(m_c435_direct_buf));
+		if(data)
+			m_c435_direct_buf_nonempty = true;
+		if(m_c435_direct_buf_pos >= 28) {
+			if(m_c435_direct_buf_nonempty) {
+				render_t &render = m_render;
+				namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
+				if(!BIT(m_c435_direct_buf[0], 15)) {
+					re->type = DIRECT;
+					memcpy(re->direct.d, m_c435_direct_buf, sizeof(m_c435_direct_buf));
+					render.count[render.cur]++;
+				}
 			}
-			render.count[render.cur]++;
+			m_c435_direct_buf_nonempty = false;
 			m_c435_direct_buf_pos = 0;
 		}
 		//if(data != 0)
@@ -4063,8 +3932,8 @@ void namcos23_state::gorgon_map(address_map &map)
 	map(0x02000000, 0x0200000f).rw(FUNC(namcos23_state::c417_r), FUNC(namcos23_state::c417_w));
 	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
-	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::czattr_r), FUNC(namcos23_state::czattr_w));
-	map(0x06080200, 0x060803ff).rw(FUNC(namcos23_state::czram_r), FUNC(namcos23_state::czram_w)); // PCZ Convert RAM (C406)
+	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::gorgon_czattr_r), FUNC(namcos23_state::gorgon_czattr_w)); // CZ Attribute RAM
+	map(0x06080000, 0x060801ff).rw(FUNC(namcos23_state::gorgon_czram_r), FUNC(namcos23_state::gorgon_czram_w)); // PCZ Convert RAM (C406)
 	map(0x06108000, 0x061087ff).ram().share("gammaram"); // Gamma RAM (C404)
 	map(0x06110000, 0x0613ffff).ram().w(FUNC(namcos23_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
 	map(0x06300000, 0x06300007).w(FUNC(namcos23_state::sprites_w));
@@ -4732,6 +4601,7 @@ void namcos23_state::machine_reset()
 
 	m_c417.unk = 0;
 	m_c435_direct_buf_pos = 0;
+	m_c435_direct_buf_nonempty = false;
 	memset(m_proj_matrix, 0, sizeof(float) * 24);
 	m_proj_matrix_line = 0;
 }
@@ -4757,12 +4627,14 @@ void namcos23_state::init_s23()
 	m_tile_mask = memregion("textile")->bytes()/256 - 1;
 	m_ptrom_limit = memregion("pointrom")->bytes()/4;
 
+	m_has_sprites = false;
 	if (!strcmp(machine().system().name, "rapidrvr") ||
 		!strcmp(machine().system().name, "rapidrvrv2c") ||
 		!strcmp(machine().system().name, "rapidrvrp") ||
 		!strcmp(machine().system().name, "finfurl")) {
 		m_sprrom = memregion("sprites")->base();
 		m_sprite_mask = memregion("sprites")->bytes() - 1;
+		m_has_sprites = true;
 	}
 
 	m_jvssense = 1;
