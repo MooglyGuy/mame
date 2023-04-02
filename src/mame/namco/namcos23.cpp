@@ -1491,9 +1491,13 @@ It can also be used with Final Furlong when wired correctly.
 #define LOG_SH2				(1 << 24U)
 #define LOG_SUBIRQ			(1 << 25U)
 #define LOG_SPRITES			(1 << 26U)
+#define LOG_IOP4			(1 << 27U)
+#define LOG_IOP6			(1 << 28U)
+#define LOG_ADC_RD			(1 << 29U)
+#define LOG_ADC_WR			(1 << 30U)
 #define LOG_ALL (LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO \
 				| LOG_MODEL_ERR | LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK \
-				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES)
+				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES | LOG_IOP4 | LOG_IOP6 | LOG_ADC_RD | LOG_ADC_WR)
 
 #define VERBOSE (0)
 #include "logmacro.h"
@@ -1599,6 +1603,8 @@ struct namcos23_render_data
 	rgbaint_t fadecolor;
 	uint32_t (*texture_lookup)(running_machine &machine, const pen_t *pens, float x, float y);
 };
+
+static bool print_extra_poly_info = false;
 
 class namcos23_state;
 
@@ -1810,10 +1816,27 @@ private:
 	uint16_t iob_p6_r();
 	void iob_p6_w(uint16_t data);
 	uint8_t iob_gun_r(offs_t offset);
-	uint16_t iob_analog_r(offs_t offset);
+	uint16_t adc0_r();
+	uint16_t adc1_r();
+	uint16_t adc2_r();
+	uint16_t adc3_r();
+	uint16_t adc4_r();
+	uint16_t adc5_r();
+	uint16_t adc6_r();
+	uint16_t adc7_r();
+	void adc0_w(uint16_t data);
+	void adc1_w(uint16_t data);
+	void adc2_w(uint16_t data);
+	void adc3_w(uint16_t data);
+	void adc4_w(uint16_t data);
+	void adc5_w(uint16_t data);
+	void adc6_w(uint16_t data);
+	void adc7_w(uint16_t data);
+
 	void c435_state_pio_w(uint16_t data);
 	void c435_state_reset_w(uint16_t data);
 
+	void gorgon_nvram_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	uint16_t gorgon_czattr_r(offs_t offset, uint16_t mem_mask = ~0);
 	void gorgon_czattr_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	uint16_t gorgon_czram_r(offs_t offset, uint16_t mem_mask = ~0);
@@ -1992,7 +2015,7 @@ inline int32_t namcos23_state::u32_to_s24(uint32_t v)
 
 inline int32_t namcos23_state::u32_to_s10(uint32_t v)
 {
-	return v & 0x200 ? v | 0xfffffe00 : v & 0x1ff;
+	return v & 0x200 ? (0x3ff - (v & 0x3ff)) | 0xfffffe00 : v & 0x1ff;
 }
 
 float namcos23_state::f24_to_f32(uint32_t v)
@@ -2158,31 +2181,31 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 
 	if (transpose)
 	{
-		memcpy(m1, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
-		memcpy(m2, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
-		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
-		t[1] = int16_t((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
-		t[2] = int16_t((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
-		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[1] + m1[5]*m2[2]) >> 14);
-		t[4] = int16_t((m1[3]*m2[3] + m1[4]*m2[4] + m1[5]*m2[5]) >> 14);
-		t[5] = int16_t((m1[3]*m2[6] + m1[4]*m2[7] + m1[5]*m2[8]) >> 14);
-		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[1] + m1[8]*m2[2]) >> 14);
-		t[7] = int16_t((m1[6]*m2[3] + m1[7]*m2[4] + m1[8]*m2[5]) >> 14);
-		t[8] = int16_t((m1[6]*m2[6] + m1[7]*m2[7] + m1[8]*m2[8]) >> 14);
+		memcpy(m1, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
+		memcpy(m2, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
+		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[3] + m1[2]*m2[6]) >> 14);
+		t[1] = int16_t((m1[0]*m2[1] + m1[1]*m2[4] + m1[2]*m2[7]) >> 14);
+		t[2] = int16_t((m1[0]*m2[2] + m1[1]*m2[5] + m1[2]*m2[8]) >> 14);
+		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[3] + m1[5]*m2[6]) >> 14);
+		t[4] = int16_t((m1[3]*m2[1] + m1[4]*m2[4] + m1[5]*m2[7]) >> 14);
+		t[5] = int16_t((m1[3]*m2[2] + m1[4]*m2[5] + m1[5]*m2[8]) >> 14);
+		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[3] + m1[8]*m2[6]) >> 14);
+		t[7] = int16_t((m1[6]*m2[1] + m1[7]*m2[4] + m1[8]*m2[7]) >> 14);
+		t[8] = int16_t((m1[6]*m2[2] + m1[7]*m2[5] + m1[8]*m2[8]) >> 14);
 	}
 	else
 	{
-		memcpy(m2, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
-		memcpy(m1, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
-		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
-		t[1] = int16_t((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
-		t[2] = int16_t((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
-		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[1] + m1[5]*m2[2]) >> 14);
-		t[4] = int16_t((m1[3]*m2[3] + m1[4]*m2[4] + m1[5]*m2[5]) >> 14);
-		t[5] = int16_t((m1[3]*m2[6] + m1[4]*m2[7] + m1[5]*m2[8]) >> 14);
-		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[1] + m1[8]*m2[2]) >> 14);
-		t[7] = int16_t((m1[6]*m2[3] + m1[7]*m2[4] + m1[8]*m2[5]) >> 14);
-		t[8] = int16_t((m1[6]*m2[6] + m1[7]*m2[7] + m1[8]*m2[8]) >> 14);
+		memcpy(m2, c435_getm(m_c435_buffer[4]), sizeof(int16_t) * 9);
+		memcpy(m1, c435_getm(m_c435_buffer[2]), sizeof(int16_t) * 9);
+		t[0] = int16_t((m1[0]*m2[0] + m1[1]*m2[3] + m1[2]*m2[6]) >> 14);
+		t[1] = int16_t((m1[0]*m2[1] + m1[1]*m2[4] + m1[2]*m2[7]) >> 14);
+		t[2] = int16_t((m1[0]*m2[2] + m1[1]*m2[5] + m1[2]*m2[8]) >> 14);
+		t[3] = int16_t((m1[3]*m2[0] + m1[4]*m2[3] + m1[5]*m2[6]) >> 14);
+		t[4] = int16_t((m1[3]*m2[1] + m1[4]*m2[4] + m1[5]*m2[7]) >> 14);
+		t[5] = int16_t((m1[3]*m2[2] + m1[4]*m2[5] + m1[5]*m2[8]) >> 14);
+		t[6] = int16_t((m1[6]*m2[0] + m1[7]*m2[3] + m1[8]*m2[6]) >> 14);
+		t[7] = int16_t((m1[6]*m2[1] + m1[7]*m2[4] + m1[8]*m2[7]) >> 14);
+		t[8] = int16_t((m1[6]*m2[2] + m1[7]*m2[5] + m1[8]*m2[8]) >> 14);
 	}
 	LOGMASKED(LOG_MATRIX_UNK, "result: %04x    %04x    %04x\n", (uint16_t)t[0], (uint16_t)t[1], (uint16_t)t[2]);
 	LOGMASKED(LOG_MATRIX_UNK, "        %04x    %04x    %04x\n", (uint16_t)t[3], (uint16_t)t[4], (uint16_t)t[5]);
@@ -2214,15 +2237,15 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_vector_mul (%04x): Vector %d = Matrix %d * Vector %d + Vector %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[4], m_c435_buffer[3]);
 		if (BIT(m_c435_buffer[0], 12))
 		{
-			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) - vt[0];
-			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) - vt[1];
-			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) - vt[2];
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[3]*int64_t(v[1]) + m[6]*int64_t(v[2])) >> 14) - vt[0];
+			t[1] = int32_t((m[1]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[7]*int64_t(v[2])) >> 14) - vt[1];
+			t[2] = int32_t((m[2]*int64_t(v[0]) + m[5]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) - vt[2];
 		}
 		else
 		{
-			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14) + vt[0];
-			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14) + vt[1];
-			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) + vt[2];
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[3]*int64_t(v[1]) + m[6]*int64_t(v[2])) >> 14) + vt[0];
+			t[1] = int32_t((m[1]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[7]*int64_t(v[2])) >> 14) + vt[1];
+			t[2] = int32_t((m[2]*int64_t(v[0]) + m[5]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14) + vt[2];
 		}
 		if (extra_logging)
 		{
@@ -2241,15 +2264,15 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 
 		if (BIT(m_c435_buffer[0], 10))
 		{
-			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
-			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
-			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[3]*int64_t(v[1]) + m[6]*int64_t(v[2])) >> 14);
+			t[1] = int32_t((m[1]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[7]*int64_t(v[2])) >> 14);
+			t[2] = int32_t((m[2]*int64_t(v[0]) + m[5]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
 		}
 		else
 		{
-			t[0] = int32_t((m[0]*int64_t(v[0]) + m[1]*int64_t(v[1]) + m[2]*int64_t(v[2])) >> 14);
-			t[1] = int32_t((m[3]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[5]*int64_t(v[2])) >> 14);
-			t[2] = int32_t((m[6]*int64_t(v[0]) + m[7]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
+			t[0] = int32_t((m[0]*int64_t(v[0]) + m[3]*int64_t(v[1]) + m[6]*int64_t(v[2])) >> 14);
+			t[1] = int32_t((m[1]*int64_t(v[0]) + m[4]*int64_t(v[1]) + m[7]*int64_t(v[2])) >> 14);
+			t[2] = int32_t((m[2]*int64_t(v[0]) + m[5]*int64_t(v[1]) + m[8]*int64_t(v[2])) >> 14);
 		}
 
 		if (extra_logging)
@@ -2335,6 +2358,24 @@ void namcos23_state::c435_render() // 8
 	bool use_scaling = m_c435_buffer[0] & 0x0080;
 
 	LOGMASKED(LOG_RENDER_INFO, "%s: render model %x %swith matrix %x and vector %x\n", machine().describe_context(), m_c435_buffer[1], use_scaling ? "scaled " : "", m_c435_buffer[2], m_c435_buffer[3]);
+
+	static uint16_t match_model = 0x2ad9;
+	if (machine().input().code_pressed_once(KEYCODE_I))
+	{
+		match_model++;
+		printf("New match model: %04x\n", match_model);
+	}
+	if (machine().input().code_pressed_once(KEYCODE_U))
+	{
+		match_model--;
+		printf("New match model: %04x\n", match_model);
+	}
+	if (machine().input().code_pressed(KEYCODE_O) && m_c435_buffer[1] != match_model)
+	{
+		//printf("Avoiding model that isn't %04x (%04x)\n", match_model, m_c435_buffer[1]);
+		return;
+	}
+	print_extra_poly_info = false;
 
 	if(render.count[render.cur] >= RENDER_MAX_ENTRIES) {
 		LOGMASKED(LOG_RENDER_ERR, "%s: WARNING: render buffer full\n", machine().describe_context());
@@ -2462,6 +2503,21 @@ void namcos23_state::c435_dma(address_space &space, uint32_t adr, uint32_t size)
 	{
 		for(int pos=0; pos < size; pos += 2)
 			c435_pio_w(space.read_word(adr+pos));
+	}
+}
+
+void namcos23_state::gorgon_nvram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
+{
+	static uint32_t nvram_data = 0;
+	if(mem_mask == 0xffff0000) {
+		const uint32_t old = nvram_data;
+		COMBINE_DATA(&nvram_data);
+		if(BIT(old, 18) != BIT(nvram_data, 18) && BIT(nvram_data, 18)) {
+			logerror("nvram 1 data bit: %d\n", BIT(nvram_data, 16));
+		}
+		if(BIT(old, 17) != BIT(nvram_data, 17) && BIT(nvram_data, 17)) {
+			logerror("nvram 2 data bit: %d\n", BIT(nvram_data, 16));
+		}
 	}
 }
 
@@ -2685,9 +2741,12 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 		int ty = (int)(v * ooz) + rd.tbase;
 		const uint32_t tex_rgb = rd.texture_lookup(*rd.machine, rd.pens, tx, ty);
 
+		// apply shading before fog
+		//const float li = i * ooz;
+		//const uint32_t lit_rgb = (light(tex_rgb >> 16, li) << 16) | (light(tex_rgb >> 8, li) << 8) | light(tex_rgb, li);
+
 		rgbaint_t rgb(tex_rgb);
 
-		// apply shading before fog
 		//int shade = i*ooz;
 		//rgb.scale_imm_and_clamp(shade << 2);
 
@@ -2735,16 +2794,16 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 
 void namcos23_state::render_apply_transform(int32_t xi, int32_t yi, int32_t zi, const namcos23_render_entry *re, poly_vertex &pv)
 {
-	pv.x =    (int32_t((re->model.m[0]*int64_t(xi) + re->model.m[1]*int64_t(yi) + re->model.m[2]*int64_t(zi)) >> 14)*re->model.scaling + re->model.v[0])/16384.0f;
-	pv.y =    (int32_t((re->model.m[3]*int64_t(xi) + re->model.m[4]*int64_t(yi) + re->model.m[5]*int64_t(zi)) >> 14)*re->model.scaling + re->model.v[1])/16384.0f;
-	pv.p[0] = (int32_t((re->model.m[6]*int64_t(xi) + re->model.m[7]*int64_t(yi) + re->model.m[8]*int64_t(zi)) >> 14)*re->model.scaling + re->model.v[2])/16384.0f;
+	pv.x =    (int32_t((re->model.m[0]*int64_t(xi) + re->model.m[3]*int64_t(yi) + re->model.m[6]*int64_t(zi)) >> 14)*re->model.scaling + re->model.v[0])/16384.0f;
+	pv.y =    (int32_t((re->model.m[1]*int64_t(xi) + re->model.m[4]*int64_t(yi) + re->model.m[7]*int64_t(zi)) >> 14)*re->model.scaling + re->model.v[1])/16384.0f;
+	pv.p[0] = (int32_t((re->model.m[2]*int64_t(xi) + re->model.m[5]*int64_t(yi) + re->model.m[8]*int64_t(zi)) >> 14)*re->model.scaling + re->model.v[2])/16384.0f;
 }
 
 void namcos23_state::render_apply_matrot(int32_t xi, int32_t yi, int32_t zi, const namcos23_render_entry *re, int32_t &x, int32_t &y, int32_t &z)
 {
-	x = (re->model.m[0]*xi + re->model.m[1]*yi + re->model.m[2]*zi) >> 14;
-	y = (re->model.m[3]*xi + re->model.m[4]*yi + re->model.m[5]*zi) >> 14;
-	z = (re->model.m[6]*xi + re->model.m[7]*yi + re->model.m[8]*zi) >> 14;
+	x = (re->model.m[0]*xi + re->model.m[3]*yi + re->model.m[6]*zi) >> 14;
+	y = (re->model.m[1]*xi + re->model.m[4]*yi + re->model.m[7]*zi) >> 14;
+	z = (re->model.m[2]*xi + re->model.m[5]*yi + re->model.m[8]*zi) >> 14;
 }
 
 void namcos23_state::render_project(poly_vertex &pv)
@@ -2981,11 +3040,15 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		uint32_t type = m_ptrom[adr++];
 		uint32_t h    = m_ptrom[adr++];
 
+		if (print_extra_poly_info) printf("type/h: %08x, %08x\n", type, h);
+
 		float tbase = (type >> 24) << 12;
 		uint8_t color = (h >> 24) & 0x7f;
 		int lmode = (type >> 19) & 3;
 		int ne = (type >> 8) & 15;
 		section++;
+
+		if (print_extra_poly_info) printf("tbase, color, lmode, ne: %f, %02x, %d, %d\n", tbase, color, lmode, ne);
 
 		// Something to do with Z-sorting?
 		//float z_add = 0.f;
@@ -3004,6 +3067,8 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			light = m_ptrom[adr++];
 		}
 
+		if (lmode < 2 && machine().input().code_pressed(KEYCODE_K)) printf("%d:%08x ", ne, light);
+
 		float minz = FLT_MAX;
 		float maxz = FLT_MIN;
 
@@ -3017,12 +3082,13 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			pv[i].p[2] = (((v1 >> 16) & 0xf00) | ((v3 >> 24 & 0xff))) + 0.5f + tbase;
 			//logerror("XYZ[%d][%d]: %f, %f, %f\n", section, i, pv[i].x, pv[i].y, pv[i].p[0]);
 
+			static const uint8_t light_shifts[4] = { 8, 16, 0, 24 };
 			switch(lmode) {
 			case 0:
-				pv[i].p[3] = ((light >> (8*(3-i))) & 0xff) / 128.0;
+				pv[i].p[3] = uint8_t(light >> light_shifts[i]) / 64.0;
 				break;
 			case 1:
-				pv[i].p[3] = ((light >> (8*(3-i))) & 0xff) / 128.0;
+				pv[i].p[3] = uint8_t(light >> light_shifts[i]) / 64.0;
 				break;
 			case 2:
 				pv[i].p[3] = 1.0;
@@ -3030,9 +3096,18 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			case 3: {
 				extptr++;
 				uint32_t norm = m_ptrom[extptr++];
-				int32_t nx = u32_to_s10(norm >> 20);
-				int32_t ny = u32_to_s10(norm >> 10);
-				int32_t nz = u32_to_s10(norm);
+				int32_t nx = u32_to_s10((norm >> 20) & 0x3ff);
+				int32_t ny = u32_to_s10((norm >> 10) & 0x3ff);
+				int32_t nz = u32_to_s10(norm & 0x3ff);
+				if (machine().input().code_pressed(KEYCODE_Y))
+				{
+					printf("%08x: %04x %04x %04x: %d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d: %08x %08x %08x\n", norm, (norm >> 20) & 0x3ff, (norm >> 10) & 0x3ff, norm & 0x3ff,
+						BIT(norm, 31), BIT(norm, 30), BIT(norm, 29), BIT(norm, 28), BIT(norm, 27), BIT(norm, 26), BIT(norm, 25), BIT(norm, 24),
+						BIT(norm, 23), BIT(norm, 22), BIT(norm, 21), BIT(norm, 20), BIT(norm, 19), BIT(norm, 18), BIT(norm, 17), BIT(norm, 16),
+						BIT(norm, 15), BIT(norm, 14), BIT(norm, 13), BIT(norm, 12), BIT(norm, 11), BIT(norm, 10), BIT(norm, 9), BIT(norm, 8),
+						BIT(norm, 7), BIT(norm, 6), BIT(norm, 5), BIT(norm, 4), BIT(norm, 3), BIT(norm, 2), BIT(norm, 1), BIT(norm, 0),
+						nx, ny, nz);
+				}
 				int32_t nrx, nry, nrz;
 				render_apply_matrot(nx, ny, nz, re, nrx, nry, nrz);
 				float lsi = float(nrx*m_light_vector[0] + nry*m_light_vector[1] + nrz*m_light_vector[2])/4194304.0f;
@@ -3047,19 +3122,20 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 		namcos23_poly_entry *p = render.polys + render.poly_count;
 
 		// Should be unnecessary once frustum clipping happens correctly, but this will at least cull polys behind the camera
-		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.1f);
+		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.0001f);
 
 		// Project if you don't clip on the near plane
 		if(p->vertex_count >= 3) {
+			if (print_extra_poly_info) printf("Poly not clipped\n");
 			// This is our poor-man's projection matrix
 			for(int i = 0; i < p->vertex_count; i++) {
 				const float z = p->pv[i].p[0] != 0.f ? p->pv[i].p[0] : 1.f;
 				p->pv[i].x /= z;
 				p->pv[i].y /= z;
 				if(z > maxz)
-					maxz = pv[i].p[0];
+					maxz = z;
 				if(z < minz)
-					minz = pv[i].p[0];
+					minz = z;
 
 				render_project(p->pv[i]);
 
@@ -3070,7 +3146,7 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			}
 
 			// Compute an odd sorta'-Z thing that can situate the polygon wherever you want in Z-depth
-			p->zkey = minz + 0.5f * (maxz - minz);
+			p->zkey = 0.5f * (minz + maxz);//minz + 0.5f * (maxz - minz);
 			p->front = !(h & 0x00000001);
 			p->rd.machine = &machine();
 			p->rd.texture_lookup = render_texture_lookup_nocache_point;
@@ -3285,7 +3361,6 @@ TILE_GET_INFO_MEMBER(namcos23_state::TextTilemapGetInfo)
 void namcos23_state::textram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 {
 	COMBINE_DATA( &m_textram[offset] );
-	if (machine().input().code_pressed(KEYCODE_K)) LOGMASKED(LOG_SUBIRQ, "textram_w[%04x] = %08x & %08x\n", offset*2, data, mem_mask);
 	m_bgtilemap->mark_tile_dirty(offset*2);
 	m_bgtilemap->mark_tile_dirty((offset*2)+1);
 }
@@ -3293,7 +3368,6 @@ void namcos23_state::textram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 void namcos23_state::textchar_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 {
 	COMBINE_DATA(&m_charram[offset]);
-	if (machine().input().code_pressed(KEYCODE_K)) LOGMASKED(LOG_SUBIRQ, "charram_w[%05x] = %08x & %08x\n", offset*2, data, mem_mask);
 	m_gfxdecode->gfx(0)->mark_dirty(offset/32);
 }
 
@@ -3798,7 +3872,7 @@ void namcos23_state::ctl_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		break;
 
 	case 6: // gmen wars spams this heavily with 0 prior to starting the GMEN board test
-		logerror("Queueing %04x at direct buf %d\n", data, m_c435_direct_buf_pos);
+		//logerror("Queueing %04x at direct buf %d\n", data, m_c435_direct_buf_pos);
 		m_c435_direct_buf[m_c435_direct_buf_pos++] = data;
 		if(data)
 			m_c435_direct_buf_nonempty = true;
@@ -3893,6 +3967,7 @@ void namcos23_state::mcuen_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 uint16_t namcos23_state::sub_comm_r(offs_t offset)
 {
 	// status register
+	m_maincpu->set_input_line(MIPS3_IRQ4, CLEAR_LINE);
 	if (offset == 0)
 	{
 		// bit 1 tx fifo empty
@@ -3905,7 +3980,6 @@ uint16_t namcos23_state::sub_comm_r(offs_t offset)
 		return 1 | 2;
 	}
 
-	m_maincpu->set_input_line(MIPS3_IRQ4, CLEAR_LINE);
 	// data rx, TBD
 	LOGMASKED(LOG_MCU, "%s: sub_comm_r data read: %04x\n", machine().describe_context(), m_mcu_unk);
 	return m_mcu_unk; //machine().rand();
@@ -3932,6 +4006,7 @@ void namcos23_state::gorgon_map(address_map &map)
 	map(0x02000000, 0x0200000f).rw(FUNC(namcos23_state::c417_r), FUNC(namcos23_state::c417_w));
 	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
+	map(0x06000000, 0x06000003).w(FUNC(namcos23_state::gorgon_nvram_w));
 	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::gorgon_czattr_r), FUNC(namcos23_state::gorgon_czattr_w)); // CZ Attribute RAM
 	map(0x06080200, 0x060803ff).rw(FUNC(namcos23_state::gorgon_czram_r), FUNC(namcos23_state::gorgon_czram_w)); // PCZ Convert RAM (C406)
 	map(0x06108000, 0x061087ff).ram().share("gammaram"); // Gamma RAM (C404)
@@ -4179,11 +4254,15 @@ void namcos23_state::s23h8iomap(address_map &map)
 
 uint8_t namcos23_state::iob_p4_r()
 {
-	return 0;
+	LOGMASKED(LOG_IOP4, "%s: iob_p4_r: %02x\n", machine().describe_context(), m_tssio_port_4);
+	return m_tssio_port_4;
 }
 
 void namcos23_state::iob_p4_w(uint8_t data)
 {
+	LOGMASKED(LOG_IOP4, "%s: iob_p4_w: %02x\n", machine().describe_context(), data);
+	m_tssio_port_4 = data;
+
 	// bit 2 = SENSE line back to main (0 = asserted, 1 = dropped)
 	m_jvssense = (data & 0x04) ? 0 : 1;
 }
@@ -4198,11 +4277,13 @@ uint8_t namcos23_state::iob_p6_r()
 	uint8_t sb = (ioport("SERVICE")->read() & 1) << 4;
 	// other bits: unknown
 
+	LOGMASKED(LOG_IOP6, "%s: iob_p6_r: %02x\n", machine().describe_context(), sb);
 	return sb | 0;
 }
 
 void namcos23_state::iob_p6_w(uint8_t data)
 {
+	LOGMASKED(LOG_IOP6, "%s: iob_p6_w: %02x\n", machine().describe_context(), data);
 	//printf("iob %02x to port 6\n", data);
 }
 
@@ -4217,6 +4298,65 @@ void namcos23_state::s23iobrdmap(address_map &map)
 	map(0xc000, 0xfb7f).ram();
 }
 
+//ioport("DSW")->read()
+uint16_t namcos23_state::adc0_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC0")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 0: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+uint16_t namcos23_state::adc1_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC1")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 1: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+uint16_t namcos23_state::adc2_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC2")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 2: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+uint16_t namcos23_state::adc4_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC4")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 4: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+uint16_t namcos23_state::adc5_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC5")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 5: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+uint16_t namcos23_state::adc6_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC6")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 6: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+uint16_t namcos23_state::adc7_r()
+{
+	const uint16_t data = uint16_t(ioport("ADC7")->read());
+	LOGMASKED(LOG_ADC_RD, "%s: ADC 7: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+void namcos23_state::adc0_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 0 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc1_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 1 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc2_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 2 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc3_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 3 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc4_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 4 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc5_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 5 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc6_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 6 Write: %02x\n", machine().describe_context(), data); }
+void namcos23_state::adc7_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 7 Write: %02x\n", machine().describe_context(), data); }
+
 void namcos23_state::s23iobrdiomap(address_map &map)
 {
 	map(h8_device::PORT_4, h8_device::PORT_4).rw(FUNC(namcos23_state::iob_p4_r), FUNC(namcos23_state::iob_p4_w));
@@ -4224,8 +4364,14 @@ void namcos23_state::s23iobrdiomap(address_map &map)
 	map(h8_device::PORT_6, h8_device::PORT_6).rw(FUNC(namcos23_state::iob_p6_r), FUNC(namcos23_state::iob_p6_w));
 	map(h8_device::PORT_8, h8_device::PORT_8).noprw();   // unknown - used on ASCA-5 only
 	map(h8_device::PORT_9, h8_device::PORT_9).noprw();   // unknown - used on ASCA-5 only
-	map(h8_device::ADC_0, h8_device::ADC_3).r(FUNC(namcos23_state::iob_analog_r));
-	map(h8_device::ADC_4, h8_device::ADC_7).noprw();
+	map(h8_device::ADC_0, h8_device::ADC_0).rw(FUNC(namcos23_state::adc0_r), FUNC(namcos23_state::adc0_w));
+	map(h8_device::ADC_1, h8_device::ADC_1).rw(FUNC(namcos23_state::adc1_r), FUNC(namcos23_state::adc1_w));
+	map(h8_device::ADC_2, h8_device::ADC_2).rw(FUNC(namcos23_state::adc2_r), FUNC(namcos23_state::adc2_w));
+	map(h8_device::ADC_3, h8_device::ADC_3).rw(FUNC(namcos23_state::adc3_r), FUNC(namcos23_state::adc3_w));
+	map(h8_device::ADC_4, h8_device::ADC_4).rw(FUNC(namcos23_state::adc4_r), FUNC(namcos23_state::adc4_w));
+	map(h8_device::ADC_5, h8_device::ADC_5).rw(FUNC(namcos23_state::adc5_r), FUNC(namcos23_state::adc5_w));
+	map(h8_device::ADC_6, h8_device::ADC_6).rw(FUNC(namcos23_state::adc6_r), FUNC(namcos23_state::adc6_w));
+	map(h8_device::ADC_7, h8_device::ADC_7).rw(FUNC(namcos23_state::adc7_r), FUNC(namcos23_state::adc7_w));
 }
 
 void namcos23_state::motoxgo_exio_map(address_map &map)
@@ -4274,28 +4420,28 @@ void namcos23_state::timecrs2iobrdmap(address_map &map)
 
 static INPUT_PORTS_START( h8analog )
 	PORT_START("ADC0")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM )
+	PORT_BIT( 0x3ff, 0x0100, IPT_CUSTOM )
 
 	PORT_START("ADC1")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM )
+	PORT_BIT( 0x3ff, 0x0100, IPT_CUSTOM )
 
 	PORT_START("ADC2")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM )
+	PORT_BIT( 0x3ff, 0x0380, IPT_CUSTOM )
 
 	PORT_START("ADC3")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM ) // rear right sensor pot (rapidrvr)
+	PORT_BIT( 0x3ff, 0x0380, IPT_CUSTOM ) // rear right sensor pot (rapidrvr)
 
 	PORT_START("ADC4")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM ) // rear left sensor pot (rapidrvr)
+	PORT_BIT( 0x3ff, 0x0380, IPT_CUSTOM ) // rear left sensor pot (rapidrvr)
 
 	PORT_START("ADC5")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM ) // front right sensor pot (rapidrvr)
+	PORT_BIT( 0x3ff, 0x0380, IPT_CUSTOM ) // front right sensor pot (rapidrvr)
 
 	PORT_START("ADC6")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM ) // front left sensor pot (rapidrvr)
+	PORT_BIT( 0x3ff, 0x0380, IPT_CUSTOM ) // front left sensor pot (rapidrvr)
 
 	PORT_START("ADC7")
-	PORT_BIT( 0x3ff, 0x0200, IPT_CUSTOM )
+	PORT_BIT( 0x3ff, 0x0380, IPT_CUSTOM )
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( rapidrvr )
@@ -4349,7 +4495,7 @@ static INPUT_PORTS_START( rapidrvr )
 	PORT_INCLUDE( h8analog )
 
 	PORT_MODIFY("ADC0")
-	PORT_BIT( 0x3ff, 0x0200, IPT_AD_STICK_Y )  PORT_SENSITIVITY(100) PORT_KEYDELTA(10) PORT_NAME("Yaw")
+	PORT_BIT( 0x3ff, 0x0380, IPT_AD_STICK_Y )  PORT_SENSITIVITY(100) PORT_KEYDELTA(10) PORT_NAME("Yaw")
 
 	PORT_MODIFY("ADC1")
 	PORT_BIT( 0x3ff, 0x0200, IPT_AD_STICK_X ) PORT_SENSITIVITY(100) PORT_KEYDELTA(10) PORT_NAME("Pitch")
@@ -4363,18 +4509,22 @@ static INPUT_PORTS_START( rapidrvrp )
 	// Some of the developer menus require you to navigate with the Dev keys,
 	// but usually the User keys work fine too.
 	PORT_MODIFY("P1")
-	PORT_BIT( 0x001, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x002, IP_ACTIVE_LOW, IPT_UNKNOWN ) // I/O Unknown Status
-	PORT_BIT( 0x004, IP_ACTIVE_LOW, IPT_UNKNOWN ) // I/O Air Dumper FR
+	PORT_BIT( 0x001, IP_ACTIVE_LOW, IPT_BUTTON4 ) PORT_NAME("Dev Service D")
+	PORT_BIT( 0x002, IP_ACTIVE_LOW, IPT_BUTTON5 ) PORT_NAME("Dev Service E") // I/O Unknown Status
+	PORT_BIT( 0x004, IP_ACTIVE_LOW, IPT_BUTTON6 ) PORT_NAME("Dev Service F") // I/O Air Dumper FR
 	PORT_BIT( 0x008, IP_ACTIVE_LOW, IPT_BUTTON1 ) PORT_PLAYER(2) PORT_NAME("Dev Service A") // + I/O Air Dumper RR
-	PORT_BIT( 0x010, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x020, IP_ACTIVE_LOW, IPT_UNKNOWN )
+	PORT_BIT( 0x010, IP_ACTIVE_LOW, IPT_BUTTON7 ) PORT_NAME("Dev Service G")
+	PORT_BIT( 0x020, IP_ACTIVE_LOW, IPT_BUTTON8 ) PORT_NAME("Dev Service H")
 	PORT_BIT( 0x040, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN ) PORT_PLAYER(2) PORT_NAME("Dev Service Down")
 	PORT_BIT( 0x080, IP_ACTIVE_LOW, IPT_JOYSTICK_UP ) PORT_PLAYER(2) PORT_NAME("Dev Service Up")
 	PORT_BIT( 0x100, IP_ACTIVE_LOW, IPT_START2 ) PORT_NAME("Dev Start")
-	PORT_BIT( 0x200, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x400, IP_ACTIVE_LOW, IPT_UNKNOWN ) // I/O Air Dumper FL
+	PORT_BIT( 0x200, IP_ACTIVE_LOW, IPT_UNUSED )
+	PORT_BIT( 0x400, IP_ACTIVE_LOW, IPT_BUTTON3 ) PORT_NAME("Dev Service C") // + I/O Air Dumper FL
 	PORT_BIT( 0x800, IP_ACTIVE_LOW, IPT_BUTTON2 ) PORT_PLAYER(2) PORT_NAME("Dev Service B") // + I/O Air Dumper RL
+	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON9 )
+	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON10 )
+	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_BUTTON11 )
+	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_BUTTON12 )
 
 	PORT_MODIFY("IN01")
 	PORT_BIT( 0x0200, IP_ACTIVE_LOW, IPT_JOYSTICK_UP ) PORT_NAME("User Service Up")
