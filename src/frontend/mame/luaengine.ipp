@@ -360,8 +360,6 @@ int sol_lua_push(sol::types<std::error_condition>, lua_State &L, std::error_cond
 
 // enums to automatically convert to strings
 int sol_lua_push(sol::types<map_handler_type>, lua_State *L, map_handler_type &&value);
-int sol_lua_push(sol::types<image_init_result>, lua_State *L, image_init_result &&value);
-int sol_lua_push(sol::types<image_verify_result>, lua_State *L, image_verify_result &&value);
 int sol_lua_push(sol::types<endianness_t>, lua_State *L, endianness_t &&value);
 
 
@@ -585,7 +583,7 @@ template <typename R, typename T, typename D>
 auto lua_engine::make_simple_callback_setter(void (T::*setter)(delegate<R ()> &&), D &&dflt, const char *name, const char *desc)
 {
 	return
-		[setter, dflt, name, desc] (T &self, sol::object cb)
+		[this, setter, dflt, name, desc] (T &self, sol::object cb)
 		{
 			if (cb == sol::lua_nil)
 			{
@@ -594,7 +592,7 @@ auto lua_engine::make_simple_callback_setter(void (T::*setter)(delegate<R ()> &&
 			else if (cb.is<sol::protected_function>())
 			{
 				(self.*setter)(delegate<R ()>(
-							[dflt, desc, cbfunc = cb.as<sol::protected_function>()] () -> R
+							[this, dflt, desc, cbfunc = cb.as<sol::protected_function>()] () -> R
 							{
 								if constexpr (std::is_same_v<R, void>)
 								{

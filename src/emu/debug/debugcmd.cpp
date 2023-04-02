@@ -3551,13 +3551,13 @@ void debugger_commands::execute_history(const std::vector<std::string_view> &par
 	}
 
 	// loop over lines
-	debug_disasm_buffer buffer(*device);
 	std::string instruction;
 	for (int index = int(unsigned(count)); index > 0; index--)
 	{
 		auto const pc = debug->history_pc(1 - index);
 		if (pc.second)
 		{
+			debug_disasm_buffer buffer(*device);
 			offs_t next_offset;
 			offs_t size;
 			u32 info;
@@ -3990,8 +3990,9 @@ void debugger_commands::execute_mount(const std::vector<std::string_view> &param
 	{
 		if ((img.instance_name() == params[0]) || (img.brief_instance_name() == params[0]))
 		{
-			if (img.load(params[1]) != image_init_result::PASS)
-				m_console.printf("Unable to mount file %s on %s\n", params[1], params[0]);
+			std::error_condition err = img.load(params[1]);
+			if (err)
+				m_console.printf("Unable to mount file %s on %s: %s\n", params[1], params[0], err.message());
 			else
 				m_console.printf("File %s mounted on %s\n", params[1], params[0]);
 			return;

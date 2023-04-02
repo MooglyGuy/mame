@@ -563,6 +563,8 @@ ui.line_height (read-only)
 ui.menu_active (read-only)
     A Boolean indicating whether an interactive UI element is currently active.
     Examples include menus and slider controls.
+ui.ui_active (read/write)
+    A Boolean indicating whether UI control inputs are currently enabled.
 ui.single_step (read/write)
     A Boolean controlling whether the emulated system should be automatically
     paused when the next frame is drawn.  This property is automatically reset
@@ -1205,16 +1207,17 @@ Methods
 ^^^^^^^
 
 image:load(filename)
-    Loads the specified file as a media image.  Returns ``"pass"`` or
-    ``"fail"``.
+    Loads the specified file as a media image.  Returns ``nil`` if no error
+    or a string describing an error if an error occurred.
 image:load_software(name)
-    Loads a media image described in a software list.  Returns ``"pass"`` or
-    ``"fail"``.
+    Loads a media image described in a software list.  Returns ``nil`` if no
+    error or a string describing an error if an error occurred.
 image:unload()
     Unloads the mounted image.
 image:create(filename)
     Creates and mounts a media image file with the specified name.  Returns
-    ``"pass"`` or ``"fail"``.
+    ``nil`` if no error or a string describing an error if an error
+    occurred.
 image:display()
     Returns a “front panel display” string for the device, if supported.  This
     can be used to show status information, like the current head position or
