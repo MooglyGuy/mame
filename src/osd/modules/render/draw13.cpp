@@ -164,8 +164,8 @@ public:
 		m_sdl_renderer = nullptr;
 	}
 
-	virtual int create() override;
-	virtual int draw(const int update) override;
+	virtual bool create() override;
+	virtual bool draw(const int update) override;
 	virtual int xy_to_render_target(const int x, const int y, int *xt, int *yt) override;
 	virtual render_primitive_list *get_primitives() override;
 
@@ -441,7 +441,7 @@ static void drawsdl_show_info(struct SDL_RendererInfo *render_info)
 }
 
 
-int renderer_sdl2::create()
+bool renderer_sdl2::create()
 {
 	// create renderer
 
@@ -480,7 +480,7 @@ int renderer_sdl2::create()
 	SDL_GetRendererInfo(m_sdl_renderer, &render_info);
 	drawsdl_show_info(&render_info);
 
-	return 0;
+	return true;
 }
 
 
@@ -519,7 +519,7 @@ void renderer_sdl2::destroy_all_textures()
 //  sdl_info::draw
 //============================================================
 
-int renderer_sdl2::draw(int update)
+bool renderer_sdl2::draw(int update)
 {
 	texture_info *texture=nullptr;
 	float vofs, hofs;
@@ -612,7 +612,7 @@ int renderer_sdl2::draw(int update)
 	SDL_RenderPresent(m_sdl_renderer);
 	m_last_blit_time += osd_ticks();
 
-	return 0;
+	return true;
 }
 
 

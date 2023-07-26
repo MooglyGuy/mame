@@ -46,7 +46,7 @@ public:
 
 	~sdl_window_info();
 
-	int window_init();
+	bool window_init();
 
 	void update() override;
 	void toggle_full_screen();
@@ -67,7 +67,7 @@ public:
 
 private:
 	// window handle and info
-	int                 m_startmaximized;
+	bool                m_startmaximized;
 
 	// dimensions
 	osd_dim             m_minimum_dim;
@@ -81,18 +81,18 @@ private:
 
 	int                 m_extra_flags;
 
-	// returns 0 on success, else 1
-	int complete_create();
+	// returns true on success, else false
+	bool complete_create();
 
 private:
 	int wnd_extra_width();
 	int wnd_extra_height();
 	osd_rect constrain_to_aspect_ratio(const osd_rect &rect, int adjustment);
-	osd_dim get_min_bounds(int constrain);
-	osd_dim get_max_bounds(int constrain);
+	osd_dim get_min_bounds(bool constrain);
+	osd_dim get_max_bounds(bool constrain);
 	void update_cursor_state();
 	osd_dim pick_best_mode();
-	void set_fullscreen(int afullscreen) { m_fullscreen = afullscreen; }
+	void set_fullscreen(bool fullscreen) { m_fullscreen = fullscreen; }
 
 	// monitor info
 	bool                               m_mouse_captured;

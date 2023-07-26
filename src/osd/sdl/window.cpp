@@ -339,7 +339,7 @@ int sdl_window_info::xy_to_render_target(int x, int y, int *xt, int *yt)
 //  (main thread)
 //============================================================
 
-int sdl_window_info::window_init()
+bool sdl_window_info::window_init()
 {
 	// set the initial maximized state
 	// FIXME: Does not belong here
@@ -347,17 +347,14 @@ int sdl_window_info::window_init()
 
 	create_target();
 
-	int result = complete_create();
-
 	// handle error conditions
-	if (result == 1)
-		goto error;
+	if (!complete_create())
+	{
+		destroy();
+		return false;
+	}
 
-	return 0;
-
-error:
-	destroy();
-	return 1;
+	return true;
 }
 
 
@@ -912,7 +909,7 @@ osd_rect sdl_window_info::constrain_to_aspect_ratio(const osd_rect &rect, int ad
 //  (window thread)
 //============================================================
 
-osd_dim sdl_window_info::get_min_bounds(int constrain)
+osd_dim sdl_window_info::get_min_bounds(bool constrain)
 {
 	int32_t minwidth, minheight;
 
@@ -985,7 +982,7 @@ osd_dim sdl_window_info::get_size()
 //  (window thread)
 //============================================================
 
-osd_dim sdl_window_info::get_max_bounds(int constrain)
+osd_dim sdl_window_info::get_max_bounds(bool constrain)
 {
 	//assert(GetCurrentThreadId() == window_threadid);
 
@@ -1032,7 +1029,7 @@ sdl_window_info::sdl_window_info(
 		const std::shared_ptr<osd_monitor_info> &a_monitor,
 		const osd_window_config *config)
 	: osd_window_t(a_machine, renderprovider, index, std::move(a_monitor), *config)
-	, m_startmaximized(0)
+	, m_startmaximized(false)
 	// Following three are used by input code to defer resizes
 	, m_minimum_dim(0, 0)
 	, m_windowed_dim(0, 0)

@@ -169,12 +169,12 @@ public:
 
 	/* Interface to be implemented by render code */
 
-	virtual int create() = 0;
+	virtual bool create() = 0;
 	virtual render_primitive_list *get_primitives() = 0;
 
 	virtual void add_audio_to_recording(const int16_t *buffer, int samples_this_frame) { }
 	virtual std::vector<ui::menu_item> get_slider_list() { return m_sliders; }
-	virtual int draw(const int update) = 0;
+	virtual bool draw(const int update) = 0;
 	virtual int xy_to_render_target(const int x, const int y, int *xt, int *yt) { return 0; }
 	virtual void save() { }
 	virtual void record() { }

@@ -164,7 +164,7 @@ sdl_osd_interface::sdl_osd_interface(sdl_options &options) :
 	osd_common_t(options),
 	m_options(options),
 	m_focus_window(nullptr),
-	m_mouse_over_window(0),
+	m_mouse_over_window(false),
 	m_modifier_keys(0),
 	m_last_click_time(std::chrono::steady_clock::time_point::min()),
 	m_last_click_x(0),
@@ -640,12 +640,12 @@ void sdl_osd_interface::process_window_event(SDL_Event const &event)
 		break;
 
 	case SDL_WINDOWEVENT_ENTER:
-		m_mouse_over_window = 1;
+		m_mouse_over_window = true;
 		break;
 
 	case SDL_WINDOWEVENT_LEAVE:
 		machine().ui_input().push_mouse_leave_event(window->target());
-		m_mouse_over_window = 0;
+		m_mouse_over_window = false;
 		break;
 
 	case SDL_WINDOWEVENT_FOCUS_GAINED:

@@ -78,7 +78,7 @@ bool mac_osd_interface::video_init()
 		// create window ...
 		auto win = std::make_unique<mac_window_info>(machine(), *m_render, index, m_monitor_module->pick_monitor(reinterpret_cast<osd_options &>(options()), index), &conf);
 
-		if (win->window_init())
+		if (!win->window_init())
 			return false;
 
 		s_window_list.emplace_back(std::move(win));

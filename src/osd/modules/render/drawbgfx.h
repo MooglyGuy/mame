@@ -42,8 +42,8 @@ public:
 	renderer_bgfx(osd_window &window, parent_module &parent_module);
 	virtual ~renderer_bgfx();
 
-	virtual int create() override;
-	virtual int draw(const int update) override;
+	virtual bool create() override;
+	virtual bool draw(const int update) override;
 
 	virtual void add_audio_to_recording(const int16_t *buffer, int samples_this_frame) override;
 	virtual std::vector<ui::menu_item> get_slider_list() override;

@@ -230,15 +230,15 @@ static inline uint32_t ycc_to_rgb(uint8_t y, uint8_t cb, uint8_t cr)
 //  drawd3d_window_init
 //============================================================
 
-int renderer_d3d9::create()
+bool renderer_d3d9::create()
 {
 	if (!initialize())
 	{
 		osd_printf_error("Unable to initialize Direct3D 9\n");
-		return 1;
+		return false;
 	}
 
-	return 0;
+	return true;
 }
 
 void renderer_d3d9::toggle_fsfx()
@@ -301,11 +301,11 @@ render_primitive_list *renderer_d3d9::get_primitives()
 //  drawd3d_window_draw
 //============================================================
 
-int renderer_d3d9::draw(const int update)
+bool renderer_d3d9::draw(const int update)
 {
 	int check = pre_window_draw_check();
 	if (check >= 0)
-		return check;
+		return false;
 
 	begin_frame();
 
@@ -316,7 +316,7 @@ int renderer_d3d9::draw(const int update)
 
 	end_frame();
 
-	return 0;
+	return true;
 }
 
 void renderer_d3d9::set_texture(texture_info *texture)

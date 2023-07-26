@@ -37,9 +37,9 @@ public:
 	{
 	}
 
-	virtual int create() override;
+	virtual bool create() override;
 	virtual render_primitive_list *get_primitives() override;
-	virtual int draw(const int update) override;
+	virtual bool draw(const int update) override;
 	virtual void save() override {}
 	virtual void record() override {}
 	virtual void toggle_fsfx() override {}
@@ -54,7 +54,7 @@ private:
 //  renderer_gdi::create
 //============================================================
 
-int renderer_gdi::create()
+bool renderer_gdi::create()
 {
 	// fill in the bitmap info header
 	m_bminfo.bmiHeader.biSize            = sizeof(m_bminfo.bmiHeader);
@@ -67,7 +67,7 @@ int renderer_gdi::create()
 	m_bminfo.bmiHeader.biClrUsed         = 0;
 	m_bminfo.bmiHeader.biClrImportant    = 0;
 
-	return 0;
+	return true;
 }
 
 //============================================================
@@ -88,7 +88,7 @@ render_primitive_list *renderer_gdi::get_primitives()
 //  renderer_gdi::draw
 //============================================================
 
-int renderer_gdi::draw(const int update)
+bool renderer_gdi::draw(const int update)
 {
 	auto &win = dynamic_cast<win_window_info &>(window());
 
@@ -129,7 +129,7 @@ int renderer_gdi::draw(const int update)
 			0, 0, width, height,
 			m_bmdata.get(), &m_bminfo, DIB_RGB_COLORS, SRCCOPY);
 
-	return 0;
+	return true;
 }
 
 

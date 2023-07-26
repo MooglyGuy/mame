@@ -476,16 +476,10 @@ void mac_window_info::update()
 
 		if (m_rendered_event.wait(event_wait_ticks))
 		{
-			const int update = 1;
-
 			// ensure the target bounds are up-to-date, and then get the primitives
-
 			render_primitive_list &primlist = *renderer().get_primitives();
 
-			// and redraw now
-
-			// Check whether window has vector screens
-
+			// and redraw now, checking whether the window has vector screens
 			{
 				const screen_device *screen = screen_device_enumerator(machine().root_device()).byindex(index());
 				if ((screen != nullptr) && (screen->screen_type() == SCREEN_TYPE_VECTOR))
@@ -496,18 +490,11 @@ void mac_window_info::update()
 
 			m_primlist = &primlist;
 
-			// if no bitmap, just fill
-			if (m_primlist == nullptr)
-			{
-			}
-			// otherwise, render with our drawing system
+			// render with our drawing system
+			if (video_config.perftest)
+				measure_fps(true);
 			else
-			{
-				if( video_config.perftest )
-					measure_fps(update);
-				else
-					renderer().draw(update);
-			}
+				renderer().draw(true);
 
 			/* all done, ready for next */
 			m_rendered_event.set();
@@ -523,7 +510,7 @@ void mac_window_info::update()
 extern void *CreateMAMEWindow(const char *title, int x, int y, int w, int h, bool isFullscreen);
 extern void *GetOSWindow(void *wincontroller);
 
-int mac_window_info::complete_create()
+bool mac_window_info::complete_create()
 {
 	osd_dim temp(0,0);
 
@@ -565,7 +552,7 @@ int mac_window_info::complete_create()
 	if  (window == nullptr)
 	{
 		osd_printf_error("Window creation failed!\n");
-		return 1;
+		return false;
 	}
 
 	set_platform_window(window);
@@ -576,13 +563,13 @@ int mac_window_info::complete_create()
 		monitor()->update_resolution(temp.width(), temp.height());
 
 	// initialize the drawing backend
-	if (renderer().create())
+	if (!renderer().create())
 	{
 		osd_printf_verbose("Exiting mac_window_info::complete_create\n");
-		return 1;
+		return false;
 	}
 
-	return 0;
+	return true;
 }
 
 
@@ -591,7 +578,7 @@ int mac_window_info::complete_create()
 //  (window thread)
 //============================================================
 
-void mac_window_info::measure_fps(int update)
+void mac_window_info::measure_fps(bool update)
 {
 	const unsigned long frames_skip4fps = 100;
 	static int64_t lastTime=0, sumdt=0, startTime=0;
@@ -610,11 +597,11 @@ void mac_window_info::measure_fps(int update)
 
 	frames++;
 	currentTime = osd_ticks();
-	if(startTime==0||frames==frames_skip4fps)
+	if (startTime == 0 || frames == frames_skip4fps)
 		startTime=currentTime;
-	if( frames>=frames_skip4fps )
+	if (frames >= frames_skip4fps)
 		sumdt+=currentTime-t0;
-	if( (currentTime-lastTime)>1L*osd_ticks_per_second() && frames>frames_skip4fps )
+	if ((currentTime - lastTime) > 1L * osd_ticks_per_second() && frames > frames_skip4fps)
 	{
 		dt = (double) (currentTime-startTime) / tps; // in decimale sec.
 		osd_printf_info("%6.2lfs, %4lu F, "
@@ -765,7 +752,7 @@ osd_rect mac_window_info::constrain_to_aspect_ratio(const osd_rect &rect, int ad
 //  (window thread)
 //============================================================
 
-osd_dim mac_window_info::get_min_bounds(int constrain)
+osd_dim mac_window_info::get_min_bounds(bool constrain)
 {
 	int32_t minwidth, minheight;
 
@@ -833,7 +820,7 @@ osd_dim mac_window_info::get_size()
 //  (window thread)
 //============================================================
 
-osd_dim mac_window_info::get_max_bounds(int constrain)
+osd_dim mac_window_info::get_max_bounds(bool constrain)
 {
 	//assert(GetCurrentThreadId() == window_threadid);
 
@@ -880,7 +867,7 @@ mac_window_info::mac_window_info(
 		std::shared_ptr<osd_monitor_info> a_monitor,
 		const osd_window_config *config)
 	: osd_window_t(a_machine, renderprovider, index, a_monitor, *config)
-	, m_startmaximized(0)
+	, m_startmaximized(false)
 	// Following three are used by input code to defer resizes
 	, m_minimum_dim(0, 0)
 	, m_windowed_dim(0, 0)

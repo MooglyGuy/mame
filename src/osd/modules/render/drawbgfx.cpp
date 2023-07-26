@@ -603,7 +603,7 @@ renderer_bgfx::~renderer_bgfx()
 //  renderer_bgfx::create
 //============================================================
 
-int renderer_bgfx::create()
+bool renderer_bgfx::create()
 {
 	const osd_dim wdim = window().get_size();
 	s_width[window().index()] = wdim.width();
@@ -662,7 +662,7 @@ int renderer_bgfx::create()
 	memset(m_white, 0xff, sizeof(uint32_t) * 16 * 16);
 	m_texinfo.push_back(rectangle_packer::packable_rectangle(WHITE_HASH, PRIMFLAG_TEXFORMAT(TEXFORMAT_ARGB32), 16, 16, 16, nullptr, m_white));
 
-	return 0;
+	return true;
 }
 
 
@@ -1132,7 +1132,7 @@ uint32_t renderer_bgfx::u32Color(uint32_t r, uint32_t g, uint32_t b, uint32_t a 
 	return (a << 24) | (b << 16) | (g << 8) | r;
 }
 
-int renderer_bgfx::draw(int update)
+bool renderer_bgfx::draw(int update)
 {
 	int window_index = window().index();
 
@@ -1157,7 +1157,7 @@ int renderer_bgfx::draw(int update)
 	bool skip_frame = update_dimensions();
 	if (skip_frame)
 	{
-		return 0;
+		return false;
 	}
 
 	if (num_screens)
@@ -1266,7 +1266,7 @@ int renderer_bgfx::draw(int update)
 		bgfx::frame();
 	}
 
-	return 0;
+	return true;
 }
 
 void renderer_bgfx::update_recording()

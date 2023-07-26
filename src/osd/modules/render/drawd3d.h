@@ -52,9 +52,9 @@ public:
 	renderer_d3d9(osd_window &window, const IDirect3D9Ptr &d3dobj);
 	virtual ~renderer_d3d9();
 
-	virtual int create() override;
+	virtual bool create() override;
 	virtual render_primitive_list *get_primitives() override;
-	virtual int draw(const int update) override;
+	virtual bool draw(const int update) override;
 	virtual void save() override;
 	virtual void record() override;
 	virtual void toggle_fsfx() override;

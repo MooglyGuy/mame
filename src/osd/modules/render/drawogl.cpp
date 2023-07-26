@@ -289,8 +289,8 @@ public:
 		destroy_all_textures();
 	}
 
-	virtual int create() override;
-	virtual int draw(const int update) override;
+	virtual bool create() override;
+	virtual bool draw(const int update) override;
 
 #ifndef OSD_WINDOWS
 	virtual int xy_to_render_target(const int x, const int y, int *xt, int *yt) override;
@@ -745,7 +745,7 @@ void renderer_ogl::initialize_gl()
 //  sdl_info::create
 //============================================================
 
-int renderer_ogl::create()
+bool renderer_ogl::create()
 {
 	// create renderer
 #if defined(OSD_WINDOWS)
@@ -760,7 +760,7 @@ int renderer_ogl::create()
 	{
 		char const *const msg = m_gl_context->last_error_message();
 		osd_printf_error("Creating OpenGL context failed: %s\n", msg ? msg : "unknown error");
-		return 1;
+		return false;
 	}
 	m_gl_context->set_swap_interval(video_config.waitvsync ? 1 : 0);
 
@@ -784,7 +784,7 @@ int renderer_ogl::create()
 	m_init_context = 0;
 
 	osd_printf_verbose("Leave renderer_ogl::create\n");
-	return 0;
+	return true;
 }
 
 
@@ -1153,7 +1153,7 @@ void renderer_ogl::loadGLExtensions()
 //  sdl_info::draw
 //============================================================
 
-int renderer_ogl::draw(const int update)
+bool renderer_ogl::draw(const int update)
 {
 	ogl_texture_info *texture=nullptr;
 	float vofs, hofs;
@@ -1420,27 +1420,6 @@ int renderer_ogl::draw(const int update)
 						float a = std::min(prim.color.a * 255.0f, 1.0f);
 						glColor4f(r, g, b, a);
 
-//                      texture = texture_update(window, &prim, 0);
-//                      if (texture) printf("line has texture!\n");
-
-						// if we have a texture to use for the vectors, use it here
-						#if 0
-						if (d3d->vector_texture != nullptr)
-						{
-							printf("SDL: textured lines unsupported\n");
-							vertex[0].u0 = d3d->vector_texture->ustart;
-							vertex[0].v0 = d3d->vector_texture->vstart;
-
-							vertex[2].u0 = d3d->vector_texture->ustop;
-							vertex[2].v0 = d3d->vector_texture->vstart;
-
-							vertex[1].u0 = d3d->vector_texture->ustart;
-							vertex[1].v0 = d3d->vector_texture->vstop;
-
-							vertex[3].u0 = d3d->vector_texture->ustop;
-							vertex[3].v0 = d3d->vector_texture->vstop;
-						}
-						#endif
 						glEnd();
 					}
 				}
@@ -1530,7 +1509,7 @@ int renderer_ogl::draw(const int update)
 
 	m_gl_context->swap_buffer();
 
-	return 0;
+	return true;
 }
 
 //============================================================

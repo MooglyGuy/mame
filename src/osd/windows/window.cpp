@@ -79,7 +79,7 @@ static DWORD main_threadid;
 
 // event handling
 static int ui_temp_pause;
-static int ui_temp_was_paused;
+static bool ui_temp_was_paused;
 
 static HANDLE window_thread;
 static DWORD window_threadid;
@@ -113,7 +113,7 @@ bool windows_osd_interface::window_init()
 	create_window_class();
 
 	// create an event to signal UI pausing
-	ui_pause_event = CreateEvent(nullptr, TRUE, FALSE, nullptr);
+	ui_pause_event = CreateEvent(nullptr, true, false, nullptr);
 	if (!ui_pause_event)
 		fatalerror("Failed to create pause event\n");
 
@@ -198,9 +198,9 @@ win_window_info::win_window_info(
 		const osd_window_config *config)
 	: osd_window_t(machine, renderprovider, index, std::move(monitor), *config)
 	, m_init_state(0)
-	, m_startmaximized(0)
-	, m_isminimized(0)
-	, m_ismaximized(0)
+	, m_startmaximized(false)
+	, m_isminimized(false)
+	, m_ismaximized(false)
 	, m_fullscreen_safe(0)
 	, m_aspect(0)
 	, m_targetview(0)
@@ -246,8 +246,8 @@ void win_window_info::hide_pointer()
 {
 	GetCursorPos(&s_saved_cursor_pos);
 
-	while (ShowCursor(FALSE) >= -1) { }
-	ShowCursor(TRUE);
+	while (ShowCursor(false) >= -1) { }
+	ShowCursor(true);
 }
 
 void win_window_info::show_pointer()
@@ -258,8 +258,8 @@ void win_window_info::show_pointer()
 		s_saved_cursor_pos.x = s_saved_cursor_pos.y = -1;
 	}
 
-	while (ShowCursor(TRUE) < 1) {};
-	ShowCursor(FALSE);
+	while (ShowCursor(true) < 1) {};
+	ShowCursor(false);
 }
 
 
@@ -312,7 +312,7 @@ static bool is_mame_window(HWND hwnd)
 	return false;
 }
 
-inline static BOOL handle_mouse_button(windows_osd_interface *osd, int button, int down, int x, int y)
+inline static bool handle_mouse_button(windows_osd_interface *osd, int button, bool down, int x, int y)
 {
 	MouseButtonEventArgs args;
 	args.button = button;
@@ -328,7 +328,7 @@ inline static BOOL handle_mouse_button(windows_osd_interface *osd, int button, i
 	return handled && !osd->options().lightgun() && !osd->options().mouse();
 }
 
-inline static BOOL handle_keypress(windows_osd_interface *osd, int vkey, int down, int scancode, BOOL extended_key)
+inline static bool handle_keypress(windows_osd_interface *osd, int vkey, bool down, int scancode, bool extended_key)
 {
 	KeyPressEventArgs args;
 	args.event_id = down ? INPUT_EVENT_KEYDOWN : INPUT_EVENT_KEYUP;
@@ -376,45 +376,45 @@ void windows_osd_interface::process_events(bool ingame, bool nodispatch)
 
 					// forward mouse button downs to the input system
 					case WM_LBUTTONDOWN:
-						dispatch = !handle_mouse_button(this, 0, TRUE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 0, true, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_RBUTTONDOWN:
-						dispatch = !handle_mouse_button(this, 1, TRUE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 1, true, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_MBUTTONDOWN:
-						dispatch = !handle_mouse_button(this, 2, TRUE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 2, true, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_XBUTTONDOWN:
-						dispatch = !handle_mouse_button(this, 3, TRUE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 3, true, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					// forward mouse button ups to the input system
 					case WM_LBUTTONUP:
-						dispatch = !handle_mouse_button(this, 0, FALSE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 0, false, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_RBUTTONUP:
-						dispatch = !handle_mouse_button(this, 1, FALSE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 1, false, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_MBUTTONUP:
-						dispatch = !handle_mouse_button(this, 2, FALSE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 2, false, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_XBUTTONUP:
-						dispatch = !handle_mouse_button(this, 3, FALSE, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
+						dispatch = !handle_mouse_button(this, 3, false, GET_X_LPARAM(message.lParam), GET_Y_LPARAM(message.lParam));
 						break;
 
 					case WM_KEYDOWN:
 						if (NOT_ALREADY_DOWN(message.lParam))
-							dispatch = !handle_keypress(this, message.wParam, TRUE, SCAN_CODE(message.lParam), IS_EXTENDED(message.lParam));
+							dispatch = !handle_keypress(this, message.wParam, true, SCAN_CODE(message.lParam), IS_EXTENDED(message.lParam));
 						break;
 
 					case WM_KEYUP:
-						dispatch = !handle_keypress(this, message.wParam, FALSE, SCAN_CODE(message.lParam), IS_EXTENDED(message.lParam));
+						dispatch = !handle_keypress(this, message.wParam, false, SCAN_CODE(message.lParam), IS_EXTENDED(message.lParam));
 						break;
 				}
 			}
@@ -666,10 +666,10 @@ std::unique_ptr<win_window_info> win_window_info::create(
 	}
 
 	// see if we are safe for fullscreen
-	window->m_fullscreen_safe = TRUE;
+	window->m_fullscreen_safe = true;
 	for (const auto &win : osd_common_t::window_list())
 		if (win->monitor() == monitor.get())
-			window->m_fullscreen_safe = FALSE;
+			window->m_fullscreen_safe = false;
 
 	window->create_target();
 
@@ -682,7 +682,7 @@ std::unique_ptr<win_window_info> win_window_info::create(
 	// set the initial maximized state
 	window->m_startmaximized = downcast<windows_options &>(machine.options()).maximize();
 
-	window->m_init_state = window->complete_create() ? -1 : 1;
+	window->m_init_state = window->complete_create() ? 1 : -1;
 
 	// handle error conditions
 	if (window->m_init_state == -1)
@@ -773,7 +773,7 @@ void win_window_info::update()
 				HDC hdc = GetDC(platform_window());
 
 				m_primlist = primlist;
-				draw_video_contents(hdc, FALSE);
+				draw_video_contents(hdc, false);
 
 				ReleaseDC(platform_window(), hdc);
 			}
@@ -792,7 +792,7 @@ void win_window_info::update()
 
 static void create_window_class()
 {
-	static int classes_created = FALSE;
+	static int classes_created = false;
 
 	assert(GetCurrentThreadId() == main_threadid);
 
@@ -812,7 +812,7 @@ static void create_window_class()
 		// register the class; fail if we can't
 		if (!RegisterClass(&wc))
 			fatalerror("Failed to create window class\n");
-		classes_created = TRUE;
+		classes_created = true;
 	}
 }
 
@@ -912,7 +912,7 @@ int win_window_info::wnd_extra_height()
 //  (window thread)
 //============================================================
 
-int win_window_info::complete_create()
+bool win_window_info::complete_create()
 {
 	RECT client;
 	int tempwidth, tempheight;
@@ -951,7 +951,7 @@ int win_window_info::complete_create()
 	}
 
 	if (hwnd == nullptr)
-		return 1;
+		return false;
 
 	set_platform_window(hwnd);
 
@@ -963,9 +963,9 @@ int win_window_info::complete_create()
 	if (!renderer_interactive() || attached_mode())
 	{
 		renderer_create();
-		if (renderer().create())
-			return 1;
-		return 0;
+		if (!renderer().create())
+			return false;
+		return true;
 	}
 
 	// adjust the window position to the initial width/height
@@ -987,8 +987,8 @@ int win_window_info::complete_create()
 	if (!fullscreen() || m_fullscreen_safe)
 	{
 		renderer_create();
-		if (renderer().create())
-			return 1;
+		if (!renderer().create())
+			return false;
 
 		ShowWindow(platform_window(), SW_SHOW);
 	}
@@ -998,7 +998,7 @@ int win_window_info::complete_create()
 	GetClientRect(platform_window(), &client);
 	FillRect(dc, &client, (HBRUSH)GetStockObject(BLACK_BRUSH));
 	ReleaseDC(platform_window(), dc);
-	return 0;
+	return true;
 }
 
 
@@ -1135,7 +1135,7 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 
 	case WM_UNICHAR:
 		if (UNICODE_NOCHAR == wparam)
-			return TRUE;
+			return true;
 		else
 			window->machine().ui_input().push_char_event(window->target(), char32_t(wparam));
 		break;
@@ -1153,7 +1153,7 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 		window->m_resize_state = RESIZE_STATE_RESIZING;
 		[[fallthrough]];
 	case WM_ENTERMENULOOP:
-		winwindow_ui_pause(window->machine(), TRUE);
+		winwindow_ui_pause(window->machine(), true);
 		break;
 
 	// unpause the system when we stop a menu or resize and force a redraw
@@ -1161,8 +1161,8 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 		window->m_resize_state = RESIZE_STATE_PENDING;
 		[[fallthrough]];
 	case WM_EXITMENULOOP:
-		winwindow_ui_pause(window->machine(), FALSE);
-		InvalidateRect(wnd, nullptr, FALSE);
+		winwindow_ui_pause(window->machine(), false);
+		InvalidateRect(wnd, nullptr, false);
 		break;
 
 	// get min/max info: set the minimum window size
@@ -1187,7 +1187,7 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 				rect->bottom = r.bottom();
 				rect->right = r.right();
 			}
-			InvalidateRect(wnd, nullptr, FALSE);
+			InvalidateRect(wnd, nullptr, false);
 		}
 		break;
 
@@ -1201,7 +1201,7 @@ LRESULT CALLBACK win_window_info::video_window_proc(HWND wnd, UINT message, WPAR
 				return 1;
 
 			// most SYSCOMMANDs require us to invalidate the window
-			InvalidateRect(wnd, nullptr, FALSE);
+			InvalidateRect(wnd, nullptr, false);
 
 			// handle maximize
 			if (cmd == SC_MAXIMIZE)
@@ -1591,19 +1591,17 @@ void win_window_info::update_minmax_state()
 		GetWindowRect(platform_window(), &bounds);
 
 		// if either the width or height matches, we were maximized
-		m_isminimized = (rect_width(&bounds) == minbounds.width()) ||
-								(rect_height(&bounds) == minbounds.height());
-		m_ismaximized = (rect_width(&bounds) == maxbounds.width()) ||
-								(rect_height(&bounds) == maxbounds.height());
+		m_isminimized = (rect_width(&bounds) == minbounds.width()) || (rect_height(&bounds) == minbounds.height());
+		m_ismaximized = (rect_width(&bounds) == maxbounds.width()) || (rect_height(&bounds) == maxbounds.height());
 
 		// We can't be maximized and minimized simultaneously
 		if (m_ismaximized)
-			m_isminimized = FALSE;
+			m_isminimized = false;
 	}
 	else
 	{
-		m_isminimized = FALSE;
-		m_ismaximized = TRUE;
+		m_isminimized = false;
+		m_ismaximized = true;
 	}
 }
 
@@ -1789,7 +1787,7 @@ void win_window_info::set_fullscreen(int fullscreen)
 			ShowWindow(platform_window(), SW_SHOW);
 
 		renderer_create();
-		if (renderer().create())
+		if (!renderer().create())
 			exit(1); // FIXME: better error handling than just silently exiting on failure
 	}
 

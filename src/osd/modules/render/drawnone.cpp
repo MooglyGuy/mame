@@ -27,9 +27,9 @@ class renderer_none : public osd_renderer
 public:
 	renderer_none(osd_window &window) : osd_renderer(window) { }
 
-	virtual int create() override { return 0; }
+	virtual bool create() override { return true; }
 	virtual render_primitive_list *get_primitives() override;
-	virtual int draw(const int update) override { return 0; }
+	virtual bool draw(const int update) override { return true; }
 	virtual void save() override { }
 	virtual void record() override { }
 	virtual void toggle_fsfx() override { }

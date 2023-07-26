@@ -86,8 +86,8 @@ public:
 	}
 	virtual ~renderer_sdl1();
 
-	virtual int create() override;
-	virtual int draw(const int update) override;
+	virtual bool create() override;
+	virtual bool draw(const int update) override;
 	virtual int xy_to_render_target(const int x, const int y, int *xt, int *yt) override;
 	virtual render_primitive_list *get_primitives() override;
 
@@ -216,7 +216,7 @@ void renderer_sdl1::show_info(struct SDL_RendererInfo *render_info)
 //  renderer_sdl2::create
 //============================================================
 
-int renderer_sdl1::create()
+bool renderer_sdl1::create()
 {
 	// create renderer
 
@@ -275,7 +275,7 @@ int renderer_sdl1::create()
 
 	yuv_init();
 	osd_printf_verbose("Leave renderer_sdl2::create\n");
-	return 0;
+	return true;
 }
 
 //============================================================
@@ -319,12 +319,11 @@ void renderer_sdl1::destroy_all_textures()
 //  renderer_sdl2::draw
 //============================================================
 
-int renderer_sdl1::draw(int update)
+bool renderer_sdl1::draw(int update)
 {
 	uint8_t *surfptr;
 	int32_t pitch;
-	Uint32 rmask, gmask, bmask;
-	Uint32 amask;
+	uint32_t rmask, gmask, bmask, amask;
 	int32_t vofs, hofs, blitwidth, blitheight, ch, cw;
 	int bpp;
 
@@ -345,7 +344,7 @@ int renderer_sdl1::draw(int update)
 	// lock it if we need it
 
 	{
-		Uint32 format;
+		uint32_t format;
 		int access, w, h;
 
 		SDL_QueryTexture(m_texture_id, &format, &access, &w, &h);
@@ -399,11 +398,11 @@ int renderer_sdl1::draw(int update)
 
 	int mamewidth, mameheight;
 
-		Uint32 fmt = 0;
-		int access = 0;
-		SDL_QueryTexture(m_texture_id, &fmt, &access, &mamewidth, &mameheight);
-		mamewidth /= m_scale_mode.mult_w;
-		mameheight /= m_scale_mode.mult_h;
+	uint32_t fmt = 0;
+	int access = 0;
+	SDL_QueryTexture(m_texture_id, &fmt, &access, &mamewidth, &mameheight);
+	mamewidth /= m_scale_mode.mult_w;
+	mameheight /= m_scale_mode.mult_h;
 	//printf("w h %d %d %d %d\n", mamewidth, mameheight, blitwidth, blitheight);
 
 	// rescale bounds
@@ -479,7 +478,7 @@ int renderer_sdl1::draw(int update)
 		SDL_RenderCopy(m_sdl_renderer,m_texture_id, nullptr, &r);
 		SDL_RenderPresent(m_sdl_renderer);
 	}
-	return 0;
+	return true;
 }
 //============================================================
 // YUV Blitting
@@ -519,19 +518,18 @@ int renderer_sdl1::draw(int update)
 #define  VSHIFT  0
 #endif
 
-#define YMASK  (Y1MASK|Y2MASK)
-#define UVMASK (UMASK|VMASK)
+#define YMASK  (Y1MASK | Y2MASK)
+#define UVMASK (UMASK | VMASK)
 
-void renderer_sdl1::yuv_lookup_set(unsigned int pen, unsigned char red,
-			unsigned char green, unsigned char blue)
+void renderer_sdl1::yuv_lookup_set(unsigned int pen, unsigned char red, unsigned char green, unsigned char blue)
 {
-	uint32_t y,u,v;
+	uint32_t y, u, v;
 
-	RGB2YUV(red,green,blue,y,u,v);
+	RGB2YUV(red, green, blue, y, u, v);
 
 	/* Storing this data in YUYV order simplifies using the data for
 	   YUY2, both with and without smoothing... */
-	m_yuv_lookup[pen]=(y<<Y1SHIFT)|(u<<USHIFT)|(y<<Y2SHIFT)|(v<<VSHIFT);
+	m_yuv_lookup[pen] = (y << Y1SHIFT) | (u << USHIFT) | (y << Y2SHIFT) | (v << VSHIFT);
 }
 
 void renderer_sdl1::yuv_init()
@@ -543,75 +541,63 @@ void renderer_sdl1::yuv_init()
 			for (unsigned char b = 0; b < 32; b++)
 			{
 				int idx = (r << 10) | (g << 5) | b;
-				yuv_lookup_set(idx,
-					(r << 3) | (r >> 2),
-					(g << 3) | (g >> 2),
-					(b << 3) | (b >> 2));
+				yuv_lookup_set(idx, (r << 3) | (r >> 2), (g << 3) | (g >> 2), (b << 3) | (b >> 2));
 			}
 }
 
-//uint32_t *lookup = sdl->m_yuv_lookup;
-
-static void yuv_RGB_to_YV12(const uint16_t *bitmap, uint8_t *ptr, const int pitch, \
-		const uint32_t *lookup, const int width, const int height)
+static void yuv_RGB_to_YV12(const uint16_t *bitmap, uint8_t *ptr, const int pitch, const uint32_t *lookup, const int width, const int height)
 {
-	int x, y;
 	uint8_t *pixels[3];
-	int u1,v1,y1,u2,v2,y2,u3,v3,y3,u4,v4,y4;      /* 12 */
 
 	pixels[0] = ptr;
 	pixels[1] = ptr + pitch * height;
 	pixels[2] = pixels[1] + pitch * height / 4;
 
-	for(y=0;y<height;y+=2)
+	for (int y = 0; y < height; y += 2)
 	{
-		const uint16_t *src=bitmap + (y * width) ;
-		const uint16_t *src2=src + width;
+		const uint16_t *src = bitmap + y * width;
+		const uint16_t *src2 = src + width;
 
 		uint8_t *dest_y = pixels[0] + y * pitch;
-		uint8_t *dest_v = pixels[1] + (y>>1) * pitch / 2;
-		uint8_t *dest_u = pixels[2] + (y>>1) * pitch / 2;
+		uint8_t *dest_v = pixels[1] + (y >> 1) * pitch / 2;
+		uint8_t *dest_u = pixels[2] + (y >> 1) * pitch / 2;
 
-		for(x=0;x<width;x+=2)
+		for (int x = 0; x < width; x += 2)
 		{
-			v1 = lookup[src[x]];
-			y1 = (v1>>Y1SHIFT) & 0xff;
-			u1 = (v1>>USHIFT)  & 0xff;
-			v1 = (v1>>VSHIFT)  & 0xff;
+			uint32_t v1 = lookup[src[x]];
+			uint32_t y1 = (v1 >> Y1SHIFT) & 0xff;
+			uint32_t u1 = (v1 >> USHIFT)  & 0xff;
+			v1 = (v1 >> VSHIFT) & 0xff;
 
-			v2 = lookup[src[x+1]];
-			y2 = (v2>>Y1SHIFT) & 0xff;
-			u2 = (v2>>USHIFT)  & 0xff;
-			v2 = (v2>>VSHIFT)  & 0xff;
+			uint32_t v2 = lookup[src[x + 1]];
+			uint32_t y2 = (v2 >> Y1SHIFT) & 0xff;
+			uint32_t u2 = (v2 >> USHIFT)  & 0xff;
+			v2 = (v2 >> VSHIFT) & 0xff;
 
-			v3 = lookup[src2[x]];
-			y3 = (v3>>Y1SHIFT) & 0xff;
-			u3 = (v3>>USHIFT)  & 0xff;
-			v3 = (v3>>VSHIFT)  & 0xff;
+			uint32_t v3 = lookup[src2[x]];
+			uint32_t y3 = (v3 >> Y1SHIFT) & 0xff;
+			uint32_t u3 = (v3 >> USHIFT)  & 0xff;
+			v3 = (v3 >> VSHIFT) & 0xff;
 
-			v4 = lookup[src2[x+1]];
-			y4 = (v4>>Y1SHIFT) & 0xff;
-			u4 = (v4>>USHIFT)  & 0xff;
-			v4 = (v4>>VSHIFT)  & 0xff;
+			uint32_t v4 = lookup[src2[x + 1]];
+			uint32_t y4 = (v4 >> Y1SHIFT) & 0xff;
+			uint32_t u4 = (v4 >> USHIFT)  & 0xff;
+			v4 = (v4 >> VSHIFT) & 0xff;
 
 			dest_y[x] = y1;
-			dest_y[x+pitch] = y3;
-			dest_y[x+1] = y2;
-			dest_y[x+pitch+1] = y4;
+			dest_y[x + pitch] = y3;
+			dest_y[x + 1] = y2;
+			dest_y[x + pitch + 1] = y4;
 
-			dest_u[x>>1] = (u1+u2+u3+u4)/4;
-			dest_v[x>>1] = (v1+v2+v3+v4)/4;
-
+			dest_u[x >> 1] = (u1 + u2 + u3 + u4) / 4;
+			dest_v[x >> 1] = (v1 + v2 + v3 + v4) / 4;
 		}
 	}
 }
 
-static void yuv_RGB_to_YV12X2(const uint16_t *bitmap, uint8_t *ptr, const int pitch, \
-		const uint32_t *lookup, const int width, const int height)
+static void yuv_RGB_to_YV12X2(const uint16_t *bitmap, uint8_t *ptr, const int pitch, const uint32_t *lookup, const int width, const int height)
 {
 	/* this one is used when scale==2 */
-	unsigned int x,y;
-	int u1,v1,y1;
 	uint8_t *pixels[3];
 
 	pixels[0] = ptr;
@@ -619,21 +605,21 @@ static void yuv_RGB_to_YV12X2(const uint16_t *bitmap, uint8_t *ptr, const int pi
 	int p2 = (pitch >> 1);
 	pixels[2] = pixels[1] + p2 * height;
 
-	for(y=0;y<height;y++)
+	for (int y = 0; y < height; y++)
 	{
-		const uint16_t *src = bitmap + (y * width) ;
+		const uint16_t *src = bitmap + (y * width);
 
 		uint16_t *dest_y = (uint16_t *)(pixels[0] + 2 * y * pitch);
 		uint8_t *dest_v = pixels[1] + y * p2;
 		uint8_t *dest_u = pixels[2] + y * p2;
-		for(x=0;x<width;x++)
+		for (int x = 0; x < width; x++)
 		{
-			v1 = lookup[src[x]];
-			y1 = (v1 >> Y1SHIFT) & 0xff;
-			u1 = (v1 >> USHIFT)  & 0xff;
+			uint32_t v1 = lookup[src[x]];
+			uint32_t y1 = (v1 >> Y1SHIFT) & 0xff;
+			uint32_t u1 = (v1 >> USHIFT)  & 0xff;
 			v1 = (v1 >> VSHIFT)  & 0xff;
 
-			dest_y[x + pitch/2] = y1 << 8 | y1;
+			dest_y[x + pitch / 2] = y1 << 8 | y1;
 			dest_y[x] = y1 << 8 | y1;
 			dest_u[x] = u1;
 			dest_v[x] = v1;
@@ -641,51 +627,43 @@ static void yuv_RGB_to_YV12X2(const uint16_t *bitmap, uint8_t *ptr, const int pi
 	}
 }
 
-static void yuv_RGB_to_YUY2(const uint16_t *bitmap, uint8_t *ptr, const int pitch, \
-		const uint32_t *lookup, const int width, const int height)
+static void yuv_RGB_to_YUY2(const uint16_t *bitmap, uint8_t *ptr, const int pitch, const uint32_t *lookup, const int width, const int height)
 {
 	/* this one is used when scale==2 */
-	unsigned int y;
-	uint32_t p1,p2,uv;
-	const int yuv_pitch = pitch/4;
+	const int yuv_pitch = pitch / 4;
 
-	for(y=0;y<height;y++)
+	for(int y = 0; y < height; y++)
 	{
-		const uint16_t *src=bitmap + (y * width) ;
-		const uint16_t *end=src+width;
+		const uint16_t *src = bitmap + (y * width);
+		const uint16_t *end = src + width;
 
 		uint32_t *dest = (uint32_t *) ptr;
 		dest += y * yuv_pitch;
-		for(; src<end; src+=2)
+		for(; src < end; src += 2)
 		{
-			p1  = lookup[src[0]];
-			p2  = lookup[src[1]];
-			uv = (p1&UVMASK)>>1;
-			uv += (p2&UVMASK)>>1;
-			*dest++ = (p1&Y1MASK)|(p2&Y2MASK)|(uv&UVMASK);
+			uint32_t p1 = lookup[src[0]];
+			uint32_t p2 = lookup[src[1]];
+			uint32_t uv = (p1 & UVMASK) >> 1;
+			uv += (p2 & UVMASK) >> 1;
+			*dest++ = (p1 & Y1MASK) | (p2 & Y2MASK) | (uv & UVMASK);
 		}
 	}
 }
 
-static void yuv_RGB_to_YUY2X2(const uint16_t *bitmap, uint8_t *ptr, const int pitch, \
-		const uint32_t *lookup, const int width, const int height)
+static void yuv_RGB_to_YUY2X2(const uint16_t *bitmap, uint8_t *ptr, const int pitch, const uint32_t *lookup, const int width, const int height)
 {
 	/* this one is used when scale==2 */
-	unsigned int y;
 	int yuv_pitch = pitch / 4;
 
-	for(y=0;y<height;y++)
+	for (int y = 0; y < height; y++)
 	{
-		const uint16_t *src=bitmap + (y * width) ;
-		const uint16_t *end=src+width;
+		const uint16_t *src = bitmap + y * width;
+		const uint16_t *end = src + width;
 
-		uint32_t *dest = (uint32_t *) ptr;
-		dest += (y * yuv_pitch);
-		for(; src<end; src++)
-		{
-			dest[0] = lookup[src[0]];
-			dest++;
-		}
+		uint32_t *dest = (uint32_t *)ptr;
+		dest += y * yuv_pitch;
+		for (; src<end; src++)
+			*dest++ = lookup[src[0]];
 	}
 }
 

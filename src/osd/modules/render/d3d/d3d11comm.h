@@ -1,13 +1,13 @@
 // license:BSD-3-Clause
-// copyright-holders:Aaron Giles
+// copyright-holders:Ryan Holtz
 //============================================================
 //
-//  d3dcomm.h - Common Win32 Direct3D structures
+//  d3d11comm.h - Common Win32 Direct3D11 structures
 //
 //============================================================
 
-#ifndef MAME_RENDER_D3D_D3DCOMM_H
-#define MAME_RENDER_D3D_D3DCOMM_H
+#ifndef MAME_RENDER_D3D_D3D11COMM_H
+#define MAME_RENDER_D3D_D3D11COMM_H
 
 #pragma once
 
@@ -15,7 +15,8 @@
 #include "bitmap.h"
 
 #include <windows.h>
-#include <d3d9.h>
+#include <d3d11.h>
+#include <d3dcompiler.h>
 #include <wrl/client.h>
 
 #include <cstring>
@@ -34,34 +35,35 @@
 //  FORWARD DECLARATIONS
 //============================================================
 
-class texture_info;
-class renderer_d3d9;
+class d3d11_texture_info;
+class d3d11_texture_manager;
+class renderer_d3d11;
 
 //============================================================
 //  TYPE DEFINITIONS
 //============================================================
 
-class vec2f
+class d3d11_vec2f
 {
 public:
-	vec2f()
+	d3d11_vec2f()
 	{
 		memset(&c, 0, sizeof(float) * 2);
 	}
-	vec2f(float x, float y)
+	d3d11_vec2f(float x, float y)
 	{
 		c.x = x;
 		c.y = y;
 	}
 
-	vec2f operator+(const vec2f& a) const
+	d3d11_vec2f operator+(const d3d11_vec2f& a) const
 	{
-		return vec2f(c.x + a.c.x, c.y + a.c.y);
+		return d3d11_vec2f(c.x + a.c.x, c.y + a.c.y);
 	}
 
-	vec2f operator-(const vec2f& a) const
+	d3d11_vec2f operator-(const d3d11_vec2f& a) const
 	{
-		return vec2f(c.x - a.c.x, c.y - a.c.y);
+		return d3d11_vec2f(c.x - a.c.x, c.y - a.c.y);
 	}
 
 	struct
@@ -70,35 +72,36 @@ public:
 	} c;
 };
 
-class d3d_texture_manager
+class d3d11_texture_manager
 {
 public:
-	d3d_texture_manager(renderer_d3d9 &d3d, IDirect3D9 *d3dobj);
+	d3d11_texture_manager(renderer_d3d11 &d3d);
+	~d3d11_texture_manager();
 
 	void                    update_textures();
 
 	void                    create_resources();
 	void                    delete_resources();
 
-	texture_info *          find_texinfo(const render_texinfo *texture, uint32_t flags);
+	d3d11_texture_info *    find_texinfo(const render_texinfo *texture, uint32_t flags);
 	uint32_t                texture_compute_hash(const render_texinfo *texture, uint32_t flags);
 
-	D3DFORMAT               get_yuv_format() const { return m_yuv_format; }
+	DXGI_FORMAT             get_yuv_format() const { return m_yuv_format; }
 
 	DWORD                   get_texture_caps() const { return m_texture_caps; }
 	DWORD                   get_max_texture_aspect() const { return m_texture_max_aspect; }
 	DWORD                   get_max_texture_width() const { return m_texture_max_width; }
 	DWORD                   get_max_texture_height() const { return m_texture_max_height; }
 
-	texture_info *          get_default_texture() const { return m_default_texture; }
+	d3d11_texture_info *    get_default_texture() const { return m_default_texture; }
 
-	renderer_d3d9 &         get_d3d() const { return m_renderer; }
+	renderer_d3d11 &        get_renderer() const { return m_renderer; }
 
-	std::vector<std::unique_ptr<texture_info> > m_texture_list;  // list of active textures
+	std::vector<std::unique_ptr<d3d11_texture_info>> m_texture_list;  // list of active textures
 
 private:
-	renderer_d3d9 &         m_renderer;
-	D3DFORMAT               m_yuv_format;               // format to use for YUV textures
+	renderer_d3d11 &        m_renderer;
+	DXGI_FORMAT             m_yuv_format;               // format to use for YUV textures
 
 	DWORD                   m_texture_caps;             // textureCaps field
 	DWORD                   m_texture_max_aspect;       // texture maximum aspect ratio
@@ -106,16 +109,16 @@ private:
 	DWORD                   m_texture_max_height;       // texture maximum height
 
 	bitmap_rgb32            m_default_bitmap;           // experimental: default bitmap
-	texture_info *          m_default_texture;          // experimental: default texture
+	d3d11_texture_info *    m_default_texture;          // experimental: default texture
 };
 
 
-/* texture_info holds information about a texture */
-class texture_info
+/* d3d11_texture_info holds information about a texture */
+class d3d11_texture_info
 {
 public:
-	texture_info(d3d_texture_manager &manager, const render_texinfo *texsource, int prescale, uint32_t flags);
-	~texture_info();
+	d3d11_texture_info(d3d11_texture_manager &manager, const render_texinfo *texsource, int prescale, uint32_t flags);
+	~d3d11_texture_info();
 
 	render_texinfo &        get_texinfo() { return m_texinfo; }
 
@@ -135,72 +138,71 @@ public:
 
 	int                     get_cur_frame() const { return m_cur_frame; }
 
-	IDirect3DTexture9 *     get_finaltex() const { return m_d3dfinaltex.Get(); }
+	ID3D11ShaderResourceView *get_prescaled_view() const { return m_prescaled_view; }
+	ID3D11ShaderResourceView * const* get_view() const { return &m_view; }
 
-	vec2f &                 get_uvstart() { return m_start; }
-	vec2f &                 get_uvstop() { return m_stop; }
-	vec2f &                 get_rawdims() { return m_rawdims; }
+	d3d11_vec2f &           get_uvstart() { return m_start; }
+	d3d11_vec2f &           get_uvstop() { return m_stop; }
+	d3d11_vec2f &           get_rawdims() { return m_rawdims; }
 
 private:
-	using IDirect3DTexture9Ptr = Microsoft::WRL::ComPtr<IDirect3DTexture9>;
-	using IDirect3DSurface9Ptr = Microsoft::WRL::ComPtr<IDirect3DSurface9>;
+	//using ID3D11Texture2DPtr = Microsoft::WRL::ComPtr<ID3D11Texture2D>;
+	//using ID3D11RenderTargetViewPtr = Microsoft::WRL::ComPtr<ID3D11RenderTargetView>;
+	//using ID3D11ShaderResourceViewPtr = Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>;
 
 	void prescale();
-	void compute_size(int texwidth, int texheight);
-	void compute_size_subroutine(int texwidth, int texheight, int* p_width, int* p_height);
 
-	inline void copyline_palette16(uint32_t *dst, const uint16_t *src, int width, const rgb_t *palette, int xborderpix);
-	inline void copyline_rgb32(uint32_t *dst, const uint32_t *src, int width, const rgb_t *palette, int xborderpix);
-	inline void copyline_argb32(uint32_t *dst, const uint32_t *src, int width, const rgb_t *palette, int xborderpix);
+	inline void copyline_palette16(uint32_t *dst, const uint16_t *src, int width, const rgb_t *palette);
+	inline void copyline_rgb32(uint32_t *dst, const uint32_t *src, int width, const rgb_t *palette);
+	inline void copyline_argb32(uint32_t *dst, const uint32_t *src, int width, const rgb_t *palette);
 	inline void copyline_yuy16_to_yuy2(uint16_t *dst, const uint16_t *src, int width, const rgb_t *palette);
-	inline void copyline_yuy16_to_uyvy(uint16_t *dst, const uint16_t *src, int width, const rgb_t *palette);
-	inline void copyline_yuy16_to_argb(uint32_t *dst, const uint16_t *src, int width, const rgb_t *palette);
 
-	d3d_texture_manager &   m_texture_manager;          // texture manager pointer
+	d3d11_texture_manager & m_texture_manager;          // texture manager pointer
 
-	renderer_d3d9 &         m_renderer;                 // renderer pointer
+	renderer_d3d11 &        m_renderer;                 // renderer pointer
 
 	const uint32_t          m_hash;                     // hash value for the texture
 	const uint32_t          m_flags;                    // rendering flags
 	render_texinfo          m_texinfo;                  // copy of the texture info
-	const int               m_type;                     // what type of texture are we?
-	vec2f                   m_start;                    // beggining UV coordinates
-	vec2f                   m_stop;                     // ending UV coordinates
-	vec2f                   m_rawdims;                  // raw dims of the texture
+	d3d11_vec2f             m_start;                    // beggining UV coordinates
+	d3d11_vec2f             m_stop;                     // ending UV coordinates
+	d3d11_vec2f             m_rawdims;                  // raw dims of the texture
 	int                     m_xprescale, m_yprescale;   // X/Y prescale factor
-	int                     m_xborderpix, m_yborderpix; // X/Y border pixels
 	int                     m_cur_frame;                // what is our current frame?
-	IDirect3DTexture9Ptr    m_d3dtex;                   // Direct3D texture pointer
-	IDirect3DSurface9Ptr    m_d3dsurface;               // Direct3D offscreen plain surface pointer
-	IDirect3DTexture9Ptr    m_d3dfinaltex;              // Direct3D final (post-scaled) texture
+	D3D11_TEXTURE2D_DESC    m_desc;
+	D3D11_SUBRESOURCE_DATA  m_data;
+	ID3D11Texture2D        *m_tex;
+	ID3D11ShaderResourceView *m_view;                 // D3D11 shader-resource view pointer for this texture (no prescaling)
+
+	D3D11_TEXTURE2D_DESC    m_prescaled_desc;
+	D3D11_SUBRESOURCE_DATA  m_prescaled_data;
+	ID3D11Texture2D        *m_prescaled_tex;
+	ID3D11ShaderResourceView *m_prescaled_view;
 };
 
-/* poly_info holds information about a single polygon/d3d primitive */
-class poly_info
+/* d3d11_poly_info holds information about a single polygon/d3d primitive */
+class d3d11_poly_info
 {
 public:
-	void init(D3DPRIMITIVETYPE type, uint32_t count, uint32_t numverts,
-				uint32_t flags, texture_info *texture, uint32_t modmode,
-				float prim_width, float prim_height, uint32_t tint)
+	void init(D3D_PRIMITIVE_TOPOLOGY type, uint32_t count, uint32_t numverts, uint32_t flags,
+		d3d11_texture_info *texture, float prim_width, float prim_height, uint32_t tint)
 	{
 		m_type = type;
 		m_count = count;
 		m_numverts = numverts;
 		m_flags = flags;
 		m_texture = texture;
-		m_modmode = modmode;
 		m_prim_width = prim_width;
 		m_prim_height = prim_height;
 		m_tint = tint;
 	}
 
-	D3DPRIMITIVETYPE        type() const { return m_type; }
+	D3D_PRIMITIVE_TOPOLOGY  type() const { return m_type; }
 	uint32_t                count() const { return m_count; }
 	uint32_t                numverts() const { return m_numverts; }
 	uint32_t                flags() const { return m_flags; }
 
-	texture_info *          texture() const { return m_texture; }
-	DWORD                   modmode() const { return m_modmode; }
+	d3d11_texture_info *    texture() const { return m_texture; }
 
 	float                   prim_width() const { return m_prim_width; }
 	float                   prim_height() const { return m_prim_height; }
@@ -208,13 +210,12 @@ public:
 	DWORD                   tint() const { return m_tint; }
 
 private:
-	D3DPRIMITIVETYPE        m_type;         // type of primitive
+	D3D_PRIMITIVE_TOPOLOGY  m_type;         // type of primitive
 	uint32_t                m_count;        // total number of primitives
 	uint32_t                m_numverts;     // total number of vertices
 	uint32_t                m_flags;        // rendering flags
 
-	texture_info *          m_texture;      // pointer to texture info
-	DWORD                   m_modmode;      // texture modulation mode
+	d3d11_texture_info *    m_texture;      // pointer to texture info
 
 	float                   m_prim_width;   // used by quads
 	float                   m_prim_height;  // used by quads
@@ -222,23 +223,25 @@ private:
 	uint32_t                m_tint;         // color tint for primitive
 };
 
-/* vertex describes a single vertex */
-struct vertex
+/* d3d11_vertex describes a single vertex */
+struct d3d11_vertex
 {
 	float       x, y, z;                    // X,Y,Z coordinates
-	float       rhw;                        // RHW when no HLSL, padding when HLSL
-	D3DCOLOR    color;                      // diffuse color
+	uint8_t     b;                          // diffuse color, blue
+	uint8_t     g;                          // diffuse color, green
+	uint8_t     r;                          // diffuse color, red
+	uint8_t     a;                          // diffuse color, alpha
 	float       u0, v0;                     // texture stage 0 coordinates
 	float       u1, v1;                     // additional info for vector data
 };
 
 
-/* d3d_render_target is the information about a Direct3D render target chain */
-class d3d_render_target
+/* d3d11_render_target is the information about a Direct3D render target chain */
+class d3d11_render_target
 {
 public:
 	// construction/destruction
-	d3d_render_target()
+	d3d11_render_target()
 		: target_width(0)
 		, target_height(0)
 		, width(0)
@@ -248,9 +251,9 @@ public:
 	{
 	}
 
-	~d3d_render_target();
+	~d3d11_render_target();
 
-	bool init(renderer_d3d9 *d3d, int source_width, int source_height, int target_width, int target_height, int screen_index);
+	bool init(renderer_d3d11 *d3d, int source_width, int source_height, int target_width, int target_height, int screen_index);
 	int next_index(int index) { return ++index > 1 ? 0 : index; }
 
 	// real target dimension
@@ -263,20 +266,25 @@ public:
 
 	int screen_index;
 
-	Microsoft::WRL::ComPtr<IDirect3DSurface9> target_surface[2];
-	Microsoft::WRL::ComPtr<IDirect3DTexture9> target_texture[2];
-	Microsoft::WRL::ComPtr<IDirect3DSurface9> source_surface[2];
-	Microsoft::WRL::ComPtr<IDirect3DTexture9> source_texture[2];
+	ID3D11Texture2D *source_texture[2];
+	ID3D11RenderTargetView *source_rt_view[2];
+	ID3D11ShaderResourceView *source_res_view[2];
 
-	Microsoft::WRL::ComPtr<IDirect3DSurface9> cache_surface;
-	Microsoft::WRL::ComPtr<IDirect3DTexture9> cache_texture;
+	ID3D11Texture2D *target_texture[2];
+	ID3D11RenderTargetView *target_rt_view[2];
+	ID3D11ShaderResourceView *target_res_view[2];
 
-	Microsoft::WRL::ComPtr<IDirect3DSurface9> bloom_surface[MAX_BLOOM_COUNT];
-	Microsoft::WRL::ComPtr<IDirect3DTexture9> bloom_texture[MAX_BLOOM_COUNT];
+	ID3D11Texture2D *cache_texture;
+	ID3D11RenderTargetView *cache_rt_view;
+	ID3D11ShaderResourceView *cache_res_view;
+
+	ID3D11Texture2D *bloom_texture[MAX_BLOOM_COUNT];
+	ID3D11RenderTargetView *bloom_rt_view[MAX_BLOOM_COUNT];
+	ID3D11ShaderResourceView *bloom_res_view[MAX_BLOOM_COUNT];
 
 	float bloom_dims[MAX_BLOOM_COUNT][2];
 
 	int bloom_count;
 };
 
-#endif // MAME_RENDER_D3D_D3DCOMM_H
+#endif // MAME_RENDER_D3D_D3D11COMM_H

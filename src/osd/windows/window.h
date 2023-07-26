@@ -101,7 +101,7 @@ public:
 
 	// window handle and info
 	RECT                m_non_fullscreen_bounds;
-	int                 m_startmaximized;
+	bool                m_startmaximized;
 	int                 m_isminimized;
 	int                 m_ismaximized;
 
@@ -129,7 +129,7 @@ public:
 
 private:
 	void draw_video_contents(HDC dc, bool update);
-	int complete_create();
+	bool complete_create();
 	int wnd_extra_width();
 	int wnd_extra_height();
 	osd_rect constrain_to_aspect_ratio(const osd_rect &rect, int adjustment);
