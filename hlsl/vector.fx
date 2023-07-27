@@ -5,12 +5,28 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Constant Definitions
+//-----------------------------------------------------------------------------
+
+cbuffer constants : register(b0)
+{
+	float2 ScreenDims;
+	float2 TargetDims;
+
+	float TimeRatio; // Frame time of the vector (not set)
+	float TimeScale; // How much frame time affects the vector's fade (not set)
+	float LengthRatio; // Size at which fade is maximum
+	float LengthScale; // How much length affects the vector's fade
+	float BeamSmooth;
+}
+
+//-----------------------------------------------------------------------------
 // Vertex Definitions
 //-----------------------------------------------------------------------------
 
 struct VS_OUTPUT
 {
-	float4 Position : POSITION;
+	float4 Position : SV_POSITION;
 	float4 Color : COLOR0;
 	float2 TexCoord : TEXCOORD0;
 	float2 SizeInfo : TEXCOORD1;
@@ -21,7 +37,7 @@ struct VS_INPUT
 	float3 Position : POSITION;
 	float4 Color : COLOR0;
 	float2 TexCoord : TEXCOORD0;
-	float2 SizeInfo : TEXCOORD1;
+	float2 VecTex : TEXCOORD1;
 };
 
 struct PS_INPUT
@@ -45,9 +61,6 @@ float roundBox(float2 p, float2 b, float r)
 // Vector Vertex Shader
 //-----------------------------------------------------------------------------
 
-uniform float2 ScreenDims;
-uniform float2 TargetDims;
-
 VS_OUTPUT vs_main(VS_INPUT Input)
 {
 	VS_OUTPUT Output = (VS_OUTPUT)0;
@@ -60,7 +73,6 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 
 	Output.TexCoord = Input.TexCoord;
 	Output.SizeInfo = Input.SizeInfo;
-
 	Output.Color = Input.Color;
 
 	return Output;
@@ -69,12 +81,6 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 //-----------------------------------------------------------------------------
 // Vector Pixel Shader
 //-----------------------------------------------------------------------------
-
-uniform float TimeRatio; // Frame time of the vector (not set)
-uniform float TimeScale; // How much frame time affects the vector's fade (not set)
-uniform float LengthRatio; // Size at which fade is maximum
-uniform float LengthScale; // How much length affects the vector's fade
-uniform float BeamSmooth;
 
 float GetBoundsFactor(float2 coord, float2 bounds, float radiusAmount, float smoothAmount)
 {
@@ -117,19 +123,4 @@ float4 ps_main(PS_INPUT Input) : COLOR
 	outColor.rgb *= RoundCornerFactor;
 
 	return outColor;
-}
-
-//-----------------------------------------------------------------------------
-// Vector Technique
-//-----------------------------------------------------------------------------
-
-technique DefaultTechnique
-{
-	pass Pass0
-	{
-		Lighting = FALSE;
-
-		VertexShader = compile vs_2_0 vs_main();
-		PixelShader = compile ps_2_0 ps_main();
-	}
 }

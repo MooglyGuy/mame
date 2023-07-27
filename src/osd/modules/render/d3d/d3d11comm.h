@@ -146,10 +146,6 @@ public:
 	d3d11_vec2f &           get_rawdims() { return m_rawdims; }
 
 private:
-	//using ID3D11Texture2DPtr = Microsoft::WRL::ComPtr<ID3D11Texture2D>;
-	//using ID3D11RenderTargetViewPtr = Microsoft::WRL::ComPtr<ID3D11RenderTargetView>;
-	//using ID3D11ShaderResourceViewPtr = Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>;
-
 	void prescale();
 
 	inline void copyline_palette16(uint32_t *dst, const uint16_t *src, int width, const rgb_t *palette);
@@ -266,13 +262,13 @@ public:
 
 	int screen_index;
 
-	ID3D11Texture2D *source_texture[2];
-	ID3D11RenderTargetView *source_rt_view[2];
-	ID3D11ShaderResourceView *source_res_view[2];
+	ID3D11Texture2D *source_texture;
+	ID3D11RenderTargetView *source_rt_view;
+	ID3D11ShaderResourceView *source_res_view;
 
-	ID3D11Texture2D *target_texture[2];
-	ID3D11RenderTargetView *target_rt_view[2];
-	ID3D11ShaderResourceView *target_res_view[2];
+	ID3D11Texture2D *target_texture;
+	ID3D11RenderTargetView *target_rt_view;
+	ID3D11ShaderResourceView *target_res_view;
 
 	ID3D11Texture2D *cache_texture;
 	ID3D11RenderTargetView *cache_rt_view;

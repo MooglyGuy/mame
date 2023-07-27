@@ -28,6 +28,7 @@
 #include <windows.h>
 #include <tchar.h>
 #include <mmsystem.h>
+#include <d3dx9.h>
 #include <d3d11.h>
 #undef interface
 
@@ -46,7 +47,7 @@
 //  TYPE DEFINITIONS
 //============================================================
 
-//class d3d11_shaders;
+class d3d11_shaders;
 struct hlsl_options;
 
 /* renderer_d3d11 is the information about D3D11 for the current screen */
@@ -55,8 +56,6 @@ class renderer_d3d11 : public osd_renderer, public slider_dirty_notifier
 public:
 	using d3d11_create_fn = HRESULT (WINAPI *)(IDXGIAdapter *, D3D_DRIVER_TYPE, HMODULE, UINT, const D3D_FEATURE_LEVEL *, UINT, UINT, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
 	using d3d_compile_fn = HRESULT (WINAPI *)(LPCWSTR, CONST D3D_SHADER_MACRO *, ID3DInclude *, LPCSTR, LPCSTR, UINT, UINT, ID3DBlob **, ID3DBlob **);
-	//using ID3D11DevicePtr = Microsoft::WRL::ComPtr<ID3D11Device>;
-	//using ID3D11DeviceContextPtr = Microsoft::WRL::ComPtr<ID3D11DeviceContext>;
 
 	renderer_d3d11(osd_window &window, const d3d11_create_fn create_fn, const d3d_compile_fn compile_fn);
 	virtual ~renderer_d3d11();
@@ -105,7 +104,7 @@ public:
 	void                    primitive_flush_pending();
 
 	void                    set_texture(d3d11_texture_info *texture);
-	void                    set_sampler_mode(const bool linear_filter, const bool wrap_texture, const bool force_set = false);
+	void                    set_sampler_mode(const bool linear_filter, const D3D11_TEXTURE_ADDRESS_MODE mode, const bool force_set = false);
 	void                    set_blendmode(const int blendmode, const bool force_set = false);
 	void                    reset_render_states();
 
@@ -120,6 +119,9 @@ public:
 
 	ID3D11Device *          get_device() const { return m_d3d11; }
 	ID3D11DeviceContext *   get_context() const { return m_d3d11_context; }
+	ID3D11DepthStencilView *get_depthbuffer() const { return m_depthbuffer_view; }
+	ID3D11RenderTargetView *get_framebuffer() const { return m_framebuffer_view; }
+	ID3D11RenderTargetView * const * get_framebuffer_ptr() const { return &m_framebuffer_view; }
 	DXGI_SWAP_CHAIN_DESC *  get_presentation() { return &m_presentation; }
 
 	ID3D11Buffer *          get_vertex_buffer() const { return m_vertexbuf; }
@@ -133,27 +135,9 @@ public:
 	d3d11_texture_manager * get_texture_manager() const { return m_texture_manager.get(); }
 	d3d11_texture_info *    get_default_texture();
 
-	//shaders *               get_shaders() const { return m_shaders.get(); }
+	d3d11_shaders *         get_shaders() const { return m_shaders.get(); }
 
 private:
-	//using ID3D11RenderTargetViewPtr = Microsoft::WRL::ComPtr<ID3D11RenderTargetView>;
-	//using ID3D11DepthStencilViewPtr = Microsoft::WRL::ComPtr<ID3D11DepthStencilView>;
-	//using IDXGISwapChainPtr = Microsoft::WRL::ComPtr<IDXGISwapChain>;
-	//using IDXGIAdapterPtr = Microsoft::WRL::ComPtr<IDXGIAdapter>;
-	//using IDXGIOutputPtr = Microsoft::WRL::ComPtr<IDXGIOutput>;
-	//using IDXGIFactoryPtr = Microsoft::WRL::ComPtr<IDXGIFactory>;
-	//using ID3D11Texture2DPtr = Microsoft::WRL::ComPtr<ID3D11Texture2D>;
-	//using ID3DBlobPtr = Microsoft::WRL::ComPtr<ID3DBlob>;
-	//using ID3D11VertexShaderPtr = Microsoft::WRL::ComPtr<ID3D11VertexShader>;
-	//using ID3D11PixelShaderPtr = Microsoft::WRL::ComPtr<ID3D11PixelShader>;
-	//using ID3D11RasterizerStatePtr = Microsoft::WRL::ComPtr<ID3D11RasterizerState>;
-	//using ID3D11DepthStencilStatePtr = Microsoft::WRL::ComPtr<ID3D11DepthStencilState>;
-	//using ID3D11BlendStatePtr = Microsoft::WRL::ComPtr<ID3D11BlendState>;
-	//using ID3D11SamplerStatePtr = Microsoft::WRL::ComPtr<ID3D11SamplerState>;
-	//using ID3D11BufferPtr = Microsoft::WRL::ComPtr<ID3D11Buffer>;
-	//using ID3D11InputLayoutPtr = Microsoft::WRL::ComPtr<ID3D11InputLayout>;
-	//using ID3D11DebugPtr = Microsoft::WRL::ComPtr<ID3D11Debug>;
-
 	d3d11_create_fn         m_create_fn;
 	d3d_compile_fn          m_compile_fn;
 	ID3D11Device           *m_d3d11;                    // Direct3D 11 API object
@@ -190,16 +174,13 @@ private:
 	d3d11_texture_info *    m_last_texture;             // previous texture
 	int                     m_blendmode;                // current blendmode
 	bool                    m_linear_filter;            // current texture filter mode
-	bool                    m_wrap_texture;             // current texture wrapping mode
+	D3D11_TEXTURE_ADDRESS_MODE m_sampler_mode;          // current texture wrapping mode
 	bool                    m_force_render_states;      // whether to force state-setting (used at the beginning of a frame)
 
 	bool                    m_device_initialized;       // whether we have called device_create() yet, or need to again
 
 	ID3D11BlendState       *m_blend_states[BLENDMODE_COUNT];
-	ID3D11SamplerState     *m_point_wrap_state;
-	ID3D11SamplerState     *m_point_clamp_state;
-	ID3D11SamplerState     *m_linear_wrap_state;
-	ID3D11SamplerState     *m_linear_clamp_state;
+	ID3D11SamplerState     *m_sampler_states[2][3];
 
 	ID3D11Texture2D          *m_framebuffer;
 	ID3D11RenderTargetView   *m_framebuffer_view;
@@ -223,7 +204,7 @@ private:
 	D3D11_INPUT_ELEMENT_DESC m_input_desc[4];
 	ID3D11InputLayout *m_input_layout;
 
-	//std::unique_ptr<shaders> m_shaders;                 // HLSL interface
+	std::unique_ptr<d3d11_shaders> m_shaders; // Shader interface
 
 	d3d11_vertex    m_vertex_data[VERTEX_BUFFER_LENGTH];
 	ID3D11Buffer   *m_vertexbuf;

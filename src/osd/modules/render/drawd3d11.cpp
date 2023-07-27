@@ -16,7 +16,7 @@
 // MAMEOS headers
 #include "drawd3d11.h"
 
-//#include "d3d/d3dhlsl.h"
+#include "d3d/d3d11hlsl.h"
 
 #include "render_module.h"
 
@@ -245,26 +245,26 @@ void renderer_d3d11::toggle_fsfx()
 
 void renderer_d3d11::record()
 {
-	//if (m_shaders != nullptr)
-	//{
-	//	m_shaders->record_movie();
-	//}
+	if (m_shaders != nullptr)
+	{
+		m_shaders->record_movie();
+	}
 }
 
 void renderer_d3d11::add_audio_to_recording(const int16_t *buffer, int samples_this_frame)
 {
-	//if (m_shaders != nullptr)
-	//{
-	//	m_shaders->record_audio(buffer, samples_this_frame);
-	//}
+	if (m_shaders != nullptr)
+	{
+		m_shaders->record_audio(buffer, samples_this_frame);
+	}
 }
 
 void renderer_d3d11::save()
 {
-	//if (m_shaders != nullptr)
-	//{
-	//	m_shaders->save_snapshot();
-	//}
+	if (m_shaders != nullptr)
+	{
+		m_shaders->save_snapshot();
+	}
 }
 
 
@@ -292,11 +292,11 @@ render_primitive_list *renderer_d3d11::get_primitives()
 		const float mode_refresh = dxgi_refresh.Numerator / (float)dxgi_refresh.Denominator;
 		window().target()->set_max_update_rate(curr_refresh_num == 0 ? mode_refresh : curr_refresh);
 	}
-	//if (m_shaders != nullptr)
-	//{
+	if (m_shaders != nullptr)
+	{
 		// do not transform primitives (scale, offset) if shaders are enabled, the shaders will handle the transformation
-		//window().target()->set_transform_container(!m_shaders->enabled());
-	//}
+		window().target()->set_transform_container(!m_shaders->enabled());
+	}
 	return &window().target()->get_primitives();
 }
 
@@ -331,29 +331,23 @@ void renderer_d3d11::set_texture(d3d11_texture_info *texture)
 	if (texture != m_last_texture)
 	{
 		m_last_texture = texture;
-		//if (m_shaders->enabled())
-		//{
-		//	m_shaders->set_texture(texture);
-		//}
+		if (m_shaders->enabled())
+		{
+			m_shaders->set_texture(texture);
+		}
 
-		ID3D11ShaderResourceView * const*texture_view = (texture == nullptr) ? get_default_texture()->get_view() : texture->get_view();
+		ID3D11ShaderResourceView * const *texture_view = (texture == nullptr) ? get_default_texture()->get_view() : texture->get_view();
 		m_d3d11_context->PSSetShaderResources(0, 1, texture_view);
 	}
 }
 
-void renderer_d3d11::set_sampler_mode(const bool linear_filter, const bool wrap_texture, const bool force_set)
+void renderer_d3d11::set_sampler_mode(const bool linear_filter, const D3D11_TEXTURE_ADDRESS_MODE mode, const bool force_set)
 {
-	if (linear_filter != m_linear_filter || wrap_texture != m_wrap_texture || force_set)
+	if (mode != m_sampler_mode || force_set)
 	{
 		m_linear_filter = linear_filter;
-		m_wrap_texture = wrap_texture;
-
-		ID3D11SamplerState *state = nullptr;
-		if (linear_filter)
-			state = wrap_texture ? m_linear_wrap_state : m_linear_clamp_state;
-		else
-			state = wrap_texture ? m_point_wrap_state : m_point_clamp_state;
-		m_d3d11_context->PSSetSamplers(0, 1, &state);
+		m_sampler_mode = mode;
+		m_d3d11_context->PSSetSamplers(0, 1, &m_sampler_states[(int)linear_filter][(int)mode - 1]);
 	}
 }
 
@@ -486,13 +480,9 @@ renderer_d3d11::renderer_d3d11(osd_window &window, const d3d11_create_fn create_
 	, m_last_texture(nullptr)
 	, m_blendmode(-1)
 	, m_linear_filter(false)
-	, m_wrap_texture(true)
+	, m_sampler_mode(D3D11_TEXTURE_ADDRESS_BORDER)
 	, m_force_render_states(true)
 	, m_device_initialized(false)
-	, m_point_wrap_state(nullptr)
-	, m_point_clamp_state(nullptr)
-	, m_linear_wrap_state(nullptr)
-	, m_linear_clamp_state(nullptr)
 	, m_framebuffer(nullptr)
 	, m_framebuffer_view(nullptr)
 	, m_depthbuffer(nullptr)
@@ -503,10 +493,10 @@ renderer_d3d11::renderer_d3d11(osd_window &window, const d3d11_create_fn create_
 	, m_depth_stencil_state(nullptr)
 	, m_constant_buffer(nullptr)
 	, m_input_layout(nullptr)
+	, m_shaders(nullptr)
 	, m_vertexbuf(nullptr)
 	, m_numverts(0)
 	, m_indexbuf(nullptr)
-	//, m_shaders(nullptr)
 	, m_texture_manager()
 {
 }
@@ -628,8 +618,8 @@ void renderer_d3d11::begin_frame()
 	// first update any textures
 	m_texture_manager->update_textures();
 
-	//if (m_shaders->enabled())
-	//	m_shaders->begin_frame(window().m_primlist);
+	if (m_shaders->enabled())
+		m_shaders->begin_frame(window().m_primlist);
 
 	m_force_render_states = true;
 }
@@ -683,8 +673,8 @@ void renderer_d3d11::end_frame()
 	// flush any pending polygons
 	primitive_flush_pending();
 
-	//if (m_shaders->enabled())
-		//m_shaders->end_frame();
+	if (m_shaders->enabled())
+		m_shaders->end_frame();
 
 	m_d3d11_context->Unmap(m_vertexbuf, 0);
 
@@ -963,22 +953,22 @@ bool renderer_d3d11::device_create_resources()
 	update_gamma_ramp();
 
 	// create shaders only once
-	//if (!m_shaders)
-	//	m_shaders = std::make_unique<shaders>();
+	if (!m_shaders)
+		m_shaders = std::make_unique<d3d11_shaders>();
 
-	//if (m_shaders->init(m_d3dobj.Get(), &window().machine(), this))
-	//{
-	//	m_post_fx_available = true;
-	//	m_shaders->init_slider_list();
-	//	m_sliders_dirty = true;
-	//}
+	if (m_shaders->init(m_d3d11, m_d3d11_context, m_compile_fn, &window().machine(), this))
+	{
+		m_post_fx_available = true;
+		m_shaders->init_slider_list();
+		m_sliders_dirty = true;
+	}
 
 	// create resources
-	//if (m_shaders->create_resources())
-	//{
-	//	osd_printf_verbose("Direct3D: failed to create HLSL resources for device\n");
-	//	return false;
-	//}
+	if (!m_shaders->create_resources())
+	{
+		osd_printf_verbose("Direct3D: failed to create HLSL resources for device\n");
+		return false;
+	}
 
 	m_force_render_states = true;
 
@@ -1040,51 +1030,35 @@ void renderer_d3d11::device_create_blend_states()
 
 void renderer_d3d11::device_create_sampler_states()
 {
-	D3D11_SAMPLER_DESC point_wrap_sampler_desc = {};
-	point_wrap_sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	point_wrap_sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
-	point_wrap_sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
-	point_wrap_sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
-	point_wrap_sampler_desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	D3D11_SAMPLER_DESC desc;
+	memset(&desc, 0, sizeof(desc));
+	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	desc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
+	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[0][(int)D3D11_TEXTURE_ADDRESS_WRAP - 1]);
 
-	D3D11_SAMPLER_DESC point_clamp_sampler_desc = {};
-	point_clamp_sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	point_clamp_sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_CLAMP;
-	point_clamp_sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_CLAMP;
-	point_clamp_sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_CLAMP;
-	point_clamp_sampler_desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[1][(int)D3D11_TEXTURE_ADDRESS_WRAP - 1]);
 
-	D3D11_SAMPLER_DESC linear_wrap_sampler_desc = {};
-	linear_wrap_sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	linear_wrap_sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
-	linear_wrap_sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
-	linear_wrap_sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
-	linear_wrap_sampler_desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	desc.AddressU       = D3D11_TEXTURE_ADDRESS_MIRROR;
+	desc.AddressV       = D3D11_TEXTURE_ADDRESS_MIRROR;
+	desc.AddressW       = D3D11_TEXTURE_ADDRESS_MIRROR;
+	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[0][(int)D3D11_TEXTURE_ADDRESS_MIRROR - 1]);
 
-	D3D11_SAMPLER_DESC linear_clamp_sampler_desc = {};
-	linear_clamp_sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	linear_clamp_sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_CLAMP;
-	linear_clamp_sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_CLAMP;
-	linear_clamp_sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_CLAMP;
-	linear_clamp_sampler_desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[1][(int)D3D11_TEXTURE_ADDRESS_MIRROR- 1]);
 
-	printf("Creating m_point_wrap_state\n");
-	m_d3d11->CreateSamplerState(&point_wrap_sampler_desc, &m_point_wrap_state);
-	printf("Creating m_point_clamp_state\n");
-	m_d3d11->CreateSamplerState(&point_clamp_sampler_desc, &m_point_clamp_state);
-	printf("Creating m_linear_wrap_state\n");
-	m_d3d11->CreateSamplerState(&linear_wrap_sampler_desc, &m_linear_wrap_state);
-	printf("Creating m_linear_clamp_state\n");
-	m_d3d11->CreateSamplerState(&linear_clamp_sampler_desc, &m_linear_clamp_state);
+	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	desc.AddressU       = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressV       = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressW       = D3D11_TEXTURE_ADDRESS_CLAMP;
+	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[0][(int)D3D11_TEXTURE_ADDRESS_CLAMP - 1]);
 
-	static const char *point_wrap_name = "PointWrapSamplerState";
-	static const char *point_clamp_name = "PointClampSamplerState";
-	static const char *linear_wrap_name = "LinearWrapSamplerState";
-	static const char *linear_clamp_name = "LinearClampSamplerState";
-	m_point_wrap_state->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(point_wrap_name) - 1, point_wrap_name);
-	m_point_clamp_state->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(point_clamp_name) - 1, point_clamp_name);
-	m_linear_wrap_state->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(linear_wrap_name) - 1, linear_wrap_name);
-	m_linear_clamp_state->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(linear_clamp_name) - 1, linear_clamp_name);
+	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[1][(int)D3D11_TEXTURE_ADDRESS_CLAMP - 1]);
 }
 
 
@@ -1118,10 +1092,12 @@ void renderer_d3d11::device_delete_resources()
 
 	m_texture_manager.reset();
 
-	m_linear_clamp_state->Release();
-	m_linear_wrap_state->Release();
-	m_point_clamp_state->Release();
-	m_point_wrap_state->Release();
+	m_sampler_states[1][2]->Release();
+	m_sampler_states[1][1]->Release();
+	m_sampler_states[1][0]->Release();
+	m_sampler_states[0][2]->Release();
+	m_sampler_states[0][1]->Release();
+	m_sampler_states[0][0]->Release();
 
 	m_blend_states[BLENDMODE_ADD]->Release();
 	m_blend_states[BLENDMODE_RGB_MULTIPLY]->Release();
@@ -1482,8 +1458,8 @@ void renderer_d3d11::batch_vectors(int vector_count)
 {
 	float quad_width = 0.0f;
 	float quad_height = 0.0f;
-	//float target_width = 0.0f;
-	//float target_height = 0.0f;
+	float target_width = 0.0f;
+	float target_height = 0.0f;
 
 	int vertex_count = vector_count * 4;
 	int triangle_count = vector_count * 2;
@@ -1533,7 +1509,7 @@ void renderer_d3d11::batch_vectors(int vector_count)
 	}
 
 	// handle orientation and rotation for vectors as they were a texture
-	/*if (m_shaders->enabled())
+	if (m_shaders->enabled())
 	{
 		bool orientation_swap_xy =
 			(window().machine().system().flags & ORIENTATION_SWAP_XY) == ORIENTATION_SWAP_XY;
@@ -1597,7 +1573,7 @@ void renderer_d3d11::batch_vectors(int vector_count)
 			m_vectorbatch[batchindex].x += half_screen_width;
 			m_vectorbatch[batchindex].y += half_screen_height;
 		}
-	}*/
+	}
 
 	// now add a polygon entry
 	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, triangle_count, vertex_count, cached_flags, nullptr, quad_width, quad_height, tint);
@@ -1632,19 +1608,19 @@ void renderer_d3d11::batch_vector(const render_primitive &prim)
 	m_vectorbatch[m_batchindex + 3].x = b1.x1;
 	m_vectorbatch[m_batchindex + 3].y = b1.y1;
 
-	//if (m_shaders->enabled())
-	//{
+	if (m_shaders->enabled())
+	{
 		// procedural generated texture
-		//m_vectorbatch[m_batchindex + 0].u0 = 0.f;
-		//m_vectorbatch[m_batchindex + 0].v0 = 0.f;
-		//m_vectorbatch[m_batchindex + 1].u0 = 0.f;
-		//m_vectorbatch[m_batchindex + 1].v0 = 1.f;
-		//m_vectorbatch[m_batchindex + 2].u0 = 1.f;
-		//m_vectorbatch[m_batchindex + 2].v0 = 0.f;
-		//m_vectorbatch[m_batchindex + 3].u0 = 1.f;
-		//m_vectorbatch[m_batchindex + 3].v0 = 1.f;
-	//}
-	//else
+		m_vectorbatch[m_batchindex + 0].u0 = 0.f;
+		m_vectorbatch[m_batchindex + 0].v0 = 0.f;
+		m_vectorbatch[m_batchindex + 1].u0 = 0.f;
+		m_vectorbatch[m_batchindex + 1].v0 = 1.f;
+		m_vectorbatch[m_batchindex + 2].u0 = 1.f;
+		m_vectorbatch[m_batchindex + 2].v0 = 0.f;
+		m_vectorbatch[m_batchindex + 3].u0 = 1.f;
+		m_vectorbatch[m_batchindex + 3].v0 = 1.f;
+	}
+	else
 	{
 		d3d11_vec2f& start = get_default_texture()->get_uvstart();
 		d3d11_vec2f& stop = get_default_texture()->get_uvstop();
@@ -1832,8 +1808,8 @@ d3d11_vertex *renderer_d3d11::mesh_alloc(int numverts)
 	{
 		primitive_flush_pending();
 
-		//if (m_shaders->enabled())
-		//	m_shaders->init_fsfx_quad();
+		if (m_shaders->enabled())
+			m_shaders->init_fsfx_quad();
 	}
 
 	// if we have enough room, return a pointer
@@ -1890,15 +1866,15 @@ void renderer_d3d11::primitive_flush_pending()
 			if (PRIMFLAG_GET_SCREENTEX(flags))
 				linear_filter = (bool)video_config.filter;
 
-			bool wrap_texture = (bool)PRIMFLAG_GET_TEXWRAP(flags);
+			D3D11_TEXTURE_ADDRESS_MODE wrap_mode = PRIMFLAG_GET_TEXWRAP(flags) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP;
 			//if (m_shaders->enabled())
 			//{
-			//	m_shaders->set_sampler_mode(linear_filter, wrap_texture);
+				//m_shaders->set_sampler_mode(linear_filter, wrap_mode, m_force_render_states);
 			//}
 			//else
-			//{
-				set_sampler_mode(linear_filter, wrap_texture, m_force_render_states);
-			//}
+			{
+				set_sampler_mode(linear_filter, wrap_mode, m_force_render_states);
+			}
 		}
 
 		// set the texture if different
@@ -1923,11 +1899,11 @@ void renderer_d3d11::primitive_flush_pending()
 
 		assert(vertexnum < VERTEX_BUFFER_LENGTH);
 
-		//if(m_shaders->enabled())
-		//{
-		//	m_shaders->render_quad(&m_poly[polynum], vertexnum);
-		//}
-		//else
+		if(m_shaders->enabled())
+		{
+			m_shaders->render_quad(&m_poly[polynum], vertexnum);
+		}
+		else
 		{
 			// set blend mode
 			set_blendmode(PRIMFLAG_GET_BLENDMODE(flags), m_force_render_states);
@@ -1943,7 +1919,7 @@ void renderer_d3d11::primitive_flush_pending()
 
     m_d3d11_context->Map(m_vertexbuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_lockedbuf);
 
-	//m_shaders->end_draw();
+	m_shaders->end_draw();
 
 	// reset the vertex count
 	m_numverts = 0;
@@ -1956,13 +1932,13 @@ std::vector<ui::menu_item> renderer_d3d11::get_slider_list()
 	m_sliders_dirty = false;
 
 	std::vector<ui::menu_item> sliders;
-	//sliders.insert(sliders.end(), m_sliders.begin(), m_sliders.end());
+	sliders.insert(sliders.end(), m_sliders.begin(), m_sliders.end());
 
-	//if (m_shaders != nullptr && m_shaders->enabled())
-	//{
-	//	std::vector<ui::menu_item> s_slider = m_shaders->get_slider_list();
-	//	sliders.insert(sliders.end(), s_slider.begin(), s_slider.end());
-	//}
+	if (m_shaders != nullptr && m_shaders->enabled())
+	{
+		std::vector<ui::menu_item> s_slider = m_shaders->get_slider_list();
+		sliders.insert(sliders.end(), s_slider.begin(), s_slider.end());
+	}
 
 	return sliders;
 }
@@ -2229,8 +2205,7 @@ inline void d3d11_texture_info::copyline_yuy16_to_yuy2(uint16_t *dst, const uint
 
 void d3d11_texture_info::set_data(const render_texinfo *texsource, uint32_t flags)
 {
-    D3D11_MAPPED_SUBRESOURCE mapped_resource;
-    memset(&mapped_resource, 0, sizeof(D3D11_MAPPED_SUBRESOURCE));
+    D3D11_MAPPED_SUBRESOURCE mapped_resource = { 0 };
 
 	// lock the texture
 	HRESULT result = m_renderer.get_context()->Map(m_tex, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
@@ -2431,44 +2406,41 @@ bool d3d11_render_target::init(renderer_d3d11 *renderer, int source_width, int s
 	target_desc.Width  = target_width;
 	target_desc.Height = target_height;
 
-	for (int index = 0; index < 2; index++)
-	{
-		if (FAILED(renderer->get_device()->CreateTexture2D(&source_desc, nullptr, &source_texture[index])))
-			return false;
+	if (FAILED(renderer->get_device()->CreateTexture2D(&source_desc, nullptr, &source_texture)))
+		return false;
 
-		D3D11_RENDER_TARGET_VIEW_DESC source_rt_view_desc;
-		source_rt_view_desc.Format = source_desc.Format;
-		source_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		source_rt_view_desc.Texture2D.MipSlice = 0;
-		if (FAILED(renderer->get_device()->CreateRenderTargetView(source_texture[index], &source_rt_view_desc, &source_rt_view[index])))
-			return false;
+	D3D11_RENDER_TARGET_VIEW_DESC source_rt_view_desc;
+	source_rt_view_desc.Format = source_desc.Format;
+	source_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	source_rt_view_desc.Texture2D.MipSlice = 0;
+	if (FAILED(renderer->get_device()->CreateRenderTargetView(source_texture, &source_rt_view_desc, &source_rt_view)))
+		return false;
 
-		D3D11_SHADER_RESOURCE_VIEW_DESC source_shader_view_desc;
-    	source_shader_view_desc.Format = source_desc.Format;
-    	source_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    	source_shader_view_desc.Texture2D.MostDetailedMip = 0;
-    	source_shader_view_desc.Texture2D.MipLevels = 1;
-		if (FAILED(renderer->get_device()->CreateShaderResourceView(source_texture[index], &source_shader_view_desc, &source_res_view[index])))
-			return false;
+	D3D11_SHADER_RESOURCE_VIEW_DESC source_shader_view_desc;
+	source_shader_view_desc.Format = source_desc.Format;
+	source_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	source_shader_view_desc.Texture2D.MostDetailedMip = 0;
+	source_shader_view_desc.Texture2D.MipLevels = 1;
+	if (FAILED(renderer->get_device()->CreateShaderResourceView(source_texture, &source_shader_view_desc, &source_res_view)))
+		return false;
 
-		if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &target_texture[index])))
-			return false;
+	if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &target_texture)))
+		return false;
 
-		D3D11_RENDER_TARGET_VIEW_DESC target_rt_view_desc;
-		source_rt_view_desc.Format = target_desc.Format;
-		source_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		source_rt_view_desc.Texture2D.MipSlice = 0;
-		if (FAILED(renderer->get_device()->CreateRenderTargetView(target_texture[index], &target_rt_view_desc, &target_rt_view[index])))
-			return false;
+	D3D11_RENDER_TARGET_VIEW_DESC target_rt_view_desc;
+	source_rt_view_desc.Format = target_desc.Format;
+	source_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	source_rt_view_desc.Texture2D.MipSlice = 0;
+	if (FAILED(renderer->get_device()->CreateRenderTargetView(target_texture, &target_rt_view_desc, &target_rt_view)))
+		return false;
 
-		D3D11_SHADER_RESOURCE_VIEW_DESC target_shader_view_desc;
-    	target_shader_view_desc.Format = target_desc.Format;
-    	target_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    	target_shader_view_desc.Texture2D.MostDetailedMip = 0;
-    	target_shader_view_desc.Texture2D.MipLevels = 1;
-		if (FAILED(renderer->get_device()->CreateShaderResourceView(target_texture[index], &target_shader_view_desc, &target_res_view[index])))
-			return false;
-	}
+	D3D11_SHADER_RESOURCE_VIEW_DESC target_shader_view_desc;
+	target_shader_view_desc.Format = target_desc.Format;
+	target_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	target_shader_view_desc.Texture2D.MostDetailedMip = 0;
+	target_shader_view_desc.Texture2D.MipLevels = 1;
+	if (FAILED(renderer->get_device()->CreateShaderResourceView(target_texture, &target_shader_view_desc, &target_res_view)))
+		return false;
 
 	if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &cache_texture)))
 		return false;

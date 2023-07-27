@@ -130,6 +130,8 @@ project ("osd_" .. _OPTIONS["osd"])
 		MAME_DIR .. "src/osd/modules/render/d3d/d3dhlsl.cpp",
 		MAME_DIR .. "src/osd/modules/render/d3d/d3dcomm.h",
 		MAME_DIR .. "src/osd/modules/render/d3d/d3dhlsl.h",
+		MAME_DIR .. "src/osd/modules/render/d3d/d3d11hlsl.cpp",
+		MAME_DIR .. "src/osd/modules/render/d3d/d3d11hlsl.h",
 		MAME_DIR .. "src/osd/modules/render/drawd3d.cpp",
 		MAME_DIR .. "src/osd/modules/render/drawd3d.h",
 		MAME_DIR .. "src/osd/modules/render/d3d/d3d11comm.h",
