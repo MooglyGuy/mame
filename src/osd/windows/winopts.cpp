@@ -114,6 +114,7 @@ options_entry const f_win_option_entries[] =
 	{ WINOPTION_BLOOM_LEVEL6_WEIGHT,                            "0.04",              core_options::option_type::FLOAT,      "bloom level 6 weight (1/4 smaller that level 5 target)" },
 	{ WINOPTION_BLOOM_LEVEL7_WEIGHT,                            "0.02",              core_options::option_type::FLOAT,      "bloom level 7 weight (1/4 smaller that level 6 target)" },
 	{ WINOPTION_BLOOM_LEVEL8_WEIGHT,                            "0.01",              core_options::option_type::FLOAT,      "bloom level 8 weight (1/4 smaller that level 7 target)" },
+	{ WINOPTION_BLOOM_SHIFT,                                    "0.0,0.0",           core_options::option_type::STRING,     "bloom shift" },
 	{ WINOPTION_LUT_TEXTURE,                                    "lut-default.png",   core_options::option_type::PATH,       "3D LUT texture filename for screen, PNG format" },
 	{ WINOPTION_LUT_ENABLE,                                     "0",                 core_options::option_type::BOOLEAN,    "Enables 3D LUT to be applied to screen after post-processing" },
 	{ WINOPTION_UI_LUT_TEXTURE,                                 "lut-default.png",   core_options::option_type::PATH,       "3D LUT texture filename of UI, PNG format" },

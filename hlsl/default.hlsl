@@ -40,12 +40,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-};
-
 //-----------------------------------------------------------------------------
 // Primary Vertex Shaders
 //-----------------------------------------------------------------------------
@@ -70,7 +64,7 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 // Primary Pixel Shaders
 //-----------------------------------------------------------------------------
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	return tex2D(DiffuseSampler, Input.TexCoord);
+	return Diffuse.Sample(DiffuseSampler, Input.TexCoord);
 }

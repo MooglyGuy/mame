@@ -6,8 +6,8 @@
 #pragma once
 
 #include "binpacker.h"
-#include "bgfx/chain.h"
-#include "bgfx/chainmanager.h"
+#include "bgfx/effect.h"
+#include "bgfx/effectmanager.h"
 #include "bgfx/vertex.h"
 #include "sliderdirtynotifier.h"
 
@@ -27,7 +27,7 @@ class target_manager;
 class shader_manager;
 class effect_manager;
 class bgfx_texture;
-class bgfx_effect;
+class bgfx_shader;
 class bgfx_target;
 class bgfx_view;
 class osd_options;
@@ -125,12 +125,12 @@ private:
 
 	std::unique_ptr<texture_manager> m_textures;
 	std::unique_ptr<target_manager> m_targets;
+	std::unique_ptr<shaderprog_manager> m_shaderprogs;
 	std::unique_ptr<shader_manager> m_shaders;
 	std::unique_ptr<effect_manager> m_effects;
-	std::unique_ptr<chain_manager> m_chains;
 
-	bgfx_effect *m_gui_effect[4];
-	bgfx_effect *m_screen_effect[4];
+	bgfx_shader *m_gui_shader[4];
+	bgfx_shader *m_screen_shader[4];
 	std::vector<uint32_t> m_seen_views;
 
 	std::map<uint32_t, rectangle_packer::packed_rectangle> m_hash_to_entry;

@@ -16,6 +16,9 @@
 #include <string>
 
 #include "texturehandleprovider.h"
+#include "statereader.h"
+
+class effect_manager;
 
 enum
 {
@@ -24,13 +27,15 @@ enum
 	TARGET_STYLE_CUSTOM
 };
 
-class bgfx_target : public bgfx_texture_handle_provider
+class bgfx_target : public bgfx_texture_handle_provider, public state_reader
 {
 public:
 	bgfx_target(std::string name, bgfx::TextureFormat::Enum format, uint16_t width, uint16_t height, uint16_t xprescale, uint16_t yprescale,
 		uint32_t style, bool double_buffer, bool filter, uint16_t scale, uint32_t screen);
 	bgfx_target(void *handle, uint16_t width, uint16_t height);
 	virtual ~bgfx_target();
+
+	static bgfx_target* from_json(const Value& value, const std::string &prefix, effect_manager& effects, uint32_t screen_index, uint16_t user_prescale, uint16_t max_prescale_size);
 
 	void page_flip();
 
@@ -57,6 +62,8 @@ public:
 	virtual int width_mul_factor() const override { return 1; }
 
 private:
+	static bool validate_parameters(const Value& value, const std::string &prefix);
+
 	std::string                 m_name;
 	bgfx::TextureFormat::Enum   m_format;
 	//bool                      m_readback;
@@ -81,6 +88,9 @@ private:
 	bool                        m_initialized;
 
 	const uint32_t              m_page_count;
+
+	static const int STYLE_COUNT = 3;
+	static const string_to_enum STYLE_NAMES[STYLE_COUNT];
 };
 
 #endif // __DRAWBGFX_TARGET__

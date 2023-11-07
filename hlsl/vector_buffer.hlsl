@@ -44,7 +44,7 @@ float3 apply_lut(float3 color)
 	float shift = floor(lutcoord.z);
 
 	lutcoord.x += shift * LUT_SCALE.y;
-	color.rgb = lerp(tex2D(LutSampler, lutcoord.xy).rgb, tex2D(LutSampler,
+	color.rgb = lerp(LutTexture.Sample(LutSampler, lutcoord.xy).rgb, LutTexture.Sample(LutSampler,
 		float2(lutcoord.x + LUT_SCALE.y, lutcoord.y)).rgb,
 		lutcoord.z - shift);
 	return color;
@@ -67,12 +67,6 @@ struct VS_INPUT
 	float4 Color : COLOR0;
 	float2 TexCoord : TEXCOORD0;
 	float2 VecTex : TEXCOORD1;
-};
-
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
 };
 
 //-----------------------------------------------------------------------------
@@ -99,9 +93,9 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 // Primary Pixel Shaders
 //-----------------------------------------------------------------------------
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	float4 BaseTexel = tex2D(DiffuseSampler, Input.TexCoord);
+	float4 BaseTexel = Diffuse.Sample(DiffuseSampler, Input.TexCoord);
 
 	if (LutEnable > 0.f)
 		BaseTexel.rgb = apply_lut(BaseTexel.rgb);

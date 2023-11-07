@@ -11,8 +11,6 @@
 cbuffer constants : register(b0)
 {
     float2 ScreenDims;
-    float2 TargetDims;
-    float2 SourceDims;
     float VectorScreen;
 
 	float Level0Weight;
@@ -86,14 +84,7 @@ struct VS_INPUT
     float3 Position : POSITION;
     float4 Color    : COLOR;
     float2 TexCoord : TEXCOORD0;
-    float3 VecTex   : TEXCOORD1;
-};
-
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-	float2 BloomCoord : TEXCOORD1;
+    float2 VecTex   : TEXCOORD1;
 };
 
 //-----------------------------------------------------------------------------
@@ -134,10 +125,7 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 	Output.Color = Input.Color;
 
 	Output.TexCoord = Input.TexCoord;
-	Output.TexCoord += 0.5f / TargetDims; // half texel offset correction (DX9)
-
 	Output.BloomCoord = Output.TexCoord;
-	Output.BloomCoord += 0.5f / SourceDims;
 
 	return Output;
 }
@@ -152,18 +140,18 @@ float3 GetNoiseFactor(float3 n, float random)
 	return 1.0f + random * max(0.0f, 0.25f * pow(E, -8 * n));
 }
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	float4 texel = tex2D(DiffuseSampler, Input.TexCoord);
+	float4 texel = DiffuseTexture.Sample(DiffuseSampler, Input.TexCoord);
 
-	float3 texelA = tex2D(BloomSamplerA, Input.BloomCoord.xy).rgb;
-	float3 texelB = tex2D(BloomSamplerB, Input.BloomCoord.xy).rgb;
-	float3 texelC = tex2D(BloomSamplerC, Input.BloomCoord.xy).rgb;
-	float3 texelD = tex2D(BloomSamplerD, Input.BloomCoord.xy).rgb;
-	float3 texelE = tex2D(BloomSamplerE, Input.BloomCoord.xy).rgb;
-	float3 texelF = tex2D(BloomSamplerF, Input.BloomCoord.xy).rgb;
-	float3 texelG = tex2D(BloomSamplerG, Input.BloomCoord.xy).rgb;
-	float3 texelH = tex2D(BloomSamplerH, Input.BloomCoord.xy).rgb;
+	float3 texelA = BloomTextureA.Sample(BloomSamplerA, Input.BloomCoord.xy).rgb;
+	float3 texelB = BloomTextureB.Sample(BloomSamplerB, Input.BloomCoord.xy).rgb;
+	float3 texelC = BloomTextureC.Sample(BloomSamplerC, Input.BloomCoord.xy).rgb;
+	float3 texelD = BloomTextureD.Sample(BloomSamplerD, Input.BloomCoord.xy).rgb;
+	float3 texelE = BloomTextureE.Sample(BloomSamplerE, Input.BloomCoord.xy).rgb;
+	float3 texelF = BloomTextureF.Sample(BloomSamplerF, Input.BloomCoord.xy).rgb;
+	float3 texelG = BloomTextureG.Sample(BloomSamplerG, Input.BloomCoord.xy).rgb;
+	float3 texelH = BloomTextureH.Sample(BloomSamplerH, Input.BloomCoord.xy).rgb;
 
 	float3 texelI = float3(0.0f, 0.0f, 0.0f);
 	float3 texelJ = float3(0.0f, 0.0f, 0.0f);
@@ -176,13 +164,13 @@ float4 ps_main(PS_INPUT Input) : COLOR
 	// vector screen uses twice -1 as many bloom levels
 	if (VectorScreen > 0.f)
 	{
-		texelI = tex2D(BloomSamplerI, Input.BloomCoord.xy).rgb;
-		texelJ = tex2D(BloomSamplerJ, Input.BloomCoord.xy).rgb;
-		texelK = tex2D(BloomSamplerK, Input.BloomCoord.xy).rgb;
-		texelL = tex2D(BloomSamplerL, Input.BloomCoord.xy).rgb;
-		texelM = tex2D(BloomSamplerM, Input.BloomCoord.xy).rgb;
-		texelN = tex2D(BloomSamplerN, Input.BloomCoord.xy).rgb;
-		texelO = tex2D(BloomSamplerO, Input.BloomCoord.xy).rgb;
+		texelI = BloomTextureI.Sample(BloomSamplerI, Input.BloomCoord.xy).rgb;
+		texelJ = BloomTextureJ.Sample(BloomSamplerJ, Input.BloomCoord.xy).rgb;
+		texelK = BloomTextureK.Sample(BloomSamplerK, Input.BloomCoord.xy).rgb;
+		texelL = BloomTextureL.Sample(BloomSamplerL, Input.BloomCoord.xy).rgb;
+		texelM = BloomTextureM.Sample(BloomSamplerM, Input.BloomCoord.xy).rgb;
+		texelN = BloomTextureN.Sample(BloomSamplerN, Input.BloomCoord.xy).rgb;
+		texelO = BloomTextureO.Sample(BloomSamplerO, Input.BloomCoord.xy).rgb;
 	}
 
 	float3 blend;

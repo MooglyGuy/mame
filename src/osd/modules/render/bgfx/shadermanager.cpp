@@ -4,141 +4,123 @@
 //
 //  shadermanager.cpp - BGFX shader manager
 //
-//  Maintains a mapping between strings and BGFX shaders,
-//  either vertex or pixel/fragment.
+//  Maintains a string-to-entry lookup of BGFX shader
+//  shaders, defined by shader.h
 //
 //============================================================
 
 #include "shadermanager.h"
 
-#include "emucore.h"
+#include "shader.h"
+#include "shadermanager.h"
+
+#include "path.h"
 
 #include "osdfile.h"
 #include "modules/lib/osdobj_common.h"
 
-#include <bx/file.h>
-#include <bx/math.h>
-#include <bx/readerwriter.h>
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
 
+#include <bx/readerwriter.h>
+#include <bx/file.h>
+
+#include <bgfx/bgfx.h>
+
+#include <utility>
+
+
+static bool prepare_shader_document(const std::string &name, const osd_options &options, rapidjson::Document &document)
+{
+	std::string full_name = name;
+	if (full_name.length() < 5 || (full_name.compare(full_name.length() - 5, 5, ".json") != 0))
+	{
+		full_name += ".json";
+	}
+
+	const std::string path = util::path_concat(options.bgfx_path(), "shaders", full_name);
+
+	bx::FileReader reader;
+	if (!bx::open(&reader, path.c_str()))
+	{
+		osd_printf_error("Unable to open shader file %s\n", path);
+		return false;
+	}
+
+	const int32_t size = bx::getSize(&reader);
+	std::unique_ptr<char []> data(new (std::nothrow) char [size + 1]);
+	if (!data)
+	{
+		osd_printf_error("Out of memory reading shader file %s\n", path);
+		bx::close(&reader);
+		return false;
+	}
+
+	bx::ErrorAssert err;
+	bx::read(&reader, reinterpret_cast<void*>(data.get()), size, &err);
+	bx::close(&reader);
+	data[size] = 0;
+
+	document.Parse<rapidjson::kParseCommentsFlag>(data.get());
+	data.reset();
+
+	if (document.HasParseError())
+	{
+		std::string error(rapidjson::GetParseError_En(document.GetParseError()));
+		osd_printf_error("Unable to parse shader %s. Errors returned:\n%s\n", path, error);
+		return false;
+	}
+
+	return true;
+}
+
+
+// keep constructor and destructor out-of-line so the header works with forward declarations
+
+shader_manager::shader_manager(shaderprog_manager& shaderprogs) : m_shaderprogs(shaderprogs)
+{
+}
 
 shader_manager::~shader_manager()
 {
-	for (std::pair<std::string, bgfx::ShaderHandle> shader : m_shaders)
-	{
-		bgfx::destroy(shader.second);
-	}
-	m_shaders.clear();
+	// the map will automatically dispose of the shaders
 }
 
-bgfx::ShaderHandle shader_manager::get_or_load_shader(const osd_options &options, const std::string &name)
+bgfx_shader* shader_manager::get_or_load_shader(const osd_options &options, const std::string &name)
 {
-	std::map<std::string, bgfx::ShaderHandle>::iterator iter = m_shaders.find(name);
+	const auto iter = m_shaders.find(name);
 	if (iter != m_shaders.end())
-	{
-		return iter->second;
-	}
+		return iter->second.get();
 
-	bgfx::ShaderHandle handle = load_shader(options, name);
-	if (handle.idx != bgfx::kInvalidHandle)
-	{
-		m_shaders[name] = handle;
-	}
-
-	return handle;
+	return load_shader(options, name);
 }
 
-bgfx::ShaderHandle shader_manager::load_shader(const osd_options &options, const std::string &name)
+bgfx_shader* shader_manager::load_shader(const osd_options &options, const std::string &name)
 {
-	std::string shader_path = make_path_string(options, name);
-	const bgfx::Memory* mem = load_mem(shader_path + name + ".bin");
-	if (mem != nullptr)
+	rapidjson::Document document;
+	if (!prepare_shader_document(name, options, document))
 	{
-		return bgfx::createShader(mem);
+		return nullptr;
 	}
 
-	return BGFX_INVALID_HANDLE;
-}
+	std::unique_ptr<bgfx_shader> shader = bgfx_shader::from_json(name, document, "Shader '" + name + "': ", options, m_shaderprogs);
 
-bool shader_manager::is_shader_present(const osd_options &options, const std::string &name)
-{
-	std::string shader_path = make_path_string(options, name);
-	std::string file_name = shader_path + name + ".bin";
-	bx::FileReader reader;
-	bx::ErrorAssert err;
-	if (bx::open(&reader, file_name.c_str()))
-	{
-		uint32_t expected_size(bx::getSize(&reader));
-		uint8_t *data = new uint8_t[expected_size];
-		uint32_t read_size = (uint32_t)bx::read(&reader, data, expected_size, &err);
-		delete [] data;
-		bx::close(&reader);
-
-		return expected_size == read_size;
-	}
-
-	return false;
-}
-
-std::string shader_manager::make_path_string(const osd_options &options, const std::string &name)
-{
-	std::string shader_path(options.bgfx_path());
-	shader_path += PATH_SEPARATOR "shaders" PATH_SEPARATOR;
-	switch (bgfx::getRendererType())
-	{
-		case bgfx::RendererType::Noop:
-		case bgfx::RendererType::Direct3D9:
-			shader_path += "dx9";
-			break;
-
-		case bgfx::RendererType::Direct3D11:
-		case bgfx::RendererType::Direct3D12:
-			shader_path += "dx11";
-			break;
-
-		case bgfx::RendererType::Gnm:
-			shader_path += "pssl";
-			break;
-
-		case bgfx::RendererType::Metal:
-			shader_path += "metal";
-			break;
-
-		case bgfx::RendererType::OpenGL:
-			shader_path += "glsl";
-			break;
-
-		case bgfx::RendererType::OpenGLES:
-			shader_path += "essl";
-			break;
-
-		case bgfx::RendererType::Vulkan:
-			shader_path += "spirv";
-			break;
-
-		default:
-			fatalerror("Unknown BGFX renderer type %d", bgfx::getRendererType());
-	}
-	shader_path += PATH_SEPARATOR;
-	return shader_path;
-}
-
-const bgfx::Memory* shader_manager::load_mem(const std::string &name)
-{
-	bx::FileReader reader;
-	if (bx::open(&reader, name.c_str()))
-	{
-		bx::ErrorAssert err;
-		uint32_t size(bx::getSize(&reader));
-		const bgfx::Memory* mem = bgfx::alloc(size + 1);
-		bx::read(&reader, mem->data, size, &err);
-		bx::close(&reader);
-
-		mem->data[mem->size - 1] = '\0';
-		return mem;
-	}
-	else
+	if (!shader)
 	{
 		osd_printf_error("Unable to load shader %s\n", name);
+		return nullptr;
 	}
-	return nullptr;
+
+	return m_shaders.emplace(name, std::move(shader)).first->second.get();
+}
+
+bool shader_manager::validate_shader(const osd_options &options, const std::string &name)
+{
+	rapidjson::Document document;
+	if (!prepare_shader_document(name, options, document))
+	{
+		return false;
+	}
+
+	return bgfx_shader::validate_value(document, "Shader '" + name + "': ", options);
 }

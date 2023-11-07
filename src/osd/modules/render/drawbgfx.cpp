@@ -9,9 +9,9 @@
 #include "drawbgfx.h"
 
 // render/bgfx
-#include "bgfx/effect.h"
-#include "bgfx/effectmanager.h"
+#include "bgfx/shader.h"
 #include "bgfx/shadermanager.h"
+#include "bgfx/shaderprogmanager.h"
 #include "bgfx/slider.h"
 #include "bgfx/target.h"
 #include "bgfx/target.h"
@@ -209,16 +209,16 @@ int video_bgfx::init(osd_interface &osd, osd_options const &options)
 	directory.reset();
 
 	// Verify baseline shaders
-	const bool gui_opaque_valid = effect_manager::validate_effect(options, "gui_opaque");
-	const bool gui_blend_valid = effect_manager::validate_effect(options, "gui_blend");
-	const bool gui_multiply_valid = effect_manager::validate_effect(options, "gui_multiply");
-	const bool gui_add_valid = effect_manager::validate_effect(options, "gui_add");
+	const bool gui_opaque_valid = shader_manager::validate_shader(options, "gui_opaque");
+	const bool gui_blend_valid = shader_manager::validate_shader(options, "gui_blend");
+	const bool gui_multiply_valid = shader_manager::validate_shader(options, "gui_multiply");
+	const bool gui_add_valid = shader_manager::validate_shader(options, "gui_add");
 	const bool all_gui_valid = gui_opaque_valid && gui_blend_valid && gui_multiply_valid && gui_add_valid;
 
-	const bool screen_opaque_valid = effect_manager::validate_effect(options, "screen_opaque");
-	const bool screen_blend_valid = effect_manager::validate_effect(options, "screen_blend");
-	const bool screen_multiply_valid = effect_manager::validate_effect(options, "screen_multiply");
-	const bool screen_add_valid = effect_manager::validate_effect(options, "screen_add");
+	const bool screen_opaque_valid = shader_manager::validate_shader(options, "screen_opaque");
+	const bool screen_blend_valid = shader_manager::validate_shader(options, "screen_blend");
+	const bool screen_multiply_valid = shader_manager::validate_shader(options, "screen_multiply");
+	const bool screen_add_valid = shader_manager::validate_shader(options, "screen_add");
 	const bool all_screen_valid = screen_opaque_valid && screen_blend_valid && screen_multiply_valid && screen_add_valid;
 
 	if (!all_gui_valid || !all_screen_valid)
@@ -620,8 +620,8 @@ renderer_bgfx::~renderer_bgfx()
 	// persist settings across fullscreen toggle
 	if (m_config)
 		m_config->get_first_child()->copy_into(m_module().persistent_settings());
-	else if (m_chains)
-		m_chains->save_config(m_module().persistent_settings());
+	else if (m_effects)
+		m_effects->save_config(m_module().persistent_settings());
 
 	bgfx::reset(0, 0, BGFX_RESET_NONE);
 
@@ -657,6 +657,20 @@ bool renderer_bgfx::create()
 	m_textures = std::make_unique<texture_manager>();
 	m_targets = std::make_unique<target_manager>(*m_textures);
 
+	m_shaderprogs = std::make_unique<shaderprog_manager>();
+	m_shaders = std::make_unique<shader_manager>(*m_shaderprogs);
+
+	// Create program from shaders.
+	m_gui_shader[0] = m_shaders->get_or_load_shader(m_module().options(), "gui_opaque");
+	m_gui_shader[1] = m_shaders->get_or_load_shader(m_module().options(), "gui_blend");
+	m_gui_shader[2] = m_shaders->get_or_load_shader(m_module().options(), "gui_multiply");
+	m_gui_shader[3] = m_shaders->get_or_load_shader(m_module().options(), "gui_add");
+
+	m_screen_shader[0] = m_shaders->get_or_load_shader(m_module().options(), "screen_opaque");
+	m_screen_shader[1] = m_shaders->get_or_load_shader(m_module().options(), "screen_blend");
+	m_screen_shader[2] = m_shaders->get_or_load_shader(m_module().options(), "screen_multiply");
+	m_screen_shader[3] = m_shaders->get_or_load_shader(m_module().options(), "screen_add");
+
 	if (window().index() != 0)
 	{
 #ifdef OSD_WINDOWS
@@ -679,27 +693,27 @@ bool renderer_bgfx::create()
 			m_ortho_view->set_backbuffer(m_framebuffer);
 	}
 
-	m_shaders = std::make_unique<shader_manager>();
-	m_effects = std::make_unique<effect_manager>(*m_shaders);
+	m_shaderprogs = std::make_unique<shaderprog_manager>();
+	m_shaders = std::make_unique<shader_manager>(*m_shaderprogs);
 
 	// Create program from shaders.
-	m_gui_effect[0] = m_effects->get_or_load_effect(m_module().options(), "gui_opaque");
-	m_gui_effect[1] = m_effects->get_or_load_effect(m_module().options(), "gui_blend");
-	m_gui_effect[2] = m_effects->get_or_load_effect(m_module().options(), "gui_multiply");
-	m_gui_effect[3] = m_effects->get_or_load_effect(m_module().options(), "gui_add");
+	m_gui_shader[0] = m_shaders->get_or_load_shader(m_module().options(), "gui_opaque");
+	m_gui_shader[1] = m_shaders->get_or_load_shader(m_module().options(), "gui_blend");
+	m_gui_shader[2] = m_shaders->get_or_load_shader(m_module().options(), "gui_multiply");
+	m_gui_shader[3] = m_shaders->get_or_load_shader(m_module().options(), "gui_add");
 
-	m_screen_effect[0] = m_effects->get_or_load_effect(m_module().options(), "screen_opaque");
-	m_screen_effect[1] = m_effects->get_or_load_effect(m_module().options(), "screen_blend");
-	m_screen_effect[2] = m_effects->get_or_load_effect(m_module().options(), "screen_multiply");
-	m_screen_effect[3] = m_effects->get_or_load_effect(m_module().options(), "screen_add");
+	m_screen_shader[0] = m_shaders->get_or_load_shader(m_module().options(), "screen_opaque");
+	m_screen_shader[1] = m_shaders->get_or_load_shader(m_module().options(), "screen_blend");
+	m_screen_shader[2] = m_shaders->get_or_load_shader(m_module().options(), "screen_multiply");
+	m_screen_shader[3] = m_shaders->get_or_load_shader(m_module().options(), "screen_add");
 
 	const uint32_t max_prescale_size = std::min(2u * std::max(wdim.width(), wdim.height()), m_module().max_texture_size());
-	m_chains = std::make_unique<chain_manager>(
+	m_effects = std::make_unique<effect_manager>(
 			window().machine(),
 			m_module().options(),
 			*m_textures,
 			*m_targets,
-			*m_effects,
+			*m_shaders,
 			window().index(),
 			*this,
 			window().prescale(),
@@ -857,9 +871,9 @@ void renderer_bgfx::render_post_screen_quad(int view, render_primitive* prim, bg
 
 	uint32_t blend = PRIMFLAG_GET_BLENDMODE(prim->flags);
 	bgfx::setVertexBuffer(0,buffer);
-	bgfx::setTexture(0, m_screen_effect[blend]->uniform("s_tex")->handle(), m_targets->target(screen, "output")->texture(), texture_flags);
+	bgfx::setTexture(0, m_screen_shader[blend]->uniform("s_tex")->handle(), m_targets->target(screen, "output")->texture(), texture_flags);
 
-	bgfx_uniform* inv_view_dims = m_screen_effect[blend]->uniform("u_inv_view_dims");
+	bgfx_uniform* inv_view_dims = m_screen_shader[blend]->uniform("u_inv_view_dims");
 	if (inv_view_dims)
 	{
 		float values[2] = { -1.0f / s_width[window_index], 1.0f / s_height[window_index] };
@@ -867,7 +881,7 @@ void renderer_bgfx::render_post_screen_quad(int view, render_primitive* prim, bg
 		inv_view_dims->upload();
 	}
 
-	m_screen_effect[blend]->submit(m_ortho_view->get_index());
+	m_screen_shader[blend]->submit(m_ortho_view->get_index());
 }
 
 void renderer_bgfx::render_avi_quad()
@@ -896,10 +910,10 @@ void renderer_bgfx::render_avi_quad()
 	vertex(&vertices[5], x[0], y[0], 0, rgba, u[0], v[0]);
 
 	bgfx::setVertexBuffer(0,&buffer);
-	bgfx::setTexture(0, m_gui_effect[PRIMFLAG_GET_BLENDMODE(BLENDMODE_NONE)]->uniform("s_tex")->handle(), m_avi_target->texture());
+	bgfx::setTexture(0, m_gui_shader[PRIMFLAG_GET_BLENDMODE(BLENDMODE_NONE)]->uniform("s_tex")->handle(), m_avi_target->texture());
 
-	bgfx_effect* effect = m_gui_effect[PRIMFLAG_GET_BLENDMODE(BLENDMODE_NONE)];
-	bgfx_uniform* inv_view_dims = effect->uniform("u_inv_view_dims");
+	bgfx_shader* shader = m_gui_shader[PRIMFLAG_GET_BLENDMODE(BLENDMODE_NONE)];
+	bgfx_uniform* inv_view_dims = shader->uniform("u_inv_view_dims");
 	if (inv_view_dims)
 	{
 		float values[2] = { -1.0f / s_width[0], 1.0f / s_height[0] };
@@ -907,7 +921,7 @@ void renderer_bgfx::render_avi_quad()
 		inv_view_dims->upload();
 	}
 
-	effect->submit(s_current_view);
+	shader->submit(s_current_view);
 	s_current_view++;
 }
 
@@ -952,13 +966,13 @@ void renderer_bgfx::render_textured_quad(render_primitive* prim, bgfx::Transient
 			, texture_flags, prim->texture.unique_id, prim->texture.old_id);
 	}
 
-	bgfx_effect** effects = is_screen ? m_screen_effect : m_gui_effect;
+	bgfx_shader** shaders = is_screen ? m_screen_shader : m_gui_shader;
 
 	uint32_t blend = PRIMFLAG_GET_BLENDMODE(prim->flags);
 	bgfx::setVertexBuffer(0,buffer);
-	bgfx::setTexture(0, effects[blend]->uniform("s_tex")->handle(), texture);
+	bgfx::setTexture(0, shaders[blend]->uniform("s_tex")->handle(), texture);
 
-	bgfx_uniform* inv_view_dims = effects[blend]->uniform("u_inv_view_dims");
+	bgfx_uniform* inv_view_dims = shaders[blend]->uniform("u_inv_view_dims");
 	if (inv_view_dims)
 	{
 		float values[2] = { -1.0f / s_width[window_index], 1.0f / s_height[window_index] };
@@ -966,7 +980,7 @@ void renderer_bgfx::render_textured_quad(render_primitive* prim, bgfx::Transient
 		inv_view_dims->upload();
 	}
 
-	effects[blend]->submit(m_ortho_view->get_index());
+	shaders[blend]->submit(m_ortho_view->get_index());
 
 	if (is_screen)
 	{
@@ -1201,7 +1215,7 @@ bool renderer_bgfx::draw(int update)
 	}
 
 	window().m_primlist->acquire_lock();
-	uint32_t num_screens = m_chains->update_screen_textures(s_current_view, window().m_primlist->first(), window());
+	uint32_t num_screens = m_effects->update_screen_textures(s_current_view, window().m_primlist->first(), window());
 	window().m_primlist->release_lock();
 
 	bool skip_frame = update_dimensions();
@@ -1222,12 +1236,12 @@ bool renderer_bgfx::draw(int update)
 		if (m_config)
 		{
 			osd_printf_verbose("BGFX: Applying configuration for window %d\n", window().index());
-			m_chains->load_config(*m_config->get_first_child());
+			m_effects->load_config(*m_config->get_first_child());
 			m_config.reset();
 		}
 
-		uint32_t chain_view_count = m_chains->process_screen_chains(s_current_view, window());
-		s_current_view += chain_view_count;
+		uint32_t effect_view_count = m_effects->process_screen_effects(s_current_view, window());
+		s_current_view += effect_view_count;
 	}
 
 	if (s_current_view > m_max_view)
@@ -1274,9 +1288,9 @@ bool renderer_bgfx::draw(int update)
 		if (status != BUFFER_EMPTY && status != BUFFER_SCREEN)
 		{
 			bgfx::setVertexBuffer(0, &buffer);
-			bgfx::setTexture(0, m_gui_effect[blend]->uniform("s_tex")->handle(), m_texture_cache->texture());
+			bgfx::setTexture(0, m_gui_shader[blend]->uniform("s_tex")->handle(), m_texture_cache->texture());
 
-			bgfx_uniform* inv_view_dims = m_gui_effect[blend]->uniform("u_inv_view_dims");
+			bgfx_uniform* inv_view_dims = m_gui_shader[blend]->uniform("u_inv_view_dims");
 			if (inv_view_dims)
 			{
 				float values[2] = { -1.0f / s_width[window_index], 1.0f / s_height[window_index] };
@@ -1284,7 +1298,7 @@ bool renderer_bgfx::draw(int update)
 				inv_view_dims->upload();
 			}
 
-			m_gui_effect[blend]->submit(m_ortho_view->get_index());
+			m_gui_shader[blend]->submit(m_ortho_view->get_index());
 		}
 
 		if (status != BUFFER_DONE && status != BUFFER_PRE_FLUSH)
@@ -1400,21 +1414,21 @@ void renderer_bgfx::setup_ortho_view()
 
 render_primitive_list *renderer_bgfx::get_primitives()
 {
-	// determines whether the screen container is transformed by the chain's shaders
-	bool chain_transform = false;
+	// determines whether the screen container is transformed by the effect's shaders
+	bool effect_transform = false;
 
-	// check the first chain
-	bgfx_chain* chain = this->m_chains->screen_chain(0);
-	if (chain != nullptr)
+	// check the first effect
+	bgfx_effect* effect = this->m_effects->screen_effect(0);
+	if (effect != nullptr)
 	{
-		chain_transform = chain->transform();
+		effect_transform = effect->transform();
 	}
 
 	osd_dim wdim = window().get_size();
 	if (wdim.width() > 0 && wdim.height() > 0)
 		window().target()->set_bounds(wdim.width(), wdim.height(), window().pixel_aspect());
 
-	window().target()->set_transform_container(!chain_transform);
+	window().target()->set_transform_container(!effect_transform);
 	return &window().target()->get_primitives();
 }
 
@@ -1456,7 +1470,7 @@ renderer_bgfx::buffer_status renderer_bgfx::buffer_primitives(bool atlas_valid, 
 							return BUFFER_PRE_FLUSH;
 						}
 
-						if (PRIMFLAG_GET_SCREENTEX((*prim)->flags) && m_chains->has_applicable_chain(screen))
+						if (PRIMFLAG_GET_SCREENTEX((*prim)->flags) && m_effects->has_applicable_effect(screen))
 						{
 #if SCENE_VIEW
 							setup_view(s_current_view, true);
@@ -1673,7 +1687,7 @@ void renderer_bgfx::allocate_buffer(render_primitive *prim, uint32_t blend, bgfx
 std::vector<ui::menu_item> renderer_bgfx::get_slider_list()
 {
 	m_sliders_dirty = false;
-	return m_chains->get_slider_list();
+	return m_effects->get_slider_list();
 }
 
 void renderer_bgfx::set_sliders_dirty()
@@ -1720,5 +1734,5 @@ void renderer_bgfx::save_config(util::xml::data_node &parentnode)
 	if (m_config)
 		m_config->get_first_child()->copy_into(parentnode);
 	else
-		m_chains->save_config(parentnode);
+		m_effects->save_config(parentnode);
 }

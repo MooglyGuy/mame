@@ -44,11 +44,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float2 TexCoord : TEXCOORD0;
-};
-
 //-----------------------------------------------------------------------------
 // Pre-scale Vertex Shader
 //-----------------------------------------------------------------------------
@@ -72,7 +67,7 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 // Pre-scale Pixel Shader
 //-----------------------------------------------------------------------------
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
 	float2 Scale = TargetDims / SourceDims;
 
@@ -87,5 +82,5 @@ float4 ps_main(PS_INPUT Input) : COLOR
 
 	float2 TexCoord = (i + f) / SourceDims;
 
-	return tex2D(DiffuseSampler, TexCoord);
+	return DiffuseTexture.Sample(DiffuseSampler, TexCoord);
 }

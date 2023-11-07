@@ -82,13 +82,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-	float2 ScreenCoord : TEXCOORD1;
-};
-
 //-----------------------------------------------------------------------------
 // Constants
 //-----------------------------------------------------------------------------
@@ -167,13 +160,13 @@ float2 GetShadowCoord(float2 TargetCoord, float2 SourceCoord)
 	return shadowFrac * shadowUV;
 }
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
 	float2 ScreenCoord = Input.ScreenCoord;
 	float2 BaseCoord = GetAdjustedCoords(Input.TexCoord);
 
 	// Color
-	float4 BaseColor = tex2D(DiffuseSampler, BaseCoord);
+	float4 BaseColor = DiffuseTexture.Sample(DiffuseSampler, BaseCoord);
 
 	// clip border
 	if (BaseCoord.x < 0.0 || BaseCoord.y < 0.0 || BaseCoord.x > 1.0 || BaseCoord.y > 1.0)
@@ -206,7 +199,7 @@ float4 ps_main(PS_INPUT Input) : COLOR
 	{
 		float2 ShadowCoord = GetShadowCoord(ScreenCoord, BaseCoord);
 
-		float4 ShadowColor = tex2D(ShadowSampler, ShadowCoord);
+		float4 ShadowColor = ShadowTexture.Sample(ShadowSampler, ShadowCoord);
 		float3 ShadowMaskColor = lerp(1.0, ShadowColor.rgb, ShadowAlpha);
 		float ShadowMaskClear = (1.0 - ShadowColor.a) * ShadowAlpha;
 

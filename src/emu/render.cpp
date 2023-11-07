@@ -329,8 +329,7 @@ void render_texture::reset(render_manager &manager, texture_scaler_func scaler, 
 		m_scaler = scaler;
 		m_param = param;
 	}
-	m_old_id = m_id;
-	m_id = ~0L;
+	m_id = ~0ULL;
 }
 
 
@@ -417,10 +416,8 @@ void render_texture::get_scaled(u32 dwidth, u32 dheight, render_texinfo &texinfo
 	if (dwidth == 0) dwidth = 1;
 	if (dheight == 0) dheight = 1;
 
+	texinfo.old_id = texinfo.unique_id;
 	texinfo.unique_id = m_id;
-	texinfo.old_id = m_old_id;
-	if (m_old_id != ~0ULL)
-		m_old_id = ~0ULL;
 
 	// are we scaler-free? if so, just return the source bitmap
 	if (m_scaler == nullptr || (m_bitmap != nullptr && swidth == dwidth && sheight == dheight))

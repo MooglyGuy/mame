@@ -21,6 +21,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <bgfx/bgfx.h>
 
@@ -48,17 +49,24 @@ public:
 
 private:
 	bgfx_texture* create_texture(const std::string &name);
+	uint32_t texture_compute_hash(void *texture, uint32_t flags);
 
 	struct sequenced_handle
 	{
 		bgfx::TextureHandle handle;
-		uint32_t seqid;
+		uint32_t hash;
+		void *base;
 		int width;
 		int height;
+		uint32_t flags;
+		uint64_t key;
+		uint32_t seqid;
 	};
 
+	bool find_mame_texture(uint32_t hash, void *base, int width, int height, uint32_t flags, uint64_t key, sequenced_handle & out_mame_handle);
+
 	std::map<std::string, std::pair<bgfx_texture_handle_provider *, std::unique_ptr<bgfx_texture_handle_provider> > > m_textures;
-	std::map<uint64_t, sequenced_handle> m_mame_textures;
+	std::vector<sequenced_handle> m_mame_textures;
 };
 
 #endif // MAME_RENDER_BGFX_TEXTUREMANAGER_H

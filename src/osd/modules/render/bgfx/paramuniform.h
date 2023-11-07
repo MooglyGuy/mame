@@ -2,7 +2,7 @@
 // copyright-holders:Ryan Holtz
 //============================================================
 //
-//  paramuniform.h - BGFX shader chain parametric uniform
+//  paramuniform.h - BGFX shader effect parametric uniform
 //
 //============================================================
 
@@ -20,9 +20,13 @@ class bgfx_param_uniform : public bgfx_entry_uniform
 public:
 	bgfx_param_uniform(bgfx_uniform* uniform, bgfx_parameter* param);
 
+	static bgfx_entry_uniform* from_json(const Value& value, const std::string &prefix, bgfx_uniform* uniform, std::map<std::string, bgfx_parameter*>& params);
+
 	virtual void bind() override;
 
 private:
+	static bool validate_parameters(const Value& value, const std::string &prefix);
+
 	bgfx_parameter* m_param;
 };
 

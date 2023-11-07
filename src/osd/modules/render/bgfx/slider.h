@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "statereader.h"
+
 #include <bgfx/bgfx.h>
 
 #include <cmath>
@@ -19,11 +21,12 @@
 #include <string>
 #include <vector>
 
+class effect_manager;
 struct slider_state;
 
 class running_machine;
 
-class bgfx_slider
+class bgfx_slider : public state_reader
 {
 public:
 	enum slider_type
@@ -50,6 +53,8 @@ public:
 	bgfx_slider(running_machine& machine, std::string &&name, float min, float def, float max, float step, slider_type type, screen_type screen, std::string format, std::string description, std::vector<std::string>& strings);
 	virtual ~bgfx_slider();
 
+	static std::vector<bgfx_slider*> from_json(const Value& value, const std::string &prefix, effect_manager& effects, uint32_t screen_index);
+
 	int32_t update(std::string *str, int32_t newval);
 
 	// Getters
@@ -68,6 +73,9 @@ public:
 	void import(float val);
 
 protected:
+	static bool get_values(const Value& value, const std::string &prefix, const std::string &name, float* values, const int count);
+	static bool validate_parameters(const Value& value, const std::string &prefix);
+
 	std::unique_ptr<slider_state> create_core_slider();
 	int32_t as_int() const { return int32_t(floor(m_value / m_step + 0.5f)); }
 
@@ -84,6 +92,11 @@ protected:
 	float           m_value;
 	std::unique_ptr<slider_state> m_slider_state;
 	running_machine&m_machine;
+
+	static const int TYPE_COUNT = 5;
+	static const string_to_enum TYPE_NAMES[TYPE_COUNT];
+	static const int SCREEN_COUNT = 11;
+	static const string_to_enum SCREEN_NAMES[SCREEN_COUNT];
 };
 
 #endif // MAME_RENDER_BGFX_SLIDER_H

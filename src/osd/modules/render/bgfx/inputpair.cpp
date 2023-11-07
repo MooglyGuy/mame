@@ -11,8 +11,8 @@
 
 #include "inputpair.h"
 
-#include "chainmanager.h"
-#include "effect.h"
+#include "effectmanager.h"
+#include "shader.h"
 #include "slider.h"
 #include "sliderdirtynotifier.h"
 #include "target.h"
@@ -24,13 +24,13 @@
 #include "util/strformat.h"
 
 
-bgfx_input_pair::bgfx_input_pair(int index, std::string sampler, std::string texture, std::vector<std::string> available_textures, std::string selection, chain_manager& chains, uint32_t screen_index)
+bgfx_input_pair::bgfx_input_pair(int index, std::string sampler, std::string texture, std::vector<std::string> available_textures, std::string selection, effect_manager& effects, uint32_t screen_index)
 	: m_index(index)
 	, m_sampler(sampler)
 	, m_texture(texture)
 	, m_available_textures(available_textures)
 	, m_selection(selection)
-	, m_chains(chains)
+	, m_effects(effects)
 {
 	if (m_available_textures.size() > 0)
 	{
@@ -45,14 +45,14 @@ bgfx_input_pair::~bgfx_input_pair()
 	m_slider_state.reset();
 }
 
-void bgfx_input_pair::bind(bgfx_effect *effect, const int32_t screen) const
+void bgfx_input_pair::bind(bgfx_shader *shader, const int32_t screen) const
 {
-	if (effect->uniform(m_sampler) == nullptr)
+	if (shader->uniform(m_sampler) == nullptr)
 		return;
 
 	std::string name = m_texture + std::to_string(screen);
 
-	bgfx_texture_handle_provider* provider = chains().textures().provider(name);
+	bgfx_texture_handle_provider* provider = effects().textures().provider(name);
 	if (!provider)
 		return;
 
@@ -60,28 +60,28 @@ void bgfx_input_pair::bind(bgfx_effect *effect, const int32_t screen) const
 	float width_margin(provider->width_margin());
 	float height(provider->height());
 
-	bgfx_uniform *tex_size = effect->uniform("u_tex_size" + std::to_string(m_index));
+	bgfx_uniform *tex_size = shader->uniform("u_tex_size" + std::to_string(m_index));
 	if (tex_size && provider)
 	{
 		float values[2] = { rowpixels, height };
 		tex_size->set(values, sizeof(float) * 2);
 	}
 
-	bgfx_uniform *inv_tex_size = effect->uniform("u_inv_tex_size" + std::to_string(m_index));
+	bgfx_uniform *inv_tex_size = shader->uniform("u_inv_tex_size" + std::to_string(m_index));
 	if (inv_tex_size && provider)
 	{
 		float values[2] = { 1.0f / rowpixels, 1.0f / height };
 		inv_tex_size->set(values, sizeof(float) * 2);
 	}
 
-	bgfx_uniform *tex_bounds = effect->uniform("u_tex_bounds" + std::to_string(m_index));
+	bgfx_uniform *tex_bounds = shader->uniform("u_tex_bounds" + std::to_string(m_index));
 	if (tex_bounds && provider)
 	{
 		float values[4] = { width_margin / rowpixels, 0.0f, 1.0f + width_margin / rowpixels, 1.0f };
 		tex_bounds->set(values, sizeof(float) * 4);
 	}
 
-	bgfx::setTexture(m_index, effect->uniform(m_sampler)->handle(), chains().textures().handle(name));
+	bgfx::setTexture(m_index, shader->uniform(m_sampler)->handle(), effects().textures().handle(name));
 }
 
 int32_t bgfx_input_pair::texture_changed(int32_t id, std::string *str, int32_t newval)
@@ -91,7 +91,7 @@ int32_t bgfx_input_pair::texture_changed(int32_t id, std::string *str, int32_t n
 		m_current_texture = newval;
 		m_texture = m_available_textures[m_current_texture];
 
-		chains().slider_notifier().set_sliders_dirty();
+		effects().slider_notifier().set_sliders_dirty();
 	}
 
 	if (str != nullptr)
@@ -125,7 +125,7 @@ void bgfx_input_pair::create_selection_slider(uint32_t screen_index)
 
 	using namespace std::placeholders;
 	m_slider_state = std::make_unique<slider_state>(
-			util::string_format("Window %1$u, Screen %1$u %3$s", chains().window_index(), screen_index, m_selection),
+			util::string_format("Window %1$u, Screen %1$u %3$s", effects().window_index(), screen_index, m_selection),
 			minval, defval, maxval, incval,
 			std::bind(&bgfx_input_pair::texture_changed, this, screen_index, _1, _2));
 
@@ -136,7 +136,7 @@ void bgfx_input_pair::create_selection_slider(uint32_t screen_index)
 
 bool bgfx_input_pair::needs_sliders()
 {
-	return chains().screen_count() > 0 && m_available_textures.size() > 1;
+	return effects().screen_count() > 0 && m_available_textures.size() > 1;
 }
 
 std::vector<ui::menu_item> bgfx_input_pair::get_slider_list()

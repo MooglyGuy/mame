@@ -10,23 +10,24 @@
 
 cbuffer constants : register(b0)
 {
-	float2 ScreenDims;
-	float2 SourceDims;
-	float2 TargetDims;
-	float2 QuadDims;
+	float2 ScreenDims; // 0
+	float2 SourceDims; // 8
 
-	float SwapXY;
+	float2 TargetDims; // 16
+	float2 QuadDims; // 24
 
-	float2 ScreenScale;
-	float2 ScreenOffset;
+	float SwapXY; // 32
+	float2 ScreenScale; // 36
 
-	float ScanlineAlpha;
-	float ScanlineScale;
-	float ScanlineHeight;
-	float ScanlineVariation;
-	float ScanlineOffset;
-	float ScanlineBrightScale;
-	float ScanlineBrightOffset;
+	float2 ScreenOffset; // 48
+
+	float ScanlineAlpha; // 56
+	float ScanlineScale; // 60
+	float ScanlineHeight; // 64
+	float ScanlineVariation; // 68
+	float ScanlineOffset; // 72
+	float ScanlineBrightScale; // 76
+	float ScanlineBrightOffset; // 80
 }
 
 //-----------------------------------------------------------------------------
@@ -40,25 +41,18 @@ SamplerState DiffuseSampler : register(s0);
 // Vertex Definitions
 //-----------------------------------------------------------------------------
 
-struct VS_INPUT
+struct VS_OUTPUT
 {
 	float4 Position : SV_POSITION;
-	float4 Color : COLOR0;
 	float2 TexCoord : TEXCOORD0;
 };
 
-struct VS_OUTPUT
+struct VS_INPUT
 {
 	float3 Position : POSITION;
 	float4 Color : COLOR0;
 	float2 TexCoord : TEXCOORD0;
 	float2 VecTex : TEXCOORD1;
-};
-
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
 };
 
 //-----------------------------------------------------------------------------
@@ -83,7 +77,6 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 	Output.Position.xy *= 2.0f; // zoom
 
 	Output.TexCoord = Input.TexCoord;
-	Output.Color = Input.Color;
 
 	return Output;
 }
@@ -109,10 +102,10 @@ float2 GetAdjustedCoords(float2 coord)
 	return coord;
 }
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
 	// Color
-	float4 BaseColor = tex2D(DiffuseSampler, Input.TexCoord);
+	float4 BaseColor = DiffuseTexture.Sample(DiffuseSampler, Input.TexCoord);
 
 	// clip border
 	if (Input.TexCoord.x < 0.0f || Input.TexCoord.y < 0.0f || Input.TexCoord.x > 1.0f || Input.TexCoord.y > 1.0f)

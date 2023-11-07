@@ -205,7 +205,7 @@ shaders::~shaders()
 //  shaders::save_snapshot
 //============================================================
 
-void shaders::save_snapshot()
+void shaders::save_snapshot(bool do_render_snap)
 {
 	if (!enabled())
 		return;
@@ -233,7 +233,7 @@ void shaders::save_snapshot()
 	}
 	snap_texture->GetSurfaceLevel(0, &snap_target);
 
-	render_snap = true;
+	render_snap = do_render_snap;
 }
 
 
@@ -300,12 +300,16 @@ void shaders::render_snapshot(IDirect3DSurface9 *surface)
 	// copy the texture
 	HRESULT result = d3d->get_device()->GetRenderTargetData(surface, snap_copy_target.Get());
 	if (FAILED(result))
+	{
 		return;
+	}
 
 	D3DLOCKED_RECT rect;
 	result = snap_copy_target->LockRect(&rect, nullptr, D3DLOCK_DISCARD);
 	if (FAILED(result))
+	{
 		return;
+	}
 
 	for (int y = 0; y < height; y++)
 	{
@@ -321,7 +325,9 @@ void shaders::render_snapshot(IDirect3DSurface9 *surface)
 	emu_file file(machine->options().snapshot_directory(), OPEN_FLAG_WRITE | OPEN_FLAG_CREATE | OPEN_FLAG_CREATE_PATHS);
 	std::error_condition const filerr = machine->video().open_next(file, "png");
 	if (filerr)
+	{
 		return;
+	}
 
 	// add two text entries describing the image
 	std::string text1 = std::string(emulator_info::get_appname()).append(" ").append(emulator_info::get_build_version());
@@ -333,11 +339,15 @@ void shaders::render_snapshot(IDirect3DSurface9 *surface)
 	// now do the actual work
 	std::error_condition const error = util::png_write_bitmap(file, &pnginfo, snapshot, 1 << 24, nullptr);
 	if (error)
+	{
 		osd_printf_error("Error generating PNG for HLSL snapshot (%s:%d %s)\n", error.category().name(), error.value(), error.message());
+	}
 
 	result = snap_copy_target->UnlockRect();
 	if (FAILED(result))
+	{
 		osd_printf_verbose("Direct3D: Error %08lX during texture UnlockRect call\n", result);
+	}
 
 	snap_texture.Reset();
 	snap_target.Reset();
@@ -535,6 +545,7 @@ bool shaders::init(IDirect3D9 *d3dobj, running_machine *machine, renderer_d3d9 *
 		options->bloom_level6_weight = winoptions.screen_bloom_lvl6_weight();
 		options->bloom_level7_weight = winoptions.screen_bloom_lvl7_weight();
 		options->bloom_level8_weight = winoptions.screen_bloom_lvl8_weight();
+		get_vector(winoptions.screen_bloom_shift(), 2, options->bloom_shift, true);
 		strncpy(options->lut_texture, winoptions.screen_lut_texture(), sizeof(options->lut_texture));
 		options->lut_enable = winoptions.screen_lut_enable();
 		strncpy(options->ui_lut_texture, winoptions.ui_lut_texture(), sizeof(options->ui_lut_texture));
@@ -1206,10 +1217,6 @@ int shaders::scanline_pass(d3d_render_target *rt, int source_index, poly_info *p
 {
 	int next_index = source_index;
 
-	// skip scanline if alpha is 0
-	//if (options->scanline_alpha == 0.0f)
-		//return next_index;
-
 	screen_device_enumerator screen_iterator(machine->root_device());
 	screen_device *screen = screen_iterator.byindex(target_to_screen[curr_target]);
 	render_container &screen_container = screen->container();
@@ -1330,6 +1337,26 @@ int shaders::post_pass(d3d_render_target *rt, int source_index, poly_info *poly,
 int shaders::chroma_pass(d3d_render_target *rt, int source_index, poly_info *poly, int vertnum)
 {
 	int next_index = source_index;
+
+	static int s_frame_num = 0;
+	s_frame_num++;
+	if (s_frame_num == 60)
+	{
+		save_snapshot(false);
+
+		set_curr_effect(default_effect.get());
+		curr_effect->update_uniforms();
+
+		curr_effect->set_texture("Diffuse", rt->target_texture[next_index].Get());
+		curr_effect->set_texture("LutTexture", nullptr);
+		curr_effect->set_bool("LutEnable", false);
+		curr_effect->set_bool("UiLutEnable", false);
+
+		d3d->set_blendmode(BLENDMODE_NONE);
+		blit(snap_target.Get(), true, D3DPT_TRIANGLELIST, 0, 2);
+
+		render_snapshot(snap_target.Get());
+	}
 
 	set_curr_effect(chroma_effect.get());
 	curr_effect->update_uniforms();
@@ -1652,7 +1679,6 @@ void shaders::render_quad(poly_info *poly, int vertnum)
 		next_index = vector_buffer_pass(rt, next_index, poly, vertnum);
 		next_index = deconverge_pass(rt, next_index, poly, vertnum);
 		next_index = defocus_pass(rt, next_index, poly, vertnum);
-		//next_index = phosphor_pass(rt, next_index, poly, vertnum);
 
 		// create bloom textures
 		int old_index = next_index;
@@ -2100,6 +2126,7 @@ enum slider_option
 	SLIDER_NTSC_Q_VALUE,
 	SLIDER_NTSC_SCAN_TIME,
 	SLIDER_LUT_ENABLE,
+	SLIDER_BLOOM_SHIFT,
 };
 
 enum slider_screen_type
@@ -2186,6 +2213,7 @@ slider_desc shaders::s_sliders[] =
 	{ "NTSC Q Signal Bandwidth (MHz)",      0,    60,  2100, 5, SLIDER_FLOAT,    SLIDER_SCREEN_TYPE_LCD_OR_RASTER, SLIDER_NTSC_Q_VALUE,            0.01f,    "%1.2f", {} },
 	{ "NTSC Scanline Duration (uSec)",      0,  5260, 10000, 1, SLIDER_FLOAT,    SLIDER_SCREEN_TYPE_LCD_OR_RASTER, SLIDER_NTSC_SCAN_TIME,          0.01f,    "%1.2f", {} },
 	{ "3D LUT (Screen)",                    0,     0,     1, 1, SLIDER_INT_ENUM, SLIDER_SCREEN_TYPE_ANY,           SLIDER_LUT_ENABLE,              0,        "%s",    { "Off", "On" } },
+	{ "Bloom Shift",                     -100,     0,   100, 1, SLIDER_VEC2,     SLIDER_SCREEN_TYPE_VECTOR,        SLIDER_BLOOM_SHIFT,             0.01f,    "%1.2f", {} },
 	{ nullptr, 0, 0, 0, 0, 0, 0, -1, 0, nullptr, {} }
 };
 
@@ -2252,6 +2280,7 @@ void *shaders::get_slider_option(int id, int index)
 		case SLIDER_BLOOM_LVL6_SCALE: return &(options->bloom_level6_weight);
 		case SLIDER_BLOOM_LVL7_SCALE: return &(options->bloom_level7_weight);
 		case SLIDER_BLOOM_LVL8_SCALE: return &(options->bloom_level8_weight);
+		case SLIDER_BLOOM_SHIFT: return &(options->bloom_shift);
 		case SLIDER_NTSC_ENABLE: return &(options->yiq_enable);
 		case SLIDER_NTSC_JITTER: return &(options->yiq_jitter);
 		case SLIDER_NTSC_A_VALUE: return &(options->yiq_a);

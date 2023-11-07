@@ -48,13 +48,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-	float2 PrevCoord : TEXCOORD1;
-};
-
 //-----------------------------------------------------------------------------
 // Phosphor Vertex Shader
 //-----------------------------------------------------------------------------
@@ -82,10 +75,10 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 
 static const float F = 30.0;
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	float4 CurrY = tex2D(DiffuseSampler, Input.TexCoord);
-	float3 PrevY = tex2D(PreviousSampler, Input.PrevCoord).rgb;
+	float4 CurrY = Diffuse.Sample(DiffuseSampler, Input.TexCoord);
+	float3 PrevY = LastPass.Sample(PreviousSampler, Input.PrevCoord).rgb;
 
 	PrevY[0] *= Phosphor[0] == 0.0 ? 0.0 : pow(Phosphor[0], F * DeltaTime);
 	PrevY[1] *= Phosphor[1] == 0.0 ? 0.0 : pow(Phosphor[1], F * DeltaTime);

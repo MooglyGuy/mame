@@ -53,11 +53,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float2 TexCoord : TEXCOORD0;
-};
-
 //-----------------------------------------------------------------------------
 // YIQ Vertex Shader
 //-----------------------------------------------------------------------------
@@ -112,10 +107,10 @@ float4 GetCompositeYIQ(float2 TexCoord)
 	float2 C3 = TexCoord + PValueSourceTexel * OffsetX.w;
 	float4 Cx = float4(C0.x, C1.x, C2.x, C3.x);
 	float4 Cy = float4(C0.y, C1.y, C2.y, C3.y);
-	float4 Texel0 = tex2D(DiffuseSampler, C0);
-	float4 Texel1 = tex2D(DiffuseSampler, C1);
-	float4 Texel2 = tex2D(DiffuseSampler, C2);
-	float4 Texel3 = tex2D(DiffuseSampler, C3);
+	float4 Texel0 = Diffuse.Sample(DiffuseSampler, C0);
+	float4 Texel1 = Diffuse.Sample(DiffuseSampler, C1);
+	float4 Texel2 = Diffuse.Sample(DiffuseSampler, C2);
+	float4 Texel3 = Diffuse.Sample(DiffuseSampler, C3);
 
 	float4 HPosition = Cx;
 	float4 VPosition = Cy;
@@ -138,9 +133,9 @@ float4 GetCompositeYIQ(float2 TexCoord)
 	return CompositeYIQ;
 }
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	float4 BaseTexel = tex2D(DiffuseSampler, Input.TexCoord);
+	float4 BaseTexel = Diffuse.Sample(DiffuseSampler, Input.TexCoord).abgr;
 
 	float TimePerSample = ScanTime / (SourceDims.x * 4.0f);
 

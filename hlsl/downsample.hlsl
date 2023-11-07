@@ -12,7 +12,7 @@ cbuffer constants : register(b0)
 {
 	float2 ScreenDims;
 	float2 TargetDims;
-	float2 QuadDims;
+	float2 BloomShift;
 }
 
 //-----------------------------------------------------------------------------
@@ -42,13 +42,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float4 TexCoord01 : TEXCOORD0;
-	float4 TexCoord23 : TEXCOORD1;
-};
-
 //-----------------------------------------------------------------------------
 // Downsample Vertex Shader
 //-----------------------------------------------------------------------------
@@ -62,6 +55,8 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 {
 	VS_OUTPUT Output = (VS_OUTPUT)0;
 
+	float2 HalfTargetTexelDims = 0.5f / TargetDims;
+
 	Output.Position = float4(Input.Position.xyz, 1.0f);
 	Output.Position.xy /= ScreenDims;
 	Output.Position.y = 1.0f - Output.Position.y; // flip y
@@ -70,12 +65,14 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 
 	Output.Color = Input.Color;
 
+	//Output.TexCoord = Input.TexCoord;
 	float2 TexCoord = Input.TexCoord;
+	//TexCoord += 0.5f / TargetDims; // half texel offset correction (DX9)
 
-	Output.TexCoord01.xy = TexCoord + Coord0Offset;
-	Output.TexCoord01.zw = TexCoord + Coord1Offset;
-	Output.TexCoord23.xy = TexCoord + Coord2Offset;
-	Output.TexCoord23.zw = TexCoord + Coord3Offset;
+	Output.TexCoord01.xy = TexCoord + Coord0Offset * HalfTargetTexelDims;
+	Output.TexCoord01.zw = TexCoord + Coord1Offset * HalfTargetTexelDims;
+	Output.TexCoord23.xy = TexCoord + Coord2Offset * HalfTargetTexelDims;
+	Output.TexCoord23.zw = TexCoord + Coord3Offset * HalfTargetTexelDims;
 
 	return Output;
 }
@@ -84,12 +81,13 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 // Downsample Pixel Shader
 //-----------------------------------------------------------------------------
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	float4 texel0 = tex2D(DiffuseSampler, Input.TexCoord01.xy);
-	float4 texel1 = tex2D(DiffuseSampler, Input.TexCoord01.zw);
-	float4 texel2 = tex2D(DiffuseSampler, Input.TexCoord23.xy);
-	float4 texel3 = tex2D(DiffuseSampler, Input.TexCoord23.zw);
+	//return Diffuse.Sample(DiffuseSampler, Input.TexCoord);
+	float4 texel0 = Diffuse.Sample(DiffuseSampler, Input.TexCoord01.xy);
+	float4 texel1 = Diffuse.Sample(DiffuseSampler, Input.TexCoord01.zw);
+	float4 texel2 = Diffuse.Sample(DiffuseSampler, Input.TexCoord23.xy);
+	float4 texel3 = Diffuse.Sample(DiffuseSampler, Input.TexCoord23.zw);
 
 	return (texel0 + texel1 + texel2 + texel3) * 0.25;
 }

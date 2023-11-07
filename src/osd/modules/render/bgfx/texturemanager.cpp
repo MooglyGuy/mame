@@ -19,8 +19,8 @@
 
 #include "emucore.h"
 #include "fileio.h"
+#include "render.h"
 #include "rendutil.h"
-
 
 texture_manager::texture_manager()
 {
@@ -31,9 +31,9 @@ texture_manager::~texture_manager()
 {
 	m_textures.clear();
 
-	for (std::pair<uint64_t, sequenced_handle> mame_texture : m_mame_textures)
+	for (sequenced_handle & mame_texture : m_mame_textures)
 	{
-		bgfx::destroy(mame_texture.second.handle);
+		bgfx::destroy(mame_texture.handle);
 	}
 	m_mame_textures.clear();
 }
@@ -110,6 +110,34 @@ bgfx_texture* texture_manager::create_png_texture(
 	return create_texture(texture_name, bgfx::TextureFormat::BGRA8, width, 0, height, data32.get(), flags);
 }
 
+uint32_t texture_manager::texture_compute_hash(void *texture_base, uint32_t flags)
+{
+	return (uintptr_t)texture_base ^ (flags & (PRIMFLAG_BLENDMODE_MASK | PRIMFLAG_TEXFORMAT_MASK));
+}
+
+bool texture_manager::find_mame_texture(uint32_t hash, void *base, int width, int height, uint32_t flags, uint64_t key, sequenced_handle & out_mame_handle)
+{
+	// find a match
+	for (auto it = m_mame_textures.begin(); it != m_mame_textures.end(); it++)
+	{
+		const uint32_t test_screen = uint32_t(it->key >> 57);
+		const uint32_t test_page = uint32_t(it->key >> 56) & 1;
+		const uint32_t prim_screen = uint32_t(key >> 57);
+		const uint32_t prim_page = uint32_t(key >> 56) & 1;
+		if (test_screen != prim_screen || test_page != prim_page)
+			continue;
+
+		if (it->hash == hash && it->base == base && it->width == width && it->height == height &&
+			((it->flags ^ flags) & (PRIMFLAG_BLENDMODE_MASK | PRIMFLAG_TEXFORMAT_MASK)) == 0)
+		{
+			out_mame_handle = *it;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bgfx::TextureHandle texture_manager::create_or_update_mame_texture(
 		uint32_t format,
 		int width,
@@ -123,83 +151,34 @@ bgfx::TextureHandle texture_manager::create_or_update_mame_texture(
 		uint64_t key,
 		uint64_t old_key)
 {
-	bgfx::TextureHandle handle = BGFX_INVALID_HANDLE;
-	if (old_key != ~0ULL)
-	{
-		const auto iter = m_mame_textures.find(old_key);
-		if (iter != m_mame_textures.end())
-		{
-			handle = iter->second.handle;
-			if (handle.idx == bgfx::kInvalidHandle)
-				return handle;
-
-			if (iter->second.width == width && iter->second.height == height)
-			{
-				// Size matches, so let's just swap the old handle into the new location
-				m_mame_textures[key] = { handle, seqid, width, height };
-				m_mame_textures[old_key] = { BGFX_INVALID_HANDLE, 0, 0, 0 };
-
-				if (iter->second.seqid == seqid)
-				{
-					// Everything matches, just return the existing handle
-					return handle;
-				}
-				else
-				{
-					bgfx::TextureFormat::Enum dst_format = bgfx::TextureFormat::BGRA8;
-					uint16_t pitch = width;
-					int width_div_factor = 1;
-					int width_mul_factor = 1;
-					const bgfx::Memory* mem = bgfx_util::mame_texture_data_to_bgfx_texture_data(dst_format, format, rowpixels, width_margin, height, palette, base, pitch, width_div_factor, width_mul_factor);
-					bgfx::updateTexture2D(handle, 0, 0, 0, 0, uint16_t((rowpixels * width_mul_factor) / width_div_factor), uint16_t(height), mem, pitch);
-					return handle;
-				}
-			}
-			bgfx::destroy(handle);
-			m_mame_textures[old_key] = { BGFX_INVALID_HANDLE, 0, 0, 0 };
-		}
-	}
-	else
-	{
-		auto iter = m_mame_textures.find(key);
-		if (iter != m_mame_textures.end())
-		{
-			handle = iter->second.handle;
-			if (handle.idx == bgfx::kInvalidHandle)
-				return handle;
-
-			if (iter->second.width == width && iter->second.height == height)
-			{
-				if (iter->second.seqid == seqid)
-				{
-					return handle;
-				}
-				else
-				{
-					bgfx::TextureFormat::Enum dst_format = bgfx::TextureFormat::BGRA8;
-					uint16_t pitch = width;
-					int width_div_factor = 1;
-					int width_mul_factor = 1;
-					const bgfx::Memory* mem = bgfx_util::mame_texture_data_to_bgfx_texture_data(dst_format, format, rowpixels, width_margin, height, palette, base, pitch, width_div_factor, width_mul_factor);
-					bgfx::updateTexture2D(handle, 0, 0, 0, 0, uint16_t((rowpixels * width_mul_factor) / width_div_factor), uint16_t(height), mem, pitch);
-					return handle;
-				}
-			}
-			bgfx::destroy(handle);
-		}
-	}
-
 	bgfx::TextureFormat::Enum dst_format = bgfx::TextureFormat::BGRA8;
 	uint16_t pitch = width;
 	int width_div_factor = 1;
 	int width_mul_factor = 1;
+
+	// First see if we can find an existing, matching, texture to return
+	const uint32_t hash = texture_compute_hash(base, flags);
+	sequenced_handle mame_handle;
+	if (find_mame_texture(hash, base, width, height, flags, key, mame_handle))
+	{
+		bgfx::TextureHandle handle = mame_handle.handle;
+		// if there's an existing texture, but with a different seqid, copy the data
+		if (mame_handle.seqid != seqid)
+		{
+			const bgfx::Memory* mem = bgfx_util::mame_texture_data_to_bgfx_texture_data(dst_format, format, rowpixels, width_margin, height, palette, base, pitch, width_div_factor, width_mul_factor);
+			bgfx::updateTexture2D(mame_handle.handle, 0, 0, 0, 0, uint16_t((rowpixels * width_mul_factor) / width_div_factor), uint16_t(height), mem, pitch);
+		}
+		return handle;
+	}
+
 	const bgfx::Memory* mem = bgfx_util::mame_texture_data_to_bgfx_texture_data(dst_format, format, rowpixels, width_margin, height, palette, base, pitch, width_div_factor, width_mul_factor);
 	const uint16_t adjusted_width = uint16_t((rowpixels * width_mul_factor) / width_div_factor);
-	handle = bgfx::createTexture2D(adjusted_width, height, false, 1, dst_format, flags, nullptr);
-	bgfx::updateTexture2D(handle, 0, 0, 0, 0, adjusted_width, uint16_t(height), mem, pitch);
+	bgfx::TextureHandle bgfx_handle = bgfx::createTexture2D(adjusted_width, height, false, 1, dst_format, flags, nullptr);
+	bgfx::updateTexture2D(bgfx_handle, 0, 0, 0, 0, adjusted_width, uint16_t(height), mem, pitch);
 
-	m_mame_textures[key] = { handle, seqid, width, height };
-	return handle;
+	mame_handle = { bgfx_handle, hash, base, width, height, flags, key, seqid };
+	m_mame_textures.push_back(mame_handle);
+	return bgfx_handle;
 }
 
 bgfx::TextureHandle texture_manager::handle(const std::string &name)

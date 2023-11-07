@@ -266,6 +266,7 @@ struct hlsl_options
 	float                   bloom_level6_weight = 0.0;
 	float                   bloom_level7_weight = 0.0;
 	float                   bloom_level8_weight = 0.0;
+	float                   bloom_shift[2]{ 0.0 };
 
 	// Final
 	char lut_texture[1024]{ 0 };
@@ -330,7 +331,7 @@ public:
 	d3d_render_target* get_texture_target(render_primitive *prim, int width, int height, int screen);
 	bool add_render_target(renderer_d3d9* d3d, render_primitive *prim, int source_width, int source_height, int source_screen, int target_width, int target_height);
 
-	void save_snapshot();
+	void save_snapshot(bool do_render_snap = true);
 	void record_movie();
 	void record_audio(const int16_t *buffer, int samples_this_frame);
 

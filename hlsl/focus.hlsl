@@ -41,12 +41,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-};
-
 //-----------------------------------------------------------------------------
 // Defocus Vertex Shader
 //-----------------------------------------------------------------------------
@@ -86,17 +80,17 @@ static const float2 CoordOffset8[8] =
 	float2( 1.60f, -0.25f),
 };
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
 	// imaginary texel dimensions independed from source and target dimension
 	float2 TexelDims = (1.0f / 1024.0f);
 
 	float2 DefocusTexelDims = Defocus * TexelDims;
 
-	float4 texel = tex2D(DiffuseSampler, Input.TexCoord);
+	float4 texel = Diffuse.Sample(DiffuseSampler, Input.TexCoord);
 	for (int i = 0; i < 8; i++)
 	{
-		texel += tex2D(DiffuseSampler, Input.TexCoord + CoordOffset8[i] * DefocusTexelDims);
+		texel += Diffuse.Sample(DiffuseSampler, Input.TexCoord + CoordOffset8[i] * DefocusTexelDims);
 	}
 
 	return texel / 9.0f;

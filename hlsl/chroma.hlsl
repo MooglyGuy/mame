@@ -45,13 +45,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-	float2 PrevCoord : TEXCOORD1;
-};
-
 //-----------------------------------------------------------------------------
 // Chroma Vertex Shader
 //-----------------------------------------------------------------------------
@@ -84,9 +77,9 @@ static const float3x3 XYZ_TO_sRGB =
 	 0.0557, -0.2040,  1.0570
 };
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	const float4 cin = tex2D(DiffuseSampler, Input.TexCoord);
+	const float4 cin = Diffuse.Sample(DiffuseSampler, Input.TexCoord);
 	float4 cout = float4(0.0, 0.0, 0.0, cin.a);
 	const float3x2 xy = { ChromaA, ChromaB, ChromaC };
 

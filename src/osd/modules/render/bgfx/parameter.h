@@ -15,10 +15,14 @@
 
 #pragma once
 
+#include "statereader.h"
+
 #include <string>
 #include <utility>
 
-class bgfx_parameter
+class effect_manager;
+
+class bgfx_parameter : public state_reader
 {
 public:
 	enum parameter_type
@@ -31,6 +35,8 @@ public:
 	bgfx_parameter(std::string &&name, parameter_type type) : m_name(std::move(name)), m_type(type) { }
 	virtual ~bgfx_parameter() = default;
 
+	static bgfx_parameter* from_json(const Value& value, const std::string &prefix, effect_manager& effects);
+
 	virtual void tick(double delta) = 0;
 
 	// Getters
@@ -38,8 +44,13 @@ public:
 	const std::string &name() const { return m_name; }
 
 protected:
+	static bool validate_parameters(const Value& value, const std::string &prefix);
+
 	std::string m_name;
 	parameter_type m_type;
+
+	static const int TYPE_COUNT = 3;
+	static const string_to_enum TYPE_NAMES[TYPE_COUNT];
 };
 
 #endif // MAME_RENDER_BGFX_PARAMETER_H

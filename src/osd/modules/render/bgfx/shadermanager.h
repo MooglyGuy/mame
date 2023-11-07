@@ -4,8 +4,8 @@
 //
 //  shadermanager.h - BGFX shader manager
 //
-//  Maintains a mapping between strings and BGFX shaders,
-//  either vertex or pixel/fragment.
+//  Maintains a string-to-entry lookup of BGFX shader
+//  effects, defined by shader.h
 //
 //============================================================
 
@@ -14,31 +14,31 @@
 
 #pragma once
 
-#include <bgfx/bgfx.h>
+#include "statereader.h"
 
 #include <map>
+#include <memory>
 #include <string>
 
-
+class bgfx_shader;
 class osd_options;
+class shaderprog_manager;
 
-
-class shader_manager
+class shader_manager : public state_reader
 {
 public:
-	shader_manager() { }
+	shader_manager(shaderprog_manager& shaderprogs);
 	~shader_manager();
 
 	// Getters
-	bgfx::ShaderHandle get_or_load_shader(const osd_options &options, const std::string &name);
-	static bgfx::ShaderHandle load_shader(const osd_options &options, const std::string &name);
-	static bool is_shader_present(const osd_options &options, const std::string &name);
+	bgfx_shader* get_or_load_shader(const osd_options &options, const std::string &name);
+	static bool validate_shader(const osd_options &options, const std::string &name);
 
 private:
-	static std::string make_path_string(const osd_options &options, const std::string &name);
-	static const bgfx::Memory* load_mem(const std::string &name);
+	bgfx_shader* load_shader(const osd_options &options, const std::string &name);
 
-	std::map<std::string, bgfx::ShaderHandle> m_shaders;
+	shaderprog_manager &m_shaderprogs;
+	std::map<std::string, std::unique_ptr<bgfx_shader> > m_shaders;
 };
 
 #endif // MAME_RENDER_BGFX_SHADERMANAGER_H

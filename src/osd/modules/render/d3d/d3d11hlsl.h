@@ -51,7 +51,13 @@ public:
 		CU_QUAD_DIMS,
 
 		CU_SWAP_XY,
+
 		CU_VECTOR_SCREEN,
+		CU_VECTOR_TIME_RATIO,
+		CU_VECTOR_TIME_SCALE,
+		CU_VECTOR_LENGTH_RATIO,
+		CU_VECTOR_LENGTH_SCALE,
+		CU_VECTOR_BEAM_SMOOTH,
 
 		CU_NTSC_CCFREQ,
 		CU_NTSC_A,
@@ -155,14 +161,14 @@ public:
 	void        begin();
 	void        end();
 
-	bool        set_vector(D3DXHANDLE param, int count, float *vector);
+	bool        set_vector(D3DXHANDLE param, uint32_t count, float *vector);
 	bool        set_float(D3DXHANDLE param, float value);
 	bool        set_int(D3DXHANDLE param, int value);
 	bool        set_bool(D3DXHANDLE param, bool value);
 	void        set_texture(uint32_t slot, ID3D11ShaderResourceView * const *tex);
 
 	void        add_uniform(D3DXHANDLE param, d3d11_uniform::uniform_type type, int id);
-	void        update_uniforms(d3d11_poly_info *poly);
+	void        update_uniforms(d3d11_poly_info *poly, ID3D11RenderTargetView *dst, ID3D11DepthStencilView *dst_depth);
 	void        finalize_uniforms();
 
 	d3d11_shaders *get_shaders() { return m_shaders; }
@@ -174,6 +180,7 @@ public:
 private:
 	std::vector<std::unique_ptr<d3d11_uniform>> m_uniform_list;
 
+	char                 m_name[256];
 	ID3D11VertexShader * m_vs;
 	ID3D11PixelShader *  m_ps;
 	ID3D11Device *       m_d3d11;
@@ -186,10 +193,6 @@ private:
 	uint32_t             m_occupied_uniforms;
 	bool                 m_constants_dirty;
 
-	std::map<D3DXHANDLE, D3DXVECTOR4> m_vecs;
-	std::map<D3DXHANDLE, float> m_floats;
-	std::map<D3DXHANDLE, int> m_ints;
-	std::map<D3DXHANDLE, bool> m_bools;
 	std::map<D3DXHANDLE, uint32_t> m_uniform_offsets;
 
 	bool        m_valid;
@@ -284,6 +287,7 @@ struct d3d11_hlsl_options
 	float                   bloom_level6_weight = 0.0;
 	float                   bloom_level7_weight = 0.0;
 	float                   bloom_level8_weight = 0.0;
+	float                   bloom_shift[2]{ 0.0 };
 
 	// Final
 	char lut_texture[1024]{ 0 };
@@ -354,8 +358,6 @@ public:
 	void record_movie();
 	void record_audio(const int16_t *buffer, int samples_this_frame);
 
-	void init_fsfx_quad();
-
 	void set_texture(d3d11_texture_info *info);
 	void set_filter(bool filter_screens);
 	void remove_render_target(int source_width, int source_height, uint32_t screen_index);
@@ -373,7 +375,7 @@ public:
 private:
 	void                    set_curr_effect(d3d11_effect *curr_effect);
 	//m_
-	void                    blit(ID3D11RenderTargetView *dst, bool clear_dst);
+	void                    blit(int indexcount = 6, int vertnum = 0);
 
 	void                    render_snapshot(ID3D11Texture2D *texture);
 	// Time since last call, only updates once per render of all screens
@@ -383,21 +385,21 @@ private:
 	rgb_t                   apply_color_convolution(rgb_t color);
 
 	// Shader passes
-	void                    ntsc_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    color_convolution_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    prescale_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    deconverge_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    scanline_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    defocus_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    phosphor_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    post_pass(d3d11_render_target *rt, d3d11_poly_info *poly, bool prepare_bloom);
-	void                    downsample_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    bloom_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    chroma_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    distortion_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    vector_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    vector_buffer_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
-	void                    screen_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
+	int                     ntsc_pass(d3d11_render_target *rt, d3d11_poly_info *poly);
+	int                     color_convolution_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     prescale_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     deconverge_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     scanline_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     defocus_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     phosphor_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     post_pass(d3d11_render_target *rt, int source_index_guest, int source_index_native, d3d11_poly_info *poly, bool prepare_bloom);
+	void                    downsample_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     bloom_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     chroma_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	int                     distortion_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	void                    vector_pass(d3d11_render_target *rt, d3d11_poly_info *poly, int vertnum);
+	int                     vector_buffer_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly);
+	void                    screen_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly, int vertnum);
 	void                    ui_pass(d3d11_poly_info *poly, int vertnum);
 
 	d3d_compile_fn                m_compile_fn;

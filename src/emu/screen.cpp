@@ -54,6 +54,8 @@ public:
 
 	static void output_notifier(const char *outname, s32 value, void *param);
 
+	bool was_dirty();
+
 private:
 	struct paired_entry {
 		int key;
@@ -77,6 +79,7 @@ private:
 	std::vector<std::vector<NSVGshape *>> m_keyed_shapes;
 	std::unordered_map<std::string, int> m_key_ids;
 	int m_key_count;
+	bool m_dirty;
 
 	int m_sx, m_sy;
 	double m_scale;
@@ -103,6 +106,7 @@ screen_device::svg_renderer::svg_renderer(memory_region *region)
 	m_rasterizer.reset(nsvgCreateRasterizer());
 
 	m_key_count = 0;
+	m_dirty = true;
 
 	for (NSVGshape *shape = m_image->shapes; shape; shape = shape->next)
 		if(shape->title[0]) {
@@ -224,12 +228,20 @@ void screen_device::svg_renderer::output_notifier(const char *outname, s32 value
 	static_cast<svg_renderer *>(param)->output_change(outname, value);
 }
 
+bool screen_device::svg_renderer::was_dirty()
+{
+	const bool was_dirty = m_dirty;
+	m_dirty = false;
+	return was_dirty;
+}
+
 void screen_device::svg_renderer::output_change(const char *outname, s32 value)
 {
 	auto l = m_key_ids.find(outname);
 	if (l == m_key_ids.end())
 		return;
 	m_key_state[l->second] = value;
+	m_dirty = true;
 }
 
 void screen_device::svg_renderer::compute_initial_bboxes(std::vector<bbox> &bboxes)
@@ -954,6 +966,7 @@ TIMER_CALLBACK_MEMBER(screen_device::scanline_tick)
 	{
 		// force a partial update to the current scanline
 		update_partial(param);
+		printf("VIDEO_UPDATE_SCANLINE\n");
 	}
 	if (!m_scanline_cb.isunset())
 		m_scanline_cb(param);
@@ -1231,6 +1244,12 @@ bool screen_device::update_partial(int scanline)
 	// remember where we left off
 	m_last_partial_scan = scanline + 1;
 	m_partial_scan_hpos = 0;
+
+	if (m_type == SCREEN_TYPE_SVG)
+	{
+		return m_svg->was_dirty();
+	}
+
 	return true;
 }
 
@@ -1331,6 +1350,7 @@ void screen_device::update_now()
 		if (current_vpos > m_last_partial_scan)
 		{
 			update_partial(current_vpos - 1);
+			printf("update_now\n");
 		}
 	}
 

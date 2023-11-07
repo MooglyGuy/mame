@@ -56,6 +56,11 @@ public:
 		, m_renderer(renderer)
 		, m_width(width)
 		, m_height(height)
+		, m_sys_texture(nullptr)
+		, m_vid_texture(nullptr)
+		, m_vid_target(nullptr)
+		, m_vid_depth_texture(nullptr)
+		, m_vid_depth_target(nullptr)
 	{
 		HRESULT result;
 
@@ -156,6 +161,7 @@ public:
 	}
 
 	ID3D11RenderTargetView * render_target() { return m_vid_target; }
+	ID3D11DepthStencilView * depth_target() { return m_vid_depth_target; }
 
 private:
 	bool                       m_initialized;
@@ -170,6 +176,8 @@ private:
 	ID3D11Texture2D *          m_sys_texture;
 	ID3D11Texture2D *          m_vid_texture;
 	ID3D11RenderTargetView *   m_vid_target;
+	ID3D11Texture2D *          m_vid_depth_texture;
+	ID3D11DepthStencilView *   m_vid_depth_target;
 };
 
 
@@ -557,6 +565,7 @@ bool d3d11_shaders::init(ID3D11Device *d3d11, ID3D11DeviceContext *d3d11_context
 		m_options->bloom_level6_weight = winoptions.screen_bloom_lvl6_weight();
 		m_options->bloom_level7_weight = winoptions.screen_bloom_lvl7_weight();
 		m_options->bloom_level8_weight = winoptions.screen_bloom_lvl8_weight();
+		get_vector(winoptions.screen_bloom_shift(), 2, m_options->bloom_shift, true);
 		strncpy(m_options->lut_texture, winoptions.screen_lut_texture(), sizeof(m_options->lut_texture));
 		m_options->lut_enable = winoptions.screen_lut_enable();
 		strncpy(m_options->ui_lut_texture, winoptions.ui_lut_texture(), sizeof(m_options->ui_lut_texture));
@@ -592,8 +601,6 @@ bool d3d11_shaders::init(ID3D11Device *d3d11, ID3D11DeviceContext *d3d11_context
 
 void d3d11_shaders::begin_frame(render_primitive_list *primlist)
 {
-	init_fsfx_quad();
-
 	std::fill(std::begin(m_target_to_screen), std::end(m_target_to_screen), 0);
 	std::fill(std::begin(m_targets_per_screen), std::end(m_targets_per_screen), 0);
 	EQUIVALENT_ARRAY(m_target_to_screen, render_container *) containers;
@@ -634,67 +641,6 @@ void d3d11_shaders::end_frame()
 	if (m_curr_effect->is_active())
 	{
 		m_curr_effect->end();
-	}
-}
-
-
-//============================================================
-//  d3d11_shaders::init_fsfx_quad
-//
-//  Called always at the start of each frame so that the two
-//  triangles used for the post-processing effects are always
-//  at the beginning of the vertex buffer.
-//
-//============================================================
-
-void d3d11_shaders::init_fsfx_quad()
-{
-	if (!enabled())
-		return;
-
-	d3d11_vertex *vertbuf = m_renderer->mesh_alloc(4);
-	if (vertbuf == nullptr)
-		return;
-
-	// fill in the vertexes clockwise
-	vertbuf[0].x = 0.0f;
-	vertbuf[0].y = 0.0f;
-	vertbuf[1].x = m_renderer->get_width();
-	vertbuf[1].y = 0.0f;
-	vertbuf[2].x = 0.0f;
-	vertbuf[2].y = m_renderer->get_height();
-	vertbuf[3].x = m_renderer->get_width();
-	vertbuf[3].y = m_renderer->get_height();
-
-	vertbuf[0].u0 = 0.0f;
-	vertbuf[0].v0 = 0.0f;
-
-	vertbuf[1].u0 = 1.0f;
-	vertbuf[1].v0 = 0.0f;
-
-	vertbuf[2].u0 = 0.0f;
-	vertbuf[2].v0 = 1.0f;
-
-	vertbuf[3].u0 = 1.0f;
-	vertbuf[3].v0 = 1.0f;
-
-	vertbuf[0].u1 = 0.0f;
-	vertbuf[0].v1 = 0.0f;
-	vertbuf[1].u1 = 0.0f;
-	vertbuf[1].v1 = 0.0f;
-	vertbuf[2].u1 = 0.0f;
-	vertbuf[2].v1 = 0.0f;
-	vertbuf[3].u1 = 0.0f;
-	vertbuf[3].v1 = 0.0f;
-
-	// set the color and Z parameters
-	for (int i = 0; i < 4; i++)
-	{
-		vertbuf[i].z = 0.0f;
-		vertbuf[i].r = 255;
-		vertbuf[i].g = 255;
-		vertbuf[i].b = 255;
-		vertbuf[i].a = 255;
 	}
 }
 
@@ -744,7 +690,6 @@ bool d3d11_shaders::create_resources()
 		return false;
 	}
 
-
 	result = m_renderer->get_device()->CreateShaderResourceView(m_black_texture, nullptr, &m_black_view);
 	if (FAILED(result))
 	{
@@ -766,7 +711,7 @@ bool d3d11_shaders::create_resources()
 	// if we have a shadow bitmap, create a texture for it
 	if (m_shadow_bitmap.valid())
 	{
-		render_texinfo texture;
+		render_texinfo texture = { 0 };
 
 		// fake in the basic data so it looks like it came from render.c
 		texture.base = m_shadow_bitmap.raw_pixptr(0);
@@ -777,7 +722,7 @@ bool d3d11_shaders::create_resources()
 		texture.seqid = 0;
 
 		// now create it (no prescale, no wrap)
-		std::unique_ptr<d3d11_texture_info> tex = std::make_unique<d3d11_texture_info>(*m_renderer->get_texture_manager(), &texture, 1, PRIMFLAG_BLENDMODE(BLENDMODE_ALPHA) | PRIMFLAG_TEXFORMAT(TEXFORMAT_ARGB32));
+		auto tex = std::make_unique<d3d11_texture_info>(*m_renderer->get_texture_manager(), &texture, 1, PRIMFLAG_BLENDMODE(BLENDMODE_ALPHA) | PRIMFLAG_TEXFORMAT(TEXFORMAT_ARGB32));
 		m_shadow_texture = tex.get();
 		m_renderer->get_texture_manager()->m_texture_list.push_back(std::move(tex));
 	}
@@ -790,7 +735,7 @@ bool d3d11_shaders::create_resources()
 
 	if (m_lut_bitmap.valid())
 	{
-		render_texinfo texture;
+		render_texinfo texture = { 0 };
 
 		// fake in the basic data so it looks like it came from render.c
 		texture.base = m_lut_bitmap.raw_pixptr(0);
@@ -814,7 +759,7 @@ bool d3d11_shaders::create_resources()
 
 	if (m_ui_lut_bitmap.valid())
 	{
-		render_texinfo texture;
+		render_texinfo texture = { 0 };
 
 		// fake in the basic data so it looks like it came from render.c
 		texture.base = m_ui_lut_bitmap.raw_pixptr(0);
@@ -874,8 +819,6 @@ bool d3d11_shaders::create_resources()
 	}
 
 	m_bloom_effect->add_uniform("ScreenDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SCREEN_DIMS);
-	m_bloom_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_TARGET_DIMS);
-	m_bloom_effect->add_uniform("SourceDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SOURCE_DIMS);
 	m_bloom_effect->add_uniform("VectorScreen", d3d11_uniform::UT_BOOL, d3d11_uniform::CU_VECTOR_SCREEN);
 	m_bloom_effect->add_uniform("Level0Weight", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_BLOOM_LEVEL0_WEIGHT);
 	m_bloom_effect->add_uniform("Level1Weight", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_BLOOM_LEVEL1_WEIGHT);
@@ -898,7 +841,7 @@ bool d3d11_shaders::create_resources()
 	m_chroma_effect->add_uniform("ChromaC", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_CHROMA_C);
 
 	m_color_effect->add_uniform("ScreenDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SCREEN_DIMS);
-	m_color_effect->add_uniform("SourceDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SOURCE_DIMS);
+	m_color_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_TARGET_DIMS);
 	m_color_effect->add_uniform("PrimTint", d3d11_uniform::UT_VEC3, d3d11_uniform::CU_PRIM_TINT);
 	m_color_effect->add_uniform("RedRatios", d3d11_uniform::UT_VEC3, d3d11_uniform::CU_COLOR_RED_RATIOS);
 	m_color_effect->add_uniform("GrnRatios", d3d11_uniform::UT_VEC3, d3d11_uniform::CU_COLOR_GRN_RATIOS);
@@ -933,8 +876,8 @@ bool d3d11_shaders::create_resources()
 	m_distortion_effect->add_uniform("SwapXY", d3d11_uniform::UT_BOOL, d3d11_uniform::CU_SWAP_XY);
 
 	m_downsample_effect->add_uniform("ScreenDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SCREEN_DIMS);
-	m_downsample_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_TARGET_DIMS);
-	m_downsample_effect->add_uniform("QuadDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_QUAD_DIMS);
+	m_downsample_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_COUNT); // Don't use the auto-setter for this, we override it in the pass
+	m_deconverge_effect->add_uniform("BloomShift", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_COUNT);
 
 	m_focus_effect->add_uniform("ScreenDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SCREEN_DIMS);
 	m_focus_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_TARGET_DIMS);
@@ -1011,6 +954,19 @@ bool d3d11_shaders::create_resources()
 	m_vector_buffer_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_TARGET_DIMS);
 	m_vector_buffer_effect->add_uniform("LutEnable", d3d11_uniform::UT_BOOL, d3d11_uniform::CU_LUT_ENABLE);
 
+	m_vector_effect->add_uniform("ScreenDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_SCREEN_DIMS);
+	m_vector_effect->add_uniform("TargetDims", d3d11_uniform::UT_VEC2, d3d11_uniform::CU_TARGET_DIMS);
+	m_vector_effect->add_uniform("TimeRatio", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_VECTOR_TIME_RATIO);
+	m_vector_effect->add_uniform("TimeScale", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_VECTOR_TIME_SCALE);
+	m_vector_effect->add_uniform("LengthRatio", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_VECTOR_LENGTH_RATIO);
+	m_vector_effect->add_uniform("LengthScale", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_VECTOR_LENGTH_SCALE);
+	m_vector_effect->add_uniform("BeamSmooth", d3d11_uniform::UT_FLOAT, d3d11_uniform::CU_VECTOR_BEAM_SMOOTH);
+
+	for (d3d11_effect *eff : effects)
+	{
+		eff->finalize_uniforms();
+	}
+
 	return true;
 }
 
@@ -1031,12 +987,6 @@ void d3d11_shaders::begin_draw()
 	m_delta_t = t - m_acc_t;
 	m_acc_t = t;
 
-	//HRESULT result = m_renderer->get_device()->SetRenderTarget(0, backbuffer.Get());
-	//if (FAILED(result))
-	//{
-	//	osd_printf_verbose("Direct3D: Error %08lX during device SetRenderTarget call\n", result);
-	//}
-
 	set_curr_effect(m_default_effect.get());
 }
 
@@ -1051,7 +1001,9 @@ void d3d11_shaders::set_curr_effect(d3d11_effect *curr_effect)
 		return;
 
 	if (m_curr_effect && m_curr_effect->is_active())
+	{
 		m_curr_effect->end();
+	}
 
 	m_curr_effect = curr_effect;
 }
@@ -1061,28 +1013,18 @@ void d3d11_shaders::set_curr_effect(d3d11_effect *curr_effect)
 //  d3d11_shaders::blit
 //============================================================
 
-void d3d11_shaders::blit(ID3D11RenderTargetView *dst, bool clear_dst)
+void d3d11_shaders::blit(int indexcount, int vertnum)
 {
-	if (dst != nullptr)
-	{
-		m_renderer->get_context()->OMSetRenderTargets(1, &dst, m_renderer->get_depthbuffer());
-
-		if (clear_dst)
-		{
-			float clear_color[4] = { 0.f, 0.f, 0.f, 1.f };
-			m_renderer->get_context()->ClearRenderTargetView(dst, clear_color);
-			m_renderer->get_context()->ClearDepthStencilView(m_renderer->get_depthbuffer(), D3D11_CLEAR_DEPTH, 1.f, 0);
-		}
-	}
-
 	if (!m_curr_effect->is_active())
 	{
 		m_curr_effect->begin();
 	}
 
-	// add the primitives
+	// draw the primitive(s)
 	m_renderer->get_context()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_renderer->get_context()->DrawIndexed(6, 0, 0);
+	//m_renderer->set_sampler_mode(0, m_filter_screens, D3D11_TEXTURE_ADDRESS_CLAMP, true);
+	m_renderer->get_context()->DrawIndexed(indexcount, 0, vertnum);
+	m_renderer->get_context()->OMSetRenderTargets(0, nullptr, nullptr);
 }
 
 //============================================================
@@ -1104,21 +1046,21 @@ d3d11_render_target* d3d11_shaders::find_render_target(int source_width, int sou
 	return nullptr;
 }
 
-void d3d11_shaders::ntsc_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::ntsc_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
 {
 	if (!m_options->yiq_enable)
-		return;
-
-	// initial texture is set in d3d11_shaders::set_texture()
+		return 0;
 
 	set_curr_effect(m_ntsc_effect.get());
-	m_curr_effect->set_texture(0, m_diffuse_texture->get_view());
 	m_curr_effect->set_float("SignalOffset", m_curr_texture->get_cur_frame() == 0 ? 0.0f : m_options->yiq_jitter);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->source_rt_view[0], rt->source_depth_rt_view[0]);
+	m_curr_effect->set_texture(0, m_diffuse_texture->get_view());
 
-	blit(rt->source_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->source_viewport);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	blit();
 
-	m_color_effect->set_texture(0, &rt->source_res_view);
+	return 0;
 }
 
 rgb_t d3d11_shaders::apply_color_convolution(rgb_t color)
@@ -1158,52 +1100,80 @@ rgb_t d3d11_shaders::apply_color_convolution(rgb_t color)
 	return rgb_t(std::clamp(int(r * 255.0f), 0, 255), std::clamp(int(g * 255.0f), 0, 255), std::clamp(int(b * 255.0f), 0, 255));
 }
 
-void d3d11_shaders::color_convolution_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::color_convolution_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
-	set_curr_effect(m_color_effect.get());
+	int next_index = source_index ^ 1;
 
-	// initial texture is set in shaders::ntsc_pass() if NTSC processing is enabled
-	if (!m_options->yiq_enable)
-		m_curr_effect->set_texture(0, m_diffuse_texture->get_view());
+	set_curr_effect(m_color_effect.get());
 
 	uint32_t tint = (uint32_t)poly->tint();
 	float prim_tint[3] = { ((tint >> 16) & 0xff) / 255.0f, ((tint >> 8) & 0xff) / 255.0f, (tint & 0xff) / 255.0f };
 	m_curr_effect->set_vector("PrimTint", 3, prim_tint);
-	m_curr_effect->set_texture(1, !m_lut_texture ? nullptr : m_lut_texture->get_view());
-	m_curr_effect->set_bool("UiLutEnable", false);
-	m_curr_effect->update_uniforms(poly);
 
-	blit(rt->source_rt_view, false);
+	// initial texture is set in shaders::ntsc_pass() if NTSC processing is enabled
+	if (!m_options->yiq_enable)
+	{
+		m_curr_effect->set_bool("SwizzleRGB", true);
+		m_curr_effect->update_uniforms(poly, rt->source_rt_view[0], rt->source_depth_rt_view[0]);
+		m_curr_effect->set_texture(0, m_diffuse_texture->get_view());
+		next_index = 0;
+	}
+	else
+	{
+		m_curr_effect->set_bool("SwizzleRGB", false);
+		m_curr_effect->update_uniforms(poly, rt->source_rt_view[source_index], rt->source_depth_rt_view[source_index]);
+		m_color_effect->set_texture(0, &rt->source_res_view[next_index]);
+	}
+	if (m_lut_texture)
+		m_curr_effect->set_texture(1, m_lut_texture->get_view());
+
+	m_d3d11_context->RSSetViewports(1, &rt->source_viewport);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	m_renderer->set_sampler_mode(1, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::prescale_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::prescale_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
-	m_renderer->set_sampler_mode(m_filter_screens, D3D11_TEXTURE_ADDRESS_CLAMP);
 	set_curr_effect(m_prescale_effect.get());
-	m_curr_effect->set_texture(0, &rt->source_res_view);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[0], rt->target_depth_rt_view[0]);
+	m_curr_effect->set_texture(0, &rt->source_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, m_filter_screens, D3D11_TEXTURE_ADDRESS_CLAMP, true);
 
-	blit(rt->source_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return 0;
 }
 
-void d3d11_shaders::deconverge_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::deconverge_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
 	// skip deconverge if no influencing settings
 	if (m_options->converge_x[0] == 0.0f && m_options->converge_x[1] == 0.0f && m_options->converge_x[2] == 0.0f &&
 		m_options->converge_y[0] == 0.0f && m_options->converge_y[1] == 0.0f && m_options->converge_y[2] == 0.0f &&
 		m_options->radial_converge_x[0] == 0.0f && m_options->radial_converge_x[1] == 0.0f && m_options->radial_converge_x[2] == 0.0f &&
 		m_options->radial_converge_y[0] == 0.0f && m_options->radial_converge_y[1] == 0.0f && m_options->radial_converge_y[2] == 0.0f)
-		return;
+		return source_index;
+
+	const int next_index = source_index ^ 1;
 
 	set_curr_effect(m_deconverge_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(rt->target_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::scanline_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::scanline_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
+	int next_index = source_index ^ 1;
+
 	screen_device_enumerator screen_iterator(m_machine->root_device());
 	screen_device *screen = screen_iterator.byindex(m_target_to_screen[m_curr_target]);
 	render_container &screen_container = screen->container();
@@ -1215,54 +1185,77 @@ void d3d11_shaders::scanline_pass(d3d11_render_target *rt, d3d11_poly_info *poly
 	float screen_offset[] = { xoffset, yoffset };
 
 	set_curr_effect(m_scanline_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
 	m_curr_effect->set_vector("ScreenScale", 2, screen_scale);
 	m_curr_effect->set_vector("ScreenOffset", 2, screen_offset);
 	m_curr_effect->set_float("ScanlineOffset", m_curr_texture->get_cur_frame() == 0 ? 0.0f : m_options->scanline_jitter);
-	m_curr_effect->update_uniforms(poly);
-	blit(rt->target_rt_view, false);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::defocus_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::defocus_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
 	// skip defocus if no influencing settings
 	if (m_options->defocus[0] == 0.0f && m_options->defocus[1] == 0.0f)
-		return;
+		return source_index;
+
+	int next_index = source_index ^ 1;
 
 	set_curr_effect(m_focus_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(rt->target_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::phosphor_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::phosphor_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
 	// skip phosphor if no influencing settings
 	if (m_options->phosphor[0] == 0.0f && m_options->phosphor[1] == 0.0f && m_options->phosphor[2] == 0.0f)
-		return;
+		return source_index;
 
-	// Shader needs time between last update
+	int next_index = source_index ^ 1;
+
 	set_curr_effect(m_phosphor_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->set_texture(1, &rt->cache_res_view);
 	m_curr_effect->set_bool("Passthrough", false);
 	m_curr_effect->set_float("DeltaTime", delta_time());
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	m_curr_effect->set_texture(1, &rt->cache_res_view);
+	m_renderer->set_sampler_mode(1, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(rt->target_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+	m_curr_effect->end();
 
 	// Pass along our phosphor'd screen
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->set_texture(1, &rt->target_res_view);
 	m_curr_effect->set_bool("Passthrough", true);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->cache_rt_view, rt->cache_depth_rt_view);
+	m_curr_effect->set_texture(0, &rt->target_res_view[next_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	m_curr_effect->set_texture(1, &rt->target_res_view[next_index]);
+	m_renderer->set_sampler_mode(1, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(rt->cache_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->cache_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::post_pass(d3d11_render_target *rt, d3d11_poly_info *poly, bool prepare_bloom)
+int d3d11_shaders::post_pass(d3d11_render_target *rt, int source_index_guest, int source_index_native, d3d11_poly_info *poly, bool prepare_bloom)
 {
+	int next_index = 0;
+
 	screen_device_enumerator screen_iterator(m_machine->root_device());
 	screen_device *screen = screen_iterator.byindex(m_target_to_screen[m_curr_target]);
 	render_container &screen_container = screen->container();
@@ -1279,29 +1272,37 @@ void d3d11_shaders::post_pass(d3d11_render_target *rt, d3d11_poly_info *poly, bo
 	float back_color[3] = { float(back_color_rgb.r()) / 255.0f, float(back_color_rgb.g()) / 255.0f, float(back_color_rgb.b()) / 255.0f };
 
 	set_curr_effect(m_post_effect.get());
-	m_curr_effect->set_texture(1, !m_shadow_texture ? nullptr : m_shadow_texture->get_view());
+	if (m_shadow_texture)
+	{
+		m_curr_effect->set_texture(1, m_shadow_texture->get_view());
+		m_renderer->set_sampler_mode(1, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	}
 	m_curr_effect->set_int("ShadowTileMode", m_options->shadow_mask_tile_mode);
-	m_curr_effect->set_texture(0, &rt->target_res_view);
 	m_curr_effect->set_vector("BackColor", 3, back_color);
 	m_curr_effect->set_vector("ScreenScale", 2, screen_scale);
 	m_curr_effect->set_vector("ScreenOffset", 2, screen_offset);
 	m_curr_effect->set_float("TimeMilliseconds", (float)m_machine->time().as_double() * 1000.0f);
 	m_curr_effect->set_bool("PrepareBloom", prepare_bloom);
-	m_curr_effect->update_uniforms(poly);
+	if (prepare_bloom)
+	{
+		next_index = source_index_guest;
+		m_curr_effect->update_uniforms(poly, rt->source_rt_view[next_index], rt->source_depth_rt_view[next_index]);
+	}
+	else
+	{
+		next_index = source_index_native ^ 1;
+		m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	}
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index_native]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(prepare_bloom ? rt->source_rt_view : rt->target_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, prepare_bloom ? &rt->source_viewport : &rt->target_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::chroma_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
-{
-	set_curr_effect(m_chroma_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->update_uniforms(poly);
-
-	blit(rt->target_rt_view, false);
-}
-
-void d3d11_shaders::downsample_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+void d3d11_shaders::downsample_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
 	// skip downsample if no influencing settings
 	if (m_options->bloom_scale == 0.0f)
@@ -1312,19 +1313,40 @@ void d3d11_shaders::downsample_pass(d3d11_render_target *rt, d3d11_poly_info *po
 	for (int bloom_index = 0; bloom_index < rt->bloom_count; bloom_index++)
 	{
 		m_curr_effect->set_vector("TargetDims", 2, rt->bloom_dims[bloom_index]);
-		m_curr_effect->set_texture(0, bloom_index == 0 ? &rt->source_res_view : &rt->bloom_res_view[bloom_index - 1]);
-		m_curr_effect->update_uniforms(poly);
-
-		blit(rt->bloom_rt_view[bloom_index], false);
+		m_curr_effect->update_uniforms(poly, rt->bloom_rt_view[bloom_index], rt->bloom_depth_rt_view[bloom_index]);
+		if (bloom_index == 0)
+			m_curr_effect->set_texture(0, &rt->source_res_view[source_index]);
+		else
+			m_curr_effect->set_texture(0, &rt->bloom_res_view[bloom_index - 1]);
+		m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+		m_d3d11_context->RSSetViewports(1, &rt->bloom_viewport[bloom_index]);
+		blit();
 		m_downsample_effect->end();
 	}
 }
 
-void d3d11_shaders::bloom_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::chroma_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
+{
+	int next_index = source_index ^ 1;
+
+	set_curr_effect(m_chroma_effect.get());
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return next_index;
+}
+
+int d3d11_shaders::bloom_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
 	// skip bloom if no influencing settings
 	if (m_options->bloom_scale == 0.0f)
-		return;
+		return source_index;
+
+	int next_index = source_index ^ 1;
 
 	set_curr_effect(m_bloom_effect.get());
 
@@ -1342,81 +1364,105 @@ void d3d11_shaders::bloom_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
 	m_curr_effect->set_float("BloomScale", m_options->bloom_scale);
 	m_curr_effect->set_vector("BloomOverdrive", 3, m_options->bloom_overdrive);
 
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
 	for (int index = 1; index < rt->bloom_count; index++)
-	{
 		m_curr_effect->set_texture(index, &rt->bloom_res_view[index - 1]);
-	}
-	for (int index = rt->bloom_count; index < MAX_BLOOM_COUNT; index++)
-	{
+	for (int index = rt->bloom_count; index < MAX_BLOOM_COUNT + 1; index++)
 		m_curr_effect->set_texture(index, &m_black_view);
-	}
-	m_curr_effect->update_uniforms(poly);
 
-	blit(rt->target_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	for (int index = 0; index < MAX_BLOOM_COUNT + 1; index++)
+		m_renderer->set_sampler_mode(index, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::distortion_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::distortion_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
 	// skip distortion if no influencing settings
 	if (m_options->reflection == 0 && m_options->vignetting == 0 && m_options->distortion == 0 && m_options->cubic_distortion == 0 &&
 		m_options->distort_corner == 0 && m_options->round_corner == 0 && m_options->smooth_border == 0)
-		return;
+	{
+		return source_index;
+	}
+
+	int next_index = source_index ^ 1;
 
 	set_curr_effect(m_distortion_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(rt->target_rt_view, false);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::vector_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+void d3d11_shaders::vector_pass(d3d11_render_target *rt, d3d11_poly_info *poly, int vertnum)
 {
 	set_curr_effect(m_vector_effect.get());
-	m_curr_effect->set_float("LengthRatio", m_options->vector_length_ratio);
-	m_curr_effect->set_float("LengthScale", m_options->vector_length_scale);
-	m_curr_effect->set_float("BeamSmooth", m_options->vector_beam_smooth);
-	m_curr_effect->update_uniforms(poly);
+	float background_color[4] = { 0.f, 0.f, 0.f, 1.f };
+	m_d3d11_context->ClearRenderTargetView(rt->target_rt_view[0], background_color);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[0], rt->target_depth_rt_view[0]);
 
 	// we need to clear the vector render target here
-	blit(rt->target_rt_view, true);
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	blit(poly->numindices(), vertnum);
 }
 
-void d3d11_shaders::vector_buffer_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+int d3d11_shaders::vector_buffer_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly)
 {
-	set_curr_effect(m_vector_buffer_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->set_texture(1, !m_lut_texture ? nullptr : m_lut_texture->get_view());
-	m_curr_effect->set_bool("UiLutEnable", false);
-	m_curr_effect->update_uniforms(poly);
+	int next_index = source_index ^ 1;
 
+	set_curr_effect(m_vector_buffer_effect.get());
+	m_curr_effect->set_bool("UiLutEnable", false);
 	// we need to clear the vector render target here
-	blit(rt->target_rt_view, true);
+	float background_color[4] = { 0.f, 0.f, 0.f, 1.f };
+	m_d3d11_context->ClearRenderTargetView(rt->target_rt_view[next_index], background_color);
+	m_curr_effect->update_uniforms(poly, rt->target_rt_view[next_index], rt->target_depth_rt_view[next_index]);
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	if (m_lut_texture)
+	{
+		m_curr_effect->set_texture(1, m_lut_texture->get_view());
+		m_renderer->set_sampler_mode(1, true, D3D11_TEXTURE_ADDRESS_CLAMP);
+	}
+
+	m_d3d11_context->RSSetViewports(1, &rt->target_viewport);
+	blit();
+
+	return next_index;
 }
 
-void d3d11_shaders::screen_pass(d3d11_render_target *rt, d3d11_poly_info *poly)
+void d3d11_shaders::screen_pass(d3d11_render_target *rt, int source_index, d3d11_poly_info *poly, int vertnum)
 {
 	m_renderer->set_blendmode(PRIMFLAG_GET_BLENDMODE(poly->flags()));
 
 	set_curr_effect(m_default_effect.get());
-	m_curr_effect->set_texture(0, &rt->target_res_view);
-	m_curr_effect->set_bool("LutEnable", false);
-	m_curr_effect->set_bool("UiLutEnable", false);
-	m_curr_effect->update_uniforms(poly);
+	m_curr_effect->update_uniforms(poly, m_renderer->get_framebuffer(), m_renderer->get_depthbuffer());
+	m_curr_effect->set_texture(0, &rt->target_res_view[source_index]);
+	m_renderer->set_sampler_mode(0, true, D3D11_TEXTURE_ADDRESS_MIRROR);
 
-	//blit(backbuffer.Get(), false);
+	D3D11_VIEWPORT viewport = m_renderer->get_viewport();
+	m_d3d11_context->RSSetViewports(1, &viewport);
+	blit(poly->numindices(), vertnum);
 
 	if (m_recording_movie)
 	{
-		blit(m_recorder->render_target(), false);
+		m_d3d11_context->RSSetViewports(1, &viewport);
+		//blit(m_recorder->render_target(), m_recorder->depth_target());
 		m_recorder->save_frame();
 	}
 
 	if (m_render_snap)
 	{
 		// we need to clear the snap render target here
-		blit(m_snap_target, true);
+		m_d3d11_context->RSSetViewports(1, &viewport);
+		//blit(m_snap_target, nullptr);
 		render_snapshot(m_snap_texture);
 		m_render_snap = false;
 	}
@@ -1426,13 +1472,18 @@ void d3d11_shaders::ui_pass(d3d11_poly_info *poly, int vertnum)
 {
 	m_renderer->set_blendmode(PRIMFLAG_GET_BLENDMODE(poly->flags()));
 
-	m_renderer->set_sampler_mode(true, PRIMFLAG_GET_TEXWRAP(poly->flags()) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP);
+	set_curr_effect(m_ui_effect.get());
+	m_curr_effect->update_uniforms(poly, m_renderer->get_framebuffer(), m_renderer->get_depthbuffer());
 	m_curr_effect->set_texture(0, m_diffuse_texture->get_view());
-	m_curr_effect->update_uniforms(poly);
+	if (m_ui_lut_texture)
+		m_curr_effect->set_texture(1, m_ui_lut_texture->get_view());
 
-	m_curr_effect->set_texture(1, !m_ui_lut_texture ? nullptr : m_ui_lut_texture->get_view());
+	m_renderer->set_sampler_mode(0, true, PRIMFLAG_GET_TEXWRAP(poly->flags()) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP);
+	m_renderer->set_sampler_mode(1, true, D3D11_TEXTURE_ADDRESS_CLAMP);
 
-	blit(nullptr, false);
+	D3D11_VIEWPORT viewport = m_renderer->get_viewport();
+	m_d3d11_context->RSSetViewports(1, &viewport);
+	blit(6, vertnum);
 }
 
 
@@ -1466,34 +1517,32 @@ void d3d11_shaders::render_quad(d3d11_poly_info *poly, int vertnum)
 			return;
 		}
 
-		ntsc_pass(rt, poly);
-		color_convolution_pass(rt, poly);
-		prescale_pass(rt, poly);
-		deconverge_pass(rt, poly);
-		scanline_pass(rt, poly);
-		defocus_pass(rt, poly);
-		//phosphor_pass(rt, poly);
+		int guest_index = ntsc_pass(rt, poly);
+		guest_index = color_convolution_pass(rt, guest_index, poly);
+
+		int native_index = prescale_pass(rt, guest_index, poly);
+		native_index = deconverge_pass(rt, native_index, poly);
+		native_index = scanline_pass(rt, native_index, poly);
+		native_index = defocus_pass(rt, native_index, poly);
 
 		// create bloom textures
 		bool bloom_enabled = (m_options->bloom_scale > 0.0f);
 		if (bloom_enabled)
 		{
-			post_pass(rt, poly, true);
-			downsample_pass(rt, poly);
+			int next_guest_index = post_pass(rt, guest_index, native_index, poly, true);
+			downsample_pass(rt, next_guest_index, poly);
 		}
 
 		// apply bloom textures (if enabled) and other post effects
-		post_pass(rt, poly, false);
-		bloom_pass(rt, poly);
-		phosphor_pass(rt, poly);
-		chroma_pass(rt, poly);
-
-		distortion_pass(rt, poly);
+		native_index = post_pass(rt, guest_index, native_index, poly, false);
+		native_index = bloom_pass(rt, native_index, poly);
+		native_index = phosphor_pass(rt, native_index, poly);
+		native_index = chroma_pass(rt, native_index, poly);
+		native_index = distortion_pass(rt, native_index, poly);
 
 		// render on screen
-		m_renderer->set_sampler_mode(true, D3D11_TEXTURE_ADDRESS_MIRROR);
-		screen_pass(rt, poly);
-		m_renderer->set_sampler_mode(true, PRIMFLAG_GET_TEXWRAP(m_curr_texture->get_flags()) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP);
+		screen_pass(rt, native_index, poly, vertnum);
+		m_renderer->set_sampler_mode(0, true, PRIMFLAG_GET_TEXWRAP(m_curr_texture->get_flags()) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP);
 
 		m_curr_texture->increment_frame_count();
 		m_curr_texture->mask_frame_count(m_options->yiq_phase_count);
@@ -1519,7 +1568,7 @@ void d3d11_shaders::render_quad(d3d11_poly_info *poly, int vertnum)
 			return;
 		}
 
-		vector_pass(rt, poly);
+		vector_pass(rt, poly, vertnum);
 
 		m_renderer->get_context()->OMSetRenderTargets(1, m_renderer->get_framebuffer_ptr(), m_renderer->get_depthbuffer());
 
@@ -1544,27 +1593,24 @@ void d3d11_shaders::render_quad(d3d11_poly_info *poly, int vertnum)
 			return;
 		}
 
-		vector_buffer_pass(rt, poly);
-		deconverge_pass(rt, poly);
-		defocus_pass(rt, poly);
-		//phosphor_pass(rt, poly);
+		int native_index = vector_buffer_pass(rt, 0, poly);
+		native_index = deconverge_pass(rt, native_index, poly);
+		native_index = defocus_pass(rt, native_index, poly);
 
 		// create bloom textures
-		post_pass(rt, poly, true);
-		downsample_pass(rt, poly);
+		int next_guest_index = post_pass(rt, 0, native_index, poly, true);
+		downsample_pass(rt, next_guest_index, poly);
 
 		// apply bloom textures
-		post_pass(rt, poly, false);
-		bloom_pass(rt, poly);
-
-		phosphor_pass(rt, poly);
-		chroma_pass(rt, poly);
-		distortion_pass(rt, poly);
+		native_index = post_pass(rt, 0, native_index, poly, false);
+		native_index = bloom_pass(rt, native_index, poly);
+		native_index = phosphor_pass(rt, native_index, poly);
+		native_index = chroma_pass(rt, native_index, poly);
+		native_index = distortion_pass(rt, native_index, poly);
 
 		// render on screen
-		m_renderer->set_sampler_mode(true, D3D11_TEXTURE_ADDRESS_MIRROR);
-		screen_pass(rt, poly);
-		m_renderer->set_sampler_mode(true, PRIMFLAG_GET_TEXWRAP(m_curr_texture->get_flags()) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP);
+		screen_pass(rt, native_index, poly, vertnum);
+		m_renderer->set_sampler_mode(0, true, PRIMFLAG_GET_TEXWRAP(m_curr_texture->get_flags()) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP);
 
 		m_curr_target++;
 	}
@@ -1703,7 +1749,9 @@ bool d3d11_shaders::add_render_target(render_primitive *prim, int source_width, 
 	std::unique_ptr<d3d11_render_target> target = std::make_unique<d3d11_render_target>();
 
 	if (!target->init(m_renderer, source_width, source_height, target_width, target_height, source_screen))
+	{
 		return false;
+	}
 
 	m_render_target_list.push_back(std::move(target));
 
@@ -1734,7 +1782,9 @@ bool d3d11_shaders::create_texture_target(render_primitive *prim, int width, int
 
 	osd_printf_verbose("Direct3D11: Create texture target - %dx%d\n", target_width, target_height);
 	if (!add_render_target(prim, source_width, source_height, source_screen, target_width, target_height))
+	{
 		return false;
+	}
 
 	return true;
 }
@@ -1747,9 +1797,7 @@ bool d3d11_shaders::create_texture_target(render_primitive *prim, int width, int
 void d3d11_shaders::delete_resources()
 {
 	if (!m_initialized || !enabled())
-	{
 		return;
-	}
 
 	m_recording_movie = false;
 	m_recorder.reset();
@@ -1971,6 +2019,7 @@ enum slider_option
 	SLIDER_NTSC_Q_VALUE,
 	SLIDER_NTSC_SCAN_TIME,
 	SLIDER_LUT_ENABLE,
+	SLIDER_BLOOM_SHIFT,
 };
 
 enum slider_screen_type
@@ -2057,6 +2106,7 @@ d3d11_slider_desc d3d11_shaders::s_sliders[] =
 	{ "NTSC Q Signal Bandwidth (MHz)",      0,    60,  2100, 5, SLIDER_FLOAT,    SLIDER_SCREEN_TYPE_LCD_OR_RASTER, SLIDER_NTSC_Q_VALUE,            0.01f,    "%1.2f", {} },
 	{ "NTSC Scanline Duration (uSec)",      0,  5260, 10000, 1, SLIDER_FLOAT,    SLIDER_SCREEN_TYPE_LCD_OR_RASTER, SLIDER_NTSC_SCAN_TIME,          0.01f,    "%1.2f", {} },
 	{ "3D LUT (Screen)",                    0,     0,     1, 1, SLIDER_INT_ENUM, SLIDER_SCREEN_TYPE_ANY,           SLIDER_LUT_ENABLE,              0,        "%s",    { "Off", "On" } },
+	{ "Bloom Shift",                     -100,     0,   100, 1, SLIDER_VEC2,     SLIDER_SCREEN_TYPE_VECTOR,        SLIDER_BLOOM_SHIFT,             0.01f,    "%1.2f", {} },
 	{ nullptr, 0, 0, 0, 0, 0, 0, -1, 0, nullptr, {} }
 };
 
@@ -2123,6 +2173,7 @@ void *d3d11_shaders::get_slider_option(int id, int index)
 		case SLIDER_BLOOM_LVL6_SCALE: return &(m_options->bloom_level6_weight);
 		case SLIDER_BLOOM_LVL7_SCALE: return &(m_options->bloom_level7_weight);
 		case SLIDER_BLOOM_LVL8_SCALE: return &(m_options->bloom_level8_weight);
+		case SLIDER_BLOOM_SHIFT: return &(m_options->bloom_shift);
 		case SLIDER_NTSC_ENABLE: return &(m_options->yiq_enable);
 		case SLIDER_NTSC_JITTER: return &(m_options->yiq_jitter);
 		case SLIDER_NTSC_A_VALUE: return &(m_options->yiq_a);
@@ -2270,38 +2321,44 @@ bool d3d11_uniform::update(d3d11_poly_info *poly)
 			break;
 		}
 		case CU_TARGET_DIMS:
-		{
 			if (shadersys->m_curr_render_target)
 			{
 				float targetdims[2] = { float(shadersys->m_curr_render_target->target_width), float(shadersys->m_curr_render_target->target_height) };
 				return m_shader->set_vector("TargetDims", 2, targetdims);
 			}
 			break;
-		}
+
 		case CU_TARGET_SCALE:
-		{
 			if (shadersys->m_curr_render_target)
 			{
 				float targetscale[2] = { shadersys->m_oversampling_enable ? 2.0f : 1.0f, shadersys->m_oversampling_enable ? 2.0f : 1.0f };
 				return m_shader->set_vector("TargetScale", 2, targetscale);
 			}
 			break;
-		}
+
 		case CU_QUAD_DIMS:
-		{
 			if (shadersys->m_curr_poly)
 			{
 				float quaddims[2] = { floorf(shadersys->m_curr_poly->prim_width() + 0.5f), floorf(shadersys->m_curr_poly->prim_height() + 0.5f) };
 				return m_shader->set_vector("QuadDims", 2, quaddims);
 			}
 			break;
-		}
 
 		case CU_SWAP_XY:
 			return m_shader->set_bool("SwapXY", renderer->window().swap_xy());
 
 		case CU_VECTOR_SCREEN:
 			return m_shader->set_bool("VectorScreen", vector_screen);
+		case CU_VECTOR_TIME_RATIO:
+			return m_shader->set_float("TimeRatio", 0.f);
+		case CU_VECTOR_TIME_SCALE:
+			return m_shader->set_float("TimeScale", 0.f);
+		case CU_VECTOR_LENGTH_RATIO:
+			return m_shader->set_float("LengthRatio", options->vector_length_ratio);
+		case CU_VECTOR_LENGTH_SCALE:
+			return m_shader->set_float("LengthScale", options->vector_length_scale);
+		case CU_VECTOR_BEAM_SMOOTH:
+			return m_shader->set_float("BeamSmooth", options->vector_beam_smooth);
 
 		case CU_BLOOM_LEVEL0_WEIGHT:
 			return m_shader->set_float("Level0Weight", options->bloom_level0_weight);
@@ -2433,7 +2490,6 @@ bool d3d11_uniform::update(d3d11_poly_info *poly)
 		case CU_POST_SHADOW_DIMS:
 		{
 			d3d11_vec2f shadow_dims;
-
 			if (shadersys->m_shadow_texture)
 			{
 				shadow_dims = shadersys->m_shadow_texture->get_rawdims();
@@ -2501,6 +2557,8 @@ d3d11_effect::d3d11_effect(d3d11_shaders *shadersys, ID3D11Device *d3d11, ID3D11
 	, m_valid(false)
 	, m_active(false)
 {
+	strcpy(m_name, name);
+
 	char name_cstr[1024];
 	sprintf(name_cstr, "%s\\%s", path, name);
 	auto effect_name = osd::text::to_tstring(name_cstr);
@@ -2562,65 +2620,84 @@ d3d11_effect::~d3d11_effect()
 		m_constant_buffer = nullptr;
 	}
 
-	m_vecs.clear();
-	m_floats.clear();
-	m_ints.clear();
-	m_bools.clear();
+	m_uniform_offsets.clear();
 }
 
 void d3d11_effect::add_uniform(D3DXHANDLE param, d3d11_uniform::uniform_type type, int id)
 {
-	m_uniform_offsets[param] = m_occupied_uniforms;
+	uint32_t uniform_size = 1;
 	switch (type)
 	{
 		case d3d11_uniform::UT_VEC4:
-			m_occupied_uniforms += 4;
+			uniform_size = 4;
 			break;
 		case d3d11_uniform::UT_VEC3:
-			m_occupied_uniforms += 3;
+			uniform_size = 3;
 			break;
 		case d3d11_uniform::UT_VEC2:
-			m_occupied_uniforms += 2;
+			uniform_size = 2;
 			break;
 		default:
-			m_occupied_uniforms++;
+			uniform_size = 1;
 			break;
 	}
 
+	const uint32_t buffer_line_words_free = 4 - (m_occupied_uniforms & 3);
+	if (buffer_line_words_free < uniform_size)
+		m_occupied_uniforms += buffer_line_words_free;
+	m_uniform_offsets[param] = m_occupied_uniforms;
+	m_occupied_uniforms += uniform_size;
 	m_uniform_list.push_back(std::make_unique<d3d11_uniform>(this, param, type, id));
 }
 
-void d3d11_effect::update_uniforms(d3d11_poly_info *poly)
+void d3d11_effect::update_uniforms(d3d11_poly_info *poly, ID3D11RenderTargetView *dst, ID3D11DepthStencilView *dst_depth)
 {
+	m_d3d11_context->OMSetRenderTargets(1, &dst, dst_depth);
+
 	for (auto &uniform : m_uniform_list)
 		(*uniform).update(poly);
+
+	D3D11_MAPPED_SUBRESOURCE mapped_constants;
+	m_d3d11_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_constants);
+	float* constants = (float *)mapped_constants.pData;
+	memcpy(constants, m_uniform_data, sizeof(float) * m_occupied_uniforms);
+	m_d3d11_context->Unmap(m_constant_buffer, 0);
+
+	m_d3d11_context->VSSetShader(m_vs, nullptr, 0);
+	m_d3d11_context->VSSetConstantBuffers(0, 1, &m_constant_buffer);
+	m_d3d11_context->PSSetShader(m_ps, nullptr, 0);
+	m_d3d11_context->PSSetConstantBuffers(0, 1, &m_constant_buffer);
+}
+
+void d3d11_effect::finalize_uniforms()
+{
+	D3D11_BUFFER_DESC constant_buffer_desc = { 0 };
+	constant_buffer_desc.ByteWidth      = ((sizeof(uint32_t) * m_occupied_uniforms) + 0xf) & 0xfffffff0; // round constant buffer size to a 16-byte boundary
+	constant_buffer_desc.Usage          = D3D11_USAGE_DYNAMIC;
+	constant_buffer_desc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
+	constant_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	m_d3d11->CreateBuffer(&constant_buffer_desc, nullptr, &m_constant_buffer);
 }
 
 void d3d11_effect::begin()
 {
 	m_active = true;
 	m_num_passes = 0;
-
-	struct pipeline_constants
-	{
-		float screen_dims[2];
-		float target_dims[2];
-		float source_dims[2];
-	};
-
-	m_d3d11_context->VSSetShader(m_vs, nullptr, 0);
-	m_d3d11_context->VSSetConstantBuffers(0, 1, &m_constant_buffer);
-	m_d3d11_context->PSSetShader(m_ps, nullptr, 0);
 }
 
 void d3d11_effect::end()
 {
+	ID3D11ShaderResourceView *const blank_srv[1] = { nullptr };
+	for (uint32_t i = 0; i < 16; i++)
+	{
+		m_d3d11_context->PSSetShaderResources(i, 1, blank_srv);
+	}
 	m_active = false;
 }
 
-bool d3d11_effect::set_vector(D3DXHANDLE param, int count, float *vector)
+bool d3d11_effect::set_vector(D3DXHANDLE param, uint32_t count, float *vector)
 {
-	count = std::min(count, 4);
+	count = std::min(count, 4U);
 
 	auto iter = m_uniform_offsets.find(param);
 	if (iter != m_uniform_offsets.end())
@@ -2628,11 +2705,13 @@ bool d3d11_effect::set_vector(D3DXHANDLE param, int count, float *vector)
 		uint32_t data_offset = iter->second;
 		if (!memcmp(&m_uniform_data[data_offset], vector, sizeof(float) * count))
 			return false;
-
 		memcpy(&m_uniform_data[data_offset], vector, sizeof(float) * count);
 	}
 	else
 	{
+		const uint32_t buffer_line_words_free = 4 - (m_occupied_uniforms & 3);
+		if (buffer_line_words_free < count)
+			m_occupied_uniforms += buffer_line_words_free;
 		m_uniform_offsets[param] = m_occupied_uniforms;
 		memcpy(&m_uniform_data[m_occupied_uniforms], vector, sizeof(float) * count);
 		m_occupied_uniforms += count;
@@ -2643,8 +2722,8 @@ bool d3d11_effect::set_vector(D3DXHANDLE param, int count, float *vector)
 
 bool d3d11_effect::set_float(D3DXHANDLE param, float value)
 {
-	auto iter = m_floats.find(param);
-	if (iter != m_floats.end())
+	auto iter = m_uniform_offsets.find(param);
+	if (iter != m_uniform_offsets.end())
 	{
 		uint32_t data_offset = iter->second;
 		if (m_uniform_data[data_offset] == value)
@@ -2663,8 +2742,8 @@ bool d3d11_effect::set_float(D3DXHANDLE param, float value)
 
 bool d3d11_effect::set_int(D3DXHANDLE param, int value)
 {
-	auto iter = m_ints.find(param);
-	if (iter != m_ints.end())
+	auto iter = m_uniform_offsets.find(param);
+	if (iter != m_uniform_offsets.end())
 	{
 		uint32_t data_offset = iter->second;
 		if (m_uniform_data[data_offset] == float(value))
@@ -2683,8 +2762,8 @@ bool d3d11_effect::set_int(D3DXHANDLE param, int value)
 
 bool d3d11_effect::set_bool(D3DXHANDLE param, bool value)
 {
-	auto iter = m_bools.find(param);
-	if (iter != m_bools.end())
+	auto iter = m_uniform_offsets.find(param);
+	if (iter != m_uniform_offsets.end())
 	{
 		uint32_t data_offset = iter->second;
 		if (m_uniform_data[data_offset] == float(value))

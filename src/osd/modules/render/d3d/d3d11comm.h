@@ -165,8 +165,6 @@ private:
 	d3d11_vec2f             m_rawdims;                  // raw dims of the texture
 	int                     m_xprescale, m_yprescale;   // X/Y prescale factor
 	int                     m_cur_frame;                // what is our current frame?
-	D3D11_TEXTURE2D_DESC    m_desc;
-	D3D11_SUBRESOURCE_DATA  m_data;
 	ID3D11Texture2D        *m_tex;
 	ID3D11ShaderResourceView *m_view;                 // D3D11 shader-resource view pointer for this texture (no prescaling)
 
@@ -180,11 +178,12 @@ private:
 class d3d11_poly_info
 {
 public:
-	void init(D3D_PRIMITIVE_TOPOLOGY type, uint32_t count, uint32_t numverts, uint32_t flags,
+	void init(D3D_PRIMITIVE_TOPOLOGY type, uint32_t count, uint32_t numindices, uint32_t numverts, uint32_t flags,
 		d3d11_texture_info *texture, float prim_width, float prim_height, uint32_t tint)
 	{
 		m_type = type;
 		m_count = count;
+		m_numindices = numindices;
 		m_numverts = numverts;
 		m_flags = flags;
 		m_texture = texture;
@@ -195,6 +194,7 @@ public:
 
 	D3D_PRIMITIVE_TOPOLOGY  type() const { return m_type; }
 	uint32_t                count() const { return m_count; }
+	uint32_t                numindices() const { return m_numindices; }
 	uint32_t                numverts() const { return m_numverts; }
 	uint32_t                flags() const { return m_flags; }
 
@@ -208,6 +208,7 @@ public:
 private:
 	D3D_PRIMITIVE_TOPOLOGY  m_type;         // type of primitive
 	uint32_t                m_count;        // total number of primitives
+	uint32_t                m_numindices;   // total number of indices
 	uint32_t                m_numverts;     // total number of vertices
 	uint32_t                m_flags;        // rendering flags
 
@@ -250,7 +251,6 @@ public:
 	~d3d11_render_target();
 
 	bool init(renderer_d3d11 *d3d, int source_width, int source_height, int target_width, int target_height, int screen_index);
-	int next_index(int index) { return ++index > 1 ? 0 : index; }
 
 	// real target dimension
 	int target_width;
@@ -262,23 +262,36 @@ public:
 
 	int screen_index;
 
-	ID3D11Texture2D *source_texture;
-	ID3D11RenderTargetView *source_rt_view;
-	ID3D11ShaderResourceView *source_res_view;
+	ID3D11Texture2D *source_texture[2];
+	ID3D11RenderTargetView *source_rt_view[2];
+	ID3D11ShaderResourceView *source_res_view[2];
+	ID3D11Texture2D *source_depth_texture[2];
+	ID3D11DepthStencilView *source_depth_rt_view[2];
+	D3D11_VIEWPORT source_viewport;
 
-	ID3D11Texture2D *target_texture;
-	ID3D11RenderTargetView *target_rt_view;
-	ID3D11ShaderResourceView *target_res_view;
+	ID3D11Texture2D *target_texture[2];
+	ID3D11RenderTargetView *target_rt_view[2];
+	ID3D11ShaderResourceView *target_res_view[2];
+	ID3D11Texture2D *target_depth_texture[2];
+	ID3D11DepthStencilView *target_depth_rt_view[2];
+	D3D11_VIEWPORT target_viewport;
 
 	ID3D11Texture2D *cache_texture;
 	ID3D11RenderTargetView *cache_rt_view;
 	ID3D11ShaderResourceView *cache_res_view;
+	ID3D11Texture2D *cache_depth_texture;
+	ID3D11DepthStencilView *cache_depth_rt_view;
+	D3D11_VIEWPORT cache_viewport;
 
 	ID3D11Texture2D *bloom_texture[MAX_BLOOM_COUNT];
 	ID3D11RenderTargetView *bloom_rt_view[MAX_BLOOM_COUNT];
 	ID3D11ShaderResourceView *bloom_res_view[MAX_BLOOM_COUNT];
+	ID3D11Texture2D *bloom_depth_texture[MAX_BLOOM_COUNT];
+	ID3D11DepthStencilView *bloom_depth_rt_view[MAX_BLOOM_COUNT];
+	D3D11_VIEWPORT bloom_viewport[MAX_BLOOM_COUNT];
 
 	float bloom_dims[MAX_BLOOM_COUNT][2];
+	float source_dims[2];
 
 	int bloom_count;
 };

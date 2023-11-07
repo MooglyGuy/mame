@@ -21,20 +21,20 @@
 #include "../frontend/mame/ui/menuitem.h"
 
 struct slider_state;
-class bgfx_effect;
-class chain_manager;
+class bgfx_shader;
+class effect_manager;
 
 class bgfx_input_pair
 {
 public:
-	bgfx_input_pair(int index, std::string sampler, std::string texture, std::vector<std::string> available_textures, std::string selection, chain_manager& chains, uint32_t screen_index);
+	bgfx_input_pair(int index, std::string sampler, std::string texture, std::vector<std::string> available_textures, std::string selection, effect_manager& effects, uint32_t screen_index);
 	~bgfx_input_pair();
 
-	void bind(bgfx_effect *effect, const int32_t screen) const;
+	void bind(bgfx_shader *shader, const int32_t screen) const;
 	int32_t texture_changed(int32_t index, std::string *str, int32_t newval);
 
 	// Getters
-	chain_manager& chains() const { return m_chains; }
+	effect_manager& effects() const { return m_effects; }
 	std::string sampler() const { return m_sampler; }
 	std::string texture() const { return m_texture; }
 	std::vector<ui::menu_item> get_slider_list();
@@ -48,7 +48,7 @@ private:
 	std::string               m_texture;
 	std::vector<std::string>  m_available_textures;
 	std::string               m_selection;
-	chain_manager&            m_chains;
+	effect_manager&           m_effects;
 	int32_t                   m_current_texture;
 	ui::menu_item             m_selection_slider;
 	std::unique_ptr<slider_state> m_slider_state;

@@ -52,12 +52,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
-};
-
 //-----------------------------------------------------------------------------
 // Constants
 //-----------------------------------------------------------------------------
@@ -238,7 +232,7 @@ float2 GetQuadCoords(float2 coord, float2 scale, float distortionAmount, float c
 	return coord;
 }
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
 	// image distortion
 	float distortionAmount = DistortionAmount;
@@ -277,7 +271,7 @@ float4 ps_main(PS_INPUT Input) : COLOR
 	}
 
 	// Color
-	float4 BaseColor = tex2D(DiffuseSampler, BaseCoord);
+	float4 BaseColor = Diffuse.Sample(DiffuseSampler, BaseCoord);
 
 	// Vignetting Simulation
 	float2 VignetteCoord = QuadCoord;

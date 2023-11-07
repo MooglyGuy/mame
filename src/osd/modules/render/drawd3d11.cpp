@@ -15,12 +15,11 @@
 
 // MAMEOS headers
 #include "drawd3d11.h"
-
 #include "d3d/d3d11hlsl.h"
-
 #include "render_module.h"
 
 // from OSD implementation
+#include "strconv.h"
 #include "window.h"
 #include "winmain.h"
 
@@ -31,6 +30,7 @@
 #include "aviio.h"
 
 #include <utility>
+#include <cfloat>
 
 
 //============================================================
@@ -341,13 +341,13 @@ void renderer_d3d11::set_texture(d3d11_texture_info *texture)
 	}
 }
 
-void renderer_d3d11::set_sampler_mode(const bool linear_filter, const D3D11_TEXTURE_ADDRESS_MODE mode, const bool force_set)
+void renderer_d3d11::set_sampler_mode(const uint32_t slot, const bool linear_filter, const D3D11_TEXTURE_ADDRESS_MODE mode, const bool force_set)
 {
-	if (mode != m_sampler_mode || force_set)
+	if (mode != m_sampler_mode[slot] || linear_filter != m_linear_filter[slot] || force_set)
 	{
-		m_linear_filter = linear_filter;
-		m_sampler_mode = mode;
-		m_d3d11_context->PSSetSamplers(0, 1, &m_sampler_states[(int)linear_filter][(int)mode - 1]);
+		m_linear_filter[slot] = linear_filter;
+		m_sampler_mode[slot] = mode;
+		m_d3d11_context->PSSetSamplers(slot, 1, &m_sampler_states[(int)linear_filter][(int)mode - 1]);
 	}
 }
 
@@ -479,8 +479,6 @@ renderer_d3d11::renderer_d3d11(osd_window &window, const d3d11_create_fn create_
 	, m_toggle(false)
 	, m_last_texture(nullptr)
 	, m_blendmode(-1)
-	, m_linear_filter(false)
-	, m_sampler_mode(D3D11_TEXTURE_ADDRESS_BORDER)
 	, m_force_render_states(true)
 	, m_device_initialized(false)
 	, m_framebuffer(nullptr)
@@ -488,23 +486,33 @@ renderer_d3d11::renderer_d3d11(osd_window &window, const d3d11_create_fn create_
 	, m_depthbuffer(nullptr)
 	, m_depthbuffer_view(nullptr)
 	, m_vs(nullptr)
+	, m_vs_bcg(nullptr)
+	, m_vs_palette16(nullptr)
 	, m_ps(nullptr)
+	, m_ps_bcg(nullptr)
+	, m_ps_palette16(nullptr)
 	, m_rasterizer_state(nullptr)
 	, m_depth_stencil_state(nullptr)
 	, m_constant_buffer(nullptr)
 	, m_input_layout(nullptr)
+	, m_input_layout_bcg(nullptr)
+	, m_input_layout_palette16(nullptr)
 	, m_shaders(nullptr)
 	, m_vertexbuf(nullptr)
 	, m_numverts(0)
 	, m_indexbuf(nullptr)
 	, m_texture_manager()
 {
+	for (uint32_t i = 0; i < 16; i++)
+	{
+		m_linear_filter[i] = false;
+		m_sampler_mode[i] = D3D11_TEXTURE_ADDRESS_BORDER;
+	}
 }
 
 bool renderer_d3d11::initialize()
 {
 	osd_printf_verbose("Direct3D11: Initialize\n");
-	printf("Direct3D11: Initialize\n");
 
 	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 	(m_create_fn)(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
@@ -526,6 +534,25 @@ bool renderer_d3d11::pre_window_draw_check()
 	// if we're in the middle of resizing, leave things alone
 	if (dynamic_cast<win_window_info &>(window()).m_resize_state == win_window_info::RESIZE_STATE_RESIZING)
 		return true;
+
+	// check if shaders should be toggled
+	if (m_device_initialized && m_toggle)
+	{
+		m_toggle = false;
+
+		// free resources
+		device_delete_resources();
+
+		m_shaders->toggle();
+		m_sliders_dirty = true;
+
+		// re-create resources
+		if (!device_create_resources())
+		{
+			osd_printf_verbose("Direct3D11: failed to recreate resources for device; failing permanently\n");
+			return false;
+		}
+	}
 
 	// if we have a device, check the cooperative level
 	if (m_device_initialized && !device_test_cooperative())
@@ -555,7 +582,7 @@ void d3d11_texture_manager::update_textures()
 			d3d11_texture_info *texture = find_texinfo(&prim.texture, prim.flags);
 			if (texture == nullptr)
 			{
-				const int prescale = /*m_renderer.get_shaders()->enabled() ? 1 :*/ m_renderer.window().prescale();
+				const int prescale = m_renderer.get_shaders()->enabled() ? 1 : m_renderer.window().prescale();
 				auto tex = std::make_unique<d3d11_texture_info>(*this, &prim.texture, prescale, prim.flags);
 				texture = tex.get();
 				m_texture_list.push_back(std::move(tex));
@@ -572,10 +599,10 @@ void d3d11_texture_manager::update_textures()
 		}
 	}
 
-	//if (!m_renderer.get_shaders()->enabled())
+	if (!m_renderer.get_shaders()->enabled())
 		return;
 
-	/*int screen_index = 0;
+	int screen_index = 0;
 	for (render_primitive &prim : *m_renderer.window().m_primlist)
 	{
 		if (PRIMFLAG_GET_SCREENTEX(prim.flags))
@@ -602,7 +629,7 @@ void d3d11_texture_manager::update_textures()
 			}
 			screen_index++;
 		}
-	}*/
+	}
 }
 
 void renderer_d3d11::begin_frame()
@@ -617,6 +644,9 @@ void renderer_d3d11::begin_frame()
 
 	// first update any textures
 	m_texture_manager->update_textures();
+
+	// ensure we have a full-screen quad
+	init_blit_quad();
 
 	if (m_shaders->enabled())
 		m_shaders->begin_frame(window().m_primlist);
@@ -679,6 +709,7 @@ void renderer_d3d11::end_frame()
 	m_d3d11_context->Unmap(m_vertexbuf, 0);
 
 	// present the current buffers
+	m_d3d11_context->Flush();
 	HRESULT result = m_swap_chain->Present(/*m_sync_interval*/0, 0);
 	if (FAILED(result))
 		osd_printf_error("Direct3D11: Present call failed: %08x\n", (uint32_t)result);
@@ -770,8 +801,6 @@ bool renderer_d3d11::device_create()
 		osd_printf_error("Direct3D11: CreateSwapChain call failed: %08x\n", (uint32_t)result);
 		return false;
 	}
-	static const char *swap_chain_name = "MAME Swap Chain";
-	m_swap_chain->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(swap_chain_name) - 1, swap_chain_name);
 
 	m_texture_manager = std::make_unique<d3d11_texture_manager>(*this);
 
@@ -791,19 +820,13 @@ bool renderer_d3d11::device_create()
 bool renderer_d3d11::device_create_resources()
 {
 	// initialize our framebuffer and view
-	printf("Creating m_framebuffer\n");
 	HRESULT result = m_swap_chain->GetBuffer(0, IID_ID3D11Texture2D, reinterpret_cast<void **>(&m_framebuffer));
 	if (FAILED(result))
 	{
 		osd_printf_error("m_swap_chain->GetBuffer failed, %08x\n", (uint32_t)result);
 		return false;
 	}
-	printf("Creating m_framebuffer_view\n");
 	m_d3d11->CreateRenderTargetView(m_framebuffer, nullptr, &m_framebuffer_view);
-	static const char *frame_buffer_name = "MAME Framebuffer";
-	static const char *frame_buffer_view_name = "MAME Framebuffer View";
-	m_framebuffer->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(frame_buffer_name) - 1, frame_buffer_name);
-	m_framebuffer_view->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(frame_buffer_view_name) - 1, frame_buffer_view_name);
 
 	// initialize our depthbuffer and view
 	D3D11_TEXTURE2D_DESC depth_buffer_desc;
@@ -811,74 +834,36 @@ bool renderer_d3d11::device_create_resources()
 	m_framebuffer->GetDesc(&depth_buffer_desc); // copy from framebuffer properties
 	depth_buffer_desc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depth_buffer_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	printf("Creating m_depthbuffer\n");
 	m_d3d11->CreateTexture2D(&depth_buffer_desc, nullptr, &m_depthbuffer);
-	printf("Creating m_depthbuffer_view\n");
 	m_d3d11->CreateDepthStencilView(m_depthbuffer, nullptr, &m_depthbuffer_view);
-	static const char *depth_buffer_name = "MAME Depth Buffer";
-	static const char *depth_buffer_view_name = "MAME Depth Buffer View";
-	m_depthbuffer->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(depth_buffer_name) - 1, depth_buffer_name);
-	m_depthbuffer_view->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(depth_buffer_view_name) - 1, depth_buffer_view_name);
+
+	// Pre-initialize our input layout descriptor
+	D3D11_INPUT_ELEMENT_DESC input_desc[4];
+	input_desc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,                            0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	input_desc[1] = { "COLOR",    0, DXGI_FORMAT_B8G8R8A8_UNORM,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	input_desc[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	input_desc[3] = { "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 
 	// initialize our default shaders
-	ID3DBlob *vs_results = nullptr;
-	ID3DBlob *vs_blob = nullptr;
-	result = (m_compile_fn)(L"shaders.hlsl", nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vs_blob, &vs_results);
-	if (FAILED(result))
-	{
-		osd_printf_error("Direct3D11: VS compilation failed: %08x\n", (uint32_t)result);
-		const char *results = (const char *)vs_results->GetBufferPointer();
-		size_t results_size = (size_t)vs_results->GetBufferSize();
-		for (size_t i = 0; i < results_size; i++)
-		{
-			osd_printf_error("%c", results[i]);
-		}
-		osd_printf_error("\n");
+	if (!load_shader("default_d3d11.hlsl", &m_vs, &m_ps, input_desc, &m_input_layout))
 		return false;
-	}
-	printf("Creating m_vs\n");
-	m_d3d11->CreateVertexShader(vs_blob->GetBufferPointer(), vs_blob->GetBufferSize(), nullptr, &m_vs);
-	static const char *vertex_shader_name = "MAME Vertex Shader";
-	m_vs->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(vertex_shader_name) - 1, vertex_shader_name);
-
-	ID3DBlob *ps_results = nullptr;
-	ID3DBlob *ps_blob = nullptr;
-	result = (m_compile_fn)(L"shaders.hlsl", nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &ps_blob, &ps_results);
-	if (FAILED(result))
-	{
-		osd_printf_error("Direct3D11: PS compilation failed: %08x\n", (uint32_t)result);
-		const char *results = (const char *)ps_results->GetBufferPointer();
-		size_t results_size = (size_t)ps_results->GetBufferSize();
-		for (size_t i = 0; i < results_size; i++)
-		{
-			osd_printf_error("%c", results[i]);
-		}
-		osd_printf_error("\n");
+	if (!load_shader("apply_bcg.hlsl", &m_vs_bcg, &m_ps_bcg, input_desc, &m_input_layout_bcg))
 		return false;
-	}
-	printf("Creating m_ps\n");
-	m_d3d11->CreatePixelShader(ps_blob->GetBufferPointer(), ps_blob->GetBufferSize(), nullptr, &m_ps);
-	static const char *pixel_shader_name = "MAME Pixel Shader";
-	m_ps->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(pixel_shader_name) - 1, pixel_shader_name);
+	if (!load_shader("apply_palette16.hlsl", &m_vs_palette16, &m_ps_palette16, input_desc, &m_input_layout_palette16))
+		return false;
 
 	// initialize our rasterizer state
 	D3D11_RASTERIZER_DESC rasterizer_desc = {};
 	rasterizer_desc.FillMode = D3D11_FILL_SOLID;
 	rasterizer_desc.CullMode = D3D11_CULL_NONE;
-	printf("Creating m_rasterizer_state\n");
 	m_d3d11->CreateRasterizerState(&rasterizer_desc, &m_rasterizer_state);
-	static const char *rasterizer_state_name = "MAME Rasterizer State";
-	m_rasterizer_state->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(rasterizer_state_name) - 1, rasterizer_state_name);
 
 	// initialize our depth-stencil state
 	D3D11_DEPTH_STENCIL_DESC depth_stencil_desc = {};
 	depth_stencil_desc.DepthEnable    = false;
 	depth_stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depth_stencil_desc.DepthFunc      = D3D11_COMPARISON_ALWAYS;
-	printf("Creating m_depth_stencil_state\n");
 	m_d3d11->CreateDepthStencilState(&depth_stencil_desc, &m_depth_stencil_state);
-	static const char *depth_stencil_state_name = "MAME Depth/Stencil State";
-	m_depth_stencil_state->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(depth_stencil_state_name) - 1, depth_stencil_state_name);
 
 	// initialize our constant buffer
 	D3D11_BUFFER_DESC constant_buffer_desc = { 0 };
@@ -886,23 +871,7 @@ bool renderer_d3d11::device_create_resources()
 	constant_buffer_desc.Usage          = D3D11_USAGE_DYNAMIC;
 	constant_buffer_desc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
 	constant_buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	printf("Creating m_constant_buffer\n");
 	m_d3d11->CreateBuffer(&constant_buffer_desc, nullptr, &m_constant_buffer);
-	static const char *constant_buffer_name = "MAME Constant Buffer";
-	m_constant_buffer->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(constant_buffer_name) - 1, constant_buffer_name);
-
-	// initialize our vertex format
-	m_input_desc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,                            0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-	m_input_desc[1] = { "COLOR",    0, DXGI_FORMAT_B8G8R8A8_UNORM,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-	m_input_desc[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-	m_input_desc[3] = { "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-	printf("Creating m_input_layout\n");
-	m_d3d11->CreateInputLayout(m_input_desc, 4, vs_blob->GetBufferPointer(), vs_blob->GetBufferSize(), &m_input_layout);
-	static const char *input_layout_name = "MAME Input Layout";
-	m_input_layout->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(input_layout_name) - 1, input_layout_name);
-
-	vs_blob->Release();
-	ps_blob->Release();
 
 	// initialize our vertex buffer
 	D3D11_BUFFER_DESC vertex_buffer_desc = { 0 };
@@ -914,35 +883,33 @@ bool renderer_d3d11::device_create_resources()
 	D3D11_SUBRESOURCE_DATA vertex_data = { 0 };
 	vertex_data.pSysMem = m_vertex_data;
 
-	printf("Creating m_vertexbuf\n");
 	result = m_d3d11->CreateBuffer(&vertex_buffer_desc, &vertex_data, &m_vertexbuf);
 	if (FAILED(result))
 	{
 		osd_printf_error("Direct3D11: CreateBuffer failed: %08x\n", (uint32_t)result);
 		return false;
 	}
-	static const char *vertexbuf_name = "Vertex Buffer";
-	m_vertexbuf->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(vertexbuf_name) - 1, vertexbuf_name);
 
 	// initialize our index buffer
 	D3D11_BUFFER_DESC index_buffer_desc = { 0 };
-	index_buffer_desc.ByteWidth = sizeof(uint32_t) * 6; // 3 vertices per triangle, 2 triangles per quad
+	index_buffer_desc.ByteWidth = sizeof(uint32_t) * (VERTEX_BUFFER_LENGTH / 4) * 6; // 3 vertices per triangle, 2 triangles per quad
 	index_buffer_desc.Usage     = D3D11_USAGE_IMMUTABLE;
 	index_buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-	m_index_data[0] = 0;
-	m_index_data[1] = 1;
-	m_index_data[2] = 3;
-	m_index_data[3] = 3;
-	m_index_data[4] = 2;
-	m_index_data[5] = 0;
+	uint32_t base_index = 0;
+	for (uint32_t i = 0; i < (VERTEX_BUFFER_LENGTH / 4) * 6; i += 6, base_index += 4)
+	{
+		m_index_data[i + 0] = base_index;
+		m_index_data[i + 1] = base_index + 1;
+		m_index_data[i + 2] = base_index + 3;
+		m_index_data[i + 3] = base_index + 3;
+		m_index_data[i + 4] = base_index + 2;
+		m_index_data[i + 5] = base_index;
+	}
 
 	D3D11_SUBRESOURCE_DATA index_data = { 0 };
 	index_data.pSysMem = m_index_data;
-	printf("Creating m_indexbuf\n");
 	m_d3d11->CreateBuffer(&index_buffer_desc, &index_data, &m_indexbuf);
-	static const char *indexbuf_name = "Index Buffer";
-	m_indexbuf->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(indexbuf_name) - 1, indexbuf_name);
 
 	// assign our viewport
 	m_viewport = { 0.f, 0.f, float(depth_buffer_desc.Width), float(depth_buffer_desc.Height), 0.f, 1.f };
@@ -982,6 +949,120 @@ bool renderer_d3d11::device_create_resources()
 //  device_create_blend_states
 //============================================================
 
+bool renderer_d3d11::load_shader(const char *filename, ID3D11VertexShader **vs, ID3D11PixelShader **ps,
+	D3D11_INPUT_ELEMENT_DESC *layout_desc, ID3D11InputLayout **layout)
+{
+	const char *hlsl_dir = downcast<windows_options &>(window().machine().options()).screen_post_fx_dir();
+
+	char name_cstr[1024];
+	sprintf(name_cstr, "%s\\%s", hlsl_dir, filename);
+	auto effect_name = osd::text::to_tstring(name_cstr);
+
+	ID3DBlob *vs_results = nullptr;
+	ID3DBlob *vs_blob = nullptr;
+	HRESULT result = (m_compile_fn)(effect_name.c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vs_blob, &vs_results);
+	if (FAILED(result))
+	{
+		osd_printf_error("Direct3D11: VS compilation failed for %ls: %08x\n", effect_name.c_str(), (uint32_t)result);
+		const char *results = (const char *)vs_results->GetBufferPointer();
+		size_t results_size = (size_t)vs_results->GetBufferSize();
+		for (size_t i = 0; i < results_size; i++)
+		{
+			osd_printf_error("%c", results[i]);
+		}
+		osd_printf_error("\n");
+		return false;
+	}
+	m_d3d11->CreateVertexShader(vs_blob->GetBufferPointer(), vs_blob->GetBufferSize(), nullptr, vs);
+
+	ID3DBlob *ps_results = nullptr;
+	ID3DBlob *ps_blob = nullptr;
+	result = (m_compile_fn)(effect_name.c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &ps_blob, &ps_results);
+	if (FAILED(result))
+	{
+		osd_printf_error("Direct3D11: PS compilation failed for %ls: %08x\n", effect_name.c_str(), (uint32_t)result);
+		const char *results = (const char *)ps_results->GetBufferPointer();
+		size_t results_size = (size_t)ps_results->GetBufferSize();
+		for (size_t i = 0; i < results_size; i++)
+		{
+			osd_printf_error("%c", results[i]);
+		}
+		osd_printf_error("\n");
+		vs_blob->Release();
+		return false;
+	}
+	m_d3d11->CreatePixelShader(ps_blob->GetBufferPointer(), ps_blob->GetBufferSize(), nullptr, ps);
+
+	m_d3d11->CreateInputLayout(layout_desc, 4, vs_blob->GetBufferPointer(), vs_blob->GetBufferSize(), layout);
+
+	vs_blob->Release();
+	ps_blob->Release();
+
+	return true;
+}
+
+
+//============================================================
+//  init_blit_quad
+//
+//  Called at the start of each frame so that the two
+//  triangles used for the full-screen blits are always
+//  at the beginning of the vertex buffer.
+//============================================================
+
+void renderer_d3d11::init_blit_quad()
+{
+	d3d11_vertex *vertbuf = mesh_alloc(4);
+	if (vertbuf == nullptr)
+		return;
+
+	// fill in the vertexes clockwise
+	vertbuf[0].x = 0.f;
+	vertbuf[0].y = 0.f;
+	vertbuf[1].x = m_width;
+	vertbuf[1].y = 0.f;
+	vertbuf[2].x = 0.f;
+	vertbuf[2].y = m_height;
+	vertbuf[3].x = m_width;
+	vertbuf[3].y = m_height;
+
+	vertbuf[0].u0 = 0.f;
+	vertbuf[0].v0 = 0.f;
+
+	vertbuf[1].u0 = 1.f;
+	vertbuf[1].v0 = 0.f;
+
+	vertbuf[2].u0 = 0.f;
+	vertbuf[2].v0 = 1.f;
+
+	vertbuf[3].u0 = 1.f;
+	vertbuf[3].v0 = 1.f;
+
+	vertbuf[0].u1 = 0.f;
+	vertbuf[0].v1 = 0.f;
+	vertbuf[1].u1 = 0.f;
+	vertbuf[1].v1 = 0.f;
+	vertbuf[2].u1 = 0.f;
+	vertbuf[2].v1 = 0.f;
+	vertbuf[3].u1 = 0.f;
+	vertbuf[3].v1 = 0.f;
+
+	// set the color and Z parameters
+	for (int i = 0; i < 4; i++)
+	{
+		vertbuf[i].z = 0.f;
+		vertbuf[i].r = 255;
+		vertbuf[i].g = 255;
+		vertbuf[i].b = 255;
+		vertbuf[i].a = 255;
+	}
+}
+
+
+//============================================================
+//  device_create_blend_states
+//============================================================
+
 void renderer_d3d11::device_create_blend_states()
 {
 	D3D11_RENDER_TARGET_BLEND_DESC none_rt_blend_desc =
@@ -1004,23 +1085,10 @@ void renderer_d3d11::device_create_blend_states()
 	D3D11_BLEND_DESC alpha_desc = { false, false, { alpha_rt_blend_desc } };
 	D3D11_BLEND_DESC multiply_desc = { false, true, { multiply_rt_blend_desc } };
 	D3D11_BLEND_DESC add_desc = { false, false, { add_rt_blend_desc } };
-	printf("Creating BLENDMODE_NONE\n");
 	m_d3d11->CreateBlendState(&none_desc, &m_blend_states[BLENDMODE_NONE]);
-	printf("Creating BLENDMODE_ALPHA\n");
 	m_d3d11->CreateBlendState(&alpha_desc, &m_blend_states[BLENDMODE_ALPHA]);
-	printf("Creating BLENDMODE_RGB_MULTIPLY\n");
 	m_d3d11->CreateBlendState(&multiply_desc, &m_blend_states[BLENDMODE_RGB_MULTIPLY]);
-	printf("Creating BLENDMODE_ADD\n");
 	m_d3d11->CreateBlendState(&add_desc, &m_blend_states[BLENDMODE_ADD]);
-
-	static const char *none_blend_name = "NoneBlendState";
-	static const char *alpha_blend_name = "AlphaBlendState";
-	static const char *mul_blend_name = "MultiplyBlendState";
-	static const char *add_blend_name = "AddBlendState";
-	m_blend_states[BLENDMODE_NONE]->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(none_blend_name) - 1, none_blend_name);
-	m_blend_states[BLENDMODE_ALPHA]->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(alpha_blend_name) - 1, alpha_blend_name);
-	m_blend_states[BLENDMODE_RGB_MULTIPLY]->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(mul_blend_name) - 1, mul_blend_name);
-	m_blend_states[BLENDMODE_ADD]->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(add_blend_name) - 1, add_blend_name);
 }
 
 
@@ -1032,11 +1100,14 @@ void renderer_d3d11::device_create_sampler_states()
 {
 	D3D11_SAMPLER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
-	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_POINT;
 	desc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
 	desc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
 	desc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.MaxAnisotropy  = 1;
+	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.MinLOD         = -FLT_MAX;
+	desc.MaxLOD         = FLT_MAX;
 	m_d3d11->CreateSamplerState(&desc, &m_sampler_states[0][(int)D3D11_TEXTURE_ADDRESS_WRAP - 1]);
 
 	desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -1068,7 +1139,6 @@ void renderer_d3d11::device_create_sampler_states()
 
 renderer_d3d11::~renderer_d3d11()
 {
-	printf("renderer_d3d11 dtor enter\n"); fflush(stdout);
 	// free our base resources
 	if (m_device_initialized)
 		device_delete_resources();
@@ -1077,7 +1147,6 @@ renderer_d3d11::~renderer_d3d11()
 	// free the device itself
 	//m_d3d11_context.Reset();
 	//m_d3d11.Reset();
-	printf("renderer_d3d11 dtor exit\n"); fflush(stdout);
 }
 
 
@@ -1087,7 +1156,6 @@ renderer_d3d11::~renderer_d3d11()
 
 void renderer_d3d11::device_delete_resources()
 {
-	printf("renderer_d3d11::device_delete_resources enter\n"); fflush(stdout);
 	m_d3d11_context->ClearState();
 
 	m_texture_manager.reset();
@@ -1112,7 +1180,12 @@ void renderer_d3d11::device_delete_resources()
 	m_depth_stencil_state->Release();
 	m_rasterizer_state->Release();
 
+	m_ps_palette16->Release();
+	m_ps_bcg->Release();
 	m_ps->Release();
+
+	m_vs_palette16->Release();
+	m_vs_bcg->Release();
 	m_vs->Release();
 
 	m_depthbuffer_view->Release();
@@ -1131,8 +1204,6 @@ void renderer_d3d11::device_delete_resources()
 	m_d3d11_context = nullptr;
 
 	m_device_initialized = false;
-
-	printf("renderer_d3d11::device_delete_resources exit\n"); fflush(stdout);
 }
 
 
@@ -1461,6 +1532,7 @@ void renderer_d3d11::batch_vectors(int vector_count)
 	float target_width = 0.0f;
 	float target_height = 0.0f;
 
+	int index_count = vector_count * 6;
 	int vertex_count = vector_count * 4;
 	int triangle_count = vector_count * 2;
 	m_vectorbatch = mesh_alloc(vertex_count);
@@ -1491,8 +1563,8 @@ void renderer_d3d11::batch_vectors(int vector_count)
 				{
 					quad_width = prim.get_quad_width();
 					quad_height = prim.get_quad_height();
-					//target_width = prim.get_full_quad_width();
-					//target_height = prim.get_full_quad_height();
+					target_width = prim.get_full_quad_width();
+					target_height = prim.get_full_quad_height();
 
 					const uint8_t a = (uint8_t)std::round(prim.color.a * 255);
 					const uint8_t r = (uint8_t)std::round(prim.color.r * 255);
@@ -1565,7 +1637,7 @@ void renderer_d3d11::batch_vectors(int vector_count)
 			m_vectorbatch[batchindex].x -= half_screen_width;
 			m_vectorbatch[batchindex].y -= half_screen_height;
 
-			// correct screen/target ratio (vectors are created in screen coordinates and have to be adjusted for texture corrdinates of the target)
+			// correct screen/target ratio (vectors are created in screen coordinates and have to be adjusted for texture coordinates of the target)
 			m_vectorbatch[batchindex].x *= screen_target_ratio_x;
 			m_vectorbatch[batchindex].y *= screen_target_ratio_y;
 
@@ -1576,7 +1648,7 @@ void renderer_d3d11::batch_vectors(int vector_count)
 	}
 
 	// now add a polygon entry
-	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, triangle_count, vertex_count, cached_flags, nullptr, quad_width, quad_height, tint);
+	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, triangle_count, index_count, vertex_count, cached_flags, nullptr, quad_width, quad_height, tint);
 	m_numpolys++;
 }
 
@@ -1720,7 +1792,7 @@ void renderer_d3d11::draw_line(const render_primitive &prim)
 	}
 
 	// now add a polygon entry
-	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, 2, 4, prim.flags, nullptr, 0.0f, 0.0f, color);
+	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, 2, 6, 4, prim.flags, nullptr, 0.0f, 0.0f, color);
 	m_numpolys++;
 }
 
@@ -1792,7 +1864,7 @@ void renderer_d3d11::draw_quad(const render_primitive &prim)
 	}
 
 	// now add a polygon entry
-	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, 2, 4, prim.flags, texture, quad_width, quad_height, color);
+	m_poly[m_numpolys].init(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, 2, 6, 4, prim.flags, texture, quad_width, quad_height, color);
 	m_numpolys++;
 }
 
@@ -1807,9 +1879,7 @@ d3d11_vertex *renderer_d3d11::mesh_alloc(int numverts)
 	if (m_numverts + numverts >= VERTEX_BUFFER_LENGTH)
 	{
 		primitive_flush_pending();
-
-		if (m_shaders->enabled())
-			m_shaders->init_fsfx_quad();
+		init_blit_quad();
 	}
 
 	// if we have enough room, return a pointer
@@ -1846,7 +1916,9 @@ void renderer_d3d11::primitive_flush_pending()
 	m_d3d11_context->OMSetDepthStencilState(m_depth_stencil_state, 0);
 	m_d3d11_context->OMSetBlendState(nullptr, nullptr, 0xffffffff); // use default blend mode (i.e. disable)
 
-	int vertexnum = 0;
+	m_shaders->begin_draw();
+
+	int vertexnum = 4;
 	uint32_t stride = sizeof(d3d11_vertex);
 	uint32_t offset = 0;
 	m_d3d11_context->IASetInputLayout(m_input_layout);
@@ -1873,26 +1945,12 @@ void renderer_d3d11::primitive_flush_pending()
 			//}
 			//else
 			{
-				set_sampler_mode(linear_filter, wrap_mode, m_force_render_states);
+				set_sampler_mode(0, linear_filter, wrap_mode, m_force_render_states);
 			}
 		}
 
 		// set the texture if different
 		set_texture(texture);
-
-		D3D11_MAPPED_SUBRESOURCE mapped_constants;
-
-		m_d3d11_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_constants);
-		pipeline_constants* constants = (pipeline_constants *)mapped_constants.pData;
-
-		constants->screen_dims[0] = m_width;
-		constants->screen_dims[1] = m_height;
-		constants->target_dims[0] = 1.f;
-		constants->target_dims[1] = 1.f;
-		constants->source_dims[0] = m_last_texture ? m_last_texture->get_rawdims().c.x : 1.f;
-		constants->source_dims[1] = m_last_texture ? m_last_texture->get_rawdims().c.y : 1.f;
-
-		m_d3d11_context->Unmap(m_constant_buffer, 0);
 
 		if (vertexnum >= VERTEX_BUFFER_LENGTH)
 			osd_printf_error("Error: vertexnum (%d) is at or over maximum vertex count (%d)\n", vertexnum, VERTEX_BUFFER_LENGTH);
@@ -1905,12 +1963,24 @@ void renderer_d3d11::primitive_flush_pending()
 		}
 		else
 		{
+			// Update constants for unshaded drawing
+			D3D11_MAPPED_SUBRESOURCE mapped_constants;
+			m_d3d11_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_constants);
+			pipeline_constants* constants = (pipeline_constants *)mapped_constants.pData;
+			constants->screen_dims[0] = m_width;
+			constants->screen_dims[1] = m_height;
+			constants->target_dims[0] = 1.f;
+			constants->target_dims[1] = 1.f;
+			constants->source_dims[0] = m_last_texture ? m_last_texture->get_rawdims().c.x : 1.f;
+			constants->source_dims[1] = m_last_texture ? m_last_texture->get_rawdims().c.y : 1.f;
+			m_d3d11_context->Unmap(m_constant_buffer, 0);
+
 			// set blend mode
 			set_blendmode(PRIMFLAG_GET_BLENDMODE(flags), m_force_render_states);
 
 			// add the primitives
 			m_d3d11_context->IASetPrimitiveTopology(m_poly[polynum].type());
-			m_d3d11_context->DrawIndexed(6, 0, vertexnum);
+			m_d3d11_context->DrawIndexed(m_poly[polynum].numindices(), 0, vertexnum);
 		}
 
 		vertexnum += m_poly[polynum].numverts();
@@ -2000,43 +2070,45 @@ d3d11_texture_info::d3d11_texture_info(d3d11_texture_manager &manager, const ren
 	m_rawdims.c.x = texsource->width;
 	m_rawdims.c.y = texsource->height;
 
-	memset(&m_desc, 0, sizeof(m_desc));
-	memset(&m_data, 0, sizeof(m_data));
-	m_desc.Width            = texsource->width;
-	m_desc.Height           = texsource->height;
-	m_desc.MipLevels        = 1;
-	m_desc.ArraySize        = 1;
-	m_desc.SampleDesc.Count = 1;
-	m_desc.Usage            = D3D11_USAGE_DYNAMIC;
-	m_desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
-	m_desc.CPUAccessFlags   = D3D11_CPU_ACCESS_WRITE;
-	m_desc.MiscFlags        = 0;
-	m_prescaled_desc = m_desc;
+	D3D11_TEXTURE2D_DESC    desc;
+	memset(&desc, 0, sizeof(desc));
+	desc.Width            = texsource->width;
+	desc.Height           = texsource->height;
+	desc.MipLevels        = 1;
+	desc.ArraySize        = 1;
+	desc.SampleDesc.Count = 1;
+	desc.Usage            = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags   = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags        = 0;
+	m_prescaled_desc = desc;
 
+	D3D11_SUBRESOURCE_DATA  data;
+	memset(&data, 0, sizeof(data));
 	switch (PRIMFLAG_GET_TEXFORMAT(flags))
 	{
 		case TEXFORMAT_ARGB32:
-			m_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-			m_data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 4;
-			m_data.SysMemPitch = texsource->rowpixels * sizeof(uint32_t);
+			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 4;
+			data.SysMemPitch = texsource->rowpixels * sizeof(uint32_t);
 			break;
 		case TEXFORMAT_RGB32:
-			m_desc.Format = DXGI_FORMAT_B8G8R8X8_UNORM;
-			m_data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 4;
-			m_data.SysMemPitch = texsource->rowpixels * sizeof(uint32_t);
+			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 4;
+			data.SysMemPitch = texsource->rowpixels * sizeof(uint32_t);
 			break;
 		case TEXFORMAT_YUY16:
-			m_desc.Format = DXGI_FORMAT_YUY2;
-			m_data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 2;
-			m_data.SysMemPitch = texsource->rowpixels * sizeof(uint16_t);
+			desc.Format = DXGI_FORMAT_YUY2;
+			data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 2;
+			data.SysMemPitch = texsource->rowpixels * sizeof(uint16_t);
 			break;
 		case TEXFORMAT_PALETTE16:
-			m_desc.Format = DXGI_FORMAT_R8G8_UNORM;
-			m_data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 2;
-			m_data.SysMemPitch = texsource->rowpixels * sizeof(uint16_t);
+			desc.Format = DXGI_FORMAT_R8G8_UNORM;
+			data.pSysMem = (uint8_t *)texsource->base - texsource->width_margin * 2;
+			data.SysMemPitch = texsource->rowpixels * sizeof(uint16_t);
 			break;
 	}
-	m_prescaled_data = m_data;
+	m_prescaled_data = data;
 
 	HRESULT result;
 	ID3D11Device *device = m_renderer.get_device();
@@ -2044,7 +2116,7 @@ d3d11_texture_info::d3d11_texture_info(d3d11_texture_manager &manager, const ren
 	{
 		assert(PRIMFLAG_TEXFORMAT(flags) != TEXFORMAT_YUY16);
 
-		result = device->CreateTexture2D(&m_desc, &m_data, &m_tex);
+		result = device->CreateTexture2D(&desc, &data, &m_tex);
 		if (FAILED(result))
 		{
 			osd_printf_error("Direct3D11: CreateTexture2D failed for non-screen texture: %08x\n", (uint32_t)result);
@@ -2085,7 +2157,7 @@ d3d11_texture_info::d3d11_texture_info(d3d11_texture_manager &manager, const ren
 			osd_printf_verbose("Direct3D: adjusting prescale from %dx%d to %dx%d\n", prescale, prescale, m_xprescale, m_yprescale);
 
 		// allocate something or error out
-		result = device->CreateTexture2D(&m_desc, &m_data, &m_tex);
+		result = device->CreateTexture2D(&desc, &data, &m_tex);
 		if (FAILED(result))
 		{
 			osd_printf_error("Direct3D11: CreateTexture2D failed for screen texture: %08x\n", (uint32_t)result);
@@ -2099,7 +2171,6 @@ d3d11_texture_info::d3d11_texture_info(d3d11_texture_manager &manager, const ren
 			goto error;
 		}
 
-		// for the target surface, we allocate a render target texture
 		m_prescaled_desc.Width *= m_xprescale;
 		m_prescaled_desc.Height *= m_yprescale;
 	}
@@ -2135,14 +2206,25 @@ inline void d3d11_texture_info::copyline_rgb32(uint32_t *dst, const uint32_t *sr
 	{
 		for (int x = 0; x < width; x++)
 		{
-			rgb_t srcpix = *src++;
-			*dst++ = 0xff000000 | palette[0x200 + srcpix.r()] | palette[0x100 + srcpix.g()] | palette[srcpix.b()];
+			const uint32_t val = *src++;
+			rgb_t srcpix = val;
+			const uint8_t r = (uint8_t)(palette[0x200 + srcpix.r()] >> 16);
+			const uint8_t g = (uint8_t)(palette[0x100 + srcpix.g()] >> 8);
+			const uint8_t b = (uint8_t)palette[srcpix.b()];
+			*dst++ = (r << 24) | (g << 16) | (b << 8) | 0x000000ff;
 		}
 	}
 	else
 	{
-		for (int x = 0; x < width; x++)
-			*dst++ = 0xff000000 | *src++;
+		memcpy(dst, src, sizeof(uint32_t) * width);
+		//for (int x = 0; x < width; x++)
+		//{
+		//	const uint32_t val = *src++;
+		//	const uint32_t r = (uint32_t)((val >> 16) & 0x000000ff);
+		//	const uint32_t g = (uint32_t)(val & 0x0000ff00);
+		//	const uint32_t b = (uint32_t)((val << 16) & 0x00ff0000);
+		//	*dst++ = 0xff000000 | r | g | b;
+		//}
 	}
 }
 
@@ -2163,7 +2245,15 @@ inline void d3d11_texture_info::copyline_argb32(uint32_t *dst, const uint32_t *s
 	}
 	else
 	{
-		memcpy(dst, src, sizeof(uint32_t) * width);
+		for (int x = 0; x < width; x++)
+		{
+			const uint32_t val = *src++;
+			const uint32_t a = val & 0xff000000;//(uint32_t)((val >> 24) & 0x000000ff);
+			const uint32_t r = (uint32_t)((val >> 16) & 0x000000ff);
+			const uint32_t g = (uint32_t)(val & 0x0000ff00);
+			const uint32_t b = (uint32_t)((val << 16) & 0x00ff0000);
+			*dst++ = a | r | g | b;
+		}
 	}
 }
 
@@ -2217,6 +2307,24 @@ void d3d11_texture_info::set_data(const render_texinfo *texsource, uint32_t flag
 
 	// loop over Y
 	int tex_format = PRIMFLAG_GET_TEXFORMAT(flags);
+	/*void *dst = mapped_resource.pData;
+	switch (tex_format)
+	{
+		case TEXFORMAT_PALETTE16:
+		case TEXFORMAT_YUY16:
+			memcpy((uint16_t *)dst, (uint16_t *)texsource->base - texsource->width_margin, sizeof(uint16_t) * texsource->rowpixels * texsource->height);
+			break;
+
+		case TEXFORMAT_RGB32:
+		case TEXFORMAT_ARGB32:
+			memcpy((uint32_t *)dst, (uint32_t *)texsource->base - texsource->width_margin, sizeof(uint16_t) * texsource->rowpixels * texsource->height);
+			copyline_rgb32((uint32_t *)dst, (uint32_t *)texsource->base + srcy * texsource->rowpixels, texsource->width, texsource->palette);
+			break;
+
+		default:
+			osd_printf_error("Unknown texture blendmode=%d format=%d\n", PRIMFLAG_GET_BLENDMODE(flags), PRIMFLAG_GET_TEXFORMAT(flags));
+			break;
+	}*/
 
 	for (int dsty = 0; dsty < texsource->height; dsty++)
 	{
@@ -2297,7 +2405,7 @@ void d3d11_texture_info::prescale()
 		osd_printf_verbose("Direct3D: Error %08lX during device BeginScene call\n", result);
 
 	// configure the rendering pipeline
-	m_renderer.set_sampler_mode(false, false);
+	m_renderer.set_sampler_mode(0, false, false);
 	m_renderer.set_blendmode(BLENDMODE_NONE);
 	result = m_renderer.get_device()->SetTexture(0, m_d3dtex);
 	if (FAILED(result))
@@ -2389,76 +2497,190 @@ bool d3d11_render_target::init(renderer_d3d11 *renderer, int source_width, int s
 
 	width = source_width;
 	height = source_height;
+	source_dims[0] = float(source_width);
+	source_dims[1] = float(source_height);
 
-	D3D11_TEXTURE2D_DESC source_desc;
+	D3D11_TEXTURE2D_DESC source_desc = { 0 };
 	source_desc.Width            = source_width;
 	source_desc.Height           = source_height;
 	source_desc.MipLevels        = 1;
 	source_desc.ArraySize        = 1;
 	source_desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 	source_desc.SampleDesc.Count = 1;
+	source_desc.SampleDesc.Quality = 0;
 	source_desc.Usage            = D3D11_USAGE_DEFAULT;
 	source_desc.BindFlags        = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-	source_desc.CPUAccessFlags   = D3D11_CPU_ACCESS_WRITE;
+	source_desc.CPUAccessFlags   = 0;
 	source_desc.MiscFlags        = 0;
-
-	D3D11_TEXTURE2D_DESC target_desc = source_desc;
-	target_desc.Width  = target_width;
-	target_desc.Height = target_height;
-
-	if (FAILED(renderer->get_device()->CreateTexture2D(&source_desc, nullptr, &source_texture)))
-		return false;
 
 	D3D11_RENDER_TARGET_VIEW_DESC source_rt_view_desc;
 	source_rt_view_desc.Format = source_desc.Format;
 	source_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	source_rt_view_desc.Texture2D.MipSlice = 0;
-	if (FAILED(renderer->get_device()->CreateRenderTargetView(source_texture, &source_rt_view_desc, &source_rt_view)))
-		return false;
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC source_shader_view_desc;
 	source_shader_view_desc.Format = source_desc.Format;
 	source_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	source_shader_view_desc.Texture2D.MostDetailedMip = 0;
 	source_shader_view_desc.Texture2D.MipLevels = 1;
-	if (FAILED(renderer->get_device()->CreateShaderResourceView(source_texture, &source_shader_view_desc, &source_res_view)))
-		return false;
 
-	if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &target_texture)))
-		return false;
+	D3D11_TEXTURE2D_DESC source_depth_desc = { 0 };
+	source_depth_desc.Width            = source_width;
+	source_depth_desc.Height           = source_height;
+	source_depth_desc.MipLevels        = 1;
+	source_depth_desc.ArraySize        = 1;
+	source_depth_desc.Format           = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	source_depth_desc.SampleDesc.Count = 1;
+	source_depth_desc.SampleDesc.Quality = 0;
+	source_depth_desc.Usage            = D3D11_USAGE_DEFAULT;
+	source_depth_desc.BindFlags        = D3D11_BIND_DEPTH_STENCIL;
+	source_depth_desc.CPUAccessFlags   = 0;
+	source_depth_desc.MiscFlags        = 0;
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC source_depth_rt_view_desc;
+	source_depth_rt_view_desc.Format = source_depth_desc.Format;
+	source_depth_rt_view_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	source_depth_rt_view_desc.Flags = 0;
+	source_depth_rt_view_desc.Texture2D.MipSlice = 0;
+
+	D3D11_TEXTURE2D_DESC target_desc = source_desc;
+	target_desc.Width  = target_width;
+	target_desc.Height = target_height;
 
 	D3D11_RENDER_TARGET_VIEW_DESC target_rt_view_desc;
-	source_rt_view_desc.Format = target_desc.Format;
-	source_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	source_rt_view_desc.Texture2D.MipSlice = 0;
-	if (FAILED(renderer->get_device()->CreateRenderTargetView(target_texture, &target_rt_view_desc, &target_rt_view)))
-		return false;
+	target_rt_view_desc.Format = target_desc.Format;
+	target_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	target_rt_view_desc.Texture2D.MipSlice = 0;
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC target_shader_view_desc;
 	target_shader_view_desc.Format = target_desc.Format;
 	target_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	target_shader_view_desc.Texture2D.MostDetailedMip = 0;
 	target_shader_view_desc.Texture2D.MipLevels = 1;
-	if (FAILED(renderer->get_device()->CreateShaderResourceView(target_texture, &target_shader_view_desc, &target_res_view)))
-		return false;
 
-	if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &cache_texture)))
-		return false;
+	D3D11_TEXTURE2D_DESC target_depth_desc = source_depth_desc;
+	target_depth_desc.Width  = target_width;
+	target_depth_desc.Height = target_height;
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC target_depth_rt_view_desc;
+	target_depth_rt_view_desc.Format = target_depth_desc.Format;
+	target_depth_rt_view_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	target_depth_rt_view_desc.Flags = 0;
+	target_depth_rt_view_desc.Texture2D.MipSlice = 0;
 
 	D3D11_RENDER_TARGET_VIEW_DESC cache_rt_view_desc;
 	cache_rt_view_desc.Format = target_desc.Format;
 	cache_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	cache_rt_view_desc.Texture2D.MipSlice = 0;
-	if (FAILED(renderer->get_device()->CreateRenderTargetView(cache_texture, &cache_rt_view_desc, &cache_rt_view)))
-		return false;
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC cache_shader_view_desc;
 	cache_shader_view_desc.Format = target_desc.Format;
 	cache_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	cache_shader_view_desc.Texture2D.MostDetailedMip = 0;
 	cache_shader_view_desc.Texture2D.MipLevels = 1;
-	if (FAILED(renderer->get_device()->CreateShaderResourceView(cache_texture, &cache_shader_view_desc, &cache_res_view)))
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC cache_depth_rt_view_desc;
+	cache_depth_rt_view_desc.Format = target_depth_desc.Format;
+	cache_depth_rt_view_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	cache_depth_rt_view_desc.Flags = 0;
+	cache_depth_rt_view_desc.Texture2D.MipSlice = 0;
+
+	source_viewport = { 0.f, 0.f, float(source_width), float(source_height), 0.f, 1.f };
+	target_viewport = { 0.f, 0.f, float(target_width), float(target_height), 0.f, 1.f };
+	cache_viewport = target_viewport;
+
+	for (int rt_index = 0; rt_index < 2; rt_index++)
+	{
+		if (FAILED(renderer->get_device()->CreateTexture2D(&source_desc, nullptr, &source_texture[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for source_texture %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateRenderTargetView(source_texture[rt_index], &source_rt_view_desc, &source_rt_view[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateRenderTargetView failed for source_rt_view %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateShaderResourceView(source_texture[rt_index], &source_shader_view_desc, &source_res_view[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateShaderResourceView failed for source_res_view %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateTexture2D(&source_depth_desc, nullptr, &source_depth_texture[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for source_depth_texture %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateDepthStencilView(source_depth_texture[rt_index], &source_depth_rt_view_desc, &source_depth_rt_view[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateDepthStencilView failed for source_depth_rt_view %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &target_texture[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for target_texture %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateRenderTargetView(target_texture[rt_index], &target_rt_view_desc, &target_rt_view[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateRenderTargetView failed for target_rt_view %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateShaderResourceView(target_texture[rt_index], &target_shader_view_desc, &target_res_view[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateShaderResourceView failed for target_res_view %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateTexture2D(&target_depth_desc, nullptr, &target_depth_texture[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for target_depth_texture %d\n", rt_index);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateDepthStencilView(target_depth_texture[rt_index], &target_depth_rt_view_desc, &target_depth_rt_view[rt_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateDepthStencilView failed for target_depth_rt_view %d\n", rt_index);
+			return false;
+		}
+	}
+
+	if (FAILED(renderer->get_device()->CreateTexture2D(&target_desc, nullptr, &cache_texture)))
+	{
+		osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for cache_texture\n");
 		return false;
+	}
+
+	if (FAILED(renderer->get_device()->CreateRenderTargetView(cache_texture, &cache_rt_view_desc, &cache_rt_view)))
+	{
+		osd_printf_error("d3d11_render_target::init, CreateRenderTargetView failed for cache_rt_view\n");
+		return false;
+	}
+
+	if (FAILED(renderer->get_device()->CreateShaderResourceView(cache_texture, &cache_shader_view_desc, &cache_res_view)))
+	{
+		osd_printf_error("d3d11_render_target::init, CreateShaderResourceView failed for cache_res_view\n");
+		return false;
+	}
+
+	if (FAILED(renderer->get_device()->CreateTexture2D(&target_depth_desc, nullptr, &cache_depth_texture)))
+	{
+		osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for cache_depth_texture\n");
+		return false;
+	}
+
+	if (FAILED(renderer->get_device()->CreateDepthStencilView(cache_depth_texture, &cache_depth_rt_view_desc, &cache_depth_rt_view)))
+	{
+		osd_printf_error("d3d11_render_target::init, CreateDepthStencilView failed for cache_depth_rt_view\n");
+		return false;
+	}
 
 	const screen_device *first_screen = screen_device_enumerator(renderer->window().machine().root_device()).first();
 	bool vector_screen = first_screen != nullptr && first_screen->screen_type() == SCREEN_TYPE_VECTOR;
@@ -2474,27 +2696,62 @@ bool d3d11_render_target::init(renderer_d3d11 *renderer, int source_width, int s
 		bloom_dims[bloom_index][0] = (int)bloom_width;
 		bloom_dims[bloom_index][1] = (int)bloom_height;
 
+		bloom_viewport[bloom_index] = { 0.f, 0.f, float(int(bloom_width)), float(int(bloom_height)), 0.f, 1.f };
+
 		D3D11_TEXTURE2D_DESC bloom_desc = source_desc;
 		bloom_desc.Width  = (uint32_t)bloom_width;
 		bloom_desc.Height = (uint32_t)bloom_height;
-
-		if (FAILED(renderer->get_device()->CreateTexture2D(&bloom_desc, nullptr, &bloom_texture[bloom_index])))
-			return false;
 
 		D3D11_RENDER_TARGET_VIEW_DESC bloom_rt_view_desc;
 		bloom_rt_view_desc.Format = bloom_desc.Format;
 		bloom_rt_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 		bloom_rt_view_desc.Texture2D.MipSlice = 0;
-		if (FAILED(renderer->get_device()->CreateRenderTargetView(bloom_texture[bloom_index], &bloom_rt_view_desc, &bloom_rt_view[bloom_index])))
-			return false;
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC bloom_shader_view_desc;
     	bloom_shader_view_desc.Format = bloom_desc.Format;
     	bloom_shader_view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     	bloom_shader_view_desc.Texture2D.MostDetailedMip = 0;
     	bloom_shader_view_desc.Texture2D.MipLevels = 1;
-		if (FAILED(renderer->get_device()->CreateShaderResourceView(bloom_texture[bloom_index], &bloom_shader_view_desc, &bloom_res_view[bloom_index])))
+
+		D3D11_TEXTURE2D_DESC bloom_depth_desc = source_depth_desc;
+		bloom_depth_desc.Width  = (uint32_t)bloom_width;
+		bloom_depth_desc.Height = (uint32_t)bloom_height;
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC bloom_depth_rt_view_desc;
+		bloom_depth_rt_view_desc.Format = bloom_depth_desc.Format;
+		bloom_depth_rt_view_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		bloom_depth_rt_view_desc.Flags = 0;
+		bloom_depth_rt_view_desc.Texture2D.MipSlice = 0;
+
+		if (FAILED(renderer->get_device()->CreateTexture2D(&bloom_desc, nullptr, &bloom_texture[bloom_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for bloom_texture[%d] (%dx%d)\n", bloom_index, (int)bloom_width, (int)bloom_height);
 			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateRenderTargetView(bloom_texture[bloom_index], &bloom_rt_view_desc, &bloom_rt_view[bloom_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateRenderTargetView failed for bloom_rt_view[%d] (%dx%d)\n", bloom_index, (int)bloom_width, (int)bloom_height);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateShaderResourceView(bloom_texture[bloom_index], &bloom_shader_view_desc, &bloom_res_view[bloom_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateShaderResourceView failed for bloom_res_view[%d] (%dx%d)\n", bloom_index, (int)bloom_width, (int)bloom_height);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateTexture2D(&bloom_depth_desc, nullptr, &bloom_depth_texture[bloom_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateTexture2D failed for bloom_depth_texture[%d] (%dx%d)\n", bloom_index, (int)bloom_width, (int)bloom_height);
+			return false;
+		}
+
+		if (FAILED(renderer->get_device()->CreateDepthStencilView(bloom_depth_texture[bloom_index], &bloom_depth_rt_view_desc, &bloom_depth_rt_view[bloom_index])))
+		{
+			osd_printf_error("d3d11_render_target::init, CreateDepthStencilView failed for bloom_depth_rt_view[%d] (%dx%d)\n", bloom_index, (int)bloom_width, (int)bloom_height);
+			return false;
+		}
 
 		bloom_width *= scale_factor;
 		bloom_height *= scale_factor;

@@ -46,13 +46,6 @@ struct VS_INPUT
 	float2 VecTex : TEXCOORD1;
 };
 
-struct PS_INPUT
-{
-	float4 Color : COLOR0;
-	float3 TexCoordX : TEXCOORD0;
-	float3 TexCoordY : TEXCOORD1;
-};
-
 //-----------------------------------------------------------------------------
 // Deconvergence Vertex Shader
 //-----------------------------------------------------------------------------
@@ -103,11 +96,11 @@ VS_OUTPUT vs_main(VS_INPUT Input)
 // Deconvergence Pixel Shader
 //-----------------------------------------------------------------------------
 
-float4 ps_main(PS_INPUT Input) : COLOR
+float4 ps_main(VS_OUTPUT Input) : SV_TARGET
 {
-	float2 ra = tex2D(DiffuseSampler, float2(Input.TexCoordX.x, Input.TexCoordY.x)).ra;
-	float2 ga = tex2D(DiffuseSampler, float2(Input.TexCoordX.y, Input.TexCoordY.y)).ga;
-	float2 ba = tex2D(DiffuseSampler, float2(Input.TexCoordX.z, Input.TexCoordY.z)).ba;
+	float2 ra = Diffuse.Sample(DiffuseSampler, float2(Input.TexCoordX.x, Input.TexCoordY.x)).ra;
+	float2 ga = Diffuse.Sample(DiffuseSampler, float2(Input.TexCoordX.y, Input.TexCoordY.y)).ga;
+	float2 ba = Diffuse.Sample(DiffuseSampler, float2(Input.TexCoordX.z, Input.TexCoordY.z)).ba;
 
 	return float4(ra.x, ga.x, ba.x, ra.y + ga.y + ba.y);
 }

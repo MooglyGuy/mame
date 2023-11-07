@@ -103,6 +103,7 @@
 #define WINOPTION_BLOOM_LEVEL6_WEIGHT       "bloom_lvl6_weight"
 #define WINOPTION_BLOOM_LEVEL7_WEIGHT       "bloom_lvl7_weight"
 #define WINOPTION_BLOOM_LEVEL8_WEIGHT       "bloom_lvl8_weight"
+#define WINOPTION_BLOOM_SHIFT				"bloom_shift"
 #define WINOPTION_LUT_TEXTURE "lut_texture"
 #define WINOPTION_LUT_ENABLE "lut_enable"
 #define WINOPTION_UI_LUT_TEXTURE "ui_lut_texture"
@@ -202,6 +203,7 @@ public:
 	float screen_bloom_lvl6_weight() const { return float_value(WINOPTION_BLOOM_LEVEL6_WEIGHT); }
 	float screen_bloom_lvl7_weight() const { return float_value(WINOPTION_BLOOM_LEVEL7_WEIGHT); }
 	float screen_bloom_lvl8_weight() const { return float_value(WINOPTION_BLOOM_LEVEL8_WEIGHT); }
+	const char *screen_bloom_shift() const { return value(WINOPTION_BLOOM_SHIFT); }
 	const char *screen_offset() const { return value(WINOPTION_OFFSET); }
 	const char *screen_scale() const { return value(WINOPTION_SCALE); }
 	const char *screen_power() const { return value(WINOPTION_POWER); }
