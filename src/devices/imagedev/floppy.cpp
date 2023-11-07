@@ -310,6 +310,17 @@ void floppy_image_device::setup_led_cb(led_cb cb)
 	cur_led_cb = cb;
 }
 
+struct floppy_image_device::fs_enum : public fs::manager_t::floppy_enumerator {
+	floppy_image_device *m_fid;
+	const fs::manager_t *m_manager;
+
+	fs_enum(floppy_image_device *fid);
+
+	virtual void add_raw(const char *name, u32 key, const char *description) override;
+protected:
+	virtual void add_format(const floppy_image_format_t &type, u32 image_size, const char *name, const char *description) override;
+};
+
 floppy_image_device::fs_enum::fs_enum(floppy_image_device *fid)
 	: fs::manager_t::floppy_enumerator(fid->form_factor, fid->variants)
 	, m_fid(fid)
@@ -403,7 +414,7 @@ void floppy_image_device::commit_image()
 	if (err)
 		popmessage("Error, unable to truncate image: %s", err.message());
 
-	output_format->save(*io, variants, image.get());
+	output_format->save(*io, variants, *image);
 }
 
 void floppy_image_device::device_config_complete()
@@ -597,7 +608,7 @@ std::pair<std::error_condition, std::string> floppy_image_device::call_load()
 		return std::make_pair(image_error::INVALIDIMAGE, "Unable to identify image file format");
 
 	image = std::make_unique<floppy_image>(tracks, sides, form_factor);
-	if (!best_format->load(*io, form_factor, variants, image.get())) {
+	if (!best_format->load(*io, form_factor, variants, *image)) {
 		image.reset();
 		return std::make_pair(image_error::INVALIDIMAGE, "Incompatible image file format or corrupted data");
 	}
@@ -821,7 +832,7 @@ void floppy_image_device::init_fs(const fs_info *fs, const fs::meta_data &meta)
 		cfs->format(meta);
 
 		auto io = util::ram_read(img.data(), img.size(), 0xff);
-		fs->m_type->load(*io, floppy_image::FF_UNKNOWN, variants, image.get());
+		fs->m_type->load(*io, floppy_image::FF_UNKNOWN, variants, *image);
 	} else {
 		fs::unformatted_image::format(fs->m_key, image.get());
 	}
@@ -1405,6 +1416,11 @@ uint32_t floppy_image_device::get_form_factor() const
 uint32_t floppy_image_device::get_variant() const
 {
 	return image ? image->get_variant() : 0;
+}
+
+std::vector<uint32_t> &floppy_image_device::get_buffer()
+{
+	return image->get_buffer(cyl, ss, subcyl);
 }
 
 //===================================================================

@@ -210,7 +210,7 @@ uint8_t  squale_state::video_ram_read_reg1()
 
 	for(p = 0; p < 4 ; p++)
 	{
-		if( m_ef9365->get_last_readback_word(p, 0) & 8 )
+		if( m_ef9365->get_last_readback_word(p, nullptr) & 8 )
 		{
 			data |= (0x01 << p);
 		}
@@ -220,7 +220,7 @@ uint8_t  squale_state::video_ram_read_reg1()
 
 	for(p = 0; p < 4 ; p++)
 	{
-		if( m_ef9365->get_last_readback_word(p, 0) & 4 )
+		if( m_ef9365->get_last_readback_word(p, nullptr) & 4 )
 		{
 			data |= (0x01 << p);
 		}
@@ -245,7 +245,7 @@ uint8_t squale_state::video_ram_read_reg2()
 
 	for(p = 0; p < 4 ; p++)
 	{
-		if( m_ef9365->get_last_readback_word(p, 0) & 2 )
+		if( m_ef9365->get_last_readback_word(p, nullptr) & 2 )
 		{
 			data |= (0x01 << p);
 		}
@@ -255,7 +255,7 @@ uint8_t squale_state::video_ram_read_reg2()
 
 	for(p = 0; p < 4 ; p++)
 	{
-		if( m_ef9365->get_last_readback_word(p, 0) & 1 )
+		if( m_ef9365->get_last_readback_word(p, nullptr) & 1 )
 		{
 			data |= (0x01 << p);
 		}
@@ -813,7 +813,7 @@ void squale_state::squale(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &squale_state::squale_mem);
 
 	/* Cartridge pia */
-	PIA6821(config, m_pia_u72, 0);
+	PIA6821(config, m_pia_u72);
 	m_pia_u72->readpa_handler().set(FUNC(squale_state::pia_u72_porta_r));
 	m_pia_u72->readpb_handler().set(FUNC(squale_state::pia_u72_portb_r));
 	m_pia_u72->writepa_handler().set(FUNC(squale_state::pia_u72_porta_w));
@@ -822,7 +822,7 @@ void squale_state::squale(machine_config &config)
 	m_pia_u72->cb2_handler().set(FUNC(squale_state::pia_u72_cb2_w));
 
 	/* Keyboard pia */
-	PIA6821(config, m_pia_u75, 0);
+	PIA6821(config, m_pia_u75);
 	m_pia_u75->readpa_handler().set(FUNC(squale_state::pia_u75_porta_r));
 	m_pia_u75->readpb_handler().set(FUNC(squale_state::pia_u75_portb_r));
 	m_pia_u75->writepa_handler().set(FUNC(squale_state::pia_u75_porta_w));

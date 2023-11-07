@@ -9,6 +9,8 @@
 #include "emu.h"
 #include "exp.h"
 
+#include "formats/cbm_crt.h"
+
 
 
 //**************************************************************************
@@ -349,6 +351,7 @@ void c64_expansion_slot_device::set_passthrough()
 #include "sw8k.h"
 #include "swiftlink.h"
 #include "system3.h"
+#include "tibdd001.h"
 #include "tdos.h"
 #include "turbo232.h"
 #include "vizastar.h"
@@ -381,6 +384,7 @@ void c64_expansion_cards(device_slot_interface &device)
 	device.option_add("speakez", C64_SPEAKEASY);
 	device.option_add("supercpu", C64_SUPERCPU);
 	device.option_add("swiftlink", C64_SWIFTLINK);
+	device.option_add("tibdd001", C64_TIB_DD_001);
 	device.option_add("turbo232", C64_TURBO232);
 	device.option_add("buscard", C64_BUSCARD);
 	device.option_add("buscard2", C64_BUSCARD2);

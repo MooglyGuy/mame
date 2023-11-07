@@ -1837,7 +1837,7 @@ Side B has a copy of Hardball for the Amstrad CPC, was this edition accidentally
 			</dataarea>
 		</part>
 	</software>
-	
+
 	<software name="aztcaslt">
 		<description>Aztec Assault</description>
 		<year>1992</year>
@@ -2162,7 +2162,7 @@ Side B has a copy of Hardball for the Amstrad CPC, was this edition accidentally
 		<year>1989</year>
 		<publisher>Dinamic Software</publisher>
 		<notes><![CDATA[
-This is a dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Amstrad CPC).
+Dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Amstrad CPC).
 ]]></notes>
 		<info name="region" value="Spain" />
 		<part name="flop1" interface="floppy_3">
@@ -2340,6 +2340,17 @@ This is a dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Ams
 		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="255232">
 				<rom name="bonanza bros. (1992)(u.s. gold)(side b).dsk" size="255232" crc="bc619eef" sha1="8596ee563127f2ef5dd047feb482e5b1a5834e97"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="bonclyde">
+		<description>Bonnie and Clyde</description>
+		<year>2020</year>
+		<publisher>Zosya Entertainment</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Bonnie_and_Clyde.dsk" size="194816" crc="6f4fa732" sha1="ebf2bfde0f66ee3303ae41d0a8163a76066d0487"/>
 			</dataarea>
 		</part>
 	</software>
@@ -2752,7 +2763,7 @@ This is a dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Ams
 	<software name="castlmas">
 		<description>Castle Master</description>
 		<year>1990</year>
-		<publisher>Incentive</publisher>
+		<publisher>Domark</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="castle master (1990)(incentive).dsk" size="194816" crc="4a793e62" sha1="ac429bc3b62f539053e045d025f1332fff32e099"/>
@@ -3762,6 +3773,18 @@ The game doesn't start after choosing the "Loader" option menu.
 		</part>
 	</software>
 
+	<software name="crzcars2a" cloneof="crzcars2">
+		<description>Crazy Cars II (Proein)</description>
+		<year>1988</year>
+		<publisher>Proein Soft Line</publisher>
+		<info name="region" value="Spain" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="193792">
+				<rom name="Crazy Cars II (Proein Soft Line).dsk" size="193792" crc="1f81ebae" sha1="a0e1ee871c4484e3a33552c0b2f00cced9f19acf"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="cricketm">
 		<description>Cricket Master</description>
 		<year>1989</year>
@@ -3769,6 +3792,19 @@ The game doesn't start after choosing the "Loader" option menu.
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="cricket master (1989)(challenge).dsk" size="194816" crc="636dadcc" sha1="e5a4685b8308834e06be0e329637567b8cf84154"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="dizzyvii">
+		<description>Crystal Kingdom Dizzy</description>
+		<year>2017</year>
+		<publisher>Team Yolkfolk</publisher>
+		<info name="version" value="1.0.5" />
+		<info name="developer" value="Barskiy, Ponomarjov, Origin, Kosov, Del Campo" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Dizzy VII - Crystal Kindom Dizzy (2017) v1.0.5.dsk" size="194816" crc="6ce7df16" sha1="baa05aa6ccf2a296485e83e12bb602e174232ba4"/>
 			</dataarea>
 		</part>
 	</software>
@@ -4500,6 +4536,17 @@ The game doesn't start after choosing the "Loader" option menu.
 		</part>
 	</software>
 
+	<software name="drift">
+		<description>Drift!</description>
+		<year>2019</year>
+		<publisher>Zosya Entertainment</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Drift.dsk" size="194816" crc="6634b881" sha1="424d6e8f87a8f63b3e275229b7e38b1f30a23f11"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="driller">
 		<description>Driller</description>
 		<year>1987</year>
@@ -4576,7 +4623,7 @@ The game doesn't start after choosing the "Loader" option menu.
 		</part>
 	</software>
 
-	<software name="gomiland_a">
+	<software name="gomiland_a" cloneof="gomiland">
 		<description>Dungeons of Gomilandia (v0.1)</description>
 		<year>2020</year>
 		<publisher>RetroWorks</publisher>
@@ -5003,6 +5050,34 @@ The game doesn't start after choosing the "Loader" option menu.
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="erik - the phantom of the opera (1987)(crysys).dsk" size="194816" crc="08b83623" sha1="53834f2930e893f8961949b3d3a6fcf6d61513fc"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="errandboy">
+		<description>The Errand Boy (English)</description>
+		<year>2021</year>
+		<publisher>Dwalin</publisher>
+		<info name="developer" value="Jose Daniel Carbonell Cob" />
+		<info name="language" value="English" />
+		<info name="region" value="Spain" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="ErrandBoyThe(EN).dsk" size="194816" crc="ebe8c9a0" sha1="2abeafa5a84e35993b7e53a9c44445e8d3bb7da1"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="errandboy_es" cloneof="errandboy">
+		<description>El Chico de los Recados (Spanish)</description>
+		<year>2021</year>
+		<publisher>Dwalin</publisher>
+		<info name="developer" value="Jose Daniel Carbonell Cob" />
+		<info name="language" value="English" />
+		<info name="region" value="Spain" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="ErrandBoyThe(ES).dsk" size="194816" crc="77ebb8a8" sha1="c6acc1a2324c56bb95a0ced809a5a209ba07e2de"/>
 			</dataarea>
 		</part>
 	</software>
@@ -5805,27 +5880,28 @@ The game doesn't start after choosing the "Loader" option menu.
 		</part>
 	</software>
 
-	<software name="funkyfuna" cloneof="funkyfun">
-		<description>Funky Fungus (alt)</description>
+	<software name="funkyfun">
+		<description>Funky Fungus</description>
 		<year>2013</year>
 		<publisher>Alessandro Grussu</publisher>
+		<info name="language" value="English/French/German/Italian/Portuguese/Spanish" />
+		<info name="region" value="Italy" />
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
-				<rom name="funky fungus (2013-09)(grussu, alessandro)(it)(m5).dsk" size="194816" crc="3300d623" sha1="94b79a2cb8744aa14bc6ebe0ca3d3d238b1751f4"/>
+				<rom name="funky fungus (2013-09)(grussu, alessandro)(it)(m6).dsk" size="194816" crc="2438e3be" sha1="c8b718e2391504bdd116c7ea61bcd5de311d7f68"/>
 			</dataarea>
 		</part>
 	</software>
 
-	<software name="funkyfun">
-		<!--
-		    This version adds Italian to the language selection screen.
-		-->
-		<description>Funky Fungus</description>
+	<software name="funkyfuna" cloneof="funkyfun">
+		<description>Funky Fungus (alt)</description>
 		<year>2013</year>
 		<publisher>Alessandro Grussu</publisher>
+		<info name="language" value="English/German/Italian/Portuguese/Spanish" />
+		<info name="region" value="Italy" />
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
-				<rom name="funky fungus (2013-09)(grussu, alessandro)(it)(m6).dsk" size="194816" crc="2438e3be" sha1="c8b718e2391504bdd116c7ea61bcd5de311d7f68"/>
+				<rom name="funky fungus (2013-09)(grussu, alessandro)(it)(m5).dsk" size="194816" crc="3300d623" sha1="94b79a2cb8744aa14bc6ebe0ca3d3d238b1751f4"/>
 			</dataarea>
 		</part>
 	</software>
@@ -8259,6 +8335,30 @@ The game doesn't start
 		</part>
 	</software>
 
+	<software name="espadasag" supported="no">
+		<description>La Espada Sagrada</description>
+		<year>1990</year>
+		<publisher>Topo Soft</publisher>
+		<info name="language" value="Spanish" />
+		<info name="region" value="Spain" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="102877">
+				<rom name="La Espada Sagrada.dsk" size="102877" crc="1449c051" sha1="bb658205e9278df591c62fb80fc8b3aa26a656ff"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="vajillas">
+		<description>La Guerra de las Vajillas</description>
+		<year>1988</year>
+		<publisher>Dinamic Software</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="101888">
+				<rom name="La Guerra de las Vajillas.dsk" size="101888" crc="328a4a78" sha1="838d96d9ac6645b583f86de86a7da32c99d8719f"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="pepetrue">
 		<description>Las Aventuras de Pepe Trueno</description>
 		<year>2003</year>
@@ -8375,10 +8475,10 @@ The game doesn't start
 		<year>1988</year>
 		<publisher>U.S. Gold</publisher>
 		<notes><![CDATA[
-Disk 1 - Side 1: Leader Board (U.S. Gold)
-Disk 1 - Side 1: Leader Board Tournament (U.S. Gold)
+Disk 1 - Side 1: Leader Board (U.S. Gold) / Leader Board Tournament (U.S. Gold)
 Disk 2 - Side 1+2: World Class Leader Board (U.S. Gold)
 ]]></notes>
+		<info name="developer" value="Access Software" />
 		<part name="flop1" interface="floppy_3">
 			<feature name="part_id" value="Side A: Leaderboard + Leaderboard Tournament"/>
 			<dataarea name="flop" size="194816">
@@ -8386,13 +8486,13 @@ Disk 2 - Side 1+2: World Class Leader Board (U.S. Gold)
 			</dataarea>
 		</part>
 		<part name="flop2" interface="floppy_3">
-			<feature name="part_id" value="Disk 2, Side A: World Class Leaderboard"/>
+			<feature name="part_id" value="Disk 2 - Side A: World Class Leaderboard"/>
 			<dataarea name="flop" size="194816">
 				<rom name="leader board par 3 - world class leaderboard (1988)(u.s. gold)(disk 2 of 2 side a).dsk" size="194816" crc="7796b0f6" sha1="428894e7cb23fb9702c0a3db0c7692ce3e7079e0"/>
 			</dataarea>
 		</part>
 		<part name="flop3" interface="floppy_3">
-			<feature name="part_id" value="Disk 2, Side B: World Class Leaderboard"/>
+			<feature name="part_id" value="Disk 2 - Side B: World Class Leaderboard"/>
 			<dataarea name="flop" size="194816">
 				<rom name="leader board par 3 - world class leaderboard (1988)(u.s. gold)(disk 2 of 2 side b).dsk" size="194816" crc="b9ef96d2" sha1="903b9a18cecfdfe20413ee6c11edc18e14e920fa"/>
 			</dataarea>
@@ -9303,6 +9403,17 @@ Disk 2 - Side 1+2: World Class Leader Board (U.S. Gold)
 		</part>
 	</software>
 
+	<software name="mdrallyx">
+		<description>Maze Death Rally-X</description>
+		<year>2018</year>
+		<publisher>Tom Dalby</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="mdr-x.dsk" size="194816" crc="3b19893d" sha1="a4a79fff7dfd75e432cd26b4b5bc72de32287568"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="masterfi">
 		<description>Masterfile +3</description>
 		<year>1987</year>
@@ -9533,7 +9644,7 @@ Disk 2 Side B seems to contain an unreadable copy of Disk 2 Side A. Needs invest
 		<year>1991</year>
 		<publisher>U.S. Gold</publisher>
 		<notes><![CDATA[
-This is a dual-system Spectrum/Amstrad release (Side A: Amstrad CPC, Side B: ZX Spectrum)
+Dual-system Spectrum/Amstrad release (Side A: Amstrad CPC, Side B: ZX Spectrum)
 ]]></notes>
 		<part name="flop1" interface="floppy_3">
 			<feature name="part_id" value="Side A: Amstrad CPC"/>
@@ -10076,6 +10187,18 @@ This is a dual-system Spectrum/Amstrad release (Side A: Amstrad CPC, Side B: ZX 
 		</part>
 	</software>
 
+	<software name="mmarkham">
+		<description>The Mystery of Markham Manor</description>
+		<year>2022</year>
+		<publisher>Taskmaster Software</publisher>
+		<info name="developer" value="E. Toovey" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Mystery128.dsk" size="194816" crc="b5be0ec9" sha1="6053bcebd9d30c725fbbacd59ff0fe30a7c9fe42"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="mystical">
 		<description>Mystical</description>
 		<year>1991</year>
@@ -10163,7 +10286,7 @@ Spanish version includes Army Moves as a bonus.
 		<year>1988</year>
 		<publisher>Dinamic Software</publisher>
 		<notes><![CDATA[
-This is a dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Amstrad CPC).
+Dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Amstrad CPC).
 Code in both sides is identical to their respective Spanish individual releases.
 ]]></notes>
 		<info name="region" value="Spain" />
@@ -10491,7 +10614,7 @@ Labeled in World of Spectrum as "(CheatVersion)(MasterDisk)", might come from th
 		<year>1989</year>
 		<publisher>Melbourne House</publisher>
 		<notes><![CDATA[
-This is a dual-system Spectrum/Amstrad release (Side A: Amstrad CPC, Side B: ZX Spectrum).
+Dual-system Spectrum/Amstrad release (Side A: Amstrad CPC, Side B: ZX Spectrum).
 ]]></notes>
 		<part name="flop1" interface="floppy_3">
 			<feature name="part_id" value="Side A: Amstrad CPC"/>
@@ -13466,7 +13589,7 @@ Both sides contain the same games, dumps are only slightly different by the end
 		<year>1989</year>
 		<publisher>Dinamic Software</publisher>
 		<notes><![CDATA[
-This is a dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Amstrad CPC).
+Dual-system Spectrum/Amstrad release (Side A: ZX Spectrum, Side B: Amstrad CPC).
 ]]></notes>
 		<info name="region" value="Spain" />
 		<part name="flop1" interface="floppy_3">
@@ -14103,6 +14226,30 @@ This dump of Side A has been manually fixed, a new untampered one may be needed 
 		</part>
 	</software>
 
+	<software name="setotais">
+		<description>Seto Taisho vs Yokai (English, Italian)</description>
+		<year>2016</year>
+		<publisher>Alessandro Grussu</publisher>
+		<info name="language" value="English/Italian" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="seto taisho vs yokai (2016-02-29)(grussu, alessandro)(en-it).dsk" size="194816" crc="12d6499a" sha1="1ed7e33084dfcdde9870c623de2f30795cedc5f7"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="setotais_a" cloneof="setotais">
+		<description>Seto Taisho vs Yokai (English, Italian) (alt)</description>
+		<year>2016</year>
+		<publisher>Alessandro Grussu</publisher>
+		<info name="language" value="English/Italian" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Seto-IT-EN.dsk" size="194816" crc="5d9333ed" sha1="9fad85ef5993c5166b6cdd1ce60d70211feb8ca1"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="setotaisde" cloneof="setotais">
 		<description>Seto Taisho vs Yokai (German, Spanish)</description>
 		<year>2016</year>
@@ -14115,14 +14262,14 @@ This dump of Side A has been manually fixed, a new untampered one may be needed 
 		</part>
 	</software>
 
-	<software name="setotais">
-		<description>Seto Taisho vs Yokai (English, Italian)</description>
+	<software name="setotaisde_a" cloneof="setotais">
+		<description>Seto Taisho vs Yokai (German, Spanish) (alt)</description>
 		<year>2016</year>
 		<publisher>Alessandro Grussu</publisher>
-		<info name="language" value="English/Italian" />
+		<info name="language" value="German/Spanish" />
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
-				<rom name="seto taisho vs yokai (2016-02-29)(grussu, alessandro)(en-it).dsk" size="194816" crc="12d6499a" sha1="1ed7e33084dfcdde9870c623de2f30795cedc5f7"/>
+				<rom name="Seto-DE-ES.dsk" size="194816" crc="78b7b6b4" sha1="614cac3020a06d8d131dd6791b2c428ca478b699"/>
 			</dataarea>
 		</part>
 	</software>
@@ -14139,6 +14286,18 @@ This dump of Side A has been manually fixed, a new untampered one may be needed 
 		</part>
 	</software>
 
+	<software name="setotaisfr_a" cloneof="setotais">
+		<description>Seto Taisho vs Yokai (French, Portuguese) (alt)</description>
+		<year>2016</year>
+		<publisher>Alessandro Grussu</publisher>
+		<info name="language" value="French/Portuguese" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Seto-FR-PT.dsk" size="194816" crc="f807a0e5" sha1="c1e957dd66d74ee0ca4b0f2a92485846fad25d45"/>
+			</dataarea>
+		</part>
+	</software>
+
 	<software name="setotase">
 		<description>Seto Taisho Special Edition</description>
 		<year>2017</year>
@@ -14149,7 +14308,7 @@ Seto Taisho vs Yokai
 Seto Taisho to Kazan
 ]]></notes>
 		<info name="developer" value="Alessandro Grussu" />
-		<info name="language" value="English/Italian" />
+		<info name="language" value="English/Italian/German/Spanish/French/Portuguese" />
 		<part name="flop1" interface="floppy_3">
 			<feature name="part_id" value="Seto Taisho vs Yokai (English, Italian)"/>
 			<dataarea name="flop" size="194816">
@@ -14817,9 +14976,11 @@ Disk 2 - Side B: MicroProse Soccer (MicroProse Software)
 	</software>
 
 	<software name="sokoban">
-		<description>Sokoban</description>
+		<description>Sokoban (English)</description>
 		<year>2006</year>
-		<publisher>Compiler</publisher>
+		<publisher>Compiler Software</publisher>
+		<info name="language" value="English" />
+		<info name="region" value="Spain" />
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sokoban (2006)(compiler)(es)(en).dsk" size="194816" crc="7c9661ad" sha1="2e76b26808d115e750c7aedd700eac1284f58b48"/>
@@ -14828,9 +14989,11 @@ Disk 2 - Side B: MicroProse Soccer (MicroProse Software)
 	</software>
 
 	<software name="sokobansp" cloneof="sokoban">
-		<description>Sokoban (Spain)</description>
+		<description>Sokoban (Spanish)</description>
 		<year>2006</year>
-		<publisher>Compiler</publisher>
+		<publisher>Compiler Software</publisher>
+		<info name="language" value="Spanish" />
+		<info name="region" value="Spain" />
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sokoban (2006)(compiler)(es).dsk" size="194816" crc="2fe0a1d0" sha1="8f53882a9481ab44dd484ae7c17cf448b1c18a85"/>
@@ -15250,6 +15413,17 @@ The floppy disks don't load after choosing the "Loader" option menu.
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sq-tracker +3 (1998)(t.d.m.).dsk" size="194816" crc="2f06ec84" sha1="00ad89d4ad50119e3aa685579fbe12fe8d7d7191"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="sqij2018">
+		<description>SQIJ 2018</description>
+		<year>2018</year>
+		<publisher>Tardis Remakes</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="Sqij2018.dsk" size="194816" crc="f036fc84" sha1="8a75c1a8f3d7eb7122c19a1432f40aa7580427ac"/>
 			</dataarea>
 		</part>
 	</software>
@@ -16833,7 +17007,7 @@ The floppy disks don't load after choosing the "Loader" option menu.
 			</dataarea>
 		</part>
 	</software>
-	
+
 	<software name="td2tduel_a" cloneof="td2tduel">
 		<description>The Duel - Test Drive II (Dro Soft)</description>
 		<year>1990</year>
@@ -17771,7 +17945,7 @@ The floppy disks don't load after choosing the "Loader" option menu.
 	</software>
 
 	<software name="swoianna">
-		<description>The Sword of IANNA (v1.1)</description>
+		<description>The Sword of Ianna (v1.1)</description>
 		<year>2017</year>
 		<publisher>RetroWorks</publisher>
 		<info name="language" value="Spanish" />
@@ -17792,7 +17966,7 @@ The floppy disks don't load after choosing the "Loader" option menu.
 	</software>
 
 	<software name="swoiannaa" cloneof="swoianna">
-		<description>The Sword of IANNA (v1.0)</description>
+		<description>The Sword of Ianna (v1.0)</description>
 		<year>2017</year>
 		<publisher>RetroWorks</publisher>
 		<info name="language" value="Spanish" />
@@ -18299,7 +18473,9 @@ Disk 3 - Side A: Vindicators (Domark)
 	<software name="tikitaca">
 		<description>Tiki Taca</description>
 		<year>2019</year>
-		<publisher>Climacus / Errazking</publisher>
+		<publisher>Climacus</publisher>
+		<info name="developer" value="Eduardo Martin Torices / Igor Errazkin" />
+		<info name="region" value="Spain" />
 		<part name="flop" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="tiki taca (2019)(climacus)(+3)(es)(en).dsk" size="194816" crc="f2e1d3d4" sha1="316de7cd90cb66b1094320d1d65b3fc5eb8543de"/>
@@ -18785,6 +18961,8 @@ Labeled as "bad dump" in TOSEC for some reason, but it's the same dump at World 
 		<description>Trigger</description>
 		<year>1989</year>
 		<publisher>Opera Soft</publisher>
+		<info name="language" value="Spanish" />
+		<info name="region" value="Spain" />
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="217344">
 				<rom name="trigger (1989)(opera soft)(es).dsk" size="217344" crc="8940aa50" sha1="77ee6b6045a32e8ca0b42561e30c40fa9607318b"/>
@@ -18796,6 +18974,8 @@ Labeled as "bad dump" in TOSEC for some reason, but it's the same dump at World 
 		<description>Trigger (Gun-Stick)</description>
 		<year>1989</year>
 		<publisher>Opera Soft</publisher>
+		<info name="language" value="Spanish" />
+		<info name="region" value="Spain" />
 		<info name="usage" value="Requires Gun-Stick light gun"/>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214784">
@@ -19091,6 +19271,19 @@ Labeled as "bad dump" in TOSEC for some reason, but it's the same dump at World 
 			<feature name="part_id" value="Disk 2, Side B: Nightshade + Gunfright"/>
 			<dataarea name="flop" size="194816">
 				<rom name="ultimate the collected works - disk 2 - side b.dsk" size="194816" crc="4e9c767f" sha1="68200320fdaaac2e634d51bd48a5f41ecaf5f218"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<software name="disccopi">
+		<description>The Ultimate Disc Copier</description>
+		<year>19??</year>
+		<publisher>&lt;unknown&gt;</publisher>
+		<info name="language" value="Spanish" />
+		<info name="region" value="Spain" />
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="204544">
+				<rom name="The Ultimate Disc Copier.dsk" size="204544" crc="2e7dfc08" sha1="dd31cc23289250015ddd29e7defa085f6e1ec68a"/>
 			</dataarea>
 		</part>
 	</software>

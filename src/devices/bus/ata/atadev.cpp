@@ -11,8 +11,9 @@
 
 #include "atapicdr.h"
 #include "cp2024.h"
-#include "idehd.h"
+#include "hdd.h"
 #include "px320a.h"
+#include "zip100.h"
 
 //-------------------------------------------------
 //  device_ata_interface - constructor
@@ -74,4 +75,5 @@ void ata_devices(device_slot_interface &device)
 	device.option_add("px320a", PX320A);
 	device.option_add("cf", ATA_CF);
 	device.option_add("cp2024", CP2024);
+	device.option_add("zip100", ZIP100_IDE);
 }
