@@ -1810,7 +1810,23 @@ private:
 	uint8_t iob_p6_r();
 	void iob_p6_w(uint8_t data);
 	uint8_t iob_gun_r(offs_t offset);
-	uint16_t iob_analog_r(offs_t offset);
+	uint16_t adc0_r();
+	uint16_t adc1_r();
+	uint16_t adc2_r();
+	uint16_t adc3_r();
+	uint16_t adc4_r();
+	uint16_t adc5_r();
+	uint16_t adc6_r();
+	uint16_t adc7_r();
+	void adc0_w(uint16_t data);
+	void adc1_w(uint16_t data);
+	void adc2_w(uint16_t data);
+	void adc3_w(uint16_t data);
+	void adc4_w(uint16_t data);
+	void adc5_w(uint16_t data);
+	void adc6_w(uint16_t data);
+	void adc7_w(uint16_t data);
+
 	void c435_state_pio_w(uint16_t data);
 	void c435_state_reset_w(uint16_t data);
 
@@ -2073,7 +2089,6 @@ void namcos23_state::c435_state_set_projection_matrix_line(const uint16_t *param
 	}
 	m_proj_matrix_line = (m_proj_matrix_line + 1) % 3;
 	buf << "\n";
-	logerror(std::move(buf).str());
 	LOGMASKED(LOG_PROJ_MAT, "%s: %s", machine().describe_context(), std::move(buf).str());
 }
 
@@ -4093,7 +4108,6 @@ void namcos23_state::sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_
 uint16_t namcos23_state::sharedram_sub_r(offs_t offset)
 {
 	uint16_t *shared16 = reinterpret_cast<uint16_t *>(m_shared_ram.target());
-
 	return shared16[BYTE_XOR_BE(offset)];
 }
 
