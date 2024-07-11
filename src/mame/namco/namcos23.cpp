@@ -1797,42 +1797,20 @@ private:
 	void sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	uint16_t sharedram_sub_r(offs_t offset);
 	void sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t mcu_p4_r();
-	void mcu_p4_w(uint16_t data);
-	uint16_t mcu_p6_r();
-	void mcu_p6_w(uint16_t data);
-	uint16_t mcu_p7_r();
-	void mcu_p7_w(uint16_t data);
-	uint16_t mcu_p8_r();
-	void mcu_p8_w(uint16_t data);
-	uint16_t mcu_p9_r();
-	void mcu_p9_w(uint16_t data);
-	uint16_t mcu_pa_r();
-	void mcu_pa_w(uint16_t data);
-	uint16_t mcu_pb_r();
-	void mcu_pb_w(uint16_t data);
-	uint16_t iob_p4_r();
-	void iob_p4_w(uint16_t data);
-	uint16_t iob_p6_r();
-	void iob_p6_w(uint16_t data);
+	uint8_t mcu_p8_r();
+	void mcu_p8_w(uint8_t data);
+	uint8_t mcu_pa_r();
+	void mcu_pa_w(uint8_t data);
+	uint8_t mcu_pb_r();
+	void mcu_pb_w(uint8_t data);
+	uint8_t mcu_p6_r();
+	void mcu_p6_w(uint8_t data);
+	uint8_t iob_p4_r();
+	void iob_p4_w(uint8_t data);
+	uint8_t iob_p6_r();
+	void iob_p6_w(uint8_t data);
 	uint8_t iob_gun_r(offs_t offset);
-	uint16_t adc0_r();
-	uint16_t adc1_r();
-	uint16_t adc2_r();
-	uint16_t adc3_r();
-	uint16_t adc4_r();
-	uint16_t adc5_r();
-	uint16_t adc6_r();
-	uint16_t adc7_r();
-	void adc0_w(uint16_t data);
-	void adc1_w(uint16_t data);
-	void adc2_w(uint16_t data);
-	void adc3_w(uint16_t data);
-	void adc4_w(uint16_t data);
-	void adc5_w(uint16_t data);
-	void adc6_w(uint16_t data);
-	void adc7_w(uint16_t data);
-
+	uint16_t iob_analog_r(offs_t offset);
 	void c435_state_pio_w(uint16_t data);
 	void c435_state_reset_w(uint16_t data);
 
@@ -1905,7 +1883,7 @@ private:
 	required_shared_ptr<uint32_t> m_gammaram;
 	required_shared_ptr<uint32_t> m_charram;
 	required_shared_ptr<uint32_t> m_textram;
-	optional_shared_ptr<uint32_t> m_czattr;
+	memory_share_creator<uint32_t> m_czattr;
 	optional_device<sh7604_device> m_gmen_sh2;
 	optional_shared_ptr<uint32_t> m_gmen_sh2_shared;
 	required_device<gfxdecode_device> m_gfxdecode;
@@ -2360,17 +2338,17 @@ void namcos23_state::c435_render() // 8
 	LOGMASKED(LOG_RENDER_INFO, "%s: render model %x %swith matrix %x and vector %x\n", machine().describe_context(), m_c435_buffer[1], use_scaling ? "scaled " : "", m_c435_buffer[2], m_c435_buffer[3]);
 
 	static uint16_t match_model = 0x2ad9;
-	if (machine().input().code_pressed_once(KEYCODE_I))
+	if (machine().input().code_pressed_once(KEYCODE_I) && false)
 	{
 		match_model++;
 		printf("New match model: %04x\n", match_model);
 	}
-	if (machine().input().code_pressed_once(KEYCODE_U))
+	if (machine().input().code_pressed_once(KEYCODE_U) && false)
 	{
 		match_model--;
 		printf("New match model: %04x\n", match_model);
 	}
-	if (machine().input().code_pressed(KEYCODE_O) && m_c435_buffer[1] != match_model)
+	if (machine().input().code_pressed(KEYCODE_O) && m_c435_buffer[1] != match_model && false)
 	{
 		//printf("Avoiding model that isn't %04x (%04x)\n", match_model, m_c435_buffer[1]);
 		return;
@@ -3067,7 +3045,7 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			light = m_ptrom[adr++];
 		}
 
-		if (lmode < 2 && machine().input().code_pressed(KEYCODE_K)) printf("%d:%08x ", ne, light);
+		if (lmode < 2 && machine().input().code_pressed(KEYCODE_K) && false) printf("%d:%08x ", ne, light);
 
 		float minz = FLT_MAX;
 		float maxz = FLT_MIN;
@@ -3099,7 +3077,7 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 				int32_t nx = u32_to_s10((norm >> 20) & 0x3ff);
 				int32_t ny = u32_to_s10((norm >> 10) & 0x3ff);
 				int32_t nz = u32_to_s10(norm & 0x3ff);
-				if (machine().input().code_pressed(KEYCODE_Y))
+				if (machine().input().code_pressed(KEYCODE_Y) && false)
 				{
 					printf("%08x: %04x %04x %04x: %d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d: %08x %08x %08x\n", norm, (norm >> 20) & 0x3ff, (norm >> 10) & 0x3ff, norm & 0x3ff,
 						BIT(norm, 31), BIT(norm, 30), BIT(norm, 29), BIT(norm, 28), BIT(norm, 27), BIT(norm, 26), BIT(norm, 25), BIT(norm, 24),
@@ -4115,6 +4093,7 @@ void namcos23_state::sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_
 uint16_t namcos23_state::sharedram_sub_r(offs_t offset)
 {
 	uint16_t *shared16 = reinterpret_cast<uint16_t *>(m_shared_ram.target());
+
 	return shared16[BYTE_XOR_BE(offset)];
 }
 
@@ -4128,33 +4107,6 @@ void namcos23_state::sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t
 	}
 }
 
-
-uint16_t namcos23_state::mcu_p4_r()
-{
-	return m_sub_porta;
-}
-
-void namcos23_state::mcu_p4_w(uint16_t data)
-{
-}
-
-uint16_t namcos23_state::mcu_p7_r()
-{
-	return m_sub_porta;
-}
-
-void namcos23_state::mcu_p7_w(uint16_t data)
-{
-}
-
-uint16_t namcos23_state::mcu_p9_r()
-{
-	return m_sub_porta;
-}
-
-void namcos23_state::mcu_p9_w(uint16_t data)
-{
-}
 
 // Port 6
 
@@ -4180,7 +4132,6 @@ uint8_t namcos23_state::mcu_p8_r()
 
 void namcos23_state::mcu_p8_w(uint8_t data)
 {
-	;
 }
 
 
@@ -4228,21 +4179,6 @@ void namcos23_state::s23h8rwmap(address_map &map)
 	map(0x300030, 0x300031).nopw(); // timecrs2 writes this when writing to the sync shared ram location, motoxgo doesn't
 }
 
-void namcos23_state::s23h8iomap(address_map &map)
-{
-	map(h8_device::PORT_4, h8_device::PORT_4).rw(FUNC(namcos23_state::mcu_p4_r), FUNC(namcos23_state::mcu_p4_w));
-	map(h8_device::PORT_6, h8_device::PORT_6).rw(FUNC(namcos23_state::mcu_p6_r), FUNC(namcos23_state::mcu_p6_w));
-	map(h8_device::PORT_7, h8_device::PORT_7).rw(FUNC(namcos23_state::mcu_p7_r), FUNC(namcos23_state::mcu_p7_w));
-	map(h8_device::PORT_8, h8_device::PORT_8).rw(FUNC(namcos23_state::mcu_p8_r), FUNC(namcos23_state::mcu_p8_w));
-	map(h8_device::PORT_9, h8_device::PORT_9).rw(FUNC(namcos23_state::mcu_p9_r), FUNC(namcos23_state::mcu_p9_w));
-	map(h8_device::PORT_A, h8_device::PORT_A).rw(FUNC(namcos23_state::mcu_pa_r), FUNC(namcos23_state::mcu_pa_w));
-	map(h8_device::PORT_B, h8_device::PORT_B).rw(FUNC(namcos23_state::mcu_pb_r), FUNC(namcos23_state::mcu_pb_w));
-	map(h8_device::ADC_0, h8_device::ADC_0).noprw();
-	map(h8_device::ADC_1, h8_device::ADC_1).noprw();
-	map(h8_device::ADC_2, h8_device::ADC_2).noprw();
-	map(h8_device::ADC_3, h8_device::ADC_3).noprw();
-}
-
 
 /***************************************************************************
 
@@ -4254,15 +4190,13 @@ void namcos23_state::s23h8iomap(address_map &map)
 
 uint8_t namcos23_state::iob_p4_r()
 {
-	LOGMASKED(LOG_IOP4, "%s: iob_p4_r: %02x\n", machine().describe_context(), m_tssio_port_4);
-	return m_tssio_port_4;
+	LOGMASKED(LOG_IOP4, "%s: iob_p4_r: %02x\n", machine().describe_context(), 0);
+	return 0;
 }
 
 void namcos23_state::iob_p4_w(uint8_t data)
 {
 	LOGMASKED(LOG_IOP4, "%s: iob_p4_w: %02x\n", machine().describe_context(), data);
-	m_tssio_port_4 = data;
-
 	// bit 2 = SENSE line back to main (0 = asserted, 1 = dropped)
 	m_jvssense = (data & 0x04) ? 0 : 1;
 }
@@ -4287,7 +4221,6 @@ void namcos23_state::iob_p6_w(uint8_t data)
 	//printf("iob %02x to port 6\n", data);
 }
 
-
 void namcos23_state::s23iobrdmap(address_map &map)
 {
 	map(0x0000, 0x1fff).rom().region("iocpu", 0);
@@ -4296,82 +4229,6 @@ void namcos23_state::s23iobrdmap(address_map &map)
 	map(0x6004, 0x6005).nopw();
 	map(0x6006, 0x6007).noprw();
 	map(0xc000, 0xfb7f).ram();
-}
-
-//ioport("DSW")->read()
-uint16_t namcos23_state::adc0_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC0")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 0: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-uint16_t namcos23_state::adc1_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC1")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 1: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-uint16_t namcos23_state::adc2_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC2")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 2: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-uint16_t namcos23_state::adc4_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC4")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 4: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-uint16_t namcos23_state::adc5_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC5")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 5: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-uint16_t namcos23_state::adc6_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC6")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 6: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-uint16_t namcos23_state::adc7_r()
-{
-	const uint16_t data = uint16_t(ioport("ADC7")->read());
-	LOGMASKED(LOG_ADC_RD, "%s: ADC 7: %04x\n", machine().describe_context(), data);
-	return data;
-}
-
-void namcos23_state::adc0_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 0 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc1_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 1 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc2_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 2 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc3_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 3 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc4_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 4 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc5_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 5 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc6_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 6 Write: %02x\n", machine().describe_context(), data); }
-void namcos23_state::adc7_w(uint16_t data) { LOGMASKED(LOG_ADC_WR, "%s: ADC 7 Write: %02x\n", machine().describe_context(), data); }
-
-void namcos23_state::s23iobrdiomap(address_map &map)
-{
-	map(h8_device::PORT_4, h8_device::PORT_4).rw(FUNC(namcos23_state::iob_p4_r), FUNC(namcos23_state::iob_p4_w));
-	map(h8_device::PORT_5, h8_device::PORT_5).noprw();   // bit 2 = status LED to indicate transmitting packet to main
-	map(h8_device::PORT_6, h8_device::PORT_6).rw(FUNC(namcos23_state::iob_p6_r), FUNC(namcos23_state::iob_p6_w));
-	map(h8_device::PORT_8, h8_device::PORT_8).noprw();   // unknown - used on ASCA-5 only
-	map(h8_device::PORT_9, h8_device::PORT_9).noprw();   // unknown - used on ASCA-5 only
-	map(h8_device::ADC_0, h8_device::ADC_0).rw(FUNC(namcos23_state::adc0_r), FUNC(namcos23_state::adc0_w));
-	map(h8_device::ADC_1, h8_device::ADC_1).rw(FUNC(namcos23_state::adc1_r), FUNC(namcos23_state::adc1_w));
-	map(h8_device::ADC_2, h8_device::ADC_2).rw(FUNC(namcos23_state::adc2_r), FUNC(namcos23_state::adc2_w));
-	map(h8_device::ADC_3, h8_device::ADC_3).rw(FUNC(namcos23_state::adc3_r), FUNC(namcos23_state::adc3_w));
-	map(h8_device::ADC_4, h8_device::ADC_4).rw(FUNC(namcos23_state::adc4_r), FUNC(namcos23_state::adc4_w));
-	map(h8_device::ADC_5, h8_device::ADC_5).rw(FUNC(namcos23_state::adc5_r), FUNC(namcos23_state::adc5_w));
-	map(h8_device::ADC_6, h8_device::ADC_6).rw(FUNC(namcos23_state::adc6_r), FUNC(namcos23_state::adc6_w));
-	map(h8_device::ADC_7, h8_device::ADC_7).rw(FUNC(namcos23_state::adc7_r), FUNC(namcos23_state::adc7_w));
 }
 
 void namcos23_state::motoxgo_exio_map(address_map &map)
