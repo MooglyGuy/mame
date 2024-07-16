@@ -3475,7 +3475,7 @@ void namcos23_state::sub_irq(uint32_t data)
 	if (data < 72)
 	{
 		m_subcpu->set_input_line(INPUT_LINE_IRQ1, ASSERT_LINE);
-		m_subcpu_scanline_timer->adjust(m_screen->time_until_pos(data, 0));
+		m_subcpu_scanline_timer->adjust(m_screen->time_until_pos(data, 32));
 	}
 	//logerror("sub_irq: %d\n", data);
 	m_sub_port8 = m_sub_port8 & ~0x02; // IRQ1 pin
@@ -3980,7 +3980,7 @@ uint16_t namcos23_state::sub_comm_r(offs_t offset)
 
 	// data rx, TBD
 	LOGMASKED(LOG_MCU, "%s: sub_comm_r data read: %04x\n", machine().describe_context(), m_mcu_unk);
-	return m_mcu_unk; //machine().rand();
+	return 0; //machine().rand();
 }
 
 void namcos23_state::sub_comm_w(offs_t offset, uint16_t data)
