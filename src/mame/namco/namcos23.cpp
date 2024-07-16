@@ -114,18 +114,18 @@ c8000000:
 ':maincpu' (801143E0): unmapped program memory write to 0C800010 = 00000000 & 0000FFFF
 
     Game status:
-        rapidrvr,v2c        Missing 3d graphics. Coins up. Freezes right when a game starts.
-        rapidrvrp           Same as above but it's possible to enable (glitchy) 3d by entering certain portions of the development menu.
-        finfurl             Missing 3d graphics. Freezes in attract mode but can 'play' the game with missing 3d.
+        rapidrvr,v2c        Glitchy 3D graphics. Coins up. Partly playable.
+        rapidrvrp           Same as above.
+        finfurl             Same as above.
         motoxgo(all)        Inputs don't respond at all. Hardlocks shortly in atract mode.
-        downhill            Freeze with black screen after POST.
-        downhillu           Heavy gfx glitches. Missing rotary inputs. Random freezes.
-        timecrs2(all)       Playable with some gfx glitches
-        panicprk,j,j2       Freezes during 'SUB-READY WAIT' after POST (see sub_comm_r).
+        downhill            Heavy gfx glitches. Missing rotary inputs. Random freezes.
+        downhillu           Same as above.
+        timecrs2(all)       Glitchy 3D graphics but otherwise playable.
+        panicprk,j,j2       Glitchy 3D graphics. Partly to fully playable depending on mini-game.
         gunwars,a           Hardlocks after POST (gmen related?).
         raceon              Hardlocks after POST (gmen related?).
         aking               Freezes at the first ingame frame showing the notice screen or test menu. Missing rotary inputs.
-        500gp               Heavy gfx glitches. Possible to coin up but freezes when starting a game as well as in attract.
+        500gp               Heavily glitched 3D graphics, possibly unknown attribute bits. Mostly playable.
         finfurl2,j          Freezes upon the gmen transfering the program to the SH2.
         crszone(all)        Has its IRQs hardwired different from S23/SS23. Won't advance past interrupt check and skipping POST with
                             DIP #2 on has it freeze shortly after.
@@ -1491,15 +1491,14 @@ It can also be used with Final Furlong when wired correctly.
 #define LOG_SH2				(1 << 24U)
 #define LOG_SUBIRQ			(1 << 25U)
 #define LOG_SPRITES			(1 << 26U)
-#define LOG_IOP4			(1 << 27U)
-#define LOG_IOP6			(1 << 28U)
-#define LOG_ADC_RD			(1 << 29U)
-#define LOG_ADC_WR			(1 << 30U)
+#define LOG_IOMCU			(1 << 27U)
+#define LOG_ADC_RD			(1 << 28U)
+#define LOG_ADC_WR			(1 << 29U)
 #define LOG_ALL (LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO \
 				| LOG_MODEL_ERR | LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK \
-				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES | LOG_IOP4 | LOG_IOP6 | LOG_ADC_RD | LOG_ADC_WR)
+				| LOG_C361_UNK | LOG_CTL_UNK | LOG_MCU | LOG_SUBIRQ | LOG_C417_ACK | LOG_SPRITES | LOG_IOMCU | LOG_ADC_RD | LOG_ADC_WR)
 
-#define VERBOSE (0)
+#define VERBOSE (LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK | LOG_MCU | LOG_SUBIRQ | LOG_IOMCU | LOG_C361_UNK | LOG_CTL_UNK | LOG_C417_ACK)
 #include "logmacro.h"
 
 namespace {
@@ -1640,6 +1639,7 @@ struct c417_t
 	uint16_t adr;
 	uint32_t pointrom_adr;
 	uint16_t unk;
+	bool test_mode;
 };
 
 struct c412_t
@@ -1718,7 +1718,7 @@ public:
 		m_rtc(*this, "rtc"),
 		m_settings(*this, "namco_settings"),
 		m_mainram(*this, "mainram"),
-		m_shared_ram(*this, "shared_ram"),
+		m_shared_ram(*this, "shared_ram", 0x10000, ENDIANNESS_BIG),
 		m_gammaram(*this, "gammaram"),
 		m_charram(*this, "charram"),
 		m_textram(*this, "textram"),
@@ -1794,6 +1794,8 @@ private:
 	uint32_t gmen_trigger_sh2();
 	uint32_t sh2_shared_r(offs_t offset);
 	void sh2_shared_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
+	void sharedram_cpu_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
+	uint32_t sharedram_cpu_r(offs_t offset, uint32_t mem_mask = ~0);
 	void sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 	uint16_t sharedram_sub_r(offs_t offset);
 	void sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
@@ -1826,7 +1828,9 @@ private:
 	uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(interrupt);
 	TIMER_CALLBACK_MEMBER(c361_timer_cb);
-	void sub_irq(int state);
+	TIMER_CALLBACK_MEMBER(subcpu_scanline_tick);
+	void vblank(int state);
+	void sub_irq(uint32_t data);
 	uint8_t nthbyte(const uint32_t *pSource, int offs);
 	uint16_t nthword(const uint32_t *pSource, int offs);
 	inline int32_t u32_to_s24(uint32_t v);
@@ -1879,7 +1883,7 @@ private:
 	required_device<rtc4543_device> m_rtc;
 	required_device<namco_settings_device> m_settings;
 	required_shared_ptr<uint32_t> m_mainram;
-	required_shared_ptr<uint32_t> m_shared_ram;
+	memory_share_creator<uint32_t> m_shared_ram;
 	required_shared_ptr<uint32_t> m_gammaram;
 	required_shared_ptr<uint32_t> m_charram;
 	required_shared_ptr<uint32_t> m_textram;
@@ -1930,6 +1934,7 @@ private:
 	uint8_t m_proj_matrix_line;
 
 	int m_vblank_count;
+	emu_timer *m_subcpu_scanline_timer;
 
 // It may only be 128
 // At 0x1e bytes per slot, rounded up to 0x20, that's 0x1000 to 0x2000 bytes.
@@ -2080,20 +2085,18 @@ void namcos23_state::c435_state_set_projection_matrix_line(const uint16_t *param
 void namcos23_state::c435_state_set(uint16_t type, const uint16_t *param)
 {
 	switch(type) {
-	case 0x0001: c435_state_set_interrupt(param); break;
-	case 0x0036: {
+	case 0x0001:
+		c435_state_set_interrupt(param);
+		break;
+	case 0x0036:
 		LOGMASKED(LOG_3D_STATE_UNK, "%s: unknown state set (type 36)\n", machine().describe_context());
-	}	break;
-	case 0x0046: {
-		char buf[4096];
-		char *p = buf;
-		p += sprintf(p, "unknown matrix(?) set (type 46):");
-		for(int i=0; i<6; i++)
-			p += sprintf(p, " %f", f24_to_f32((param[2*i+1] << 16) | param[2*i+2]));
-		p += sprintf(p, "\n");
-		LOGMASKED(LOG_3D_STATE_UNK, "%s: %s", machine().describe_context(), buf);
-	}	break;
-	case 0x00c8: c435_state_set_projection_matrix_line(param); break;
+		break;
+	case 0x0046:
+		LOGMASKED(LOG_3D_STATE_UNK, "%s: unknown matrix(?) set (type 46)\n", machine().describe_context());
+		break;
+	case 0x00c8:
+		c435_state_set_projection_matrix_line(param);
+		break;
 	default: {
 		std::ostringstream buf;
 		util::stream_format(buf, "WARNING: Unhandled state type %04x :", type);
@@ -3363,7 +3366,6 @@ void namcos23_state::video_start()
 
 uint32_t namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
-	logerror("***SCREEN UPDATE***\n");
 	update_mixer();
 	if (m_has_sprites)
 		recalc_czram();
@@ -3456,12 +3458,27 @@ INTERRUPT_GEN_MEMBER(namcos23_state::interrupt)
 	m_render.count[m_render.cur] = 0;
 }
 
-void namcos23_state::sub_irq(int state)
+TIMER_CALLBACK_MEMBER(namcos23_state::subcpu_scanline_tick)
 {
-	m_subcpu->set_input_line(INPUT_LINE_IRQ1, state);
-	m_adc->adtrg_w(state);
-	m_sub_port8 = (m_sub_port8 & ~0x02) | (~state << 1 & 2); // IRQ1 pin
+	m_sub_port8 |= 0x02; // IRQ1 pin
+	m_subcpu->set_input_line(INPUT_LINE_IRQ1, CLEAR_LINE);
+}
+
+void namcos23_state::vblank(int state)
+{
 	m_sub_portb = (m_sub_portb & 0x7f) | (state << 7);
+	m_adc->adtrg_w(state);
+}
+
+void namcos23_state::sub_irq(uint32_t data)
+{
+	if (data < 72)
+	{
+		m_subcpu->set_input_line(INPUT_LINE_IRQ1, ASSERT_LINE);
+		m_subcpu_scanline_timer->adjust(m_screen->time_until_pos(data, 0));
+	}
+	//logerror("sub_irq: %d\n", data);
+	m_sub_port8 = m_sub_port8 & ~0x02; // IRQ1 pin
 
 	/*if (state)
 	{
@@ -3500,13 +3517,17 @@ uint16_t namcos23_state::c417_r(offs_t offset, uint16_t mem_mask)
 	*/
 	case 0:
 	{
-		uint16_t data = 0x008e | (m_screen->vblank() ? 0x0000 : 0x8000);
+		uint16_t data = 0x008e | (m_c417.test_mode << 15);
 		//LOGMASKED(LOG_C417_UNK, "%s: c417 status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		return data;
 	}
 	case 1:
 		LOGMASKED(LOG_C417_UNK, "%s: c417 address read: %04x & %04x\n", machine().describe_context(), m_c417.adr, mem_mask);
 		return m_c417.adr;
+	case 3:
+		LOGMASKED(LOG_C417_UNK, "%s: c417 test-mode shutdown(?): %04x & %04x\n", machine().describe_context(), 0, mem_mask);
+		m_c417.test_mode = false;
+		return 0;
 	case 4:
 		LOGMASKED(LOG_C417_UNK, "%s: c417 ram[%04x] read: %04x & %04x\n", machine().describe_context(), m_c417.adr, m_c417.ram[m_c417.adr], mem_mask);
 		return m_c417.ram[m_c417.adr];
@@ -3550,6 +3571,7 @@ void namcos23_state::c417_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 	case 3:
 		LOGMASKED(LOG_C417_UNK, "%s: c417_w: pointrom address clear: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		m_c417.pointrom_adr = 0;
+		m_c417.test_mode = true;
 		break;
 	case 4:
 		//LOGMASKED(LOG_C417_UNK, "%s: c417_w %04x = %04x\n", machine().describe_context(), m_c417.adr, data);
@@ -3903,6 +3925,7 @@ uint16_t namcos23_state::ctl_r(offs_t offset, uint16_t mem_mask)
 
 void namcos23_state::mcuen_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
+	LOGMASKED(LOG_MCU, "%s: mcuen_w: %08x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 	switch(offset) {
 	case 2:
 		// subcpu irq ack
@@ -3912,10 +3935,9 @@ void namcos23_state::mcuen_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 	case 5:
 		// boot/start the audio mcu
 		if(data) {
-			LOGMASKED(LOG_MCU, "%s: mcuen_w: booting H8/3002\n", machine().describe_context());
-
 			// Panic Park: writing 1 when it's already running means reboot?
-			if(m_subcpu_running) {
+			if (m_subcpu_running) {
+				LOGMASKED(LOG_MCU, "%s: mcuen_w: resetting H8/3002\n", machine().describe_context());
 				m_subcpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
 			}
 
@@ -4008,7 +4030,7 @@ void namcos23_state::s23_map(address_map &map)
 	map(0x00000000, 0x00ffffff).ram().share("mainram");
 	map(0x01000000, 0x010000ff).rw(FUNC(namcos23_state::c435_r), FUNC(namcos23_state::c435_w));
 	map(0x02000000, 0x0200000f).rw(FUNC(namcos23_state::c417_r), FUNC(namcos23_state::c417_w));
-	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
+	map(0x04400000, 0x0440ffff).rw(FUNC(namcos23_state::sharedram_cpu_r), FUNC(namcos23_state::sharedram_cpu_w)); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
 	map(0x06000000, 0x0600ffff).ram().share("nvram"); // Backup RAM
 	map(0x06200000, 0x06203fff).ram(); // C422 RAM
@@ -4081,6 +4103,19 @@ void namcos23_state::gmen_sh2_map(address_map &map)
 
 ***************************************************************************/
 
+void namcos23_state::sharedram_cpu_w(offs_t offset, uint32_t data, uint32_t mem_mask)
+{
+	//LOGMASKED(LOG_MCU, "%s: sharedram_cpu_w: %08x = %08x & %08x\n", machine().describe_context(), offset << 2, data, mem_mask);
+	COMBINE_DATA(&m_shared_ram[offset]);
+}
+
+uint32_t namcos23_state::sharedram_cpu_r(offs_t offset, uint32_t mem_mask)
+{
+	const uint32_t data = m_shared_ram[offset];
+	//LOGMASKED(LOG_MCU, "%s: sharedram_cpu_r: %08x: %08x & %08x\n", machine().describe_context(), offset << 2, data, mem_mask);
+	return data;
+}
+
 void namcos23_state::sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
 	uint16_t *shared16 = reinterpret_cast<uint16_t *>(m_shared_ram.target());
@@ -4093,7 +4128,6 @@ uint16_t namcos23_state::sharedram_sub_r(offs_t offset)
 	uint16_t *shared16 = reinterpret_cast<uint16_t *>(m_shared_ram.target());
 	return shared16[BYTE_XOR_BE(offset)];
 }
-
 
 void namcos23_state::sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
@@ -4110,12 +4144,26 @@ void namcos23_state::sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t
 uint8_t namcos23_state::mcu_p6_r()
 {
 	// bit 1 = JVS cable present sense (1 = I/O board plugged in)
-	return (m_jvssense << 1) | 0xfd;
+	const u8 data = (m_jvssense << 1) | 0xfd;
+	LOGMASKED(LOG_MCU, "%s: mcu_p6_r: %02x\n", machine().describe_context(), data);
+	return data;
 }
 
 void namcos23_state::mcu_p6_w(uint8_t data)
 {
-	//printf("%02x to port 6\n", data);
+	LOGMASKED(LOG_MCU, "%s: mcu_p6_w: %02x\n", machine().describe_context(), data);
+	static u8 old_data = 0;
+	if (data != old_data)
+	{
+		const u8 changed = data ^ old_data;
+		for (int i = 0; i < 8; i++)
+		{
+			if (!BIT(changed, i))
+				continue;
+			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+		}
+		old_data = data;
+	}
 }
 
 
@@ -4124,11 +4172,26 @@ void namcos23_state::mcu_p6_w(uint8_t data)
 
 uint8_t namcos23_state::mcu_p8_r()
 {
+	LOGMASKED(LOG_MCU, "%s: mcu_p8_r: %02x\n", machine().describe_context(), m_sub_port8);
 	return m_sub_port8;
 }
 
 void namcos23_state::mcu_p8_w(uint8_t data)
 {
+	LOGMASKED(LOG_MCU, "%s: mcu_p8_w: %02x\n", machine().describe_context(), data);
+	static u8 old_data = 0;
+	if (data != old_data)
+	{
+		const u8 changed = data ^ old_data;
+		for (int i = 0; i < 8; i++)
+		{
+			if (!BIT(changed, i))
+				continue;
+			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+		}
+		old_data = data;
+	}
+	m_sub_port8 = (data & ~0x02) | (m_sub_port8 & 0x02);
 }
 
 
@@ -4137,11 +4200,25 @@ void namcos23_state::mcu_p8_w(uint8_t data)
 
 uint8_t namcos23_state::mcu_pa_r()
 {
+	LOGMASKED(LOG_MCU, "%s: mcu_pa_r: %02x\n", machine().describe_context(), m_sub_porta);
 	return m_sub_porta;
 }
 
 void namcos23_state::mcu_pa_w(uint8_t data)
 {
+	LOGMASKED(LOG_MCU, "%s: mcu_pa_w: %02x\n", machine().describe_context(), data);
+	static u8 old_data = 0;
+	if (data != old_data)
+	{
+		const u8 changed = data ^ old_data;
+		for (int i = 0; i < 8; i++)
+		{
+			if (!BIT(changed, i))
+				continue;
+			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+		}
+		old_data = data;
+	}
 	m_rtc->ce_w(data & 1);
 	m_sub_porta = data;
 	m_rtc->ce_w((m_sub_portb & 0x20) && (m_sub_porta & 1));
@@ -4154,11 +4231,25 @@ void namcos23_state::mcu_pa_w(uint8_t data)
 
 uint8_t namcos23_state::mcu_pb_r()
 {
+	LOGMASKED(LOG_MCU, "%s: mcu_pb_r: %02x\n", machine().describe_context(), m_sub_portb);
 	return m_sub_portb;
 }
 
 void namcos23_state::mcu_pb_w(uint8_t data)
 {
+	LOGMASKED(LOG_MCU, "%s: mcu_pb_w: %02x\n", machine().describe_context(), data);
+	static u8 old_data = 0;
+	if (data != old_data)
+	{
+		const u8 changed = data ^ old_data;
+		for (int i = 0; i < 8; i++)
+		{
+			if (!BIT(changed, i))
+				continue;
+			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+		}
+		old_data = data;
+	}
 	m_sub_portb = (m_sub_portb & 0xc0) | (data & 0x3f);
 	m_rtc->ce_w((m_sub_portb & 0x20) && (m_sub_porta & 1));
 	m_settings->ce_w((m_sub_portb & 0x20) && !(m_sub_porta & 1));
@@ -4187,13 +4278,25 @@ void namcos23_state::s23h8rwmap(address_map &map)
 
 uint8_t namcos23_state::iob_p4_r()
 {
-	LOGMASKED(LOG_IOP4, "%s: iob_p4_r: %02x\n", machine().describe_context(), 0);
+	LOGMASKED(LOG_IOMCU, "%s: iob_p4_r: %02x\n", machine().describe_context(), 0);
 	return 0;
 }
 
 void namcos23_state::iob_p4_w(uint8_t data)
 {
-	LOGMASKED(LOG_IOP4, "%s: iob_p4_w: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_IOMCU, "%s: iob_p4_w: %02x\n", machine().describe_context(), data);
+	static u8 old_data = 0;
+	if (data != old_data)
+	{
+		const u8 changed = data ^ old_data;
+		for (int i = 0; i < 8; i++)
+		{
+			if (!BIT(changed, i))
+				continue;
+			LOGMASKED(LOG_IOMCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+		}
+		old_data = data;
+	}
 	// bit 2 = SENSE line back to main (0 = asserted, 1 = dropped)
 	m_jvssense = (data & 0x04) ? 0 : 1;
 }
@@ -4208,13 +4311,25 @@ uint8_t namcos23_state::iob_p6_r()
 	uint8_t sb = (ioport("SERVICE")->read() & 1) << 4;
 	// other bits: unknown
 
-	LOGMASKED(LOG_IOP6, "%s: iob_p6_r: %02x\n", machine().describe_context(), sb);
-	return sb | 0;
+	LOGMASKED(LOG_IOMCU, "%s: iob_p6_r: %02x\n", machine().describe_context(), sb);
+	return sb /*| 0xef*/;
 }
 
 void namcos23_state::iob_p6_w(uint8_t data)
 {
-	LOGMASKED(LOG_IOP6, "%s: iob_p6_w: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_IOMCU, "%s: iob_p6_w: %02x\n", machine().describe_context(), data);
+	static u8 old_data = 0;
+	if (data != old_data)
+	{
+		const u8 changed = data ^ old_data;
+		for (int i = 0; i < 8; i++)
+		{
+			if (!BIT(changed, i))
+				continue;
+			LOGMASKED(LOG_IOMCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+		}
+		old_data = data;
+	}
 	//printf("iob %02x to port 6\n", data);
 }
 
@@ -4222,8 +4337,8 @@ void namcos23_state::s23iobrdmap(address_map &map)
 {
 	map(0x0000, 0x1fff).rom().region("iocpu", 0);
 	map(0x6000, 0x6001).portr("IN01");
-	map(0x6002, 0x6003).portr("IN23").nopw();
-	map(0x6004, 0x6005).nopw();
+	map(0x6002, 0x6003).portr("IN23");
+	map(0x6004, 0x6005).portr("IN45");
 	map(0x6006, 0x6007).noprw();
 	map(0xc000, 0xfb7f).ram();
 }
@@ -4417,7 +4532,7 @@ INPUT_PORTS_END
 
 static INPUT_PORTS_START( s23 )
 	// Basically a testing grounds for inputs.
-	// You can go to the pcb test mode by pressing P1-A, and it doesn't crash anymore somehow
+	// You can go to the pcb test mode by pressing P1-A.
 	// Use P1-A to select, P1-Sel+P1-A to exit, up/down to navigate
 	PORT_START("P1")
 	PORT_BIT( 0x008, IP_ACTIVE_LOW, IPT_BUTTON1 ) PORT_PLAYER(2) PORT_NAME("Dev Service P1-A")
@@ -4496,6 +4611,70 @@ static INPUT_PORTS_START( s23 )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 
 	PORT_INCLUDE( h8analog )
+INPUT_PORTS_END
+
+static INPUT_PORTS_START( panicprk )
+	PORT_START("P1")
+	PORT_BIT( 0xffff, IP_ACTIVE_LOW, IPT_UNUSED )
+
+	PORT_START("P2")
+	PORT_BIT( 0xffff, IP_ACTIVE_LOW, IPT_UNUSED )
+
+	PORT_START("IN01")
+	PORT_SERVICE( 0x0100, IP_ACTIVE_LOW )
+	PORT_BIT( 0x0200, IP_ACTIVE_LOW, IPT_JOYSTICK_UP ) PORT_NAME("User Service Up")
+	PORT_BIT( 0x0400, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN ) PORT_NAME("User Service Down")
+	PORT_BIT( 0x0800, IP_ACTIVE_LOW, IPT_SERVICE2 ) PORT_NAME("User Service Enter")
+	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_START1 )
+	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_START2 )
+	PORT_BIT( 0xc0ff, IP_ACTIVE_LOW, IPT_UNUSED )
+
+	PORT_START("IN23")
+	PORT_BIT( 0x0800, IP_ACTIVE_LOW, IPT_COIN1 )
+	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_COIN2 )
+	PORT_BIT( 0xe7ff, IP_ACTIVE_LOW, IPT_UNUSED )
+
+	PORT_START("IN45")
+	PORT_BIT( 0xffff, IP_ACTIVE_LOW, IPT_UNUSED )
+
+	PORT_START("SERVICE")
+	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_SERVICE1 )
+
+	PORT_START("DSW")
+	PORT_DIPNAME( 0x01, 0x01, "Service Mode DIP" )
+	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x02, 0x02, "Skip POST" )
+	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x04, 0x04, "Freeze?" )
+	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unknown ) )
+	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x10, 0x10, DEF_STR( Unknown ) )
+	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x20, 0x20, DEF_STR( Unknown ) )
+	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Unknown ) )
+	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x80, 0x80, DEF_STR( Unknown ) )
+	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+
+	PORT_INCLUDE( h8analog )
+
+	PORT_MODIFY("ADC0")
+	PORT_BIT( 0x3ff, 0x0200, IPT_AD_STICK_X )  PORT_SENSITIVITY(100) PORT_KEYDELTA(10) PORT_NAME("P1 Lever")
+	PORT_MINMAX(0, 0x3ff) PORT_PLAYER(1)
+
+	PORT_MODIFY("ADC1")
+	PORT_BIT( 0x3ff, 0x0200, IPT_AD_STICK_X ) PORT_SENSITIVITY(100) PORT_KEYDELTA(10) PORT_NAME("P2 Lever")
+	PORT_MINMAX(0, 0x3ff) PORT_PLAYER(2)
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( timecrs2 )
@@ -4594,6 +4773,9 @@ void namcos23_state::machine_start()
 		save_pointer(NAME(m_banked_czram[bank]), 0x100, bank);
 		save_pointer(NAME(m_recalc_czram[bank]), 0x2000, bank);
 	}
+
+	m_subcpu_scanline_timer = timer_alloc(FUNC(namcos23_state::subcpu_scanline_tick), this);
+	m_subcpu_scanline_timer->adjust(attotime::never);
 }
 
 
@@ -4602,6 +4784,7 @@ void namcos23_state::machine_reset()
 	m_vblank_count = 0;
 	m_c435_buffer_pos = 0;
 	m_subcpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
+	m_subcpu_running = false;
 
 	m_c417.unk = 0;
 	m_c435_direct_buf_pos = 0;
@@ -4824,11 +5007,11 @@ void namcos23_state::s23(machine_config &config)
 	m_iocpu->read_adc<7>().set_ioport("ADC7");
 	m_iocpu->read_port4().set(FUNC(namcos23_state::iob_p4_r));
 	m_iocpu->write_port4().set(FUNC(namcos23_state::iob_p4_w));
-	m_iocpu->write_port5().set_nop();   // bit 2 = status LED to indicate transmitting packet to main
+	m_iocpu->write_port5().set_nop();
 	m_iocpu->read_port6().set(FUNC(namcos23_state::iob_p6_r));
 	m_iocpu->write_port6().set(FUNC(namcos23_state::iob_p6_w));
-	m_iocpu->write_port8().set_nop();   // unknown - used on ASCA-5 only
-	m_iocpu->write_port9().set_nop();   // unknown - used on ASCA-5 only
+	m_iocpu->write_port8().set_nop();
+	m_iocpu->write_port9().set_nop();
 
 	m_iocpu->write_sci_tx<0>().set(m_subcpu, FUNC(h8_device::sci_rx_w<0>));
 	m_subcpu->write_sci_tx<0>().set(m_iocpu, FUNC(h8_device::sci_rx_w<0>));
@@ -4853,7 +5036,8 @@ void namcos23_state::s23(machine_config &config)
 	m_screen->set_size(640, 480);
 	m_screen->set_visarea(0, 639, 0, 479);
 	m_screen->set_screen_update(FUNC(namcos23_state::screen_update));
-	m_screen->screen_vblank().set(FUNC(namcos23_state::sub_irq));
+	m_screen->screen_vblank().set(FUNC(namcos23_state::vblank));
+	m_screen->scanline().set(FUNC(namcos23_state::sub_irq));
 
 	PALETTE(config, m_palette).set_entries(0x8000);
 
@@ -4864,10 +5048,10 @@ void namcos23_state::s23(machine_config &config)
 	SPEAKER(config, "rspeaker").front_right();
 
 	c352_device &c352(C352(config, "c352", C352CLOCK, C352DIV));
-	c352.add_route(0, "rspeaker", 1.00);
-	c352.add_route(1, "lspeaker", 1.00);
-	c352.add_route(2, "rspeaker", 1.00);
-	c352.add_route(3, "lspeaker", 1.00);
+	c352.add_route(0, "lspeaker", 1.00);
+	c352.add_route(1, "rspeaker", 1.00);
+	c352.add_route(2, "lspeaker", 1.00);
+	c352.add_route(3, "rspeaker", 1.00);
 }
 
 void namcos23_state::motoxgo(machine_config &config)
@@ -6531,9 +6715,9 @@ GAME( 1997, timecrs2v2b, timecrs2, timecrs2,    timecrs2,  namcos23_state, init_
 GAME( 1997, timecrs2v1b, timecrs2, timecrs2,    timecrs2,  namcos23_state, init_s23, ROT0, "Namco", "Time Crisis II (Japan, TSS1 Ver. B)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
 GAME( 1997, timecrs2v4a, timecrs2, timecrs2v4a, timecrs2,  namcos23_state, init_s23, ROT0, "Namco", "Time Crisis II (World, TSS4 Ver. A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
 GAME( 1997, timecrs2v5a, timecrs2, timecrs2v4a, timecrs2,  namcos23_state, init_s23, ROT0, "Namco", "Time Crisis II (US, TSS5 Ver. A)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, panicprk,    0,        s23,         s23,       namcos23_state, init_s23, ROT0, "Namco", "Panic Park (World, PNP2 Ver. A)",          GAME_FLAGS )
-GAME( 1997, panicprkj,   panicprk, s23,         s23,       namcos23_state, init_s23, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 1)",   GAME_FLAGS )
-GAME( 1997, panicprkj2,  panicprk, s23,         s23,       namcos23_state, init_s23, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 2)",   GAME_FLAGS )
+GAME( 1997, panicprk,    0,        s23,         panicprk,  namcos23_state, init_s23, ROT0, "Namco", "Panic Park (World, PNP2 Ver. A)",          GAME_FLAGS )
+GAME( 1997, panicprkj,   panicprk, s23,         panicprk,  namcos23_state, init_s23, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 1)",   GAME_FLAGS )
+GAME( 1997, panicprkj2,  panicprk, s23,         panicprk,  namcos23_state, init_s23, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 2)",   GAME_FLAGS )
 GAME( 1998, gunwars,     0,        gmen,        s23,       namcos23_state, init_s23, ROT0, "Namco", "Gunmen Wars (Japan, GM1 Ver. B)",          GAME_FLAGS | MACHINE_NODEVICE_LAN )
 GAME( 1998, gunwarsa,    gunwars,  gmen,        s23,       namcos23_state, init_s23, ROT0, "Namco", "Gunmen Wars (Japan, GM1 Ver. A)",          GAME_FLAGS | MACHINE_NODEVICE_LAN )
 GAME( 1998, raceon,      0,        gmen,        s23,       namcos23_state, init_s23, ROT0, "Namco", "Race On! (World, RO2 Ver. A)",             GAME_FLAGS | MACHINE_NODEVICE_LAN )
