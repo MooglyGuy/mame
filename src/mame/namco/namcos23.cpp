@@ -4338,7 +4338,6 @@ void namcos23_state::s23iobrdmap(address_map &map)
 	map(0x0000, 0x1fff).rom().region("iocpu", 0);
 	map(0x6000, 0x6001).portr("IN01");
 	map(0x6002, 0x6003).portr("IN23");
-	map(0x6004, 0x6005).portr("IN45");
 	map(0x6006, 0x6007).noprw();
 	map(0xc000, 0xfb7f).ram();
 }
@@ -4633,9 +4632,6 @@ static INPUT_PORTS_START( panicprk )
 	PORT_BIT( 0x0800, IP_ACTIVE_LOW, IPT_COIN1 )
 	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_COIN2 )
 	PORT_BIT( 0xe7ff, IP_ACTIVE_LOW, IPT_UNUSED )
-
-	PORT_START("IN45")
-	PORT_BIT( 0xffff, IP_ACTIVE_LOW, IPT_UNUSED )
 
 	PORT_START("SERVICE")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_SERVICE1 )
