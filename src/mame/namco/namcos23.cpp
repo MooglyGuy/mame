@@ -1791,6 +1791,8 @@ private:
 	void sub_comm_w(offs_t offset, uint16_t data);
 	uint32_t c435_r(offs_t offset, uint32_t mem_mask = ~0);
 	void c435_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
+	uint32_t czattr_r(offs_t offset, uint32_t mem_mask = ~0);
+	void czattr_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	uint32_t gmen_trigger_sh2();
 	uint32_t sh2_shared_r(offs_t offset);
 	void sh2_shared_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
@@ -2273,6 +2275,8 @@ void namcos23_state::c435_matrix_set() // 0.4
 	if(m_c435_buffer[0] != 0x004a)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
+	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_set (%04x): Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1]);
+
 	int16_t *t = c435_getm(m_c435_buffer[1]);
 	for(int i=0; i<9; i++)
 		t[i] = m_c435_buffer[i+2];
@@ -2290,6 +2294,8 @@ void namcos23_state::c435_vector_set() // 0.5
 	}
 	if(m_c435_buffer[0] != 0x057)
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_vector_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
+
+	LOGMASKED(LOG_MATRIX_UNK, "c435_vector_set (%04x): Vector2 %d\n", m_c435_buffer[0], m_c435_buffer[1]);
 
 	int32_t *t = c435_getv(m_c435_buffer[1]);
 	for(int i=0; i<3; i++)
@@ -3149,7 +3155,7 @@ static int render_poly_compare(const void *i1, const void *i2)
 	if(p1->front != p2->front)
 		return p1->front ? 1 : -1;
 
-	return p1->zkey < p2->zkey ? 1 : p1->zkey > p2->zkey ? -1 : 0;
+	return p1->zkey < p2->zkey ? -1 : p1->zkey > p2->zkey ? 1 : 0;
 }
 
 void namcos23_renderer::render_flush(bitmap_argb32& bitmap)
@@ -3337,6 +3343,7 @@ TILE_GET_INFO_MEMBER(namcos23_state::TextTilemapGetInfo)
 void namcos23_state::textram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 {
 	COMBINE_DATA( &m_textram[offset] );
+	if (machine().input().code_pressed(KEYCODE_K)) LOGMASKED(LOG_SUBIRQ, "textram_w[%04x] = %08x & %08x\n", offset*2, data, mem_mask);
 	m_bgtilemap->mark_tile_dirty(offset*2);
 	m_bgtilemap->mark_tile_dirty((offset*2)+1);
 }
@@ -3344,6 +3351,7 @@ void namcos23_state::textram_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 void namcos23_state::textchar_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 {
 	COMBINE_DATA(&m_charram[offset]);
+	if (machine().input().code_pressed(KEYCODE_K)) LOGMASKED(LOG_SUBIRQ, "charram_w[%05x] = %08x & %08x\n", offset*2, data, mem_mask);
 	m_gfxdecode->gfx(0)->mark_dirty(offset/32);
 }
 
@@ -4091,7 +4099,6 @@ void namcos23_state::sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_
 uint16_t namcos23_state::sharedram_sub_r(offs_t offset)
 {
 	uint16_t *shared16 = reinterpret_cast<uint16_t *>(m_shared_ram.target());
-
 	return shared16[BYTE_XOR_BE(offset)];
 }
 
