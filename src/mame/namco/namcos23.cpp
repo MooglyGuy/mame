@@ -2779,9 +2779,9 @@ void namcos23_state::render_apply_transform(int32_t xi, int32_t yi, int32_t zi, 
 
 void namcos23_state::render_apply_matrot(int32_t xi, int32_t yi, int32_t zi, const namcos23_render_entry *re, int32_t &x, int32_t &y, int32_t &z)
 {
-	x = (re->model.m[0]*xi + re->model.m[3]*yi + re->model.m[6]*zi) >> 14;
-	y = (re->model.m[1]*xi + re->model.m[4]*yi + re->model.m[7]*zi) >> 14;
-	z = (re->model.m[2]*xi + re->model.m[5]*yi + re->model.m[8]*zi) >> 14;
+	x = (re->model.m[0]*xi + re->model.m[1]*yi + re->model.m[2]*zi) >> 14;
+	y = (re->model.m[3]*xi + re->model.m[4]*yi + re->model.m[5]*zi) >> 14;
+	z = (re->model.m[6]*xi + re->model.m[7]*yi + re->model.m[8]*zi) >> 14;
 }
 
 void namcos23_state::render_project(poly_vertex &pv)
@@ -3030,7 +3030,6 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 
 		// Something to do with Z-sorting?
 		//float z_add = 0.f;
-		if(type & 0x00001000) {
 			adr++;
 			//z_add = (m_ptrom[adr++] >> 16) / 16384.f;
 		}
@@ -3136,7 +3135,6 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 			p->rd.h = h;
 			p->rd.type = type;
 			render.poly_count++;
-		}
 
 		if(type & 0x000010000)
 			break;
