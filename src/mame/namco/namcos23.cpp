@@ -1614,7 +1614,7 @@ public:
 	namcos23_renderer(namcos23_state &state);
 	void render_flush(bitmap_argb32& bitmap);
 	void render_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
-	//void render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
+	void render_sprite_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid);
 	float* zBuffer() { return m_zBuffer; }
 
 private:
@@ -2149,7 +2149,7 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		LOGMASKED(LOG_MATRIX_ERR, "%s: WARNING: c435_matrix_matrix_mul with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
-	bool transpose = BIT(m_c435_buffer[0], 10);
+	bool transpose = true;//BIT(m_c435_buffer[0], 10);
 	if((m_c435_buffer[0] & ~0x400) != 0x0004)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if(m_c435_buffer[3] != 0xffff)
@@ -2277,8 +2277,6 @@ void namcos23_state::c435_matrix_set() // 0.4
 	if(m_c435_buffer[0] != 0x004a)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 
-	LOGMASKED(LOG_MATRIX_UNK, "c435_matrix_set (%04x): Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1]);
-
 	int16_t *t = c435_getm(m_c435_buffer[1]);
 	for(int i=0; i<9; i++)
 		t[i] = m_c435_buffer[i+2];
@@ -2296,8 +2294,6 @@ void namcos23_state::c435_vector_set() // 0.5
 	}
 	if(m_c435_buffer[0] != 0x057)
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_vector_set header %04x\n", machine().describe_context(), m_c435_buffer[0]);
-
-	LOGMASKED(LOG_MATRIX_UNK, "c435_vector_set (%04x): Vector2 %d\n", m_c435_buffer[0], m_c435_buffer[1]);
 
 	int32_t *t = c435_getv(m_c435_buffer[1]);
 	for(int i=0; i<3; i++)
@@ -2701,7 +2697,7 @@ void namcos23_renderer::render_sprite_scanline(int32_t scanline, const extent_t&
 		}
 		x_index += dx;
 	}
-}*/
+}
 
 void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
 {
