@@ -1791,10 +1791,6 @@ private:
 	void sub_comm_w(offs_t offset, uint16_t data);
 	uint32_t c435_r(offs_t offset, uint32_t mem_mask = ~0);
 	void c435_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	uint16_t czattr_r(offs_t offset, uint16_t mem_mask = ~0);
-	void czattr_w(address_space &space, offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint32_t czram_r(offs_t offset, uint32_t mem_mask = ~0);
-	void czram_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
 	uint32_t gmen_trigger_sh2();
 	uint32_t sh2_shared_r(offs_t offset);
 	void sh2_shared_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
@@ -2149,7 +2145,7 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		LOGMASKED(LOG_MATRIX_ERR, "%s: WARNING: c435_matrix_matrix_mul with size %d\n", machine().describe_context(), m_c435_buffer[0] & 0xf);
 		return;
 	}
-	bool transpose = true;//BIT(m_c435_buffer[0], 10);
+	bool transpose = BIT(m_c435_buffer[0], 10);
 	if((m_c435_buffer[0] & ~0x400) != 0x0004)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if(m_c435_buffer[3] != 0xffff)
@@ -2717,7 +2713,6 @@ void namcos23_renderer::render_scanline(int32_t scanline, const extent_t& extent
 
 	uint32_t *dest = &object.bitmap->pix(scanline, 0);
 
-	//printf("Scanline at %d, direct:%d, z:%f, dz:%f, u:%f, v:%f, du:%f, dv:%f\n", scanline, rd.direct, z, dz, u, v, du, dv);
 	for(int x = extent.startx; x < extent.stopx; x++) {
 		float ooz = 1.0f / z;
 		int tx = (int)(u * ooz);
@@ -3002,8 +2997,8 @@ void namcos23_state::render_one_model(const namcos23_render_entry *re)
 {
 	render_t &render = m_render;
 
-	if(re->model.model == 3486)
-		return;
+	//if(re->model.model == 3486)
+		//return;
 
 	//if(re->model.model < 0x0a || re->model.model > 0xa)
 		//return;
@@ -3151,8 +3146,8 @@ static int render_poly_compare(const void *i1, const void *i2)
 	const namcos23_poly_entry *p1 = *(const namcos23_poly_entry **)i1;
 	const namcos23_poly_entry *p2 = *(const namcos23_poly_entry **)i2;
 
-	//if(p1->front != p2->front)
-		//return p1->front ? 1 : -1;
+	if(p1->front != p2->front)
+		return p1->front ? 1 : -1;
 
 	return p1->zkey < p2->zkey ? 1 : p1->zkey > p2->zkey ? -1 : 0;
 }
@@ -3181,10 +3176,7 @@ void namcos23_renderer::render_flush(bitmap_argb32& bitmap)
 		if (p->rd.sprite)
 			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_sprite_scanline, this), 4, p->pv);
 		else if (p->vertex_count == 3)
-		{
-			//printf("3");
 			render_triangle<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), p->pv[0], p->pv[1], p->pv[2]);
-		}
 		else if (p->vertex_count == 4)
 			render_triangle_fan<4>(scissor, render_delegate(&namcos23_renderer::render_scanline, this), 4, p->pv);
 		else if (p->vertex_count == 5)
