@@ -4374,12 +4374,11 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 		int ne = (type >> 8) & 15;
 		bool stencil_enabled = BIT(h, 11);
 
-		if (print_extra_poly_info) printf("tbase, color, lmode, ne: %f, %02x, %d, %d\n", tbase, color, lmode, ne);
-
-		// Something to do with Z-sorting?
-		//float z_add = 0.f;
-			adr++;
-			//z_add = (m_ptrom[adr++] >> 16) / 16384.f;
+		// Z-sort bias
+		u32 polyshift = 0;
+		if (type & 0x00001000)
+		{
+			polyshift = data[offs++];
 		}
 		u8 alpha = 0xff;
 
@@ -4630,6 +4629,7 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 			p->rd.blend_enabled = BIT(h, 10);
 
 			render.poly_count++;
+		}
 
 		if (type & 0x000010000)
 			break;
