@@ -114,21 +114,20 @@ c8000000:
 ':maincpu' (801143E0): unmapped program memory write to 0C800010 = 00000000 & 0000FFFF
 
     Game status:
-        rapidrvr,v2c        Glitchy 3D graphics. Coins up. Partly playable.
+        rapidrvr,v2c        Glitchy graphics. Coins up. Partly playable.
         rapidrvrp           Same as above.
         finfurl             Same as above.
-        motoxgo(all)        Inputs don't respond at all. Hardlocks shortly in atract mode.
-        downhill            Heavy gfx glitches. Missing rotary inputs. Random freezes.
+        motoxgo(all)        Glitchy graphics. Inputs unresponsive.
+        downhill            Extremely glitchy graphics. Inputs unresponsive.
         downhillu           Same as above.
-        timecrs2(all)       Glitchy 3D graphics but otherwise playable.
-        panicprk,j,j2       Glitchy 3D graphics. Partly to fully playable depending on mini-game.
-        gunwars,a           Hardlocks after POST (gmen related?).
-        raceon              Hardlocks after POST (gmen related?).
-        aking               Freezes at the first ingame frame showing the notice screen or test menu. Missing rotary inputs.
-        500gp               Heavily glitched 3D graphics, possibly unknown attribute bits. Mostly playable.
-        finfurl2,j          Freezes upon the gmen transfering the program to the SH2.
-        crszone(all)        Has its IRQs hardwired different from S23/SS23. Won't advance past interrupt check and skipping POST with
-                            DIP #2 on has it freeze shortly after.
+        timecrs2(all)       Glitchy graphics but otherwise playable.
+        panicprk,j,j2       Glitchy graphics. Partly to fully playable depending on mini-game.
+        gunwars,a           Extremely glitchy graphics. Inputs unresponsive.
+        raceon              Locks up after POST (lack of STR I/O board emulation).
+        aking               Locks up after displaying legal-notice screen or test menu. Inputs unresponsive.
+        500gp               Extremely glitchy graphics. Partly playable.
+        finfurl2,j          Locks up due to undumped and unemulated JVS I/O board.
+        crszone(all)
 
 ****************************************************************************
 
@@ -652,6 +651,88 @@ Notes:
       J16        - Labelled 'TEXTURE'    | i.e. The ROM board sits on top of this board
       J17        - Labelled 'POINT'      /
       SW3        - 8 position DIP Switch
+
+
+Namco NamCam
+------------
+
+/------------------------\
+|   NAMCO          /---\ |
+|                  | O | |
+|  NAMCAM          \---/ |
+\------------------------/
+
+This is a CCD camera used on Gunmen Wars and Race-On and is
+mounted into the upper bezel above the monitor in front of the
+player. Both games run on Namco Super System 23 hardware.
+The camera has a 5 pin connector. That connector is wired to
+a 6 pin connector J6 on the V198 EMI PCB on the outside of the metal
+box housing the Super System 23 game boards.
+The pinout of J6 is...
+1 - +5V
+2 - GND
+3 - VIDEO (color composite video)
+4 - GND
+5 - NO CONNECT
+6 - SCREEN (just tied to GND on the PCB)
+Connector J6 eventually connects to the GMEN board to the VPX-3220 IC.
+
+When the game is started the game takes a snapshot of the
+player's face which is added on top of the game graphics by
+the GMEN PCB.
+If the NamCam is not connected the game will hang near the end of
+the SH2 initialisation/loading and will not go in-game. If the
+camera works enough to get the game booted but doesn't work in-game
+the board will hang on the 'taking the photo' screen then eventually
+reboot. The camera PCB is made by Toshiba.
+The PCB is mounted to the underside of the NamCam.
+
+PCB Top Side
+------------
+
+TOSHIBA
+PB7408
+70177778A
+TW10794V-0
+767 13604 (sticker)
+|--------------------------------|
+|        |-------|19.069MHz      |
+|        |TOSHIBA|       CCD_CAM |
+|        |TC90A22AF              |
+|P001    |-------|  93C45A       |
+|--------------------------------|
+Notes:
+TC90A22AF - Toshiba TA90A22AF CCD Camera Digital Signal Processing IC (TQFP80)
+   93C45A - 93C45A (TSSOP8) EEPROM, connected to TC90A22AF on pins 59-64.
+            pin 58 is NTPA and is grounded so the camera is set to NTSC mode.
+            The eeprom holds camera setting data, brightness, contrast etc.
+  CCD_CAM - This is the actual CCD sensor and lens
+     P001 - 5-pin connector that joins to the V198 EMI PCB
+
+
+PCB bottom Side
+---------------
+                    Note: This area has many tiny diodes, inductors, transistors,
+TOSHIBA             capacitors etc, most can't be identified to period-correct
+PB7408              manufacturers due to undocumented SMD codes.
+70177778A            /----/\----\
+TW10794V-0          /            \
+|--------------------------------|
+|             5W01  1R33  GY     |
+|        TA1283FN        3800    |
+| D16510             00DM   LY   |
+|              X2 LY        800mA|
+|--------------------------------|
+Notes:
+  D16510 - NEC uPD16510 Vertical Driver for CCD Sensor (TSSOP20)
+TA1283FN - ? Made by Toshiba (TSSOP24)
+    3800 - ? possibly an op-amp made by New Japan Radio Co. (i.e. JRC3800?) (TSSOP8)
+    1R33 - Sharp PQ1R33 Voltage Regulator (SOIC6)
+      X2 - ROHM EMX2 Dual General-Purpose NPN Transistor
+      LY - Probably a transistor (SOT23)
+      GY - Probably a transistor (SOT89)
+    00DM - ? (SOT523)
+    5W01 - ?. Possibly ST Microelectronics ST25W01 128 x8-bit Serial EEPROM (connected to TA1283FN) (TSSOP8)
 
 
 Program ROM PCB
@@ -1447,14 +1528,14 @@ It can also be used with Final Furlong when wired correctly.
 */
 
 #include "emu.h"
+#include "bus/rs232/rs232.h"
 #include "cpu/f2mc16/mb9061x.h"
 #include "cpu/h8/h83002.h"
 #include "cpu/h8/h83337.h"
 #include "cpu/mips/mips3.h"
 #include "cpu/sh/sh7604.h"
-#include "md8412b.h"
-#include "namco_settings.h"
-#include "vpx3220a.h"
+#include "machine/6850acia.h"
+#include "machine/clock.h"
 #include "machine/nvram.h"
 #include "machine/rtc4543.h"
 #include "sound/c352.h"
@@ -1464,6 +1545,10 @@ It can also be used with Final Furlong when wired correctly.
 #include "screen.h"
 #include "speaker.h"
 #include "tilemap.h"
+
+#include "md8412b.h"
+#include "namco_settings.h"
+#include "vpx3220a.h"
 
 #include <cfloat>
 
@@ -1508,15 +1593,20 @@ It can also be used with Final Furlong when wired correctly.
 #define LOG_C421_RAM		(1ULL << 39)
 #define LOG_C417_RAM		(1ULL << 40)
 #define LOG_GMEN			(1ULL << 41)
+#define LOG_MCU_PORTS		(1ULL << 42)
+#define LOG_RS232			(1ULL << 43)
+#define LOG_IRQ_STATUS  	(1ULL << 44)
+#define LOG_C451			(1ULL << 45)
 #define LOG_ALL ( LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO | LOG_MODEL_ERR | \
 				LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C417_ACK | LOG_C412_UNK | LOG_C421_UNK | \
 				LOG_C422_IRQ | LOG_C422_UNK | LOG_C361_UNK | LOG_CTL_UNK | LOG_C417_IRQ | LOG_C361_IRQ | LOG_MATRIX_INFO | LOG_VEC_INFO | \
-				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C417_RAM | LOG_GMEN )
+				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C417_RAM | LOG_GMEN | LOG_GENERAL | LOG_MCU | \
+				LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK )
 
 //#define VERBOSE (LOG_GENERAL | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_3D_STATE_UNK | LOG_3D_STATE_ERR | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_MODEL_ERR | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C361_UNK | LOG_PROJ_MAT )
 //#define VERBOSE ( LOG_GENERAL | LOG_C435_PIO_UNK | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_C435_UNK | LOG_C361_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_CTL_REG | LOG_CTL_UNK | LOG_SH2 | LOG_MCU )
-#define VERBOSE ( LOG_ALL & ~( LOG_MODELS | LOG_C412_RAM | LOG_C421_RAM | LOG_C417_RAM ) )
-//#define VERBOSE ( 0 )
+//#define VERBOSE ( LOG_ALL )
+#define VERBOSE ( 0 )
 #include "logmacro.h"
 
 class PixxiiiPacket
@@ -1880,6 +1970,7 @@ namespace
 #define MAIN_C422_IRQ   0x10
 #define MAIN_C450_IRQ   0x20
 #define MAIN_C451_IRQ   0x40
+#define MAIN_RS232_IRQ  0x100
 
 #define DUMP_MODELS 0
 
@@ -1896,8 +1987,8 @@ enum
 
 enum
 {
-	RENDER_MAX_ENTRIES = 1000,
-	POLY_MAX_ENTRIES = 10000
+	RENDER_MAX_ENTRIES = 4000,
+	POLY_MAX_ENTRIES = 40000
 };
 
 struct c404_mixer_regs_t
@@ -2000,7 +2091,7 @@ struct namcos23_render_data
 	bitmap_ind8 *primap;
 	u32 flags;
 	rgbaint_t polycolor;
-	uint16_t model;
+	u16 model;
 	bool direct;
 	bool immediate;
 	bool sprite;
@@ -2071,6 +2162,7 @@ struct c417_t
 	u16 ram[0x10000];
 	u16 adr;
 	u32 pointrom_adr;
+	u32 unk6;
 	u16 unk;
 	bool test_mode;
 };
@@ -2180,15 +2272,13 @@ public:
 	{ }
 
 	void timecrs2v4a(machine_config &config);
-	void ss23e2(machine_config &config);
 	void gorgon(machine_config &config);
 	void ss23(machine_config &config);
 	void s23(machine_config &config);
 	void timecrs2(machine_config &config);
 	void motoxgo(machine_config &config);
 
-	void init_s23();
-	void init_ss23evo2();
+	void driver_init();
 
 	render_t m_render;
 	const u16 *m_tmlrom;
@@ -2213,59 +2303,60 @@ protected:
 	virtual void machine_reset() override;
 	virtual void video_start() override;
 
-	void update_main_interrupts(u32 cause);
+	void irq_update_common(u32 cause);
+	virtual void irq_update(u32 cause);
 
-	void textram_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	void textchar_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	void gammaram_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	void paletteram_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	void sprites_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t c417_r(offs_t offset, uint16_t mem_mask = ~0);
-	void c417_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t c412_ram_r(offs_t offset);
-	void c412_ram_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t c412_r(offs_t offset, uint16_t mem_mask = ~0);
-	void c412_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t c421_ram_r(offs_t offset);
-	void c421_ram_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t c421_r(offs_t offset, uint16_t mem_mask = ~0);
-	void c421_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	void direct_buf_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	void ctl_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t ctl_r(offs_t offset, uint16_t mem_mask = ~0);
-	void c361_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t c361_r(offs_t offset, uint16_t mem_mask = ~0);
-	uint16_t c422_r(offs_t offset);
-	void c422_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	void mcuen_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t sub_comm_r(offs_t offset);
-	void sub_comm_w(offs_t offset, uint16_t data);
-	uint32_t c435_r(offs_t offset, uint32_t mem_mask = ~0);
-	void c435_w(address_space &space, offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	uint32_t gmen_trigger_sh2();
-	uint32_t sh2_shared_r(offs_t offset);
-	void sh2_shared_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	void sharedram_cpu_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
-	uint32_t sharedram_cpu_r(offs_t offset, uint32_t mem_mask = ~0);
-	void sharedram_sub_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint16_t sharedram_sub_r(offs_t offset);
-	void sub_interrupt_main_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
-	uint8_t mcu_p8_r();
-	void mcu_p8_w(uint8_t data);
-	uint8_t mcu_pa_r();
-	void mcu_pa_w(uint8_t data);
-	uint8_t mcu_pb_r();
-	void mcu_pb_w(uint8_t data);
-	uint8_t mcu_p6_r();
-	void mcu_p6_w(uint8_t data);
-	uint8_t iob_p4_r();
-	void iob_p4_w(uint8_t data);
-	uint8_t iob_p6_r();
-	void iob_p6_w(uint8_t data);
-	uint8_t iob_gun_r(offs_t offset);
-	uint16_t iob_analog_r(offs_t offset);
-	void c435_state_pio_w(uint16_t data);
-	void c435_state_reset_w(uint16_t data);
+	void textram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void textchar_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void gammaram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void paletteram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void sprites_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	virtual u16 c417_r(offs_t offset, u16 mem_mask = ~0);
+	void c417_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c412_ram_r(offs_t offset);
+	void c412_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c412_r(offs_t offset, u16 mem_mask = ~0);
+	void c412_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c421_ram_r(offs_t offset);
+	void c421_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c421_r(offs_t offset, u16 mem_mask = ~0);
+	void c421_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	void direct_buf_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	void ctl_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 ctl_r(offs_t offset, u16 mem_mask = ~0);
+	void c361_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c361_r(offs_t offset, u16 mem_mask = ~0);
+	u16 c422_r(offs_t offset);
+	void c422_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	void mcuen_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u32 c435_r(offs_t offset, u32 mem_mask = ~0);
+	void c435_w(address_space &space, offs_t offset, u32 data, u32 mem_mask = ~0);
+	u32 gmen_trigger_sh2();
+	u32 sh2_shared_r(offs_t offset);
+	void sh2_shared_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void sharedram_cpu_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	u32 sharedram_cpu_r(offs_t offset, u32 mem_mask = ~0);
+	void sharedram_sub_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 sharedram_sub_r(offs_t offset);
+	void sub_interrupt_main_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 sub_comm_r(offs_t offset);
+	void sub_comm_w(offs_t offset, u8 data);
+	u8 mcu_p8_r();
+	void mcu_p8_w(u8 data);
+	u8 mcu_pa_r();
+	void mcu_pa_w(u8 data);
+	u8 mcu_pb_r();
+	void mcu_pb_w(u8 data);
+	u8 mcu_p6_r();
+	void mcu_p6_w(u8 data);
+	u8 iob_p4_r();
+	void iob_p4_w(u8 data);
+	u8 iob_p6_r();
+	void iob_p6_w(u8 data);
+	u8 iob_gun_r(offs_t offset);
+	u16 iob_analog_r(offs_t offset);
+	void c435_state_pio_w(u16 data);
+	void c435_state_reset_w(u16 data);
 
 	void gorgon_nvram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	u16 gorgon_czattr_r(offs_t offset, u16 mem_mask = ~0);
@@ -2331,6 +2422,7 @@ protected:
 
 	void gorgon_map(address_map &map);
 	void s23_map(address_map &map);
+	void crszone_map(address_map &map);
 	void s23h8rwmap(address_map &map);
 	void s23iobrdmap(address_map &map);
 	void motoxgo_exio_map(address_map &map);
@@ -2401,6 +2493,7 @@ protected:
 	u16 m_unk4801;
 	emu_timer *m_subcpu_scanline_on_timer;
 	emu_timer *m_subcpu_scanline_off_timer;
+	emu_timer *m_c451_kick_timer;
 
 // It may only be 128
 // At 0x1e bytes per slot, rounded up to 0x20, that's 0x1000 to 0x2000 bytes.
@@ -2420,11 +2513,12 @@ protected:
 	u16 m_c435_buffer[256];
 	int m_c435_buffer_pos;
 
-	int m_c435_irqnum;
+	int m_c361_irqnum;
 	int m_c422_irqnum;
+	int m_c435_irqnum;
 	int m_vbl_irqnum;
-	int m_c361_sub_irqnum;
-	int m_lvl6_irqnum;
+	int m_sub_irqnum;
+	int m_rs232_irqnum;
 
 	u8 m_sub_port8;
 	u8 m_sub_porta;
@@ -2483,6 +2577,50 @@ private:
 	u32 m_sh2_unk;
 };
 
+class crszone_state : public namcos23_state
+{
+public:
+	crszone_state(const machine_config &mconfig, device_type type, const char *tag) :
+		namcos23_state(mconfig, type, tag),
+		m_acia(*this, "acia")
+	{ }
+
+	void crszone(machine_config &config);
+
+	void driver_init();
+
+protected:
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+
+	void mips_map(address_map &map);
+
+	virtual void irq_update(u32 cause) override;
+
+	virtual u16 c417_r(offs_t offset, u16 mem_mask = ~0) override;
+	TIMER_CALLBACK_MEMBER(c451_dma_kick);
+
+	void unk58_w(offs_t offset, u32 data);
+	void irq_vbl_ack_w(offs_t offset, u32 data);
+	void irq_lv6_ack_w(offs_t offset, u32 data);
+	u32 irq_lv3_status_r();
+	u32 irq_lv5_status_r();
+	u32 irq_lv6_status_r();
+
+	void acia_irq_w(int state);
+	u8 acia_r(offs_t offset);
+	void acia_w(offs_t offset, u8 data);
+
+	u32 c450_irq_status_r(offs_t offset, u32 mem_mask);
+	void c450_dma_addr_w(address_space &space, offs_t offset, u32 data, u32 mem_mask = ~0);
+	void c450_dma_size_w(address_space &space, offs_t offset, u32 data, u32 mem_mask = ~0);
+
+	required_device<acia6850_device> m_acia;
+
+	int m_c450_irqnum;
+	int m_c451_irqnum;
+};
+
 u8 namcos23_state::nthbyte(const u32 *pSource, int offs)
 {
 	pSource += offs/4;
@@ -2531,7 +2669,7 @@ float namcos23_state::f24_to_f32(u32 v)
 	// 1 is e=32, m=0x4000, -1 is e=31, m=0x8000
 
 	// This code turns it into a standard float
-	if (!v)
+	if (!(v & 0x0000ffff))
 		return 0;
 
 	u32 r = v & 0x8000 ? 0x80000000 : 0;
@@ -2571,10 +2709,14 @@ s16 *namcos23_state::c435_getm(u16 id)
 
 void namcos23_state::c435_state_set_interrupt(const u16 *param)
 {
+//	if (param[0] & 1)
+//		irq_update(m_main_irqcause | (MAIN_C435_IRQ | MAIN_C450_IRQ));
+//	else
+//		irq_update(m_main_irqcause & ~(MAIN_C435_IRQ | MAIN_C450_IRQ));
 	if (param[0] & 1)
-		update_main_interrupts(m_main_irqcause | MAIN_C435_IRQ);
+		irq_update(m_main_irqcause | MAIN_C435_IRQ);
 	else
-		update_main_interrupts(m_main_irqcause & ~MAIN_C435_IRQ);
+		irq_update(m_main_irqcause & ~MAIN_C435_IRQ);
 }
 
 void namcos23_state::c435_state_set_projection_matrix_line(const u16 *param)
@@ -2585,22 +2727,95 @@ void namcos23_state::c435_state_set_projection_matrix_line(const u16 *param)
 	//   line 2: 0 1 -(sy-b)/(sx/t) 0  0 -1 -(sy+b)/(sx/t) 0
 	//   line 3: 0 0 -1             c  0  0              0 sx/t
 
+	static u16 old[16*3] =
+	{
+		0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,
+		0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,
+		0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff
+	};
+
+	if (memcmp(&old[m_proj_matrix_line * 16], &param[1], sizeof(u16) * 16) != 0)
+	{
+		memcpy(&old[m_proj_matrix_line * 16], &param[1], sizeof(u16) * 16);
+		printf("Matrix line %d changed:\n", m_proj_matrix_line);
+		u32 uvals[8];
+		float fvals[8];
+		for (int i = 0; i < 8; i++)
+		{
+			uvals[i] = ((u32)param[2 * i + 1] << 16) | param[2 * i + 2];
+			fvals[i] = f24_to_f32(uvals[i]);
+		}
+		for (int i = 0; i < 8; i++)
+			printf("%08x ", uvals[i]);
+		printf("\n");
+		for (int i = 0; i < 8; i++)
+			printf("%f ", fvals[i]);
+		printf("\n\n");
+	}
+
 	std::ostringstream buf;
 	buf << "projection matrix line:";
-	for (int i=0; i<8; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		util::stream_format(buf, " %f", f24_to_f32((param[2*i+1] << 16) | param[2*i+2]));
-		m_proj_matrix[m_proj_matrix_line * 8 + i] = f24_to_f32((param[2*i+1] << 16) | param[2*i+2]);
+		util::stream_format(buf, " %f", f24_to_f32((param[2 * i + 1] << 16) | param[2 * i + 2]));
+		m_proj_matrix[m_proj_matrix_line * 8 + i] = f24_to_f32((param[2 * i + 1] << 16) | param[2 * i + 2]);
 	}
+	m_proj_matrix_line = (m_proj_matrix_line + 1) % 3;
+	buf << "\n";
+	LOGMASKED(LOG_PROJ_MAT, "%s: %s", machine().describe_context(), std::move(buf).str());
+
+	std::ostringstream buf2;
+	buf2 << "projection matrix line:";
+	for (int i = 0; i < 8; i++)
+	{
+		util::stream_format(buf2, " %08x", (param[2 * i + 1] << 16) | param[2 * i + 2]);
+	}
+	buf2 << "\n";
+	LOGMASKED(LOG_PROJ_MAT, "%s: %s", machine().describe_context(), std::move(buf2).str());
+
+	if (m_proj_matrix_line == 0)
+	{
+		static float old_sx_over_t = 0.0f;
+		static float old_neg_sxma = 0.0f;
+		static float old_neg_sxpa = 0.0f;
+		static float old_neg_symb = 0.0f;
+		static float old_neg_sypb = 0.0f;
+		static float old_sx = 0.0f;
+		static float old_sy = 0.0f;
+		static float old_a = 0.0f;
+		static float old_b = 0.0f;
+		const float sx_over_t = m_proj_matrix[23];
+		const float neg_sxma = m_proj_matrix[ 2];
+		const float neg_sxpa = m_proj_matrix[ 6];
+		const float neg_symb = m_proj_matrix[10];
+		const float neg_sypb = m_proj_matrix[14];
+		const float sx = -((m_proj_matrix[ 2] + m_proj_matrix[ 6]) * m_proj_matrix[23]) * 0.5f;
+		const float sy = -((m_proj_matrix[10] + m_proj_matrix[14]) * m_proj_matrix[23]) * 0.5f;
+		const float a = -m_proj_matrix[ 2] + sx;
+		const float b = -m_proj_matrix[10] + sy;
+		if (sx_over_t != old_sx_over_t ||
+			old_neg_sxma != neg_sxma || old_neg_sxpa != neg_sxpa || old_neg_symb != neg_symb || old_neg_sypb != neg_sypb ||
+			sx != old_sx || sy != old_sy || a != old_a || b != old_b)
+		{
+			old_sx_over_t = sx_over_t;
+			old_neg_sxma = neg_sxma;
+			old_neg_sxpa = neg_sxpa;
+			old_neg_symb = neg_sypb;
+			old_neg_sypb = neg_symb;
+			old_sx = sx;
+			old_sy = sy;
+			old_a = a;
+			old_b = b;
+			printf("Factors: %f, %f, %f, %f, %f\n", sx_over_t, neg_sxma, neg_sxpa, neg_symb, neg_sypb);
+			printf("sx, sy, a, b: %f, %f, %f, %f\n\n", sx, sy, a, b);
+		}
+	}
+
 	if (s_capturing)
 	{
 		PixxiiiPacket &cspl = log_packet("CSPL");
 		cspl.add_u16_buffer(param, 17);
 	}
-	m_proj_matrix_line = (m_proj_matrix_line + 1) % 3;
-	buf << "\n";
-	logerror(std::move(buf).str());
-	LOGMASKED(LOG_PROJ_MAT, "%s: %s", machine().describe_context(), std::move(buf).str());
 }
 
 void namcos23_state::c435_state_reset_w(u16 data)
@@ -2660,7 +2875,8 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		return;
 	}
 	bool transpose = BIT(m_c435_buffer[0], 10);
-	if ((m_c435_buffer[0] & ~0x400) != 0x0004)
+	bool identity = BIT(m_c435_buffer[0], 8);
+	if ((m_c435_buffer[0] & ~0x500) != 0x0004)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if (m_c435_buffer[3] != 0xffff)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_mul with +2=%04x\n", machine().describe_context(), m_c435_buffer[3]);
@@ -2677,10 +2893,18 @@ void namcos23_state::c435_matrix_matrix_mul() // 0.0
 		cmm_.add_u16_buffer(m_c435_buffer, 5);
 	}
 
-	memcpy(m1, c435_getm(m_c435_buffer[4]), sizeof(s16) * 9);
 	memcpy(m2, c435_getm(m_c435_buffer[2]), sizeof(s16) * 9);
 	if (transpose)
 		transpose_matrix(m2);
+	if (identity)
+	{
+		memset(m1, 0, sizeof(s16) * 9);
+		m1[0] = m1[4] = m1[8] = 0x4000;
+	}
+	else
+	{
+		memcpy(m1, c435_getm(m_c435_buffer[4]), sizeof(s16) * 9);
+	}
 	t[0] = s16((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
 	t[1] = s16((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
 	t[2] = s16((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
@@ -2778,12 +3002,17 @@ void namcos23_state::c435_matrix_matrix_immed_mul() // 0.2
 		return;
 	}
 	bool transpose = BIT(m_c435_buffer[0], 10);
-	if ((m_c435_buffer[0] & ~0x400) != 0x0004)
+	if ((m_c435_buffer[0] & ~0x400) != 0x000c)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_immed_mul header %04x\n", machine().describe_context(), m_c435_buffer[0]);
 	if (m_c435_buffer[3] != 0xffff)
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_matrix_immed_mul with +2=%04x\n", machine().describe_context(), m_c435_buffer[3]);
 
 	LOGMASKED(LOG_MATRIX_INFO, "c435_matrix_matrix_immed_mul (%04x): Matrix %d = Immediate Matrix * Matrix %d\n", m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2]);
+	LOGMASKED(LOG_MATRIX_INFO, "    %04x %04x %04x %04x %04x %04x %04x %04x %04x %04x %04x %04x %04x\n",
+		m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[3],
+		m_c435_buffer[4], m_c435_buffer[5], m_c435_buffer[6],
+		m_c435_buffer[7], m_c435_buffer[8], m_c435_buffer[9],
+		m_c435_buffer[10], m_c435_buffer[11], m_c435_buffer[12]);
 
 	s16 *t = c435_getm(m_c435_buffer[1]);
 	s16 m1[9];
@@ -2797,17 +3026,26 @@ void namcos23_state::c435_matrix_matrix_immed_mul() // 0.2
 
 	memcpy(m1, &m_c435_buffer[4], sizeof(s16) * 9);
 	memcpy(m2, c435_getm(m_c435_buffer[2]), sizeof(s16) * 9);
+	LOGMASKED(LOG_MATRIX_INFO, "    m1: %04x    %04x    %04x\n", (u16)m1[0], (u16)m1[1], (u16)m1[2]);
+	LOGMASKED(LOG_MATRIX_INFO, "        %04x    %04x    %04x\n", (u16)m1[3], (u16)m1[4], (u16)m1[5]);
+	LOGMASKED(LOG_MATRIX_INFO, "        %04x    %04x    %04x\n\n", (u16)m1[6], (u16)m1[7], (u16)m1[8]);
+	LOGMASKED(LOG_MATRIX_INFO, "    m2: %04x    %04x    %04x\n", (u16)m2[0], (u16)m2[1], (u16)m2[2]);
+	LOGMASKED(LOG_MATRIX_INFO, "        %04x    %04x    %04x\n", (u16)m2[3], (u16)m2[4], (u16)m2[5]);
+	LOGMASKED(LOG_MATRIX_INFO, "        %04x    %04x    %04x\n\n", (u16)m2[6], (u16)m2[7], (u16)m2[8]);
+
 	if (transpose)
 		transpose_matrix(m2);
-	t[0] = s16((m1[0]*m2[0] + m1[1]*m2[1] + m1[2]*m2[2]) >> 14);
-	t[1] = s16((m1[0]*m2[3] + m1[1]*m2[4] + m1[2]*m2[5]) >> 14);
-	t[2] = s16((m1[0]*m2[6] + m1[1]*m2[7] + m1[2]*m2[8]) >> 14);
-	t[3] = s16((m1[3]*m2[0] + m1[4]*m2[1] + m1[5]*m2[2]) >> 14);
-	t[4] = s16((m1[3]*m2[3] + m1[4]*m2[4] + m1[5]*m2[5]) >> 14);
-	t[5] = s16((m1[3]*m2[6] + m1[4]*m2[7] + m1[5]*m2[8]) >> 14);
-	t[6] = s16((m1[6]*m2[0] + m1[7]*m2[1] + m1[8]*m2[2]) >> 14);
-	t[7] = s16((m1[6]*m2[3] + m1[7]*m2[4] + m1[8]*m2[5]) >> 14);
-	t[8] = s16((m1[6]*m2[6] + m1[7]*m2[7] + m1[8]*m2[8]) >> 14);
+	t[0] = s16((m1[0]*m2[0] + m1[1]*m2[3] + m1[2]*m2[6]) >> 14);
+	t[1] = s16((m1[0]*m2[1] + m1[1]*m2[4] + m1[2]*m2[7]) >> 14);
+	t[2] = s16((m1[0]*m2[2] + m1[1]*m2[5] + m1[2]*m2[8]) >> 14);
+
+	t[3] = s16((m1[3]*m2[0] + m1[4]*m2[3] + m1[5]*m2[6]) >> 14);
+	t[4] = s16((m1[3]*m2[1] + m1[4]*m2[4] + m1[5]*m2[7]) >> 14);
+	t[5] = s16((m1[3]*m2[2] + m1[4]*m2[5] + m1[5]*m2[8]) >> 14);
+
+	t[6] = s16((m1[6]*m2[0] + m1[7]*m2[3] + m1[8]*m2[6]) >> 14);
+	t[7] = s16((m1[6]*m2[1] + m1[7]*m2[4] + m1[8]*m2[7]) >> 14);
+	t[8] = s16((m1[6]*m2[2] + m1[7]*m2[5] + m1[8]*m2[8]) >> 14);
 
 	LOGMASKED(LOG_MATRIX_INFO, "result: %04x    %04x    %04x\n", (u16)t[0], (u16)t[1], (u16)t[2]);
 	LOGMASKED(LOG_MATRIX_INFO, "        %04x    %04x    %04x\n", (u16)t[3], (u16)t[4], (u16)t[5]);
@@ -2829,7 +3067,7 @@ void namcos23_state::c435_matrix_vector_immed_mul() // 0.3
 	}
 
 	bool extra_logging = true;
-	if (m_c435_buffer[0] != 0x0814 && m_c435_buffer[0] != 0x1014 && m_c435_buffer[0] != 0x0414)
+	if (m_c435_buffer[0] != 0x0839 && m_c435_buffer[0] != 0x1039 && m_c435_buffer[0] != 0x0439)
 	{
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_matrix_vector_immed_mul header %04x %04x %04x %04x\n", machine().describe_context(), m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[3]);
 		//extra_logging = true;
@@ -2959,19 +3197,13 @@ void namcos23_state::c435_scaling_set() // 4.4
 
 void namcos23_state::c435_state_set(u16 type, const u16 *param)
 {
+	LOGMASKED(LOG_3D_STATE_UNK, "%s: c435_state_set, type %04x, header %04x\n", machine().describe_context(), type, m_c435_buffer[0]);
 	switch (type)
 	{
 	case 0x0000:
 	{
 		render_t &render = m_render;
 		namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
-		if (s_capturing)
-		{
-			PixxiiiPacket &cimm = log_packet("CIMM");
-			cimm.add_u16(m_c435_buffer[0]);
-			cimm.add_u16(type);
-			cimm.add_u16_buffer(param, c435_get_state_entry_size(type));
-		}
 		memcpy(&re->c404, &m_c404, sizeof(re->c404));
 		re->type = IMMEDIATE;
 		re->unk4001 = m_unk4001;
@@ -2980,51 +3212,128 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		re->model_blend_factor = 0;
 		re->unk4701 = m_unk4701;
 		re->unk4801 = m_unk4801;
-		re->immediate.type  =  param[ 0];
-		re->immediate.h     = (param[ 1] << 16) | param[ 2];
-		re->immediate.pal   = (param[ 3] << 16) | param[ 4];
-		re->immediate.zbias = (param[ 5] << 16) | param[ 6];
-		re->immediate.i[0]  = (param[ 7] << 16) | param[ 8];
-		re->immediate.i[1]  = (param[ 9] << 16) | param[10];
-		re->immediate.i[2]  = (param[11] << 16) | param[12];
-		re->immediate.u[0]  = (param[13] << 16) | param[14];
-		re->immediate.v[0]  = (param[15] << 16) | param[16];
-		re->immediate.u[1]  = (param[17] << 16) | param[18];
-		re->immediate.v[1]  = (param[19] << 16) | param[20];
-		re->immediate.u[2]  = (param[21] << 16) | param[22];
-		re->immediate.v[2]  = (param[23] << 16) | param[24];
-		re->immediate.x[0]  = (param[25] << 16) | param[26];
-		re->immediate.y[0]  = (param[27] << 16) | param[28];
-		re->immediate.z[0]  = (param[29] << 16) | param[30];
-		re->immediate.x[1]  = (param[31] << 16) | param[32];
-		re->immediate.y[1]  = (param[33] << 16) | param[34];
-		re->immediate.z[1]  = (param[35] << 16) | param[36];
-		re->immediate.x[2]  = (param[37] << 16) | param[38];
-		re->immediate.y[2]  = (param[39] << 16) | param[40];
-		re->immediate.z[2]  = (param[41] << 16) | param[42];
-		//LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
-		//LOG("Immediate Draw: %04x (type)\n", param[0]);
-		//LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
-		//LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
-		//LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
-		//LOG("Immediate Draw: %08x (i0)\n", re->immediate.i[0]);
-		//LOG("Immediate Draw: %08x (i1)\n", re->immediate.i[1]);
-		//LOG("Immediate Draw: %08x (i2)\n", re->immediate.i[2]);
-		//LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
-		//LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
-		//LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
-		//LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
-		//LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
-		//LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
-		//LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
-		//LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
-		//LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
-		//LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
-		//LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
-		//LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
-		//LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
-		//LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
-		//LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
+		if (m_c435_buffer[0] == 0x4f38)
+		{
+			if (s_capturing)
+			{
+				PixxiiiPacket &cimm = log_packet("CIMM");
+				cimm.add_u16(m_c435_buffer[0]);
+				cimm.add_u16(type);
+				cimm.add_u16_buffer(param, 55);
+			}
+			re->immediate.type  =  param[ 0];
+			re->immediate.h     = (param[ 1] << 16) | param[ 2];
+			re->immediate.pal   = (param[ 3] << 16) | param[ 4];
+			re->immediate.zbias = (param[ 5] << 16) | param[ 6];
+			re->immediate.i[0]  = (param[ 7] << 16) | param[ 8];
+			re->immediate.i[1]  = (param[ 9] << 16) | param[10];
+			re->immediate.i[2]  = (param[11] << 16) | param[12];
+			re->immediate.i[3]  = (param[13] << 16) | param[14];
+			re->immediate.u[0]  = (param[15] << 16) | param[16];
+			re->immediate.v[0]  = (param[17] << 16) | param[18];
+			re->immediate.u[1]  = (param[19] << 16) | param[20];
+			re->immediate.v[1]  = (param[21] << 16) | param[22];
+			re->immediate.u[2]  = (param[23] << 16) | param[24];
+			re->immediate.v[2]  = (param[25] << 16) | param[26];
+			re->immediate.u[3]  = (param[27] << 16) | param[28];
+			re->immediate.v[3]  = (param[29] << 16) | param[30];
+			re->immediate.x[0]  = (param[31] << 16) | param[32];
+			re->immediate.y[0]  = (param[33] << 16) | param[34];
+			re->immediate.z[0]  = (param[35] << 16) | param[36];
+			re->immediate.x[1]  = (param[37] << 16) | param[38];
+			re->immediate.y[1]  = (param[39] << 16) | param[40];
+			re->immediate.z[1]  = (param[41] << 16) | param[42];
+			re->immediate.x[2]  = (param[43] << 16) | param[44];
+			re->immediate.y[2]  = (param[45] << 16) | param[46];
+			re->immediate.z[2]  = (param[47] << 16) | param[48];
+			re->immediate.x[3]  = (param[49] << 16) | param[50];
+			re->immediate.y[3]  = (param[51] << 16) | param[52];
+			re->immediate.z[3]  = (param[53] << 16) | param[54];
+			LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
+			LOG("Immediate Draw: %04x (type)\n", param[0]);
+			LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
+			LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
+			LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
+			LOG("Immediate Draw: %08x (i0)\n", re->immediate.i[0]);
+			LOG("Immediate Draw: %08x (i1)\n", re->immediate.i[1]);
+			LOG("Immediate Draw: %08x (i2)\n", re->immediate.i[2]);
+			LOG("Immediate Draw: %08x (i3)\n", re->immediate.i[3]);
+			LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
+			LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
+			LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
+			LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
+			LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
+			LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
+			LOG("Immediate Draw: %08x (u3)\n", re->immediate.u[3]);
+			LOG("Immediate Draw: %08x (v3)\n", re->immediate.v[3]);
+			LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
+			LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
+			LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
+			LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
+			LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
+			LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
+			LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
+			LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
+			LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
+			LOG("Immediate Draw: %08x (x3)\n", re->immediate.x[3]);
+			LOG("Immediate Draw: %08x (y3)\n", re->immediate.y[3]);
+			LOG("Immediate Draw: %08x (z3)\n", re->immediate.z[3]);
+		}
+		else
+		{
+			if (s_capturing)
+			{
+				PixxiiiPacket &cimm = log_packet("CIMM");
+				cimm.add_u16(m_c435_buffer[0]);
+				cimm.add_u16(type);
+				cimm.add_u16_buffer(param, 43);
+			}
+			re->immediate.type  =  param[ 0];
+			re->immediate.h     = (param[ 1] << 16) | param[ 2];
+			re->immediate.pal   = (param[ 3] << 16) | param[ 4];
+			re->immediate.zbias = (param[ 5] << 16) | param[ 6];
+			re->immediate.i[0]  = (param[ 7] << 16) | param[ 8];
+			re->immediate.i[1]  = (param[ 9] << 16) | param[10];
+			re->immediate.i[2]  = (param[11] << 16) | param[12];
+			re->immediate.u[0]  = (param[13] << 16) | param[14];
+			re->immediate.v[0]  = (param[15] << 16) | param[16];
+			re->immediate.u[1]  = (param[17] << 16) | param[18];
+			re->immediate.v[1]  = (param[19] << 16) | param[20];
+			re->immediate.u[2]  = (param[21] << 16) | param[22];
+			re->immediate.v[2]  = (param[23] << 16) | param[24];
+			re->immediate.x[0]  = (param[25] << 16) | param[26];
+			re->immediate.y[0]  = (param[27] << 16) | param[28];
+			re->immediate.z[0]  = (param[29] << 16) | param[30];
+			re->immediate.x[1]  = (param[31] << 16) | param[32];
+			re->immediate.y[1]  = (param[33] << 16) | param[34];
+			re->immediate.z[1]  = (param[35] << 16) | param[36];
+			re->immediate.x[2]  = (param[37] << 16) | param[38];
+			re->immediate.y[2]  = (param[39] << 16) | param[40];
+			re->immediate.z[2]  = (param[41] << 16) | param[42];
+			//LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
+			//LOG("Immediate Draw: %04x (type)\n", param[0]);
+			//LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
+			//LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
+			//LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
+			//LOG("Immediate Draw: %08x (i0)\n", re->immediate.i[0]);
+			//LOG("Immediate Draw: %08x (i1)\n", re->immediate.i[1]);
+			//LOG("Immediate Draw: %08x (i2)\n", re->immediate.i[2]);
+			//LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
+			//LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
+			//LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
+			//LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
+			//LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
+			//LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
+			//LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
+			//LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
+			//LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
+			//LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
+			//LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
+			//LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
+			//LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
+			//LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
+			//LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
+		}
 		render.count[render.cur]++;
 		break;
 	}
@@ -3270,6 +3579,7 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 			(u32)(param[9] << 16) | param[10],
 			(u32)(param[11] << 16) | param[12]
 		};
+		bool printed = false;
 		if (memcmp(old_words, new_words, sizeof(old_words)) != 0)
 		{
 			if (old_words[0] != 0xffffffff)
@@ -3281,6 +3591,7 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 					if (old_words[i] != new_words[i])
 					{
 						printf("0046 Word %2d changed: (was %08x, now %08x)\n", i*2+1, old_words[i], new_words[i]); fflush(stdout);
+						printed = true;
 						//printf("%f\n", f24_to_f32(new_words[i])); fflush(stdout);
 					}
 				}
@@ -3293,21 +3604,41 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		{
 			if (old_word1 != 0xffffffff)
 			{
-				printf("Word 1/2: %08x\n", ((u32)param[1] << 16) | param[2]); fflush(stdout);
+				u32 val = ((u32)param[1] << 16) | param[2];
+				float fval = f24_to_f32((val >> 4) + 0x200000);
+				printf("Word 1/2: %08x (%f)\n", ((u32)param[1] << 16) | param[2], fval); fflush(stdout);
 				//printf("%f\n", f24_to_f32(((u32)param[1] << 16) | param[2])); fflush(stdout);
+				printed = true;
 			}
 			old_word1 = (u32)(param[1] << 16) | param[2];
 		}
 
-		static u32 old_word4 = 0xffffffff;
-		if (((u32)(param[4] << 16) | param[5]) != old_word4)
+		static u32 old_word3 = 0xffffffff;
+		if (((u32)(param[3] << 16) | param[4]) != old_word3)
 		{
-			if (old_word4 != 0xffffffff)
+			if (old_word3 != 0xffffffff)
 			{
-				printf("Word 4/5: %08x\n", ((u32)param[4] << 16) | param[5]); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[4] << 16) | param[5])); fflush(stdout);
+				u32 val = ((u32)param[3] << 16) | param[4];
+				float fval = f24_to_f32((val >> 4) + 0x200000);
+				printf("Word 3/4: %08x (%f)\n", ((u32)param[3] << 16) | param[4], fval); fflush(stdout);
+				//printf("%f\n", f24_to_f32(((u32)param[3] << 16) | param[4])); fflush(stdout);
+				printed = true;
 			}
-			old_word4 = (u32)(param[4] << 16) | param[5];
+			old_word3 = (u32)(param[3] << 16) | param[4];
+		}
+
+		static u32 old_word5 = 0xffffffff;
+		if (((u32)(param[5] << 16) | param[6]) != old_word5)
+		{
+			if (old_word5 != 0xffffffff)
+			{
+				u32 val = ((u32)param[5] << 16) | param[6];
+				float fval = f24_to_f32((val >> 4) + 0x200000);
+				printf("Word 5/6: %08x (%f)\n", ((u32)param[5] << 16) | param[6], fval); fflush(stdout);
+				//printf("%f\n", f24_to_f32(((u32)param[5] << 16) | param[6])); fflush(stdout);
+				printed = true;
+			}
+			old_word5 = (u32)(param[5] << 16) | param[6];
 		}
 
 		static u32 old_word7 = 0xffffffff;
@@ -3315,11 +3646,45 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		{
 			if (old_word7 != 0xffffffff)
 			{
-				printf("Word 7/8: %08x\n", ((u32)param[7] << 16) | param[8]); fflush(stdout);
+				u32 val = ((u32)param[7] << 16) | param[8];
+				float fval = f24_to_f32((val >> 4) + 0x200000);
+				printf("Word 7/8: %08x (%f)\n", ((u32)param[7] << 16) | param[8], fval); fflush(stdout);
 				//printf("%f\n", f24_to_f32(((u32)param[7] << 16) | param[8])); fflush(stdout);
+				printed = true;
 			}
 			old_word7 = (u32)(param[7] << 16) | param[8];
 		}
+
+		static u32 old_word9 = 0xffffffff;
+		if (((u32)(param[9] << 16) | param[10]) != old_word9)
+		{
+			if (old_word9 != 0xffffffff)
+			{
+				u32 val = ((u32)param[9] << 16) | param[10];
+				float fval = f24_to_f32((val >> 4) + 0x200000);
+				printf("Word 9/10: %08x (%f)\n", ((u32)param[9] << 16) | param[10], fval); fflush(stdout);
+				//printf("%f\n", f24_to_f32(((u32)param[9] << 16) | param[10])); fflush(stdout);
+				printed = true;
+			}
+			old_word9 = (u32)(param[9] << 16) | param[10];
+		}
+
+		static u32 old_word11 = 0xffffffff;
+		if (((u32)(param[11] << 16) | param[12]) != old_word11)
+		{
+			if (old_word11 != 0xffffffff)
+			{
+				u32 val = ((u32)param[11] << 16) | param[12];
+				float fval = f24_to_f32((val >> 4) + 0x200000);
+				printf("Word 11/12: %08x (%f)\n", ((u32)param[11] << 16) | param[12], fval); fflush(stdout);
+				//printf("%f\n", f24_to_f32(((u32)param[11] << 16) | param[12])); fflush(stdout);
+				printed = true;
+			}
+			old_word11 = (u32)(param[11] << 16) | param[12];
+		}
+
+		if (printed)
+			printf("\n");
 
 		LOGMASKED(LOG_3D_STATE_UNK, "%s: unknown matrix(?) set (type 46) (%04x)\n", machine().describe_context(), m_c435_buffer[0]);
 		for (int i = 0; i < (m_c435_buffer[0] & 0xff); i++)
@@ -3362,13 +3727,13 @@ void namcos23_state::c435_state_set() // 4.f
 		return;
 	}
 	int size = c435_get_state_entry_size(m_c435_buffer[1]);
-	if (size != (m_c435_buffer[0] & 0xff)-1)
+	if (size != ((m_c435_buffer[0] & 0xff) - 1) && m_c435_buffer[0] != 0x4f38)
 	{
 		LOGMASKED(LOG_3D_STATE_ERR, "%s: WARNING: c435_state_set size disagreement (type=%04x, got %d, expected %d)\n", machine().describe_context(), m_c435_buffer[1], (m_c435_buffer[0] & 0xff)-1, size);
-		LOG("Header: %04x\n", m_c435_buffer[0]);
+		LOGMASKED(LOG_3D_STATE_ERR, "Header: %04x\n", m_c435_buffer[0]);
 		for (int i = 0; i < (m_c435_buffer[0] & 0xff); i++)
 		{
-			LOG("Word %02x: %04x\n", i, m_c435_buffer[i+1]);
+			LOGMASKED(LOG_3D_STATE_ERR, "Word %02x: %04x\n", i, m_c435_buffer[i+1]);
 		}
 		return;
 	}
@@ -3492,8 +3857,8 @@ void namcos23_state::c435_render() // 8
 	memcpy(re->model.m, m, sizeof(re->model.m));
 	memcpy(re->model.v, v, sizeof(re->model.v));
 
-	LOGMASKED(LOG_MODEL_INFO, "%s: Render %04x (%04x) (%04x) %f\n", machine().describe_context(),
-			re->model.model, m_c435_buffer[size - 1], m_c435_buffer[size], re->model.scaling);
+	LOGMASKED(LOG_MODEL_INFO, "%s: Render %04x (%04x) (%04x) %f (%d)\n", machine().describe_context(),
+			re->model.model, m_c435_buffer[size - 1], m_c435_buffer[size], re->model.scaling, render.count[render.cur] + 1);
 
 	render.count[render.cur]++;
 }
@@ -3511,6 +3876,11 @@ void namcos23_state::c435_flush() // c
 		PixxiiiPacket &cfls = log_packet("CFLS");
 		cfls.add_u16(m_c435_buffer[0]);
 	}
+
+	if (BIT(m_c435_buffer[0], 13))
+		irq_update(m_main_irqcause | MAIN_C451_IRQ);
+	else
+		irq_update(m_main_irqcause & ~MAIN_C451_IRQ);
 
 	//LOGMASKED(LOG_RENDER_INFO, "%s: Skipping c435_flush flush request (we flush after all processing is done)\n", machine().describe_context());
 }
@@ -3547,7 +3917,7 @@ void namcos23_state::c435_sprite_w(u16 data)
 
 void namcos23_state::c435_pio_w(u16 data)
 {
-	//LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 PIO: %x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 PIO: %x\n", machine().describe_context(), data);
 	m_c435_buffer[m_c435_buffer_pos++] = data;
 	u16 h = m_c435_buffer[0];
 	int psize;
@@ -3912,11 +4282,11 @@ void namcos23_renderer::render_scanline(s32 scanline, const extent_t& extent, co
 		float ooz = 1.0f / z;
 		int tx = int(u * ooz);
 		int ty = int(v * ooz);
-		uint8_t pen = 0;
+		u8 pen = 0;
 		bool reject = rd.stencil_lookup(*rd.machine, tx, ty);
 		if (!reject)
 		{
-			uint32_t tex_rgb = 0xffffff;
+			u32 tex_rgb = 0xffffff;
 			if (texture_enabled)
 			{
 				ty += rd.tbase;
@@ -4006,10 +4376,10 @@ void namcos23_state::render_project(poly_vertex &pv)
 static bool render_stencil_lookup(running_machine &machine, float x, float y)
 {
 	namcos23_state *state = machine.driver_data<namcos23_state>();
-    u32 xx = uint32_t(x);
-    u32 yy = uint32_t(y);
+    u32 xx = u32(x);
+    u32 yy = u32(y);
 	u32 bit = (xx & 15) ^ 15;
-	u32 offs = (yy << 6) | (xx >> 4);
+	u32 offs = ((yy << 6) | (xx >> 4)) & 0x1ffff;
 	if (!BIT(state->m_texram[offs], bit))
 	{
 		return true;
@@ -4044,6 +4414,10 @@ static u32 render_texture_lookup(running_machine &machine, const pen_t *pens, in
 
 void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 {
+	LOG("render_direct_poly\n");
+	if (true)
+		return;
+
 	render_t &render = m_render;
 
 	u32 zsort = ((re->direct.d[1] & 0x1ff) << 12) | (re->direct.d[0] & 0xfff);
@@ -4367,14 +4741,14 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 		u32 type = data[offs++];
 		u32 h    = data[offs++];
 
-		u32 tbase = ((type & 0xff000000) >> 24) << 12;
+		u32 cmode = (type & 0xf0000000) >> 28;
+		u32 tbase = ((type & 0x0f000000) >> 24) << 12;
 		bool texture_enabled = BIT(type, 6);
 		u8 color = (h >> 24) & 0x7f;
 		int lmode = (type >> 19) & 3;
 		int ne = (type >> 8) & 15;
 		bool stencil_enabled = BIT(h, 11);
 
-		// Z-sort bias
 		u32 polyshift = 0;
 		if (type & 0x00001000)
 		{
@@ -4394,9 +4768,6 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 		{
 			light = data[offs++];
 		}
-
-		float minz = FLT_MAX;
-		float maxz = FLT_MIN;
 
 		for (int i = 0; i < ne; i++)
 		{
@@ -4532,6 +4903,25 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 			continue;
 		}
 
+		float minz = FLT_MAX;
+		float maxz = FLT_MIN;
+
+		/*for (int i = 0; i < p->vertex_count; i++)
+		{
+			const s32 z = (p->pv[i].p[0] != 0) ? p->pv[i].p[0] : 1.f;
+			if (z > maxz)
+				maxz = z;
+			if (z < minz)
+				minz = z;
+		}
+
+		if (maxz < 0)
+		{
+			if (type & 0x00010000)
+				break;
+			continue;
+		}*/
+
 		// Should be unnecessary once frustum clipping happens correctly, but this will at least cull polys behind the camera
 		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.0001f * 16384.f);
 
@@ -4599,7 +4989,7 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 			p->rd.h = h;
 			p->rd.type = type;
 			p->rd.tbase = tbase;
-			p->rd.cmode = 0;
+			p->rd.cmode = cmode;
 			p->rd.cz_value = 0;
 			p->rd.cz_type = 0;
 			p->rd.unk4301 = re->unk4301;
@@ -5418,6 +5808,7 @@ INTERRUPT_GEN_MEMBER(namcos23_gmen_state::interrupt)
 
 u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
+	LOG("***SCREEN UPDATE***\n");
 	check_pixxiii_trigger();
 
 	m_bgtilemap->set_palette_offset(m_c404.palbase);
@@ -5471,13 +5862,16 @@ u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, c
 
 // Interrupts
 
-void namcos23_state::update_main_interrupts(u32 cause)
+void namcos23_state::irq_update_common(u32 cause)
 {
-	u32 old = m_main_irqcause;
-	u32 changed = cause ^ m_main_irqcause;
+	//if (cause != 0 && cause != 1)
+		//LOG("irq_update: %02x\n", cause);
+
+	const u32 old = m_main_irqcause;
+	const u32 changed = cause ^ m_main_irqcause;
 	m_main_irqcause = cause;
 
-	// level 2: vblank
+	// vblank
 	if (changed & MAIN_VBLANK_IRQ)
 	{
 		if (m_main_irqcause & MAIN_VBLANK_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
@@ -5485,31 +5879,85 @@ void namcos23_state::update_main_interrupts(u32 cause)
 		m_maincpu->set_input_line(m_vbl_irqnum, (cause & MAIN_VBLANK_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
-	// level 3: C361/subcpu
-	if (changed & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
-	{
-		if (m_main_irqcause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361(%d) || SubCPU(%d)\n", m_c361_sub_irqnum - MIPS3_IRQ0, (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
-		else if (old & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d\n", m_c361_sub_irqnum - MIPS3_IRQ0);
-		m_maincpu->set_input_line(m_c361_sub_irqnum, (cause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) ? ASSERT_LINE : CLEAR_LINE);
-	}
-
-	// level 4: C435
-	if (changed & MAIN_C435_IRQ)
-	{
-		m_maincpu->set_input_line(m_c435_irqnum, (cause & MAIN_C435_IRQ) ? ASSERT_LINE : CLEAR_LINE);
-	}
-
-	// level 5: C422
+	// C422
 	if (changed & MAIN_C422_IRQ)
 	{
+		if (m_main_irqcause & MAIN_C422_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C422_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c422_irqnum, (cause & MAIN_C422_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
+}
 
-	// crszone(sys23ev2) has a different configuration, are they hardwired or configured by software? (where?)..
-	// level 3: C422/subcpu
-	// level 4: vblank
-	// level 5: C451/C361
-	// level 6: C450
+void namcos23_state::irq_update(u32 cause)
+{
+	const u32 old = m_main_irqcause;
+	const u32 changed = cause ^ m_main_irqcause;
+
+	irq_update_common(cause);
+
+	// C361/subcpu
+	if (changed & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
+	{
+		if (m_main_irqcause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361(%d) || SubCPU(%d)\n", m_c361_irqnum - MIPS3_IRQ0, (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
+		else if (old & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d\n", m_c361_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_c361_irqnum, (cause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) ? ASSERT_LINE : CLEAR_LINE);
+	}
+
+	// C435
+	if (changed & MAIN_C435_IRQ && m_c435_irqnum >= 0)
+	{
+		if (m_main_irqcause & MAIN_C435_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C435_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_c435_irqnum, (cause & MAIN_C435_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
+}
+
+void crszone_state::irq_update(u32 cause)
+{
+	const u32 old = m_main_irqcause;
+	const u32 changed = cause ^ m_main_irqcause;
+
+	irq_update_common(cause);
+
+	// RS232
+	if (changed & MAIN_RS232_IRQ)
+	{
+		if (m_main_irqcause & MAIN_RS232_IRQ) LOGMASKED(LOG_RS232, "Raising IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_RS232_IRQ) LOGMASKED(LOG_RS232, "Lowering IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_rs232_irqnum, (cause & MAIN_RS232_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
+
+	// C361
+	if (changed & MAIN_C361_IRQ)
+	{
+		if (m_main_irqcause & MAIN_C361_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C361_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_c361_irqnum, (cause & MAIN_C361_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
+
+	// SubCPU
+	if (changed & MAIN_SUBCPU_IRQ)
+	{
+		if (m_main_irqcause & MAIN_SUBCPU_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_SUBCPU_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_sub_irqnum, (cause & MAIN_SUBCPU_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
+
+	// C450
+	if (changed & MAIN_C450_IRQ && m_c450_irqnum >= 0)
+	{
+		if (m_main_irqcause & MAIN_C450_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C450_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_c450_irqnum, (cause & MAIN_C450_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
+
+	// C451
+	if (changed & MAIN_C451_IRQ && m_c451_irqnum >= 0)
+	{
+		if (m_main_irqcause & MAIN_C451_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C451_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
+		m_maincpu->set_input_line(m_c451_irqnum, (cause & MAIN_C451_IRQ) ? ASSERT_LINE : CLEAR_LINE);
+	}
 }
 
 INTERRUPT_GEN_MEMBER(namcos23_state::interrupt)
@@ -5518,10 +5966,17 @@ INTERRUPT_GEN_MEMBER(namcos23_state::interrupt)
 
 void namcos23_state::vblank(int state)
 {
-	if (!m_ctl_vbl_active && state)
+	LOG("***VBLANK***\n");
+	if (/*!m_ctl_vbl_active &&*/ state)
 	{
 		m_ctl_vbl_active = true;
-		update_main_interrupts(m_main_irqcause | MAIN_VBLANK_IRQ);
+		LOG("Setting VBL IRQ\n");
+		irq_update(m_main_irqcause | MAIN_VBLANK_IRQ);
+	}
+	else
+	{
+		LOG("Clearing VBL IRQ automatically\n");
+		irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
 	}
 	m_sub_portb = (m_sub_portb & 0x7f) | (state << 7);
 	m_adc->adtrg_w(state);
@@ -5551,6 +6006,18 @@ TIMER_CALLBACK_MEMBER(namcos23_state::subcpu_scanline_off_tick)
 
 
 // C417
+
+u16 crszone_state::c417_r(offs_t offset, u16 mem_mask)
+{
+	if (offset == 0)
+	{
+		u16 data = m_c417.test_mode << 15;
+		LOGMASKED(LOG_C417_REG, "%s: c417 status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+		return data;
+	}
+
+	return namcos23_state::c417_r(offset, mem_mask);
+}
 
 u16 namcos23_state::c417_r(offs_t offset, u16 mem_mask)
 {
@@ -5630,16 +6097,21 @@ void namcos23_state::c417_w(offs_t offset, u16 data, u16 mem_mask)
 		m_c417.test_mode = true;
 		break;
 	case 4:
-		//LOGMASKED(LOG_C417_REG, "%s: c417_w %04x = %04x\n", machine().describe_context(), m_c417.adr, data);
-		//LOGMASKED(LOG_C417_REG, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
 		LOGMASKED(LOG_C417_REG, "%s: c417_w: RAM[%04x] = %04x & %04x\n", machine().describe_context(), m_c417.adr, data, mem_mask);
 		if (!m_c417.test_mode) LOGMASKED(LOG_C417_RAM, "C417 RAM write: %08x = %04x & %04x\n", (m_c417.adr << 1), data, mem_mask);
 		COMBINE_DATA(m_c417.ram + m_c417.adr);
 		break;
+	/*case 6:
+		LOGMASKED(LOG_C417_ACK, "%s: c417_w: request IRQ 2 (%x)\n", machine().describe_context(), data);
+		m_c417.unk6 = data;
+		LOG("Setting C435 IRQ\n");
+		irq_update(m_main_irqcause | MAIN_C435_IRQ);
+		break;*/
 	case 7:
 		LOGMASKED(LOG_C417_ACK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
 		COMBINE_DATA(&m_c417.unk);
-		update_main_interrupts(m_main_irqcause & ~MAIN_C435_IRQ);
+		LOG("Clearing C435 IRQ\n");
+		irq_update(m_main_irqcause & ~MAIN_C435_IRQ);
 		break;
 	default:
 		LOGMASKED(LOG_C417_UNK, "%s: c417 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
@@ -5648,6 +6120,46 @@ void namcos23_state::c417_w(offs_t offset, u16 data, u16 mem_mask)
 }
 
 
+// C412
+
+u32 crszone_state::c450_irq_status_r(offs_t offset, u32 mem_mask)
+{
+	u32 data = (m_main_irqcause & MAIN_C450_IRQ) ? 1 : 0;
+	static u32 old_data = 0;
+	//u32 data = (m_c451_kick_timer->remaining() != attotime::never) ? 1 : 0;
+	if (data != old_data)
+	{
+		old_data = data;
+		LOGMASKED(LOG_C451, "%s: c450_irq_status_r: read IRQ flag @%08x: %08x\n", machine().describe_context(), 0x1040001c, data);
+	}
+	//irq_update(m_main_irqcause & ~MAIN_C450_IRQ);
+	return data;
+}
+
+void crszone_state::c450_dma_addr_w(address_space &space, offs_t offset, u32 data, u32 mem_mask)
+{
+	LOGMASKED(LOG_C435_REG, "%s: c450 write DMA address @%08x: %08x & %08x\n", machine().describe_context(), 0x10400000, data, mem_mask);
+	COMBINE_DATA(&m_c435_address);
+	if (s_capturing)
+	{
+		PixxiiiPacket &a435 = log_packet("A435");
+		a435.add_u32(m_c435_address);
+	}
+}
+
+void crszone_state::c450_dma_size_w(address_space &space, offs_t offset, u32 data, u32 mem_mask)
+{
+	LOGMASKED(LOG_C435_REG, "%s: c450 write DMA size @%08x: %08x & %08x (kicking DMA from %08x)\n", machine().describe_context(), 0x1040000c, data, mem_mask, m_c435_address);
+	COMBINE_DATA(&m_c435_size);
+	if (s_capturing)
+	{
+		PixxiiiPacket &s435 = log_packet("S435");
+		s435.add_u32(m_c435_size);
+	}
+	//m_c451_kick_timer->adjust(attotime::from_usec(500));
+	c435_dma(space, m_c435_address, m_c435_size);
+	irq_update(m_main_irqcause | MAIN_C450_IRQ);
+}
 
 // C412
 
@@ -5689,6 +6201,10 @@ void namcos23_state::c412_ram_w(offs_t offset, u16 data, u16 mem_mask)
 		if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 PCZRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c412.pczram  + (offset & 0x1ff));
 	}
+	else
+	{
+		if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
+	}
 }
 
 u16 namcos23_state::c412_r(offs_t offset, u16 mem_mask)
@@ -5706,7 +6222,6 @@ u16 namcos23_state::c412_r(offs_t offset, u16 mem_mask)
 		return m_c412.adr >> 16;
 	case 0xa: {
 		u16 data = c412_ram_r(m_c412.adr);
-		//LOGMASKED(LOG_C412_UNK, "%s: read c412 offset %x & %04x: %04x\n", machine().describe_context(), offset, mem_mask, data);
 		return data;
 	}
 	case 0xc:
@@ -5730,11 +6245,9 @@ void namcos23_state::c412_w(offs_t offset, u16 data, u16 mem_mask)
 		LOGMASKED(LOG_C412_UNK, "%s: c412 write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
 	case 0x8:
-		//LOGMASKED(LOG_C412_UNK, "%s: c412 write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		m_c412.adr = (data & mem_mask) | (m_c412.adr & (0xffffffff ^ mem_mask));
 		break;
 	case 0x9:
-		//LOGMASKED(LOG_C412_UNK, "%s: c412 write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		m_c412.adr = ((data & mem_mask) << 16) | (m_c412.adr & (0xffffffff ^ (mem_mask << 16)));
 		break;
 	case 0xa:
@@ -5779,32 +6292,39 @@ void namcos23_state::c421_ram_w(offs_t offset, u16 data, u16 mem_mask)
 	}
 	else if (offset < 0x88000)
 	{
-		if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 SRAM write: %08x = %04x & %04x\n", (m_c417.adr << 1), data, mem_mask);
+		//if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 SRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.sram   + (offset & 0x07fff));
+	}
+	else
+	{
+		if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 	}
 }
 
 u16 namcos23_state::c421_r(offs_t offset, u16 mem_mask)
 {
+	u16 data = 0;
 	switch (offset)
 	{
 	case 0:
-	{
-		const u16 data = c421_ram_r(m_c421.adr & 0xfffff);
-		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x: %04x\n", machine().describe_context(), offset, mem_mask, (u16)data);
-		return data;
-	}
+		data = c421_ram_r(m_c421.adr & 0xfffff);
+		break;
 
 	case 2:
-		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x: %04x\n", machine().describe_context(), offset, mem_mask, (u16)(m_c421.adr >> 16));
-		return m_c421.adr >> 16;
+		data = m_c421.adr >> 16;
+		break;
+
 	case 3:
-		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x: %04x\n", machine().describe_context(), offset, mem_mask, (u16)m_c421.adr);
-		return m_c421.adr;
+		data = (u16)m_c421.adr;
+		LOGMASKED(LOG_C421_UNK, "%s: c421 RAM address LSW read %x: %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
+		break;
+
+	default:
+		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x: %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
+		break;
 	}
 
-	LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
-	return 0;
+	return data;
 }
 
 void namcos23_state::c421_w(offs_t offset, u16 data, u16 mem_mask)
@@ -5842,18 +6362,18 @@ void namcos23_state::c422_w(offs_t offset, u16 data, u16 mem_mask)
 	switch (offset)
 	{
 	case 1:
+		LOGMASKED(LOG_C422_IRQ, "%s: c422_w: offset 1: %04x\n", machine().describe_context(), data);
 		if (data == 0xfffb)
 		{
 			LOGMASKED(LOG_C422_IRQ, "%s: c422_w: raise IRQ 3\n", machine().describe_context());
-			update_main_interrupts(m_main_irqcause | MAIN_C422_IRQ);
+			irq_update(m_main_irqcause | MAIN_C422_IRQ);
 		}
 		else if (data == 0x000f)
 		{
 			LOGMASKED(LOG_C422_IRQ, "%s: c422_w: ack IRQ 3\n", machine().describe_context());
-			update_main_interrupts(m_main_irqcause & ~MAIN_C422_IRQ);
+			irq_update(m_main_irqcause & ~MAIN_C422_IRQ);
 		}
 		break;
-
 	default:
 		LOGMASKED(LOG_C422_UNK, "%s: c422 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
 		break;
@@ -5872,7 +6392,7 @@ TIMER_CALLBACK_MEMBER(namcos23_state::c361_timer_cb)
 	{
 		LOGMASKED(LOG_C361_IRQ, "c361 timer callback, scanline %d\n", m_c361.scanline);
 		// need to do a partial update here, but doesn't work properly yet
-		update_main_interrupts(m_main_irqcause | MAIN_C361_IRQ);
+		irq_update(m_main_irqcause | MAIN_C361_IRQ);
 
 		// TC2 indicates it's probably one-shot since it resets it each VBL...
 		//c361.timer->adjust(m_screen->time_until_pos(c361.scanline));
@@ -5880,7 +6400,7 @@ TIMER_CALLBACK_MEMBER(namcos23_state::c361_timer_cb)
 	else
 	{
 		LOGMASKED(LOG_C361_IRQ, "c361 timer callback, clearing irq\n", m_c361.scanline);
-		update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
+		irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
 	}
 }
 
@@ -5952,7 +6472,7 @@ u16 namcos23_state::c361_r(offs_t offset, u16 mem_mask)
 	// how does it work exactly? it's not understood in namcos22 either (also has a c361)
 	case 5:
 	{
-		update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
+		irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
 		u16 data = (m_screen->vpos() * 2) | (m_screen->vblank() ? 1 : 0);
 		//LOGMASKED(LOG_C361_REG, "%s: c361 vpos read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		return data;
@@ -5960,7 +6480,7 @@ u16 namcos23_state::c361_r(offs_t offset, u16 mem_mask)
 	case 6:
 	{
 		u16 data = ((m_main_irqcause & MAIN_C361_IRQ) || m_screen->vblank()) ? 1 : 0;
-		update_main_interrupts(m_main_irqcause & ~MAIN_C361_IRQ);
+		irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
 		//LOGMASKED(LOG_C361_REG, "%s: c361 vbl read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		return data;
 	}
@@ -5976,6 +6496,7 @@ u16 namcos23_state::c361_r(offs_t offset, u16 mem_mask)
 
 void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 {
+	LOG("%s: direct_buf_w [%3d]: %08x = %04x & %04x\n", machine().describe_context(), m_c435_direct_buf_pos, offset << 1, data, mem_mask);
 	if (offset == 1)
 	{
 		m_c435_direct_buf_open = (bool)data;
@@ -6009,6 +6530,53 @@ void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 		memcpy(&re->c404, &m_c404, sizeof(re->c404));
 		render.count[render.cur]++;
 
+		int cztype = re->direct.d[3] & 3;
+		LOG("%s: Presumptive direct-poly info:\n", machine().describe_context());
+		LOG("%s:     Z-Sort:  %08x\n", machine().describe_context(), ((re->direct.d[1] & 0x1ff) << 12) | (re->direct.d[0] & 0xfff));
+		LOG("%s:     CZ Type: %08x\n", machine().describe_context(), cztype);
+		LOG("%s:     Flags:   %08x\n", machine().describe_context(), ((re->direct.d[3] << 6) & 0x1fff) | cztype);
+		LOG("%s:     U0:      %08x\n", machine().describe_context(), (re->direct.d[4] >> 4));
+		LOG("%s:     V0:      %08x\n", machine().describe_context(), (re->direct.d[5] >> 4));
+		LOG("%s:     X0:      %d\n", machine().describe_context(), ((s16)re->direct.d[6] + 320));
+		LOG("%s:     Y0:      %d\n", machine().describe_context(), ((s16)re->direct.d[7] + 320));
+		float z0 = 0.0f;
+		int mant0 = re->direct.d[9], exp0 = re->direct.d[8] & 0x3f;
+		if (mant0) { z0 = mant0; while (exp0 < 0x2e) { z0 /= 2.0f; exp0++; } }
+		else z0 = (float)0x10000;
+		LOG("%s:     Z0:      %f\n", machine().describe_context(), z0);
+		LOG("%s:     U1:      %08x\n", machine().describe_context(), (re->direct.d[10] >> 4));
+		LOG("%s:     V1:      %08x\n", machine().describe_context(), (re->direct.d[11] >> 4));
+		LOG("%s:     X1:      %d\n", machine().describe_context(), ((s16)re->direct.d[12] + 320));
+		LOG("%s:     Y1:      %d\n", machine().describe_context(), ((s16)re->direct.d[13] + 320));
+		float z1 = 0.0f;
+		int mant1 = re->direct.d[15], exp1 = re->direct.d[14] & 0x3f;
+		if (mant1) { z1 = mant1; while (exp1 < 0x2e) { z1 /= 2.0f; exp1++; } }
+		else z1 = (float)0x10000;
+		LOG("%s:     Z1:      %f\n", machine().describe_context(), z1);
+		LOG("%s:     U2:      %08x\n", machine().describe_context(), (re->direct.d[16] >> 4));
+		LOG("%s:     V2:      %08x\n", machine().describe_context(), (re->direct.d[17] >> 4));
+		LOG("%s:     X2:      %d\n", machine().describe_context(), ((s16)re->direct.d[18] + 320));
+		LOG("%s:     Y2:      %d\n", machine().describe_context(), ((s16)re->direct.d[19] + 320));
+		float z2 = 0.0f;
+		int mant2 = re->direct.d[21], exp2 = re->direct.d[20] & 0x3f;
+		if (mant2) { z2 = mant2; while (exp2 < 0x2e) { z2 /= 2.0f; exp2++; } }
+		else z2 = (float)0x10000;
+		LOG("%s:     Z2:      %f\n", machine().describe_context(), z2);
+		LOG("%s:     U3:      %08x\n", machine().describe_context(), (re->direct.d[22] >> 4));
+		LOG("%s:     V3:      %08x\n", machine().describe_context(), (re->direct.d[23] >> 4));
+		LOG("%s:     X3:      %d\n", machine().describe_context(), ((s16)re->direct.d[24] + 320));
+		LOG("%s:     Y3:      %d\n", machine().describe_context(), ((s16)re->direct.d[25] + 320));
+		float z3 = 0.0f;
+		int mant3 = re->direct.d[27], exp3 = re->direct.d[26] & 0x3f;
+		if (mant3) { z3 = mant3; while (exp3 < 0x2e) { z3 /= 2.0f; exp3++; } }
+		else z3 = (float)0x10000;
+		LOG("%s:     Z3:      %f\n", machine().describe_context(), z3);
+        LOG("%s:     Palette: %04x\n", machine().describe_context(), re->direct.d[2] & 0x7f00);
+        LOG("%s:     TBase:   %04x\n", machine().describe_context(), (re->direct.d[2] & 0x000f) << 12);
+        LOG("%s:     CMode:   %04x\n", machine().describe_context(), (re->direct.d[2] & 0x00f0) >> 4);
+        LOG("%s:     CZVal:   %04x\n", machine().describe_context(), (re->direct.d[3] >> 2) & 0x1fff);
+        LOG("%s:     CZType:  %d\n", machine().describe_context(), re->direct.d[3] & 3);
+
 		if (s_capturing)
 		{
 			PixxiiiPacket &cdir = log_packet("CDIR");
@@ -6040,7 +6608,8 @@ void namcos23_state::ctl_w(offs_t offset, u16 data, u16 mem_mask)
 		if (m_ctl_vbl_active)
 		{
 			m_ctl_vbl_active = false;
-			update_main_interrupts(m_main_irqcause & ~MAIN_VBLANK_IRQ);
+			LOG("Clearing VBL IRQ\n");
+			irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
 		}
 		break;
 
@@ -6093,7 +6662,7 @@ u16 namcos23_state::ctl_r(offs_t offset, u16 mem_mask)
 	case 1:
 	{
 		u16 data = 0x0000 | ioport("DSW")->read() | ((m_main_irqcause & MAIN_C361_IRQ) ? 0x400 : 0);
-		//LOGMASKED(LOG_CTL_REG, "%s: ctl status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+		LOGMASKED(LOG_CTL_REG, "%s: ctl status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
 		return data;
 	}
 	case 2: case 3:
@@ -6115,12 +6684,16 @@ u16 namcos23_state::ctl_r(offs_t offset, u16 mem_mask)
 
 void namcos23_state::mcuen_w(offs_t offset, u16 data, u16 mem_mask)
 {
-	LOGMASKED(LOG_MCU, "%s: mcuen_w: %08x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
+	if (offset != 7)
+	{
+		LOGMASKED(LOG_MCU, "%s: mcuen_w: %08x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
+	}
 	switch (offset)
 	{
 	case 2:
 		// subcpu irq ack
-		update_main_interrupts(m_main_irqcause & ~MAIN_SUBCPU_IRQ);
+		LOG("Clearing SubCPU IRQ\n");
+		irq_update(m_main_irqcause & ~MAIN_SUBCPU_IRQ);
 		break;
 
 	case 5:
@@ -6146,8 +6719,8 @@ void namcos23_state::mcuen_w(offs_t offset, u16 data, u16 mem_mask)
 		break;
 
 	default:
-		// For some reason, the main program write the high 16bits of the
-		// 32 bits words of itself there...
+		// For some reason, the main program writes the high 16bits of the first 0x28000
+		// 32-bits words of itself to offset 7
 		//logerror("mcuen_w: mask %04x, data %04x @ %x\n", mem_mask, data, offset);
 		break;
 	}
@@ -6156,19 +6729,20 @@ void namcos23_state::mcuen_w(offs_t offset, u16 data, u16 mem_mask)
 
 // C?? (unknown comms)
 
-// while getting the subcpu to be ready, panicprk sits in a tight loop waiting for this AND 0002 to be non-zero (at PC=BFC02F00)
+// 6850 ACIA comms info:
+// while getting the subcpu to be ready, panicprk sits in a tight loop waiting for status AND 0002 to be non-zero (at PC=BFC02F00)
+// bit 1 tx fifo empty
+// bit 0 rx fifo ready
+// bit 4-6: error (reads data port and discards it) (PC=0xbfc03698)
+// data ready is signalled thru MIPS irq 4
+// 3f0fa8 (phys address) is where data pops up in TC2 & PP
+// PC=0xbfc03838 bit 7 high => fail (data loaded must be parsed somehow)
 u16 namcos23_state::sub_comm_r(offs_t offset)
 {
 	// status register
-	m_maincpu->set_input_line(m_lvl6_irqnum, CLEAR_LINE);
+	m_maincpu->set_input_line(m_rs232_irqnum, CLEAR_LINE);
 	if (offset == 0)
 	{
-		// bit 1 tx fifo empty
-		// bit 0 rx fifo ready
-		// bit 4-6: error (reads data port and discards it) (PC=0xbfc03698)
-		// data ready is signalled thru MIPS irq 4
-		// 3f0fa8 (phys address) is where data pops up in TC2 & PP
-		// PC=0xbfc03838 bit 7 high => fail (data loaded must be parsed somehow)
 		LOGMASKED(LOG_MCU, "%s: sub_comm_r status read: %04x\n", machine().describe_context(), 3);
 		return 1 | 2;
 	}
@@ -6178,14 +6752,14 @@ u16 namcos23_state::sub_comm_r(offs_t offset)
 	return 0; //machine().rand();
 }
 
-void namcos23_state::sub_comm_w(offs_t offset, u16 data)
+void namcos23_state::sub_comm_w(offs_t offset, u8 data)
 {
+	LOGMASKED(LOG_MCU, "%s: sub_comm_w data write to %d: %04x\n", machine().describe_context(), m_mcu_unk);
 	if (offset == 1)
 	{
 		// data tx
 		m_mcu_unk = data & 0xff;
-		LOGMASKED(LOG_MCU, "%s: sub_comm_w data write: %04x\n", machine().describe_context(), m_mcu_unk);
-		m_maincpu->set_input_line(m_lvl6_irqnum, ASSERT_LINE);
+		m_maincpu->set_input_line(m_rs232_irqnum, ASSERT_LINE);
 	}
 }
 
@@ -6212,10 +6786,86 @@ void namcos23_state::gorgon_map(address_map &map)
 	map(0x0c000000, 0x0c00ffff).ram().share("nvram"); // Backup RAM
 	map(0x0d000000, 0x0d00000f).rw(FUNC(namcos23_state::ctl_r), FUNC(namcos23_state::ctl_w)); // write for LEDs at d000000, watchdog at d000004
 	//map(0x0e000000, 0x0e007fff).ram(); // C405 RAM - what is this?
-	map(0x0f000000, 0x0f000003).rw(FUNC(namcos23_state::sub_comm_r), FUNC(namcos23_state::sub_comm_w)); // not sure
+	map(0x0f000000, 0x0f000003).rw(FUNC(namcos23_state::sub_comm_r), FUNC(namcos23_state::sub_comm_w));
 	map(0x0f200000, 0x0f203fff).ram(); // C422 RAM
 	map(0x0f300000, 0x0f30000f).rw(FUNC(namcos23_state::c422_r), FUNC(namcos23_state::c422_w)); // C422 registers
 	map(0x0fc00000, 0x0fffffff).nopw().rom().region("user1", 0);
+}
+
+/*  0x0000, 0x0001, 0x0002, 0x0003,
+  0x0003, 0x0004, 0x0005, 0x0005
+  0x0006, 0x0007*/
+
+// Test 3: IRQ Index 3 (C422)
+// Test 4: IRQ Index 3 (SUBCPU)
+// Test 5: IRQ Index 4 (VBL)
+// Test 6: IRQ Index 5 (C451)
+// Test 7: IRQ Index 5 (C361)
+// Test 8: IRQ Index 6 (C450)
+
+void crszone_state::unk58_w(offs_t offset, u32 data)
+{
+	static u32 old = 0;
+	if (old != data)
+	{
+		LOG("%s: crszone_unk58_w: %08x\n", machine().describe_context(), data);
+		old = data;
+	}
+}
+
+void crszone_state::irq_vbl_ack_w(offs_t offset, u32 data)
+{
+	irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
+}
+
+void crszone_state::irq_lv6_ack_w(offs_t offset, u32 data)
+{
+}
+
+u32 crszone_state::irq_lv3_status_r()
+{
+	u32 data = 0;
+	if (m_main_irqcause & MAIN_SUBCPU_IRQ)
+	{
+		data |= 1;
+		irq_update(m_main_irqcause & ~MAIN_SUBCPU_IRQ);
+	}
+	if (m_main_irqcause & MAIN_C422_IRQ)
+	{
+		data |= 2;
+		irq_update(m_main_irqcause & ~MAIN_C422_IRQ);
+	}
+	LOGMASKED(LOG_IRQ_STATUS, "%s: LV3 IRQ status read: %08x\n", machine().describe_context(), data);
+	return data;
+}
+
+u32 crszone_state::irq_lv5_status_r()
+{
+	u32 data = 0;
+	if (m_main_irqcause & MAIN_C451_IRQ)
+	{
+		data |= 1;
+		irq_update(m_main_irqcause & ~MAIN_C451_IRQ);
+	}
+	if (m_main_irqcause & MAIN_C361_IRQ)
+	{
+		data |= 2;
+		irq_update(m_main_irqcause & ~MAIN_C451_IRQ);
+	}
+	LOGMASKED(LOG_IRQ_STATUS, "%s: LV5 IRQ status read: %08x\n", machine().describe_context(), data);
+	return data;
+}
+
+u32 crszone_state::irq_lv6_status_r()
+{
+	u32 data = 0;
+	if (m_main_irqcause & MAIN_C450_IRQ)
+	{
+		data |= 2;
+		irq_update(m_main_irqcause & ~MAIN_C450_IRQ);
+	}
+	LOGMASKED(LOG_IRQ_STATUS, "%s: LV6 IRQ status read: %08x\n", machine().describe_context(), data);
+	return data;
 }
 
 // (Super) System 23
@@ -6247,7 +6897,43 @@ void namcos23_state::s23_map(address_map &map)
 	map(0x0fc00000, 0x0fffffff).nopw().rom().region("user1", 0);
 }
 
-
+void crszone_state::mips_map(address_map &map)
+{
+	map.global_mask(0x1fffffff);
+	map(0x00000000, 0x00ffffff).ram().share("mainram");
+	map(0x10000058, 0x1000005b).w(FUNC(crszone_state::unk58_w));
+	//map(0x10000080, 0x10000083).nopw();
+	map(0x10000080, 0x10000083).w(FUNC(crszone_state::irq_vbl_ack_w));
+	map(0x10000094, 0x10000097).w(FUNC(crszone_state::irq_lv6_ack_w));
+	map(0x100000a8, 0x100000ab).r(FUNC(crszone_state::irq_lv3_status_r));
+	map(0x100000b0, 0x100000b3).r(FUNC(crszone_state::irq_lv5_status_r));
+	map(0x100000b4, 0x100000b7).r(FUNC(crszone_state::irq_lv6_status_r));
+	map(0x10400000, 0x10400003).w(FUNC(crszone_state::c450_dma_addr_w));
+	map(0x1040000c, 0x1040000f).w(FUNC(crszone_state::c450_dma_size_w));
+	map(0x1040001c, 0x1040001f).r(FUNC(crszone_state::c450_irq_status_r));
+	//map(0x11000000, 0x110000ff).rw(FUNC(crszone_state::c435_r), FUNC(crszone_state::c435_w));
+	map(0x12000000, 0x1200000f).rw(FUNC(crszone_state::c417_r), FUNC(crszone_state::c417_w));
+	map(0x14400000, 0x1440ffff).rw(FUNC(crszone_state::sharedram_cpu_r), FUNC(crszone_state::sharedram_cpu_w)); // Communication RAM (C416)
+	map(0x14c3ff00, 0x14c3ff0f).w(FUNC(crszone_state::mcuen_w));
+	map(0x16000000, 0x1600ffff).ram().share("nvram"); // Backup RAM
+	map(0x16200000, 0x16203fff).ram(); // C422 RAM
+	map(0x16400000, 0x1640000f).rw(FUNC(crszone_state::c422_r), FUNC(crszone_state::c422_w)); // C422 registers
+	map(0x16800000, 0x1681dfff).ram().w(FUNC(crszone_state::textchar_w)).share("charram"); // Text CGRAM (C361)
+	map(0x1681e000, 0x1681ffff).ram().w(FUNC(crszone_state::textram_w)).share("textram"); // Text VRAM (C361)
+	map(0x16820000, 0x1682000f).rw(FUNC(crszone_state::c361_r), FUNC(crszone_state::c361_w)); // C361
+	map(0x16a08000, 0x16a087ff).ram().w(FUNC(crszone_state::gammaram_w)).share("gammaram"); // Gamma RAM (C404)
+	map(0x16a10000, 0x16a3ffff).ram().w(FUNC(crszone_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
+	map(0x18000000, 0x18ffffff).rom().region("data", 0x0000000).mirror(0x1000000); // data ROMs
+	map(0x1a000000, 0x1affffff).rom().region("data", 0x1000000).mirror(0x1000000);
+	map(0x1c000000, 0x1c00001f).rw(FUNC(crszone_state::c412_r), FUNC(crszone_state::c412_w));
+	map(0x1c400000, 0x1c400007).rw(FUNC(crszone_state::c421_r), FUNC(crszone_state::c421_w));
+	map(0x1c800010, 0x1c800011).w(FUNC(crszone_state::c435_state_reset_w));
+	map(0x1c800016, 0x1c800017).w(FUNC(crszone_state::c435_state_pio_w));
+	map(0x1cc00000, 0x1cc00003).w(FUNC(crszone_state::direct_buf_w));
+	map(0x1d000000, 0x1d00000f).rw(FUNC(crszone_state::ctl_r), FUNC(crszone_state::ctl_w));
+	map(0x1f000000, 0x1f000003).rw(FUNC(crszone_state::acia_r), FUNC(crszone_state::acia_w));
+	map(0x1f800000, 0x1fffffff).nopw().rom().region("user1", 0);
+}
 
 // GMEN interface
 
@@ -6357,7 +7043,7 @@ void namcos23_gmen_state::sh2_map(address_map &map)
 
 void namcos23_state::sharedram_cpu_w(offs_t offset, u32 data, u32 mem_mask)
 {
-	//LOGMASKED(LOG_MCU, "%s: sharedram_cpu_w: %08x = %08x & %08x\n", machine().describe_context(), offset << 2, data, mem_mask);
+	LOGMASKED(LOG_MCU, "%s: sharedram_cpu_w: %08x = %08x & %08x\n", machine().describe_context(), offset << 2, data, mem_mask);
 	COMBINE_DATA(&m_shared_ram[offset]);
 }
 
@@ -6385,7 +7071,8 @@ void namcos23_state::sub_interrupt_main_w(offs_t offset, u16 data, u16 mem_mask)
 {
 	if ((mem_mask == 0xffff) && (data == 0x3170))
 	{
-		update_main_interrupts(m_main_irqcause | MAIN_SUBCPU_IRQ);
+		LOG("Setting SubCPU IRQ\n");
+		irq_update(m_main_irqcause | MAIN_SUBCPU_IRQ);
 	}
 	else
 	{
@@ -6393,6 +7080,43 @@ void namcos23_state::sub_interrupt_main_w(offs_t offset, u16 data, u16 mem_mask)
 	}
 }
 
+void crszone_state::acia_irq_w(int state)
+{
+	if (state)
+		irq_update(m_main_irqcause | MAIN_RS232_IRQ);
+	else
+		irq_update(m_main_irqcause & ~MAIN_RS232_IRQ);
+}
+
+u8 crszone_state::acia_r(offs_t offset)
+{
+	u8 data = 0;
+	if (offset == 1)
+	{
+		data = m_acia->status_r();
+		LOGMASKED(LOG_RS232, "%s: ACIA S23 status read: %02x\n", machine().describe_context(), data);
+		return data;
+	}
+	if (offset == 3)
+	{
+		data = m_acia->data_r();
+		LOGMASKED(LOG_RS232, "%s: ACIA S23 data read: %02x\n", machine().describe_context(), data);
+		return data;
+	}
+	LOGMASKED(LOG_RS232, "%s: ACIA S23 read %d: %02x\n", machine().describe_context(), offset, data);
+	return data;
+}
+
+void crszone_state::acia_w(offs_t offset, u8 data)
+{
+	if (offset == 1)
+	{
+		LOGMASKED(LOG_RS232, "%s: ACIA control write = %02x\n", machine().describe_context(), data);
+		m_acia->control_w(data);
+		return;
+	}
+	LOGMASKED(LOG_RS232, "%s: ACIA S23 write %d = %02x\n", machine().describe_context(), offset, data);
+}
 
 // Port 6
 
@@ -6400,13 +7124,13 @@ u8 namcos23_state::mcu_p6_r()
 {
 	// bit 1 = JVS cable present sense (1 = I/O board plugged in)
 	const u8 data = (m_jvssense << 1) | 0xfd;
-	LOGMASKED(LOG_MCU, "%s: mcu_p6_r: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_p6_r: %02x\n", machine().describe_context(), data);
 	return data;
 }
 
 void namcos23_state::mcu_p6_w(u8 data)
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_p6_w: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_p6_w: %02x\n", machine().describe_context(), data);
 	static u8 old_data = 0;
 	if (data != old_data)
 	{
@@ -6415,7 +7139,7 @@ void namcos23_state::mcu_p6_w(u8 data)
 		{
 			if (!BIT(changed, i))
 				continue;
-			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+			LOGMASKED(LOG_MCU_PORTS, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
 		}
 		old_data = data;
 	}
@@ -6427,13 +7151,13 @@ void namcos23_state::mcu_p6_w(u8 data)
 
 u8 namcos23_state::mcu_p8_r()
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_p8_r: %02x\n", machine().describe_context(), m_sub_port8);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_p8_r: %02x\n", machine().describe_context(), m_sub_port8);
 	return m_sub_port8;
 }
 
 void namcos23_state::mcu_p8_w(u8 data)
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_p8_w: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_p8_w: %02x\n", machine().describe_context(), data);
 	static u8 old_data = 0;
 	if (data != old_data)
 	{
@@ -6442,7 +7166,7 @@ void namcos23_state::mcu_p8_w(u8 data)
 		{
 			if (!BIT(changed, i))
 				continue;
-			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+			LOGMASKED(LOG_MCU_PORTS, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
 		}
 		old_data = data;
 	}
@@ -6455,13 +7179,13 @@ void namcos23_state::mcu_p8_w(u8 data)
 
 u8 namcos23_state::mcu_pa_r()
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_pa_r: %02x\n", machine().describe_context(), m_sub_porta);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_pa_r: %02x\n", machine().describe_context(), m_sub_porta);
 	return m_sub_porta;
 }
 
 void namcos23_state::mcu_pa_w(u8 data)
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_pa_w: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_pa_w: %02x\n", machine().describe_context(), data);
 	static u8 old_data = 0;
 	if (data != old_data)
 	{
@@ -6470,7 +7194,7 @@ void namcos23_state::mcu_pa_w(u8 data)
 		{
 			if (!BIT(changed, i))
 				continue;
-			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+			LOGMASKED(LOG_MCU_PORTS, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
 		}
 		old_data = data;
 	}
@@ -6486,13 +7210,13 @@ void namcos23_state::mcu_pa_w(u8 data)
 
 u8 namcos23_state::mcu_pb_r()
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_pb_r: %02x\n", machine().describe_context(), m_sub_portb);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_pb_r: %02x\n", machine().describe_context(), m_sub_portb);
 	return m_sub_portb;
 }
 
 void namcos23_state::mcu_pb_w(u8 data)
 {
-	LOGMASKED(LOG_MCU, "%s: mcu_pb_w: %02x\n", machine().describe_context(), data);
+	LOGMASKED(LOG_MCU_PORTS, "%s: mcu_pb_w: %02x\n", machine().describe_context(), data);
 	static u8 old_data = 0;
 	if (data != old_data)
 	{
@@ -6501,7 +7225,7 @@ void namcos23_state::mcu_pb_w(u8 data)
 		{
 			if (!BIT(changed, i))
 				continue;
-			LOGMASKED(LOG_MCU, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
+			LOGMASKED(LOG_MCU_PORTS, "%s:           Bit %d changed (now %d)\n", machine().describe_context(), i, BIT(data, i));
 		}
 		old_data = data;
 	}
@@ -6591,8 +7315,9 @@ void namcos23_state::s23iobrdmap(address_map &map)
 {
 	map(0x0000, 0x1fff).rom().region("iocpu", 0);
 	map(0x6000, 0x6001).portr("IN01");
-	map(0x6002, 0x6003).portr("IN23");
+	map(0x6002, 0x6003).nopw().portr("IN23");
 	map(0x6004, 0x6007).noprw();
+	map(0x7000, 0x7007).noprw();
 	map(0xc000, 0xfb7f).ram();
 }
 
@@ -7082,6 +7807,7 @@ void namcos23_state::machine_start()
 	save_item(NAME(m_c417.ram));
 	save_item(NAME(m_c417.adr));
 	save_item(NAME(m_c417.pointrom_adr));
+	save_item(NAME(m_c417.unk6));
 	save_item(NAME(m_c417.unk));
 	save_item(NAME(m_c417.test_mode));
 
@@ -7147,6 +7873,24 @@ void namcos23_state::machine_reset()
 	}
 }
 
+void crszone_state::machine_start()
+{
+	namcos23_state::machine_start();
+	m_c451_kick_timer = timer_alloc(FUNC(crszone_state::c451_dma_kick), this);
+}
+
+void crszone_state::machine_reset()
+{
+	namcos23_state::machine_reset();
+	m_c451_kick_timer->adjust(attotime::never);
+}
+
+TIMER_CALLBACK_MEMBER(crszone_state::c451_dma_kick)
+{
+	c435_dma(m_maincpu->space(AS_PROGRAM), m_c435_address, m_c435_size);
+	irq_update(m_main_irqcause | MAIN_C450_IRQ);
+}
+
 TIMER_CALLBACK_MEMBER(namcos23_gmen_state::sh2_irq_off)
 {
 	m_sh2->set_input_line(m_sh2_irq, CLEAR_LINE);
@@ -7175,24 +7919,28 @@ void namcos23_gmen_state::machine_reset()
 }
 
 
-void namcos23_state::init_ss23evo2()
+void crszone_state::driver_init()
 {
-	init_s23();
+	namcos23_state::driver_init();
 
-	m_c435_irqnum = MIPS3_IRQ0;
-	m_c422_irqnum = MIPS3_IRQ1;
-	m_vbl_irqnum = MIPS3_IRQ2;
-	m_c361_sub_irqnum = MIPS3_IRQ3;
-	m_lvl6_irqnum = MIPS3_IRQ4;
+	m_rs232_irqnum = MIPS3_IRQ0; // LV2
+	m_sub_irqnum = MIPS3_IRQ1; // LV3
+	m_c422_irqnum = MIPS3_IRQ1; // LV3
+	m_vbl_irqnum = MIPS3_IRQ2; // LV4
+	m_c361_irqnum = MIPS3_IRQ3; // LV5
+	m_c435_irqnum = -1;
+	m_c451_irqnum = MIPS3_IRQ3;
+	m_c450_irqnum = MIPS3_IRQ4;
 }
 
-void namcos23_state::init_s23()
+void namcos23_state::driver_init()
 {
-	m_vbl_irqnum = MIPS3_IRQ0;
-	m_c361_sub_irqnum = MIPS3_IRQ1;
-	m_c435_irqnum = MIPS3_IRQ2;
-	m_c422_irqnum = MIPS3_IRQ3;
-	m_lvl6_irqnum = MIPS3_IRQ4;
+	m_vbl_irqnum = MIPS3_IRQ0; // LV2
+	m_c361_irqnum = MIPS3_IRQ1; // LV3
+	m_sub_irqnum = MIPS3_IRQ1; // LV3
+	m_c435_irqnum = MIPS3_IRQ2; // LV4
+	m_c422_irqnum = MIPS3_IRQ3; // LV5
+	m_rs232_irqnum = MIPS3_IRQ5;
 
 	m_has_sprites = false;
 	if (!strcmp(machine().system().name, "rapidrvr") ||
@@ -7506,12 +8254,25 @@ void namcos23_state::timecrs2v4a(machine_config &config)
 	m_iocpu->set_addrmap(AS_PROGRAM, &namcos23_state::timecrs2iobrdmap);
 }
 
-void namcos23_state::ss23e2(machine_config &config)
+void crszone_state::crszone(machine_config &config)
 {
 	ss23(config);
 
 	/* basic machine hardware */
 	m_maincpu->set_clock(BUSCLOCK * 6);
+	m_maincpu->set_addrmap(AS_PROGRAM, &crszone_state::mips_map);
+
+	/* debug hardware */
+	ACIA6850(config, m_acia, 0);
+	m_acia->txd_handler().set("rs232", FUNC(rs232_port_device::write_txd));
+	m_acia->irq_handler().set(FUNC(crszone_state::acia_irq_w));
+
+	clock_device &acia_clock(CLOCK(config, "acia_clock", 1'843'200));
+	acia_clock.signal_handler().set("acia", FUNC(acia6850_device::write_txc));
+	acia_clock.signal_handler().append("acia", FUNC(acia6850_device::write_rxc));
+
+	rs232_port_device &rs232(RS232_PORT(config, "rs232", default_rs232_devices, nullptr));
+	rs232.rxd_handler().set(m_acia, FUNC(acia6850_device::write_rxd));
 }
 
 
@@ -8373,6 +9134,60 @@ ROM_START( raceon )
 ROM_END
 
 
+ROM_START( raceonj )
+	ROM_REGION32_BE( 0x400000, "user1", 0 ) /* 4 megs for main R4650 code */
+	ROM_LOAD16_BYTE( "ro1verb.ic2",  0x000000, 0x200000, CRC(92952b85) SHA1(4a360479546fccd6932415fb9deae664355e4879) )
+	ROM_LOAD16_BYTE( "ro1verb.ic1",  0x000001, 0x200000, CRC(92fb212c) SHA1(8d22c3fcf5e928a8fc1ea97422021e42a5eedc8b) )
+
+	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
+	ROM_LOAD16_WORD_SWAP( "ro1verb.ic3",  0x000000, 0x080000, CRC(a763ecb7) SHA1(6b1ab63bb56342abbf7ddd7d17d413779fbafce1) )
+
+	ROM_REGION( 0x40000, "iocpu", 0 )   /* I/O board HD643334 H8/3334 MCU code */
+	ROM_LOAD( "asc5_io-a.ic14", 0x000000, 0x020000, CRC(5964767f) SHA1(320db5e78ae23c5f94e368432d51573b409995db) )
+
+	ROM_REGION( 0x80000, "ffb", 0 ) /* STR steering force-feedback board code */
+	ROM_LOAD( "ro1_str-0a.ic16", 0x000000, 0x080000, CRC(27d39e1f) SHA1(6161cbb27c964ffab1db3b3c1f073ec514876e61) )
+
+	ROM_REGION32_BE( 0x2000000, "data", 0 ) /* data ROMs */
+	ROM_LOAD16_BYTE( "ro1mtah.2j",   0x000000, 0x800000, CRC(216abfb1) SHA1(8db7b17dc6441adc7a4ec8b941d5a84d73c735d6) )
+	ROM_LOAD16_BYTE( "ro1mtal.2h",   0x000001, 0x800000, CRC(17646306) SHA1(8d1af777f8e884b650efee8e4c26e032e1c088b7) )
+
+	ROM_REGION( 0x2000000, "textile", 0 )   /* texture tiles */
+	ROM_LOAD( "ro1cgll.4m",   0x0000000, 0x800000, CRC(12c64936) SHA1(14a0d3d336f2fbe7992eedb3900748763368bc6b) )
+	ROM_LOAD( "ro1cglm.4k",   0x0800000, 0x800000, CRC(7e8bb4fc) SHA1(46a7940989576239a720fde8ec4e4b623b0b6fe6) )
+	ROM_LOAD( "ro1cgum.4j",   0x1000000, 0x800000, CRC(b9767735) SHA1(87fec452998a782db2cf00d369149b200a00d163) )
+	ROM_LOAD( "ro1cguu.4f",   0x1800000, 0x800000, CRC(8fef8bd4) SHA1(6870590f585dc8d87ebe5181da870715c9c4fee3) )
+
+	ROM_REGION16_LE( 0x400000, "textilemapl", 0 )   /* texture tilemap 0-15*/
+	ROM_LOAD( "ro1ccrl.7f",   0x000000, 0x400000, CRC(fe50e424) SHA1(8317c998db687e1c40398e0005a037dcded19c25) )
+
+	ROM_REGION( 0x200000, "textilemaph", 0 )        /* texture tilemap 16-17 + attr */
+	ROM_LOAD( "ro1ccrh.7e",   0x000000, 0x200000, CRC(1c958de2) SHA1(4893350999d5d377e68b9577187828de7a4c77c2) )
+
+	ROM_REGION32_LE( 0x2000000, "pointrom", 0 ) /* 3D model data */
+	ROM_LOAD32_WORD_SWAP( "ro1pt0h.7a",   0x0000000, 0x400000, CRC(6ef742ab) SHA1(500ce413b2463a555237de7bcc9627d1082c9b52) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt0l.7c",   0x0000002, 0x400000, CRC(f4b88bd0) SHA1(cc642d959645730b03ef01e6dbb5d0077bce7163) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt1h.5a",   0x0800000, 0x400000, CRC(428bf573) SHA1(6be159e1cf7ef38639610c347fd2322ab9911a70) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt1l.5c",   0x0800002, 0x400000, CRC(f3df1d13) SHA1(9f96c99bd3537940a532d3dccb69a1c7d8c6be63) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt2h.4a",   0x1000000, 0x400000, CRC(e1abdbc9) SHA1(91827af01cb83f4422d7329c8eea52bb57d7d57e) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt2l.4c",   0x1000002, 0x400000, CRC(c64f5cdc) SHA1(e7261f3a56718f304127cc85c08d0b32525dc1cd) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt3h.3a",   0x1800000, 0x400000, CRC(ef4685f6) SHA1(930037cac4aae9892278aa322844d03c773c70f7) )
+	ROM_LOAD32_WORD_SWAP( "ro1pt3l.3c",   0x1800002, 0x400000, CRC(07d27009) SHA1(770001bee9d7ace337db8a42bf377678b2b5d5fb) )
+
+	ROM_REGION( 0x1000000, "c352", 0 ) /* C352 PCM samples */
+	ROM_LOAD( "ro1wavel.2c",  0x000000, 0x800000, CRC(c6aca840) SHA1(09a021459b6326fe161ffcee36376648a5bf0e00) )
+	ROM_LOAD( "ro1waveh.2a",  0x800000, 0x800000, CRC(24ba72e8) SHA1(c9ad8be152918758f3bdbc21c2b83fbf70d16a5d) )
+
+	ROM_REGION( 0x800000, "spares", 0 ) /* duplicate ROMs for the second texel pipeline on the PCB, not used for emulation */
+	ROM_LOAD( "ro1ccrl.7m",   0x000000, 0x400000, CRC(fe50e424) SHA1(8317c998db687e1c40398e0005a037dcded19c25) )
+	ROM_LOAD( "ro1ccrh.7k",   0x000000, 0x200000, CRC(1c958de2) SHA1(4893350999d5d377e68b9577187828de7a4c77c2) )
+	ROM_LOAD( "ro1cgll.5m",   0x000000, 0x800000, CRC(12c64936) SHA1(14a0d3d336f2fbe7992eedb3900748763368bc6b) )
+	ROM_LOAD( "ro1cglm.5k",   0x000000, 0x800000, CRC(7e8bb4fc) SHA1(46a7940989576239a720fde8ec4e4b623b0b6fe6) )
+	ROM_LOAD( "ro1cgum.5j",   0x000000, 0x800000, CRC(b9767735) SHA1(87fec452998a782db2cf00d369149b200a00d163) )
+	ROM_LOAD( "ro1cguu.5f",   0x000000, 0x800000, CRC(8fef8bd4) SHA1(6870590f585dc8d87ebe5181da870715c9c4fee3) )
+ROM_END
+
+
 ROM_START( finfurl2 )
 	ROM_REGION32_BE( 0x400000, "user1", 0 ) /* 4 megs for main R4650 code */
 	ROM_LOAD16_BYTE( "29f016.ic2",   0x000000, 0x200000, CRC(13cbc545) SHA1(3e67a7bfbb1c1374e8e3996a0c09e4861b0dca14) )
@@ -8795,8 +9610,7 @@ ROM_END
 
 ROM_START( crszone )
 	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
-	ROM_LOAD16_WORD_SWAP( "cszo4verb.ic4", 0x400000, 0x400000, CRC(6192533d) SHA1(d102b91fe193bf255ea4e57a2bd964aa1cdfd21d) )
-	ROM_CONTINUE( 0x000000, 0x400000 )
+	ROM_LOAD16_WORD_SWAP( "cszo4verb.ic4", 0x000000, 0x800000, CRC(6192533d) SHA1(d102b91fe193bf255ea4e57a2bd964aa1cdfd21d) )
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
 	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic1", 0x000000, 0x080000, CRC(c790743b) SHA1(5fa7b83a7a1b1105a3aa0870b782cf2741b7d11c) )
@@ -9115,36 +9929,37 @@ ROM_END
 
 /* Games */
 #define GAME_FLAGS (MACHINE_NOT_WORKING | MACHINE_UNEMULATED_PROTECTION | MACHINE_IMPERFECT_GRAPHICS)
-//    YEAR, NAME,        PARENT,   MACHINE,     INPUT,     CLASS,         		INIT,     MNTR, COMPANY, FULLNAME,                                   FLAGS
-GAME( 1997, rapidrvr,    0,        gorgon,      rapidrvr,  namcos23_state,		init_s23, ROT0, "Namco", "Rapid River (US, RD3 Ver. C)",             GAME_FLAGS ) // 97/11/27, USA
-GAME( 1997, rapidrvrv2c, rapidrvr, gorgon,      rapidrvr,  namcos23_state,		init_s23, ROT0, "Namco", "Rapid River (World, RD2 Ver. C)",          GAME_FLAGS ) // 97/11/27, Europe
-GAME( 1997, rapidrvrp,   rapidrvr, gorgon,      rapidrvrp, namcos23_state,		init_s23, ROT0, "Namco", "Rapid River (prototype)",                  GAME_FLAGS ) // 97/11/10, USA
-GAME( 1997, finfurl,     0,        gorgon,      finfurl,   namcos23_state,		init_s23, ROT0, "Namco", "Final Furlong (World, FF2 Ver. A)",        GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, downhill,    0,        s23,         downhill,  namcos23_state,		init_s23, ROT0, "Namco", "Downhill Bikers (World, DH2 Ver. A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, downhillu,   downhill, s23,         downhill,  namcos23_state,		init_s23, ROT0, "Namco", "Downhill Bikers (US, DH3 Ver. A)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, motoxgo,     0,        motoxgo,     s23,       namcos23_state,		init_s23, ROT0, "Namco", "Motocross Go! (US, MG3 Ver. A)",           GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, motoxgov2a,  motoxgo,  motoxgo,     s23,       namcos23_state,		init_s23, ROT0, "Namco", "Motocross Go! (World, MG2 Ver. A, set 1)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, motoxgov2a2, motoxgo,  motoxgo,     s23,       namcos23_state,		init_s23, ROT0, "Namco", "Motocross Go! (World, MG2 Ver. A, set 2)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, motoxgov1a,  motoxgo,  motoxgo,     s23,       namcos23_state,		init_s23, ROT0, "Namco", "Motocross Go! (Japan, MG1 Ver. A, set 1)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, motoxgov1a2, motoxgo,  motoxgo,     s23,       namcos23_state,		init_s23, ROT0, "Namco", "Motocross Go! (Japan, MG1 Ver. A, set 2)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, timecrs2,    0,        timecrs2,    timecrs2,  namcos23_state,		init_s23, ROT0, "Namco", "Time Crisis II (US, TSS3 Ver. B)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, timecrs2v2b, timecrs2, timecrs2,    timecrs2,  namcos23_state,		init_s23, ROT0, "Namco", "Time Crisis II (World, TSS2 Ver. B)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, timecrs2v1b, timecrs2, timecrs2,    timecrs2,  namcos23_state,		init_s23, ROT0, "Namco", "Time Crisis II (Japan, TSS1 Ver. B)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, timecrs2v4a, timecrs2, timecrs2v4a, timecrs2,  namcos23_state,		init_s23, ROT0, "Namco", "Time Crisis II (World, TSS4 Ver. A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, timecrs2v5a, timecrs2, timecrs2v4a, timecrs2,  namcos23_state,		init_s23, ROT0, "Namco", "Time Crisis II (US, TSS5 Ver. A)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1997, panicprk,    0,        s23,         panicprk,  namcos23_state,		init_s23, ROT0, "Namco", "Panic Park (World, PNP2 Ver. A)",          GAME_FLAGS )
-GAME( 1997, panicprkj,   panicprk, s23,         panicprk,  namcos23_state,		init_s23, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 1)",   GAME_FLAGS )
-GAME( 1997, panicprkj2,  panicprk, s23,         panicprk,  namcos23_state,		init_s23, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 2)",   GAME_FLAGS )
-GAME( 1998, gunwars,     0,        gmen,        gmen,      namcos23_gmen_state, init_s23, ROT0, "Namco", "Gunmen Wars (Japan, GM1 Ver. B)",          GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1998, gunwarsa,    gunwars,  gmen,        gmen,      namcos23_gmen_state, init_s23, ROT0, "Namco", "Gunmen Wars (Japan, GM1 Ver. A)",          GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1998, raceon,      0,        gmen,        gmen,      namcos23_gmen_state, init_s23, ROT0, "Namco", "Race On! (World, RO2 Ver. A)",             GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1998, 500gp,       0,        ss23,        500gp,     namcos23_state,		init_s23, ROT0, "Namco", "500 GP (US, 5GP3 Ver. C)",                 GAME_FLAGS | MACHINE_NODEVICE_LAN )
-GAME( 1998, aking,       0,        ss23,        s23,       namcos23_state,		init_s23, ROT0, "Namco", "Angler King (Japan, AG1 Ver. A)",          GAME_FLAGS )
-GAME( 1998, finfurl2,    0,        gmen,        gmen,      namcos23_gmen_state, init_s23, ROT0, "Namco", "Final Furlong 2 (World)",                  GAME_FLAGS | MACHINE_NODEVICE_LAN ) // 99/02/26  15:08:47 Overseas
-GAME( 1998, finfurl2j,   finfurl2, gmen,        gmen,      namcos23_gmen_state, init_s23, ROT0, "Namco", "Final Furlong 2 (Japan, FFS1 Ver.A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN ) // 99/02/26  15:03:14 Japanese
-GAME( 1999, crszone,     0,        ss23e2,      s23,       namcos23_state,		init_ss23evo2, ROT0, "Namco", "Crisis Zone (World, CSZO4 Ver. B)",        GAME_FLAGS )
-GAME( 1999, crszonev4a,  crszone,  ss23e2,      s23,       namcos23_state,		init_ss23evo2, ROT0, "Namco", "Crisis Zone (World, CSZO4 Ver. A)",        GAME_FLAGS )
-GAME( 1999, crszonev3b,  crszone,  ss23e2,      s23,       namcos23_state,		init_ss23evo2, ROT0, "Namco", "Crisis Zone (US, CSZO3 Ver. B, set 1)",    GAME_FLAGS )
-GAME( 1999, crszonev3b2, crszone,  ss23e2,      s23,       namcos23_state,		init_ss23evo2, ROT0, "Namco", "Crisis Zone (US, CSZO3 Ver. B, set 2)",    GAME_FLAGS )
-GAME( 1999, crszonev3a,  crszone,  ss23e2,      s23,       namcos23_state,		init_ss23evo2, ROT0, "Namco", "Crisis Zone (US, CSZO3 Ver. A)",           GAME_FLAGS )
-GAME( 1999, crszonev2a,  crszone,  ss23e2,      s23,       namcos23_state,		init_ss23evo2, ROT0, "Namco", "Crisis Zone (World, CSZO2 Ver. A)",        GAME_FLAGS )
+//    YEAR, NAME,        PARENT,   MACHINE,     INPUT,     CLASS,         		INIT,        MNTR, COMPANY, FULLNAME,                                   FLAGS
+GAME( 1997, rapidrvr,    0,        gorgon,      rapidrvr,  namcos23_state,		driver_init, ROT0, "Namco", "Rapid River (US, RD3 Ver. C)",             GAME_FLAGS ) // 97/11/27, USA
+GAME( 1997, rapidrvrv2c, rapidrvr, gorgon,      rapidrvr,  namcos23_state,		driver_init, ROT0, "Namco", "Rapid River (World, RD2 Ver. C)",          GAME_FLAGS ) // 97/11/27, Europe
+GAME( 1997, rapidrvrp,   rapidrvr, gorgon,      rapidrvrp, namcos23_state,		driver_init, ROT0, "Namco", "Rapid River (prototype)",                  GAME_FLAGS ) // 97/11/10, USA
+GAME( 1997, finfurl,     0,        gorgon,      finfurl,   namcos23_state,		driver_init, ROT0, "Namco", "Final Furlong (World, FF2 Ver. A)",        GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, downhill,    0,        s23,         downhill,  namcos23_state,		driver_init, ROT0, "Namco", "Downhill Bikers (World, DH2 Ver. A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, downhillu,   downhill, s23,         downhill,  namcos23_state,		driver_init, ROT0, "Namco", "Downhill Bikers (US, DH3 Ver. A)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, motoxgo,     0,        motoxgo,     s23,       namcos23_state,		driver_init, ROT0, "Namco", "Motocross Go! (US, MG3 Ver. A)",           GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, motoxgov2a,  motoxgo,  motoxgo,     s23,       namcos23_state,		driver_init, ROT0, "Namco", "Motocross Go! (World, MG2 Ver. A, set 1)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, motoxgov2a2, motoxgo,  motoxgo,     s23,       namcos23_state,		driver_init, ROT0, "Namco", "Motocross Go! (World, MG2 Ver. A, set 2)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, motoxgov1a,  motoxgo,  motoxgo,     s23,       namcos23_state,		driver_init, ROT0, "Namco", "Motocross Go! (Japan, MG1 Ver. A, set 1)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, motoxgov1a2, motoxgo,  motoxgo,     s23,       namcos23_state,		driver_init, ROT0, "Namco", "Motocross Go! (Japan, MG1 Ver. A, set 2)", GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, timecrs2,    0,        timecrs2,    timecrs2,  namcos23_state,		driver_init, ROT0, "Namco", "Time Crisis II (US, TSS3 Ver. B)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, timecrs2v2b, timecrs2, timecrs2,    timecrs2,  namcos23_state,		driver_init, ROT0, "Namco", "Time Crisis II (World, TSS2 Ver. B)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, timecrs2v1b, timecrs2, timecrs2,    timecrs2,  namcos23_state,		driver_init, ROT0, "Namco", "Time Crisis II (Japan, TSS1 Ver. B)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, timecrs2v4a, timecrs2, timecrs2v4a, timecrs2,  namcos23_state,		driver_init, ROT0, "Namco", "Time Crisis II (World, TSS4 Ver. A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, timecrs2v5a, timecrs2, timecrs2v4a, timecrs2,  namcos23_state,		driver_init, ROT0, "Namco", "Time Crisis II (US, TSS5 Ver. A)",         GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1997, panicprk,    0,        s23,         panicprk,  namcos23_state,		driver_init, ROT0, "Namco", "Panic Park (World, PNP2 Ver. A)",          GAME_FLAGS )
+GAME( 1997, panicprkj,   panicprk, s23,         panicprk,  namcos23_state,		driver_init, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 1)",   GAME_FLAGS )
+GAME( 1997, panicprkj2,  panicprk, s23,         panicprk,  namcos23_state,		driver_init, ROT0, "Namco", "Panic Park (Japan, PNP1 Ver. B, set 2)",   GAME_FLAGS )
+GAME( 1998, gunwars,     0,        gmen,        gmen,      namcos23_gmen_state, driver_init, ROT0, "Namco", "Gunmen Wars (Japan, GM1 Ver. B)",          GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1998, gunwarsa,    gunwars,  gmen,        gmen,      namcos23_gmen_state, driver_init, ROT0, "Namco", "Gunmen Wars (Japan, GM1 Ver. A)",          GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1998, raceon,      0,        gmen,        gmen,      namcos23_gmen_state, driver_init, ROT0, "Namco", "Race On! (World, RO2 Ver. A)",             GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1998, raceonj,     raceon,   gmen,        gmen,      namcos23_gmen_state, driver_init, ROT0, "Namco", "Race On! (Japan, RO1 Ver. B)",             GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1998, 500gp,       0,        ss23,        500gp,     namcos23_state,		driver_init, ROT0, "Namco", "500 GP (US, 5GP3 Ver. C)",                 GAME_FLAGS | MACHINE_NODEVICE_LAN )
+GAME( 1998, aking,       0,        ss23,        s23,       namcos23_state,		driver_init, ROT0, "Namco", "Angler King (Japan, AG1 Ver. A)",          GAME_FLAGS )
+GAME( 1998, finfurl2,    0,        gmen,        gmen,      namcos23_gmen_state, driver_init, ROT0, "Namco", "Final Furlong 2 (World)",                  GAME_FLAGS | MACHINE_NODEVICE_LAN ) // 99/02/26  15:08:47 Overseas
+GAME( 1998, finfurl2j,   finfurl2, gmen,        gmen,      namcos23_gmen_state, driver_init, ROT0, "Namco", "Final Furlong 2 (Japan, FFS1 Ver.A)",      GAME_FLAGS | MACHINE_NODEVICE_LAN ) // 99/02/26  15:03:14 Japanese
+GAME( 1999, crszone,     0,        crszone,     s23,       crszone_state,		driver_init, ROT0, "Namco", "Crisis Zone (World, CSZO4 Ver. B)",        GAME_FLAGS )
+GAME( 1999, crszonev4a,  crszone,  crszone,     s23,       crszone_state,		driver_init, ROT0, "Namco", "Crisis Zone (World, CSZO4 Ver. A)",        GAME_FLAGS )
+GAME( 1999, crszonev3b,  crszone,  crszone,     s23,       crszone_state,		driver_init, ROT0, "Namco", "Crisis Zone (US, CSZO3 Ver. B, set 1)",    GAME_FLAGS )
+GAME( 1999, crszonev3b2, crszone,  crszone,     s23,       crszone_state,		driver_init, ROT0, "Namco", "Crisis Zone (US, CSZO3 Ver. B, set 2)",    GAME_FLAGS )
+GAME( 1999, crszonev3a,  crszone,  crszone,     s23,       crszone_state,		driver_init, ROT0, "Namco", "Crisis Zone (US, CSZO3 Ver. A)",           GAME_FLAGS )
+GAME( 1999, crszonev2a,  crszone,  crszone,     s23,       crszone_state,		driver_init, ROT0, "Namco", "Crisis Zone (World, CSZO2 Ver. A)",        GAME_FLAGS )
