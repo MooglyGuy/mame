@@ -2600,7 +2600,6 @@ protected:
 	virtual u16 c417_r(offs_t offset, u16 mem_mask = ~0) override;
 	TIMER_CALLBACK_MEMBER(c451_dma_kick);
 
-	void unk58_w(offs_t offset, u32 data);
 	void irq_vbl_ack_w(offs_t offset, u32 data);
 	void irq_lv6_ack_w(offs_t offset, u32 data);
 	u32 irq_lv3_status_r();
@@ -2737,20 +2736,6 @@ void namcos23_state::c435_state_set_projection_matrix_line(const u16 *param)
 	if (memcmp(&old[m_proj_matrix_line * 16], &param[1], sizeof(u16) * 16) != 0)
 	{
 		memcpy(&old[m_proj_matrix_line * 16], &param[1], sizeof(u16) * 16);
-		printf("Matrix line %d changed:\n", m_proj_matrix_line);
-		u32 uvals[8];
-		float fvals[8];
-		for (int i = 0; i < 8; i++)
-		{
-			uvals[i] = ((u32)param[2 * i + 1] << 16) | param[2 * i + 2];
-			fvals[i] = f24_to_f32(uvals[i]);
-		}
-		for (int i = 0; i < 8; i++)
-			printf("%08x ", uvals[i]);
-		printf("\n");
-		for (int i = 0; i < 8; i++)
-			printf("%f ", fvals[i]);
-		printf("\n\n");
 	}
 
 	std::ostringstream buf;
@@ -2772,44 +2757,6 @@ void namcos23_state::c435_state_set_projection_matrix_line(const u16 *param)
 	}
 	buf2 << "\n";
 	LOGMASKED(LOG_PROJ_MAT, "%s: %s", machine().describe_context(), std::move(buf2).str());
-
-	if (m_proj_matrix_line == 0)
-	{
-		static float old_sx_over_t = 0.0f;
-		static float old_neg_sxma = 0.0f;
-		static float old_neg_sxpa = 0.0f;
-		static float old_neg_symb = 0.0f;
-		static float old_neg_sypb = 0.0f;
-		static float old_sx = 0.0f;
-		static float old_sy = 0.0f;
-		static float old_a = 0.0f;
-		static float old_b = 0.0f;
-		const float sx_over_t = m_proj_matrix[23];
-		const float neg_sxma = m_proj_matrix[ 2];
-		const float neg_sxpa = m_proj_matrix[ 6];
-		const float neg_symb = m_proj_matrix[10];
-		const float neg_sypb = m_proj_matrix[14];
-		const float sx = -((m_proj_matrix[ 2] + m_proj_matrix[ 6]) * m_proj_matrix[23]) * 0.5f;
-		const float sy = -((m_proj_matrix[10] + m_proj_matrix[14]) * m_proj_matrix[23]) * 0.5f;
-		const float a = -m_proj_matrix[ 2] + sx;
-		const float b = -m_proj_matrix[10] + sy;
-		if (sx_over_t != old_sx_over_t ||
-			old_neg_sxma != neg_sxma || old_neg_sxpa != neg_sxpa || old_neg_symb != neg_symb || old_neg_sypb != neg_sypb ||
-			sx != old_sx || sy != old_sy || a != old_a || b != old_b)
-		{
-			old_sx_over_t = sx_over_t;
-			old_neg_sxma = neg_sxma;
-			old_neg_sxpa = neg_sxpa;
-			old_neg_symb = neg_sypb;
-			old_neg_sypb = neg_symb;
-			old_sx = sx;
-			old_sy = sy;
-			old_a = a;
-			old_b = b;
-			printf("Factors: %f, %f, %f, %f, %f\n", sx_over_t, neg_sxma, neg_sxpa, neg_symb, neg_sypb);
-			printf("sx, sy, a, b: %f, %f, %f, %f\n\n", sx, sy, a, b);
-		}
-	}
 
 	if (s_capturing)
 	{
@@ -3249,35 +3196,6 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 			re->immediate.x[3]  = (param[49] << 16) | param[50];
 			re->immediate.y[3]  = (param[51] << 16) | param[52];
 			re->immediate.z[3]  = (param[53] << 16) | param[54];
-			LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
-			LOG("Immediate Draw: %04x (type)\n", param[0]);
-			LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
-			LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
-			LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
-			LOG("Immediate Draw: %08x (i0)\n", re->immediate.i[0]);
-			LOG("Immediate Draw: %08x (i1)\n", re->immediate.i[1]);
-			LOG("Immediate Draw: %08x (i2)\n", re->immediate.i[2]);
-			LOG("Immediate Draw: %08x (i3)\n", re->immediate.i[3]);
-			LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
-			LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
-			LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
-			LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
-			LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
-			LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
-			LOG("Immediate Draw: %08x (u3)\n", re->immediate.u[3]);
-			LOG("Immediate Draw: %08x (v3)\n", re->immediate.v[3]);
-			LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
-			LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
-			LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
-			LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
-			LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
-			LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
-			LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
-			LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
-			LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
-			LOG("Immediate Draw: %08x (x3)\n", re->immediate.x[3]);
-			LOG("Immediate Draw: %08x (y3)\n", re->immediate.y[3]);
-			LOG("Immediate Draw: %08x (z3)\n", re->immediate.z[3]);
 		}
 		else
 		{
@@ -3310,29 +3228,6 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 			re->immediate.x[2]  = (param[37] << 16) | param[38];
 			re->immediate.y[2]  = (param[39] << 16) | param[40];
 			re->immediate.z[2]  = (param[41] << 16) | param[42];
-			//LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
-			//LOG("Immediate Draw: %04x (type)\n", param[0]);
-			//LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
-			//LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
-			//LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
-			//LOG("Immediate Draw: %08x (i0)\n", re->immediate.i[0]);
-			//LOG("Immediate Draw: %08x (i1)\n", re->immediate.i[1]);
-			//LOG("Immediate Draw: %08x (i2)\n", re->immediate.i[2]);
-			//LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
-			//LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
-			//LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
-			//LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
-			//LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
-			//LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
-			//LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
-			//LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
-			//LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
-			//LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
-			//LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
-			//LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
-			//LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
-			//LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
-			//LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
 		}
 		render.count[render.cur]++;
 		break;
@@ -3413,35 +3308,6 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		re->immediate.x[3]  = (param[47] << 16) | param[48];
 		re->immediate.y[3]  = (param[49] << 16) | param[50];
 		re->immediate.z[3]  = (param[51] << 16) | param[52];
-		//LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
-		//LOG("Immediate Draw: %04x (type)\n", param[0]);
-		//LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
-		//LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
-		//LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
-		//LOG("Immediate Draw: %08x (i0)\n", re->immediate.i[0]);
-		//LOG("Immediate Draw: %08x (i1)\n", re->immediate.i[1]);
-		//LOG("Immediate Draw: %08x (i2)\n", re->immediate.i[2]);
-		//LOG("Immediate Draw: %08x (i3)\n", re->immediate.i[3]);
-		//LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
-		//LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
-		//LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
-		//LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
-		//LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
-		//LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
-		//LOG("Immediate Draw: %08x (u3)\n", re->immediate.u[3]);
-		//LOG("Immediate Draw: %08x (v3)\n", re->immediate.v[3]);
-		//LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
-		//LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
-		//LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
-		//LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
-		//LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
-		//LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
-		//LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
-		//LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
-		//LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
-		//LOG("Immediate Draw: %08x (x3)\n", re->immediate.x[3]);
-		//LOG("Immediate Draw: %08x (y3)\n", re->immediate.y[3]);
-		//LOG("Immediate Draw: %08x (z3)\n\n", re->immediate.z[3]);
 		render.count[render.cur]++;
 		break;
 	}
@@ -3488,59 +3354,7 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		re->immediate.x[3]  = (param[41] << 16) | param[42];
 		re->immediate.y[3]  = (param[43] << 16) | param[44];
 		re->immediate.z[3]  = (param[45] << 16) | param[46];
-		//for (int i = 0; i < 46; i++)
-		//{
-		//	LOG("param[%2d]: %04x\n", i, param[i]);
-		//}
-		//LOG("Immediate Draw: %04x (header)\n", m_c435_buffer[0]);
-		//LOG("Immediate Draw: %04x (type)\n", param[0]);
-		//LOG("Immediate Draw: %08x (h)\n", re->immediate.h);
-		//LOG("Immediate Draw: %08x (pal)\n", re->immediate.pal);
-		//LOG("Immediate Draw: %08x (zbias)\n", re->immediate.zbias);
-		//LOG("Immediate Draw: %08x (u0)\n", re->immediate.u[0]);
-		//LOG("Immediate Draw: %08x (v0)\n", re->immediate.v[0]);
-		//LOG("Immediate Draw: %08x (u1)\n", re->immediate.u[1]);
-		//LOG("Immediate Draw: %08x (v1)\n", re->immediate.v[1]);
-		//LOG("Immediate Draw: %08x (u2)\n", re->immediate.u[2]);
-		//LOG("Immediate Draw: %08x (v2)\n", re->immediate.v[2]);
-		//LOG("Immediate Draw: %08x (u3)\n", re->immediate.u[3]);
-		//LOG("Immediate Draw: %08x (v3)\n", re->immediate.v[3]);
-		//LOG("Immediate Draw: %08x (x0)\n", re->immediate.x[0]);
-		//LOG("Immediate Draw: %08x (y0)\n", re->immediate.y[0]);
-		//LOG("Immediate Draw: %08x (z0)\n", re->immediate.z[0]);
-		//LOG("Immediate Draw: %08x (x1)\n", re->immediate.x[1]);
-		//LOG("Immediate Draw: %08x (y1)\n", re->immediate.y[1]);
-		//LOG("Immediate Draw: %08x (z1)\n", re->immediate.z[1]);
-		//LOG("Immediate Draw: %08x (x2)\n", re->immediate.x[2]);
-		//LOG("Immediate Draw: %08x (y2)\n", re->immediate.y[2]);
-		//LOG("Immediate Draw: %08x (z2)\n", re->immediate.z[2]);
-		//LOG("Immediate Draw: %08x (x3)\n", re->immediate.x[3]);
-		//LOG("Immediate Draw: %08x (y3)\n", re->immediate.y[3]);
-		//LOG("Immediate Draw: %08x (z3)\n\n", re->immediate.z[3]);
 		render.count[render.cur]++;
-		break;
-	}
-	case 0x0042:
-	{
-		static u16 old_stuff[41] =
-		{
-			0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
-			0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
-			0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
-			0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
-			0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
-		};
-		if (memcmp(old_stuff, param, sizeof(old_stuff)) != 0)
-		{
-			for (int i = 0; i < 41; i++)
-			{
-				if (old_stuff[i] != param[i])
-				{
-					printf("Word %2d changed: (was %04x, now %04x)\n", i, old_stuff[i], param[i]);
-				}
-			}
-			memcpy(old_stuff, param, sizeof(old_stuff));
-		}
 		break;
 	}
 	case 0x0001:
@@ -3567,125 +3381,6 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		break;
 	case 0x0046:
 	{
-		static u32 old_words[6] =
-		{
-			0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-		};
-		u32 new_words[6] = {
-			(u32)(param[1] << 16) | param[2],
-			(u32)(param[3] << 16) | param[4],
-			(u32)(param[5] << 16) | param[6],
-			(u32)(param[7] << 16) | param[8],
-			(u32)(param[9] << 16) | param[10],
-			(u32)(param[11] << 16) | param[12]
-		};
-		bool printed = false;
-		if (memcmp(old_words, new_words, sizeof(old_words)) != 0)
-		{
-			if (old_words[0] != 0xffffffff)
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					if (i == 0 || i == 3)
-						continue;
-					if (old_words[i] != new_words[i])
-					{
-						printf("0046 Word %2d changed: (was %08x, now %08x)\n", i*2+1, old_words[i], new_words[i]); fflush(stdout);
-						printed = true;
-						//printf("%f\n", f24_to_f32(new_words[i])); fflush(stdout);
-					}
-				}
-			}
-			memcpy(old_words, new_words, sizeof(old_words));
-		}
-
-		static u32 old_word1 = 0xffffffff;
-		if (((u32)(param[1] << 16) | param[2]) != old_word1)
-		{
-			if (old_word1 != 0xffffffff)
-			{
-				u32 val = ((u32)param[1] << 16) | param[2];
-				float fval = f24_to_f32((val >> 4) + 0x200000);
-				printf("Word 1/2: %08x (%f)\n", ((u32)param[1] << 16) | param[2], fval); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[1] << 16) | param[2])); fflush(stdout);
-				printed = true;
-			}
-			old_word1 = (u32)(param[1] << 16) | param[2];
-		}
-
-		static u32 old_word3 = 0xffffffff;
-		if (((u32)(param[3] << 16) | param[4]) != old_word3)
-		{
-			if (old_word3 != 0xffffffff)
-			{
-				u32 val = ((u32)param[3] << 16) | param[4];
-				float fval = f24_to_f32((val >> 4) + 0x200000);
-				printf("Word 3/4: %08x (%f)\n", ((u32)param[3] << 16) | param[4], fval); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[3] << 16) | param[4])); fflush(stdout);
-				printed = true;
-			}
-			old_word3 = (u32)(param[3] << 16) | param[4];
-		}
-
-		static u32 old_word5 = 0xffffffff;
-		if (((u32)(param[5] << 16) | param[6]) != old_word5)
-		{
-			if (old_word5 != 0xffffffff)
-			{
-				u32 val = ((u32)param[5] << 16) | param[6];
-				float fval = f24_to_f32((val >> 4) + 0x200000);
-				printf("Word 5/6: %08x (%f)\n", ((u32)param[5] << 16) | param[6], fval); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[5] << 16) | param[6])); fflush(stdout);
-				printed = true;
-			}
-			old_word5 = (u32)(param[5] << 16) | param[6];
-		}
-
-		static u32 old_word7 = 0xffffffff;
-		if (((u32)(param[7] << 16) | param[8]) != old_word7)
-		{
-			if (old_word7 != 0xffffffff)
-			{
-				u32 val = ((u32)param[7] << 16) | param[8];
-				float fval = f24_to_f32((val >> 4) + 0x200000);
-				printf("Word 7/8: %08x (%f)\n", ((u32)param[7] << 16) | param[8], fval); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[7] << 16) | param[8])); fflush(stdout);
-				printed = true;
-			}
-			old_word7 = (u32)(param[7] << 16) | param[8];
-		}
-
-		static u32 old_word9 = 0xffffffff;
-		if (((u32)(param[9] << 16) | param[10]) != old_word9)
-		{
-			if (old_word9 != 0xffffffff)
-			{
-				u32 val = ((u32)param[9] << 16) | param[10];
-				float fval = f24_to_f32((val >> 4) + 0x200000);
-				printf("Word 9/10: %08x (%f)\n", ((u32)param[9] << 16) | param[10], fval); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[9] << 16) | param[10])); fflush(stdout);
-				printed = true;
-			}
-			old_word9 = (u32)(param[9] << 16) | param[10];
-		}
-
-		static u32 old_word11 = 0xffffffff;
-		if (((u32)(param[11] << 16) | param[12]) != old_word11)
-		{
-			if (old_word11 != 0xffffffff)
-			{
-				u32 val = ((u32)param[11] << 16) | param[12];
-				float fval = f24_to_f32((val >> 4) + 0x200000);
-				printf("Word 11/12: %08x (%f)\n", ((u32)param[11] << 16) | param[12], fval); fflush(stdout);
-				//printf("%f\n", f24_to_f32(((u32)param[11] << 16) | param[12])); fflush(stdout);
-				printed = true;
-			}
-			old_word11 = (u32)(param[11] << 16) | param[12];
-		}
-
-		if (printed)
-			printf("\n");
-
 		LOGMASKED(LOG_3D_STATE_UNK, "%s: unknown matrix(?) set (type 46) (%04x)\n", machine().describe_context(), m_c435_buffer[0]);
 		for (int i = 0; i < (m_c435_buffer[0] & 0xff); i++)
 			LOGMASKED(LOG_3D_STATE_UNK, "%s: Word %02x: %04x\n", machine().describe_context(), i, m_c435_buffer[1 + i]);
@@ -3743,7 +3438,6 @@ void namcos23_state::c435_state_set() // 4.f
 
 void namcos23_state::c435_unk_set() // 4.3
 {
-	LOG("State 4301: %04x\n", m_c435_buffer[1]);
 	m_unk4301 = m_c435_buffer[1];
 	if (s_capturing)
 	{
@@ -3754,9 +3448,7 @@ void namcos23_state::c435_unk_set() // 4.3
 
 void namcos23_state::c435_model_blend_factor_set() // 4.5
 {
-	LOG("Set Model Blend Factor: %04x\n", m_c435_buffer[1]);
 	m_model_blend_factor = m_c435_buffer[1];
-
 	if (s_capturing)
 	{
 		PixxiiiPacket &cblf = log_packet("CBLF");
@@ -3766,7 +3458,6 @@ void namcos23_state::c435_model_blend_factor_set() // 4.5
 
 void namcos23_state::c435_unk_set4() // 4.0
 {
-	LOG("State 4001: %04x\n", m_c435_buffer[1]);
 	m_unk4001 = m_c435_buffer[1];
 	if (s_capturing)
 	{
@@ -3777,7 +3468,6 @@ void namcos23_state::c435_unk_set4() // 4.0
 
 void namcos23_state::c435_unk_set3() // 4.7
 {
-	LOG("State 4701: %04x\n", m_c435_buffer[1]);
 	m_unk4701 = m_c435_buffer[1];
 	if (s_capturing)
 	{
@@ -3788,7 +3478,6 @@ void namcos23_state::c435_unk_set3() // 4.7
 
 void namcos23_state::c435_unk_set5() // 4.8
 {
-	LOG("State 4801: %04x\n", m_c435_buffer[1]);
 	m_unk4801 = m_c435_buffer[1];
 	if (s_capturing)
 	{
@@ -3799,7 +3488,6 @@ void namcos23_state::c435_unk_set5() // 4.8
 
 void namcos23_state::c435_absolute_priority_set() // 4.1
 {
-	LOG("Set Absolute Priority: %04x\n", m_c435_buffer[1]);
 	m_absolute_priority = m_c435_buffer[1];
 
 	if (s_capturing)
@@ -3898,7 +3586,6 @@ void namcos23_state::c435_sprite_w(u16 data)
 	{
 		if (m_c435_buffer_pos < 4)
 		{
-			LOG("c435_sprite_w: Sprite data target address: %04x\n", data);
 			m_c435_sprite_target = data;
 		}
 		else
@@ -3907,10 +3594,6 @@ void namcos23_state::c435_sprite_w(u16 data)
 			LOGMASKED(LOG_SPRITES, "c435_sprite_w: Sprite data area %04x write: %04x\n", m_c435_sprite_target + buf_idx, data);
 			m_c435_spritedata[m_c435_sprite_target + buf_idx] = data;
 		}
-	}
-	else
-	{
-		LOG("c435_sprite_w: Sprite data lead-off (ignored, %04x)\n", data);
 	}
 	m_c435_buffer_pos++;
 }
@@ -4323,13 +4006,6 @@ void namcos23_renderer::render_scanline(s32 scanline, const extent_t& extent, co
 				rgb.blend(rgbaint_t(dest[x]), 0x80);
 			}
 
-			//u8 some_brightness = (u8)std::clamp((rd.unk4801 * 255.0f) / 64.0f, 0.0f, 255.0f);
-			//if (rd.unk4801 != 0)
-				//printf("%d ", rd.unk4801);
-			//u8 some_brightness = (u8)(some_val * 255);
-			//u32 src = 0xff000000 | (some_brightness << 16) | (some_brightness << 8) | some_brightness;
-			//rgb.set(0xff000000 | (some_brightness << 16) | (some_brightness << 8) | some_brightness);
-
 			u32 src = rgb.to_rgba();
 			dest[x] = 0xff000000 | src;
 			primap[x] = (primap[x] & ~1) | prioverchar;
@@ -4414,7 +4090,6 @@ static u32 render_texture_lookup(running_machine &machine, const pen_t *pens, in
 
 void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 {
-	LOG("render_direct_poly\n");
 	if (true)
 		return;
 
@@ -4726,7 +4401,7 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 	u32 adr2 = m_ptrom[re->model.model2];
 	if (adr >= m_ptrom_limit || adr2 >= m_ptrom_limit)
 	{
-		LOG("%s: WARNING: model %04x base address %08x out-of-bounds - pointram?\n", machine().describe_context(), re->model.model, adr);
+		LOGMASKED(LOG_MODEL_ERR, "%s: WARNING: model %04x base address %08x out-of-bounds - pointram?\n", machine().describe_context(), re->model.model, adr);
 		return;
 	}
 
@@ -5287,246 +4962,196 @@ void namcos23_state::gammaram_w(offs_t offset, u32 data, u32 mem_mask)
 		case 0x00: // Fade R, Fade G
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Poly Fade R: %04x\n", data >> 16);
 				m_c404.poly_fade_r &= ~(mem_mask >> 16);
 				m_c404.poly_fade_r |= (data & mem_mask) >> 16;
-				if (m_c404.poly_fade_r != old) { old = m_c404.poly_fade_r; printf("gammaram_w, Poly Fade R: %04x\n", m_c404.poly_fade_r); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Poly Fade G: %04x\n", data & 0x0000ffff);
 				m_c404.poly_fade_g &= ~mem_mask;
 				m_c404.poly_fade_g |= (u16)(data & mem_mask);
-				if (m_c404.poly_fade_g != old) { old = m_c404.poly_fade_g; printf("gammaram_w, Poly Fade G: %04x\n", m_c404.poly_fade_g); }
 			}
 			break;
 		case 0x01: // Fade B
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Poly Fade B: %04x\n", data >> 16);
 				m_c404.poly_fade_b &= ~(mem_mask >> 16);
 				m_c404.poly_fade_b |= (data & mem_mask) >> 16;
-				if (m_c404.poly_fade_b != old) { old = m_c404.poly_fade_b; printf("gammaram_w, Poly Fade B: %04x\n", m_c404.poly_fade_b); }
 			}
 			break;
 		case 0x02: // Fog R
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Fog R: %04x\n", data & 0x0000ffff);
 				m_c404.fog_r &= ~mem_mask;
 				m_c404.fog_r |= (u16)(data & mem_mask);
-				if (m_c404.fog_r != old) { old = m_c404.fog_r; printf("gammaram_w, Fog R: %04x\n", m_c404.fog_r); }
 			}
 			break;
 		case 0x03: // Fog G, Fog B
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Fog G: %04x\n", data >> 16);
 				m_c404.fog_g &= ~(mem_mask >> 16);
 				m_c404.fog_g |= (data & mem_mask) >> 16;
-				if (m_c404.fog_g != old) { old = m_c404.fog_g; printf("gammaram_w, Fog G: %04x\n", m_c404.fog_g); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Fog B: %04x\n", data & 0x0000ffff);
 				m_c404.fog_b &= ~mem_mask;
 				m_c404.fog_b |= (u16)(data & mem_mask);
-				if (m_c404.fog_b != old) { old = m_c404.fog_b; printf("gammaram_w, Fog B: %04x\n", m_c404.fog_b); }
 			}
 			break;
 		case 0x04: // BG Color R, BG Color G
 			if (mem_mask & 0xffff0000)
 			{
-				static u8 old = 0xff;
 				logerror("gammaram_w, Background R: %04x\n", data >> 16);
 				u16 color = (m_c404.bgcolor >> 16) & 0x00ff;
 				color &= ~(mem_mask >> 16);
 				color |= (data & mem_mask) >> 16;
 				m_c404.bgcolor &= 0xff00ffff;
 				m_c404.bgcolor |= (color & 0x00ff) << 16;
-				if (((m_c404.bgcolor >> 16) & 0xff) != old) { old = (m_c404.bgcolor >> 16); printf("gammaram_w, Background R: %02x\n", (m_c404.bgcolor >> 16) & 0xff); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Background G: %04x\n", data & 0x0000ffff);
 				u16 color = (m_c404.bgcolor >> 8) & 0x00ff;
 				color &= ~mem_mask;
 				color |= (u16)(data & mem_mask);
 				m_c404.bgcolor &= 0xffff00ff;
 				m_c404.bgcolor |= (color & 0x00ff) << 8;
-				if (((m_c404.bgcolor >> 8) & 0xff) != old) { old = (m_c404.bgcolor >> 8); printf("gammaram_w, Background G: %02x\n", (m_c404.bgcolor >> 8) & 0xff); }
 			}
 			break;
 		case 0x05: // BG Color B
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Background B: %04x\n", data >> 16);
 				u16 color = m_c404.bgcolor & 0x00ff;
 				color &= ~(mem_mask >> 16);
 				color |= (data & mem_mask) >> 16;
 				m_c404.bgcolor &= 0xffffff00;
 				m_c404.bgcolor |= color & 0x00ff;
-				if (((m_c404.bgcolor >> 0) & 0xff) != old) { old = (m_c404.bgcolor >> 0); printf("gammaram_w, Background B: %02x\n", (m_c404.bgcolor >> 0) & 0xff); }
 			}
 			break;
 		case 0x06: // Spot Factor LSB
 			if (mem_mask & 0x0000ffff)
 			{
-				static u8 old = 0xff;
 				logerror("gammaram_w, Spot Factor LSB: %04x\n", data & 0x0000ffff);
 				m_c404.spot_factor &= 0xff00;
 				m_c404.spot_factor &= ~mem_mask;
 				m_c404.spot_factor |= (u16)(data & mem_mask) & 0x00ff;
-				if ((m_c404.spot_factor & 0xff) != old) { old = m_c404.spot_factor & 0x00ff; printf("gammaram_w, Spot Factor LSB: %02x\n", m_c404.spot_factor & 0xff); }
 			}
 			break;
 		case 0x07: // Spot Factor MSB, Poly Alpha Color Mask
 			if (mem_mask & 0xffff0000)
 			{
-				static u8 old = 0xff;
 				logerror("gammaram_w, Background R: %04x\n", data >> 16);
 				m_c404.spot_factor &= 0x00ff;
 				m_c404.spot_factor &= ~(mem_mask >> 16);
 				m_c404.spot_factor |= (((data & mem_mask) >> 16) & 0x00ff) << 8;
-				if (((m_c404.spot_factor >> 8) & 0xff) != old) { old = (m_c404.spot_factor >> 8); printf("gammaram_w, Background R: %02x\n", (m_c404.spot_factor >> 8) & 0xff); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Poly Alpha Color: %04x\n", data & 0x0000ffff);
 				m_c404.poly_alpha_color &= ~mem_mask;
 				m_c404.poly_alpha_color |= (u16)(data & mem_mask);
-				if (m_c404.poly_alpha_color != old) { old = m_c404.poly_alpha_color; printf("gammaram_w, Poly Alpha Color: %04x\n", m_c404.poly_alpha_color); }
 			}
 			break;
 		case 0x08: // Poly Translucency
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Poly Alpha Pen: %04x\n", data >> 16);
 				m_c404.poly_alpha_pen &= ~(mem_mask >> 16);
 				m_c404.poly_alpha_pen |= (data & mem_mask) >> 16;
-				if (m_c404.poly_alpha_pen != old) { old = m_c404.poly_alpha_pen; printf("gammaram_w, Poly Alpha Pen: %04x\n", m_c404.poly_alpha_pen); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Poly Alpha: %04x\n", data & 0x0000ffff);
 				m_c404.poly_alpha &= ~mem_mask;
 				m_c404.poly_alpha |= (u16)(data & mem_mask);
-				if (m_c404.poly_alpha != old) { old = m_c404.poly_alpha; printf("gammaram_w, Poly Alpha: %04x\n", m_c404.poly_alpha); }
 			}
 			break;
 		case 0x09: // Text Alpha Pen Comparisons
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Text Alpha Check 12: %04x\n", data >> 16);
 				m_c404.alpha_check12 &= ~(mem_mask >> 16);
 				m_c404.alpha_check12 |= (data & mem_mask) >> 16;
-				if (m_c404.alpha_check12 != old) { old = m_c404.alpha_check12; printf("gammaram_w, Text Alpha Check 12: %04x\n", m_c404.alpha_check12); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Text Alpha Check 13: %04x\n", data & 0x0000ffff);
 				m_c404.alpha_check13 &= ~mem_mask;
 				m_c404.alpha_check13 |= (u16)(data & mem_mask);
-				if (m_c404.alpha_check13 != old) { old = m_c404.alpha_check13; printf("gammaram_w, Text Alpha Check 13: %04x\n", m_c404.alpha_check13); }
 			}
 			break;
 		case 0x0a: // Text Alpha Pen Mask(?), Text Alpha Factor
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Text Alpha Pen Mask: %04x\n", data >> 16);
 				m_c404.alpha_mask &= ~(mem_mask >> 16);
 				m_c404.alpha_mask |= (data & mem_mask) >> 16;
-				if (m_c404.alpha_mask != old) { old = m_c404.alpha_mask; printf("gammaram_w, Text Alpha Pen Mask: %04x\n", m_c404.alpha_mask); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Text Alpha Factor: %04x\n", data & 0x0000ffff);
 				m_c404.alpha_factor &= ~mem_mask;
 				m_c404.alpha_factor |= (u16)(data & mem_mask);
-				if (m_c404.alpha_factor != old) { old = m_c404.alpha_factor; printf("gammaram_w, Text Alpha Factor: %04x\n", m_c404.alpha_factor); }
 			}
 			break;
 		case 0x0b: // Screen Fade R, Screen Fade G
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Screen Fade R: %04x\n", data >> 16);
 				m_c404.screen_fade_r &= ~(mem_mask >> 16);
 				m_c404.screen_fade_r |= (data & mem_mask) >> 16;
-				if (m_c404.screen_fade_r != old) { old = m_c404.screen_fade_r; printf("gammaram_w, Screen Fade R: %04x\n", m_c404.screen_fade_r); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Screen Fade G: %04x\n", data & 0x0000ffff);
 				m_c404.screen_fade_g &= ~mem_mask;
 				m_c404.screen_fade_g |= (u16)(data & mem_mask);
-				if (m_c404.screen_fade_g != old) { old = m_c404.screen_fade_g; printf("gammaram_w, Screen Fade G: %04x\n", m_c404.screen_fade_g); }
 			}
 			break;
 		case 0x0c: // Screen Fade B, Screen Fade Factor
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Screen Fade B: %04x\n", data >> 16);
 				m_c404.screen_fade_b &= ~(mem_mask >> 16);
 				m_c404.screen_fade_b |= (data & mem_mask) >> 16;
-				if (m_c404.screen_fade_b != old) { old = m_c404.screen_fade_b; printf("gammaram_w, Screen Fade B: %04x\n", m_c404.screen_fade_b); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				//static u16 old = 0xffff;
 				logerror("gammaram_w, Screen Fade Factor: %04x\n", data & 0x0000ffff);
 				m_c404.screen_fade_factor &= ~mem_mask;
 				m_c404.screen_fade_factor |= (u16)(data & mem_mask);
-				//if (m_c404.screen_fade_factor != old) { old = m_c404.screen_fade_factor; printf("gammaram_w, Screen Fade Factor: %04x\n", m_c404.screen_fade_factor); }
 			}
 			break;
 		case 0x0d: // Fade Flags, Palette Base
 			if (mem_mask & 0xffff0000)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Fade Flags: %04x\n", data >> 16);
 				m_c404.fade_flags &= ~(mem_mask >> 16);
 				m_c404.fade_flags |= (data & mem_mask) >> 16;
-				if (m_c404.fade_flags != old) { old = m_c404.fade_flags; printf("gammaram_w, Fade Flags: %04x\n", m_c404.fade_flags); }
 			}
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Palette Base: %04x\n", data & 0x0000ffff);
 				u16 palbase = m_c404.palbase >> 8;
 				palbase &= ~mem_mask;
 				palbase |= (u16)(data & mem_mask);
 				m_c404.palbase = (palbase << 8) & 0x7f00;
-				if (m_c404.palbase != old) { old = m_c404.palbase; printf("gammaram_w, Palette Base: %04x\n", m_c404.palbase); }
 			}
 			break;
 		case 0x0f: // Layer Flags
 			if (mem_mask & 0x0000ffff)
 			{
-				static u16 old = 0xffff;
 				logerror("gammaram_w, Layer Flags: %04x\n", data & 0x0000ffff);
 				u16 layer_flags = m_c404.layer_flags;
 				layer_flags &= ~mem_mask;
 				layer_flags |= (u16)(data & mem_mask);
 				m_c404.layer_flags = layer_flags;
-				if (m_c404.layer_flags != old) { old = m_c404.layer_flags; printf("gammaram_w, Layer Flags: %04x\n", m_c404.layer_flags); }
 			}
 			break;
 		default:
@@ -5808,7 +5433,6 @@ INTERRUPT_GEN_MEMBER(namcos23_gmen_state::interrupt)
 
 u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
-	LOG("***SCREEN UPDATE***\n");
 	check_pixxiii_trigger();
 
 	m_bgtilemap->set_palette_offset(m_c404.palbase);
@@ -5864,9 +5488,6 @@ u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, c
 
 void namcos23_state::irq_update_common(u32 cause)
 {
-	//if (cause != 0 && cause != 1)
-		//LOG("irq_update: %02x\n", cause);
-
 	const u32 old = m_main_irqcause;
 	const u32 changed = cause ^ m_main_irqcause;
 	m_main_irqcause = cause;
@@ -5966,16 +5587,13 @@ INTERRUPT_GEN_MEMBER(namcos23_state::interrupt)
 
 void namcos23_state::vblank(int state)
 {
-	LOG("***VBLANK***\n");
-	if (/*!m_ctl_vbl_active &&*/ state)
+	if (state)
 	{
 		m_ctl_vbl_active = true;
-		LOG("Setting VBL IRQ\n");
 		irq_update(m_main_irqcause | MAIN_VBLANK_IRQ);
 	}
 	else
 	{
-		LOG("Clearing VBL IRQ automatically\n");
 		irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
 	}
 	m_sub_portb = (m_sub_portb & 0x7f) | (state << 7);
@@ -6101,16 +5719,9 @@ void namcos23_state::c417_w(offs_t offset, u16 data, u16 mem_mask)
 		if (!m_c417.test_mode) LOGMASKED(LOG_C417_RAM, "C417 RAM write: %08x = %04x & %04x\n", (m_c417.adr << 1), data, mem_mask);
 		COMBINE_DATA(m_c417.ram + m_c417.adr);
 		break;
-	/*case 6:
-		LOGMASKED(LOG_C417_ACK, "%s: c417_w: request IRQ 2 (%x)\n", machine().describe_context(), data);
-		m_c417.unk6 = data;
-		LOG("Setting C435 IRQ\n");
-		irq_update(m_main_irqcause | MAIN_C435_IRQ);
-		break;*/
 	case 7:
 		LOGMASKED(LOG_C417_ACK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
 		COMBINE_DATA(&m_c417.unk);
-		LOG("Clearing C435 IRQ\n");
 		irq_update(m_main_irqcause & ~MAIN_C435_IRQ);
 		break;
 	default:
@@ -6496,7 +6107,6 @@ u16 namcos23_state::c361_r(offs_t offset, u16 mem_mask)
 
 void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 {
-	LOG("%s: direct_buf_w [%3d]: %08x = %04x & %04x\n", machine().describe_context(), m_c435_direct_buf_pos, offset << 1, data, mem_mask);
 	if (offset == 1)
 	{
 		m_c435_direct_buf_open = (bool)data;
@@ -6530,53 +6140,6 @@ void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 		memcpy(&re->c404, &m_c404, sizeof(re->c404));
 		render.count[render.cur]++;
 
-		int cztype = re->direct.d[3] & 3;
-		LOG("%s: Presumptive direct-poly info:\n", machine().describe_context());
-		LOG("%s:     Z-Sort:  %08x\n", machine().describe_context(), ((re->direct.d[1] & 0x1ff) << 12) | (re->direct.d[0] & 0xfff));
-		LOG("%s:     CZ Type: %08x\n", machine().describe_context(), cztype);
-		LOG("%s:     Flags:   %08x\n", machine().describe_context(), ((re->direct.d[3] << 6) & 0x1fff) | cztype);
-		LOG("%s:     U0:      %08x\n", machine().describe_context(), (re->direct.d[4] >> 4));
-		LOG("%s:     V0:      %08x\n", machine().describe_context(), (re->direct.d[5] >> 4));
-		LOG("%s:     X0:      %d\n", machine().describe_context(), ((s16)re->direct.d[6] + 320));
-		LOG("%s:     Y0:      %d\n", machine().describe_context(), ((s16)re->direct.d[7] + 320));
-		float z0 = 0.0f;
-		int mant0 = re->direct.d[9], exp0 = re->direct.d[8] & 0x3f;
-		if (mant0) { z0 = mant0; while (exp0 < 0x2e) { z0 /= 2.0f; exp0++; } }
-		else z0 = (float)0x10000;
-		LOG("%s:     Z0:      %f\n", machine().describe_context(), z0);
-		LOG("%s:     U1:      %08x\n", machine().describe_context(), (re->direct.d[10] >> 4));
-		LOG("%s:     V1:      %08x\n", machine().describe_context(), (re->direct.d[11] >> 4));
-		LOG("%s:     X1:      %d\n", machine().describe_context(), ((s16)re->direct.d[12] + 320));
-		LOG("%s:     Y1:      %d\n", machine().describe_context(), ((s16)re->direct.d[13] + 320));
-		float z1 = 0.0f;
-		int mant1 = re->direct.d[15], exp1 = re->direct.d[14] & 0x3f;
-		if (mant1) { z1 = mant1; while (exp1 < 0x2e) { z1 /= 2.0f; exp1++; } }
-		else z1 = (float)0x10000;
-		LOG("%s:     Z1:      %f\n", machine().describe_context(), z1);
-		LOG("%s:     U2:      %08x\n", machine().describe_context(), (re->direct.d[16] >> 4));
-		LOG("%s:     V2:      %08x\n", machine().describe_context(), (re->direct.d[17] >> 4));
-		LOG("%s:     X2:      %d\n", machine().describe_context(), ((s16)re->direct.d[18] + 320));
-		LOG("%s:     Y2:      %d\n", machine().describe_context(), ((s16)re->direct.d[19] + 320));
-		float z2 = 0.0f;
-		int mant2 = re->direct.d[21], exp2 = re->direct.d[20] & 0x3f;
-		if (mant2) { z2 = mant2; while (exp2 < 0x2e) { z2 /= 2.0f; exp2++; } }
-		else z2 = (float)0x10000;
-		LOG("%s:     Z2:      %f\n", machine().describe_context(), z2);
-		LOG("%s:     U3:      %08x\n", machine().describe_context(), (re->direct.d[22] >> 4));
-		LOG("%s:     V3:      %08x\n", machine().describe_context(), (re->direct.d[23] >> 4));
-		LOG("%s:     X3:      %d\n", machine().describe_context(), ((s16)re->direct.d[24] + 320));
-		LOG("%s:     Y3:      %d\n", machine().describe_context(), ((s16)re->direct.d[25] + 320));
-		float z3 = 0.0f;
-		int mant3 = re->direct.d[27], exp3 = re->direct.d[26] & 0x3f;
-		if (mant3) { z3 = mant3; while (exp3 < 0x2e) { z3 /= 2.0f; exp3++; } }
-		else z3 = (float)0x10000;
-		LOG("%s:     Z3:      %f\n", machine().describe_context(), z3);
-        LOG("%s:     Palette: %04x\n", machine().describe_context(), re->direct.d[2] & 0x7f00);
-        LOG("%s:     TBase:   %04x\n", machine().describe_context(), (re->direct.d[2] & 0x000f) << 12);
-        LOG("%s:     CMode:   %04x\n", machine().describe_context(), (re->direct.d[2] & 0x00f0) >> 4);
-        LOG("%s:     CZVal:   %04x\n", machine().describe_context(), (re->direct.d[3] >> 2) & 0x1fff);
-        LOG("%s:     CZType:  %d\n", machine().describe_context(), re->direct.d[3] & 3);
-
 		if (s_capturing)
 		{
 			PixxiiiPacket &cdir = log_packet("CDIR");
@@ -6608,7 +6171,6 @@ void namcos23_state::ctl_w(offs_t offset, u16 data, u16 mem_mask)
 		if (m_ctl_vbl_active)
 		{
 			m_ctl_vbl_active = false;
-			LOG("Clearing VBL IRQ\n");
 			irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
 		}
 		break;
@@ -6692,7 +6254,6 @@ void namcos23_state::mcuen_w(offs_t offset, u16 data, u16 mem_mask)
 	{
 	case 2:
 		// subcpu irq ack
-		LOG("Clearing SubCPU IRQ\n");
 		irq_update(m_main_irqcause & ~MAIN_SUBCPU_IRQ);
 		break;
 
@@ -6803,16 +6364,6 @@ void namcos23_state::gorgon_map(address_map &map)
 // Test 7: IRQ Index 5 (C361)
 // Test 8: IRQ Index 6 (C450)
 
-void crszone_state::unk58_w(offs_t offset, u32 data)
-{
-	static u32 old = 0;
-	if (old != data)
-	{
-		LOG("%s: crszone_unk58_w: %08x\n", machine().describe_context(), data);
-		old = data;
-	}
-}
-
 void crszone_state::irq_vbl_ack_w(offs_t offset, u32 data)
 {
 	irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
@@ -6901,8 +6452,6 @@ void crszone_state::mips_map(address_map &map)
 {
 	map.global_mask(0x1fffffff);
 	map(0x00000000, 0x00ffffff).ram().share("mainram");
-	map(0x10000058, 0x1000005b).w(FUNC(crszone_state::unk58_w));
-	//map(0x10000080, 0x10000083).nopw();
 	map(0x10000080, 0x10000083).w(FUNC(crszone_state::irq_vbl_ack_w));
 	map(0x10000094, 0x10000097).w(FUNC(crszone_state::irq_lv6_ack_w));
 	map(0x100000a8, 0x100000ab).r(FUNC(crszone_state::irq_lv3_status_r));
@@ -6911,7 +6460,6 @@ void crszone_state::mips_map(address_map &map)
 	map(0x10400000, 0x10400003).w(FUNC(crszone_state::c450_dma_addr_w));
 	map(0x1040000c, 0x1040000f).w(FUNC(crszone_state::c450_dma_size_w));
 	map(0x1040001c, 0x1040001f).r(FUNC(crszone_state::c450_irq_status_r));
-	//map(0x11000000, 0x110000ff).rw(FUNC(crszone_state::c435_r), FUNC(crszone_state::c435_w));
 	map(0x12000000, 0x1200000f).rw(FUNC(crszone_state::c417_r), FUNC(crszone_state::c417_w));
 	map(0x14400000, 0x1440ffff).rw(FUNC(crszone_state::sharedram_cpu_r), FUNC(crszone_state::sharedram_cpu_w)); // Communication RAM (C416)
 	map(0x14c3ff00, 0x14c3ff0f).w(FUNC(crszone_state::mcuen_w));
@@ -6952,19 +6500,12 @@ u32 namcos23_gmen_state::sh2_shared_r(offs_t offset, u32 mem_mask)
 
 void namcos23_gmen_state::sh2_shared_w(offs_t offset, u32 data, u32 mem_mask)
 {
-	if (offset == 0xc000/4 || offset == 0xc048/4)
-	{
-		logerror("%s: sh2_shared_w: %08x = %08x\n", machine().describe_context().c_str(), offset << 2, data);
-		//printf("%s: sh2_shared_w: %08x = %08x\n", machine().describe_context().c_str(), offset << 2, data);
-	}
 	COMBINE_DATA(&m_sh2_shared[offset]);
 }
 
 u32 namcos23_gmen_state::sh2_dsw_r(offs_t offset, u32 mem_mask)
 {
-	const u32 data = ioport("GMENDSW")->read() << 24;
-	//logerror("%s: sh2_dsw_r: %08x & %08x\n", machine().describe_context().c_str(), data, mem_mask);
-	return data;
+	return ioport("GMENDSW")->read() << 24;
 }
 
 u32 namcos23_gmen_state::mips_sh2_unk_r(offs_t offset, u32 mem_mask)
@@ -7070,14 +6611,9 @@ u16 namcos23_state::sharedram_sub_r(offs_t offset)
 void namcos23_state::sub_interrupt_main_w(offs_t offset, u16 data, u16 mem_mask)
 {
 	if ((mem_mask == 0xffff) && (data == 0x3170))
-	{
-		LOG("Setting SubCPU IRQ\n");
 		irq_update(m_main_irqcause | MAIN_SUBCPU_IRQ);
-	}
 	else
-	{
 		LOGMASKED(LOG_SUBIRQ, "%s: Unknown write %x to sub_interrupt_main_w!\n", machine().describe_context(), data);
-	}
 }
 
 void crszone_state::acia_irq_w(int state)
