@@ -1591,21 +1591,19 @@ It can also be used with Final Furlong when wired correctly.
 #define LOG_C417_REG		(1ULL << 37)
 #define LOG_C412_RAM		(1ULL << 38)
 #define LOG_C421_RAM		(1ULL << 39)
-#define LOG_C417_RAM		(1ULL << 40)
-#define LOG_GMEN			(1ULL << 41)
-#define LOG_MCU_PORTS		(1ULL << 42)
-#define LOG_RS232			(1ULL << 43)
-#define LOG_IRQ_STATUS  	(1ULL << 44)
-#define LOG_C451			(1ULL << 45)
+#define LOG_C404_REGS		(1ULL << 40)
+#define LOG_C404_RAM		(1ULL << 41)
+#define LOG_GMEN			(1ULL << 42)
+#define LOG_MCU_PORTS		(1ULL << 43)
+#define LOG_RS232			(1ULL << 44)
+#define LOG_IRQ_STATUS  	(1ULL << 45)
+#define LOG_C451			(1ULL << 46)
 #define LOG_ALL ( LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO | LOG_MODEL_ERR | \
 				LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C417_ACK | LOG_C412_UNK | LOG_C421_UNK | \
 				LOG_C422_IRQ | LOG_C422_UNK | LOG_C361_UNK | LOG_CTL_UNK | LOG_C417_IRQ | LOG_C361_IRQ | LOG_MATRIX_INFO | LOG_VEC_INFO | \
-				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C417_RAM | LOG_GMEN | LOG_GENERAL | LOG_MCU | \
-				LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK )
+				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C404_REGS | LOG_C404_RAM | LOG_GMEN | \
+				LOG_GENERAL | LOG_MCU | LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK )
 
-//#define VERBOSE (LOG_GENERAL | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_3D_STATE_UNK | LOG_3D_STATE_ERR | LOG_MATRIX_ERR | LOG_MATRIX_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_MODEL_ERR | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C361_UNK | LOG_PROJ_MAT )
-//#define VERBOSE ( LOG_GENERAL | LOG_C435_PIO_UNK | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_C435_UNK | LOG_C361_UNK | LOG_C417_UNK | LOG_C412_UNK | LOG_C421_UNK | LOG_C422_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_CTL_REG | LOG_CTL_UNK | LOG_SH2 | LOG_MCU )
-//#define VERBOSE ( LOG_ALL )
 #define VERBOSE ( 0 )
 #include "logmacro.h"
 
@@ -1828,8 +1826,6 @@ struct c417_t
 	u16 ram[0x10000];
 	u16 adr;
 	u32 pointrom_adr;
-	u32 unk6;
-	u16 unk;
 	bool test_mode;
 };
 
@@ -1837,7 +1833,7 @@ struct c412_t
 {
 	u16 sdram_a[0x100000]; // Framebuffers, probably
 	u16 sdram_b[0x100000];
-	u16 sram[0x20000];     // Ram-based tiles for rendering
+	u16 sram[0x20000];     // Ram-based tiles for alpha-cutout drawing
 	u16 pczram[0x200];     // PCZ Convert RAM
 	u32 adr;
 	u16 status_c;
@@ -1886,6 +1882,7 @@ struct c404_t
 	u8 fade_flags;
 	u16 palbase;
 	u8 layer_flags;
+	u16 ram[0x400];
 	u16 spritedata_idx;
 	u64 rowscroll_frame;
 	u16 rowscroll[480];
@@ -1922,7 +1919,6 @@ public:
 		m_settings(*this, "namco_settings"),
 		m_mainram(*this, "mainram"),
 		m_shared_ram(*this, "shared_ram", 0x10000, ENDIANNESS_BIG),
-		m_gammaram(*this, "gammaram"),
 		m_charram(*this, "charram"),
 		m_textram(*this, "textram"),
 		m_czattr(*this, "czattr", 0x10, ENDIANNESS_BIG),
@@ -1962,8 +1958,6 @@ public:
 	u8 *m_texture_tiledata;
 	std::unique_ptr<u8 []> m_texture_ayx_to_pixel;
 
-	virtual INTERRUPT_GEN_MEMBER(interrupt);
-
 protected:
 	virtual void machine_start() override;
 	virtual void machine_reset() override;
@@ -1974,32 +1968,87 @@ protected:
 
 	void textram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	void textchar_w(offs_t offset, u32 data, u32 mem_mask = ~0);
-	void gammaram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	void paletteram_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	void sprites_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	virtual u16 c417_r(offs_t offset, u16 mem_mask = ~0);
-	void c417_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+
+	u16 c404_ram_r(offs_t offset);
+	void c404_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	void c404_poly_fade_red_w(offs_t offset, u16 data);
+	void c404_poly_fade_green_w(offs_t offset, u16 data);
+	void c404_poly_fade_blue_w(offs_t offset, u16 data);
+	void c404_fog_red_w(offs_t offset, u16 data);
+	void c404_fog_green_w(offs_t offset, u16 data);
+	void c404_fog_blue_w(offs_t offset, u16 data);
+	void c404_bg_red_w(offs_t offset, u16 data);
+	void c404_bg_green_w(offs_t offset, u16 data);
+	void c404_bg_blue_w(offs_t offset, u16 data);
+	void c404_spot_lsb_w(offs_t offset, u16 data);
+	void c404_spot_msb_w(offs_t offset, u16 data);
+	void c404_poly_alpha_color_w(offs_t offset, u16 data);
+	void c404_poly_alpha_pen_w(offs_t offset, u16 data);
+	void c404_poly_alpha_w(offs_t offset, u16 data);
+	void c404_alpha_check12_w(offs_t offset, u16 data);
+	void c404_alpha_check13_w(offs_t offset, u16 data);
+	void c404_text_alpha_mask_w(offs_t offset, u16 data);
+	void c404_text_alpha_factor_w(offs_t offset, u16 data);
+	void c404_screen_fade_red_w(offs_t offset, u16 data);
+	void c404_screen_fade_green_w(offs_t offset, u16 data);
+	void c404_screen_fade_blue_w(offs_t offset, u16 data);
+	void c404_screen_fade_factor_w(offs_t offset, u16 data);
+	void c404_fade_flags_w(offs_t offset, u16 data);
+	void c404_palette_base_w(offs_t offset, u16 data);
+	void c404_layer_flags_w(offs_t offset, u16 data);
+
+	virtual u16 c417_status_r();
+	u16 c417_addr_r();
+	void c417_addr_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	void c417_ptrom_addr_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c417_test_done_r();
+	void c417_ptrom_addr_clear_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c417_ram_r();
+	void c417_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c417_ptrom_msw_r();
+	u16 c417_ptrom_lsw_r();
+	void c417_irq_ack_w(offs_t offset, u16 data);
+
 	u16 c412_ram_r(offs_t offset);
 	void c412_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
 	u16 c412_r(offs_t offset, u16 mem_mask = ~0);
 	void c412_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	u16 c421_ram_r(offs_t offset);
+
+	u16 c421_ram_r();
 	void c421_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	u16 c421_r(offs_t offset, u16 mem_mask = ~0);
-	void c421_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c421_addr_msw_r();
+	void c421_addr_msw_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c421_addr_lsw_r();
+	void c421_addr_lsw_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+
 	void direct_buf_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	void ctl_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	u16 ctl_r(offs_t offset, u16 mem_mask = ~0);
-	void c361_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	u16 c361_r(offs_t offset, u16 mem_mask = ~0);
+
+	void ctl_leds_w(offs_t offset, u16 data);
+	u16 ctl_status_r();
+	u16 ctl_input1_r();
+	void ctl_input1_w(offs_t offset, u16 data);
+	u16 ctl_input2_r();
+	void ctl_input2_w(offs_t offset, u16 data);
+	void ctl_vbl_ack_w(offs_t offset, u16 data);
+	void ctl_direct_poly_w(offs_t offset, u16 data);
+
+	void c361_xscroll_w(offs_t offset, u16 data);
+	void c361_yscroll_w(offs_t offset, u16 data);
+	void c361_irq_scanline_w(offs_t offset, u16 data);
+	u16 c361_vpos_r();
+	u16 c361_vblank_r();
+
 	u16 c422_r(offs_t offset);
 	void c422_w(offs_t offset, u16 data, u16 mem_mask = ~0);
 	void mcuen_w(offs_t offset, u16 data, u16 mem_mask = ~0);
-	u32 c435_r(offs_t offset, u32 mem_mask = ~0);
-	void c435_w(address_space &space, offs_t offset, u32 data, u32 mem_mask = ~0);
-	u32 gmen_trigger_sh2();
-	u32 sh2_shared_r(offs_t offset);
-	void sh2_shared_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	u32 c435_busy_flag_r();
+	void c435_dma_addr_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void c435_dma_size_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void c435_dma_start_w(address_space &space, offs_t offset, u32 data, u32 mem_mask = ~0);
+	void c435_pio_mode_w(offs_t offset, u32 data, u32 mem_mask = ~0);
+	void c435_clear_bufpos_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	void sharedram_cpu_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	u32 sharedram_cpu_r(offs_t offset, u32 mem_mask = ~0);
 	void sharedram_sub_w(offs_t offset, u16 data, u16 mem_mask = ~0);
@@ -2067,7 +2116,7 @@ protected:
 	void c435_render();
 	void c435_flush();
 
-	void c435_pio_w(u16 data);
+	void c435_pio_w(offs_t offset, u16 data);
 	void c435_sprite_w(u16 data);
 	void c435_dma(address_space &space, u32 adr, u32 size);
 
@@ -2087,7 +2136,6 @@ protected:
 
 	void gorgon_map(address_map &map);
 	void s23_map(address_map &map);
-	void crszone_map(address_map &map);
 	void s23h8rwmap(address_map &map);
 	void s23iobrdmap(address_map &map);
 	void motoxgo_exio_map(address_map &map);
@@ -2101,7 +2149,6 @@ protected:
 	required_device<namco_settings_device> m_settings;
 	required_shared_ptr<u32> m_mainram;
 	memory_share_creator<u32> m_shared_ram;
-	required_shared_ptr<u32> m_gammaram;
 	required_shared_ptr<u32> m_charram;
 	required_shared_ptr<u32> m_textram;
 	memory_share_creator<u32> m_czattr;
@@ -2160,13 +2207,13 @@ protected:
 	emu_timer *m_subcpu_scanline_off_timer;
 	emu_timer *m_c451_kick_timer;
 
-// It may only be 128
-// At 0x1e bytes per slot, rounded up to 0x20, that's 0x1000 to 0x2000 bytes.
-// That fits pretty much anywhere, including inside a IC
-// No idea at that point if it's CPU-reachable.  DMA's probably more efficient anyway.
+	// There may only be 128 matrix and vector slots.
+	// At 0x1e bytes per slot, rounded up to 0x20, that's 0x1000 to 0x2000 bytes.
+	// That fits pretty much anywhere, including inside an IC.
+	// Unknown right now if it's directly CPU-accessible. Command packets via DMA are probably more efficient.
 
-// Matrices are stored in signed 2.14 fixed point
-// Vectors are stored in signed 10.14 fixed point
+	// Matrices are stored in signed 2.14 fixed point
+	// Vectors are stored in signed 10.14 fixed point
 
 	s16 m_matrices[256][9];
 	s32 m_vectors[256][3];
@@ -2204,8 +2251,6 @@ public:
 	{ }
 
 	void gmen(machine_config &config);
-
-	virtual INTERRUPT_GEN_MEMBER(interrupt) override;
 
 protected:
 	virtual void machine_start() override;
@@ -2262,11 +2307,10 @@ protected:
 
 	virtual void irq_update(u32 cause) override;
 
-	virtual u16 c417_r(offs_t offset, u16 mem_mask = ~0) override;
+	virtual u16 c417_status_r() override;
 	TIMER_CALLBACK_MEMBER(c451_dma_kick);
 
 	void irq_vbl_ack_w(offs_t offset, u32 data);
-	void irq_lv6_ack_w(offs_t offset, u32 data);
 	u32 irq_lv3_status_r();
 	u32 irq_lv5_status_r();
 	u32 irq_lv6_status_r();
@@ -2313,7 +2357,7 @@ namcos23_renderer::namcos23_renderer(namcos23_state &state)
 {
 }
 
-// 3D hardware, to throw at least in part in namcos23_v.cpp
+// 3D hardware
 
 s32 u32_to_s24(u32 v)
 {
@@ -2373,10 +2417,6 @@ s16 *namcos23_state::c435_getm(u16 id)
 
 void namcos23_state::c435_state_set_interrupt(const u16 *param)
 {
-//	if (param[0] & 1)
-//		irq_update(m_main_irqcause | (MAIN_C435_IRQ | MAIN_C450_IRQ));
-//	else
-//		irq_update(m_main_irqcause & ~(MAIN_C435_IRQ | MAIN_C450_IRQ));
 	if (param[0] & 1)
 		irq_update(m_main_irqcause | MAIN_C435_IRQ);
 	else
@@ -2390,18 +2430,6 @@ void namcos23_state::c435_state_set_projection_matrix_line(const u16 *param)
 	//   line 1: 1 0 -(sx-a)/(sx/t) 0 -1  0 -(sx+a)/(sx/t) 0
 	//   line 2: 0 1 -(sy-b)/(sx/t) 0  0 -1 -(sy+b)/(sx/t) 0
 	//   line 3: 0 0 -1             c  0  0              0 sx/t
-
-	static u16 old[16*3] =
-	{
-		0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,
-		0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,
-		0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff
-	};
-
-	if (memcmp(&old[m_proj_matrix_line * 16], &param[1], sizeof(u16) * 16) != 0)
-	{
-		memcpy(&old[m_proj_matrix_line * 16], &param[1], sizeof(u16) * 16);
-	}
 
 	std::ostringstream buf;
 	buf << "projection matrix line:";
@@ -2524,11 +2552,11 @@ void namcos23_state::c435_matrix_vector_mul() // 0.1
 		return;
 	}
 
-	bool extra_logging = true;
+	bool extra_logging = false;
 	if (m_c435_buffer[0] != 0x0814 && m_c435_buffer[0] != 0x1014 && m_c435_buffer[0] != 0x0414)
 	{
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_matrix_vector_mul header %04x %04x %04x %04x %04x\n", machine().describe_context(), m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[3], m_c435_buffer[4]);
-		//extra_logging = true;
+		extra_logging = true;
 	}
 
 	s32 *t = c435_getv(m_c435_buffer[1]);
@@ -2644,11 +2672,11 @@ void namcos23_state::c435_matrix_vector_immed_mul() // 0.3
 		return;
 	}
 
-	bool extra_logging = true;
+	bool extra_logging = false;
 	if (m_c435_buffer[0] != 0x0839 && m_c435_buffer[0] != 0x1039 && m_c435_buffer[0] != 0x0439)
 	{
 		LOGMASKED(LOG_VEC_UNK, "%s: WARNING: c435_matrix_vector_immed_mul header %04x %04x %04x %04x\n", machine().describe_context(), m_c435_buffer[0], m_c435_buffer[1], m_c435_buffer[2], m_c435_buffer[3]);
-		//extra_logging = true;
+		extra_logging = true;
 	}
 
 	s32 *t = c435_getv(m_c435_buffer[1]);
@@ -3028,15 +3056,12 @@ void namcos23_state::c435_render() // 8
 	bool use_scaling = BIT(m_c435_buffer[0], 7);
 	bool transpose = BIT(m_c435_buffer[0], 6);
 
-	//LOGMASKED(LOG_RENDER_INFO, "%s: render model %x %swith matrix %x and vector %x\n", machine().describe_context(), m_c435_buffer[1], use_scaling ? "scaled " : "", m_c435_buffer[2], m_c435_buffer[3]);
-
 	if (render.count[render.cur] >= RENDER_MAX_ENTRIES)
 	{
 		LOGMASKED(LOG_RENDER_ERR, "%s: WARNING: render buffer full\n", machine().describe_context());
 		return;
 	}
 
-	// Vector and matrix may be inverted
 	const s16 *m = c435_getm(m_c435_buffer[size - 1]);
 	const s32 *v = c435_getv(m_c435_buffer[size]);
 
@@ -3097,7 +3122,7 @@ void namcos23_state::c435_sprite_w(u16 data)
 	m_c435_buffer_pos++;
 }
 
-void namcos23_state::c435_pio_w(u16 data)
+void namcos23_state::c435_pio_w(offs_t offset, u16 data)
 {
 	LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 PIO: %x\n", machine().describe_context(), data);
 	m_c435_buffer[m_c435_buffer_pos++] = data;
@@ -3132,7 +3157,7 @@ void namcos23_state::c435_pio_w(u16 data)
 		case 0x0000: c435_unk_set4(); break;
 		case 0x0100: c435_absolute_priority_set(); break;
 		case 0x0300: c435_unk_set(); break;
-		case 0x0400: /*LOGMASKED(LOG_C435_PIO_UNK, "%s: Scaling Set\n", machine().describe_context());*/ c435_scaling_set(); break;
+		case 0x0400: c435_scaling_set(); break;
 		case 0x0500: c435_model_blend_factor_set(); break;
 		case 0x0700: c435_unk_set3(); break;
 		case 0x0800: c435_unk_set5(); break;
@@ -3141,8 +3166,8 @@ void namcos23_state::c435_pio_w(u16 data)
 		}
 		break;
 
-	case 0x8000: /*LOGMASKED(LOG_C435_PIO_UNK, "%s: Render\n", machine().describe_context());*/ c435_render(); break;
-	case 0xc000: /*LOGMASKED(LOG_C435_PIO_UNK, "%s: Flush\n", machine().describe_context());*/ c435_flush(); break;
+	case 0x8000: c435_render(); break;
+	case 0xc000: c435_flush(); break;
 	}
 
 	if (!known)
@@ -3170,26 +3195,13 @@ void namcos23_state::c435_dma(address_space &space, u32 adr, u32 size)
 	else
 	{
 		for (u32 pos = 0; pos < size; pos += 2)
-			c435_pio_w(space.read_word(adr + pos));
+			c435_pio_w(0, space.read_word(adr + pos));
 	}
 }
 
 void namcos23_state::gorgon_nvram_w(offs_t offset, u32 data, u32 mem_mask)
 {
-	static u32 nvram_data = 0;
-	if (mem_mask == 0xffff0000)
-	{
-		const u32 old = nvram_data;
-		COMBINE_DATA(&nvram_data);
-		if (BIT(old, 18) != BIT(nvram_data, 18) && BIT(nvram_data, 18))
-		{
-			logerror("nvram 1 data bit: %d\n", BIT(nvram_data, 16));
-		}
-		if (BIT(old, 17) != BIT(nvram_data, 17) && BIT(nvram_data, 17))
-		{
-			logerror("nvram 2 data bit: %d\n", BIT(nvram_data, 16));
-		}
-	}
+	// TODO
 }
 
 u16 namcos23_state::gorgon_czattr_r(offs_t offset, u16 mem_mask)
@@ -3299,52 +3311,45 @@ void namcos23_state::recalc_czram()
 	}
 }
 
-u32 namcos23_state::c435_r(offs_t offset, u32 mem_mask)
+u32 namcos23_state::c435_busy_flag_r()
 {
-	switch (offset)
-	{
-	case 0xa:
-		LOGMASKED(LOG_C435_REG, "%s: c435 read busy flag %08x\n", machine().describe_context(), offset);
-		return 1; // Busy flag
-	}
-
-	LOGMASKED(LOG_C435_UNK, "%s: c435 unknown read %02x & %08x\n", machine().describe_context(), offset, mem_mask);
-	return 0;
+	LOGMASKED(LOG_C435_REG, "%s: c435 read busy flag: %08x\n", machine().describe_context(), 1);
+	return 1;
 }
 
-void namcos23_state::c435_w(address_space &space, offs_t offset, u32 data, u32 mem_mask)
+void namcos23_state::c435_dma_addr_w(offs_t offset, u32 data, u32 mem_mask)
 {
-	switch (offset)
+	LOGMASKED(LOG_C435_REG, "%s: c435 write address: %08x & %08x\n", machine().describe_context(), data, mem_mask);
+	COMBINE_DATA(&m_c435_address);
+}
+
+void namcos23_state::c435_dma_size_w(offs_t offset, u32 data, u32 mem_mask)
+{
+	LOGMASKED(LOG_C435_REG, "%s: c435 write size: %08x & %08x\n", machine().describe_context(), data, mem_mask);
+	COMBINE_DATA(&m_c435_size);
+}
+
+void namcos23_state::c435_dma_start_w(address_space &space, offs_t offset, u32 data, u32 mem_mask)
+{
+	LOGMASKED(LOG_C435_REG, "%s: c435 write DMA: %08x & %08x\n", machine().describe_context(), data, mem_mask);
+	if (data & 1)
+		c435_dma(space, m_c435_address, m_c435_size);
+}
+
+void namcos23_state::c435_pio_mode_w(offs_t offset, u32 data, u32 mem_mask)
+{
+	if (m_has_sprites)
 	{
-	case 0x7:
-		LOGMASKED(LOG_C435_REG, "%s: c435 write address: %08x & %08x\n", machine().describe_context(), data, mem_mask);
-		COMBINE_DATA(&m_c435_address);
-		break;
-	case 0x8:
-		LOGMASKED(LOG_C435_REG, "%s: c435 write size: %08x & %08x\n", machine().describe_context(), data, mem_mask);
-		COMBINE_DATA(&m_c435_size);
-		break;
-	case 0x9:
-		LOGMASKED(LOG_C435_REG, "%s: c435 write DMA: %08x & %08x\n", machine().describe_context(), data, mem_mask);
-		if (data & 1)
-			c435_dma(space, m_c435_address, m_c435_size);
-		break;
-	case 0x17:
-		if (m_has_sprites)
-		{
-			LOGMASKED(LOG_C435_REG, "%s: PIO mode write: %08x & %08x (%s mode)\n", machine().describe_context(), data, mem_mask, BIT(data, 0) ? "sprite" : "command");
-			COMBINE_DATA(&m_c435_pio_mode);
-			m_c435_buffer_pos = 0;
-		}
-		break;
-	case 0x18:
-		LOGMASKED(LOG_C435_REG, "%s: clear buffer pos: %08x & %08x\n", machine().describe_context(), data, mem_mask);
+		LOGMASKED(LOG_C435_REG, "%s: PIO mode write: %08x & %08x (%s mode)\n", machine().describe_context(), data, mem_mask, BIT(data, 0) ? "sprite" : "command");
+		COMBINE_DATA(&m_c435_pio_mode);
 		m_c435_buffer_pos = 0;
-		break;
-	default:
-		LOGMASKED(LOG_C435_UNK, "%s: c435 unknown write %02x = %08x & %08x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
 	}
+}
+
+void namcos23_state::c435_clear_bufpos_w(offs_t offset, u32 data, u32 mem_mask)
+{
+	LOGMASKED(LOG_C435_REG, "%s: clear buffer pos: %08x & %08x\n", machine().describe_context(), data, mem_mask);
+	m_c435_buffer_pos = 0;
 }
 
 void namcos23_renderer::render_sprite_scanline(s32 scanline, const extent_t& extent, const namcos23_render_data& object, int threadid)
@@ -3758,11 +3763,6 @@ void namcos23_state::render_sprite_tile(u32 code, u32 color, int xflip, int yfli
 		p->rd.alpha = alpha;
 		p->rd.poly_alpha_pen = c404.poly_alpha_pen;
 		p->rd.alpha_enabled = (color & 0x7f) != c404.poly_alpha_color;
-		/*if (~color & 0x80 && cz_factor > 0)
-		{
-			p->rd.fogfactor = cz_factor;
-			p->rd.fogcolor.set(0, re->c404.fog_r, re->c404.fog_g, re->c404.fog_b);
-		}*/
 
 		p->rd.blend_enabled = false;
 		render.poly_count++;
@@ -4055,22 +4055,6 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 
 		float minz = FLT_MAX;
 		float maxz = FLT_MIN;
-
-		/*for (int i = 0; i < p->vertex_count; i++)
-		{
-			const s32 z = (p->pv[i].p[0] != 0) ? p->pv[i].p[0] : 1.f;
-			if (z > maxz)
-				maxz = z;
-			if (z < minz)
-				minz = z;
-		}
-
-		if (maxz < 0)
-		{
-			if (type & 0x00010000)
-				break;
-			continue;
-		}*/
 
 		// Should be unnecessary once frustum clipping happens correctly, but this will at least cull polys behind the camera
 		p->vertex_count = render.polymgr->zclip_if_less<4>(ne, pv, p->pv, 0.0001f * 16384.f);
@@ -4392,212 +4376,181 @@ void namcos23_state::textchar_w(offs_t offset, u32 data, u32 mem_mask)
 	m_gfxdecode->gfx(0)->mark_dirty(offset/32);
 }
 
-void namcos23_state::gammaram_w(offs_t offset, u32 data, u32 mem_mask)
-{
-	switch (offset)
-	{
-		case 0x00: // Fade R, Fade G
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Poly Fade R: %04x\n", data >> 16);
-				m_c404.poly_fade_r &= ~(mem_mask >> 16);
-				m_c404.poly_fade_r |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Poly Fade G: %04x\n", data & 0x0000ffff);
-				m_c404.poly_fade_g &= ~mem_mask;
-				m_c404.poly_fade_g |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x01: // Fade B
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Poly Fade B: %04x\n", data >> 16);
-				m_c404.poly_fade_b &= ~(mem_mask >> 16);
-				m_c404.poly_fade_b |= (data & mem_mask) >> 16;
-			}
-			break;
-		case 0x02: // Fog R
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Fog R: %04x\n", data & 0x0000ffff);
-				m_c404.fog_r &= ~mem_mask;
-				m_c404.fog_r |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x03: // Fog G, Fog B
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Fog G: %04x\n", data >> 16);
-				m_c404.fog_g &= ~(mem_mask >> 16);
-				m_c404.fog_g |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Fog B: %04x\n", data & 0x0000ffff);
-				m_c404.fog_b &= ~mem_mask;
-				m_c404.fog_b |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x04: // BG Color R, BG Color G
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Background R: %04x\n", data >> 16);
-				u16 color = (m_c404.bgcolor >> 16) & 0x00ff;
-				color &= ~(mem_mask >> 16);
-				color |= (data & mem_mask) >> 16;
-				m_c404.bgcolor &= 0xff00ffff;
-				m_c404.bgcolor |= (color & 0x00ff) << 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Background G: %04x\n", data & 0x0000ffff);
-				u16 color = (m_c404.bgcolor >> 8) & 0x00ff;
-				color &= ~mem_mask;
-				color |= (u16)(data & mem_mask);
-				m_c404.bgcolor &= 0xffff00ff;
-				m_c404.bgcolor |= (color & 0x00ff) << 8;
-			}
-			break;
-		case 0x05: // BG Color B
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Background B: %04x\n", data >> 16);
-				u16 color = m_c404.bgcolor & 0x00ff;
-				color &= ~(mem_mask >> 16);
-				color |= (data & mem_mask) >> 16;
-				m_c404.bgcolor &= 0xffffff00;
-				m_c404.bgcolor |= color & 0x00ff;
-			}
-			break;
-		case 0x06: // Spot Factor LSB
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Spot Factor LSB: %04x\n", data & 0x0000ffff);
-				m_c404.spot_factor &= 0xff00;
-				m_c404.spot_factor &= ~mem_mask;
-				m_c404.spot_factor |= (u16)(data & mem_mask) & 0x00ff;
-			}
-			break;
-		case 0x07: // Spot Factor MSB, Poly Alpha Color Mask
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Background R: %04x\n", data >> 16);
-				m_c404.spot_factor &= 0x00ff;
-				m_c404.spot_factor &= ~(mem_mask >> 16);
-				m_c404.spot_factor |= (((data & mem_mask) >> 16) & 0x00ff) << 8;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Poly Alpha Color: %04x\n", data & 0x0000ffff);
-				m_c404.poly_alpha_color &= ~mem_mask;
-				m_c404.poly_alpha_color |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x08: // Poly Translucency
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Poly Alpha Pen: %04x\n", data >> 16);
-				m_c404.poly_alpha_pen &= ~(mem_mask >> 16);
-				m_c404.poly_alpha_pen |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Poly Alpha: %04x\n", data & 0x0000ffff);
-				m_c404.poly_alpha &= ~mem_mask;
-				m_c404.poly_alpha |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x09: // Text Alpha Pen Comparisons
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Text Alpha Check 12: %04x\n", data >> 16);
-				m_c404.alpha_check12 &= ~(mem_mask >> 16);
-				m_c404.alpha_check12 |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Text Alpha Check 13: %04x\n", data & 0x0000ffff);
-				m_c404.alpha_check13 &= ~mem_mask;
-				m_c404.alpha_check13 |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x0a: // Text Alpha Pen Mask(?), Text Alpha Factor
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Text Alpha Pen Mask: %04x\n", data >> 16);
-				m_c404.alpha_mask &= ~(mem_mask >> 16);
-				m_c404.alpha_mask |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Text Alpha Factor: %04x\n", data & 0x0000ffff);
-				m_c404.alpha_factor &= ~mem_mask;
-				m_c404.alpha_factor |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x0b: // Screen Fade R, Screen Fade G
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Screen Fade R: %04x\n", data >> 16);
-				m_c404.screen_fade_r &= ~(mem_mask >> 16);
-				m_c404.screen_fade_r |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Screen Fade G: %04x\n", data & 0x0000ffff);
-				m_c404.screen_fade_g &= ~mem_mask;
-				m_c404.screen_fade_g |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x0c: // Screen Fade B, Screen Fade Factor
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Screen Fade B: %04x\n", data >> 16);
-				m_c404.screen_fade_b &= ~(mem_mask >> 16);
-				m_c404.screen_fade_b |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Screen Fade Factor: %04x\n", data & 0x0000ffff);
-				m_c404.screen_fade_factor &= ~mem_mask;
-				m_c404.screen_fade_factor |= (u16)(data & mem_mask);
-			}
-			break;
-		case 0x0d: // Fade Flags, Palette Base
-			if (mem_mask & 0xffff0000)
-			{
-				logerror("gammaram_w, Fade Flags: %04x\n", data >> 16);
-				m_c404.fade_flags &= ~(mem_mask >> 16);
-				m_c404.fade_flags |= (data & mem_mask) >> 16;
-			}
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Palette Base: %04x\n", data & 0x0000ffff);
-				u16 palbase = m_c404.palbase >> 8;
-				palbase &= ~mem_mask;
-				palbase |= (u16)(data & mem_mask);
-				m_c404.palbase = (palbase << 8) & 0x7f00;
-			}
-			break;
-		case 0x0f: // Layer Flags
-			if (mem_mask & 0x0000ffff)
-			{
-				logerror("gammaram_w, Layer Flags: %04x\n", data & 0x0000ffff);
-				u16 layer_flags = m_c404.layer_flags;
-				layer_flags &= ~mem_mask;
-				layer_flags |= (u16)(data & mem_mask);
-				m_c404.layer_flags = layer_flags;
-			}
-			break;
-		default:
-			logerror("gammaram_w, Unknown: %08x = %08x & %08x\n", offset, data, mem_mask);
-			break;
-	}
+// C404 (mixing, gamma RAM)
 
-	COMBINE_DATA(&m_gammaram[offset]);
+u16 namcos23_state::c404_ram_r(offs_t offset)
+{
+	LOGMASKED(LOG_C404_RAM, "%s: c404_ram_r[%04x]: %04x\n", machine().describe_context(), offset, m_c404.ram[offset]);
+	return m_c404.ram[offset];
 }
+
+void namcos23_state::c404_ram_w(offs_t offset, u16 data, u16 mem_mask)
+{
+	LOGMASKED(LOG_C404_RAM, "%s: c404_ram_w[%04x] = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
+	COMBINE_DATA(&m_c404.ram[offset]);
+}
+
+void namcos23_state::c404_poly_fade_red_w(offs_t offset, u16 data) // 0
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_poly_fade_red_w: %04x\n", machine().describe_context(), data);
+	m_c404.poly_fade_r = m_c404.ram[0x00] = data;
+}
+
+void namcos23_state::c404_poly_fade_green_w(offs_t offset, u16 data) // 1
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_poly_fade_green_w: %04x\n", machine().describe_context(), data);
+	m_c404.poly_fade_g = m_c404.ram[0x01] = data;
+}
+
+void namcos23_state::c404_poly_fade_blue_w(offs_t offset, u16 data) // 2
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_poly_fade_blue_w: %04x\n", machine().describe_context(), data);
+	m_c404.poly_fade_b = m_c404.ram[0x02] = data;
+}
+
+void namcos23_state::c404_fog_red_w(offs_t offset, u16 data) // 5
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_fog_red_w: %04x\n", machine().describe_context(), data);
+	m_c404.fog_r = m_c404.ram[0x05] = data;
+}
+
+void namcos23_state::c404_fog_green_w(offs_t offset, u16 data) // 6
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_fog_green_w: %04x\n", machine().describe_context(), data);
+	m_c404.fog_g = m_c404.ram[0x06] = data;
+}
+
+void namcos23_state::c404_fog_blue_w(offs_t offset, u16 data) // 7
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_fog_blue_w: %04x\n", machine().describe_context(), data);
+	m_c404.fog_b = m_c404.ram[0x07] = data;
+}
+
+void namcos23_state::c404_bg_red_w(offs_t offset, u16 data) // 8
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_bg_red_w: %04x\n", machine().describe_context(), data);
+	m_c404.ram[0x08] = data;
+	m_c404.bgcolor &= 0xff00ffff;
+	m_c404.bgcolor |= (data & 0x00ff) << 16;
+}
+
+void namcos23_state::c404_bg_green_w(offs_t offset, u16 data) // 9
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_bg_green_w: %04x\n", machine().describe_context(), data);
+	m_c404.ram[0x09] = data;
+	m_c404.bgcolor &= 0xffff00ff;
+	m_c404.bgcolor |= (data & 0x00ff) << 8;
+}
+
+void namcos23_state::c404_bg_blue_w(offs_t offset, u16 data) // a
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_bg_blue_w: %04x\n", machine().describe_context(), data);
+	m_c404.ram[0x0a] = data;
+	m_c404.bgcolor &= 0xffffff00;
+	m_c404.bgcolor |= data & 0x00ff;
+}
+
+void namcos23_state::c404_spot_lsb_w(offs_t offset, u16 data) // d
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_spot_lsb_w: %04x\n", machine().describe_context(), data);
+	m_c404.ram[0x0d] = data;
+	m_c404.spot_factor &= 0xff00;
+	m_c404.spot_factor |= data & 0x00ff;
+}
+
+void namcos23_state::c404_spot_msb_w(offs_t offset, u16 data) // e
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_spot_msb_w: %04x\n", machine().describe_context(), data);
+	m_c404.ram[0x0e] = data;
+	m_c404.spot_factor &= 0x00ff;
+	m_c404.spot_factor |= (data & 0x00ff) << 8;
+}
+
+void namcos23_state::c404_poly_alpha_color_w(offs_t offset, u16 data) // f
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_poly_alpha_color_w: %04x\n", machine().describe_context(), data);
+	m_c404.poly_alpha_color = m_c404.ram[0x0f] = data;
+}
+
+void namcos23_state::c404_poly_alpha_pen_w(offs_t offset, u16 data) // 10
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_poly_alpha_pen_w: %04x\n", machine().describe_context(), data);
+	m_c404.poly_alpha_pen = m_c404.ram[0x10] = data;
+}
+
+void namcos23_state::c404_poly_alpha_w(offs_t offset, u16 data) // 11
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_poly_alpha_w: %04x\n", machine().describe_context(), data);
+	m_c404.poly_alpha = m_c404.ram[0x11] = data;
+}
+
+void namcos23_state::c404_alpha_check12_w(offs_t offset, u16 data) // 12
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_alpha_check12_w: %04x\n", machine().describe_context(), data);
+	m_c404.alpha_check12 = m_c404.ram[0x12] = data;
+}
+
+void namcos23_state::c404_alpha_check13_w(offs_t offset, u16 data) // 13
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_alpha_check13_w: %04x\n", machine().describe_context(), data);
+	m_c404.alpha_check13 = m_c404.ram[0x13] = data;
+}
+
+void namcos23_state::c404_text_alpha_mask_w(offs_t offset, u16 data) // 14
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_text_alpha_mask_w: %04x\n", machine().describe_context(), data);
+	m_c404.alpha_mask = m_c404.ram[0x14] = data;
+}
+
+void namcos23_state::c404_text_alpha_factor_w(offs_t offset, u16 data) // 15
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_text_alpha_factor_w: %04x\n", machine().describe_context(), data);
+	m_c404.alpha_factor = m_c404.ram[0x15] = data;
+}
+
+void namcos23_state::c404_screen_fade_red_w(offs_t offset, u16 data) // 16
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_screen_fade_red_w: %04x\n", machine().describe_context(), data);
+	m_c404.screen_fade_r = m_c404.ram[0x16] = data;
+}
+
+void namcos23_state::c404_screen_fade_green_w(offs_t offset, u16 data) // 17
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_screen_fade_green_w: %04x\n", machine().describe_context(), data);
+	m_c404.screen_fade_g = m_c404.ram[0x17] = data;
+}
+
+void namcos23_state::c404_screen_fade_blue_w(offs_t offset, u16 data) // 18
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_screen_fade_blue_w: %04x\n", machine().describe_context(), data);
+	m_c404.screen_fade_b = m_c404.ram[0x18] = data;
+}
+
+void namcos23_state::c404_screen_fade_factor_w(offs_t offset, u16 data) // 19
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_screen_fade_factor_w: %04x\n", machine().describe_context(), data);
+	m_c404.screen_fade_factor = m_c404.ram[0x19] = data;
+}
+
+void namcos23_state::c404_fade_flags_w(offs_t offset, u16 data) // 1a
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_fade_flags_w: %04x\n", machine().describe_context(), data);
+	m_c404.fade_flags = m_c404.ram[0x1a] = data;
+}
+
+void namcos23_state::c404_palette_base_w(offs_t offset, u16 data) // 1b
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_palette_base_w: %04x\n", machine().describe_context(), data);
+	m_c404.ram[0x1b] = data;
+	m_c404.palbase = (data << 8) & 0x7f00;
+}
+
+void namcos23_state::c404_layer_flags_w(offs_t offset, u16 data) // 1f
+{
+	LOGMASKED(LOG_C404_REGS, "%s: c404_palette_base_w: %04x\n", machine().describe_context(), data);
+	m_c404.layer_flags = m_c404.ram[0x1f] = data;
+}
+
 
 // Video start/update callbacks
 
@@ -4705,12 +4658,6 @@ void namcos23_state::mix_text_layer(screen_device &screen, bitmap_rgb32 &bitmap,
 	}
 }
 
-INTERRUPT_GEN_MEMBER(namcos23_gmen_state::interrupt)
-{
-	//m_sh2->set_input_line(6, ASSERT_LINE);
-	//m_sh2->set_input_line(6, CLEAR_LINE);
-}
-
 u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
 	m_bgtilemap->set_palette_offset(m_c404.palbase);
@@ -4773,16 +4720,20 @@ void namcos23_state::irq_update_common(u32 cause)
 	// vblank
 	if (changed & MAIN_VBLANK_IRQ)
 	{
-		if (m_main_irqcause & MAIN_VBLANK_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_VBLANK_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_VBLANK_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_VBLANK_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_vbl_irqnum, (cause & MAIN_VBLANK_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
 	// C422
 	if (changed & MAIN_C422_IRQ)
 	{
-		if (m_main_irqcause & MAIN_C422_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_C422_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_C422_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C422_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c422_irqnum, (cause & MAIN_C422_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 }
@@ -4797,16 +4748,20 @@ void namcos23_state::irq_update(u32 cause)
 	// C361/subcpu
 	if (changed & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
 	{
-		if (m_main_irqcause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361(%d) || SubCPU(%d)\n", m_c361_irqnum - MIPS3_IRQ0, (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
-		else if (old & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d\n", m_c361_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361(%d) || SubCPU(%d)\n", m_c361_irqnum - MIPS3_IRQ0, (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
+		else if (old & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d\n", m_c361_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c361_irqnum, (cause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
 	// C435
 	if (changed & MAIN_C435_IRQ && m_c435_irqnum >= 0)
 	{
-		if (m_main_irqcause & MAIN_C435_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_C435_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_C435_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C435_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c435_irqnum, (cause & MAIN_C435_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 }
@@ -4821,46 +4776,52 @@ void crszone_state::irq_update(u32 cause)
 	// RS232
 	if (changed & MAIN_RS232_IRQ)
 	{
-		if (m_main_irqcause & MAIN_RS232_IRQ) LOGMASKED(LOG_RS232, "Raising IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_RS232_IRQ) LOGMASKED(LOG_RS232, "Lowering IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_RS232_IRQ)
+			LOGMASKED(LOG_RS232, "Raising IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_RS232_IRQ)
+			LOGMASKED(LOG_RS232, "Lowering IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_rs232_irqnum, (cause & MAIN_RS232_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
 	// C361
 	if (changed & MAIN_C361_IRQ)
 	{
-		if (m_main_irqcause & MAIN_C361_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_C361_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_C361_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C361_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c361_irqnum, (cause & MAIN_C361_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
 	// SubCPU
 	if (changed & MAIN_SUBCPU_IRQ)
 	{
-		if (m_main_irqcause & MAIN_SUBCPU_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_SUBCPU_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_SUBCPU_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_SUBCPU_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_sub_irqnum, (cause & MAIN_SUBCPU_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
 	// C450
 	if (changed & MAIN_C450_IRQ && m_c450_irqnum >= 0)
 	{
-		if (m_main_irqcause & MAIN_C450_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_C450_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_C450_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C450_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c450_irqnum, (cause & MAIN_C450_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
 	// C451
 	if (changed & MAIN_C451_IRQ && m_c451_irqnum >= 0)
 	{
-		if (m_main_irqcause & MAIN_C451_IRQ) LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
-		else if (old & MAIN_C451_IRQ) LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
+		if (m_main_irqcause & MAIN_C451_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
+		else if (old & MAIN_C451_IRQ)
+			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c451_irqnum, (cause & MAIN_C451_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
-}
-
-INTERRUPT_GEN_MEMBER(namcos23_state::interrupt)
-{
 }
 
 void namcos23_state::vblank(int state)
@@ -4903,22 +4864,8 @@ TIMER_CALLBACK_MEMBER(namcos23_state::subcpu_scanline_off_tick)
 
 // C417
 
-u16 crszone_state::c417_r(offs_t offset, u16 mem_mask)
+u16 namcos23_state::c417_status_r()
 {
-	if (offset == 0)
-	{
-		u16 data = m_c417.test_mode << 15;
-		LOGMASKED(LOG_C417_REG, "%s: c417 status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		return data;
-	}
-
-	return namcos23_state::c417_r(offset, mem_mask);
-}
-
-u16 namcos23_state::c417_r(offs_t offset, u16 mem_mask)
-{
-	switch (offset)
-	{
 	/* According to timecrs2v4a, +0 is the status word with bits being:
 	   15: test mode flag (huh?)
 	   10: fifo data ready
@@ -4933,79 +4880,91 @@ u16 namcos23_state::c417_r(offs_t offset, u16 mem_mask)
 	   1:  1st c435 busy (inverted)
 	   0:  xcpreq
 	*/
-	case 0:
-	{
-		u16 data = 0x008e | (m_c417.test_mode << 15);
-		LOGMASKED(LOG_C417_REG, "%s: c417 status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		return data;
-	}
-	case 1:
-		LOGMASKED(LOG_C417_REG, "%s: c417 address read: %04x & %04x\n", machine().describe_context(), m_c417.adr, mem_mask);
-		return m_c417.adr;
-	case 3:
-		LOGMASKED(LOG_C417_REG, "%s: c417 test-mode shutdown(?): %04x & %04x\n", machine().describe_context(), 0, mem_mask);
-		m_c417.test_mode = false;
-		return 0;
-	case 4:
-		LOGMASKED(LOG_C417_REG, "%s: c417 ram[%04x] read: %04x & %04x\n", machine().describe_context(), m_c417.adr, m_c417.ram[m_c417.adr], mem_mask);
-		return m_c417.ram[m_c417.adr];
-	case 5:
-		if (m_c417.pointrom_adr >= m_ptrom_limit)
-		{
-			LOGMASKED(LOG_C417_REG, "%s: c417 point rom (over-limit) msw read: %04x & %04x\n", machine().describe_context(), 0xffff, mem_mask);
-			return 0xffff;
-		}
-		LOGMASKED(LOG_C417_REG, "%s: c417 point rom[%06x] msw read: %04x & %04x\n", machine().describe_context(), m_c417.pointrom_adr, m_ptrom[m_c417.pointrom_adr] >> 16, mem_mask);
-		return m_ptrom[m_c417.pointrom_adr] >> 16;
-	case 6:
-		if (m_c417.pointrom_adr >= m_ptrom_limit)
-		{
-			LOGMASKED(LOG_C417_REG, "%s: c417 point rom (over-limit) lsw read: %04x & %04x\n", machine().describe_context(), 0xffff, mem_mask);
-			return 0xffff;
-		}
-		// TODO: rapid river wants auto-inc in some way here (NGs point ROM self test otherwise)
-		LOGMASKED(LOG_C417_REG, "%s: c417 point rom[%06x] lsw read: %04x & %04x\n", machine().describe_context(), m_c417.pointrom_adr, (u16)m_ptrom[m_c417.pointrom_adr], mem_mask);
-		return m_ptrom[m_c417.pointrom_adr];
-	}
 
-	LOGMASKED(LOG_C417_UNK, "%s: c417 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
+	u16 data = 0x008e | (m_c417.test_mode << 15);
+	LOGMASKED(LOG_C417_REG, "%s: c417_status_r: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+u16 crszone_state::c417_status_r()
+{
+	u16 data = m_c417.test_mode << 15;
+	LOGMASKED(LOG_C417_REG, "%s: c417_status_r: %04x\n", machine().describe_context(), data);
+	return data;
+}
+
+u16 namcos23_state::c417_addr_r()
+{
+	LOGMASKED(LOG_C417_REG, "%s: c417_addr_r: %04x\n", machine().describe_context(), m_c417.adr);
+	return m_c417.adr;
+}
+
+void namcos23_state::c417_addr_w(offs_t offset, u16 data, u16 mem_mask)
+{
+	LOGMASKED(LOG_C417_REG, "%s: c417_addr_w: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+	COMBINE_DATA(&m_c417.adr);
+}
+
+void namcos23_state::c417_ptrom_addr_w(offs_t offset, u16 data, u16 mem_mask)
+{
+	m_c417.pointrom_adr = (m_c417.pointrom_adr << 16) | data;
+	LOGMASKED(LOG_C417_REG, "%s: c417_ptrom_addr_w: %04x & %04x (now %08x)\n", machine().describe_context(), data, mem_mask, m_c417.pointrom_adr);
+}
+
+u16 namcos23_state::c417_test_done_r()
+{
+	LOGMASKED(LOG_C417_REG, "%s: c417_test_done_r: %04x\n", machine().describe_context(), 0);
+	m_c417.test_mode = false;
 	return 0;
 }
 
-void namcos23_state::c417_w(offs_t offset, u16 data, u16 mem_mask)
+void namcos23_state::c417_ptrom_addr_clear_w(offs_t offset, u16 data, u16 mem_mask)
 {
-	switch (offset)
+	LOGMASKED(LOG_C417_REG, "%s: c417_ptrom_addr_clear_w: %04x & %04x\n", machine().describe_context(), data, mem_mask);
+	m_c417.pointrom_adr = 0;
+	m_c417.test_mode = true;
+}
+
+u16 namcos23_state::c417_ram_r()
+{
+	LOGMASKED(LOG_C417_REG, "%s: c417 ram[%04x] read: %04x\n", machine().describe_context(), m_c417.adr, m_c417.ram[m_c417.adr]);
+	return m_c417.ram[m_c417.adr];
+}
+
+void namcos23_state::c417_ram_w(offs_t offset, u16 data, u16 mem_mask)
+{
+	if (!m_c417.test_mode)
+		LOGMASKED(LOG_C417_REG, "%s: c417_ram_w: %04x = %04x & %04x\n", machine().describe_context(), m_c417.adr, data, mem_mask);
+	COMBINE_DATA(m_c417.ram + m_c417.adr);
+}
+
+u16 namcos23_state::c417_ptrom_msw_r()
+{
+	if (m_c417.pointrom_adr >= m_ptrom_limit)
 	{
-	case 0:
-		c435_pio_w(data);
-		break;
-	case 1:
-		LOGMASKED(LOG_C417_REG, "%s: c417_w: address set: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		COMBINE_DATA(&m_c417.adr);
-		break;
-	case 2:
-		m_c417.pointrom_adr = (m_c417.pointrom_adr << 16) | data;
-		LOGMASKED(LOG_C417_REG, "%s: c417_w: pointrom lsw set: %04x & %04x (now %08x)\n", machine().describe_context(), data, mem_mask, m_c417.pointrom_adr);
-		break;
-	case 3:
-		LOGMASKED(LOG_C417_REG, "%s: c417_w: pointrom address clear: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		m_c417.pointrom_adr = 0;
-		m_c417.test_mode = true;
-		break;
-	case 4:
-		LOGMASKED(LOG_C417_REG, "%s: c417_w: RAM[%04x] = %04x & %04x\n", machine().describe_context(), m_c417.adr, data, mem_mask);
-		if (!m_c417.test_mode) LOGMASKED(LOG_C417_RAM, "C417 RAM write: %08x = %04x & %04x\n", (m_c417.adr << 1), data, mem_mask);
-		COMBINE_DATA(m_c417.ram + m_c417.adr);
-		break;
-	case 7:
-		LOGMASKED(LOG_C417_ACK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
-		COMBINE_DATA(&m_c417.unk);
-		irq_update(m_main_irqcause & ~MAIN_C435_IRQ);
-		break;
-	default:
-		LOGMASKED(LOG_C417_UNK, "%s: c417 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
+		LOGMASKED(LOG_C417_REG, "%s: c417 point rom (over-limit) msw read: %04x\n", machine().describe_context(), 0xffff);
+		return 0xffff;
 	}
+	LOGMASKED(LOG_C417_REG, "%s: c417 point rom[%06x] msw read: %04x\n", machine().describe_context(), m_c417.pointrom_adr, m_ptrom[m_c417.pointrom_adr] >> 16);
+	return m_ptrom[m_c417.pointrom_adr] >> 16;
+}
+
+u16 namcos23_state::c417_ptrom_lsw_r()
+{
+	if (m_c417.pointrom_adr >= m_ptrom_limit)
+	{
+		LOGMASKED(LOG_C417_REG, "%s: c417 point rom (over-limit) lsw read: %04x\n", machine().describe_context(), 0xffff);
+		return 0xffff;
+	}
+	// TODO: rapid river wants auto-inc in some way here (NGs point ROM self test otherwise)
+	LOGMASKED(LOG_C417_REG, "%s: c417 point rom[%06x] lsw read: %04x\n", machine().describe_context(), m_c417.pointrom_adr, (u16)m_ptrom[m_c417.pointrom_adr]);
+	return m_ptrom[m_c417.pointrom_adr];
+}
+
+void namcos23_state::c417_irq_ack_w(offs_t offset, u16 data)
+{
+	LOGMASKED(LOG_C417_ACK, "%s: c417_w: ack IRQ 2 (%x)\n", machine().describe_context(), data);
+	irq_update(m_main_irqcause & ~MAIN_C435_IRQ);
 }
 
 
@@ -5143,9 +5102,9 @@ void namcos23_state::c412_w(offs_t offset, u16 data, u16 mem_mask)
 
 // C421
 
-u16 namcos23_state::c421_ram_r(offs_t offset)
+u16 namcos23_state::c421_ram_r()
 {
-	//  logerror("c421_ram_r %06x (%08x, %08x)\n", offset, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	offs_t offset = m_c421.adr & 0xfffff;
 	if (offset < 0x40000)
 		return m_c421.dram_a[offset & 0x3ffff];
 	else if (offset < 0x80000)
@@ -5158,74 +5117,39 @@ u16 namcos23_state::c421_ram_r(offs_t offset)
 
 void namcos23_state::c421_ram_w(offs_t offset, u16 data, u16 mem_mask)
 {
-	//  logerror("c421_ram_w %06x = %04x (%08x, %08x)\n", offset, data, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
+	offset = m_c421.adr & 0xfffff;
 	if (offset < 0x40000)
-	{
-		//if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 DRAM A write: %08x = %04x & %04x\n", (m_c417.adr << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.dram_a + (offset & 0x3ffff));
-	}
 	else if (offset < 0x80000)
-	{
-		//if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 DRAM B write: %08x = %04x & %04x\n", (m_c417.adr << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.dram_b + (offset & 0x3ffff));
-	}
 	else if (offset < 0x88000)
-	{
-		//if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 SRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.sram   + (offset & 0x07fff));
-	}
 	else
-	{
-		if (!m_c417.test_mode) LOGMASKED(LOG_C421_RAM, "C421 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
-	}
+		LOGMASKED(LOG_C421_RAM, "C421 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
+	m_c421.adr += 2;
 }
 
-u16 namcos23_state::c421_r(offs_t offset, u16 mem_mask)
+u16 namcos23_state::c421_addr_msw_r()
 {
-	u16 data = 0;
-	switch (offset)
-	{
-	case 0:
-		data = c421_ram_r(m_c421.adr & 0xfffff);
-		break;
-
-	case 2:
-		data = m_c421.adr >> 16;
-		break;
-
-	case 3:
-		data = (u16)m_c421.adr;
-		LOGMASKED(LOG_C421_UNK, "%s: c421 RAM address LSW read %x: %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
-
-	default:
-		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown read %x: %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
-	}
-
-	return data;
+	LOGMASKED(LOG_C421_UNK, "%s: c421 RAM address MSW read: %04x\n", machine().describe_context(), (u16)(m_c421.adr >> 16));
+	return (u16)(m_c421.adr >> 16);
 }
 
-void namcos23_state::c421_w(offs_t offset, u16 data, u16 mem_mask)
+void namcos23_state::c421_addr_msw_w(offs_t offset, u16 data, u16 mem_mask)
 {
-	switch (offset)
-	{
-	case 0:
-		c421_ram_w(m_c421.adr & 0xfffff, data, mem_mask);
-		m_c421.adr += 2;
-		break;
-	case 2:
-		m_c421.adr = ((data & mem_mask) << 16) | (m_c421.adr & (0xffffffff ^ (mem_mask << 16)));
-		break;
-	case 3:
-		m_c421.adr = (data & mem_mask) | (m_c421.adr & (0xffffffff ^ mem_mask));
-		break;
-	default:
-		LOGMASKED(LOG_C421_UNK, "%s: c421 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
-	}
+	m_c421.adr = ((data & mem_mask) << 16) | (m_c421.adr & ~(mem_mask << 16));
 }
 
+u16 namcos23_state::c421_addr_lsw_r()
+{
+	LOGMASKED(LOG_C421_UNK, "%s: c421 RAM address LSW read: %04x\n", machine().describe_context(), (u16)m_c421.adr);
+	return (u16)m_c421.adr;
+}
+
+void namcos23_state::c421_addr_lsw_w(offs_t offset, u16 data, u16 mem_mask)
+{
+	m_c421.adr = (data & mem_mask) | (m_c421.adr & ~(u32)mem_mask);
+}
 
 
 // C422
@@ -5316,59 +5240,38 @@ void namcos23_state::apply_text_scroll()
 		m_bgtilemap->set_scrollx((i + scroll_y + 4) & 0x3ff, m_c404.rowscroll[i]);
 }
 
-void namcos23_state::c361_w(offs_t offset, u16 data, u16 mem_mask)
+void namcos23_state::c361_xscroll_w(offs_t offset, u16 data)
 {
-	switch (offset)
-	{
-	case 0:
-		LOGMASKED(LOG_C361_REG, "%s: c361 set scroll X, %04x (scanline %d)\n", machine().describe_context(), data, m_screen->vpos());
-		update_text_rowscroll();
-		m_c404.xscroll = data;
-		break;
-
-	case 1:
-		LOGMASKED(LOG_C361_REG, "%s: c361 set scroll Y, %04x (scanline %d)\n", machine().describe_context(), data, m_screen->vpos());
-		m_c404.yscroll = data;
-		break;
-
-	case 4: // interrupt control
-		LOGMASKED(LOG_C361_IRQ, "%s: c361 scanline write, %04x\n", machine().describe_context(), data);
-		m_c361.scanline = (data & 0x1ff);
-		m_c361.timer->adjust(m_screen->time_until_pos(m_c361.scanline));
-		break;
-
-	default:
-		LOGMASKED(LOG_C361_UNK, "%s: c361 unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
-	}
+	LOGMASKED(LOG_C361_REG, "%s: c361_xscroll_w: %04x (scanline %d)\n", machine().describe_context(), data, m_screen->vpos());
+	update_text_rowscroll();
+	m_c404.xscroll = data;
 }
 
-u16 namcos23_state::c361_r(offs_t offset, u16 mem_mask)
+void namcos23_state::c361_yscroll_w(offs_t offset, u16 data)
 {
-	switch (offset)
-	{
-	// current raster position
-	// how does it work exactly? it's not understood in namcos22 either (also has a c361)
-	case 5:
-	{
-		irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
-		u16 data = (m_screen->vpos() * 2) | (m_screen->vblank() ? 1 : 0);
-		//LOGMASKED(LOG_C361_REG, "%s: c361 vpos read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		return data;
-	}
-	case 6:
-	{
-		u16 data = ((m_main_irqcause & MAIN_C361_IRQ) || m_screen->vblank()) ? 1 : 0;
-		irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
-		//LOGMASKED(LOG_C361_REG, "%s: c361 vbl read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		return data;
-	}
-	}
-
-	LOGMASKED(LOG_C361_UNK, "%s: c361 unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
-	return 0xffff;
+	LOGMASKED(LOG_C361_REG, "%s: c361_yscroll_w: %04x (scanline %d)\n", machine().describe_context(), data, m_screen->vpos());
+	m_c404.yscroll = data;
 }
 
+void namcos23_state::c361_irq_scanline_w(offs_t offset, u16 data)
+{
+	LOGMASKED(LOG_C361_IRQ, "%s: c361_irq_scanline_w: %04x\n", machine().describe_context(), data);
+	m_c361.scanline = (data & 0x1ff);
+	m_c361.timer->adjust(m_screen->time_until_pos(m_c361.scanline));
+}
+
+u16 namcos23_state::c361_vpos_r()
+{
+	irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
+	return (m_screen->vpos() * 2) | (m_screen->vblank() ? 1 : 0);
+}
+
+u16 namcos23_state::c361_vblank_r()
+{
+	const u16 data = ((m_main_irqcause & MAIN_C361_IRQ) || m_screen->vblank()) ? 1 : 0;
+	irq_update(m_main_irqcause & ~MAIN_C361_IRQ);
+	return data;
+}
 
 
 // C?? (control)
@@ -5413,90 +5316,88 @@ void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 	}
 }
 
-void namcos23_state::ctl_w(offs_t offset, u16 data, u16 mem_mask)
+void namcos23_state::ctl_leds_w(offs_t offset, u16 data)
 {
-	switch (offset)
+	if (m_ctl_led != (data & 0xff))
 	{
-	case 0:
-		if (m_ctl_led != (data & 0xff))
-		{
-			m_ctl_led = data & 0xff;
-			for (int i = 0; i < 8; i++)
-				m_lamps[i] = BIT(data, 7 - i);
-		}
-		break;
-
-	case 2: case 3:
-		// These may be coming from another CPU, in particular the I/O one
-		m_ctl_inp_buffer[offset-2] = (offset == 2 ? m_p1 : m_p2)->read();
-		break;
-	case 5:
-		if (m_ctl_vbl_active)
-		{
-			m_ctl_vbl_active = false;
-			irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
-		}
-		break;
-
-	case 6: // gmen wars spams this heavily with 0 prior to starting the GMEN board test
-		//logerror("Queueing %04x at direct buf %d\n", data, m_c435_direct_buf_pos);
-		m_c435_direct_buf[m_c435_direct_buf_pos++] = data;
-		if (data)
-			m_c435_direct_buf_nonempty = true;
-		if (m_c435_direct_buf_pos >= 28)
-		{
-			if (m_c435_direct_buf_nonempty)
-			{
-				render_t &render = m_render;
-				namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
-				if (!BIT(m_c435_direct_buf[0], 15))
-				{
-					re->type = DIRECT;
-					re->absolute_priority = m_absolute_priority;
-					re->unk4301 = m_unk4301;
-					re->model_blend_factor = 0;
-					re->unk4701 = m_unk4701;
-					re->unk4801 = m_unk4801;
-					memcpy(re->direct.d, m_c435_direct_buf, sizeof(m_c435_direct_buf));
-					memcpy(&re->c404, &m_c404, sizeof(re->c404));
-					render.count[render.cur]++;
-				}
-			}
-			m_c435_direct_buf_nonempty = false;
-			m_c435_direct_buf_pos = 0;
-		}
-		break;
-
-	default:
-		LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown write %x = %04x & %04x\n", machine().describe_context(), offset, data, mem_mask);
-		break;
+		m_ctl_led = data & 0xff;
+		for (int i = 0; i < 8; i++)
+			m_lamps[i] = BIT(data, 7 - i);
 	}
 }
 
-u16 namcos23_state::ctl_r(offs_t offset, u16 mem_mask)
+u16 namcos23_state::ctl_status_r()
 {
-	switch (offset)
-	{
 	// 0100 set freezes gorgon (polygon fifo flag)
-	case 1:
-	{
-		u16 data = 0x0000 | ioport("DSW")->read() | ((m_main_irqcause & MAIN_C361_IRQ) ? 0x400 : 0);
-		LOGMASKED(LOG_CTL_REG, "%s: ctl status read: %04x & %04x\n", machine().describe_context(), data, mem_mask);
-		return data;
-	}
-	case 2: case 3:
-	{
-		u16 res = m_ctl_inp_buffer[offset-2] & 0x800 ? 0xffff : 0x0000;
-		m_ctl_inp_buffer[offset-2] = (m_ctl_inp_buffer[offset-2] << 1) | 1;
-		//LOGMASKED(LOG_CTL_REG, "%s: ctl input buffer[%04x] read: %04x & %04x (%04x)\n", machine().describe_context(), offset-2, res, mem_mask, m_ctl_inp_buffer[offset-2]);
-		return res;
-	}
-	}
-
-	LOGMASKED(LOG_CTL_UNK, "%s: ctl unknown read %x & %04x\n", machine().describe_context(), offset, mem_mask);
-	return 0xffff;
+	const u16 data = 0x0000 | ioport("DSW")->read() | ((m_main_irqcause & MAIN_C361_IRQ) ? 0x400 : 0);
+	LOGMASKED(LOG_CTL_REG, "%s: ctl_status_r: %04x\n", machine().describe_context(), data);
+	return data;
 }
 
+u16 namcos23_state::ctl_input1_r()
+{
+	const u16 data = m_ctl_inp_buffer[0] & 0x800 ? 0xffff : 0x0000;
+	m_ctl_inp_buffer[0] = (m_ctl_inp_buffer[0] << 1) | 1;
+	return data;
+}
+
+void namcos23_state::ctl_input1_w(offs_t offset, u16 data)
+{
+	// These may be coming from another CPU, in particular the I/O one
+	m_ctl_inp_buffer[0] = m_p1->read();
+}
+
+u16 namcos23_state::ctl_input2_r()
+{
+	const u16 data = m_ctl_inp_buffer[1] & 0x800 ? 0xffff : 0x0000;
+	m_ctl_inp_buffer[1] = (m_ctl_inp_buffer[1] << 1) | 1;
+	return data;
+}
+
+void namcos23_state::ctl_input2_w(offs_t offset, u16 data)
+{
+	// These may be coming from another CPU, in particular the I/O one
+	m_ctl_inp_buffer[1] = m_p2->read();
+}
+
+void namcos23_state::ctl_vbl_ack_w(offs_t offset, u16 data)
+{
+	if (m_ctl_vbl_active)
+	{
+		m_ctl_vbl_active = false;
+		irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
+	}
+}
+
+void namcos23_state::ctl_direct_poly_w(offs_t offset, u16 data)
+{
+	// gmen wars spams this heavily with 0 prior to starting the GMEN board test
+	m_c435_direct_buf[m_c435_direct_buf_pos++] = data;
+	if (data)
+		m_c435_direct_buf_nonempty = true;
+	if (m_c435_direct_buf_pos >= 28)
+	{
+		if (m_c435_direct_buf_nonempty)
+		{
+			render_t &render = m_render;
+			namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
+			if (!BIT(m_c435_direct_buf[0], 15))
+			{
+				re->type = DIRECT;
+				re->absolute_priority = m_absolute_priority;
+				re->unk4301 = m_unk4301;
+				re->model_blend_factor = 0;
+				re->unk4701 = m_unk4701;
+				re->unk4801 = m_unk4801;
+				memcpy(re->direct.d, m_c435_direct_buf, sizeof(m_c435_direct_buf));
+				memcpy(&re->c404, &m_c404, sizeof(re->c404));
+				render.count[render.cur]++;
+			}
+		}
+		m_c435_direct_buf_nonempty = false;
+		m_c435_direct_buf_pos = 0;
+	}
+}
 
 
 // C?? (MCU enable)
@@ -5581,53 +5482,9 @@ void namcos23_state::sub_comm_w(offs_t offset, u8 data)
 	}
 }
 
-
-// System Gorgon
-void namcos23_state::gorgon_map(address_map &map)
-{
-	map.global_mask(0xfffffff);
-	map(0x00000000, 0x003fffff).ram().share("mainram");
-	map(0x01000000, 0x010000ff).rw(FUNC(namcos23_state::c435_r), FUNC(namcos23_state::c435_w));
-	map(0x02000000, 0x0200000f).rw(FUNC(namcos23_state::c417_r), FUNC(namcos23_state::c417_w));
-	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
-	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
-	map(0x06000000, 0x06000003).w(FUNC(namcos23_state::gorgon_nvram_w));
-	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::gorgon_czattr_r), FUNC(namcos23_state::gorgon_czattr_w)); // CZ Attribute RAM
-	map(0x06080200, 0x060803ff).rw(FUNC(namcos23_state::gorgon_czram_r), FUNC(namcos23_state::gorgon_czram_w)); // PCZ Convert RAM (C406)
-	map(0x06108000, 0x061087ff).ram().w(FUNC(namcos23_state::gammaram_w)).share("gammaram"); // Gamma RAM (C404)
-	map(0x06110000, 0x0613ffff).ram().w(FUNC(namcos23_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
-	map(0x06300000, 0x06300007).w(FUNC(namcos23_state::sprites_w));
-	map(0x06400000, 0x0641dfff).ram().w(FUNC(namcos23_state::textchar_w)).share("charram"); // Text CGRAM (C361)
-	map(0x0641e000, 0x0641ffff).ram().w(FUNC(namcos23_state::textram_w)).share("textram"); // Text VRAM (C361)
-	map(0x06420000, 0x0642000f).rw(FUNC(namcos23_state::c361_r), FUNC(namcos23_state::c361_w)); // C361
-	map(0x08000000, 0x087fffff).rom().region("data", 0); // data ROMs
-	map(0x0c000000, 0x0c00ffff).ram().share("nvram"); // Backup RAM
-	map(0x0d000000, 0x0d00000f).rw(FUNC(namcos23_state::ctl_r), FUNC(namcos23_state::ctl_w)); // write for LEDs at d000000, watchdog at d000004
-	//map(0x0e000000, 0x0e007fff).ram(); // C405 RAM - what is this?
-	map(0x0f000000, 0x0f000003).rw(FUNC(namcos23_state::sub_comm_r), FUNC(namcos23_state::sub_comm_w));
-	map(0x0f200000, 0x0f203fff).ram(); // C422 RAM
-	map(0x0f300000, 0x0f30000f).rw(FUNC(namcos23_state::c422_r), FUNC(namcos23_state::c422_w)); // C422 registers
-	map(0x0fc00000, 0x0fffffff).nopw().rom().region("user1", 0);
-}
-
-/*  0x0000, 0x0001, 0x0002, 0x0003,
-  0x0003, 0x0004, 0x0005, 0x0005
-  0x0006, 0x0007*/
-
-// Test 3: IRQ Index 3 (C422)
-// Test 4: IRQ Index 3 (SUBCPU)
-// Test 5: IRQ Index 4 (VBL)
-// Test 6: IRQ Index 5 (C451)
-// Test 7: IRQ Index 5 (C361)
-// Test 8: IRQ Index 6 (C450)
-
 void crszone_state::irq_vbl_ack_w(offs_t offset, u32 data)
 {
 	irq_update(m_main_irqcause & ~MAIN_VBLANK_IRQ);
-}
-
-void crszone_state::irq_lv6_ack_w(offs_t offset, u32 data)
-{
 }
 
 u32 crszone_state::irq_lv3_status_r()
@@ -5676,13 +5533,111 @@ u32 crszone_state::irq_lv6_status_r()
 	return data;
 }
 
+
+// System Gorgon
+void namcos23_state::gorgon_map(address_map &map)
+{
+	map.global_mask(0xfffffff);
+	map(0x00000000, 0x003fffff).ram().share("mainram");
+
+	map(0x01000028, 0x0100002b).r(FUNC(namcos23_state::c435_busy_flag_r));
+	map(0x0100001c, 0x0100001f).w(FUNC(namcos23_state::c435_dma_addr_w));
+	map(0x01000020, 0x01000023).w(FUNC(namcos23_state::c435_dma_size_w));
+	map(0x01000024, 0x01000027).w(FUNC(namcos23_state::c435_dma_start_w));
+	map(0x0100005c, 0x0100005f).w(FUNC(namcos23_state::c435_pio_mode_w));
+	map(0x01000060, 0x01000063).w(FUNC(namcos23_state::c435_clear_bufpos_w));
+
+	map(0x02000000, 0x02000001).rw(FUNC(namcos23_state::c417_status_r), FUNC(namcos23_state::c435_pio_w));
+	map(0x02000002, 0x02000003).rw(FUNC(namcos23_state::c417_addr_r), FUNC(namcos23_state::c417_addr_w));
+	map(0x02000004, 0x02000005).w(FUNC(namcos23_state::c417_ptrom_addr_w));
+	map(0x02000006, 0x02000007).rw(FUNC(namcos23_state::c417_test_done_r), FUNC(namcos23_state::c417_ptrom_addr_clear_w));
+	map(0x02000008, 0x02000009).rw(FUNC(namcos23_state::c417_ram_r), FUNC(namcos23_state::c417_ram_w));
+	map(0x0200000a, 0x0200000b).r(FUNC(namcos23_state::c417_ptrom_msw_r));
+	map(0x0200000c, 0x0200000d).rw(FUNC(namcos23_state::c417_ptrom_lsw_r), FUNC(namcos23_state::c417_irq_ack_w));
+
+	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
+	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
+	map(0x06000000, 0x06000003).w(FUNC(namcos23_state::gorgon_nvram_w));
+	map(0x06080000, 0x0608000f).rw(FUNC(namcos23_state::gorgon_czattr_r), FUNC(namcos23_state::gorgon_czattr_w)); // CZ Attribute RAM
+	map(0x06080200, 0x060803ff).rw(FUNC(namcos23_state::gorgon_czram_r), FUNC(namcos23_state::gorgon_czram_w)); // PCZ Convert RAM (C406)
+
+	map(0x06108000, 0x061087ff).rw(FUNC(namcos23_state::c404_ram_r), FUNC(namcos23_state::c404_ram_w));
+	map(0x06108000, 0x06108001).w(FUNC(namcos23_state::c404_poly_fade_red_w));
+	map(0x06108002, 0x06108003).w(FUNC(namcos23_state::c404_poly_fade_green_w));
+	map(0x06108004, 0x06108005).w(FUNC(namcos23_state::c404_poly_fade_blue_w));
+	map(0x0610800a, 0x0610800b).w(FUNC(namcos23_state::c404_fog_red_w));
+	map(0x0610800c, 0x0610800d).w(FUNC(namcos23_state::c404_fog_green_w));
+	map(0x0610800e, 0x0610800f).w(FUNC(namcos23_state::c404_fog_blue_w));
+	map(0x06108010, 0x06108011).w(FUNC(namcos23_state::c404_bg_red_w));
+	map(0x06108012, 0x06108013).w(FUNC(namcos23_state::c404_bg_green_w));
+	map(0x06108014, 0x06108015).w(FUNC(namcos23_state::c404_bg_blue_w));
+	map(0x0610801a, 0x0610801b).w(FUNC(namcos23_state::c404_spot_lsb_w));
+	map(0x0610801c, 0x0610801d).w(FUNC(namcos23_state::c404_spot_msb_w));
+	map(0x0610801e, 0x0610801f).w(FUNC(namcos23_state::c404_poly_alpha_color_w));
+	map(0x06108020, 0x06108021).w(FUNC(namcos23_state::c404_poly_alpha_pen_w));
+	map(0x06108022, 0x06108023).w(FUNC(namcos23_state::c404_poly_alpha_w));
+	map(0x06108024, 0x06108025).w(FUNC(namcos23_state::c404_alpha_check12_w));
+	map(0x06108026, 0x06108027).w(FUNC(namcos23_state::c404_alpha_check13_w));
+	map(0x06108028, 0x06108029).w(FUNC(namcos23_state::c404_text_alpha_mask_w));
+	map(0x0610802a, 0x0610802b).w(FUNC(namcos23_state::c404_text_alpha_factor_w));
+	map(0x0610802c, 0x0610802d).w(FUNC(namcos23_state::c404_screen_fade_red_w));
+	map(0x0610802e, 0x0610802f).w(FUNC(namcos23_state::c404_screen_fade_green_w));
+	map(0x06108030, 0x06108031).w(FUNC(namcos23_state::c404_screen_fade_blue_w));
+	map(0x06108032, 0x06108033).w(FUNC(namcos23_state::c404_screen_fade_factor_w));
+	map(0x06108034, 0x06108035).w(FUNC(namcos23_state::c404_fade_flags_w));
+	map(0x06108036, 0x06108037).w(FUNC(namcos23_state::c404_palette_base_w));
+	map(0x0610803e, 0x0610803f).w(FUNC(namcos23_state::c404_layer_flags_w));
+
+	map(0x06110000, 0x0613ffff).ram().w(FUNC(namcos23_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
+	map(0x06300000, 0x06300007).w(FUNC(namcos23_state::sprites_w));
+	map(0x06400000, 0x0641dfff).ram().w(FUNC(namcos23_state::textchar_w)).share("charram"); // Text CGRAM (C361)
+	map(0x0641e000, 0x0641ffff).ram().w(FUNC(namcos23_state::textram_w)).share("textram"); // Text VRAM (C361)
+
+	map(0x06420000, 0x06420001).w(FUNC(namcos23_state::c361_xscroll_w));
+	map(0x06420002, 0x06420003).w(FUNC(namcos23_state::c361_yscroll_w));
+	map(0x06420008, 0x06420009).w(FUNC(namcos23_state::c361_irq_scanline_w));
+	map(0x0642000a, 0x0642000b).r(FUNC(namcos23_state::c361_vpos_r));
+	map(0x0642000c, 0x0642000d).r(FUNC(namcos23_state::c361_vblank_r));
+
+	map(0x08000000, 0x087fffff).rom().region("data", 0); // data ROMs
+	map(0x0c000000, 0x0c00ffff).ram().share("nvram"); // Backup RAM
+
+	map(0x0d000000, 0x0d000001).w(FUNC(namcos23_state::ctl_leds_w));
+	map(0x0d000002, 0x0d000003).r(FUNC(namcos23_state::ctl_status_r));
+	map(0x0d000004, 0x0d000005).rw(FUNC(namcos23_state::ctl_input1_r), FUNC(namcos23_state::ctl_input1_w));
+	map(0x0d000006, 0x0d000007).rw(FUNC(namcos23_state::ctl_input2_r), FUNC(namcos23_state::ctl_input2_w));
+	map(0x0d00000a, 0x0d00000b).w(FUNC(namcos23_state::ctl_vbl_ack_w));
+	map(0x0d00000c, 0x0d00000d).w(FUNC(namcos23_state::ctl_direct_poly_w));
+
+	//map(0x0e000000, 0x0e007fff).ram(); // C405 RAM - what is this?
+
+	map(0x0f000000, 0x0f000003).rw(FUNC(namcos23_state::sub_comm_r), FUNC(namcos23_state::sub_comm_w));
+	map(0x0f200000, 0x0f203fff).ram(); // C422 RAM
+	map(0x0f300000, 0x0f30000f).rw(FUNC(namcos23_state::c422_r), FUNC(namcos23_state::c422_w)); // C422 registers
+	map(0x0fc00000, 0x0fffffff).nopw().rom().region("user1", 0);
+}
+
 // (Super) System 23
 void namcos23_state::s23_map(address_map &map)
 {
 	map.global_mask(0xfffffff);
 	map(0x00000000, 0x00ffffff).ram().share("mainram");
-	map(0x01000000, 0x010000ff).rw(FUNC(namcos23_state::c435_r), FUNC(namcos23_state::c435_w));
-	map(0x02000000, 0x0200000f).rw(FUNC(namcos23_state::c417_r), FUNC(namcos23_state::c417_w));
+	map(0x0100001c, 0x0100001f).w(FUNC(namcos23_state::c435_dma_addr_w));
+	map(0x01000020, 0x01000023).w(FUNC(namcos23_state::c435_dma_size_w));
+	map(0x01000024, 0x01000027).w(FUNC(namcos23_state::c435_dma_start_w));
+	map(0x01000028, 0x0100002b).r(FUNC(namcos23_state::c435_busy_flag_r));
+	map(0x0100005c, 0x0100005f).w(FUNC(namcos23_state::c435_pio_mode_w));
+	map(0x01000060, 0x01000063).w(FUNC(namcos23_state::c435_clear_bufpos_w));
+
+	map(0x02000000, 0x02000001).rw(FUNC(namcos23_state::c417_status_r), FUNC(namcos23_state::c435_pio_w));
+	map(0x02000002, 0x02000003).rw(FUNC(namcos23_state::c417_addr_r), FUNC(namcos23_state::c417_addr_w));
+	map(0x02000004, 0x02000005).w(FUNC(namcos23_state::c417_ptrom_addr_w));
+	map(0x02000006, 0x02000007).rw(FUNC(namcos23_state::c417_test_done_r), FUNC(namcos23_state::c417_ptrom_addr_clear_w));
+	map(0x02000008, 0x02000009).rw(FUNC(namcos23_state::c417_ram_r), FUNC(namcos23_state::c417_ram_w));
+	map(0x0200000a, 0x0200000b).r(FUNC(namcos23_state::c417_ptrom_msw_r));
+	map(0x0200000c, 0x0200000d).r(FUNC(namcos23_state::c417_ptrom_lsw_r));
+	map(0x0200000e, 0x0200000f).w(FUNC(namcos23_state::c417_irq_ack_w));
+
 	map(0x04400000, 0x0440ffff).rw(FUNC(namcos23_state::sharedram_cpu_r), FUNC(namcos23_state::sharedram_cpu_w)); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
 	map(0x06000000, 0x0600ffff).ram().share("nvram"); // Backup RAM
@@ -5690,17 +5645,60 @@ void namcos23_state::s23_map(address_map &map)
 	map(0x06400000, 0x0640000f).rw(FUNC(namcos23_state::c422_r), FUNC(namcos23_state::c422_w)); // C422 registers
 	map(0x06800000, 0x0681dfff).ram().w(FUNC(namcos23_state::textchar_w)).share("charram"); // Text CGRAM (C361)
 	map(0x0681e000, 0x0681ffff).ram().w(FUNC(namcos23_state::textram_w)).share("textram"); // Text VRAM (C361)
-	map(0x06820000, 0x0682000f).rw(FUNC(namcos23_state::c361_r), FUNC(namcos23_state::c361_w)); // C361
-	map(0x06a08000, 0x06a087ff).ram().w(FUNC(namcos23_state::gammaram_w)).share("gammaram"); // Gamma RAM (C404)
+
+	map(0x06820000, 0x06820001).w(FUNC(namcos23_state::c361_xscroll_w));
+	map(0x06820002, 0x06820003).w(FUNC(namcos23_state::c361_yscroll_w));
+	map(0x06820008, 0x06820009).w(FUNC(namcos23_state::c361_irq_scanline_w));
+	map(0x0682000a, 0x0682000b).r(FUNC(namcos23_state::c361_vpos_r));
+	map(0x0682000c, 0x0682000d).r(FUNC(namcos23_state::c361_vblank_r));
+
+	map(0x06a08000, 0x06a087ff).rw(FUNC(namcos23_state::c404_ram_r), FUNC(namcos23_state::c404_ram_w));
+	map(0x06a08000, 0x06a08001).w(FUNC(namcos23_state::c404_poly_fade_red_w));
+	map(0x06a08002, 0x06a08003).w(FUNC(namcos23_state::c404_poly_fade_green_w));
+	map(0x06a08004, 0x06a08005).w(FUNC(namcos23_state::c404_poly_fade_blue_w));
+	map(0x06a0800a, 0x06a0800b).w(FUNC(namcos23_state::c404_fog_red_w));
+	map(0x06a0800c, 0x06a0800d).w(FUNC(namcos23_state::c404_fog_green_w));
+	map(0x06a0800e, 0x06a0800f).w(FUNC(namcos23_state::c404_fog_blue_w));
+	map(0x06a08010, 0x06a08011).w(FUNC(namcos23_state::c404_bg_red_w));
+	map(0x06a08012, 0x06a08013).w(FUNC(namcos23_state::c404_bg_green_w));
+	map(0x06a08014, 0x06a08015).w(FUNC(namcos23_state::c404_bg_blue_w));
+	map(0x06a0801a, 0x06a0801b).w(FUNC(namcos23_state::c404_spot_lsb_w));
+	map(0x06a0801c, 0x06a0801d).w(FUNC(namcos23_state::c404_spot_msb_w));
+	map(0x06a0801e, 0x06a0801f).w(FUNC(namcos23_state::c404_poly_alpha_color_w));
+	map(0x06a08020, 0x06a08021).w(FUNC(namcos23_state::c404_poly_alpha_pen_w));
+	map(0x06a08022, 0x06a08023).w(FUNC(namcos23_state::c404_poly_alpha_w));
+	map(0x06a08024, 0x06a08025).w(FUNC(namcos23_state::c404_alpha_check12_w));
+	map(0x06a08026, 0x06a08027).w(FUNC(namcos23_state::c404_alpha_check13_w));
+	map(0x06a08028, 0x06a08029).w(FUNC(namcos23_state::c404_text_alpha_mask_w));
+	map(0x06a0802a, 0x06a0802b).w(FUNC(namcos23_state::c404_text_alpha_factor_w));
+	map(0x06a0802c, 0x06a0802d).w(FUNC(namcos23_state::c404_screen_fade_red_w));
+	map(0x06a0802e, 0x06a0802f).w(FUNC(namcos23_state::c404_screen_fade_green_w));
+	map(0x06a08030, 0x06a08031).w(FUNC(namcos23_state::c404_screen_fade_blue_w));
+	map(0x06a08032, 0x06a08033).w(FUNC(namcos23_state::c404_screen_fade_factor_w));
+	map(0x06a08034, 0x06a08035).w(FUNC(namcos23_state::c404_fade_flags_w));
+	map(0x06a08036, 0x06a08037).w(FUNC(namcos23_state::c404_palette_base_w));
+	map(0x06a0803e, 0x06a0803f).w(FUNC(namcos23_state::c404_layer_flags_w));
+
 	map(0x06a10000, 0x06a3ffff).ram().w(FUNC(namcos23_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
 	map(0x08000000, 0x08ffffff).rom().region("data", 0x0000000).mirror(0x1000000); // data ROMs
 	map(0x0a000000, 0x0affffff).rom().region("data", 0x1000000).mirror(0x1000000);
 	map(0x0c000000, 0x0c00001f).rw(FUNC(namcos23_state::c412_r), FUNC(namcos23_state::c412_w));
-	map(0x0c400000, 0x0c400007).rw(FUNC(namcos23_state::c421_r), FUNC(namcos23_state::c421_w));
+
+	map(0x0c400000, 0x0c400001).rw(FUNC(namcos23_state::c421_ram_r), FUNC(namcos23_state::c421_ram_w));
+	map(0x0c400004, 0x0c400005).rw(FUNC(namcos23_state::c421_addr_msw_r), FUNC(namcos23_state::c421_addr_msw_w));
+	map(0x0c400006, 0x0c400007).rw(FUNC(namcos23_state::c421_addr_lsw_r), FUNC(namcos23_state::c421_addr_lsw_w));
+
 	map(0x0c800010, 0x0c800011).w(FUNC(namcos23_state::c435_state_reset_w));
 	map(0x0c800016, 0x0c800017).w(FUNC(namcos23_state::c435_state_pio_w));
 	map(0x0cc00000, 0x0cc00003).w(FUNC(namcos23_state::direct_buf_w));
-	map(0x0d000000, 0x0d00000f).rw(FUNC(namcos23_state::ctl_r), FUNC(namcos23_state::ctl_w));
+
+	map(0x0d000000, 0x0d000001).w(FUNC(namcos23_state::ctl_leds_w));
+	map(0x0d000002, 0x0d000003).r(FUNC(namcos23_state::ctl_status_r));
+	map(0x0d000004, 0x0d000005).rw(FUNC(namcos23_state::ctl_input1_r), FUNC(namcos23_state::ctl_input1_w));
+	map(0x0d000006, 0x0d000007).rw(FUNC(namcos23_state::ctl_input2_r), FUNC(namcos23_state::ctl_input2_w));
+	map(0x0d00000a, 0x0d00000b).w(FUNC(namcos23_state::ctl_vbl_ack_w));
+	map(0x0d00000c, 0x0d00000d).w(FUNC(namcos23_state::ctl_direct_poly_w));
+
 	map(0x0e800000, 0x0e800003).rw(FUNC(namcos23_state::sub_comm_r), FUNC(namcos23_state::sub_comm_w)); // not sure
 	map(0x0fc00000, 0x0fffffff).nopw().rom().region("user1", 0);
 }
@@ -5709,15 +5707,24 @@ void crszone_state::mips_map(address_map &map)
 {
 	map.global_mask(0x1fffffff);
 	map(0x00000000, 0x00ffffff).ram().share("mainram");
+
 	map(0x10000080, 0x10000083).w(FUNC(crszone_state::irq_vbl_ack_w));
-	map(0x10000094, 0x10000097).w(FUNC(crszone_state::irq_lv6_ack_w));
 	map(0x100000a8, 0x100000ab).r(FUNC(crszone_state::irq_lv3_status_r));
 	map(0x100000b0, 0x100000b3).r(FUNC(crszone_state::irq_lv5_status_r));
 	map(0x100000b4, 0x100000b7).r(FUNC(crszone_state::irq_lv6_status_r));
+
 	map(0x10400000, 0x10400003).w(FUNC(crszone_state::c450_dma_addr_w));
 	map(0x1040000c, 0x1040000f).w(FUNC(crszone_state::c450_dma_size_w));
 	map(0x1040001c, 0x1040001f).r(FUNC(crszone_state::c450_irq_status_r));
-	map(0x12000000, 0x1200000f).rw(FUNC(crszone_state::c417_r), FUNC(crszone_state::c417_w));
+
+	map(0x12000000, 0x12000001).rw(FUNC(crszone_state::c417_status_r), FUNC(crszone_state::c435_pio_w));
+	map(0x12000002, 0x12000003).rw(FUNC(crszone_state::c417_addr_r), FUNC(crszone_state::c417_addr_w));
+	map(0x12000004, 0x12000005).w(FUNC(crszone_state::c417_ptrom_addr_w));
+	map(0x12000006, 0x12000007).rw(FUNC(crszone_state::c417_test_done_r), FUNC(crszone_state::c417_ptrom_addr_clear_w));
+	map(0x12000008, 0x12000009).rw(FUNC(crszone_state::c417_ram_r), FUNC(crszone_state::c417_ram_w));
+	map(0x1200000a, 0x1200000b).r(FUNC(crszone_state::c417_ptrom_msw_r));
+	map(0x1200000c, 0x1200000d).rw(FUNC(crszone_state::c417_ptrom_lsw_r), FUNC(crszone_state::c417_irq_ack_w));
+
 	map(0x14400000, 0x1440ffff).rw(FUNC(crszone_state::sharedram_cpu_r), FUNC(crszone_state::sharedram_cpu_w)); // Communication RAM (C416)
 	map(0x14c3ff00, 0x14c3ff0f).w(FUNC(crszone_state::mcuen_w));
 	map(0x16000000, 0x1600ffff).ram().share("nvram"); // Backup RAM
@@ -5725,17 +5732,60 @@ void crszone_state::mips_map(address_map &map)
 	map(0x16400000, 0x1640000f).rw(FUNC(crszone_state::c422_r), FUNC(crszone_state::c422_w)); // C422 registers
 	map(0x16800000, 0x1681dfff).ram().w(FUNC(crszone_state::textchar_w)).share("charram"); // Text CGRAM (C361)
 	map(0x1681e000, 0x1681ffff).ram().w(FUNC(crszone_state::textram_w)).share("textram"); // Text VRAM (C361)
-	map(0x16820000, 0x1682000f).rw(FUNC(crszone_state::c361_r), FUNC(crszone_state::c361_w)); // C361
-	map(0x16a08000, 0x16a087ff).ram().w(FUNC(crszone_state::gammaram_w)).share("gammaram"); // Gamma RAM (C404)
+
+	map(0x16820000, 0x16820001).w(FUNC(crszone_state::c361_xscroll_w));
+	map(0x16820002, 0x16820003).w(FUNC(crszone_state::c361_yscroll_w));
+	map(0x16820008, 0x16820009).w(FUNC(crszone_state::c361_irq_scanline_w));
+	map(0x1682000a, 0x1682000b).r(FUNC(crszone_state::c361_vpos_r));
+	map(0x1682000c, 0x1682000d).r(FUNC(crszone_state::c361_vblank_r));
+
+	map(0x16a08000, 0x16a087ff).rw(FUNC(crszone_state::c404_ram_r), FUNC(crszone_state::c404_ram_w));
+	map(0x16a08000, 0x16a08001).w(FUNC(crszone_state::c404_poly_fade_red_w));
+	map(0x16a08002, 0x16a08003).w(FUNC(crszone_state::c404_poly_fade_green_w));
+	map(0x16a08004, 0x16a08005).w(FUNC(crszone_state::c404_poly_fade_blue_w));
+	map(0x16a0800a, 0x16a0800b).w(FUNC(crszone_state::c404_fog_red_w));
+	map(0x16a0800c, 0x16a0800d).w(FUNC(crszone_state::c404_fog_green_w));
+	map(0x16a0800e, 0x16a0800f).w(FUNC(crszone_state::c404_fog_blue_w));
+	map(0x16a08010, 0x16a08011).w(FUNC(crszone_state::c404_bg_red_w));
+	map(0x16a08012, 0x16a08013).w(FUNC(crszone_state::c404_bg_green_w));
+	map(0x16a08014, 0x16a08015).w(FUNC(crszone_state::c404_bg_blue_w));
+	map(0x16a0801a, 0x16a0801b).w(FUNC(crszone_state::c404_spot_lsb_w));
+	map(0x16a0801c, 0x16a0801d).w(FUNC(crszone_state::c404_spot_msb_w));
+	map(0x16a0801e, 0x16a0801f).w(FUNC(crszone_state::c404_poly_alpha_color_w));
+	map(0x16a08020, 0x16a08021).w(FUNC(crszone_state::c404_poly_alpha_pen_w));
+	map(0x16a08022, 0x16a08023).w(FUNC(crszone_state::c404_poly_alpha_w));
+	map(0x16a08024, 0x16a08025).w(FUNC(crszone_state::c404_alpha_check12_w));
+	map(0x16a08026, 0x16a08027).w(FUNC(crszone_state::c404_alpha_check13_w));
+	map(0x16a08028, 0x16a08029).w(FUNC(crszone_state::c404_text_alpha_mask_w));
+	map(0x16a0802a, 0x16a0802b).w(FUNC(crszone_state::c404_text_alpha_factor_w));
+	map(0x16a0802c, 0x16a0802d).w(FUNC(crszone_state::c404_screen_fade_red_w));
+	map(0x16a0802e, 0x16a0802f).w(FUNC(crszone_state::c404_screen_fade_green_w));
+	map(0x16a08030, 0x16a08031).w(FUNC(crszone_state::c404_screen_fade_blue_w));
+	map(0x16a08032, 0x16a08033).w(FUNC(crszone_state::c404_screen_fade_factor_w));
+	map(0x16a08034, 0x16a08035).w(FUNC(crszone_state::c404_fade_flags_w));
+	map(0x16a08036, 0x16a08037).w(FUNC(crszone_state::c404_palette_base_w));
+	map(0x16a0803e, 0x16a0803f).w(FUNC(crszone_state::c404_layer_flags_w));
+
 	map(0x16a10000, 0x16a3ffff).ram().w(FUNC(crszone_state::paletteram_w)).share("paletteram"); // Palette RAM (C404)
 	map(0x18000000, 0x18ffffff).rom().region("data", 0x0000000).mirror(0x1000000); // data ROMs
 	map(0x1a000000, 0x1affffff).rom().region("data", 0x1000000).mirror(0x1000000);
 	map(0x1c000000, 0x1c00001f).rw(FUNC(crszone_state::c412_r), FUNC(crszone_state::c412_w));
-	map(0x1c400000, 0x1c400007).rw(FUNC(crszone_state::c421_r), FUNC(crszone_state::c421_w));
+
+	map(0x1c400000, 0x1c400001).rw(FUNC(crszone_state::c421_ram_r), FUNC(crszone_state::c421_ram_w));
+	map(0x1c400004, 0x1c400005).rw(FUNC(crszone_state::c421_addr_msw_r), FUNC(crszone_state::c421_addr_msw_w));
+	map(0x1c400006, 0x1c400007).rw(FUNC(crszone_state::c421_addr_lsw_r), FUNC(crszone_state::c421_addr_lsw_w));
+
 	map(0x1c800010, 0x1c800011).w(FUNC(crszone_state::c435_state_reset_w));
 	map(0x1c800016, 0x1c800017).w(FUNC(crszone_state::c435_state_pio_w));
 	map(0x1cc00000, 0x1cc00003).w(FUNC(crszone_state::direct_buf_w));
-	map(0x1d000000, 0x1d00000f).rw(FUNC(crszone_state::ctl_r), FUNC(crszone_state::ctl_w));
+
+	map(0x1d000000, 0x1d000001).w(FUNC(crszone_state::ctl_leds_w));
+	map(0x1d000002, 0x1d000003).r(FUNC(crszone_state::ctl_status_r));
+	map(0x1d000004, 0x1d000005).rw(FUNC(crszone_state::ctl_input1_r), FUNC(crszone_state::ctl_input1_w));
+	map(0x1d000006, 0x1d000007).rw(FUNC(crszone_state::ctl_input2_r), FUNC(crszone_state::ctl_input2_w));
+	map(0x1d00000a, 0x1d00000b).w(FUNC(crszone_state::ctl_vbl_ack_w));
+	map(0x1d00000c, 0x1d00000d).w(FUNC(crszone_state::ctl_direct_poly_w));
+
 	map(0x1f000000, 0x1f000003).rw(FUNC(crszone_state::acia_r), FUNC(crszone_state::acia_w));
 	map(0x1f800000, 0x1fffffff).nopw().rom().region("user1", 0);
 }
@@ -6084,7 +6134,7 @@ u8 namcos23_state::iob_p6_r()
 	// other bits: unknown
 
 	LOGMASKED(LOG_IOMCU, "%s: iob_p6_r: %02x\n", machine().describe_context(), sb);
-	return sb /*| 0xef*/;
+	return sb;
 }
 
 void namcos23_state::iob_p6_w(u8 data)
@@ -6600,8 +6650,6 @@ void namcos23_state::machine_start()
 	save_item(NAME(m_c417.ram));
 	save_item(NAME(m_c417.adr));
 	save_item(NAME(m_c417.pointrom_adr));
-	save_item(NAME(m_c417.unk6));
-	save_item(NAME(m_c417.unk));
 	save_item(NAME(m_c417.test_mode));
 
 	save_item(NAME(m_c412.sdram_a));
@@ -6649,7 +6697,6 @@ void namcos23_state::machine_reset()
 	m_subcpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
 	m_subcpu_running = false;
 
-	m_c417.unk = 0;
 	m_c435_direct_buf_pos = 0;
 	m_c435_direct_buf_nonempty = false;
 	m_c435_direct_buf_open = false;
@@ -6842,7 +6889,6 @@ void namcos23_state::gorgon(machine_config &config)
 	m_maincpu->set_icache_size(8192);   // VERIFIED
 	m_maincpu->set_dcache_size(8192);   // VERIFIED
 	m_maincpu->set_addrmap(AS_PROGRAM, &namcos23_state::gorgon_map);
-	m_maincpu->set_vblank_int("screen", FUNC(namcos23_state::interrupt));
 
 	H83002(config, m_subcpu, H8CLOCK);
 	m_subcpu->set_addrmap(AS_PROGRAM, &namcos23_state::s23h8rwmap);
@@ -6925,7 +6971,6 @@ void namcos23_state::s23(machine_config &config)
 	m_maincpu->set_icache_size(8192);   // VERIFIED
 	m_maincpu->set_dcache_size(8192);   // VERIFIED
 	m_maincpu->set_addrmap(AS_PROGRAM, &namcos23_state::s23_map);
-	m_maincpu->set_vblank_int("screen", FUNC(namcos23_state::interrupt));
 
 	H83002(config, m_subcpu, H8CLOCK);
 	m_subcpu->set_addrmap(AS_PROGRAM, &namcos23_state::s23h8rwmap);
@@ -7012,7 +7057,6 @@ void namcos23_state::motoxgo(machine_config &config)
 void namcos23_state::timecrs2(machine_config &config)
 {
 	s23(config);
-	m_maincpu->set_vblank_int("screen", FUNC(namcos23_state::interrupt));
 
 	/* basic machine hardware */
 	m_iocpu->set_addrmap(AS_PROGRAM, &namcos23_state::timecrs2iobrdmap);
@@ -8402,7 +8446,7 @@ ROM_END
 
 
 ROM_START( crszone )
-	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
+	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 8 megs for main R4650 code */
 	ROM_LOAD16_WORD_SWAP( "cszo4verb.ic4", 0x000000, 0x800000, CRC(6192533d) SHA1(d102b91fe193bf255ea4e57a2bd964aa1cdfd21d) )
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
@@ -8454,9 +8498,8 @@ ROM_END
 
 
 ROM_START( crszonev4a )
-	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
-	ROM_LOAD16_WORD_SWAP( "cszo4vera.ic4", 0x400000, 0x400000, CRC(cabee8c3) SHA1(4887b8550038c072f988c5999d57ec40e82e4072) )
-	ROM_CONTINUE( 0x000000, 0x400000 )
+	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 8 megs for main R4650 code */
+	ROM_LOAD16_WORD_SWAP( "cszo4vera.ic4", 0x000000, 0x800000, CRC(cabee8c3) SHA1(4887b8550038c072f988c5999d57ec40e82e4072) )
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
 	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic1", 0x000000, 0x080000, CRC(c790743b) SHA1(5fa7b83a7a1b1105a3aa0870b782cf2741b7d11c) )
@@ -8507,8 +8550,8 @@ ROM_END
 
 
 ROM_START( crszonev3b )
-	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
-	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic4", 0x400000, 0x400000, CRC(4cb26465) SHA1(078dfd0d8c920707df14e9a26658fa63421fcb0b) )
+	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 8 megs for main R4650 code */
+	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic4", 0x000000, 0x800000, CRC(4cb26465) SHA1(078dfd0d8c920707df14e9a26658fa63421fcb0b) )
 	ROM_CONTINUE( 0x000000, 0x400000 )
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
@@ -8560,9 +8603,8 @@ ROM_END
 
 
 ROM_START( crszonev3b2 )
-	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
-	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic4", 0x400000, 0x400000, CRC(3755b402) SHA1(e169fded9d136af7ce6997868629eed5196b8cdd) ) // sldh
-	ROM_CONTINUE( 0x000000, 0x400000 )
+	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 8 megs for main R4650 code */
+	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic4", 0x000000, 0x800000, CRC(3755b402) SHA1(e169fded9d136af7ce6997868629eed5196b8cdd) ) // sldh
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
 	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic1", 0x000000, 0x080000, CRC(c790743b) SHA1(5fa7b83a7a1b1105a3aa0870b782cf2741b7d11c) )
@@ -8613,9 +8655,8 @@ ROM_END
 
 
 ROM_START( crszonev3a )
-	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
-	ROM_LOAD16_WORD_SWAP( "cszo3vera.ic4", 0x400000, 0x400000, CRC(09b0c91e) SHA1(226c3788d6a50272e2544d04d9ca20df81014fb6) )
-	ROM_CONTINUE( 0x000000, 0x400000 )
+	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 8 megs for main R4650 code */
+	ROM_LOAD16_WORD_SWAP( "cszo3vera.ic4", 0x000000, 0x800000, CRC(09b0c91e) SHA1(226c3788d6a50272e2544d04d9ca20df81014fb6) )
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
 	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic1", 0x000000, 0x080000, CRC(c790743b) SHA1(5fa7b83a7a1b1105a3aa0870b782cf2741b7d11c) )
@@ -8666,9 +8707,8 @@ ROM_END
 
 
 ROM_START( crszonev2a )
-	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 4 megs for main R4650 code */
-	ROM_LOAD16_WORD_SWAP( "cszo2vera.ic4", 0x400000, 0x400000, CRC(1426d8d0) SHA1(e8049df1b2db1180f9edf6e5fa9fe8692ae81086) )
-	ROM_CONTINUE( 0x000000, 0x400000 )
+	ROM_REGION32_BE( 0x800000, "user1", 0 ) /* 8 megs for main R4650 code */
+	ROM_LOAD16_WORD_SWAP( "cszo2vera.ic4", 0x000000, 0x800000, CRC(1426d8d0) SHA1(e8049df1b2db1180f9edf6e5fa9fe8692ae81086) )
 
 	ROM_REGION( 0x80000, "subcpu", 0 )  /* Hitachi H8/3002 MCU code */
 	ROM_LOAD16_WORD_SWAP( "cszo3verb.ic1", 0x000000, 0x080000, CRC(c790743b) SHA1(5fa7b83a7a1b1105a3aa0870b782cf2741b7d11c) )
