@@ -1602,9 +1602,9 @@ It can also be used with Final Furlong when wired correctly.
 				LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C417_ACK | LOG_C412_UNK | LOG_C421_UNK | \
 				LOG_C422_IRQ | LOG_C422_UNK | LOG_C361_UNK | LOG_CTL_UNK | LOG_C417_IRQ | LOG_C361_IRQ | LOG_MATRIX_INFO | LOG_VEC_INFO | \
 				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C404_REGS | LOG_C404_RAM | LOG_GMEN | \
-				LOG_GENERAL | LOG_MCU | LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK )
+				LOG_GENERAL | LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK | LOG_MCU_PORTS )
 
-#define VERBOSE ( 0 )
+#define VERBOSE ( LOG_ALL )
 #include "logmacro.h"
 
 namespace
@@ -2056,6 +2056,8 @@ protected:
 	void sub_interrupt_main_w(offs_t offset, u16 data, u16 mem_mask = ~0);
 	u16 sub_comm_r(offs_t offset);
 	void sub_comm_w(offs_t offset, u8 data);
+	int m_rtc_clk = 0;
+	void rtc_clk_w(int state);
 	u8 mcu_p8_r();
 	void mcu_p8_w(u8 data);
 	u8 mcu_pa_r();
@@ -4561,7 +4563,6 @@ void namcos23_state::video_start()
 	m_bgtilemap = &machine().tilemap().create(*m_gfxdecode, tilemap_get_info_delegate(*this, FUNC(namcos23_state::TextTilemapGetInfo)), TILEMAP_SCAN_ROWS, 16, 16, 64, 64);
 	m_bgtilemap->set_scroll_rows(64 * 16); // fake
 	m_bgtilemap->set_transparent_pen(0xf);
-	//m_bgtilemap->set_scrolldx(860, 860);
 	m_render.polymgr = std::make_unique<namcos23_renderer>(*this);
 
 	m_ptrom  = (const u32 *)memregion("pointrom")->base();
@@ -4634,9 +4635,9 @@ void namcos23_state::mix_text_layer(screen_device &screen, bitmap_rgb32 &bitmap,
 	for (int y = cliprect.min_y; y <= cliprect.max_y; y++)
 	{
 		u16 const *const src = &m_mix_bitmap->pix(y);
-		u32 *const dst = &bitmap.pix(y);
 		u8 const *const pri = &screen.priority().pix(y);
-		for (int x = cliprect.min_x; x <= cliprect.max_x; x++)
+		u32 *dst = &bitmap.pix(y);
+		for (int x = cliprect.min_x; x <= cliprect.max_x; x++, dst++)
 		{
 			// skip if transparent or under poly/sprite
 			if (pri[x] == prival)
@@ -4652,7 +4653,7 @@ void namcos23_state::mix_text_layer(screen_device &screen, bitmap_rgb32 &bitmap,
 				if (m_c404.alpha_factor && ((pen & 0xf) == m_c404.alpha_mask || (pen >= m_c404.alpha_check12 && pen <= m_c404.alpha_check13)))
 					rgb.blend(rgbaint_t(dst[x]), 0xff - m_c404.alpha_factor);
 
-				dst[x] = rgb.to_rgba();
+				*dst = rgb.to_rgba();
 			}
 		}
 	}
@@ -4693,6 +4694,22 @@ u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, c
 		mix_text_layer(screen, bitmap, cliprect, 6);
 	}
 
+	const u16 *rlut = &m_c404.ram[0x100];
+	const u16 *glut = &m_c404.ram[0x200];
+	const u16 *blut = &m_c404.ram[0x300];
+	for (int y = cliprect.top(); y <= cliprect.bottom(); y++)
+	{
+		u32 *dst = &bitmap.pix(y);
+		for (int x = cliprect.left(); x <= cliprect.right(); x++, dst++)
+		{
+			const u32 rgb = *dst;
+			const u8 r = (u8)rlut[NATIVE_ENDIAN_VALUE_LE_BE(1, 0) ^ ((rgb >> 16) & 0xff)];
+			const u8 g = (u8)glut[NATIVE_ENDIAN_VALUE_LE_BE(1, 0) ^ ((rgb >> 8) & 0xff)];
+			const u8 b = (u8)blut[NATIVE_ENDIAN_VALUE_LE_BE(1, 0) ^ (rgb & 0xff)];
+			*dst = (r << 16) | (g << 8) | b;
+		}
+	}
+
 	m_vblank_count++;
 
 	return 0;
@@ -4721,9 +4738,9 @@ void namcos23_state::irq_update_common(u32 cause)
 	if (changed & MAIN_VBLANK_IRQ)
 	{
 		if (m_main_irqcause & MAIN_VBLANK_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_VBLANK_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, main VBL\n", m_vbl_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_vbl_irqnum, (cause & MAIN_VBLANK_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
@@ -4731,9 +4748,9 @@ void namcos23_state::irq_update_common(u32 cause)
 	if (changed & MAIN_C422_IRQ)
 	{
 		if (m_main_irqcause & MAIN_C422_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_C422_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, C422\n", m_c422_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c422_irqnum, (cause & MAIN_C422_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 }
@@ -4749,9 +4766,9 @@ void namcos23_state::irq_update(u32 cause)
 	if (changed & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
 	{
 		if (m_main_irqcause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361(%d) || SubCPU(%d)\n", m_c361_irqnum - MIPS3_IRQ0, (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, C361(%d) || SubCPU(%d)\n", m_c361_irqnum - MIPS3_IRQ0, (m_main_irqcause & MAIN_C361_IRQ) ? 1 : 0, (m_main_irqcause & MAIN_SUBCPU_IRQ) ? 1 : 0);
 		else if (old & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ))
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d\n", m_c361_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d\n", m_c361_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c361_irqnum, (cause & (MAIN_C361_IRQ | MAIN_SUBCPU_IRQ)) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
@@ -4759,9 +4776,9 @@ void namcos23_state::irq_update(u32 cause)
 	if (changed & MAIN_C435_IRQ && m_c435_irqnum >= 0)
 	{
 		if (m_main_irqcause & MAIN_C435_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_C435_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, C435\n", m_c435_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c435_irqnum, (cause & MAIN_C435_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 }
@@ -4777,9 +4794,9 @@ void crszone_state::irq_update(u32 cause)
 	if (changed & MAIN_RS232_IRQ)
 	{
 		if (m_main_irqcause & MAIN_RS232_IRQ)
-			LOGMASKED(LOG_RS232, "Raising IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_RS232_IRQ)
-			LOGMASKED(LOG_RS232, "Lowering IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, RS232\n", m_rs232_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_rs232_irqnum, (cause & MAIN_RS232_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
@@ -4787,9 +4804,9 @@ void crszone_state::irq_update(u32 cause)
 	if (changed & MAIN_C361_IRQ)
 	{
 		if (m_main_irqcause & MAIN_C361_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_C361_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, C361\n", m_c361_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c361_irqnum, (cause & MAIN_C361_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
@@ -4797,9 +4814,9 @@ void crszone_state::irq_update(u32 cause)
 	if (changed & MAIN_SUBCPU_IRQ)
 	{
 		if (m_main_irqcause & MAIN_SUBCPU_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_SUBCPU_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, SubCPU\n", m_sub_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_sub_irqnum, (cause & MAIN_SUBCPU_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
@@ -4807,9 +4824,9 @@ void crszone_state::irq_update(u32 cause)
 	if (changed & MAIN_C450_IRQ && m_c450_irqnum >= 0)
 	{
 		if (m_main_irqcause & MAIN_C450_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_C450_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, C450\n", m_c450_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c450_irqnum, (cause & MAIN_C450_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 
@@ -4817,9 +4834,9 @@ void crszone_state::irq_update(u32 cause)
 	if (changed & MAIN_C451_IRQ && m_c451_irqnum >= 0)
 	{
 		if (m_main_irqcause & MAIN_C451_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Raising IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Raising IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
 		else if (old & MAIN_C451_IRQ)
-			LOGMASKED(LOG_C417_IRQ, "Lowering IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
+			LOGMASKED(LOG_IRQ_STATUS, "Lowering IRQ%d, C451\n", m_c451_irqnum - MIPS3_IRQ0);
 		m_maincpu->set_input_line(m_c451_irqnum, (cause & MAIN_C451_IRQ) ? ASSERT_LINE : CLEAR_LINE);
 	}
 }
@@ -5708,6 +5725,7 @@ void crszone_state::mips_map(address_map &map)
 	map.global_mask(0x1fffffff);
 	map(0x00000000, 0x00ffffff).ram().share("mainram");
 
+	map(0x10000058, 0x1000005b).nopw();
 	map(0x10000080, 0x10000083).w(FUNC(crszone_state::irq_vbl_ack_w));
 	map(0x100000a8, 0x100000ab).r(FUNC(crszone_state::irq_lv3_status_r));
 	map(0x100000b0, 0x100000b3).r(FUNC(crszone_state::irq_lv5_status_r));
@@ -5898,15 +5916,20 @@ void namcos23_state::sharedram_cpu_w(offs_t offset, u32 data, u32 mem_mask)
 u32 namcos23_state::sharedram_cpu_r(offs_t offset, u32 mem_mask)
 {
 	const u32 data = m_shared_ram[offset];
-	//LOGMASKED(LOG_MCU, "%s: sharedram_cpu_r: %08x: %08x & %08x\n", machine().describe_context(), offset << 2, data, mem_mask);
+	LOGMASKED(LOG_MCU, "%s: sharedram_cpu_r: %08x: %08x & %08x\n", machine().describe_context(), offset << 2, data, mem_mask);
 	return data;
 }
 
 void namcos23_state::sharedram_sub_w(offs_t offset, u16 data, u16 mem_mask)
 {
 	u16 *shared16 = reinterpret_cast<u16 *>(m_shared_ram.target());
-
-	COMBINE_DATA(&shared16[BYTE_XOR_BE(offset)]);
+	const u32 addr = BYTE_XOR_BE(offset);
+	if ((addr << 1) == 0x3030 || (addr << 1) == 0x3032 || (addr << 1) == 0x3034 || (addr << 1) == 0x3036)
+	{
+		//logerror("%s: %04x:%04x\n", machine().describe_context(), data, mem_mask);
+		//printf("%04x:%04x ", data, mem_mask);
+	}
+	COMBINE_DATA(&shared16[addr]);
 }
 
 u16 namcos23_state::sharedram_sub_r(offs_t offset)
@@ -6041,10 +6064,24 @@ void namcos23_state::mcu_pa_w(u8 data)
 		}
 		old_data = data;
 	}
-	m_rtc->ce_w(data & 1);
 	m_sub_porta = data;
+	bool old_ce = (m_sub_portb & 0x20) && (m_sub_porta & 1);
 	m_rtc->ce_w((m_sub_portb & 0x20) && (m_sub_porta & 1));
+	bool new_ce = (m_sub_portb & 0x20) && (m_sub_porta & 1);
+	m_rtc->ce_w(new_ce);
+	if (!old_ce && new_ce)
+	{
+		m_rtc->clk_w(m_rtc_clk);
+	}
 	m_settings->ce_w((m_sub_portb & 0x20) && !(m_sub_porta & 1));
+}
+
+void namcos23_state::rtc_clk_w(int state)
+{
+	if (m_rtc_clk == state)
+		return;
+	m_rtc_clk = state;
+	m_rtc->clk_w(m_rtc_clk);
 }
 
 
@@ -6072,8 +6109,14 @@ void namcos23_state::mcu_pb_w(u8 data)
 		}
 		old_data = data;
 	}
+	bool old_ce = (m_sub_portb & 0x20) && (m_sub_porta & 1);
 	m_sub_portb = (m_sub_portb & 0xc0) | (data & 0x3f);
-	m_rtc->ce_w((m_sub_portb & 0x20) && (m_sub_porta & 1));
+	bool new_ce = (m_sub_portb & 0x20) && (m_sub_porta & 1);
+	m_rtc->ce_w(new_ce);
+	if (!old_ce && new_ce)
+	{
+		m_rtc->clk_w(m_rtc_clk);
+	}
 	m_settings->ce_w((m_sub_portb & 0x20) && !(m_sub_porta & 1));
 }
 
@@ -7020,7 +7063,8 @@ void namcos23_state::s23(machine_config &config)
 	m_rtc->data_cb().set(m_subcpu, FUNC(h8_device::sci_rx_w<1>));
 
 	m_subcpu->write_sci_tx<1>().set(m_settings, FUNC(namco_settings_device::data_w));
-	m_subcpu->write_sci_clk<1>().set(m_rtc, FUNC(rtc4543_device::clk_w)).invert();
+	//m_subcpu->write_sci_clk<1>().set(m_rtc, FUNC(rtc4543_device::clk_w)).invert();
+	m_subcpu->write_sci_clk<1>().set(FUNC(namcos23_state::rtc_clk_w)).invert();
 	m_subcpu->write_sci_clk<1>().append(m_settings, FUNC(namco_settings_device::clk_w));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
