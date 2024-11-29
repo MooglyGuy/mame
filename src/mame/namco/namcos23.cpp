@@ -1720,7 +1720,6 @@ struct namcos23_model_data
 	u16 model2;
 	s16 m[9];
 	s32 v[3];
-	float scaling;
 	bool transpose;
 	s32 light_vector[3];
 };
@@ -1768,9 +1767,12 @@ struct namcos23_render_entry
 {
 	int type;
 	u16 absolute_priority;
+	u16 tx;
+	u16 ty;
+	float scaling;
 	u16 model_blend_factor;
-	u16 camera_power;
-	u16 camera_ambient;
+	u16 light_power;
+	u16 light_ambient;
 	u8 poly_fade_r;
 	u8 poly_fade_g;
 	u8 poly_fade_b;
@@ -2077,6 +2079,8 @@ protected:
 
 	u16 c421_ram_r();
 	void c421_ram_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 c421_unk_c400002_r();
+	void c421_unk_c400002_w(offs_t offset, u16 data);
 	u16 c421_addr_msw_r();
 	void c421_addr_msw_w(offs_t offset, u16 data, u16 mem_mask = ~0);
 	u16 c421_addr_lsw_r();
@@ -2098,6 +2102,7 @@ protected:
 	void c361_irq_scanline_w(offs_t offset, u16 data);
 	u16 c361_vpos_r();
 	u16 c361_vblank_r();
+	u16 c361_unk_e_r();
 	TIMER_CALLBACK_MEMBER(c361_timer_cb);
 
 	u16 c422_r(offs_t offset);
@@ -2112,6 +2117,10 @@ protected:
 	void c435_clear_bufpos_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	void c435_state_pio_w(u16 data);
 	void c435_state_reset_w(u16 data);
+	void c435_unk_c800012_w(u16 data);
+	void c435_unk_c800014_w(u16 data);
+	void c435_pipeline_w(offs_t offset, u16 data);
+	void c435_dma_w(offs_t offset, u16 data);
 	void c435_pio_w(offs_t offset, u16 data);
 	void c435_sprite_w(u16 data);
 
@@ -2132,18 +2141,22 @@ protected:
 	void c435_matrix_set();
 	void c435_vector_set();
 	void c435_state_set();
-	void c435_scaling_set();
-	void c435_model_blend_factor_set();
 	void c435_unk_set0();
 	void c435_absolute_priority_set();
-	void c435_unk_set3();
-	void c435_camera_power_set();
-	void c435_camera_ambient_set();
+	void c435_tx_set();
+	void c435_ty_set();
+	void c435_scaling_set();
+	void c435_model_blend_factor_set();
+	void c435_unk_set6();
+	void c435_light_power_set();
+	void c435_light_ambient_set();
 	void c435_render();
 	void c435_flush();
 
 	void sharedram_sub_w(offs_t offset, u16 data, u16 mem_mask = ~0);
 	u16 sharedram_sub_r(offs_t offset);
+	void sharedram_main_w(offs_t offset, u16 data, u16 mem_mask = ~0);
+	u16 sharedram_main_r(offs_t offset);
 
 	void sub_interrupt_main_w(offs_t offset, u16 data, u16 mem_mask = ~0);
 	u16 sub_comm_r(offs_t offset);
@@ -2231,9 +2244,12 @@ protected:
 	emu_timer *m_subcpu_scanline_off_timer;
 
 	u16 m_absolute_priority;
+	u16 m_tx;
+	u16 m_ty;
+	u16 m_scaling;
 	u16 m_model_blend_factor;
-	u16 m_camera_power;
-	u16 m_camera_ambient;
+	u16 m_light_power;
+	u16 m_light_ambient;
 	float m_proj_matrix[8*3];
 	u8 m_proj_matrix_line;
 
@@ -2244,7 +2260,6 @@ protected:
 	s16 m_matrices[256][9]; // Matrices are stored in signed 2.14 fixed point
 	s32 m_vectors[256][3];  // Vectors are stored in signed 10.14 fixed point
 	s32 m_light_vector[3];
-	u16 m_scaling;
 	s32 m_spv[3];
 	s16 m_spm[9];
 
@@ -2650,6 +2665,16 @@ void namcos23_state::c435_state_reset_w(u16 data)
 	m_c435.buffer_pos = 0;
 }
 
+void namcos23_state::c435_unk_c800012_w(u16 data)
+{
+	LOGMASKED(LOG_C435_UNK, "%s: c435_unk_c800012_w: %04x\n", data);
+}
+
+void namcos23_state::c435_unk_c800014_w(u16 data)
+{
+	LOGMASKED(LOG_C435_UNK, "%s: c435_unk_c800014_w: %04x\n", data);
+}
+
 void namcos23_state::c435_state_pio_w(u16 data)
 {
 	m_c435.buffer[m_c435.buffer_pos++] = data;
@@ -3000,24 +3025,6 @@ void namcos23_state::c435_vector_set() // 0.5
 	LOGMASKED(LOG_VEC_INFO, "c435_vector_set (%04x): Vector %d = %08x %08x %08x\n", m_c435.buffer[0], m_c435.buffer[1], t[0], t[1], t[2]);
 }
 
-void namcos23_state::c435_scaling_set() // 4.4
-{
-	if ((m_c435.buffer[0] & 0xff) != 1)
-	{
-		LOGMASKED(LOG_VEC_ERR, "%s: WARNING: c435_scaling_set with size %d\n", machine().describe_context(), m_c435.buffer[0] & 0xff);
-		return;
-	}
-
-	LOGMASKED(LOG_MATRIX_INFO, "c435_scaling_set (%04x): %04x\n", m_c435.buffer[0], m_c435.buffer[1]);
-	m_scaling = m_c435.buffer[1];
-
-	if (s_capturing)
-	{
-		PixxiiiPacket &css_ = log_packet("CSS_");
-		css_.add_u16_buffer(m_c435.buffer, 2);
-	}
-}
-
 void namcos23_state::c435_state_set(u16 type, const u16 *param)
 {
 	LOGMASKED(LOG_3D_STATE_UNK, "%s: c435_state_set, type %04x, header %04x\n", machine().describe_context(), type, m_c435.buffer[0]);
@@ -3041,8 +3048,10 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		re->fade_flags = m_c404.fade_flags;
 		re->absolute_priority = m_absolute_priority;
 		re->model_blend_factor = 0;
-		re->camera_power = m_camera_power;
-		re->camera_ambient = m_camera_ambient;
+		re->tx = m_tx;
+		re->ty = m_ty;
+		re->light_power = m_light_power;
+		re->light_ambient = m_light_ambient;
 		if (m_c435.buffer[0] == 0x4f38)
 		{
 			if (s_capturing)
@@ -3141,8 +3150,10 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		re->type = IMMEDIATE;
 		re->absolute_priority = m_absolute_priority;
 		re->model_blend_factor = 0;
-		re->camera_power = m_camera_power;
-		re->camera_ambient = m_camera_ambient;
+		re->tx = m_tx;
+		re->ty = m_ty;
+		re->light_power = m_light_power;
+		re->light_ambient = m_light_ambient;
 		/*
 		3-e0: 1110 0000, has shade+tex+pos
 		3-a0: 1010 0000, has tex+pos
@@ -3228,8 +3239,10 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 		re->type = IMMEDIATE;
 		re->absolute_priority = m_absolute_priority;
 		re->model_blend_factor = 0;
-		re->camera_power = m_camera_power;
-		re->camera_ambient = m_camera_ambient;
+		re->tx = m_tx;
+		re->ty = m_ty;
+		re->light_power = m_light_power;
+		re->light_ambient = m_light_ambient;
 		re->immediate.type  =  param[ 0];
 		re->immediate.h     = (param[ 1] << 16) | param[ 2];
 		re->immediate.pal   = (param[ 3] << 16) | param[ 4];
@@ -3336,8 +3349,8 @@ void namcos23_state::c435_unk_set0() // 4.0
 {
 	if (s_capturing)
 	{
-		PixxiiiPacket &cu43 = log_packet("CU40");
-		cu43.add_u16_buffer(m_c435.buffer, 2);
+		PixxiiiPacket &cu40 = log_packet("CU40");
+		cu40.add_u16_buffer(m_c435.buffer, 2);
 	}
 }
 
@@ -3351,12 +3364,41 @@ void namcos23_state::c435_absolute_priority_set() // 4.1
 	}
 }
 
-void namcos23_state::c435_unk_set3() // 4.3
+void namcos23_state::c435_tx_set() // 4.2
 {
+	m_tx = m_c435.buffer[1];
 	if (s_capturing)
 	{
-		PixxiiiPacket &cu43 = log_packet("CU43");
-		cu43.add_u16_buffer(m_c435.buffer, 2);
+		PixxiiiPacket &ctxs = log_packet("CTXS");
+		ctxs.add_u16_buffer(m_c435.buffer, 2);
+	}
+}
+
+void namcos23_state::c435_ty_set() // 4.3
+{
+	m_ty = m_c435.buffer[1];
+	if (s_capturing)
+	{
+		PixxiiiPacket &ctys = log_packet("CTYS");
+		ctys.add_u16_buffer(m_c435.buffer, 2);
+	}
+}
+
+void namcos23_state::c435_scaling_set() // 4.4
+{
+	if ((m_c435.buffer[0] & 0xff) != 1)
+	{
+		LOGMASKED(LOG_VEC_ERR, "%s: WARNING: c435_scaling_set with size %d\n", machine().describe_context(), m_c435.buffer[0] & 0xff);
+		return;
+	}
+
+	LOGMASKED(LOG_MATRIX_INFO, "c435_scaling_set (%04x): %04x\n", m_c435.buffer[0], m_c435.buffer[1]);
+	m_scaling = m_c435.buffer[1];
+
+	if (s_capturing)
+	{
+		PixxiiiPacket &css_ = log_packet("CSS_");
+		css_.add_u16_buffer(m_c435.buffer, 2);
 	}
 }
 
@@ -3370,23 +3412,32 @@ void namcos23_state::c435_model_blend_factor_set() // 4.5
 	}
 }
 
-void namcos23_state::c435_camera_power_set() // 4.7
+void namcos23_state::c435_unk_set6() // 4.6
 {
-	m_camera_power = m_c435.buffer[1];
 	if (s_capturing)
 	{
-		PixxiiiPacket &cu47 = log_packet("CU47");
-		cu47.add_u16_buffer(m_c435.buffer, 2);
+		PixxiiiPacket &cu46 = log_packet("CU46");
+		cu46.add_u16_buffer(m_c435.buffer, 2);
 	}
 }
 
-void namcos23_state::c435_camera_ambient_set() // 4.8
+void namcos23_state::c435_light_power_set() // 4.7
 {
-	m_camera_ambient = m_c435.buffer[1];
+	m_light_power = m_c435.buffer[1];
 	if (s_capturing)
 	{
-		PixxiiiPacket &cu48 = log_packet("CU48");
-		cu48.add_u16_buffer(m_c435.buffer, 2);
+		PixxiiiPacket &clpw = log_packet("CLPW");
+		clpw.add_u16_buffer(m_c435.buffer, 2);
+	}
+}
+
+void namcos23_state::c435_light_ambient_set() // 4.8
+{
+	m_light_ambient = m_c435.buffer[1];
+	if (s_capturing)
+	{
+		PixxiiiPacket &clam = log_packet("CLAM");
+		clam.add_u16_buffer(m_c435.buffer, 2);
 	}
 }
 
@@ -3416,15 +3467,27 @@ void namcos23_state::c435_render() // 8
 	const s32 *v = c435_getv(m_c435.buffer[size]);
 
 	namcos23_render_entry *re = render.entries[render.cur] + render.count[render.cur];
+	if (m_c435.buffer[1] != 0 && m_c435.buffer[1] < 0x80)
+	{
+		//machine().debug_break();
+		//printf("Trying to render model: %04x\n", m_c435.buffer[1]);
+		re->model.model = m_c435.buffer[1] + 0x80;
+	}
+	else
+	{
+		re->model.model = m_c435.buffer[1];
+	}
+
 	re->type = MODEL;
-	re->model.model = m_c435.buffer[1];
 	re->model.model2 = (size == 4 ? m_c435.buffer[2] : 0);
-	re->model.scaling = use_scaling ? m_scaling / 16384.0 : 1.0;
+	re->scaling = use_scaling ? m_scaling / 16384.0 : 1.0;
 	re->model.transpose = transpose;
 	re->absolute_priority = m_absolute_priority;
 	re->model_blend_factor = m_model_blend_factor;
-	re->camera_power = m_camera_power;
-	re->camera_ambient = m_camera_ambient;
+	re->tx = m_tx;
+	re->ty = m_ty;
+	re->light_power = m_light_power;
+	re->light_ambient = m_light_ambient;
 	re->model.light_vector[0] = m_light_vector[0];
 	re->model.light_vector[1] = m_light_vector[1];
 	re->model.light_vector[2] = m_light_vector[2];
@@ -3443,7 +3506,7 @@ void namcos23_state::c435_render() // 8
 	memcpy(re->model.v, v, sizeof(re->model.v));
 
 	LOGMASKED(LOG_MODEL_INFO, "%s: Render %04x (%04x) (%04x) %f (%d)\n", machine().describe_context(),
-			re->model.model, m_c435.buffer[size - 1], m_c435.buffer[size], re->model.scaling, render.count[render.cur] + 1);
+			re->model.model, m_c435.buffer[size - 1], m_c435.buffer[size], re->scaling, render.count[render.cur] + 1);
 
 	render.count[render.cur]++;
 }
@@ -3493,9 +3556,8 @@ void namcos23_state::c435_sprite_w(u16 data)
 	m_c435.buffer_pos++;
 }
 
-void namcos23_state::c435_pio_w(offs_t offset, u16 data)
+void namcos23_state::c435_pipeline_w(offs_t offset, u16 data)
 {
-	LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 PIO: %x\n", machine().describe_context(), data);
 	m_c435.buffer[m_c435.buffer_pos++] = data;
 	u16 h = m_c435.buffer[0];
 	int psize;
@@ -3545,8 +3607,11 @@ void namcos23_state::c435_pio_w(offs_t offset, u16 data)
 		case 0x0100:
 			c435_absolute_priority_set();
 			break;
+		case 0x0200:
+			c435_tx_set();
+			break;
 		case 0x0300:
-			c435_unk_set3();
+			c435_ty_set();
 			break;
 		case 0x0400:
 			c435_scaling_set();
@@ -3554,11 +3619,14 @@ void namcos23_state::c435_pio_w(offs_t offset, u16 data)
 		case 0x0500:
 			c435_model_blend_factor_set();
 			break;
+		case 0x0600:
+			c435_unk_set6();
+			break;
 		case 0x0700:
-			c435_camera_power_set();
+			c435_light_power_set();
 			break;
 		case 0x0800:
-			c435_camera_ambient_set();
+			c435_light_ambient_set();
 			break;
 		case 0x0f00:
 			c435_state_set();
@@ -3596,6 +3664,18 @@ void namcos23_state::c435_pio_w(offs_t offset, u16 data)
 	m_c435.buffer_pos = 0;
 }
 
+void namcos23_state::c435_dma_w(offs_t offset, u16 data)
+{
+	LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 DMA: %x\n", machine().describe_context(), data);
+	c435_pipeline_w(offset, data);
+}
+
+void namcos23_state::c435_pio_w(offs_t offset, u16 data)
+{
+	LOGMASKED(LOG_C435_PIO_UNK, "%s: C435 PIO: %x\n", machine().describe_context(), data);
+	c435_pipeline_w(offset, data);
+}
+
 void namcos23_state::c435_dma(address_space &space, u32 adr, u32 size)
 {
 	adr &= 0x1fffffff;
@@ -3608,7 +3688,7 @@ void namcos23_state::c435_dma(address_space &space, u32 adr, u32 size)
 	else
 	{
 		for (u32 pos = 0; pos < size; pos += 2)
-			c435_pio_w(0, space.read_word(adr + pos));
+			c435_dma_w(0, space.read_word(adr + pos));
 	}
 }
 
@@ -3932,9 +4012,9 @@ void namcos23_state::render_apply_transform(s32 xi, s32 yi, s32 zi, const namcos
 	memcpy(m, re->model.m, sizeof(s16) * 9);
 	if (re->model.transpose)
 		transpose_matrix(m);
-	x = (((m[0] * s64(xi) + m[1] * s64(yi) + m[2] * s64(zi)) >> 14) * re->model.scaling + re->model.v[0]) / 16384.f;
-	y = (((m[3] * s64(xi) + m[4] * s64(yi) + m[5] * s64(zi)) >> 14) * re->model.scaling + re->model.v[1]) / 16384.f;
-	z = (((m[6] * s64(xi) + m[7] * s64(yi) + m[8] * s64(zi)) >> 14) * re->model.scaling + re->model.v[2]) / 16384.f;
+	x = (((m[0] * s64(xi) + m[1] * s64(yi) + m[2] * s64(zi)) >> 14) * re->scaling + re->model.v[0]) / 16384.f;
+	y = (((m[3] * s64(xi) + m[4] * s64(yi) + m[5] * s64(zi)) >> 14) * re->scaling + re->model.v[1]) / 16384.f;
+	z = (((m[6] * s64(xi) + m[7] * s64(yi) + m[8] * s64(zi)) >> 14) * re->scaling + re->model.v[2]) / 16384.f;
 }
 
 void namcos23_state::render_apply_matrot(s32 xi, s32 yi, s32 zi, const namcos23_render_entry *re, float &x, float &y, float &z)
@@ -3989,9 +4069,9 @@ static u32 render_texture_lookup(running_machine &machine, const pen_t *pens, in
 		attr >>= 4;
 	u32 tile = (state->m_tmlrom[tileid] | (attr << 16)) & state->m_tile_mask;
 
-	// Probably swapx/swapy to add on bits 2-3 of attr
-	// Bits used by motoxgo at least
-	u8 color = state->m_texrom[(tile << 8) | ((yy << 4) & 0xf0) | (xx & 0x0f)];
+	const u8 yflipmask = BIT(attr, 1) ? 0xf0 : 0x00;
+	const u8 xflipmask = BIT(attr, 2) ? 0x0f : 0x00;
+	u8 color = state->m_texrom[(tile << 8) | (((yy << 4) & 0xf0) ^ yflipmask) | ((xx & 0x0f) ^ xflipmask)];
 	pen = color;
 	return pens[(pen >> penshift) & penmask];
 }
@@ -4419,7 +4499,7 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 				if (lsi < 0)
 					lsi = 0;
 
-				pv[i].p[3] = std::clamp(re->camera_ambient + re->camera_power * lsi, 0.f, 64.f);
+				pv[i].p[3] = std::clamp(re->light_ambient + re->light_power * lsi, 0.f, 64.f);
 			}   break;
 			}
 		}
@@ -5343,17 +5423,21 @@ void namcos23_state::check_pixxiii_trigger()
 		cu40.add_u16(0);
 		cu40.add_u16(0);
 
-		PixxiiiPacket &cu43 = log_packet("CU43");
-		cu43.add_u16(0);
-		cu43.add_u16(0);
+		PixxiiiPacket &ctxs = log_packet("CTXS");
+		ctxs.add_u16(0);
+		ctxs.add_u16(m_tx);
 
-		PixxiiiPacket &cu47 = log_packet("CU47");
-		cu47.add_u16(0);
-		cu47.add_u16(m_camera_ambient);
+		PixxiiiPacket &ctys = log_packet("CTYS");
+		ctys.add_u16(0);
+		ctys.add_u16(m_ty);
 
-		PixxiiiPacket &cu48 = log_packet("CU48");
-		cu48.add_u16(0);
-		cu48.add_u16(m_camera_power);
+		PixxiiiPacket &clpw = log_packet("CLPW");
+		clpw.add_u16(0);
+		clpw.add_u16(m_light_power);
+
+		PixxiiiPacket &clam = log_packet("CLAM");
+		clam.add_u16(0);
+		clam.add_u16(m_light_ambient);
 
 		PixxiiiPacket &cblf = log_packet("CBLF");
 		cblf.add_u16(0);
@@ -5780,27 +5864,26 @@ void namcos23_state::c412_ram_w(offs_t offset, u16 data, u16 mem_mask)
 	//  logerror("c412_ram_w %06x = %04x (%08x, %08x)\n", offset, data, m_maincpu->pc(), (unsigned int)m_maincpu->state_int(MIPS3_R31));
 	if (offset < 0x100000)
 	{
-		//if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 SDRAM A write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
+		LOGMASKED(LOG_C412_RAM, "C412 SDRAM A write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c412.sdram_a + (offset & 0xfffff));
 	}
 	else if (offset < 0x200000)
 	{
-		//if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 SDRAM B write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
+		LOGMASKED(LOG_C412_RAM, "C412 SDRAM B write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c412.sdram_b + (offset & 0xfffff));
 	}
 	else if (offset < 0x220000)
 	{
-		if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 SRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c412.sram    + (offset & 0x1ffff));
 	}
 	else if (offset < 0x220200)
 	{
-		if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 PCZRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
+		LOGMASKED(LOG_C412_RAM, "C412 PCZRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c412.pczram  + (offset & 0x1ff));
 	}
 	else
 	{
-		if (!m_c417.test_mode) LOGMASKED(LOG_C412_RAM, "C412 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
+		LOGMASKED(LOG_C412_RAM, "C412 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 	}
 }
 
@@ -5884,14 +5967,34 @@ void namcos23_state::c421_ram_w(offs_t offset, u16 data, u16 mem_mask)
 {
 	offset = m_c421.adr & 0xfffff;
 	if (offset < 0x40000)
+	{
+		LOGMASKED(LOG_C421_RAM, "C421 DRAM A write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.dram_a + (offset & 0x3ffff));
+	}
 	else if (offset < 0x80000)
+	{
+		LOGMASKED(LOG_C421_RAM, "C421 DRAM B write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.dram_b + (offset & 0x3ffff));
+	}
 	else if (offset < 0x88000)
+	{
+		LOGMASKED(LOG_C421_RAM, "C421 SRAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 		COMBINE_DATA(m_c421.sram   + (offset & 0x07fff));
+	}
 	else
 		LOGMASKED(LOG_C421_RAM, "C421 Unknown RAM write: %08x = %04x & %04x\n", (offset << 1), data, mem_mask);
 	m_c421.adr += 2;
+}
+
+u16 namcos23_state::c421_unk_c400002_r()
+{
+	LOGMASKED(LOG_C421_UNK, "%s: c421_unk_c400002_r: %04x\n", machine().describe_context(), 0);
+	return 0;
+}
+
+void namcos23_state::c421_unk_c400002_w(offs_t offset, u16 data)
+{
+	LOGMASKED(LOG_C421_UNK, "%s: c421_unk_c400002_w: %04x\n", machine().describe_context(), data);
 }
 
 u16 namcos23_state::c421_addr_msw_r()
@@ -6040,6 +6143,12 @@ u16 namcos23_state::c361_vblank_r()
 	return data;
 }
 
+u16 namcos23_state::c361_unk_e_r()
+{
+	LOGMASKED(LOG_C361_REG, "%s: c361_unk_e_r: %04x\n", machine().describe_context(), 0);
+	return 0;
+}
+
 
 // C?? (control)
 
@@ -6082,6 +6191,10 @@ void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 		re->fade_flags = m_c404.fade_flags;
 		re->absolute_priority = m_absolute_priority;
 		re->model_blend_factor = 0;
+		re->tx = m_tx;
+		re->ty = m_ty;
+		re->light_power = m_light_power;
+		re->light_ambient = m_light_ambient;
 		memcpy(re->direct.d, m_c435.direct_buf, sizeof(m_c435.direct_buf));
 		render.count[render.cur]++;
 
@@ -6176,6 +6289,10 @@ void namcos23_state::ctl_direct_poly_w(offs_t offset, u16 data)
 				re->fade_flags = m_c404.fade_flags;
 				re->absolute_priority = m_absolute_priority;
 				re->model_blend_factor = 0;
+				re->tx = m_tx;
+				re->ty = m_ty;
+				re->light_power = m_light_power;
+				re->light_ambient = m_light_ambient;
 				memcpy(re->direct.d, m_c435.direct_buf, sizeof(m_c435.direct_buf));
 				render.count[render.cur]++;
 
@@ -6352,7 +6469,7 @@ void namcos23_state::mips_base_map(address_map &map)
 	map(0x0200000c, 0x0200000d).r(FUNC(namcos23_state::c417_ptrom_lsw_r));
 	map(0x0200000e, 0x0200000f).w(FUNC(namcos23_state::c417_irq_ack_w));
 
-	map(0x04400000, 0x0440ffff).ram().share("shared_ram"); // Communication RAM (C416)
+	map(0x04400000, 0x0440ffff).rw(FUNC(namcos23_state::sharedram_main_r), FUNC(namcos23_state::sharedram_main_w)); // Communication RAM (C416)
 	map(0x04c3ff00, 0x04c3ff0f).w(FUNC(namcos23_state::mcuen_w));
 
 	map(0x0d000000, 0x0d000001).w(FUNC(namcos23_state::ctl_leds_w));
@@ -6412,10 +6529,13 @@ void namcos23_state::mips_map(address_map &map)
 	map(0x0c000000, 0x0c00001f).rw(FUNC(namcos23_state::c412_r), FUNC(namcos23_state::c412_w));
 
 	map(0x0c400000, 0x0c400001).rw(FUNC(namcos23_state::c421_ram_r), FUNC(namcos23_state::c421_ram_w));
+	map(0x0c400002, 0x0c400003).rw(FUNC(namcos23_state::c421_unk_c400002_r), FUNC(namcos23_state::c421_unk_c400002_w));
 	map(0x0c400004, 0x0c400005).rw(FUNC(namcos23_state::c421_addr_msw_r), FUNC(namcos23_state::c421_addr_msw_w));
 	map(0x0c400006, 0x0c400007).rw(FUNC(namcos23_state::c421_addr_lsw_r), FUNC(namcos23_state::c421_addr_lsw_w));
 
 	map(0x0c800010, 0x0c800011).w(FUNC(namcos23_state::c435_state_reset_w));
+	map(0x0c800012, 0x0c800013).w(FUNC(namcos23_state::c435_unk_c800012_w));
+	map(0x0c800014, 0x0c800015).w(FUNC(namcos23_state::c435_unk_c800014_w));
 	map(0x0c800016, 0x0c800017).w(FUNC(namcos23_state::c435_state_pio_w));
 	map(0x0cc00000, 0x0cc00003).w(FUNC(namcos23_state::direct_buf_w));
 
@@ -6487,6 +6607,7 @@ void namcos23_state::c361_map(address_map &map, const u32 addr)
 	map(addr + 0x8, addr + 0x9).w(FUNC(namcos23_state::c361_irq_scanline_w));
 	map(addr + 0xa, addr + 0xb).r(FUNC(namcos23_state::c361_vpos_r));
 	map(addr + 0xc, addr + 0xd).r(FUNC(namcos23_state::c361_vblank_r));
+	map(addr + 0xe, addr + 0xf).r(FUNC(namcos23_state::c361_unk_e_r));
 }
 
 void namcos23_state::c404_map(address_map &map, const u32 addr)
@@ -6633,6 +6754,24 @@ void namcos23_state::sharedram_sub_w(offs_t offset, u16 data, u16 mem_mask)
 u16 namcos23_state::sharedram_sub_r(offs_t offset)
 {
 	u16 *shared16 = reinterpret_cast<u16 *>(m_shared_ram.target());
+	return shared16[BYTE_XOR_BE(offset)];
+}
+
+void namcos23_state::sharedram_main_w(offs_t offset, u16 data, u16 mem_mask)
+{
+	u16 *shared16 = reinterpret_cast<u16 *>(m_shared_ram.target());
+	COMBINE_DATA(&shared16[BYTE_XOR_BE(offset)]);
+}
+
+u16 namcos23_state::sharedram_main_r(offs_t offset)
+{
+	// 3382
+	//if (offset == 0x3380/2 || offset == 0x3382/2) {
+	//	LOG("shared RAM read: %04x: %04x\n", offset << 1, 0x8000);
+	//	return 0xffff;
+	//}
+	u16 *shared16 = reinterpret_cast<u16 *>(m_shared_ram.target());
+	LOG("shared RAM read: %04x: %04x\n", offset << 1, shared16[BYTE_XOR_BE(offset)]);
 	return shared16[BYTE_XOR_BE(offset)];
 }
 
@@ -6900,8 +7039,8 @@ void namcos23_state::machine_start()
 
 	save_item(NAME(m_absolute_priority));
 	save_item(NAME(m_model_blend_factor));
-	save_item(NAME(m_camera_power));
-	save_item(NAME(m_camera_ambient));
+	save_item(NAME(m_light_power));
+	save_item(NAME(m_light_ambient));
 	save_item(NAME(m_matrices));
 	save_item(NAME(m_vectors));
 	save_item(NAME(m_light_vector));
