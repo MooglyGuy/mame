@@ -226,7 +226,7 @@ public:
 		m_slotnumber = slot;
 	}
 
-	peribox_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	peribox_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// Called from the box (direction to card)
 	void readz(offs_t offset, uint8_t *value);

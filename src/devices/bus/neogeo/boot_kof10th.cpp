@@ -19,7 +19,7 @@
 DEFINE_DEVICE_TYPE(NEOGEO_KOF10TH_CART, neogeo_kof10th_cart_device, "neocart_kof10th", "Neo Geo KoF 10th Ann. Bootleg Cart")
 
 
-neogeo_kof10th_cart_device::neogeo_kof10th_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_kof10th_cart_device::neogeo_kof10th_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_bootleg_cart_device(mconfig, NEOGEO_KOF10TH_CART, tag, owner, clock)
 {
 }

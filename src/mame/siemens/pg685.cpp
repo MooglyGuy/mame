@@ -552,12 +552,12 @@ void pg685_state::pg685oua12(machine_config &config)
 	pg685_backplane(config);
 	pg685_module(config);
 
-	I8251(config, "mainuart", 12288000 / 6); // wrong
+	I8251(config, "mainuart", XTAL::u(12288000) / 6); // wrong
 
 	// rs232 port
 
 	// keyboard
-	i8279_device &kbdc(I8279(config, "kbdc", 12288000 / 6)); // wrong
+	i8279_device &kbdc(I8279(config, "kbdc", XTAL::u(12288000) / 6)); // wrong
 	kbdc.out_irq_callback().set("mainpic", FUNC(pic8259_device::ir0_w));
 
 	// printer

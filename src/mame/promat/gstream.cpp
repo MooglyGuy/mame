@@ -834,7 +834,7 @@ void gstream_state::machine_reset()
 void gstream_state::gstream(machine_config &config)
 {
 	/* basic machine hardware */
-	E132XT(config, m_maincpu, 16000000*4); /* 4x internal multiplier */
+	E132XT(config, m_maincpu, XTAL::u(16000000)*4); /* 4x internal multiplier */
 	m_maincpu->set_addrmap(AS_PROGRAM, &gstream_state::gstream_32bit_map);
 	m_maincpu->set_addrmap(AS_IO, &gstream_state::gstream_io);
 	m_maincpu->set_vblank_int("screen", FUNC(gstream_state::irq0_line_hold));
@@ -863,7 +863,7 @@ void gstream_state::gstream(machine_config &config)
 void gstream_state::x2222(machine_config &config)
 {
 	/* basic machine hardware */
-	E132XT(config, m_maincpu, 16000000*4); /* 4x internal multiplier */
+	E132XT(config, m_maincpu, XTAL::u(16000000)*4); /* 4x internal multiplier */
 	m_maincpu->set_addrmap(AS_PROGRAM, &gstream_state::x2222_32bit_map);
 	m_maincpu->set_addrmap(AS_IO, &gstream_state::x2222_io);
 	m_maincpu->set_vblank_int("screen", FUNC(gstream_state::irq0_line_hold));

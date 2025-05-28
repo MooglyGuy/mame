@@ -352,7 +352,7 @@ void c1p_state::osi630_ctrl_w(uint8_t data)
 void c1p_state::osi630_sound_w(uint8_t data)
 {
 	if (data != 0)
-		m_beeper->set_clock(49152 / data);
+		m_beeper->set_frequency(49152 / data);
 }
 
 /* Disk Drive */

@@ -2005,7 +2005,7 @@ void segas16a_state::system16a(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	SEGA_SYS16A_SPRITES(config, m_sprites);
-	SEGAIC16VID(config, m_segaic16vid, 0, "gfxdecode");
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), "gfxdecode");
 
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_segas16a);
 	PALETTE(config, m_palette).set_entries(2048*2);
@@ -2026,7 +2026,7 @@ void segas16a_state::system16a(machine_config &config)
 void segas16a_state::system16a_fd1089a(machine_config &config)
 {
 	system16a(config);
-	FD1089A(config.replace(), m_maincpu, 10000000);
+	FD1089A(config.replace(), m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas16a_state::system16a_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas16a_state::irq4_line_hold));
 }
@@ -2034,7 +2034,7 @@ void segas16a_state::system16a_fd1089a(machine_config &config)
 void segas16a_state::system16a_fd1089b(machine_config &config)
 {
 	system16a(config);
-	FD1089B(config.replace(), m_maincpu, 10000000);
+	FD1089B(config.replace(), m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas16a_state::system16a_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas16a_state::irq4_line_hold));
 }
@@ -2042,7 +2042,7 @@ void segas16a_state::system16a_fd1089b(machine_config &config)
 void segas16a_state::system16a_fd1094(machine_config &config)
 {
 	system16a(config);
-	FD1094(config.replace(), m_maincpu, 10000000);
+	FD1094(config.replace(), m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas16a_state::system16a_map);
 	m_maincpu->set_addrmap(AS_OPCODES, &segas16a_state::decrypted_opcodes_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas16a_state::irq4_line_hold));
@@ -2078,14 +2078,14 @@ void segas16a_state::system16a_no7751(machine_config &config)
 	config.device_remove("n7751_8243");
 	config.device_remove("dac");
 
-	YM2151(config.replace(), m_ymsnd, 4000000);
+	YM2151(config.replace(), m_ymsnd, XTAL::u(4000000));
 	m_ymsnd->add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
 void segas16a_state::system16a_no7751p(machine_config &config)
 {
 	system16a_no7751(config);
-	segacrp2_z80_device &z80(SEGA_315_5177(config.replace(), m_soundcpu, 4000000));
+	segacrp2_z80_device &z80(SEGA_315_5177(config.replace(), m_soundcpu, XTAL::u(4000000)));
 	z80.set_addrmap(AS_PROGRAM, &segas16a_state::sound_map);
 	z80.set_addrmap(AS_IO, &segas16a_state::sound_no7751_portmap);
 	z80.set_addrmap(AS_OPCODES, &segas16a_state::sound_decrypted_opcodes_map);
@@ -2099,7 +2099,7 @@ void segas16a_state::system16a_i8751_no7751(machine_config &config)
     config.device_remove("n7751");
     config.device_remove("dac");
 
-    YM2151(config.replace(), "ymsnd", 4000000).add_route(ALL_OUTPUTS, "speaker", 0.5);
+    YM2151(config.replace(), "ymsnd", XTAL::u(4000000)).add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 */
 
@@ -2111,7 +2111,7 @@ void segas16a_state::system16a_fd1089a_no7751(machine_config &config)
 	config.device_remove("n7751");
 	config.device_remove("dac");
 
-	YM2151(config.replace(), m_ymsnd, 4000000);
+	YM2151(config.replace(), m_ymsnd, XTAL::u(4000000));
 	m_ymsnd->add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
@@ -2123,7 +2123,7 @@ void segas16a_state::system16a_fd1089b_no7751(machine_config &config)
 	config.device_remove("n7751");
 	config.device_remove("dac");
 
-	YM2151(config.replace(), m_ymsnd, 4000000);
+	YM2151(config.replace(), m_ymsnd, XTAL::u(4000000));
 	m_ymsnd->add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
@@ -2135,7 +2135,7 @@ void segas16a_state::system16a_fd1094_no7751(machine_config &config)
 	config.device_remove("n7751");
 	config.device_remove("dac");
 
-	YM2151(config.replace(), m_ymsnd, 4000000);
+	YM2151(config.replace(), m_ymsnd, XTAL::u(4000000));
 	m_ymsnd->add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 

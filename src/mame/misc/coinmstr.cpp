@@ -1309,7 +1309,7 @@ void coinmstr_state::coinmstr(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_coinmstr);
 	PALETTE(config, m_palette).set_entries(46*32*4);
 
-	mc6845_device &crtc(MC6845(config, "crtc", 14000000 / 16));
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(14000000) / 16));
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8);

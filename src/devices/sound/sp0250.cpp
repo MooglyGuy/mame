@@ -62,8 +62,8 @@ sp0250_device::sp0250_device(const machine_config &mconfig, const char *tag, dev
 void sp0250_device::device_start()
 {
 	// output PWM data at the ROMCLOCK frequency
-	int sample_rate = clock() / 2;
-	int frame_rate = sample_rate / (4 * PWM_CLOCKS);
+	const XTAL sample_rate = clock() / 2;
+	const XTAL frame_rate = sample_rate / (4 * PWM_CLOCKS);
 	m_stream = stream_alloc(0, 1, m_pwm_mode ? sample_rate : frame_rate);
 
 	// if a DRQ callback is offered, run a timer at the frame rate

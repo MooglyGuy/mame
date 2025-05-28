@@ -296,5 +296,5 @@ static void karaoke_studio_cart(device_slot_interface &device)
 
 void nes_karaokestudio_device::device_add_mconfig(machine_config &config)
 {
-	NES_KSEXPANSION_SLOT(config, m_subslot, karaoke_studio_cart);
+	NES_KSEXPANSION_SLOT(config, m_subslot, XTAL(), karaoke_studio_cart);
 }

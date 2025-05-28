@@ -2015,7 +2015,7 @@ void seattle_state::seattle_common(machine_config &config)
 	R5000LE(config, m_maincpu, SYSTEM_CLOCK * 3);
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
-	m_maincpu->set_system_clock(SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(SYSTEM_CLOCK.value());
 
 	// PCI Bus Devices
 	PCI_ROOT(config, "pci");
@@ -2027,7 +2027,7 @@ void seattle_state::seattle_common(machine_config &config)
 	m_galileo->set_map(3, address_map_constructor(&seattle_state::seattle_cs3_map, "seattle_cs3_map", this), this);
 	m_galileo->set_simm0_size(0x00800000);
 
-	ide_pci_device &ide(IDE_PCI(config, PCI_ID_IDE, 0, 0x100b0002, 0x01, 0x0));
+	ide_pci_device &ide(IDE_PCI(config, PCI_ID_IDE, 0x100b0002, 0x01, 0x0));
 	ide.irq_handler().set_inputline(m_maincpu, IDE_IRQ_NUM);
 	ide.set_legacy_top(0x0a0);
 	ide.subdevice<bus_master_ide_controller_device>("ide")->slot(0).set_option_machine_config("hdd", hdd_config);
@@ -2064,7 +2064,7 @@ void seattle_state::phoenix(machine_config &config)
 	R4700LE(config.replace(), m_maincpu, SYSTEM_CLOCK * 2);
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
-	m_maincpu->set_system_clock(SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(SYSTEM_CLOCK.value());
 
 	m_galileo->set_simm0_size(0x00200000);
 	m_galileo->set_simm1_size(0x00200000);
@@ -2077,7 +2077,7 @@ void seattle_state::seattle150(machine_config &config)
 	R5000LE(config.replace(), m_maincpu, SYSTEM_CLOCK * 3);
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
-	m_maincpu->set_system_clock(SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(SYSTEM_CLOCK.value());
 }
 
 

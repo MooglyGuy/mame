@@ -867,7 +867,7 @@ void snk6502_state::satansat(machine_config &config)
 	m_gfxdecode->set_info(gfx_satansat);
 
 	// sound hardware
-	SATANSAT_SOUND(config.replace(), "snk6502", 0);
+	SATANSAT_SOUND(config.replace(), "snk6502");
 }
 
 void vanguard_state::vanguard(machine_config &config)
@@ -911,7 +911,7 @@ void fantasy_state::fantasy(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &fantasy_state::fantasy_map);
 
 	// sound hardware
-	FANTASY_SOUND(config.replace(), "snk6502", 0);
+	FANTASY_SOUND(config.replace(), "snk6502");
 }
 
 void fantasy_state::nibbler(machine_config &config)
@@ -919,7 +919,7 @@ void fantasy_state::nibbler(machine_config &config)
 	fantasy(config);
 
 	// sound hardware
-	NIBBLER_SOUND(config.replace(), "snk6502", 0);
+	NIBBLER_SOUND(config.replace(), "snk6502");
 }
 
 void fantasy_state::pballoon(machine_config &config)
@@ -933,7 +933,7 @@ void fantasy_state::pballoon(machine_config &config)
 	MCFG_VIDEO_START_OVERRIDE(snk6502_state, pballoon)
 
 	// sound hardware
-	PBALLOON_SOUND(config.replace(), "snk6502", 0);
+	PBALLOON_SOUND(config.replace(), "snk6502");
 }
 
 

@@ -310,7 +310,7 @@ void drtomy_state::machine_reset()
 void drtomy_state::drtomy(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 24000000/2);          /* ? MHz */
+	M68000(config, m_maincpu, XTAL::u(24000000)/2);          /* ? MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &drtomy_state::drtomy_map);
 	m_maincpu->set_vblank_int("screen", FUNC(drtomy_state::irq6_line_hold));
 
@@ -330,7 +330,7 @@ void drtomy_state::drtomy(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 26000000/16, okim6295_device::PIN7_LOW).add_route(ALL_OUTPUTS, "mono", 0.8);
+	OKIM6295(config, m_oki, XTAL::u(26000000)/16, okim6295_device::PIN7_LOW).add_route(ALL_OUTPUTS, "mono", 0.8);
 }
 
 

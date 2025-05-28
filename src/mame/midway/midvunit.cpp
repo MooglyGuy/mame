@@ -33,7 +33,7 @@
 #include "crusnusa.lh"
 
 
-#define CPU_CLOCK       50000000
+#define CPU_CLOCK       XTAL::u(50000000)
 
 
 /*************************************
@@ -261,7 +261,7 @@ void midvunit_state::tms32031_control_w(offs_t offset, uint32_t data, uint32_t m
 
 		/* bit 0x200 selects internal clocking, which is 1/2 the main CPU clock rate */
 		if (data & 0x200)
-			m_timer_rate = (double)(m_maincpu->unscaled_clock() * 0.5);
+			m_timer_rate = m_maincpu->unscaled_clock().dvalue() * 0.5;
 		else
 			m_timer_rate = 10000000.;
 	}
@@ -1091,7 +1091,7 @@ void midvunit_state::midvcommon(machine_config &config)
 	PALETTE(config, m_palette).set_entries(32768);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(MIDVUNIT_VIDEO_CLOCK/2, 666, 0, 512, 432, 0, 400);
+	m_screen->set_raw(MIDVUNIT_VIDEO_CLOCK / 2, 666, 0, 512, 432, 0, 400);
 	m_screen->set_screen_update(FUNC(midvunit_state::screen_update_midvunit));
 	m_screen->set_palette(m_palette);
 }

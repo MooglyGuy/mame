@@ -852,7 +852,7 @@ void tek4132_state::tek4132(machine_config &config)
 
 	m_lan->set_addrmap(0, &tek4132_state::lan_map);
 
-	m_scc->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL()0);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 
 	/*
 	 * Interrupt sources

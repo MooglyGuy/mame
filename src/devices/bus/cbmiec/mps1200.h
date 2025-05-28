@@ -24,12 +24,12 @@ class mps1200_device : public device_t, public device_cbm_iec_interface
 {
 public:
 	// device type constructor
-	mps1200_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mps1200_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 
 protected:
-	mps1200_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	mps1200_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override;
@@ -55,7 +55,7 @@ class mps1250_device : public mps1200_device
 {
 public:
 	// device type constructor
-	mps1250_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mps1250_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override;

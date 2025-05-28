@@ -287,7 +287,7 @@ void nb1412m2_device::timer_w(uint8_t data)
 	// The DAC frequency and timer clock are linked.
 	// When the DAC clock changes, sound driver sets wait loop count ($C010)
 	// in the range of 2 to 4 in order to keep the tempo of BGM even if clock changed.
-	m_timer->adjust(attotime::from_hz(double(clock()) / (256 * 35) * m_timer_rate));
+	m_timer->adjust(attotime::from_hz(clock() / (256 * 35) * m_timer_rate));
 }
 
 void nb1412m2_device::timer_ack_w(uint8_t data)
@@ -325,7 +325,7 @@ void nb1412m2_device::dac_timer_w(uint8_t data)
 {
 	// TODO: Algorithm is unknown
 	m_timer_rate = ((data & 0x30) >> 4) + 1;
-	m_dac_frequency = double(clock()) / (256 * 12) * m_timer_rate;
+	m_dac_frequency = clock() / (256 * 12) * m_timer_rate;
 }
 
 // controls music tempo

@@ -136,7 +136,7 @@ private:
 	} m_eeprom_ee[0x40]; /* only 0 to 4 used in hx, addressing seems to allow this */
 
 	int m_eeprom_state = 0;
-	int m_eeprom_clock = XTAL();
+	int m_eeprom_clock = 0;
 	uint8_t m_eeprom_oper = 0;
 	uint16_t m_eeprom_data = 0;
 

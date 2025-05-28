@@ -84,7 +84,7 @@ protected:
 	};
 
 public:
-	cxd8442q_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cxd8442q_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void map(address_map &map);
 	void map_fifo_ram(address_map &map);

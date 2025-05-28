@@ -50,9 +50,9 @@ void warpwarp_sound_device::device_start()
 	for (int i = 0; i < 0x8000; i++)
 		m_decay[0x7fff - i] = (int16_t) (0x7fff/exp(1.0*i/4096));
 
-	m_clock_16h = clock() / 3 / 2 / 16;
-	m_clock_1v = clock() / 3 / 2 / 384;
-	m_channel = stream_alloc(0, 1, m_clock_16h);
+	m_clock_16h = clock().value() / 3 / 2 / 16;
+	m_clock_1v = clock().value() / 3 / 2 / 384;
+	m_channel = stream_alloc(0, 1, XTAL::u(m_clock_16h));
 
 	m_sound_volume_timer = timer_alloc(FUNC(warpwarp_sound_device::sound_decay_tick), this);
 	m_music_volume_timer = timer_alloc(FUNC(warpwarp_sound_device::music_decay_tick), this);

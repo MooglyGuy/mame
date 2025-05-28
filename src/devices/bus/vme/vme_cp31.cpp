@@ -161,7 +161,7 @@ void vme_cp31_card_device::device_add_mconfig(machine_config &config)
 	MC68153(config, m_bim, CLOCK32 / 8);
 	m_bim->out_int_callback().set(FUNC(vme_cp31_card_device::bim_irq_callback));
 
-	MPCC68561(config, m_mpcc, 1392000, 0, 0); // FIXME: XTAL unknown
+	MPCC68561(config, m_mpcc, XTAL::u(1392000), 0, 0); // FIXME: XTAL unknown
 	m_mpcc->out_txd_cb().set(RS232P1_TAG, FUNC(rs232_port_device::write_txd));
 	m_mpcc->out_dtr_cb().set(RS232P1_TAG, FUNC(rs232_port_device::write_dtr));
 	m_mpcc->out_rts_cb().set(RS232P1_TAG, FUNC(rs232_port_device::write_rts));

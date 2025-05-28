@@ -559,7 +559,7 @@ void lastfght_state::machine_reset()
 void lastfght_state::lastfght(machine_config &config)
 {
 	/* basic machine hardware */
-	H83044(config, m_maincpu, 32000000/2);
+	H83044(config, m_maincpu, XTAL::u(32000000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &lastfght_state::lastfght_map);
 	m_maincpu->set_vblank_int("screen", FUNC(lastfght_state::irq0_line_hold));
 

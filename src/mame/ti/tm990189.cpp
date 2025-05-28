@@ -879,7 +879,7 @@ void tm990189_state::tm990_189(machine_config &config)
 
 	TMS9902(config, m_tms9902, 8_MHz_XTAL / 4);
 	m_tms9902->xmit_cb().set(FUNC(tm990189_state::xmit_callback)); // called when a character is transmitted
-	TM990_189_RS232(config, "rs232", 0, m_tms9902);
+	TM990_189_RS232(config, "rs232", XTAL(), m_tms9902);
 
 	timer_device &display_timer(TIMER(config, "display_timer"));
 	display_timer.configure_periodic(FUNC(tm990189_state::display_callback), attotime::from_hz(30));
@@ -942,7 +942,7 @@ void tm990189_state::tm990_189_v(machine_config &config)
 
 	TMS9902(config, m_tms9902, 8_MHz_XTAL / 4);
 	m_tms9902->xmit_cb().set(FUNC(tm990189_state::xmit_callback)); // called when a character is transmitted;
-	TM990_189_RS232(config, "rs232", 0, m_tms9902);
+	TM990_189_RS232(config, "rs232", XTAL(), m_tms9902);
 
 	timer_device &display_timer(TIMER(config, "display_timer"));
 	display_timer.configure_periodic(FUNC(tm990189_state::display_callback), attotime::from_hz(30));

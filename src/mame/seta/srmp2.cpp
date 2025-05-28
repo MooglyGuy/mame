@@ -1191,7 +1191,7 @@ void srmp2_state::srmp3(machine_config &config)
 	MCFG_MACHINE_START_OVERRIDE(srmp2_state,srmp3)
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	X1_001(config, m_spritegen, 16000000, "palette", gfx_srmp3);
+	X1_001(config, m_spritegen, XTAL::u(16000000), "palette", gfx_srmp3);
 	m_spritegen->set_gfxbank_callback(FUNC(srmp2_state::srmp3_gfxbank_callback));
 	m_spritegen->set_fg_xoffsets( 0x10, 0x10 );
 	m_spritegen->set_fg_yoffsets( 0x06, 0x06 );
@@ -1212,7 +1212,7 @@ void srmp2_state::srmp3(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &aysnd(AY8910(config, "aysnd", 16000000/16));
+	ay8910_device &aysnd(AY8910(config, "aysnd", XTAL::u(16000000)/16));
 	aysnd.port_a_read_callback().set_ioport("DSW2");
 	aysnd.port_b_read_callback().set_ioport("DSW1");
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.20);

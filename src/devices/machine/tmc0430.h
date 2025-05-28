@@ -28,7 +28,7 @@ class tmc0430_device : public device_t
 {
 public:
 	tmc0430_device(const machine_config &mconfig, const char *tag, device_t *owner, const char *regionname, int offset, int ident) :
-		tmc0430_device(mconfig, tag, owner)
+		tmc0430_device(mconfig, tag, owner, XTAL())
 	{
 		set_region_and_ident(regionname, offset, ident);
 	}

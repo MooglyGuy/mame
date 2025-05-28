@@ -490,10 +490,10 @@ multipcm_device::multipcm_device(const machine_config &mconfig, const char *tag,
 
 void multipcm_device::device_start()
 {
-	const float clock_divider = 224.0f;
-	m_rate = (float)clock() / clock_divider;
+	constexpr int CLOCK_DIVIDER = 224;
+	m_rate = clock().dvalue() / CLOCK_DIVIDER;
 
-	m_stream = stream_alloc(0, 2, m_rate);
+	m_stream = stream_alloc(0, 2, clock() / CLOCK_DIVIDER);
 
 	// Volume + pan table
 	m_left_pan_table = make_unique_clear<int32_t[]>(0x800);
@@ -631,9 +631,9 @@ void multipcm_device::device_start()
 
 void multipcm_device::device_clock_changed()
 {
-	const float clock_divider = 224.0f;
-	m_rate = (float)clock() / clock_divider;
-	m_stream->set_sample_rate(m_rate);
+	constexpr int CLOCK_DIVIDER = 224;
+	m_rate = clock().dvalue() / CLOCK_DIVIDER;
+	m_stream->set_sample_rate(clock() / CLOCK_DIVIDER);
 
 	for (int32_t i = 0; i < 0x400; ++i)
 	{

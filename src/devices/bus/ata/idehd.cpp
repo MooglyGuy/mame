@@ -889,7 +889,7 @@ DEFINE_DEVICE_TYPE(ATA_CF, ide_cf_device, "atacf", "ATA CompactFlash Card")
 //  ide_cf_device - constructor
 //-------------------------------------------------
 
-ide_cf_device::ide_cf_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ide_cf_device::ide_cf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ide_hdd_device(mconfig, ATA_CF, tag, owner, clock)
 {
 }

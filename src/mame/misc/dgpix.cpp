@@ -456,7 +456,7 @@ void dgpix_state::machine_reset()
 
 void dgpix_state::dgpix(machine_config &config)
 {
-	E132XT(config, m_maincpu, 20000000*4); /* 4x internal multiplier */
+	E132XT(config, m_maincpu, XTAL::u(20000000)*4); /* 4x internal multiplier */
 	m_maincpu->set_addrmap(AS_PROGRAM, &dgpix_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &dgpix_state::io_map);
 

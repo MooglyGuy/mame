@@ -4450,11 +4450,11 @@ void newport_base_device::device_add_mconfig(machine_config &config, uint32_t xm
 {
 	newport_base_device::device_add_mconfig(config);
 
-	XMAP9(config, m_xmap[0], 0, xmap_revision);
-	XMAP9(config, m_xmap[1], 0, xmap_revision);
-	CMAP(config, m_cmap[0], 0, cmap_revision);
-	CMAP(config, m_cmap[1], 0, cmap_revision);
-	RB2(config, m_rb2, 0, global_mask);
+	XMAP9(config, m_xmap[0], XTAL(), xmap_revision);
+	XMAP9(config, m_xmap[1], XTAL(), xmap_revision);
+	CMAP(config, m_cmap[0], XTAL(), cmap_revision);
+	CMAP(config, m_cmap[1], XTAL(), cmap_revision);
+	RB2(config, m_rb2, XTAL(), global_mask);
 	write_mask().set(m_rb2, FUNC(rb2_device::set_write_mask));
 	draw_flags().set(m_rb2, FUNC(rb2_device::set_flags));
 	pixel_address().set(m_rb2, FUNC(rb2_device::set_address));

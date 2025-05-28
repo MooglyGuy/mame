@@ -58,7 +58,7 @@ mas3507d_device::mas3507d_device(const machine_config &mconfig, const char *tag,
 
 void mas3507d_device::device_start()
 {
-	stream = stream_alloc(0, 2, 44100);
+	stream = stream_alloc(0, 2, XTAL::u(44100));
 
 	cb_mpeg_frame_sync.resolve();
 	cb_demand.resolve();
@@ -121,7 +121,7 @@ void mas3507d_device::device_reset()
 	is_muted = false;
 	gain_ll = gain_rr = 0;
 
-	stream->set_sample_rate(44100);
+	stream->set_sample_rate(XTAL::u(44100));
 
 	reset_playback();
 }
@@ -471,7 +471,7 @@ void mas3507d_device::fill_buffer()
 	std::copy(mp3data.begin() + mp3_info.frame_bytes, mp3data.end(), mp3data.begin());
 	mp3data_count -= mp3_info.frame_bytes;
 
-	stream->set_sample_rate(mp3_info.hz);
+	stream->set_sample_rate(XTAL::u(mp3_info.hz));
 
 	decoded_frame_count++;
 	cb_mpeg_frame_sync(1);

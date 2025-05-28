@@ -29,7 +29,7 @@ public:
 class mtu130_extension_device : public device_t, public device_single_card_slot_interface<mtu130_extension_interface>
 {
 public:
-	mtu130_extension_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mtu130_extension_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~mtu130_extension_device() = default;
 
 	// Configuration

@@ -390,7 +390,7 @@ WRITE_LINE_MEMBER(hng64_state::tcu_tm2_cb)
 
 void hng64_state::hng64_audio(machine_config &config)
 {
-	V53A(config, m_audiocpu, 32000000/2);              // V53A, 16? mhz!
+	V53A(config, m_audiocpu, XTAL::u(32000000)/2);              // V53A, 16? mhz!
 	m_audiocpu->set_addrmap(AS_PROGRAM, &hng64_state::hng_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &hng64_state::hng_sound_io);
 	m_audiocpu->out_hreq_cb().set(FUNC(hng64_state::dma_hreq_cb));
@@ -404,7 +404,7 @@ void hng64_state::hng64_audio(machine_config &config)
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
 
-	L7A1045(config, m_dsp, 32000000/2); // ??
+	L7A1045(config, m_dsp, XTAL::u(32000000)/2); // ??
 	m_dsp->add_route(0, "lspeaker", 0.1);
 	m_dsp->add_route(1, "rspeaker", 0.1);
 }

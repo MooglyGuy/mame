@@ -1201,7 +1201,7 @@ void playmark_state::wbeachvl_mcs(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &playmark_state::wbeachvla_main_map);
 
-	I87C51(config, m_audio_mcs, 24'000'000 / 2); // actually S87C751, clock unverified, near a 24 MHz XTAL
+	I87C51(config, m_audio_mcs, XTAL::u(24'000'000) / 2); // actually S87C751, clock unverified, near a 24 MHz XTAL
 	//m_audio_mcs->port_in_cb<1>().set(); // TODO: reads something here. pending_r?
 	m_audio_mcs->port_out_cb<1>().set(FUNC(playmark_state::wbeachvla_snd_control_w));
 	m_audio_mcs->port_in_cb<3>().set(FUNC(playmark_state::wbeachvla_snd_command_r));

@@ -151,7 +151,7 @@ public:
 		set_fixed(false);
 	}
 
-	hexbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	hexbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// Used to establish the reverse link (inbound)
 	void set_chain_element(hexbus_chained_device* chain) { m_chain_element = chain; }

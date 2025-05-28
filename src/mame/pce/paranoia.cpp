@@ -178,15 +178,15 @@ void paranoia_state::paranoia(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(60));
 
-	i8085a_cpu_device &sub(I8085A(config, "sub", 18000000/3));
+	i8085a_cpu_device &sub(I8085A(config, "sub", XTAL::u(18000000)/3));
 	sub.set_addrmap(AS_PROGRAM, &paranoia_state::paranoia_8085_map);
 	sub.set_addrmap(AS_IO, &paranoia_state::paranoia_8085_io_map);
 
-	z80_device &sub2(Z80(config, "sub2", 18000000/6));
+	z80_device &sub2(Z80(config, "sub2", XTAL::u(18000000)/6));
 	sub2.set_addrmap(AS_PROGRAM, &paranoia_state::paranoia_z80_map);
 	sub2.set_addrmap(AS_IO, &paranoia_state::paranoia_z80_io_map);
 
-	i8155_device &i8155(I8155(config, "i8155", 1000000 /*?*/));
+	i8155_device &i8155(I8155(config, "i8155", XTAL::u(1000000) /*?*/));
 	i8155.out_pa_callback().set(FUNC(paranoia_state::i8155_a_w));
 	i8155.out_pb_callback().set(FUNC(paranoia_state::i8155_b_w));
 	i8155.out_pc_callback().set(FUNC(paranoia_state::i8155_c_w));

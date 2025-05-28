@@ -294,13 +294,13 @@ INPUT_PORTS_END
 
 void trivrus_state::trivrus(machine_config &config)
 {
-	SE3208(config, m_maincpu, 14318180 * 3); // unknown clock
+	SE3208(config, m_maincpu, XTAL::u(14318180) * 3); // unknown clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &trivrus_state::trivrus_mem);
 	m_maincpu->iackx_cb().set(m_vr0soc, FUNC(vrender0soc_device::irq_callback));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	VRENDER0_SOC(config, m_vr0soc, 14318180 * 3);
+	VRENDER0_SOC(config, m_vr0soc, XTAL::u(14318180) * 3);
 	m_vr0soc->set_host_cpu_tag(m_maincpu);
 	m_vr0soc->set_external_vclk(28636360);
 	m_vr0soc->tx_callback<0>().set(m_microtouch, FUNC(microtouch_device::rx));

@@ -74,7 +74,7 @@ class mbc6_device : public device_t, public device_gb_cart_interface
 public:
 	static constexpr feature_type imperfect_features() { return feature::ROM; }
 
-	mbc6_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mbc6_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual image_init_result load(std::string &message) override ATTR_COLD;
 	virtual void unload() override ATTR_COLD;
@@ -123,7 +123,7 @@ mbc6_device::mbc6_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, GB_ROM_MBC6, tag, owner, clock),
 	device_gb_cart_interface(mconfig, *this),
 	m_flash(*this, "flash"),

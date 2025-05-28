@@ -114,7 +114,7 @@ bitmap_printer_device::bitmap_printer_device(const machine_config &mconfig, cons
 }
 
 bitmap_printer_device::bitmap_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, int paper_width, int paper_height, int hdpi, int vdpi) :
-	bitmap_printer_device(mconfig, tag, owner)
+	bitmap_printer_device(mconfig, tag, owner, XTAL())
 {
 	m_paper_width = paper_width;
 	m_paper_height = paper_height;

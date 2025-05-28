@@ -37,7 +37,7 @@ void bbd_device_base<Entries, Outputs>::device_start()
 	if (m_cv_handler.isnull())
 		m_stream = stream_alloc(1, Outputs, sample_rate());
 	else
-		m_stream = stream_alloc(1, Outputs, XTAL(), STREAM_DISABLE_INPUT_RESAMPLING, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+		m_stream = stream_alloc(1, Outputs, XTAL(), (sound_stream_flags)(STREAM_DISABLE_INPUT_RESAMPLING | SAMPLE_RATE_OUTPUT_ADAPTIVE));
 
 	save_item(NAME(m_buffer));
 	save_item(NAME(m_curpos));

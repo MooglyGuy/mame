@@ -19,7 +19,7 @@
 #include "speaker.h"
 
 
-#define MCLK 12000000
+#define MCLK XTAL::u(12000000)
 
 
 class mjsister_state : public driver_device

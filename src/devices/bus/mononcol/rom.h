@@ -16,7 +16,7 @@ class mononcol_rom_plain_device : public device_t, public device_mononcol_cart_i
 {
 public:
 	// construction/destruction
-	mononcol_rom_plain_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mononcol_rom_plain_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t read() override { return m_spi->read(); }
 	DECLARE_WRITE_LINE_MEMBER(dir_w) override { m_spi->dir_w(state); }
@@ -26,7 +26,7 @@ public:
 	void set_spi_region(uint8_t *region, size_t size) override { m_spi->set_rom_ptr(region); m_spi->set_rom_size(size); }
 
 protected:
-	mononcol_rom_plain_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	mononcol_rom_plain_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override;

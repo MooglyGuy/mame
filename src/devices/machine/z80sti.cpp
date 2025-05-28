@@ -129,13 +129,13 @@ void z80sti_device::device_start()
 	// create serial receive clock timer
 	if (m_rx_clock > 0)
 	{
-		set_rcv_rate(m_rx_clock);
+		set_rcv_rate(XTAL::u(m_rx_clock));
 	}
 
 	// create serial transmit clock timer
 	if (m_tx_clock > 0)
 	{
-		set_tra_rate(m_tx_clock);
+		set_tra_rate(XTAL::u(m_tx_clock));
 	}
 
 	// state saving

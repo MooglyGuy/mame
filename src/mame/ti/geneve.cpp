@@ -1225,8 +1225,8 @@ void geneve_state::geneve_common(machine_config &config)
 	m_kbdconn->out_clock_cb().set(GENEVE_GATE_ARRAY_TAG, FUNC(bus::ti99::internal::geneve_gate_array_device::kbdclk));
 	m_kbdconn->out_data_cb().set(GENEVE_GATE_ARRAY_TAG, FUNC(bus::ti99::internal::geneve_gate_array_device::kbddata));
 
-	TI99_JOYPORT(config, m_joyport, 0, ti99_joyport_options_plain, "twinjoy");
-	V9938_COLORBUS(config, m_colorbus, 0, ti99_colorbus_options, nullptr);
+	TI99_JOYPORT(config, m_joyport, XTAL(), ti99_joyport_options_plain, "twinjoy");
+	V9938_COLORBUS(config, m_colorbus, XTAL(), ti99_colorbus_options, nullptr);
 	m_colorbus->extra_button_cb().set(FUNC(geneve_state::left_mouse_button));
 
 	// PFM expansion

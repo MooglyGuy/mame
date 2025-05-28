@@ -332,11 +332,11 @@ GFXDECODE_END
 void pass_state::pass(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 14'318'180 / 2);
+	M68000(config, m_maincpu, XTAL(14'318'181) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &pass_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pass_state::irq1_line_hold)); // all the same
 
-	z80_device &audiocpu(Z80(config, "audiocpu", 14'318'180 / 4));
+	z80_device &audiocpu(Z80(config, "audiocpu", XTAL(14'318'181) / 4));
 	audiocpu.set_addrmap(AS_PROGRAM, &pass_state::sound_map);
 	audiocpu.set_addrmap(AS_IO, &pass_state::sound_io_map);
 	audiocpu.set_periodic_int(FUNC(pass_state::irq0_line_hold), attotime::from_hz(60)); // probably not accurate, unknown timing and generation (ym2203 sound chip?).
@@ -359,7 +359,7 @@ void pass_state::pass(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	YM2203(config, "ymsnd", XTAL::u(14'318'180) / 4).add_route(ALL_OUTPUTS, "mono", 0.60);
+	YM2203(config, "ymsnd", XTAL(14'318'181) / 4).add_route(ALL_OUTPUTS, "mono", 0.60);
 
 	OKIM6295(config, "oki", XTAL::u(792'000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.60); // clock frequency & pin 7 not verified
 }

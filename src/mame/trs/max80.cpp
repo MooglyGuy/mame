@@ -308,7 +308,7 @@ void max80_state::drive_w(offs_t offset, u8 data)
 	}
 
 	m_fdc->dden_w(!BIT(data, 6));
-	m_fdc->set_unscaled_clock(BIT(data, 5) ? 2000000 : 1000000);
+	m_fdc->set_unscaled_clock(XTAL::u(BIT(data, 5) ? 2000000 : 1000000));
 	m_allow_nmi = BIT(data, 7);
 }
 
@@ -447,7 +447,7 @@ static void max80_floppies(device_slot_interface &device)
 void max80_state::max80(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 15'200'000 / 3);
+	Z80(config, m_maincpu, XTAL::u(15'200'000) / 3);
 	m_maincpu->set_addrmap(AS_PROGRAM, &max80_state::mem_map);
 
 	/* video hardware */
@@ -460,7 +460,7 @@ void max80_state::max80(machine_config &config)
 
 	PALETTE(config, m_palette, palette_device::MONOCHROME);
 
-	HD6845S(config, m_crtc, 15'200'000 / 8);   // HD46505
+	HD6845S(config, m_crtc, XTAL::u(15'200'000) / 8);   // HD46505
 	m_crtc->set_screen("screen");
 	m_crtc->set_show_border_area(false);
 	m_crtc->set_char_width(8);
@@ -475,7 +475,7 @@ void max80_state::max80(machine_config &config)
 	FLOPPY_CONNECTOR(config, "fdc:2", max80_floppies, nullptr, max80_state::floppy_formats).enable_sound(true);
 	FLOPPY_CONNECTOR(config, "fdc:3", max80_floppies, nullptr, max80_state::floppy_formats).enable_sound(true);
 
-	Z80PIO(config, m_pio, 15'200'000 / 3);
+	Z80PIO(config, m_pio, XTAL::u(15'200'000) / 3);
 	m_pio->in_pa_callback().set(FUNC(max80_state::pio_pa_r));
 	m_pio->out_pa_callback().set(FUNC(max80_state::pio_pa_w));
 	m_pio->out_pb_callback().set(FUNC(max80_state::pio_pb_w));
@@ -486,7 +486,7 @@ void max80_state::max80(machine_config &config)
 
 	MSM5832(config, m_rtc, 32.768_kHz_XTAL);
 
-	Z80SIO(config, m_uart, 15'200'000 / 3);
+	Z80SIO(config, m_uart, XTAL::u(15'200'000) / 3);
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();

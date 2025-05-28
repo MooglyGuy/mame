@@ -19,13 +19,13 @@
 DEFINE_DEVICE_TYPE(NEOGEO_CMC_CART, neogeo_cmc_cart_device, "neocart_cmc", "Neo Geo CMC Cart")
 
 
-neogeo_cmc_cart_device::neogeo_cmc_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_cmc_cart_device::neogeo_cmc_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, type, tag, owner, clock),
 	m_prot(*this, "cmc_prot")
 {
 }
 
-neogeo_cmc_cart_device::neogeo_cmc_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_cmc_cart_device::neogeo_cmc_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_cmc_cart_device(mconfig, NEOGEO_CMC_CART, tag, owner, clock)
 {
 }

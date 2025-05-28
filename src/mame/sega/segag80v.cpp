@@ -965,13 +965,13 @@ void segag80v_state::zektor(machine_config &config)
 void segag80v_state::tacscan(machine_config &config)
 {
 	g80v_base(config);
-	SEGAUSB(config, m_usb, 0, m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	SEGAUSB(config, m_usb, XTAL(), m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 
 void segag80v_state::startrek(machine_config &config)
 {
 	g80v_base(config);
-	SEGAUSB(config, m_usb, 0, m_maincpu).add_route(ALL_OUTPUTS, "speech", 1.0);
+	SEGAUSB(config, m_usb, XTAL(), m_maincpu).add_route(ALL_OUTPUTS, "speech", 1.0);
 	SEGA_SPEECH_BOARD(config, "speech").add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 

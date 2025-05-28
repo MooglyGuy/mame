@@ -163,7 +163,7 @@ void vp550_device::octave_w(uint8_t data)
 
 	if (BIT(data, 4))
 	{
-		clock2 = m_slot->clock() >> (3 - (data & 0x03));
+		clock2 = m_slot->clock().value() >> (3 - (data & 0x03));
 	}
 
 	m_pfg[BIT(data, 2)]->set_clk2(clock2);

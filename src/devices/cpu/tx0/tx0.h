@@ -130,7 +130,7 @@ class tx0_8kw_device : public tx0_device
 {
 public:
 	// construction/destruction
-	tx0_8kw_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	tx0_8kw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	tx0_8kw_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
@@ -147,7 +147,7 @@ class tx0_8kwo_device : public tx0_8kw_device
 {
 public:
 	// construction/destruction
-	tx0_8kwo_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	tx0_8kwo_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -161,7 +161,7 @@ class tx0_64kw_device : public tx0_device
 {
 public:
 	// construction/destruction
-	tx0_64kw_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	tx0_64kw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void execute_run() override;

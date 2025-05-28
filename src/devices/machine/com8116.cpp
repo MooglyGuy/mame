@@ -149,7 +149,7 @@ void com8116_device::device_start()
 	m_ft_timer = timer_alloc(FUNC(com8116_device::ft_tick), this);
 
 	for (int i = 0; i < 16; i++)
-		LOGMASKED(LOG_TABLE, "Output Frequency %01X: 16X %f Hz\n", i, double(clock()) / m_divisors[i] / 16.0);
+		LOGMASKED(LOG_TABLE, "Output Frequency %01X: 16X %f Hz\n", i, clock().dvalue() / m_divisors[i] / 16.0);
 
 	// register for state saving
 	save_item(NAME(m_fx4));
@@ -210,7 +210,7 @@ TIMER_CALLBACK_MEMBER(com8116_device::ft_tick)
 void com8116_device::str_w(uint8_t data)
 {
 	int fr_divider = data & 0x0f;
-	int fr_clock = clock() / m_divisors[fr_divider];
+	int fr_clock = clock().value() / m_divisors[fr_divider];
 
 	LOGMASKED(LOG_SELECTED, "Receiver Divisor Select %01X: %u (%u Hz)\n", data & 0x0f, m_divisors[fr_divider], fr_clock);
 
@@ -225,7 +225,7 @@ void com8116_device::str_w(uint8_t data)
 void com8116_device::stt_w(uint8_t data)
 {
 	int ft_divider = data & 0x0f;
-	int ft_clock = clock() / m_divisors[ft_divider];
+	int ft_clock = clock().value() / m_divisors[ft_divider];
 
 	LOGMASKED(LOG_SELECTED, "Transmitter Divisor Select %01X: %u (%u Hz)\n", data & 0x0f, m_divisors[ft_divider], ft_clock);
 

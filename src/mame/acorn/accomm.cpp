@@ -607,12 +607,12 @@ void accomm_state::sheila_w(offs_t offset, uint8_t data)
 	case 0x06:  /* Counter divider */
 		if ( m_ula.communication_mode == 0x01)
 		{
-		/* GUESS
-		 * the Electron Advanced Users manual says this is the correct algorithm
-		 * but the divider is wrong(?), says 16 but results in high pitch,
-		 * 32 is more close
-		 */
-			m_beeper->set_clock( 1000000 / ( 32 * ( data + 1 ) ) );
+			/* GUESS
+			 * the Electron Advanced Users manual says this is the correct algorithm
+			 * but the divider is wrong(?), says 16 but results in high pitch,
+			 * 32 is more close
+			 */
+			m_beeper->set_frequency( 1000000 / ( 32 * ( data + 1 ) ) );
 		}
 		break;
 	case 0x07:  /* Misc. */

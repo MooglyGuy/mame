@@ -50,7 +50,7 @@ void nes_sharpcass_device::device_add_mconfig(machine_config &config)
 //  nes_sharpcass_device - constructor
 //-------------------------------------------------
 
-nes_sharpcass_device::nes_sharpcass_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+nes_sharpcass_device::nes_sharpcass_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NES_SHARPCASS, tag, owner, clock)
 	, device_nes_control_port_interface(mconfig, *this)
 	, m_cassette(*this, "tape")

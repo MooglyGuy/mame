@@ -377,7 +377,7 @@ void ltd3_state::ram_w(offs_t offset, u8 data)
 				m_snd_pulse->b_w(BIT(data, 4));
 				if (BIT(data, 4))
 				{
-					u16 freq = 100 + ((data>>5) * 300);  // guess
+					const XTAL freq = XTAL::u(100 + ((data>>5) * 300));  // guess
 					m_monotone->set_unscaled_clock(freq);
 				}
 				// Display digits

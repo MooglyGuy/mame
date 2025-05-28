@@ -99,7 +99,7 @@ class tama5_device : public mbc_device_base
 public:
 	static constexpr feature_type unemulated_features() { return feature::SOUND; }
 
-	tama5_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	tama5_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual image_init_result load(std::string &message) override ATTR_COLD;
 
@@ -126,7 +126,7 @@ tama5_device::tama5_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_device_base(mconfig, GB_ROM_TAMA5, tag, owner, clock),
 	m_bank_sel_rom(0U),
 	m_response(0U),

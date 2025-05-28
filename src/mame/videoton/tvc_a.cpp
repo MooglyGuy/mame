@@ -65,7 +65,7 @@ TIMER_CALLBACK_MEMBER(tvc_sound_device::trigger_int)
 void tvc_sound_device::sound_stream_update(sound_stream &stream, std::vector<read_stream_view> const &inputs, std::vector<write_stream_view> &outputs)
 {
 	auto &output = outputs[0];
-	int rate = output.sample_rate() / 2;
+	int rate = output.sample_rate().value() / 2;
 	if (m_enabled && m_freq)
 	{
 		for (int sampindex = 0; sampindex < output.samples(); sampindex++)

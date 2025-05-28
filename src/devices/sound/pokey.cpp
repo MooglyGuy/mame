@@ -381,7 +381,7 @@ void pokey_device::device_clock_changed()
 {
 	m_clock_period = clocks_to_attotime(1);
 
-	if (clock() != 0)
+	if (clock().value() != 0)
 	{
 		if (m_stream != nullptr)
 			m_stream->set_sample_rate(clock());

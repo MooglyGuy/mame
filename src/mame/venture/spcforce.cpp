@@ -326,7 +326,7 @@ void spcforce_state::spcforce(machine_config &config)
 {
 	// basic machine hardware
 	// FIXME: The 8085A had a max clock of 6MHz, internally divided by 2!
-	I8085A(config, m_maincpu, 8'000'000 * 2);        // 4.00 MHz???
+	I8085A(config, m_maincpu, XTAL::u(8'000'000) * 2);        // 4.00 MHz???
 	m_maincpu->set_addrmap(AS_PROGRAM, &spcforce_state::main_map);
 
 	I8035(config, m_audiocpu, XTAL::u(6'144'000));        /* divisor ??? */

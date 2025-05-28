@@ -333,7 +333,7 @@ myb3k_keyboard_device::myb3k_keyboard_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_keyboard_cb(*this)
 	, m_io_kbd_t(*this, "MYB3K_T%X", 0U)
@@ -482,7 +482,7 @@ stepone_keyboard_device::stepone_keyboard_device(
 	const machine_config &mconfig,
 	char const *tag,
 	device_t *owner,
-	u32 clock) : myb3k_keyboard_device(mconfig, STEPONE_KEYBOARD, tag, owner, clock)
+	const XTAL &clock) : myb3k_keyboard_device(mconfig, STEPONE_KEYBOARD, tag, owner, clock)
 {
 }
 
@@ -495,7 +495,7 @@ jb3000_keyboard_device::jb3000_keyboard_device(
 	const machine_config &mconfig,
 	char const *tag,
 	device_t *owner,
-	u32 clock) : myb3k_keyboard_device(mconfig, JB3000_KEYBOARD, tag, owner, clock)
+	const XTAL &clock) : myb3k_keyboard_device(mconfig, JB3000_KEYBOARD, tag, owner, clock)
 {
 }
 

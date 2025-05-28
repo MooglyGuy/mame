@@ -213,12 +213,12 @@ INPUT_PORTS_END
 void exchess_state::exchess(machine_config &config)
 {
 	/* basic machine hardware */
-	F8(config, m_maincpu, 4500000/2); // measured
+	F8(config, m_maincpu, XTAL::u(4500000)/2); // measured
 	m_maincpu->set_addrmap(AS_PROGRAM, &exchess_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &exchess_state::main_io);
 	m_maincpu->set_irq_acknowledge_callback("psu", FUNC(f38t56_device::int_acknowledge));
 
-	f38t56_device &psu(F38T56(config, "psu", 4500000/2));
+	f38t56_device &psu(F38T56(config, "psu", XTAL::u(4500000)/2));
 	psu.set_int_vector(0x0020);
 	psu.int_req_callback().set_inputline("maincpu", F8_INPUT_LINE_INT_REQ);
 	psu.read_a().set(FUNC(exchess_state::ram_data_r));

@@ -486,7 +486,7 @@ void xor100_state::xor100(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &xor100_state::xor100_io);
 
 	/* devices */
-	I8251(config, m_uart_a, 0/*8_MHz_XTAL / 2,*/);
+	I8251(config, m_uart_a, XTAL()/*8_MHz_XTAL / 2,*/);
 	m_uart_a->txd_handler().set(RS232_A_TAG, FUNC(rs232_port_device::write_txd));
 	m_uart_a->dtr_handler().set(RS232_A_TAG, FUNC(rs232_port_device::write_dtr));
 	m_uart_a->rts_handler().set(RS232_A_TAG, FUNC(rs232_port_device::write_rts));
@@ -495,7 +495,7 @@ void xor100_state::xor100(machine_config &config)
 	rs232a.rxd_handler().set(m_uart_a, FUNC(i8251_device::write_rxd));
 	rs232a.dsr_handler().set(m_uart_a, FUNC(i8251_device::write_dsr));
 
-	I8251(config, m_uart_b, 0/*8_MHz_XTAL / 2,*/);
+	I8251(config, m_uart_b, XTAL()/*8_MHz_XTAL / 2,*/);
 	m_uart_b->txd_handler().set(RS232_B_TAG, FUNC(rs232_port_device::write_txd));
 	m_uart_b->dtr_handler().set(RS232_B_TAG, FUNC(rs232_port_device::write_dtr));
 	m_uart_b->rts_handler().set(RS232_B_TAG, FUNC(rs232_port_device::write_rts));

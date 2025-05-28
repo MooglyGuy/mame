@@ -288,7 +288,7 @@ void malzak_state::machine_reset()
 void malzak_state::malzak(machine_config &config)
 {
 	/* basic machine hardware */
-	S2650(config, m_maincpu, 3800000/4);
+	S2650(config, m_maincpu, XTAL::u(3800000)/4);
 	m_maincpu->set_addrmap(AS_PROGRAM, &malzak_state::malzak_map);
 	m_maincpu->set_addrmap(AS_IO, &malzak_state::malzak_io_map);
 	m_maincpu->set_addrmap(AS_DATA, &malzak_state::malzak_data_map);

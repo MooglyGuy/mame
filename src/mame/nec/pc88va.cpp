@@ -857,7 +857,7 @@ void pc88va_state::pc88va_fdc_w(offs_t offset, uint8_t data)
 			m_fdd[0]->get_device()->set_rpm(data & 0x01 ? 360 : 300);
 			m_fdd[1]->get_device()->set_rpm(data & 0x02 ? 360 : 300);
 
-			m_fdc->set_rate(data & 0x20 ? 500000 : 250000);
+			m_fdc->set_rate(XTAL::u(data & 0x20 ? 500000 : 250000));
 			break;
 		/*
 		---- x--- PCM: ?
@@ -1627,7 +1627,7 @@ void pc88va_state::pc88va(machine_config &config)
 	m_dmac->in_memr_callback().set(FUNC(pc88va_state::dma_memr_cb));
 	m_dmac->out_memw_callback().set(FUNC(pc88va_state::dma_memw_cb));
 
-	UPD765A(config, m_fdc, 8000000, false, true);
+	UPD765A(config, m_fdc, XTAL::u(8000000), false, true);
 	m_fdc->intrq_wr_callback().set(FUNC(pc88va_state::fdc_irq));
 	m_fdc->drq_wr_callback().set(FUNC(pc88va_state::fdc_drq));
 	FLOPPY_CONNECTOR(config, m_fdd[0], pc88va_floppies, "525hd", pc88va_state::floppy_formats);

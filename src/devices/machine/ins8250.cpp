@@ -249,8 +249,8 @@ READ_LINE_MEMBER(ins8250_uart_device::intrpt_r)
 // Baud rate generator is reset after writing to either byte of divisor latch
 void ins8250_uart_device::update_baud_rate()
 {
-	LOG("%.1f baud selected (divisor = %d)\n", double(clock()) / (m_regs.dl * 16), m_regs.dl);
-	set_rate(clock(), m_regs.dl * 16);
+	LOG("%.1f baud selected (divisor = %d)\n", clock().dvalue() / (m_regs.dl * 16), m_regs.dl);
+	set_rate(clock() / (m_regs.dl * 16));
 
 	// FIXME: Baud rate generator should not affect transmitter or receiver, but device_serial_interface resets them regardless.
 	// If the transmitter is still running at this time and we don't flush it, the shift register will never be emptied!

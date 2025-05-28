@@ -721,7 +721,7 @@ void r2dx_v33_state::r2dx_oki_map(address_map &map)
 void r2dx_v33_state::rdx_v33(machine_config &config)
 {
 	/* basic machine hardware */
-	V33(config, m_maincpu, 32000000/2); // ?
+	V33(config, m_maincpu, XTAL::u(32000000)/2); // ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &r2dx_v33_state::rdx_v33_map);
 	m_maincpu->set_vblank_int("screen", FUNC(r2dx_v33_state::interrupt));
 

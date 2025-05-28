@@ -44,17 +44,17 @@ m950x0_device::m950x0_device(const machine_config &mconfig, device_type type, co
 }
 
 m95010_device::m95010_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: m950x0_device(mconfig, M95010, tag, ownerx80)
+	: m950x0_device(mconfig, M95010, tag, owner, 0x80)
 {
 }
 
 m95020_device::m95020_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: m950x0_device(mconfig, M95020, tag, ownerx100)
+	: m950x0_device(mconfig, M95020, tag, owner, 0x100)
 {
 }
 
 m95040_device::m95040_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: m950x0_device(mconfig, M95040, tag, ownerx200)
+	: m950x0_device(mconfig, M95040, tag, owner, 0x200)
 {
 }
 

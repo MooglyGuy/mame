@@ -13,7 +13,7 @@
 #include "speaker.h"
 
 
-#define ym3812_StdClock 3579545
+#define ym3812_StdClock XTAL::u(3579545)
 
 uint8_t isa8_adlib_device::ym3812_16_r(offs_t offset)
 {

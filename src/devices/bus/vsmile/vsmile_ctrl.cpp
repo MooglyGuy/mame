@@ -58,7 +58,7 @@ vsmile_ctrl_port_device::vsmile_ctrl_port_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, VSMILE_CTRL_PORT, tag, owner, clock)
 	, device_single_card_slot_interface<device_vsmile_ctrl_interface>(mconfig, *this)
 	, m_rts_cb(*this)
@@ -94,7 +94,7 @@ vsmile_ctrl_device_base::vsmile_ctrl_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_vsmile_ctrl_interface(mconfig, *this)
 	, m_tx_timer(nullptr)

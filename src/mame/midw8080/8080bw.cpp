@@ -1726,7 +1726,7 @@ void _8080bw_state::schaser(machine_config &config)
 	mw8080bw_root(config);
 
 	// basic machine hardware
-	i8080_cpu_device &maincpu(I8080(config.replace(), m_maincpu, 1996800)); // 19.968MHz / 10
+	i8080_cpu_device &maincpu(I8080(config.replace(), m_maincpu, XTAL::u(19968000) / 10)); // 19.968MHz / 10
 	maincpu.set_addrmap(AS_PROGRAM, &_8080bw_state::schaser_map);
 	maincpu.set_addrmap(AS_IO, &_8080bw_state::schaser_io_map);
 	maincpu.set_irq_acknowledge_callback(FUNC(_8080bw_state::interrupt_vector));
@@ -1970,7 +1970,7 @@ void _8080bw_state::sflush(machine_config &config)
 	mw8080bw_root(config);
 
 	/* basic machine hardware */
-	M6800(config.replace(), m_maincpu, 1500000); // ?
+	M6800(config.replace(), m_maincpu, XTAL::u(1500000)); // ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &_8080bw_state::sflush_map);
 
 	MCFG_MACHINE_START_OVERRIDE(_8080bw_state,sflush)
@@ -4096,7 +4096,7 @@ void cane_state::cane(machine_config &config)
 	mw8080bw_root(config);
 
 	// Basic machine hardware
-	i8080_cpu_device &maincpu(I8080(config.replace(), m_maincpu, 1996800)); /* 19.968MHz / 10 */
+	i8080_cpu_device &maincpu(I8080(config.replace(), m_maincpu, XTAL::u(1996800))); /* 19.968MHz / 10 */
 	maincpu.set_addrmap(AS_PROGRAM, &cane_state::cane_map);
 	maincpu.set_addrmap(AS_IO, &cane_state::cane_io_map);
 	maincpu.set_irq_acknowledge_callback(FUNC(cane_state::interrupt_vector));
@@ -4203,7 +4203,7 @@ void orbite_state::orbite(machine_config &config)
 	mw8080bw_root(config);
 
 	// basic machine hardware
-	i8080_cpu_device &maincpu(I8080(config.replace(), m_maincpu, 1996800)); /* 19.968MHz / 10 */
+	i8080_cpu_device &maincpu(I8080(config.replace(), m_maincpu, XTAL::u(1996800))); /* 19.968MHz / 10 */
 	maincpu.set_addrmap(AS_PROGRAM, &orbite_state::orbite_map);
 	maincpu.set_addrmap(AS_IO, &orbite_state::orbite_io_map);
 	maincpu.set_irq_acknowledge_callback(FUNC(orbite_state::interrupt_vector));

@@ -404,7 +404,7 @@ GFXDECODE_END
 void xyonix_state::xyonix(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 16000000 / 4);        // 4 MHz ?
+	Z80(config, m_maincpu, XTAL::u(16000000) / 4);        // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &xyonix_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &xyonix_state::port_map);
 	m_maincpu->set_periodic_int(FUNC(xyonix_state::irq0_line_assert), attotime::from_hz(4*60));  // ?? controls music tempo
@@ -430,8 +430,8 @@ void xyonix_state::xyonix(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	SN76496(config, "sn1", 16000000/4).add_route(ALL_OUTPUTS, "mono", 0.5);
-	SN76496(config, "sn2", 16000000/4).add_route(ALL_OUTPUTS, "mono", 0.5);
+	SN76496(config, "sn1", XTAL::u(16000000)/4).add_route(ALL_OUTPUTS, "mono", 0.5);
+	SN76496(config, "sn2", XTAL::u(16000000)/4).add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
 /* ROM Loading ***************************************************************/

@@ -443,12 +443,12 @@ TIMER_DEVICE_CALLBACK_MEMBER(namco_de_pcbstack_device::screen_scanline)
 
 void namco_de_pcbstack_device::configure_c148_standard(machine_config &config)
 {
-	NAMCO_C148(config, m_master_intc, 0, m_maincpu, true);
+	NAMCO_C148(config, m_master_intc, XTAL(), m_maincpu, true);
 	m_master_intc->link_c148_device(m_slave_intc);
 	m_master_intc->out_ext1_callback().set(FUNC(namco_de_pcbstack_device::sound_reset_w));
 	m_master_intc->out_ext2_callback().set(FUNC(namco_de_pcbstack_device::system_reset_w));
 
-	NAMCO_C148(config, m_slave_intc, 0, m_slave, false);
+	NAMCO_C148(config, m_slave_intc, XTAL(), m_slave, false);
 	m_slave_intc->link_c148_device(m_master_intc);
 }
 
@@ -469,7 +469,7 @@ void namco_de_pcbstack_device::device_reset()
 	/* Initialise the bank select in the sound CPU */
 	m_audiobank->set_entry(0); /* Page in bank 0 */
 
-	m_audiocpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE );
+	m_audiocpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
 
 	/* Place CPU2 & CPU3 into the reset condition */
 	reset_all_subcpus(ASSERT_LINE);

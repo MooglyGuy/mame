@@ -919,7 +919,7 @@ void mcr68_state::mcr68(machine_config &config)
 
 	WATCHDOG_TIMER(config, "watchdog").set_vblank_count("screen", 8);
 
-	PTM6840(config, m_ptm, 7723800 / 10);
+	PTM6840(config, m_ptm, XTAL::u(7723800) / 10);
 	m_ptm->irq_callback().set_inputline("maincpu", 2);
 
 	// Video hardware
@@ -946,7 +946,7 @@ void mcr68_state::xenophob(machine_config &config)
 	mcr68(config);
 
 	// Basic machine hardware
-	MIDWAY_SOUNDS_GOOD(config, m_sounds_good).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	MIDWAY_SOUNDS_GOOD(config, m_sounds_good, XTAL(16'000'000)).add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 
 void mcr68_state::intlaser(machine_config &config)
@@ -954,7 +954,7 @@ void mcr68_state::intlaser(machine_config &config)
 	mcr68(config);
 
 	// Basic machine hardware
-	MIDWAY_SOUNDS_GOOD(config, m_sounds_good).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	MIDWAY_SOUNDS_GOOD(config, m_sounds_good, XTAL(16'000'000)).add_route(ALL_OUTPUTS, "speaker", 1.0);
 
 	subdevice<watchdog_timer_device>("watchdog")->set_vblank_count("screen", 800);
 }
@@ -965,8 +965,8 @@ void mcr68_state::spyhunt2(machine_config &config)
 	mcr68(config);
 
 	// Basic machine hardware
-	MIDWAY_SOUNDS_GOOD(config, m_sounds_good).add_route(ALL_OUTPUTS, "speaker", 0.5);
-	MIDWAY_TURBO_CHEAP_SQUEAK(config, m_turbo_cheap_squeak).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	MIDWAY_SOUNDS_GOOD(config, m_sounds_good, XTAL(16'000'000)).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	MIDWAY_TURBO_CHEAP_SQUEAK(config, m_turbo_cheap_squeak, XTAL(8'000'000)).add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	ADC0844(config, m_adc);
 	m_adc->ch1_callback().set_ioport("AN1");

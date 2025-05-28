@@ -460,7 +460,7 @@ void s2636_device::sound_stream_update(sound_stream &stream, std::vector<read_st
 		{
 			if (m_registers[REG_SND_PERIOD])
 			{
-				m_sample_cnt = (machine().sample_rate() * (m_registers[REG_SND_PERIOD] + 1) * screen().scan_period()).seconds();
+				m_sample_cnt = (machine().sample_rate().value() * (m_registers[REG_SND_PERIOD] + 1) * screen().scan_period()).seconds();
 				m_sound_lvl = !m_sound_lvl;
 			}
 			else

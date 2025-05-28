@@ -173,12 +173,7 @@ void mbc_ram_device_base<Base>::unload()
 
 
 template <typename Base>
-mbc_ram_device_base<Base>::mbc_ram_device_base(
-		machine_config const &mconfig,
-		device_type type,
-		char const *tag,
-		device_t *owner,
-		u32 clock) :
+mbc_ram_device_base<Base>::mbc_ram_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 	Base(mconfig, type, tag, owner, clock),
 	m_bank_ram(*this, "ram"),
 	m_bank_bits_ram(0U),

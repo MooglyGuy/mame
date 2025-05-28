@@ -656,7 +656,7 @@ void maniach_state::maniach(machine_config &config)
 	MC6809E(config, m_audiocpu, XTAL::u(1'500'000));    // 1.5 MHz ???? (HD68A09EP)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &maniach_state::sound_map);
 
-	TAITO68705_MCU(config, m_mcu, 1'500'000 * 2);  // (don't know really how fast, but it doesn't need to even be this fast)
+	TAITO68705_MCU(config, m_mcu, XTAL::u(1'500'000) * 2);  // (don't know really how fast, but it doesn't need to even be this fast)
 
 	config.set_maximum_quantum(attotime::from_hz(6000));  // 100 CPU slice per frame - high interleaving to sync main and MCU
 

@@ -383,7 +383,7 @@ WRITE_LINE_MEMBER( pent6800_state::p50ca2_w )
 void pent6800_state::p51a_w(u8 data)
 {
 	static uint16_t frequency[16] = { 387, 435, 488, 517, 581, 652, 691, 775, 870, 977, 1035, 1161, 1304, 1381, 1550, 1740 };
-	m_beep->set_clock(frequency[data & 15]);
+	m_beep->set_frequency(frequency[data & 15]);
 }
 
 // Sound on/off

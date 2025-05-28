@@ -89,7 +89,7 @@ void uts_extw_keyboard_device::p2_w(u8 data)
 	m_p2_output = data;
 }
 
-void uts_extw_keyboard_device::t0_clock(u32 clk)
+void uts_extw_keyboard_device::t0_clock(const XTAL &clk)
 {
 }
 

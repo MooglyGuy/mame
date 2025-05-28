@@ -124,7 +124,7 @@ private:
 };
 
 
-#define MAIN_CLOCK 4000000 /* 4 MHz */
+#define MAIN_CLOCK XTAL::u(4000000) /* 4 MHz */
 #define PIXEL_CLOCK 4.433619_MHz_XTAL
 
 

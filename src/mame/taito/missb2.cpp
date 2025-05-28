@@ -434,7 +434,7 @@ static GFXDECODE_START( gfx_bublpong )
 	GFXDECODE_ENTRY( "gfx2", 0x00000, bglayout_alt,   0, 2 )
 GFXDECODE_END
 
-#define MAIN_XTAL 24000000  // not sure about this
+#define MAIN_XTAL XTAL::u(24000000)  // not sure about this
 
 /* Sound Interfaces */
 

@@ -23,7 +23,7 @@
 #include "emupal.h"
 #include "screen.h"
 
-#define MIDVUNIT_VIDEO_CLOCK    33000000
+#define MIDVUNIT_VIDEO_CLOCK    XTAL::u(33000000)
 
 struct midvunit_object_data
 {

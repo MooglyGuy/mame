@@ -834,7 +834,7 @@ uint32_t vrc5074_device::cpu_reg_r(offs_t offset)
 		if (m_cpu_regs[offset - 1] & 1)
 		{
 			// Should check for cascaded timer
-			result = m_cpu_regs[offset] = m_timer[which]->remaining().as_double() * clock();
+			result = m_cpu_regs[offset] = m_timer[which]->remaining().as_double() * clock().value();
 		}
 
 		if (LOG_TIMERS) logerror("%s NILE READ: timer %d counter(%03X) = %08X\n", machine().describe_context(), which, offset * 4, result);
@@ -973,7 +973,7 @@ void vrc5074_device::cpu_reg_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 		/* timer disabled? */
 		else if ((olddata & 1) && !(m_cpu_regs[offset] & 1))
 		{
-			m_cpu_regs[offset + 1] = m_timer[which]->remaining().as_double() * clock();
+			m_cpu_regs[offset + 1] = m_timer[which]->remaining().as_double() * clock().value();
 			m_timer[which]->adjust(attotime::never, which);
 		}
 		break;

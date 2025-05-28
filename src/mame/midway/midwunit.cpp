@@ -104,7 +104,7 @@ Notes:
 #include "screen.h"
 
 
-#define PIXEL_CLOCK     (8000000)
+#define PIXEL_CLOCK     XTAL::u(8000000)
 
 
 /*************************************

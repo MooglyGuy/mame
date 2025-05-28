@@ -139,7 +139,7 @@ void m68340_cpu_device::m68340_internal_sim_w(offs_t offset, uint16_t data, uint
 				set_unscaled_clock(m_crystal *
 								   (4 << (((sim.m_syncr & m68340_sim::REG_SYNCR_W) != 0 ? 2 : 0) + ((sim.m_syncr & m68340_sim::REG_SYNCR_X) != 0 ? 1 : 0))) *
 								   (((sim.m_syncr & m68340_sim::REG_SYNCR_Y_MSK) >> 8) & 0x3f));
-				LOGCLOCK( " - Clock: %d [0x%08x]\n", clock(), clock());
+				LOGCLOCK( " - Clock: %d [0x%08x]\n", clock().value(), clock().value());
 			}
 			break;
 
@@ -178,7 +178,7 @@ void m68340_cpu_device::m68340_internal_sim_w(offs_t offset, uint16_t data, uint
 			{
 				LOGPIT("Starting PIT timer\n");
 				sim.m_pit_counter = sim.m_pitr & m68340_sim::REG_PITR_COUNT;
-				m_irq_timer->adjust(cycles_to_attotime((m_crystal / 4) / ((sim.m_pitr & m68340_sim::REG_PITR_PTP) != 0 ? 512 : 1)));
+				m_irq_timer->adjust(cycles_to_attotime((m_crystal.value() / 4) / ((sim.m_pitr & m68340_sim::REG_PITR_PTP) != 0 ? 512 : 1)));
 			}
 
 			break;
@@ -470,7 +470,7 @@ TIMER_CALLBACK_MEMBER(m68340_cpu_device::periodic_interrupt_timer_callback)
 void m68340_cpu_device::start_68340_sim()
 {
 	LOG("%s\n", FUNCNAME);
-	LOGCLOCK( " - Clock: %d [0x%08x]\n", clock(), clock());
+	LOGCLOCK( " - Clock: %d [0x%08x]\n", clock().value(), clock().value());
 	m_irq_timer = timer_alloc(FUNC(m68340_cpu_device::periodic_interrupt_timer_callback), this);
 
 	// resolve callbacks Port A
@@ -503,7 +503,7 @@ void m68340_cpu_device::start_68340_sim()
 	default:
 		logerror("Unknown Clock mode, check schematics and/or the source code\n");
 	}
-	LOGCLOCK( " - Clock: %d [0x%08x]\n", clock(), clock());
+	LOGCLOCK( " - Clock: %d [0x%08x]\n", clock().value(), clock().value());
 }
 
 void m68340_sim::reset()
@@ -546,7 +546,7 @@ void m68340_cpu_device::do_tick_pit()
 	{
 		LOGPIT("Re-arming PIT timer\n");
 		sim.m_pit_counter = sim.m_pitr & m68340_sim::REG_PITR_COUNT;
-		m_irq_timer->adjust(cycles_to_attotime((m_crystal / 4) / ((sim.m_pitr & m68340_sim::REG_PITR_PTP) != 0 ? 512 : 1)));
+		m_irq_timer->adjust(cycles_to_attotime((m_crystal.value() / 4) / ((sim.m_pitr & m68340_sim::REG_PITR_PTP) != 0 ? 512 : 1)));
 	}
 	else
 	{

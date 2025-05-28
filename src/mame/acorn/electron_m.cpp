@@ -27,7 +27,7 @@ void electron_state::waitforramsync()
 TIMER_CALLBACK_MEMBER(electron_state::setup_beep)
 {
 	m_beeper->set_state( 0 );
-	m_beeper->set_clock( 300 );
+	m_beeper->set_frequency( 300 );
 }
 
 void electron_state::electron_tape_start()
@@ -487,12 +487,12 @@ void electron_state::electron_sheila_w(offs_t offset, uint8_t data)
 	case 0x06:  /* Counter divider */
 		if ( m_ula.communication_mode == 0x01)
 		{
-		/* GUESS
-		 * the Advanced Users manual says this is the correct algorithm
-		 * but the divider is wrong(?), says 16 but results in high pitch,
-		 * 32 is more close
-		 */
-			m_beeper->set_clock( 1000000 / ( 32 * ( data + 1 ) ) );
+			/* GUESS
+			 * the Advanced Users manual says this is the correct algorithm
+			 * but the divider is wrong(?), says 16 but results in high pitch,
+			 * 32 is more close
+			 */
+			m_beeper->set_frequency( 1000000 / ( 32 * ( data + 1 ) ) );
 		}
 		break;
 	case 0x07:  /* Misc. */

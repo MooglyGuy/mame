@@ -441,7 +441,7 @@ static const int dendego_pressure_table[0x100] =
 
 // hmm, what is the pixel clock? let's assume it's same as the 68040
 // 54MHz(/4) or 16MHz would make HTOTAL unrealistically short
-#define PIXEL_CLOCK         (10000000*2)
+#define PIXEL_CLOCK         XTAL::u(10000000*2)
 
 // VSync - 55.6795Hz
 // HSync - 24.639kHz / 24.690kHz (may be inaccurate)

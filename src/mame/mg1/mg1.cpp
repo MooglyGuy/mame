@@ -325,16 +325,16 @@ void mg1_state::mg1(machine_config &config)
 
 	NVRAM(config, m_sram); // 2xTC5516AP 2048x8 SRAM
 
-	M6801(config, m_iop, 8_MHz_XTAL / 8); // TODO: MC68121 (mode 2)
+	M6801(config, m_iop, XTAL::u(8000000) / 8); // TODO: MC68121 (mode 2)
 	m_iop->set_addrmap(0, &mg1_state::iop_map);
 
 	NVRAM(config, m_iop_sram); // 1xD4016C-3 2048x8 SRAM
 
 	PIT8253(config, m_iop_ctc);
 
-	AM9516(config, m_dma[0], 10_MHz_XTAL / 2); // graphics (not used)
+	AM9516(config, m_dma[0], XTAL::u(10000000) / 2); // graphics (not used)
 
-	AM9516(config, m_dma[1], 10_MHz_XTAL / 2); // general, ch1 hard disk, ch2 -> J3 or floppy
+	AM9516(config, m_dma[1], XTAL::u(10000000) / 2); // general, ch1 hard disk, ch2 -> J3 or floppy
 	m_dma[1]->out_int().set(m_icu, FUNC(ns32202_device::ir_w<4>));
 	m_dma[1]->set_addrmap(am9516_device::SYSTEM_MEM, &mg1_state::dma_map);
 

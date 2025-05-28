@@ -1046,7 +1046,7 @@ void sun3_state::sun3(machine_config &config)
 void sun3_state::sun3_60(machine_config &config)
 {
 	sun3(config);
-	M68020(config.replace(), m_maincpu, 20000000);
+	M68020(config.replace(), m_maincpu, XTAL::u(20000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &sun3_state::sun3_mem);
 
 	screen_device &bwtwo(*subdevice<screen_device>("bwtwo"));
@@ -1061,7 +1061,7 @@ void sun3_state::sun3e(machine_config &config)
 {
 	sun3(config);
 
-	M68020(config.replace(), m_maincpu, 20000000);
+	M68020(config.replace(), m_maincpu, XTAL::u(20000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &sun3_state::sun3_mem);
 }
 
@@ -1069,7 +1069,7 @@ void sun3_state::sun3e(machine_config &config)
 void sun3_state::sun3200(machine_config &config)
 {
 	sun3(config);
-	M68020(config.replace(), m_maincpu, 25000000);
+	M68020(config.replace(), m_maincpu, XTAL::u(25000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &sun3_state::sun3_mem);
 
 	screen_device &bwtwo(*subdevice<screen_device>("bwtwo"));

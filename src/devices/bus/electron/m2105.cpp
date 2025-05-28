@@ -114,7 +114,7 @@ void electron_m2105_device::device_add_mconfig(machine_config &config)
 	output_latch_device &latch(OUTPUT_LATCH(config, "cent_data_out"));
 	centronics.set_output_latch(latch);
 
-	TMS6100(config, "tms6100", 640000/4);
+	TMS6100(config, "tms6100", XTAL::u(640000)/4);
 
 	tms5220_device &tms(TMS5220(config, "tms5220", XTAL::u(640000)));
 	tms.ready_cb().set(m_via[0], FUNC(via6522_device::write_ca1));

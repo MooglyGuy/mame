@@ -113,7 +113,7 @@ class sega8_cart_slot_device : public device_t,
 {
 public:
 	// construction/destruction
-	sega8_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sega8_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~sega8_cart_slot_device();
 
 	// image-level overrides
@@ -166,7 +166,7 @@ class sega8_card_slot_device : public sega8_cart_slot_device
 {
 public:
 	// construction/destruction
-	sega8_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sega8_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual const char *image_type_name() const noexcept override { return "card"; }
 	virtual const char *image_brief_type_name() const noexcept override { return "card"; }
@@ -191,7 +191,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sg1000_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sg1000_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sg1000_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,sg"; }
 };
@@ -211,7 +211,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	omv_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	omv_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sg1000_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,sg"; }
 };
@@ -231,7 +231,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sc3000_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sc3000_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sg1000_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,sg,sc"; }
 };
@@ -251,7 +251,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sg1000mk3_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sg1000mk3_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sms_cart,sg1000_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,sms,sg"; }
 };
@@ -271,7 +271,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sms_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sms_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sms_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,sms"; }
 };
@@ -291,7 +291,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	gamegear_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	gamegear_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "gamegear_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,gg"; }
 };
@@ -312,7 +312,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sms_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sms_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sms_card"; }
 	virtual const char *file_extensions() const noexcept override { return "bin"; }
 };
@@ -332,7 +332,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sg1000_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sg1000_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual const char *image_interface() const noexcept override { return "sg1000_cart"; }
 	virtual const char *file_extensions() const noexcept override { return "bin,sg"; }
 };

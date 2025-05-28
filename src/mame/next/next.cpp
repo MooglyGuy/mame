@@ -574,7 +574,7 @@ void next_state::scsictrl_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 		scsictrl = data >> 24;
 		if(scsictrl & 0x02)
 			scsi->reset();
-		scsi->set_clock(scsi_clocks[scsictrl >> 6]);
+		scsi->set_clock(XTAL::u(scsi_clocks[scsictrl >> 6]));
 
 		logerror("SCSIctrl %dMHz int=%s dma=%s dmadir=%s%s%s dest=%s (%08x)\n",
 				scsi_clocks[scsictrl >> 6]/1000000,

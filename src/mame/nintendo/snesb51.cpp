@@ -250,7 +250,7 @@ void snesb51_state::machine_start()
 void snesb51_state::base(machine_config &config)
 {
 	// basic machine hardware
-	_5A22(config, m_maincpu, 3580000 * 6);
+	_5A22(config, m_maincpu, XTAL::u(3580000) * 6);
 	m_maincpu->set_addrmap(AS_PROGRAM, &snesb51_state::snes_map);
 
 	S_SMP(config, m_soundcpu, XTAL(24'576'000) / 12);

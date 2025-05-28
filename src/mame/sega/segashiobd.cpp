@@ -75,7 +75,7 @@ void sega_837_14438_device::sh4_map(address_map &map)
 	map(0x0c000000, 0x0cffffff).mirror(0x80000000).ram();
 }
 
-#define CPU_CLOCK 200000000 // need to set the correct value here
+#define CPU_CLOCK XTAL::u(200000000) // need to set the correct value here
 
 void sega_837_14438_device::device_add_mconfig(machine_config &config)
 {

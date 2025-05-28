@@ -199,7 +199,7 @@ void rp5c01_device::device_start()
 	m_out_alarm_cb.resolve_safe();
 
 	// allocate timers
-	if (clock() > 0)
+	if (clock().value() > 0)
 	{
 		m_clock_timer = timer_alloc(FUNC(rp5c01_device::advance_1hz_clock), this);
 		m_clock_timer->adjust(attotime::from_hz(clock() / 16384), 0, attotime::from_hz(clock() / 16384));

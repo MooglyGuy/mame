@@ -1320,7 +1320,7 @@ INPUT_PORTS_END
 void nbmj8991_state::nbmjdrv1(machine_config &config) // galkoku
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 25000000/5);        /* 5.00 MHz ? */
+	Z80(config, m_maincpu, XTAL::u(25000000)/5);        /* 5.00 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &nbmj8991_state::galkoku_map);
 	m_maincpu->set_addrmap(AS_IO, &nbmj8991_state::galkoku_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(nbmj8991_state::irq0_line_hold));
@@ -1340,7 +1340,7 @@ void nbmj8991_state::nbmjdrv1(machine_config &config) // galkoku
 
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
-	YM3812(config, "fmsnd", 25000000/10).add_route(ALL_OUTPUTS, "speaker", 0.7);
+	YM3812(config, "fmsnd", XTAL::u(25000000)/10).add_route(ALL_OUTPUTS, "speaker", 0.7);
 
 	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 }
@@ -1349,7 +1349,7 @@ void nbmj8991_state::nbmjdrv1(machine_config &config) // galkoku
 void nbmj8991_state::nbmjdrv2(machine_config &config) // pstadium
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 6000000/2); /* 3.00 MHz */
+	Z80(config, m_maincpu, XTAL::u(6000000)/2); /* 3.00 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &nbmj8991_state::pstadium_map);
 	m_maincpu->set_addrmap(AS_IO, &nbmj8991_state::pstadium_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(nbmj8991_state::irq0_line_hold));
@@ -1377,7 +1377,7 @@ void nbmj8991_state::nbmjdrv2(machine_config &config) // pstadium
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	YM3812(config, "fmsnd", 25000000/6.25).add_route(ALL_OUTPUTS, "speaker", 0.7);
+	YM3812(config, "fmsnd", XTAL::u(25000000)/6.25).add_route(ALL_OUTPUTS, "speaker", 0.7);
 
 	DAC_8BIT_R2R(config, "dac1").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 	DAC_8BIT_R2R(config, "dac2").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
@@ -1389,7 +1389,7 @@ void nbmj8991_state::nbmjdrv3(machine_config &config)
 	nbmjdrv1(config);
 
 	/* sound hardware */
-	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", 1250000));
+	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", XTAL::u(1250000)));
 	fmsnd.port_a_read_callback().set_ioport("DSWA");
 	fmsnd.port_b_read_callback().set_ioport("DSWB");
 	fmsnd.add_route(ALL_OUTPUTS, "speaker", 0.35);

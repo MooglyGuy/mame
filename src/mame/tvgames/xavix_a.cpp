@@ -27,7 +27,7 @@ void xavix_sound_device::device_start()
 	m_readregs_cb.resolve_safe(0xff);
 	m_readsamples_cb.resolve_safe(0x80);
 
-	m_stream = stream_alloc(0, 2, 163840);
+	m_stream = stream_alloc(0, 2, XTAL::u(163840));
 }
 
 void xavix_sound_device::device_reset()

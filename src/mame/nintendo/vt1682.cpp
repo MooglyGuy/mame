@@ -90,11 +90,11 @@
 
 #define MAIN_CPU_CLOCK_NTSC XTAL(21'477'272)/4
 #define SOUND_CPU_CLOCK_NTSC XTAL(21'477'272)
-#define TIMER_ALT_SPEED_NTSC (15746)
+#define TIMER_ALT_SPEED_NTSC XTAL::u(15746)
 
 #define MAIN_CPU_CLOCK_PAL XTAL(26'601'712)/5
 #define SOUND_CPU_CLOCK_PAL XTAL(26'601'712)
-#define TIMER_ALT_SPEED_PAL (15602)
+#define TIMER_ALT_SPEED_PAL XTAL::u(15602)
 
 
 
@@ -2798,7 +2798,8 @@ uint8_t vt_vt1682_state::vt1682_210b_misc_cs_prg0_bank_sel_r()
 void vt_vt1682_state::vt1682_210b_misc_cs_prg0_bank_sel_w(uint8_t data)
 {
 	// PQ2 Enable is also used for ROM banking along with Program Bank 0 select
-	uint32_t clock = m_maincpu->clock();
+	// TODO XTAL: Ensure this is reliable; this should probably be done in a better way.
+	uint32_t clock = m_maincpu->clock().value();
 
 	LOGMASKED(LOG_OTHER, "%s: vt1682_210b_misc_cs_prg0_bank_sel_w writing: %02x\n", machine().describe_context(), data);
 	m_210b_misc_cs_prg0_bank_sel = data;

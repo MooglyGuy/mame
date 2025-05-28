@@ -327,7 +327,7 @@ void whitestar_state::whitestar(machine_config &config)
 	genpin_audio(config);
 
 	DECOBSMT(config, m_decobsmt);
-	DECODMD2(config, m_decodmd, 0, "dmdcpu");
+	DECODMD2(config, m_decodmd, XTAL(), "dmdcpu");
 }
 
 void whitestar_state::whitestarm(machine_config &config)

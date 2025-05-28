@@ -18,7 +18,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: device_t(mconfig, TI8X_SPEAKER_STEREO, tag, owner, clock)
 		, device_ti8x_link_port_interface(mconfig, *this)
 		, m_left_speaker(*this, "lspkr")
@@ -65,7 +65,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: device_t(mconfig, TI8X_SPEAKER_MONO, tag, owner, clock)
 		, device_ti8x_link_port_interface(mconfig, *this)
 		, m_speaker(*this, "spkr")

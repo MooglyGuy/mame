@@ -168,7 +168,7 @@ GFXDECODE_END
 void galaxy_state::galaxy(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 6'144'000 / 2);
+	Z80(config, m_maincpu, XTAL::u(6'144'000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &galaxy_state::galaxy_mem);
 	m_maincpu->set_vblank_int("screen", FUNC(galaxy_state::irq0_line_hold));
 	m_maincpu->set_irq_acknowledge_callback(FUNC(galaxy_state::irq_callback));
@@ -204,7 +204,7 @@ void galaxy_state::galaxy(machine_config &config)
 void galaxy_state::galaxyp(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 6'144'000 / 2);
+	Z80(config, m_maincpu, XTAL::u(6'144'000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &galaxy_state::galaxyp_mem);
 	m_maincpu->set_addrmap(AS_IO, &galaxy_state::galaxyp_io);
 	m_maincpu->set_vblank_int("screen", FUNC(galaxy_state::irq0_line_hold));
@@ -226,7 +226,7 @@ void galaxy_state::galaxyp(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	ay8910_device &ay(AY8910(config, "ay8910", 6'144'000 / 4));
+	ay8910_device &ay(AY8910(config, "ay8910", XTAL::u(6'144'000) / 4));
 	ay.add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	CASSETTE(config, m_cassette);

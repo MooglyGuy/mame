@@ -250,7 +250,7 @@ public:
 class macronix_29f008tc_device : public intelfsh8_device
 {
 public:
-	macronix_29f008tc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	macronix_29f008tc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class macronix_29l001mc_device : public intelfsh8_device

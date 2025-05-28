@@ -354,7 +354,7 @@ void zx8302_device::control_w(uint8_t data)
 
 	m_baudx4_timer->adjust(attotime::zero, 0, attotime::from_hz(baudx4));
 
-	set_tra_rate(baud);
+	set_tra_rate(XTAL::u(baud));
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_2);
 }
 

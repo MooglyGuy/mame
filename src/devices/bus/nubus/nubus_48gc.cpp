@@ -89,7 +89,7 @@ class jmfb_device :
 {
 protected:
 	// construction/destruction
-	jmfb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	jmfb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override;
@@ -162,7 +162,7 @@ private:
 class nubus_48gc_device : public jmfb_device
 {
 public:
-	nubus_48gc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nubus_48gc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -176,7 +176,7 @@ private:
 class nubus_824gc_device : public jmfb_device
 {
 public:
-	nubus_824gc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nubus_824gc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

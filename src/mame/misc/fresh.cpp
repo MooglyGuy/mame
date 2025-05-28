@@ -588,7 +588,7 @@ TIMER_DEVICE_CALLBACK_MEMBER(fresh_state::fake_scanline)
 void fresh_state::fresh(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 24000000/2);
+	M68000(config, m_maincpu, XTAL::u(24000000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &fresh_state::fresh_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(fresh_state::fake_scanline), "screen", 0, 1);
 

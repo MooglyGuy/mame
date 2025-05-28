@@ -443,8 +443,8 @@ private:
 //  CONSTANTS
 //**************************************************************************
 
-const auto MASTER_CLOCK = XTAL(50'000'000);
-const auto SOUND_CLOCK = XTAL(16'000'000);
+const XTAL MASTER_CLOCK = XTAL(50'000'000);
+const XTAL SOUND_CLOCK = XTAL(16'000'000);
 
 
 
@@ -1713,7 +1713,7 @@ void segaxbd_state::xboard_base_mconfig(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	SEGA_XBOARD_SPRITES(config, m_sprites);
-	SEGAIC16VID(config, m_segaic16vid, 0, "gfxdecode");
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), "gfxdecode");
 	m_segaic16vid->set_screen(m_screen);
 
 	SEGAIC16_ROAD(config, m_segaic16road);

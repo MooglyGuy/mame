@@ -318,7 +318,7 @@ void sa1111_device::skaud_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 	LOGMASKED(LOG_SK, "%s: skaud_w: Audio Clock Divider Register = %08x & %08x\n", machine().describe_context(), data, mem_mask);
 	LOGMASKED(LOG_SK, "%s:          Audio Clock Divider: %02x\n", machine().describe_context(), audio_divider);
 	COMBINE_DATA(&m_sk_regs.skaud);
-	const uint32_t pll_clock = clock() * 39;
+	const XTAL pll_clock = clock() * 39;
 	if (m_audio_codec)
 		m_audio_codec->set_unscaled_clock(pll_clock / audio_divider);
 }
@@ -632,7 +632,7 @@ void sa1111_device::audio_start_tx_dma(const uint32_t buf)
 	m_audio_regs.sadtcc = m_audio_regs.sadtc[buf];
 
 	const uint32_t divisor = ((m_sk_regs.skaud & SKAUD_ACD_MASK) >> SKAUD_ACD_BIT) + 1;
-	const uint32_t pll_clock = clock() * 39;
+	const uint32_t pll_clock = clock().value() * 39;
 	attotime clock_period = attotime::from_ticks(divisor * 128, pll_clock);
 	m_audio_regs.tx_dma_timer->adjust(clock_period, 0, clock_period);
 
@@ -647,7 +647,7 @@ void sa1111_device::audio_start_rx_dma(const uint32_t buf)
 	m_audio_regs.sadra = m_audio_regs.sadrs[buf];
 
 	const uint32_t divisor = ((m_sk_regs.skaud & SKAUD_ACD_MASK) >> SKAUD_ACD_BIT) + 1;
-	const uint32_t pll_clock = clock() * 39;
+	const uint32_t pll_clock = clock().value() * 39;
 	attotime clock_period = attotime::from_ticks(divisor * 256, pll_clock);
 	m_audio_regs.rx_dma_timer->adjust(clock_period, 0, clock_period);
 }
@@ -722,7 +722,7 @@ void sa1111_device::audio_tx_fifo_push(uint32_t data)
 		if (m_audio_regs.tx_timer->remaining() == attotime::never)
 		{
 			const uint32_t divisor = ((m_sk_regs.skaud & SKAUD_ACD_MASK) >> SKAUD_ACD_BIT) + 1;
-			const uint32_t pll_clock = clock() * 39;
+			const uint32_t pll_clock = clock().value() * 39;
 			attotime clock_period = attotime::from_ticks(divisor * 256, pll_clock);
 			m_audio_regs.tx_timer->adjust(clock_period, 0, clock_period);
 		}

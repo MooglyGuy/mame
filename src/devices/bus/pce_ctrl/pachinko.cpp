@@ -69,7 +69,7 @@ ioport_constructor pce_pachinko_device::device_input_ports() const
 //  pce_pachinko_device - constructor
 //-------------------------------------------------
 
-pce_pachinko_device::pce_pachinko_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+pce_pachinko_device::pce_pachinko_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PCE_PACHINKO, tag, owner, clock),
 	device_pce_control_port_interface(mconfig, *this),
 	m_buttons(*this, "BUTTONS"),

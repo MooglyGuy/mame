@@ -165,8 +165,8 @@ class a800_rom_corina_device : public a800_rom_device
 {
 public:
 	// construction/destruction
-	a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual uint8_t read_80xx(offs_t offset) override;
 	virtual void write_80xx(offs_t offset, uint8_t data) override;
@@ -188,7 +188,7 @@ class a800_rom_corina_sram_device : public a800_rom_corina_device
 {
 public:
 	// construction/destruction
-	a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 
 protected:

@@ -185,16 +185,16 @@ void whouse_testcons_state::whousetc(machine_config &config)
 
 	I8255(config, "i8255");
 
-	DL1416B(config, m_dsp[0], u32(0));
+	DL1416B(config, m_dsp[0]);
 	m_dsp[0]->update().set(FUNC(whouse_testcons_state::update_dsp<0>));
 
-	DL1416B(config, m_dsp[1], u32(0));
+	DL1416B(config, m_dsp[1]);
 	m_dsp[1]->update().set(FUNC(whouse_testcons_state::update_dsp<1>));
 
-	DL1416B(config, m_dsp[2], u32(0));
+	DL1416B(config, m_dsp[2]);
 	m_dsp[2]->update().set(FUNC(whouse_testcons_state::update_dsp<2>));
 
-	DL1416B(config, m_dsp[3], u32(0));
+	DL1416B(config, m_dsp[3]);
 	m_dsp[3]->update().set(FUNC(whouse_testcons_state::update_dsp<3>));
 
 	config.set_default_layout(layout_whousetc);

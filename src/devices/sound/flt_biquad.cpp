@@ -397,7 +397,7 @@ filter_biquad_device::biquad_params filter_biquad_device::opamp_diff_bandpass_ca
 
 void filter_biquad_device::device_start()
 {
-	m_stream = stream_alloc(1, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(1, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 	m_last_sample_rate = 0;
 	recalc();
 
@@ -428,10 +428,10 @@ void filter_biquad_device::sound_stream_update(sound_stream &stream, std::vector
 	auto &src = inputs[0];
 	auto &dst = outputs[0];
 
-	if (m_last_sample_rate != m_stream->sample_rate())
+	if (m_last_sample_rate != m_stream->sample_rate().value())
 	{
 		recalc();
-		m_last_sample_rate = m_stream->sample_rate();
+		m_last_sample_rate = m_stream->sample_rate().value();
 	}
 
 	for (int sampindex = 0; sampindex < dst.samples(); sampindex++)

@@ -97,7 +97,7 @@ void device_neogeo_cart_interface::optimize_sprites(uint8_t* region_sprites, uin
 //-------------------------------------------------
 //  neogeo_cart_slot_device - constructor
 //-------------------------------------------------
-neogeo_cart_slot_device::neogeo_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_cart_slot_device::neogeo_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NEOGEO_CART_SLOT, tag, owner, clock),
 	device_cartrom_image_interface(mconfig, *this),
 	device_single_card_slot_interface<device_neogeo_cart_interface>(mconfig, *this),

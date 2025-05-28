@@ -28,7 +28,7 @@ public:
 	};
 
 	// construction/destruction
-	cp1610_cpu_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	cp1610_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto bext() { return m_read_bext.bind(); }
 	auto iab() { return m_read_iab.bind(); }

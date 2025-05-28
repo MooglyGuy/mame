@@ -95,7 +95,7 @@ void isbc8024_device::device_reset()
 
 void isbc8024_device::device_add_mconfig(machine_config &config)
 {
-	I8085A(config, m_cpu, 19'354'000 / 2);
+	I8085A(config, m_cpu, XTAL::u(19'354'000) / 2);
 	m_cpu->set_addrmap(AS_PROGRAM, &isbc8024_device::cpu_mem_map);
 	m_cpu->set_addrmap(AS_IO, &isbc8024_device::cpu_pio_map);
 

@@ -273,8 +273,8 @@ class sns_sufami_cart_slot_device : public base_sns_cart_slot_device
 public:
 	// construction/destruction
 	template <typename T>
-	sns_sufami_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: sns_sufami_cart_slot_device(mconfig, tag, owner)
+	sns_sufami_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&opts, const char *dflt)
+		: sns_sufami_cart_slot_device(mconfig, tag, owner, clock)
 	{
 		option_reset();
 		opts(*this);
@@ -293,8 +293,8 @@ class sns_bsx_cart_slot_device :  public base_sns_cart_slot_device
 public:
 	// construction/destruction
 	template <typename T>
-	sns_bsx_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: sns_bsx_cart_slot_device(mconfig, tag, owner)
+	sns_bsx_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&opts, const char *dflt)
+		: sns_bsx_cart_slot_device(mconfig, tag, owner, clock)
 	{
 		option_reset();
 		opts(*this);

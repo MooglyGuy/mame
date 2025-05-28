@@ -76,7 +76,7 @@ static const std::array<const char* , i3002_device::REG_COUNT> reg_names =
 	  "MAR"
 	}};
 
-i3002_device::i3002_device(const machine_config &mconfig , const char *tag , device_t *owner , uint32_t clock)
+i3002_device::i3002_device(const machine_config &mconfig , const char *tag , device_t *owner , const XTAL &clock)
 	: device_t(mconfig , I3002 , tag , owner , clock)
 	, m_co_handler(*this)
 	, m_ro_handler(*this)

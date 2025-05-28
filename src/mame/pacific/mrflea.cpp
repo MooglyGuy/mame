@@ -466,7 +466,7 @@ void mrflea_state::mrflea(machine_config &config)
 
 	AY8910(config, "ay2", XTAL::u(2'000'000)).add_route(ALL_OUTPUTS, "mono", 0.25); // not used for sound?
 
-	ay8910_device &ay3(AY8910(config, "ay3", 2'000'000));
+	ay8910_device &ay3(AY8910(config, "ay3", XTAL::u(2'000'000)));
 	ay3.port_a_read_callback().set_ioport("DSW2");
 	ay3.port_b_read_callback().set_ioport("DSW1");
 	ay3.add_route(ALL_OUTPUTS, "mono", 0.25);

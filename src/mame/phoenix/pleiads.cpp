@@ -697,7 +697,7 @@ void pleiads_sound_device::common_start()
 void pleiads_sound_device::sound_stream_update(sound_stream &stream, std::vector<read_stream_view> const &inputs, std::vector<write_stream_view> &outputs)
 {
 	auto &buffer = outputs[0];
-	int rate = buffer.sample_rate();
+	int rate = buffer.sample_rate().value();
 
 	for (int sampindex = 0; sampindex < buffer.samples(); sampindex++)
 	{

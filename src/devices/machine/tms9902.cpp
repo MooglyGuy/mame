@@ -906,7 +906,7 @@ void tms9902_device::device_reset()
 
 void tms9902_device::device_start()
 {
-	m_clock_rate = clock();
+	m_clock_rate = clock().value();
 
 	m_int_cb.resolve_safe();
 	m_rcv_cb.resolve_safe();

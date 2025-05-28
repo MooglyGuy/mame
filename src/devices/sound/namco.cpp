@@ -58,8 +58,6 @@ namco_audio_device::namco_audio_device(const machine_config &mconfig, device_typ
 	, m_wave_size(0)
 	, m_sound_enable(false)
 	, m_stream(nullptr)
-	, m_namco_clock(0)
-	, m_sample_rate(0)
 	, m_f_fracbits(0)
 	, m_voices(0)
 	, m_stereo(false)
@@ -98,9 +96,9 @@ void namco_audio_device::device_start()
 
 	/* get stream channels */
 	if (m_stereo)
-		m_stream = stream_alloc(0, 2, 192000);
+		m_stream = stream_alloc(0, 2, XTAL::u(192000));
 	else
-		m_stream = stream_alloc(0, 1, 192000);
+		m_stream = stream_alloc(0, 1, XTAL::u(192000));
 
 	/* start with sound enabled, many games don't have a sound enable register */
 	m_sound_enable = true;
@@ -165,15 +163,15 @@ void namco_audio_device::device_clock_changed()
 
 	/* adjust internal clock */
 	m_namco_clock = clock();
-	for (clock_multiple = 0; m_namco_clock < INTERNAL_RATE; clock_multiple++)
-		m_namco_clock *= 2;
+	for (clock_multiple = 0; m_namco_clock.value() < INTERNAL_RATE; clock_multiple++)
+		m_namco_clock = m_namco_clock * 2;
 
 	m_f_fracbits = clock_multiple + 15;
 
 	/* adjust output clock */
 	m_sample_rate = m_namco_clock;
 
-	logerror("Namco: freq fractional bits = %d: internal freq = %d, output freq = %d\n", m_f_fracbits, m_namco_clock, m_sample_rate);
+	logerror("Namco: freq fractional bits = %d: internal freq = %d, output freq = %d\n", m_f_fracbits, m_namco_clock.value(), m_sample_rate.value());
 
 	m_stream->set_sample_rate(m_sample_rate);
 }

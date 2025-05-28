@@ -242,7 +242,7 @@ INPUT_PORTS_END
 void comebaby_state::comebaby(machine_config &config)
 {
 	/* basic machine hardware */
-	PENTIUM2(config, m_maincpu, (66666666*19)/2); /* Actually a Celeron */
+	PENTIUM2(config, m_maincpu, XTAL::u(66666666) * 19 / 2); /* Actually a Celeron */
 	m_maincpu->set_addrmap(AS_PROGRAM, &comebaby_state::comebaby_map);
 	m_maincpu->set_addrmap(AS_IO, &comebaby_state::comebaby_io);
 

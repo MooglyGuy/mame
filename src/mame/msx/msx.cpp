@@ -776,7 +776,7 @@ protected:
 	template <typename T, typename U>
 	auto &add_internal_slot(machine_config &config, T &&type, U &&tag, uint8_t prim, uint8_t sec, uint8_t page, uint8_t numpages)
 	{
-		auto &device(std::forward<T>(type)(config, std::forward<U>(tag), 0U));
+		auto &device(std::forward<T>(type)(config, std::forward<U>(tag)));
 		device.set_memory_space(m_maincpu, AS_PROGRAM);
 		device.set_io_space(m_maincpu, AS_IO);
 		device.set_start_address(page * 0x4000);
@@ -787,7 +787,7 @@ protected:
 	template <typename T, typename U>
 	auto &add_internal_slot(machine_config &config, T &&type, U &&tag, uint8_t prim, uint8_t sec, uint8_t page, uint8_t numpages, const char *region, uint32_t offset)
 	{
-		auto &device(std::forward<T>(type)(config, std::forward<U>(tag), 0U));
+		auto &device(std::forward<T>(type)(config, std::forward<U>(tag)));
 		device.set_memory_space(m_maincpu, AS_PROGRAM);
 		device.set_io_space(m_maincpu, AS_IO);
 		device.set_start_address(page * 0x4000);
@@ -800,7 +800,7 @@ protected:
 	auto &add_internal_slot_mirrored(machine_config &config, T &&type, U &&tag, uint8_t prim, uint8_t sec, uint8_t page, uint8_t numpages, const char *region, uint32_t offset)
 	{
 		// Memory mapped FDC registers are also accessible through page 2
-		auto &device(type(config, std::forward<U>(tag), 0U));
+		auto &device(type(config, std::forward<U>(tag)));
 		device.set_memory_space(m_maincpu, AS_PROGRAM);
 		device.set_io_space(m_maincpu, AS_IO);
 		device.set_start_address(page * 0x4000);
@@ -812,7 +812,7 @@ protected:
 	template <int N, typename T, typename U, typename V>
 	auto &add_cartridge_slot(machine_config &config, T &&type, U &&tag, uint8_t prim, uint8_t sec, V &&intf, const char *deft)
 	{
-		auto &device(type(config, std::forward<U>(tag), 0U));
+		auto &device(type(config, std::forward<U>(tag)));
 		device.set_memory_space(m_maincpu, AS_PROGRAM);
 		device.set_io_space(m_maincpu, AS_IO);
 		device.option_reset();
@@ -2346,7 +2346,7 @@ void msx_state::msx_base(machine_config &config, XTAL xtal, int cpu_divider)
 
 	// sound hardware
 	SPEAKER(config, m_speaker).front_center();
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, m_speaker, 0.1);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, m_speaker, 0.1);
 
 	AY8910(config, m_ay8910, xtal / cpu_divider / 2);
 	m_ay8910->set_flags(AY8910_SINGLE_OUTPUT);

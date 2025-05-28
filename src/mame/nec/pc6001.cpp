@@ -1679,7 +1679,7 @@ static GFXDECODE_START( gfx_pc6001m2 )
 GFXDECODE_END
 
 // TODO: same as PC-88 / PC-98 31'948'800 ?
-#define PC6001_MAIN_CLOCK 7987200
+#define PC6001_MAIN_CLOCK XTAL::u(7987200)
 
 void pc6001_state::pc6001(machine_config &config)
 {

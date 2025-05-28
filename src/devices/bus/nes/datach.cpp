@@ -371,7 +371,7 @@ static void datach_cart(device_slot_interface &device)
 void nes_datach_device::device_add_mconfig(machine_config &config)
 {
 	BARCODE_READER(config, m_reader);
-	NES_DATACH_SLOT(config, m_subslot, 0, datach_cart);
+	NES_DATACH_SLOT(config, m_subslot, XTAL(), datach_cart);
 	I2C_24C02(config, m_i2cmem);
 }
 

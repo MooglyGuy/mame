@@ -84,14 +84,14 @@ void a2bus_diskiing13_device::floppy_formats(format_registration &fr)
 
 void diskiing_device::device_add_mconfig(machine_config &config)
 {
-	DISKII_FDC(config, m_wozfdc, 1021800*2);
+	DISKII_FDC(config, m_wozfdc, XTAL::u(1021800)*2);
 	for (auto &floppy : m_floppy)
 		FLOPPY_CONNECTOR(config, floppy, a2_floppies, "525", diskiing_device::floppy_formats).enable_sound(true);
 }
 
 void a2bus_diskiing13_device::device_add_mconfig(machine_config &config)
 {
-	DISKII_FDC(config, m_wozfdc, 1021800*2);
+	DISKII_FDC(config, m_wozfdc, XTAL::u(1021800)*2);
 	for (auto &floppy : m_floppy)
 		FLOPPY_CONNECTOR(config, floppy, a2_floppies, "525", a2bus_diskiing13_device::floppy_formats).enable_sound(true);
 }
@@ -154,12 +154,12 @@ a2bus_applesurance_device::a2bus_applesurance_device(const machine_config &mconf
 {
 }
 
-a2bus_agat7flop_device::a2bus_agat7flop_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_agat7flop_device::a2bus_agat7flop_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	diskiing_device(mconfig, A2BUS_AGAT7_FDC, tag, owner, clock)
 {
 }
 
-a2bus_agat9flop_device::a2bus_agat9flop_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_agat9flop_device::a2bus_agat9flop_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	diskiing_device(mconfig, A2BUS_AGAT9_FDC, tag, owner, clock)
 {
 }

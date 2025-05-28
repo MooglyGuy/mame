@@ -3811,7 +3811,7 @@ void pacman_state::dremshpr(machine_config &config)
 
 	// Sound hardware
 	config.device_remove("namco");
-	AY8910(config, "ay8910", 14318000/8).add_route(ALL_OUTPUTS, "mono", 0.50);
+	AY8910(config, "ay8910", XTAL::u(14318000)/8).add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	m_mainlatch->q_out_cb<0>().set(FUNC(pacman_state::nmi_mask_w));
 	m_mainlatch->q_out_cb<1>().set_nop();

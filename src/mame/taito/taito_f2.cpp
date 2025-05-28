@@ -2774,10 +2774,10 @@ void taitof2_state::machine_start()
 void taitof2_state::taito_f2(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 24000000/2); /* 12 MHz */
+	M68000(config, m_maincpu, XTAL::u(24000000)/2); /* 12 MHz */
 	m_maincpu->set_vblank_int("screen", FUNC(taitof2_state::interrupt));
 
-	Z80(config, m_audiocpu, 24000000/6);   /* 4 MHz */
+	Z80(config, m_audiocpu, XTAL::u(24000000)/6);   /* 4 MHz */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &taitof2_state::sound_map);
 
 	WATCHDOG_TIMER(config, "watchdog");
@@ -2799,7 +2799,7 @@ void taitof2_state::taito_f2(machine_config &config)
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 24000000/3)); /* Was 16000000/2, but only a 24Mhz OSC */
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(24000000)/3)); /* Was 16000000/2, but only a 24Mhz OSC */
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "lspeaker", 0.25);
 	ymsnd.add_route(0, "rspeaker", 0.25);
@@ -3503,11 +3503,11 @@ void taitof2_state::driftout(machine_config &config)
 void taitof2_state::cameltrya(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu,24000000/2);  /* verified on pcb  */
+	M68000(config, m_maincpu, XTAL::u(24000000)/2);  /* verified on pcb  */
 	m_maincpu->set_addrmap(AS_PROGRAM, &taitof2_state::cameltrya_map);
 	m_maincpu->set_vblank_int("screen", FUNC(taitof2_state::interrupt));
 
-	Z80(config, m_audiocpu, 24000000/4);    /* verifed on pcb */
+	Z80(config, m_audiocpu, XTAL::u(24000000)/4);    /* verifed on pcb */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &taitof2_state::cameltrya_sound_map);
 
 	TC0220IOC(config, m_tc0220ioc);
@@ -3546,7 +3546,7 @@ void taitof2_state::cameltrya(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym2203_device &ymsnd(YM2203(config, "ymsnd", 24000000/8)); /* verified on pcb  */
+	ym2203_device &ymsnd(YM2203(config, "ymsnd", XTAL::u(24000000)/8)); /* verified on pcb  */
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.port_a_write_callback().set(FUNC(taitof2_state::cameltrya_porta_w));   /* not implemented */
 	ymsnd.add_route(0, "mono", 0.20);

@@ -38,7 +38,7 @@ void jx8p_synth_device::device_start()
 
 void jx8p_synth_device::prescale_w(u8 data)
 {
-	double clockin = clock() / (16.0 - (data & 0x0f));
+	double clockin = clock().dvalue() / (16.0 - (data & 0x0f));
 	for (int n = 0; n < 2; n++)
 	{
 		m_pit[n]->set_clockin(0, clockin);
@@ -46,8 +46,7 @@ void jx8p_synth_device::prescale_w(u8 data)
 		m_pit[n]->set_clockin(2, clockin);
 	}
 
-	u32 timerin = clock() / (16 - ((data & 0xf0) >> 4));
-	m_ramio->set_unscaled_clock(timerin);
+	m_ramio->set_unscaled_clock(clock() / (16 - ((data & 0xf0) >> 4)));
 }
 
 void jx8p_synth_device::adc_w(offs_t offset, u8 data)

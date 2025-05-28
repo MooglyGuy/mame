@@ -351,7 +351,7 @@ private:
 };
 
 
-#define X301    19660000
+#define X301    XTAL::u(19660000)
 
 
 void nakajies_state::update_banks()

@@ -848,10 +848,10 @@ void discrete_device::device_start()
 	const discrete_block *intf_start = m_intf;
 
 	/* If a clock is specified we will use it, otherwise run at the audio sample rate. */
-	if (this->clock())
-		m_sample_rate = this->clock();
+	if (clock().value() != 0)
+		m_sample_rate = clock().value();
 	else
-		m_sample_rate = this->machine().sample_rate();
+		m_sample_rate = machine().sample_rate().value();
 	m_sample_time = 1.0 / m_sample_rate;
 	m_neg_sample_time = - m_sample_time;
 
@@ -969,7 +969,7 @@ void discrete_sound_device::device_start()
 		fatalerror("init_nodes() - Couldn't find an output node\n");
 
 	/* initialize the stream(s) */
-	m_stream = stream_alloc(m_input_stream_list.size(), m_output_list.size(), m_sample_rate);
+	m_stream = stream_alloc(m_input_stream_list.size(), m_output_list.size(), XTAL::u(m_sample_rate));
 
 	/* Finalize stream_input_nodes */
 	for (discrete_dss_input_stream_node *node : m_input_stream_list)

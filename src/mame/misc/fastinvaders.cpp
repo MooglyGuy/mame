@@ -629,7 +629,7 @@ GFXDECODE_END
 void fastinvaders_state::fastinvaders(machine_config &config)
 {
 	/* basic machine hardware */
-	I8085A(config, m_maincpu, 6144100/2); // 6144100 Xtal /2 internaly
+	I8085A(config, m_maincpu, XTAL::u(6144100)/2); // 6144100 Xtal /2 internaly
 	m_maincpu->set_addrmap(AS_PROGRAM, &fastinvaders_state::fastinvaders_map);
 //  m_maincpu->set_addrmap(AS_IO, &fastinvaders_state::fastinvaders_io_map);
 //  m_maincpu->set_vblank_int("screen", FUNC(fastinvaders_state::irq0_line_hold));
@@ -680,7 +680,7 @@ void fastinvaders_state::fastinvaders_6845(machine_config &config)
 	fastinvaders(config);
 	m_maincpu->set_addrmap(AS_IO, &fastinvaders_state::fastinvaders_6845_io);
 
-	MC6845(config, m_crtc6845, 11500000/16); /* confirmed */
+	MC6845(config, m_crtc6845, XTAL::u(11500000)/16); /* confirmed */
 	m_crtc6845->set_screen("screen");
 	m_crtc6845->set_show_border_area(false);
 	m_crtc6845->set_char_width(16);

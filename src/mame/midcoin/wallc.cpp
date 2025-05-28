@@ -560,7 +560,7 @@ void wallc_state::wallc(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	ay8912_device &aysnd(AY8912(config, "aysnd", 12288000 / 8));
+	ay8912_device &aysnd(AY8912(config, "aysnd", XTAL::u(12288000 / 8)));
 	aysnd.port_a_read_callback().set_ioport("DSW2");
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.30);
 }

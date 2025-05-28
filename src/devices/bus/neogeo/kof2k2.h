@@ -17,14 +17,14 @@ class neogeo_kof2k2type_cart_device : public neogeo_rom_device
 {
 public:
 	// construction/destruction
-	neogeo_kof2k2type_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_kof2k2type_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual void decrypt_all(DECRYPT_ALL_PARAMS) override { }
 	virtual int get_fixed_bank_type() override { return 0; }
 
 protected:
-	neogeo_kof2k2type_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_kof2k2type_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override;

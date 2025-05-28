@@ -1347,9 +1347,9 @@ Notes:
 //#define C352CLOCK   (25401600)  /* previously measured at 25.992MHz from 2061 pin 9  */
 //#define C352DIV     (296)
 
-#define H8CLOCK     (16934400)      /* based on research (superctr) */
-#define BUSCLOCK    (16934400*2)
-#define C352CLOCK   (25401600)
+#define H8CLOCK     (XTAL::u(16934400))      /* based on research (superctr) */
+#define BUSCLOCK    (XTAL::u(16934400)*2)
+#define C352CLOCK   (XTAL::u(25401600))
 #define C352DIV     (288)
 
 #define VSYNC1      (59.8824)

@@ -21,7 +21,7 @@
  *
  *************************************/
 
-#define DEFAULT_SAMPLE_RATE         (48000)
+#define DEFAULT_SAMPLE_RATE         XTAL::u(48000)
 
 
 /*************************************
@@ -135,7 +135,7 @@ void dmadac_set_frequency(dmadac_sound_device **devlist, uint8_t num_channels, d
 
 void dmadac_sound_device::set_frequency(double frequency)
 {
-	m_channel->set_sample_rate(frequency);
+	m_channel->set_sample_rate(XTAL::u((uint32_t)frequency));
 }
 
 /*************************************

@@ -909,11 +909,14 @@ void einstein_state::einstein(machine_config &config)
 	ctc.zc_callback<2>().set(IC_I058, FUNC(z80ctc_device::trg3));
 
 	/* Einstein daisy chain support for non-Z80 devices */
-	Z80DAISY_GENERIC(config, m_keyboard_daisy, 0xf7);
+	Z80DAISY_GENERIC(config, m_keyboard_daisy);
+	m_keyboard_daisy->set_vector(0xf7);
 	m_keyboard_daisy->int_handler().set(FUNC(einstein_state::int_w<2>));
-	Z80DAISY_GENERIC(config, m_adc_daisy, 0xfb);
+	Z80DAISY_GENERIC(config, m_adc_daisy);
+	m_adc_daisy->set_vector(0xfb);
 	m_adc_daisy->int_handler().set(FUNC(einstein_state::int_w<3>));
-	Z80DAISY_GENERIC(config, m_fire_daisy, 0xfd);
+	Z80DAISY_GENERIC(config, m_fire_daisy);
+	m_fire_daisy->set_vector(0xfd);
 	m_fire_daisy->int_handler().set(FUNC(einstein_state::int_w<4>));
 
 	/* video hardware */
@@ -1012,7 +1015,8 @@ void einstein_state::einst256(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &einstein_state::einst256_io);
 	m_maincpu->set_daisy_config(einst256_daisy_chain);
 
-	Z80DAISY_GENERIC(config, m_vdp_daisy, 0xfe);
+	Z80DAISY_GENERIC(config, m_vdp_daisy);
+	m_vdp_daisy->set_vector(0xfe);
 	m_vdp_daisy->int_handler().set(FUNC(einstein_state::int_w<5>));
 
 	/* video hardware */

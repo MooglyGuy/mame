@@ -186,8 +186,7 @@ void selz80_state::setup_baud()
 	u8 baudsw = ioport("BJ")->read() & 15;
 	if (baudsw)
 	{
-		u32 speed = (9600*16) >> baudsw;
-		m_clock->set_unscaled_clock(speed);
+		m_clock->set_unscaled_clock(XTAL::u((9600*16) >> baudsw));
 	}
 }
 

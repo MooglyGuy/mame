@@ -873,7 +873,7 @@ void tek4051_state::com_pia_pb_w(uint8_t data)
 	case 3: div = 2; break;
 	}
 
-	m_acia_clock->set_unscaled_clock(osc);
+	m_acia_clock->set_unscaled_clock(XTAL::u(osc));
 	m_acia_clock->set_clock_scale((double) 1 / div);
 }
 

@@ -94,7 +94,7 @@ void psxcd_device::device_start()
 	cdrom_image_device::device_start();
 	m_irq_handler.resolve_safe();
 
-	uint32_t sysclk = m_maincpu->clock() / 2;
+	uint32_t sysclk = m_maincpu->clock().value() / 2;
 	start_read_delay = (sysclk / 60);
 	read_sector_cycles = (sysclk / 75);
 	preread_delay = (read_sector_cycles >> 2) - 500;

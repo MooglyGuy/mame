@@ -98,6 +98,7 @@
 #include "emu.h"
 #define QSOUND_LLE
 #include "qsound.h"
+#include "cpu/dsp16/dsp16rc.h"
 
 #include <algorithm>
 #include <fstream>

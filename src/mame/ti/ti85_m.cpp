@@ -851,11 +851,11 @@ void ti85_state::ti83pse_port_0020_w(uint8_t data)
 	m_cpu_speed = data;
 	if (data)
 	{
-		m_maincpu->set_unscaled_clock(15000000);
+		m_maincpu->set_unscaled_clock(XTAL::u(15000000));
 	}
 	else
 	{
-		m_maincpu->set_unscaled_clock(6000000);
+		m_maincpu->set_unscaled_clock(XTAL::u(6000000));
 	}
 }
 

@@ -56,7 +56,7 @@ public:
 		set_fixed(false);
 	}
 
-	saitekosa_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	saitekosa_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~saitekosa_expansion_device();
 
 	// callbacks

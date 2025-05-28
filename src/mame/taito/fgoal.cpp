@@ -539,7 +539,7 @@ void fgoal_state::machine_reset()
 void fgoal_state::fgoal(machine_config &config)
 {
 	// basic machine hardware
-	M6800(config, m_maincpu, 10065000 / 10); // ?
+	M6800(config, m_maincpu, XTAL::u(10065000) / 10); // ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &fgoal_state::cpu_map);
 
 	// add shifter

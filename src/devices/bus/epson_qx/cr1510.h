@@ -27,7 +27,7 @@ class cr1510_device : public device_t, public bus::epson_qx::device_option_expan
 {
 public:
 	// construction/destruction
-	cr1510_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cr1510_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

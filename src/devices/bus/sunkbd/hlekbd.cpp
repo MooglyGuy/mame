@@ -747,7 +747,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: hle_device_base(
 				mconfig,
 				SUN_TYPE3_HLE_KEYBOARD,
@@ -784,7 +784,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: hle_type4_device_base(
 				mconfig,
 				SUN_TYPE4_HLE_KEYBOARD,
@@ -814,7 +814,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: hle_type4_device_base(
 				mconfig,
 				SUN_TYPE5_HLE_KEYBOARD,
@@ -844,7 +844,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: hle_type4_device_base(
 				mconfig,
 				SUN_TYPE5_GB_HLE_KEYBOARD,
@@ -874,7 +874,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: hle_type4_device_base(
 				mconfig,
 				SUN_TYPE5_SE_HLE_KEYBOARD,
@@ -904,7 +904,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: hle_type4_device_base(
 				mconfig,
 				SUN_TYPE5_JP_HLE_KEYBOARD,
@@ -939,7 +939,7 @@ hle_device_base::hle_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_buffered_serial_interface(mconfig, *this)
 	, device_sun_keyboard_port_interface(mconfig, *this)
@@ -985,7 +985,7 @@ WRITE_LINE_MEMBER( hle_device_base::input_txd )
 void hle_device_base::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "bell").front_center();
-	BEEP(config, m_beeper, ATTOSECONDS_TO_HZ(480 * ATTOSECONDS_PER_MICROSECOND)).add_route(ALL_OUTPUTS, "bell", 1.0);
+	BEEP(config, m_beeper, XTAL::u(ATTOSECONDS_TO_HZ(480 * ATTOSECONDS_PER_MICROSECOND))).add_route(ALL_OUTPUTS, "bell", 1.0);
 }
 
 
@@ -1024,7 +1024,7 @@ void hle_device_base::device_reset()
 
 	// configure device_buffered_serial_interface
 	set_data_frame(START_BIT_COUNT, DATA_BIT_COUNT, PARITY, STOP_BITS);
-	set_rate(BAUD);
+	set_rate(XTAL::u(BAUD));
 	receive_register_reset();
 	transmit_register_reset();
 

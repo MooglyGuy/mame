@@ -27,11 +27,7 @@ public:
 	auto m68intrq_cb() { return m_68intrq_cb.bind(); }
 	auto busrq_cb() { return m_busrq_cb.bind(); }
 
-	taito_sj_security_mcu_device(
-			machine_config const &mconfig,
-			char const *tag,
-			device_t *owner,
-			u32 clock);
+	taito_sj_security_mcu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// uses two consecutive addresses
 	u8 data_r(address_space &space, offs_t offset);

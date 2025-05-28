@@ -55,7 +55,7 @@ i8251_device::i8251_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock),
 	device_serial_interface(mconfig, *this),
 	m_txd_handler(*this),

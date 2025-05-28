@@ -37,9 +37,9 @@
 //  CONSTANTS
 //**************************************************************************
 
-const uint32_t MASTER_CLOCK_25MHz = 25174800;
-const uint32_t MASTER_CLOCK_10MHz = 10000000;
-const uint32_t MASTER_CLOCK_8MHz = 8000000;
+const XTAL MASTER_CLOCK_25MHz = XTAL::u(25174800);
+const XTAL MASTER_CLOCK_10MHz = XTAL::u(10000000);
+const XTAL MASTER_CLOCK_8MHz = XTAL::u(8000000);
 
 //**************************************************************************
 //  PPI READ/WRITE CALLBACKS
@@ -749,7 +749,7 @@ void segahang_state::shared_base(machine_config &config)
 	ADC0804(config, m_adc, MASTER_CLOCK_25MHz/4/6);
 	m_adc->vin_callback().set(FUNC(segahang_state::analog_r));
 
-	SEGAIC16VID(config, m_segaic16vid, 0, "gfxdecode");
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), "gfxdecode");
 	SEGAIC16_ROAD(config, m_segaic16road);
 
 	// video hardware
@@ -918,7 +918,7 @@ void segahang_state::shangupb(machine_config &config)
 void segahang_state::shangonro(machine_config &config)
 {
 	shangupb(config);
-	FD1094(config.replace(), m_subcpu, 10000000);
+	FD1094(config.replace(), m_subcpu, XTAL::u(10000000));
 	m_subcpu->set_addrmap(AS_PROGRAM, &segahang_state::sub_map);
 	m_subcpu->set_addrmap(AS_OPCODES, &segahang_state::fd1094_decrypted_opcodes_map);
 }

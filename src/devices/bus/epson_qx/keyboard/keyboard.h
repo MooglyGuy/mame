@@ -29,14 +29,14 @@ public:
 	// construction/destruction
 	template <typename T>
 	keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: keyboard_port_device(mconfig, tag, owner, 0)
+		: keyboard_port_device(mconfig, tag, owner, XTAL())
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0U);
+	keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	DECLARE_WRITE_LINE_MEMBER(txd_w);
 
@@ -66,7 +66,7 @@ public:
 	DECLARE_WRITE_LINE_MEMBER(clk_w);
 
 protected:
-	keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	virtual void device_add_mconfig(machine_config &config) override;
 	virtual const tiny_rom_entry *device_rom_region() const override;
 	virtual void device_start() override;
@@ -88,7 +88,7 @@ protected:
 class qx10_keyboard_hasci : public keyboard_device
 {
 public:
-	qx10_keyboard_hasci(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	qx10_keyboard_hasci(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ioport_constructor device_input_ports() const override;
 	virtual const internal_layout &layout() const override;
 };
@@ -96,7 +96,7 @@ public:
 class qx10_keyboard_ascii : public keyboard_device
 {
 public:
-	qx10_keyboard_ascii(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	qx10_keyboard_ascii(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ioport_constructor device_input_ports() const override;
 	virtual const internal_layout &layout() const override;
 };

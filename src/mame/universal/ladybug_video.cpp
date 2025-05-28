@@ -15,7 +15,7 @@
 DEFINE_DEVICE_TYPE(LADYBUG_VIDEO,  ladybug_video_device,  "ladybug_video",  "Lady Bug/Space Raider video")
 
 
-ladybug_video_device::ladybug_video_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ladybug_video_device::ladybug_video_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, LADYBUG_VIDEO, tag, owner, clock)
 	, m_gfxdecode(*this, finder_base::DUMMY_TAG)
 {

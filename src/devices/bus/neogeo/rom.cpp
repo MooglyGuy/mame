@@ -20,13 +20,13 @@
 DEFINE_DEVICE_TYPE(NEOGEO_ROM, neogeo_rom_device, "neocart_rom", "Neo Geo Standard Carts")
 
 
-neogeo_rom_device::neogeo_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_rom_device::neogeo_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_neogeo_cart_interface(mconfig, *this)
 {
 }
 
-neogeo_rom_device::neogeo_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_rom_device::neogeo_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, NEOGEO_ROM, tag, owner, clock)
 {
 }

@@ -1163,11 +1163,11 @@ void nforcepc_state::nforcepc(machine_config &config)
 	//maincpu.smiact().set("pci:01.0", FUNC(???_host_device::smi_act_w));
 
 	PCI_ROOT(config, "pci");
-	CRUSH11(config, "pci:00.0", 0, "maincpu", "bios"); // 10de:01a4 NVIDIA Corporation nForce CPU bridge
-	CRUSH11_MEMORY(config, "pci:00.1", 0, 0x10430c11, 2); // 10de:01ac NVIDIA Corporation nForce 220/420 Memory Controller
+	CRUSH11(config, "pci:00.0", XTAL(), "maincpu", "bios"); // 10de:01a4 NVIDIA Corporation nForce CPU bridge
+	CRUSH11_MEMORY(config, "pci:00.1", XTAL(), 0x10430c11, 2); // 10de:01ac NVIDIA Corporation nForce 220/420 Memory Controller
 	// 10de:01ad NVIDIA Corporation nForce 220/420 Memory Controller
 	// 10de:01ab NVIDIA Corporation nForce 420 Memory Controller (DDR)
-	mcpx_isalpc_device &isa(MCPX_ISALPC(config, "pci:01.0", 0, 0x10430c11)); // 10de:01b2 NVIDIA Corporation nForce ISA Bridge (LPC bus)
+	mcpx_isalpc_device &isa(MCPX_ISALPC(config, "pci:01.0", XTAL(), 0x10430c11)); // 10de:01b2 NVIDIA Corporation nForce ISA Bridge (LPC bus)
 	isa.smi().set_inputline(":maincpu", INPUT_LINE_SMI);
 	isa.boot_state_hook().set(FUNC(nforcepc_state::boot_state_award_w));
 	isa.interrupt_output().set(FUNC(nforcepc_state::maincpu_interrupt));
@@ -1180,28 +1180,28 @@ void nforcepc_state::nforcepc(machine_config &config)
 	ite.txd2().set("serport1", FUNC(rs232_port_device::write_txd));
 	ite.ndtr2().set("serport1", FUNC(rs232_port_device::write_dtr));
 	ite.nrts2().set("serport1", FUNC(rs232_port_device::write_rts));
-	MCPX_SMBUS(config, "pci:01.1", 0, 0x10430c11); // 10de:01b4 NVIDIA Corporation nForce PCI System Management (SMBus)
-	SMBUS_ROM(config, "pci:01.1:050", 0, test_spd_data, sizeof(test_spd_data)); // these 3 are on smbus number 0
+	MCPX_SMBUS(config, "pci:01.1", XTAL(), 0x10430c11); // 10de:01b4 NVIDIA Corporation nForce PCI System Management (SMBus)
+	SMBUS_ROM(config, "pci:01.1:050", XTAL(), test_spd_data, sizeof(test_spd_data)); // these 3 are on smbus number 0
 	SMBUS_LOGGER(config, "pci:01.1:051");
 	SMBUS_LOGGER(config, "pci:01.1:052");
 	SMBUS_LOGGER(config, "pci:01.1:108"); // these 4 are on smbus number 1
 	AS99127F(config, "pci:01.1:12d");
 	AS99127F_SENSOR2(config, "pci:01.1:148");
 	AS99127F_SENSOR3(config, "pci:01.1:149");
-	mcpx_ohci_device &ohci(MCPX_OHCI(config, "pci:02.0", 0, 0x10430c11)); // 10de:01c2 NVIDIA Corporation nForce USB Controller
+	mcpx_ohci_device &ohci(MCPX_OHCI(config, "pci:02.0", XTAL(), 0x10430c11)); // 10de:01c2 NVIDIA Corporation nForce USB Controller
 	ohci.interrupt_handler().set("pci:01.0", FUNC(mcpx_isalpc_device::irq1));
-	MCPX_OHCI(config, "pci:03.0", 0, 0x10430c11); // 10de:01c2 NVIDIA Corporation nForce USB Controller
+	MCPX_OHCI(config, "pci:03.0", XTAL(), 0x10430c11); // 10de:01c2 NVIDIA Corporation nForce USB Controller
 	MCPX_ETH(config, "pci:04.0"); // 10de:01c3 NVIDIA Corporation nForce Ethernet Controller
-	MCPX_APU(config, "pci:05.0", 0, 0x10430c11, m_maincpu); // 10de:01b0 NVIDIA Corporation nForce Audio Processing Unit
-	MCPX_AC97_AUDIO(config, "pci:06.0", 0, 0x10438384); // 10de:01b1 NVIDIA Corporation nForce AC'97 Audio Controller
-	PCI_BRIDGE(config, "pci:08.0", 0, 0x10de01b8, 0xc2); // 10de:01b8 NVIDIA Corporation nForce PCI-to-PCI bridge
+	MCPX_APU(config, "pci:05.0", XTAL(), 0x10430c11, m_maincpu); // 10de:01b0 NVIDIA Corporation nForce Audio Processing Unit
+	MCPX_AC97_AUDIO(config, "pci:06.0", XTAL(), 0x10438384); // 10de:01b1 NVIDIA Corporation nForce AC'97 Audio Controller
+	PCI_BRIDGE(config, "pci:08.0", XTAL(), 0x10de01b8, 0xc2); // 10de:01b8 NVIDIA Corporation nForce PCI-to-PCI bridge
 	// 10ec:8139 Realtek Semiconductor Co., Ltd. RTL-8139/8139C/8139C+ (behind bridge)
-	mcpx_ide_device &ide(MCPX_IDE(config, "pci:09.0", 0, 0x10430c11)); // 10de:01bc NVIDIA Corporation nForce IDE
+	mcpx_ide_device &ide(MCPX_IDE(config, "pci:09.0", XTAL(), 0x10430c11)); // 10de:01bc NVIDIA Corporation nForce IDE
 	ide.pri_interrupt_handler().set("pci:01.0", FUNC(mcpx_isalpc_device::irq14));
 	ide.sec_interrupt_handler().set("pci:01.0", FUNC(mcpx_isalpc_device::irq15));
 	ide.subdevice<ide_controller_32_device>("ide1")->options(ata_devices, "hdd", nullptr, true);
 	ide.subdevice<ide_controller_32_device>("ide2")->options(ata_devices, "cdrom", nullptr, true);
-	NV2A_AGP(config, "pci:1e.0", 0, 0x10de01b7, 0xb2); // 10de:01b7 NVIDIA Corporation nForce AGP to PCI Bridge
+	NV2A_AGP(config, "pci:1e.0", XTAL(), 0x10de01b7, 0xb2); // 10de:01b7 NVIDIA Corporation nForce AGP to PCI Bridge
 	VIRGEDX_PCI(config, "pci:0a.0");
 	SST_49LF020(config, "bios");
 

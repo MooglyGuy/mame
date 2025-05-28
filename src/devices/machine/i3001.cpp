@@ -14,7 +14,7 @@
 // Device type definition
 DEFINE_DEVICE_TYPE(I3001, i3001_device, "i3001", "Intel i3001 MCU")
 
-i3001_device::i3001_device(const machine_config &mconfig , const char *tag , device_t *owner , uint32_t clock)
+i3001_device::i3001_device(const machine_config &mconfig , const char *tag , device_t *owner , const XTAL &clock)
 	: device_t(mconfig , I3001 , tag , owner , clock)
 	, m_fo_handler(*this)
 	, m_px_handler(*this)

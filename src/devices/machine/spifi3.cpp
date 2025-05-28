@@ -250,7 +250,7 @@ namespace
 	}
 }
 
-spifi3_device::spifi3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+spifi3_device::spifi3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	nscsi_device(mconfig, SPIFI3, tag, owner, clock),
 	nscsi_slot_card_interface(mconfig, *this, DEVICE_SELF),
 	m_even_fifo(),

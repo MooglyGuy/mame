@@ -535,10 +535,10 @@ void a7150_state::a7150(machine_config &config)
 
 	Z80CTC(config, m_ctc, 16_MHz_XTAL / 3);
 	m_ctc->intr_callback().set_inputline(m_gfxcpu, INPUT_LINE_IRQ0);
-	m_ctc->set_clk<0>(1230750);
-	m_ctc->set_clk<1>(1230750);
-	m_ctc->set_clk<2>(1230750);
-	m_ctc->set_clk<3>(1230750);
+	m_ctc->set_clk<0>(XTAL::u(1230750));
+	m_ctc->set_clk<1>(XTAL::u(1230750));
+	m_ctc->set_clk<2>(XTAL::u(1230750));
+	m_ctc->set_clk<3>(XTAL::u(1230750));
 	m_ctc->zc_callback<0>().set(Z80SIO_TAG, FUNC(z80sio_device::rxca_w));
 	m_ctc->zc_callback<0>().append(Z80SIO_TAG, FUNC(z80sio_device::txca_w));
 	m_ctc->zc_callback<1>().set(Z80SIO_TAG, FUNC(z80sio_device::rxtxcb_w));

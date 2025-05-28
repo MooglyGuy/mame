@@ -273,13 +273,13 @@ void kiwame_state::kiwame(machine_config &config)
 	// TODO: determine actual clocks for CPU and video/sound ICs (only XTAL available is 20 MHz)
 
 	/* basic machine hardware */
-	TMP68301(config, m_maincpu, 16000000);
+	TMP68301(config, m_maincpu, XTAL::u(16000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &kiwame_state::kiwame_map);
 	m_maincpu->out_parallel_callback().set(FUNC(kiwame_state::row_select_w));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0); // 2x LH52B256D-70LL + battery (possibly only lower bytes battery-backed)
 
-	X1_001(config, m_spritegen, 16000000, "palette", gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), "palette", gfx_sprites);
 	// position kludges
 	m_spritegen->set_fg_xoffsets(-16, 0); // correct (test grid)
 	m_spritegen->set_fg_yoffsets(-0x12, 0x0e);
@@ -301,7 +301,7 @@ void kiwame_state::kiwame(machine_config &config)
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
 
-	x1_010_device &x1snd(X1_010(config, "x1snd", 16000000));
+	x1_010_device &x1snd(X1_010(config, "x1snd", XTAL::u(16000000)));
 	x1snd.add_route(0, "lspeaker", 1.0);
 	x1snd.add_route(1, "rspeaker", 1.0);
 }

@@ -43,7 +43,7 @@ public:
 	virtual bool is_reset_on_load() const noexcept override { return true; }
 
 protected:
-	gb_cart_slot_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	gb_cart_slot_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

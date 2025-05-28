@@ -15,7 +15,7 @@ class dp8573_device : public device_t, public device_nvram_interface
 {
 public:
 	dp8573_device(const machine_config &mconfig, const char *tag, device_t *owner)
-		: dp8573_device(mconfig, tag, owner, 32768)
+		: dp8573_device(mconfig, tag, owner, XTAL(32'768))
 	{
 	}
 

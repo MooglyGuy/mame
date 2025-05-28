@@ -81,7 +81,7 @@ DEVICE_IMAGE_LOAD_MEMBER(digiblast_state::cart_load)
 void digiblast_state::digiblast(machine_config &config)
 {
 	/* basic machine hardware */
-	ARM9(config, m_maincpu, 200000000);
+	ARM9(config, m_maincpu, XTAL::u(200000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &digiblast_state::digiblast_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
@@ -93,7 +93,7 @@ void digiblast_state::digiblast(machine_config &config)
 
 	PALETTE(config, "palette").set_entries(256);
 
-	S3C2410(config, m_s3c2410, 12000000);
+	S3C2410(config, m_s3c2410, XTAL::u(12000000));
 	m_s3c2410->set_palette_tag("palette");
 	m_s3c2410->set_screen_tag("screen");
 	//m_s3c2410->core_pin_r_callback().set(FUNC(digiblast_state::s3c2410_core_pin_r));

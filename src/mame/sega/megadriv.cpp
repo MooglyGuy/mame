@@ -947,8 +947,8 @@ void md_base_state::md_ntsc(machine_config &config)
 	m_vdp->add_route(ALL_OUTPUTS, "rspeaker", 0.50);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_refresh_hz(double(MASTER_CLOCK_NTSC) / 10.0 / 262.0 / 342.0); // same as SMS?
-//  m_screen->set_refresh_hz(double(MASTER_CLOCK_NTSC) / 8.0 / 262.0 / 427.0); // or 427 Htotal?
+	m_screen->set_refresh_hz(MASTER_CLOCK_NTSC / 10.0 / 262.0 / 342.0); // same as SMS?
+//  m_screen->set_refresh_hz(MASTER_CLOCK_NTSC / 8.0 / 262.0 / 427.0); // or 427 Htotal?
 	m_screen->set_vblank_time(ATTOSECONDS_IN_USEC(0)); // Vblank handled manually.
 	m_screen->set_size(64*8, 620);
 	m_screen->set_visarea(0, 32*8-1, 0, 28*8-1);
@@ -1000,8 +1000,8 @@ void md_base_state::md_pal(machine_config &config)
 	m_vdp->add_route(ALL_OUTPUTS, "rspeaker", 0.50);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_refresh_hz(double(MASTER_CLOCK_PAL) / 10.0 / 313.0 / 342.0); // same as SMS?
-//  m_screen->set_refresh_hz(double(MASTER_CLOCK_PAL) / 8.0 / 313.0 / 423.0); // or 423 Htotal?
+	m_screen->set_refresh_hz(MASTER_CLOCK_PAL / 10.0 / 313.0 / 342.0); // same as SMS?
+//  m_screen->set_refresh_hz(MASTER_CLOCK_PAL / 8.0 / 313.0 / 423.0); // or 423 Htotal?
 	m_screen->set_vblank_time(ATTOSECONDS_IN_USEC(0)); // Vblank handled manually.
 	m_screen->set_size(64*8, 620);
 	m_screen->set_visarea(0, 32*8-1, 0, 28*8-1);

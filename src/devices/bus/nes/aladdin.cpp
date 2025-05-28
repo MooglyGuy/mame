@@ -327,5 +327,5 @@ static void ade_cart(device_slot_interface &device)
 
 void nes_aladdin_device::device_add_mconfig(machine_config &config)
 {
-	NES_ALADDIN_SLOT(config, m_subslot, ade_cart);
+	NES_ALADDIN_SLOT(config, m_subslot, XTAL(), ade_cart);
 }

@@ -400,7 +400,7 @@ void astrocde_state::votrax_speech_w(uint8_t data)
 {
 	// Note that the frequency change is smooth, but we just can't
 	// handle that.
-	m_votrax->set_clock(data & 0x40 ? 782000 : 756000);
+	m_votrax->set_clock(XTAL::u(data & 0x40 ? 782000 : 756000));
 	m_votrax->inflection_w(data & 0x80 ? 0 : 2);
 	m_votrax->write(data & 0x3f);
 }

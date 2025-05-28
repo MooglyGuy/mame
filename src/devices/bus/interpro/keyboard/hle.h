@@ -49,7 +49,7 @@ private:
 	static constexpr int DATA_BIT_COUNT = 8;
 	static constexpr device_serial_interface::parity_t PARITY = device_serial_interface::PARITY_EVEN;
 	static constexpr device_serial_interface::stop_bits_t STOP_BITS = device_serial_interface::STOP_BITS_1;
-	static constexpr int BAUD = 1'200;
+	static constexpr XTAL BAUD = XTAL::u(1'200);
 
 	enum {
 		CLICK_TIMER_ID = 30'000

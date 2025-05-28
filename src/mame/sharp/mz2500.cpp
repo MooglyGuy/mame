@@ -1843,7 +1843,7 @@ void mz2500_state::mz2500(machine_config &config)
 
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(21'477'272, 640+108, 0, 640, 480, 0, 200); //unknown clock / divider
+	m_screen->set_raw(XTAL::u(21'477'272), 640+108, 0, 640, 480, 0, 200); //unknown clock / divider
 	m_screen->set_screen_update(FUNC(mz2500_state::screen_update_mz2500));
 	m_screen->set_palette(m_palette);
 

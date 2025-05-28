@@ -35,7 +35,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	dmvcart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	dmvcart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~dmvcart_slot_device();
 
 	auto prog_read() { return m_prog_read_cb.bind(); }

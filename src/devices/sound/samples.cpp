@@ -237,7 +237,7 @@ void samples_device::device_start()
 	{
 		// initialize channel
 		channel_t &chan = m_channel[channel];
-		chan.stream = stream_alloc(0, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+		chan.stream = stream_alloc(0, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 		chan.source = nullptr;
 		chan.source_num = -1;
 		chan.pos = 0;
@@ -329,7 +329,7 @@ void samples_device::sound_stream_update(sound_stream &stream, std::vector<read_
 			if (chan.source != nullptr && !chan.paused)
 			{
 				// load some info locally
-				double step = double(chan.curfreq) / double(buffer.sample_rate());
+				double step = chan.curfreq / buffer.sample_rate().dvalue();
 				double endpos = chan.source_len;
 				const int16_t *sample = chan.source;
 

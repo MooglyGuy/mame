@@ -116,7 +116,7 @@ To Do / Status:
 #include "softlist_dev.h"
 #include "utf8.h"
 
-#define MASTER_XTAL 12164800
+#define MASTER_XTAL XTAL::u(12164800)
 
 
 class radionic_state : public trs80_state
@@ -407,7 +407,7 @@ void radionic_state::machine_reset()
 	u16 baud = 300;
 	for (u8 i = 0; i < sw; i++)
 		baud <<= 1;
-	m_clock->set_unscaled_clock(baud*16); // It's designed on the assumption that the uart will divide by 16
+	m_clock->set_unscaled_clock(XTAL::u(baud*16)); // It's designed on the assumption that the uart will divide by 16
 	//printf("%d\n",baud);
 }
 

@@ -19,7 +19,7 @@
 DEFINE_DEVICE_TYPE(NEOGEO_KOF98_CART, neogeo_kof98_cart_device, "neocart_kof98", "Neo Geo KoF 98 Cart")
 
 
-neogeo_kof98_cart_device::neogeo_kof98_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_kof98_cart_device::neogeo_kof98_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, NEOGEO_KOF98_CART, tag, owner, clock),
 	m_prot(*this, "kof98_prot")
 {

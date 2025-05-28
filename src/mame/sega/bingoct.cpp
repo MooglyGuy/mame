@@ -238,11 +238,11 @@ void bingoct_device::device_add_mconfig(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	rf5c68_device &rf5c68_1(RF5C68(config, "5c68_1", 32000000 / 4));
+	rf5c68_device &rf5c68_1(RF5C68(config, "5c68_1", XTAL::u(32000000) / 4));
 	rf5c68_1.add_route(ALL_OUTPUTS, "mono", 1.0);
 	rf5c68_1.set_addrmap(0, &bingoct_device::pcm_map);
 
-	rf5c68_device &rf5c68_2(RF5C68(config, "5c68_2", 32000000 / 4));
+	rf5c68_device &rf5c68_2(RF5C68(config, "5c68_2", XTAL::u(32000000) / 4));
 	rf5c68_2.add_route(ALL_OUTPUTS, "mono", 1.0);
 	rf5c68_1.set_addrmap(0, &bingoct_device::pcm_map);
 }

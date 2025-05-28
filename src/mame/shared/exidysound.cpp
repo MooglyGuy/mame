@@ -181,7 +181,7 @@ void exidy_sound_device::common_sh_start()
 	m_sh6840_clocks_per_sample = (int)(SH6840_CLOCK.dvalue() / (double)sample_rate * (double)(1 << 24));
 
 	/* allocate the stream */
-	m_stream = stream_alloc(0, 1, sample_rate);
+	m_stream = stream_alloc(0, 1, SH8253_CLOCK);
 
 	sh6840_register_state_globals();
 }

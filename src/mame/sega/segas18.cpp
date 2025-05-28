@@ -1364,7 +1364,7 @@ void segas18_state::system18(machine_config &config)
 
 	NVRAM(config, m_nvram, nvram_device::DEFAULT_ALL_0);
 
-	SEGA_315_5195_MEM_MAPPER(config, m_mapper, 10000000, m_maincpu);
+	SEGA_315_5195_MEM_MAPPER(config, m_mapper, XTAL::u(10000000), m_maincpu);
 	m_mapper->set_mapper(FUNC(segas18_state::memory_mapper));
 	m_mapper->pbf().set_inputline(m_soundcpu, INPUT_LINE_NMI);
 
@@ -1380,7 +1380,7 @@ void segas18_state::system18(machine_config &config)
 	m_io->out_cnt1_callback().set(m_segaic16vid, FUNC(segaic16_video_device::set_display_enable));
 	m_io->out_cnt2_callback().set(FUNC(segas18_state::set_vdp_enable));
 
-	SEGA315_5313(config, m_vdp, 15000000, m_maincpu); // ??? Frequency is a complete guess
+	SEGA315_5313(config, m_vdp, XTAL::u(15000000), m_maincpu); // ??? Frequency is a complete guess
 	m_vdp->set_is_pal(false);
 	m_vdp->snd_irq().set(FUNC(segas18_state::vdp_sndirqline_callback_s18));
 	m_vdp->lv6_irq().set(FUNC(segas18_state::vdp_lv6irqline_callback_s18));
@@ -1404,7 +1404,7 @@ void segas18_state::system18(machine_config &config)
 	PALETTE(config, m_palette).set_entries(2048*2 + 64*3);
 
 	SEGA_SYS16B_SPRITES(config, m_sprites);
-	SEGAIC16VID(config, m_segaic16vid, 0, m_gfxdecode);
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), m_gfxdecode);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
@@ -1426,7 +1426,7 @@ void segas18_state::system18_fd1094(machine_config &config)
 	system18(config);
 
 	// basic machine hardware
-	FD1094(config.replace(), m_maincpu, 10000000);
+	FD1094(config.replace(), m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas18_state::system18_map);
 	m_maincpu->set_addrmap(AS_OPCODES, &segas18_state::decrypted_opcodes_map);
 	m_maincpu->set_vblank_int("screen", FUNC(segas18_state::irq4_line_hold));

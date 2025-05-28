@@ -119,7 +119,7 @@ void cdp1864_device::device_start()
 	initialize_palette();
 
 	// create sound stream
-	m_stream = stream_alloc(0, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(0, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 
 	// allocate timers
 	m_int_timer = timer_alloc(FUNC(cdp1864_device::int_tick), this);
@@ -260,8 +260,8 @@ void cdp1864_device::sound_stream_update(sound_stream &stream, std::vector<read_
 
 	if (m_aoe)
 	{
-		double frequency = unscaled_clock() / 8 / 4 / (m_latch + 1) / 2;
-		int rate = buffer.sample_rate() / 2;
+		double frequency = unscaled_clock().dvalue() / 8 / 4 / (m_latch + 1) / 2;
+		int rate = buffer.sample_rate().value() / 2;
 
 		/* get progress through wave */
 		int incr = m_incr;

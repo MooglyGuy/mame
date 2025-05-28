@@ -1060,7 +1060,7 @@ void kingdrby_state::cowrace(machine_config &config)
 
 	OKIM6295(config, "oki", XTAL::u(1056000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.80); // clock frequency & pin 7 not verified
 
-	ym2203_device &aysnd(YM2203(config.replace(), "aysnd", 3000000));
+	ym2203_device &aysnd(YM2203(config.replace(), "aysnd", XTAL::u(3000000)));
 	aysnd.port_a_read_callback().set(FUNC(kingdrby_state::sound_cmd_r));
 	aysnd.port_b_read_callback().set("oki", FUNC(okim6295_device::read));
 	aysnd.port_b_write_callback().set("oki", FUNC(okim6295_device::write));

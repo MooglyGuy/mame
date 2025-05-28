@@ -18,7 +18,7 @@ class neogeo_cthd2k3_cart_device : public neogeo_rom_device
 {
 public:
 	// construction/destruction
-	neogeo_cthd2k3_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_cthd2k3_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual uint32_t get_bank_base(uint16_t sel) override { return m_prot->get_bank_base(sel); }
@@ -26,7 +26,7 @@ public:
 	virtual int get_fixed_bank_type() override { return 0; }
 
 protected:
-	neogeo_cthd2k3_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_cthd2k3_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override;

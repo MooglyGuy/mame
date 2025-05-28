@@ -867,7 +867,7 @@ void rx2030_state::rs2030(machine_config &config)
 	m_tty[0]->set_default_option("mouse");
 
 	// video hardware (1280x1024x8bpp @ 60Hz), 40 parts vram
-	u32 const pixclock = 108'189'000;
+	XTAL pixclock = XTAL::u(108'189'000);
 
 	// timing from VESA 1280x1024 @ 60Hz
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
@@ -1105,7 +1105,7 @@ void rx3230_state::rx3230(machine_config &config)
 	m_buzzer->add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	// motherboard monochrome video (1152x900 @ 72Hz)
-	u32 const pixclock = 74'649'600;
+	XTAL pixclock = XTAL::u(74'649'600);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_raw(pixclock, 1152, 0, 1152, 900, 0, 900);
@@ -1137,7 +1137,7 @@ void rx3230_state::rs3230(machine_config &config)
 		m_cpu->set_addrmap(AS_PROGRAM, &rx3230_state::rs3230_map);
 
 		// video hardware (1280x1024x8bpp @ 60Hz), 16 parts vram
-		u32 const pixclock = 108'180'000;
+		XTAL pixclock = XTAL::u(108'180'000);
 
 		// timing from VESA 1280x1024 @ 60Hz
 		m_screen->set_raw(pixclock, 1688, 248, 1528, 1066, 38, 1062);

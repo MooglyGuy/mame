@@ -81,7 +81,7 @@ private:
 	uint8_t m_channel_strobe;
 
 	int output_channels;
-	uint32_t output_rate;
+	XTAL output_rate;
 
 	emu_timer *m_timer;
 

@@ -121,8 +121,8 @@ protected:
 
 	// internal state
 	sound_stream *m_stream;               // which stream are we using
-	int           m_sample_rate;          // current sample rate
-	u32           m_master_clock;         // master clock frequency
+	XTAL          m_sample_rate;          // current sample rate
+	XTAL          m_master_clock;         // master clock frequency
 	s8            m_address_acc_shift;    // right shift accumulator for generate integer address
 	u64           m_address_acc_mask;     // accumulator mask
 

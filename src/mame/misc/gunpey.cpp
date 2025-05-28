@@ -1161,14 +1161,14 @@ TIMER_DEVICE_CALLBACK_MEMBER(gunpey_state::scanline)
 void gunpey_state::gunpey(machine_config &config)
 {
 	/* basic machine hardware */
-	V30(config, m_maincpu, 57242400 / 4);
+	V30(config, m_maincpu, XTAL::u(57242400) / 4);
 	m_maincpu->set_addrmap(AS_PROGRAM, &gunpey_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &gunpey_state::io_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(gunpey_state::scanline), "screen", 0, 1);
 
 	/* video hardware */
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(57242400/8, 442, 0, 320, 264, 0, 240); /* just to get ~60 Hz */
+	screen.set_raw(XTAL::u(57242400)/8, 442, 0, 320, 264, 0, 240); /* just to get ~60 Hz */
 	screen.set_screen_update(FUNC(gunpey_state::screen_update));
 	screen.set_palette(m_palette);
 

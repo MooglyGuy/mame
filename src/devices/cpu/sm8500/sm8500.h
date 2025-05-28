@@ -20,7 +20,7 @@ class sm8500_cpu_device : public cpu_device
 {
 public:
 	// construction/destruction
-	sm8500_cpu_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	sm8500_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	auto dma_cb() { return m_dma_func.bind(); }

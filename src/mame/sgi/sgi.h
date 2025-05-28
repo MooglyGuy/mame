@@ -25,7 +25,7 @@ public:
 		m_maincpu.set_tag(std::forward<T>(cpu_tag));
 		m_eeprom.set_tag(std::forward<U>(eeprom_tag));
 	}
-	sgi_mc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sgi_mc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto int_dma_done_cb() { return m_int_dma_done_cb.bind(); }
 	auto eisa_present() { return m_eisa_present.bind(); }

@@ -82,7 +82,7 @@ void rc2014_fdc9266_device::control_w(offs_t, uint8_t data)
 	if (m_floppy[1]->get_device())
 		m_floppy[1]->get_device()->mon_w(!BIT(data,2));
 
-	m_fdc->set_rate(BIT(data,6) ? 500000 : 250000);
+	m_fdc->set_rate(BIT(data,6) ? XTAL::u(500000) : XTAL::u(250000));
 	m_fdc->reset_w(!BIT(data,7) ? ASSERT_LINE : CLEAR_LINE);
 }
 

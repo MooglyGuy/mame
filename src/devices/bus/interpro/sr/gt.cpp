@@ -340,7 +340,7 @@ void gtdb_device::device_add_mconfig(machine_config &config)
  */
 void mpcb963_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 83'020'800;
+	const XTAL pixclock = XTAL::u(83'020'800);
 
 	gt_device_base::device_add_mconfig(config);
 
@@ -355,7 +355,7 @@ void mpcb963_device::device_add_mconfig(machine_config &config)
 
 void mpcba79_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 83'020'800;
+	const XTAL pixclock = XTAL::u(83'020'800);
 
 	gt_device_base::device_add_mconfig(config);
 
@@ -388,7 +388,7 @@ void mpcba79_device::device_add_mconfig(machine_config &config)
  */
 void msmt070_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 105'561'000;
+	const XTAL pixclock = XTAL::u(105'561'000);
 
 	gt_device_base::device_add_mconfig(config);
 
@@ -403,7 +403,7 @@ void msmt070_device::device_add_mconfig(machine_config &config)
 
 void msmt071_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 105'561'000;
+	const XTAL pixclock = XTAL::u(105'561'000);
 
 	gt_device_base::device_add_mconfig(config);
 
@@ -436,7 +436,7 @@ void msmt071_device::device_add_mconfig(machine_config &config)
 */
 void msmt081_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 209'260'800;
+	const XTAL pixclock = XTAL::u(209'260'800);
 
 	gt_device_base::device_add_mconfig(config);
 
@@ -456,7 +456,7 @@ void msmt081_device::device_add_mconfig(machine_config &config)
  */
 void mpcbb68_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 105'561'000;
+	const XTAL pixclock = XTAL::u(105'561'000);
 
 	gtdb_device::device_add_mconfig(config);
 
@@ -483,7 +483,7 @@ void mpcbb68_device::device_add_mconfig(machine_config &config)
  */
 void mpcbb92_device::device_add_mconfig(machine_config &config)
 {
-	const u32 pixclock = 209'260'800;
+	const XTAL pixclock = XTAL::u(209'260'800);
 
 	gtdb_device::device_add_mconfig(config);
 

@@ -40,7 +40,7 @@ INPUT_PORTS_END
 //-------------------------------------------------
 //  ide_device - constructor
 //-------------------------------------------------
-ide_device::ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ide_device::ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, EPSON_QX_OPTION_IDE, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	m_hdd(*this, "hdd"),
@@ -62,7 +62,7 @@ ioport_constructor ide_device::device_input_ports() const
 //-------------------------------------------------
 void ide_device::device_add_mconfig(machine_config &config)
 {
-	IDE_HARDDISK(config, m_hdd, 0);
+	IDE_HARDDISK(config, m_hdd);
 }
 
 //-------------------------------------------------

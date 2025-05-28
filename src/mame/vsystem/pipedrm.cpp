@@ -649,12 +649,12 @@ void hatris_state::machine_reset()
 void pipedrm_state::pipedrm(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 12000000/2);
+	Z80(config, m_maincpu, XTAL::u(12000000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &pipedrm_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &pipedrm_state::main_portmap);
 	m_maincpu->set_vblank_int("screen", FUNC(pipedrm_state::irq0_line_hold));
 
-	Z80(config, m_subcpu, 14318000/4);
+	Z80(config, m_subcpu, XTAL::u(14318000)/4);
 	m_subcpu->set_addrmap(AS_PROGRAM, &pipedrm_state::sound_map);
 	m_subcpu->set_addrmap(AS_IO, &pipedrm_state::sound_portmap);
 
@@ -696,12 +696,12 @@ void pipedrm_state::pipedrm(machine_config &config)
 void hatris_state::hatris(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 12000000/2);
+	Z80(config, m_maincpu, XTAL::u(12000000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &hatris_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &hatris_state::main_portmap);
 	m_maincpu->set_vblank_int("screen", FUNC(hatris_state::irq0_line_hold));
 
-	Z80(config, m_subcpu, 14318000/4);
+	Z80(config, m_subcpu, XTAL::u(14318000)/4);
 	m_subcpu->set_addrmap(AS_PROGRAM, &hatris_state::sound_map);
 	m_subcpu->set_addrmap(AS_IO, &hatris_state::sound_portmap);
 

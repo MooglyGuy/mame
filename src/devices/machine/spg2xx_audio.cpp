@@ -76,7 +76,7 @@ void spg2xx_audio_device::device_start()
 	m_audio_beat = timer_alloc(FUNC(spg2xx_audio_device::audio_beat_tick), this);
 	m_audio_beat->adjust(attotime::never);
 
-	m_stream = stream_alloc(0, 2, 281250/4);
+	m_stream = stream_alloc(0, 2, XTAL::u(281250)/4);
 
 	m_channel_debug = -1;
 

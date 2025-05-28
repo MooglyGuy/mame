@@ -1236,7 +1236,7 @@ void z80scc_channel::tra_complete()
 	if ( m_delayed_tx_brg_change == 1)
 	{
 		m_delayed_tx_brg_change = 0;
-		set_tra_rate(m_brg_rate);
+		set_tra_rate(XTAL::u(m_brg_rate));
 		LOGTX("Delayed Init - Baud Rate Generator: %d mode: %dx\n", m_brg_rate, get_clock_mode() );
 	}
 
@@ -2815,8 +2815,8 @@ unsigned int z80scc_channel::get_brg_rate()
 	brg_const = 2 + (m_wr13 << 8 | m_wr12);
 	if (m_wr14 & WR14_BRG_SOURCE) // Do we use the PCLK as baudrate source
 	{
-		rate = owner()->clock() / (brg_const == 0 ? 1 : brg_const);
-		LOG("   - Source bit rate (%d) = PCLK (%d) / (%d)\n", rate, owner()->clock(), brg_const);
+		rate = owner()->clock().value() / (brg_const == 0 ? 1 : brg_const);
+		LOG("   - Source bit rate (%d) = PCLK (%d) / (%d)\n", rate, owner()->clock().value(), brg_const);
 	}
 	else // Else we use the RTxC as BRG source
 	{
@@ -2838,7 +2838,7 @@ void z80scc_channel::update_baudtimer()
 		brg_const = 2 + (m_wr13 << 8 | m_wr12);
 		if (m_wr14 & WR14_BRG_SOURCE) // Do we use the PCLK as baudrate source
 		{
-			rate = owner()->clock() / (brg_const == 0 ? 1 : brg_const);
+			rate = owner()->clock().value() / (brg_const == 0 ? 1 : brg_const);
 		}
 		else // Else we use the RTxC as BRG source
 		{
@@ -2899,11 +2899,11 @@ void z80scc_channel::update_serial()
 		m_brg_rate = get_brg_rate();
 
 		LOG("- BRG rate %d\n", m_brg_rate);
-		set_rcv_rate(m_brg_rate);
+		set_rcv_rate(XTAL::u(m_brg_rate));
 
 		if (is_transmit_register_empty())
 		{
-			set_tra_rate(m_brg_rate);
+			set_tra_rate(XTAL::u(m_brg_rate));
 			LOGTX("   - Baud Rate Generator: %d clock mode: %dx\n", m_brg_rate, get_clock_mode());
 		}
 		else
@@ -2922,13 +2922,13 @@ void z80scc_channel::update_serial()
 	// in m_uart->txca/txcb and rxca/rxcb respectivelly
 	if (m_rxc > 0)
 	{
-		set_rcv_rate(m_rxc / clocks); // TODO Check/Fix this to get the right tx/rx clocks, seems to be missing a divider or two
+		set_rcv_rate(XTAL::u(m_rxc) / clocks); // TODO Check/Fix this to get the right tx/rx clocks, seems to be missing a divider or two
 		LOG("   - Receiver clock: %d mode: %d rate: %d/%xh\n", m_rxc, clocks, m_rxc / clocks, m_rxc / clocks);
 	}
 
 	if (m_txc > 0 && !(m_wr14 & WR14_BRG_ENABLE))
 	{
-		set_tra_rate(m_txc / clocks);
+		set_tra_rate(XTAL::u(m_txc) / clocks);
 		LOG("   - Transmit clock: %d mode: %d rate: %d/%xh\n", m_txc, clocks, m_txc / clocks, m_txc / clocks);
 	}
 }

@@ -178,7 +178,7 @@ void svision_sound_device::sounddma_w(offs_t offset, uint8_t data)
 			m_dma.size = (data ? data : 0x100) * 32;
 			break;
 		case 3:
-			m_dma.step = unscaled_clock() / (256.0 * machine().sample_rate() * (1 + (data & 3)));
+			m_dma.step = unscaled_clock().dvalue() / (256.0 * machine().sample_rate().dvalue() * (1 + (data & 3)));
 			m_dma.right = data & 4;
 			m_dma.left = data & 8;
 			m_dma.ca14to16 = ((data & 0x70) >> 4) << 14;
@@ -202,7 +202,7 @@ void svision_sound_device::noise_w(offs_t offset, uint8_t data)
 	{
 		case 0:
 			m_noise.volume=data&0xf;
-			m_noise.step= unscaled_clock() / (256.0*machine().sample_rate()*(1+(data>>4)));
+			m_noise.step = unscaled_clock().dvalue() / (256.0 * machine().sample_rate().dvalue() * (1 + (data >> 4)));
 			break;
 		case 1:
 			m_noise.count = data + 1;
@@ -247,7 +247,7 @@ void svision_sound_device::soundport_w(int which, int offset, int data)
 			if (size)
 			{
 				//  channel.size=(int)(device->machine().sample_rate()*(size<<5)/4e6);
-				channel.size = (int) (machine().sample_rate() * (size << 5) / unscaled_clock());
+				channel.size = (int) (machine().sample_rate().dvalue() * (size << 5) / unscaled_clock().dvalue());
 			}
 			else
 			{

@@ -404,7 +404,7 @@ void midway_ssio_device::device_add_mconfig(machine_config &config)
 {
 	Z80(config, m_cpu, DERIVED_CLOCK(1, 2*4));
 	m_cpu->set_addrmap(AS_PROGRAM, &midway_ssio_device::ssio_map);
-	if (clock())
+	if (clock().value() != 0)
 		m_cpu->set_periodic_int(DEVICE_SELF, FUNC(midway_ssio_device::clock_14024), attotime::from_hz(clock() / (2*16*10)));
 
 	AY8910(config, m_ay0, DERIVED_CLOCK(1, 2*4));

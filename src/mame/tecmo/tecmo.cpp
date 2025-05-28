@@ -907,7 +907,7 @@ void tecmo_state::geminib(machine_config &config)
 {
 	gemini(config);
 	// 24.18 MHz OSC / 59.62 Hz, bootleg only?
-	m_screen->set_raw(24180000/4, 384,0,256,264,16,240);
+	m_screen->set_raw(XTAL::u(24180000)/4, 384,0,256,264,16,240);
 }
 
 void tecmo_state::silkworm(machine_config &config)

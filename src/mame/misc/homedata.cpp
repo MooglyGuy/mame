@@ -1249,11 +1249,11 @@ MACHINE_RESET_MEMBER(homedata_state,reikaids)
 void homedata_state::mrokumei(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809E(config, m_maincpu, 16000000/8);  /* 2MHz ? */
+	MC6809E(config, m_maincpu, XTAL::u(16000000)/8);  /* 2MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &homedata_state::mrokumei_map);
 	m_maincpu->set_vblank_int("screen", FUNC(homedata_state::homedata_irq)); /* also triggered by the blitter */
 
-	Z80(config, m_audiocpu, 16000000/4);   /* 4MHz ? */
+	Z80(config, m_audiocpu, XTAL::u(16000000)/4);   /* 4MHz ? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &homedata_state::mrokumei_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &homedata_state::mrokumei_sound_io_map);
 
@@ -1283,7 +1283,7 @@ void homedata_state::mrokumei(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	SN76489A(config, m_sn, 16000000/4);     // SN76489AN actually
+	SN76489A(config, m_sn, XTAL::u(16000000)/4);     // SN76489AN actually
 	m_sn->add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 1.0); // unknown DAC
@@ -1350,7 +1350,7 @@ void homedata_state::reikaids(machine_config &config)
 void homedata_state::pteacher(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809E(config, m_maincpu, 16000000/8);  /* 2MHz ? */
+	MC6809E(config, m_maincpu, XTAL::u(16000000)/8);  /* 2MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &homedata_state::pteacher_map);
 	m_maincpu->set_vblank_int("screen", FUNC(homedata_state::homedata_irq)); /* also triggered by the blitter */
 
@@ -1391,7 +1391,7 @@ void homedata_state::pteacher(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	GENERIC_LATCH_8(config, m_mainlatch);
 
-	SN76489A(config, m_sn, 16000000/4);     // SN76489AN actually
+	SN76489A(config, m_sn, XTAL::u(16000000)/4);     // SN76489AN actually
 	m_sn->add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 1.0); // unknown DAC
@@ -1532,14 +1532,14 @@ GFXDECODE_END
 void homedata_state::mirderby(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809E(config, m_maincpu, 16000000/8);  /* 2 Mhz */
+	MC6809E(config, m_maincpu, XTAL::u(16000000)/8);  /* 2 Mhz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &homedata_state::cpu2_map);
 
-	z80_device &cpu0(Z80(config, "cpu0", 16000000/4));   /* 4 Mhz */
+	z80_device &cpu0(Z80(config, "cpu0", XTAL::u(16000000)/4));   /* 4 Mhz */
 	cpu0.set_disable();
 	cpu0.set_addrmap(AS_PROGRAM, &homedata_state::cpu0_map);
 
-	mc6809e_device &cpu1(MC6809E(config, "cpu1", 16000000/8)); /* 2 Mhz */
+	mc6809e_device &cpu1(MC6809E(config, "cpu1", XTAL::u(16000000)/8)); /* 2 Mhz */
 	cpu1.set_addrmap(AS_PROGRAM, &homedata_state::cpu1_map);
 	cpu1.set_disable();
 	//cpu1.set_vblank_int("screen", FUNC(homedata_state::mirderby_irq));

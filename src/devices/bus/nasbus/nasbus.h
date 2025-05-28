@@ -118,7 +118,7 @@ public:
 		set_fixed(false);
 		set_bus(std::forward<T>(bus));
 	}
-	nasbus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	nasbus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_bus(T &&tag) { m_bus.set_tag(std::forward<T>(tag)); }
 

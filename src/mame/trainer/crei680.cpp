@@ -280,7 +280,7 @@ void crei680_state::crei680(machine_config &config)
 	PALETTE(config, m_palette, palette_device::MONOCHROME);
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_crei680);
 
-	MC6845(config, m_crtc, 5281920/6);
+	MC6845(config, m_crtc, XTAL::u(5281920)/6);
 	m_crtc->set_screen("screen");
 	m_crtc->set_show_border_area(false);
 	m_crtc->set_char_width(6);

@@ -150,7 +150,7 @@ void efo_zsu_device::ay1_porta_w(u8 data)
 		else if (BIT(data, 4))
 			m_ctc0_ch2->set_unscaled_clock(8_MHz_XTAL / 32); // 250 KHz
 		else
-			m_ctc0_ch2->set_unscaled_clock(0);
+			m_ctc0_ch2->set_unscaled_clock(XTAL::u(0));
 	}
 
 	m_ay1_porta = data;
@@ -161,7 +161,7 @@ WRITE_LINE_MEMBER(efo_zsu_device::ctc0_z0_w)
 	if (state)
 	{
 		// TODO: also temporarily clears CA on HC4066 filtering switch
-		m_ctc0_ch0->set_unscaled_clock(0);
+		m_ctc0_ch0->set_unscaled_clock(XTAL::u(0));
 		m_ctc0_ck0_restart_timer->adjust(attotime::from_hz(8_MHz_XTAL / 256));
 	}
 }

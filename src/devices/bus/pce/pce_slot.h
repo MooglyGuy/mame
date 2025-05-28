@@ -77,7 +77,7 @@ public:
 		set_intf(interface);
 	}
 
-	pce_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pce_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~pce_cart_slot_device();
 
 	// image-level overrides

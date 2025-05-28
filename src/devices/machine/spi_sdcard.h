@@ -27,7 +27,7 @@ protected:
 		SD_TYPE_HC
 	};
 
-	spi_sdcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	spi_sdcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override;
 	virtual void device_reset() override;

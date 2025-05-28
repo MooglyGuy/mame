@@ -1194,7 +1194,7 @@ key matrix is shown in below
 #include "speaker.h"
 
 
-#define CPU_CLOCK (200000000)
+#define CPU_CLOCK XTAL::u(200000000)
 
 uint16_t naomi_state::naomi_g2bus_r(offs_t offset)
 {
@@ -2425,13 +2425,13 @@ void dc_state::naomi_aw_base(machine_config &config)
 	ARM7(config, m_soundcpu, ((XTAL(33'868'800)*2)/3)/8);   // AICA bus clock is 2/3rds * 33.8688.  ARM7 gets 1 bus cycle out of each 8.
 	m_soundcpu->set_addrmap(AS_PROGRAM, &dc_state::dc_audio_map);
 
-	MAPLE_DC(config, m_maple, 0, m_maincpu);
+	MAPLE_DC(config, m_maple, XTAL(), m_maincpu);
 	m_maple->irq_callback().set(FUNC(dc_state::maple_irq));
 
 	/* video hardware */
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
 	// TODO: hook up PVR SPG pclk source
-	screen.set_raw(13458568*2, 820, 0, 640, 532, 0, 480);
+	screen.set_raw(XTAL::u(13458568)*2, 820, 0, 640, 532, 0, 480);
 	screen.set_screen_update("powervr2", FUNC(powervr2_device::screen_update));
 
 	POWERVR2(config, m_powervr2);
@@ -2465,12 +2465,12 @@ void naomi_state::naomi_base(machine_config &config)
 	// - using UART as timer - 13.260MHz,
 	// - unrolled NOPs then GPIO toggle - 12.76MHz (or 3.19M NOP instructions per second)
 	// for now we use higher clock, otherwise earlier NAOMI BIOS revisions will not boot (see MT#06552).
-	mie_device &mie(MIE(config, "mie" "_maple", 16000000, m_maple, 0, "mie"));
+	mie_device &mie(MIE(config, "mie" "_maple", XTAL::u(16000000), m_maple, 0, "mie"));
 	mie.set_gpio_name<3>("MIE.3");
 	mie.set_gpio_name<5>("MIE.5");
 	MIE_JVS(config, "mie", XTAL::u(16000000));
 
-	sega_837_13551_device &sega837(SEGA_837_13551(config, "837_13551", 0, "mie"));
+	sega_837_13551_device &sega837(SEGA_837_13551(config, "837_13551", XTAL(), "mie"));
 	sega837.set_port_tags("TILT", "P1", "P2", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "OUTPUT");
 
 	EEPROM_93C46_8BIT(config, "mie_eeprom");
@@ -2488,7 +2488,7 @@ void naomi_state::naomi_base(machine_config &config)
 void naomi_state::naomi(machine_config &config)
 {
 	naomi_base(config);
-	naomi_rom_board &rom_board(NAOMI_ROM_BOARD(config, "rom_board", 0, "naomibd_eeprom"));
+	naomi_rom_board &rom_board(NAOMI_ROM_BOARD(config, "rom_board", XTAL(), "naomibd_eeprom"));
 	rom_board.irq_callback().set(FUNC(dc_state::g1_irq));
 	rom_board.ext_irq_callback().set(FUNC(dc_state::external_irq));
 	rom_board.reset_out_callback().set(FUNC(naomi_state::external_reset));
@@ -2501,7 +2501,7 @@ void naomi_state::naomi(machine_config &config)
 void naomi_state::naomigd(machine_config &config)
 {
 	naomi_base(config);
-	naomi_gdrom_board &rom_board(NAOMI_GDROM_BOARD(config, "rom_board", 0, "naomibd_eeprom", ":gdrom", "pic"));
+	naomi_gdrom_board &rom_board(NAOMI_GDROM_BOARD(config, "rom_board", XTAL(), "naomibd_eeprom", ":gdrom", "pic"));
 	rom_board.irq_callback().set(FUNC(dc_state::g1_irq));
 	rom_board.ext_irq_callback().set(FUNC(dc_state::external_irq));
 	rom_board.reset_out_callback().set(FUNC(naomi_state::external_reset));
@@ -2514,7 +2514,7 @@ void naomi_state::naomigd(machine_config &config)
 void naomi_state::naomim1(machine_config &config)
 {
 	naomi_base(config);
-	naomi_m1_board &rom_board(NAOMI_M1_BOARD(config, "rom_board", 0, "naomibd_eeprom"));
+	naomi_m1_board &rom_board(NAOMI_M1_BOARD(config, "rom_board", XTAL(), "naomibd_eeprom"));
 	rom_board.irq_callback().set(FUNC(dc_state::g1_irq));
 }
 
@@ -2525,7 +2525,7 @@ void naomi_state::naomim1(machine_config &config)
 void naomi_state::naomim2(machine_config &config)
 {
 	naomi_base(config);
-	naomi_m2_board &rom_board(NAOMI_M2_BOARD(config, "rom_board", 0, "naomibd_eeprom"));
+	naomi_m2_board &rom_board(NAOMI_M2_BOARD(config, "rom_board", XTAL(), "naomibd_eeprom"));
 	rom_board.irq_callback().set(FUNC(dc_state::g1_irq));
 }
 
@@ -2536,7 +2536,7 @@ void naomi_state::naomim2(machine_config &config)
 void naomi_state::naomim4(machine_config &config)
 {
 	naomi_base(config);
-	naomi_m4_board &rom_board(NAOMI_M4_BOARD(config, "rom_board", 0, "naomibd_eeprom", "pic_readout"));
+	naomi_m4_board &rom_board(NAOMI_M4_BOARD(config, "rom_board", XTAL(), "naomibd_eeprom", "pic_readout"));
 	rom_board.irq_callback().set(FUNC(dc_state::g1_irq));
 }
 
@@ -2557,9 +2557,9 @@ void naomi_state::naomim1_hop(machine_config &config)
 void naomi_state::naomim2_kb(machine_config &config)
 {
 	naomim2(config);
-	dc_keyboard_device &dcctrl0(DC_KEYBOARD(config, "dcctrl0", 0, m_maple, 1));
+	dc_keyboard_device &dcctrl0(DC_KEYBOARD(config, "dcctrl0", XTAL(), m_maple, 1));
 	dcctrl0.set_port_tags("P1.M", "P1.LD", "P1.KC1", "P1.KC2", "P1.KC3", "P1.KC4", "P1.KC5", "P1.KC6");
-	dc_keyboard_device &dcctrl1(DC_KEYBOARD(config, "dcctrl1", 0, m_maple, 2));
+	dc_keyboard_device &dcctrl1(DC_KEYBOARD(config, "dcctrl1", XTAL(), m_maple, 2));
 	dcctrl1.set_port_tags("P2.M", "P2.LD", "P2.KC1", "P2.KC2", "P2.KC3", "P2.KC4", "P2.KC5", "P2.KC6");
 }
 
@@ -2580,9 +2580,9 @@ void naomi_state::naomim2_gun(machine_config &config)
 void naomi_state::naomigd_kb(machine_config &config)
 {
 	naomigd(config);
-	dc_keyboard_device &dcctrl0(DC_KEYBOARD(config, "dcctrl0", 0, m_maple, 1));
+	dc_keyboard_device &dcctrl0(DC_KEYBOARD(config, "dcctrl0", XTAL(), m_maple, 1));
 	dcctrl0.set_port_tags("P1.M", "P1.LD", "P1.KC1", "P1.KC2", "P1.KC3", "P1.KC4", "P1.KC5", "P1.KC6");
-	dc_keyboard_device &dcctrl1(DC_KEYBOARD(config, "dcctrl1", 0, m_maple, 2));
+	dc_keyboard_device &dcctrl1(DC_KEYBOARD(config, "dcctrl1", XTAL(), m_maple, 2));
 	dcctrl1.set_port_tags("P2.M", "P2.LD", "P2.KC1", "P2.KC2", "P2.KC3", "P2.KC4", "P2.KC5", "P2.KC6");
 }
 

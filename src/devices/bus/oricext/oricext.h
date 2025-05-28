@@ -31,7 +31,7 @@ public:
 		set_cputag(std::forward<U>(cputag));
 	}
 
-	oricext_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	oricext_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~oricext_connector();
 
 	template <typename T> void set_cputag(T &&tag) { cpu.set_tag(std::forward<T>(tag)); }

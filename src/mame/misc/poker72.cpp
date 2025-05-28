@@ -389,7 +389,7 @@ void poker72_state::poker72(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &ay(AY8910(config, "ay", 8000000 / 8)); // ? Mhz
+	ay8910_device &ay(AY8910(config, "ay", XTAL::u(8000000) / 8)); // ? Mhz
 	ay.port_a_read_callback().set_ioport("SW2");
 	ay.port_b_read_callback().set_ioport("SW3");
 	ay.add_route(ALL_OUTPUTS, "mono", 0.50);

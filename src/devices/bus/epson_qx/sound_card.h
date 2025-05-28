@@ -28,7 +28,7 @@ class ym2149_sound_card_device : public device_t, public device_option_expansion
 {
 public:
 	// construction/destruction
-	ym2149_sound_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ym2149_sound_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

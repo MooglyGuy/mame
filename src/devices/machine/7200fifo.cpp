@@ -38,7 +38,7 @@ fifo7200_device::fifo7200_device(const machine_config &mconfig, device_type type
 //-------------------------------------------------
 
 idt7200_device::idt7200_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	 : fifo7200_device(mconfig, IDT7200, tag, ownerx100)
+	 : fifo7200_device(mconfig, IDT7200, tag, owner, 0x100)
 {
 }
 
@@ -48,7 +48,7 @@ idt7200_device::idt7200_device(const machine_config &mconfig, const char *tag, d
 //-------------------------------------------------
 
 idt7201_device::idt7201_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	 : fifo7200_device(mconfig, IDT7201, tag, ownerx200)
+	 : fifo7200_device(mconfig, IDT7201, tag, owner, 0x200)
 {
 }
 
@@ -58,7 +58,7 @@ idt7201_device::idt7201_device(const machine_config &mconfig, const char *tag, d
 //-------------------------------------------------
 
 idt7202_device::idt7202_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	 : fifo7200_device(mconfig, IDT7202, tag, ownerx400)
+	 : fifo7200_device(mconfig, IDT7202, tag, owner, 0x400)
 {
 }
 

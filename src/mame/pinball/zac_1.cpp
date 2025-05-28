@@ -332,10 +332,10 @@ void zac_1_state::audio_command_w(u8 data)
 		{
 			// check for the steam whistle
 			if (data == 3)
-				m_astable->set_unscaled_clock(1277);
+				m_astable->set_unscaled_clock(XTAL::u(1277));
 			else
 			{
-				m_astable->set_unscaled_clock(0);
+				m_astable->set_unscaled_clock(XTAL());
 				m_clock_state = 0;
 			}
 
@@ -602,40 +602,40 @@ TIMER_DEVICE_CALLBACK_MEMBER(zac_1_state::zac_1_outtimer)
 			case 0:
 				if (data)
 				{
-					m_monotone->set_unscaled_clock(988);
+					m_monotone->set_unscaled_clock(XTAL::u(988));
 					m_out_offs = 0x7f;
 				}
 				break;
 			case 1:
 				if (data)
 				{
-					m_monotone->set_unscaled_clock(750);
+					m_monotone->set_unscaled_clock(XTAL::u(750));
 					m_out_offs = 0x7f;
 				}
 				break;
 			case 2:
 				if (data)
 				{
-					m_monotone->set_unscaled_clock(600);
+					m_monotone->set_unscaled_clock(XTAL::u(600));
 					m_out_offs = 0x7f;
 				}
 				break;
 			case 3:
 				if (data)
 				{
-					m_monotone->set_unscaled_clock(400);
+					m_monotone->set_unscaled_clock(XTAL::u(400));
 					m_out_offs = 0x7f;
 				}
 		}
 		if (m_out_offs == 0x57)
-			m_monotone->set_unscaled_clock(0);
+			m_monotone->set_unscaled_clock(XTAL());
 	}
 }
 
 void zac_1_state::config_base(machine_config &config)
 {
 	/* basic machine hardware */
-	S2650(config, m_maincpu, 6000000/2); // no xtal, just 2 chips forming a random oscillator
+	S2650(config, m_maincpu, XTAL::u(6000000)/2); // no xtal, just 2 chips forming a random oscillator
 	m_maincpu->set_addrmap(AS_PROGRAM, &zac_1_state::zac_1_map);
 	m_maincpu->set_addrmap(AS_IO, &zac_1_state::zac_1_io);
 	m_maincpu->set_addrmap(AS_DATA, &zac_1_state::zac_1_data);

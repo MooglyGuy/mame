@@ -11,7 +11,7 @@
 class cherry_g80_1500_device : public device_t, public device_pc_kbd_interface
 {
 public:
-	cherry_g80_1500_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	cherry_g80_1500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual DECLARE_WRITE_LINE_MEMBER(data_write) override;

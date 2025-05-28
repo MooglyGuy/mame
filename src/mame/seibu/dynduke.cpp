@@ -317,13 +317,13 @@ WRITE_LINE_MEMBER(dynduke_state::vblank_irq)
 void dynduke_state::dynduke(machine_config &config)
 {
 	// basic machine hardware
-	V30(config, m_maincpu, 16000000/2); // NEC V30-8 CPU
+	V30(config, m_maincpu, XTAL::u(16000000)/2); // NEC V30-8 CPU
 	m_maincpu->set_addrmap(AS_PROGRAM, &dynduke_state::master_map);
 
-	V30(config, m_slave, 16000000/2); // NEC V30-8 CPU
+	V30(config, m_slave, XTAL::u(16000000)/2); // NEC V30-8 CPU
 	m_slave->set_addrmap(AS_PROGRAM, &dynduke_state::slave_map);
 
-	z80_device &audiocpu(Z80(config, "audiocpu", 14318180/4));
+	z80_device &audiocpu(Z80(config, "audiocpu", XTAL::u(14318180)/4));
 	audiocpu.set_addrmap(AS_PROGRAM, &dynduke_state::sound_map);
 	audiocpu.set_addrmap(AS_OPCODES, &dynduke_state::sound_decrypted_opcodes_map);
 	audiocpu.set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
@@ -352,7 +352,7 @@ void dynduke_state::dynduke(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 14318180/4));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set("seibu_sound", FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 

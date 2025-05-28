@@ -300,7 +300,7 @@ void mb9061x_device::recalc_timer(int tnum)
 			return;
 	}
 
-	u32 tclk = clock() / divider;
+	u32 tclk = clock().value() / divider;
 	u32 tval = m_timer_regs[rbase+2] | (m_timer_regs[rbase+3]<<8);
 	//printf("CSL %d, tclk %d, tval %d\n", csl, tclk, tval);
 	//printf("Timer is %d Hz\n", tclk / tval);

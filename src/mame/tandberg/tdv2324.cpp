@@ -267,16 +267,16 @@ static void tdv2324_floppies(device_slot_interface &device)
 void tdv2324_state::tdv2324(machine_config &config)
 {
 	// basic system hardware
-	i8085a_cpu_device &maincpu(I8085A(config, m_maincpu, 8700000/2)); // ???
+	i8085a_cpu_device &maincpu(I8085A(config, m_maincpu, XTAL::u(8700000)/2)); // ???
 	maincpu.set_addrmap(AS_PROGRAM, &tdv2324_state::tdv2324_mem);
 	maincpu.set_addrmap(AS_IO, &tdv2324_state::tdv2324_io);
 	maincpu.in_inta_func().set(P8259A_TAG, FUNC(pic8259_device::acknowledge));
 
-	I8085A(config, m_subcpu, 8000000/2); // ???
+	I8085A(config, m_subcpu, XTAL::u(8000000)/2); // ???
 	m_subcpu->set_addrmap(AS_PROGRAM, &tdv2324_state::tdv2324_sub_mem);
 	m_subcpu->set_addrmap(AS_IO, &tdv2324_state::tdv2324_sub_io);
 
-	M6802(config, m_fdccpu, 8000000/2); // ???
+	M6802(config, m_fdccpu, XTAL::u(8000000)/2); // ???
 	m_fdccpu->set_ram_enable(false);
 	m_fdccpu->set_addrmap(AS_PROGRAM, &tdv2324_state::tdv2324_fdc_mem);
 
@@ -298,9 +298,9 @@ void tdv2324_state::tdv2324(machine_config &config)
 
 	PIT8253(config, m_pit1);
 
-	Z80SIO(config, MK3887N4_TAG, 8000000/2);
+	Z80SIO(config, MK3887N4_TAG, XTAL::u(8000000)/2);
 
-	FD1797(config, FD1797PL02_TAG, 8000000/4);
+	FD1797(config, FD1797PL02_TAG, XTAL::u(8000000)/4);
 	FLOPPY_CONNECTOR(config, FD1797PL02_TAG":0", tdv2324_floppies, "8dsdd", floppy_image_device::default_mfm_floppy_formats);
 	FLOPPY_CONNECTOR(config, FD1797PL02_TAG":1", tdv2324_floppies, "8dsdd", floppy_image_device::default_mfm_floppy_formats);
 

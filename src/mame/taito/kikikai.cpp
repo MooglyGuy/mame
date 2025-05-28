@@ -678,14 +678,14 @@ void kikikai_simulation_state::machine_reset()
 void kikikai_state::base(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 24000000/4); /* 6 MHz, Uses clock divided 24MHz OSC */
+	Z80(config, m_maincpu, XTAL::u(24000000)/4); /* 6 MHz, Uses clock divided 24MHz OSC */
 	m_maincpu->set_addrmap(AS_PROGRAM, &kikikai_state::main_map);
 
-	Z80(config, m_audiocpu, 24000000/4); /* 6 MHz, Uses clock divided 24MHz OSC */
+	Z80(config, m_audiocpu, XTAL::u(24000000)/4); /* 6 MHz, Uses clock divided 24MHz OSC */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &kikikai_state::sound_map);
 	m_audiocpu->set_vblank_int("screen", FUNC(kikikai_state::irq0_line_hold));
 
-	Z80(config, m_subcpu, 8000000/2); /* 4 MHz, Uses 8Mhz OSC */
+	Z80(config, m_subcpu, XTAL::u(8000000)/2); /* 4 MHz, Uses 8Mhz OSC */
 	m_subcpu->set_addrmap(AS_PROGRAM, &kikikai_state::kicknrun_sub_cpu_map);
 	m_subcpu->set_vblank_int("screen", FUNC(kikikai_state::irq0_line_hold));
 
@@ -694,7 +694,7 @@ void kikikai_state::base(machine_config &config)
 
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(24000000/4, 384, 0, 256, 264, 16, 240);
+	m_screen->set_raw(XTAL::u(24000000)/4, 384, 0, 256, 264, 16, 240);
 	m_screen->set_screen_update(FUNC(kikikai_state::screen_update_kicknrun));
 	m_screen->set_palette(m_palette);
 

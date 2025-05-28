@@ -153,7 +153,7 @@ enum is_mask : u16
 
 DEFINE_DEVICE_TYPE(AM9516, am9516_device, "am9516", "Am9516 Universal DMA Controller")
 
-am9516_device::am9516_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+am9516_device::am9516_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, AM9516, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_space_config{

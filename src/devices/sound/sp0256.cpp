@@ -1247,7 +1247,7 @@ void sp0256_device::spb640_w(offs_t offset, uint16_t data)
 	}
 }
 
-void sp0256_device::set_clock(int clock)
+void sp0256_device::set_clock(const XTAL &clock)
 {
 	set_unscaled_clock(clock);
 	m_stream->set_sample_rate(clock / CLOCK_DIVIDER);

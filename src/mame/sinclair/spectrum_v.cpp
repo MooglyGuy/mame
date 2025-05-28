@@ -228,8 +228,8 @@ void spectrum_state::content_early(s8 shift)
 		return;
 
 	u64 now = m_maincpu->total_cycles() - m_int_at + shift;
-	u64 cf = vpos * m_screen->width() * m_maincpu->clock() / m_screen->clock() + m_contention_offset;
-	u64 ct = cf + get_screen_area().width() * m_maincpu->clock() / m_screen->clock();
+	u64 cf = vpos * m_screen->width() * m_maincpu->clock().value() / m_screen->clock().value() + m_contention_offset;
+	u64 ct = cf + get_screen_area().width() * m_maincpu->clock().value() / m_screen->clock().value();
 
 	if(cf <= now && now < ct)
 	{
@@ -246,8 +246,8 @@ void spectrum_state::content_late()
 		return;
 
 	u64 now = m_maincpu->total_cycles() - m_int_at + 1;
-	u64 cf = vpos * m_screen->width() * m_maincpu->clock() / m_screen->clock() + m_contention_offset;
-	u64 ct = cf + get_screen_area().width() * m_maincpu->clock() / m_screen->clock();
+	u64 cf = vpos * m_screen->width() * m_maincpu->clock().value() / m_screen->clock().value() + m_contention_offset;
+	u64 ct = cf + get_screen_area().width() * m_maincpu->clock().value() / m_screen->clock().value();
 	for(auto i = 0x04; i; i >>= 1)
 	{
 		if(cf <= now && now < ct)

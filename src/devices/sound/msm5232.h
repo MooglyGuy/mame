@@ -83,7 +83,7 @@ private:
 
 	int     m_gate;       /* current state of the GATE output */
 
-	int     m_chip_clock;      /* chip clock in Hz */
+	XTAL    m_chip_clock; /* chip clock in Hz */
 	int     m_rate;       /* sample rate in Hz */
 
 	double  m_external_capacity[8]; /* in Farads, eg 0.39e-6 = 0.36 uF (microFarads) */
@@ -92,7 +92,7 @@ private:
 	void init_tables();
 	void init_voice(int i);
 	void gate_update();
-	void init(int clock, int rate);
+	void init(const XTAL clock, int rate);
 	void EG_voices_advance();
 	void TG_group_advance(int groupidx);
 };

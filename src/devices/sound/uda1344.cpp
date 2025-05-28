@@ -29,7 +29,6 @@ uda1344_device::uda1344_device(const machine_config &mconfig, const char *tag, d
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
 	, m_volume(1.0)
-	, m_frequency(BASE_FREQUENCY)
 	, m_data_transfer_mode(0)
 	, m_status_reg(0)
 	, m_clock_divider(512)
@@ -52,7 +51,6 @@ void uda1344_device::device_start()
 	save_item(NAME(m_bufin));
 	save_item(NAME(m_bufout));
 	save_item(NAME(m_volume));
-	save_item(NAME(m_frequency));
 
 	save_item(NAME(m_data_transfer_mode));
 	save_item(NAME(m_status_reg));
@@ -84,7 +82,6 @@ void uda1344_device::device_reset()
 	m_adc_enable = false;
 
 	m_volume = 1.0;
-	m_frequency = BASE_FREQUENCY;
 
 	memset(m_bufin, 0, sizeof(uint32_t) * 2);
 	memset(m_bufout, 0, sizeof(uint32_t) * 2);
@@ -140,7 +137,7 @@ void uda1344_device::ingest_samples(int16_t left, int16_t right)
 
 void uda1344_device::device_clock_changed()
 {
-	if (clock() == 0)
+	if (clock().value() == 0)
 		return;
 
 	m_stream->update();

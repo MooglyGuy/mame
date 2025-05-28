@@ -24,7 +24,7 @@ ti8x_link_port_device::ti8x_link_port_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: ti8x_link_port_device(mconfig, TI8X_LINK_PORT, tag, owner, clock)
 {
 }
@@ -35,7 +35,7 @@ ti8x_link_port_device::ti8x_link_port_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_single_card_slot_interface<device_ti8x_link_port_interface>(mconfig, *this)
 	, m_tip_handler(*this)

@@ -59,7 +59,7 @@ input_merger_device::input_merger_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		u32 initval,
 		u32 xorval,
 		int active)

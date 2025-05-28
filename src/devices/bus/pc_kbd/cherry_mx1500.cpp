@@ -24,7 +24,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(CHERRY_G80_1500, cherry_g80_1500_device, "g80_1500", "Cherry G80-1500 Multi-Function Keyboard")
 
-cherry_g80_1500_device::cherry_g80_1500_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+cherry_g80_1500_device::cherry_g80_1500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CHERRY_G80_1500, tag, owner, clock)
 	, device_pc_kbd_interface(mconfig, *this)
 	, m_mcu(*this, "mcu")
@@ -314,7 +314,7 @@ void cherry_g80_1500_device::ext_map(address_map &map)
 
 void cherry_g80_1500_device::device_add_mconfig(machine_config &config)
 {
-	i8032_device &mcu(I8032(config, m_mcu, 7'392'000)); // exact type and clock unknown (might actually use a more conventional 7.3728 MHz XTAL, as on G80-1000)
+	i8032_device &mcu(I8032(config, m_mcu, XTAL::u(7'392'000))); // exact type and clock unknown (might actually use a more conventional 7.3728 MHz XTAL, as on G80-1000)
 	mcu.set_addrmap(AS_PROGRAM, &cherry_g80_1500_device::prog_map);
 	mcu.set_addrmap(AS_IO, &cherry_g80_1500_device::ext_map);
 	mcu.port_out_cb<1>().set(FUNC(cherry_g80_1500_device::mcu_p1_w));

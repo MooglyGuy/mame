@@ -67,7 +67,7 @@ namespace {
 class gbck003_device : public flat_ram_device_base<mbc_dual_uniform_device_base>
 {
 public:
-	gbck003_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	gbck003_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual image_init_result load(std::string &message) override ATTR_COLD;
 
@@ -104,7 +104,7 @@ gbck003_device::gbck003_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	flat_ram_device_base<mbc_dual_uniform_device_base>(mconfig, GB_ROM_GBCK003, tag, owner, clock),
 	m_bank_setting{ 0U, 0U },
 	m_bank_mux_rom(0U),

@@ -120,7 +120,7 @@ void l7a1045_sound_device::device_start()
 	assert(!(m_rom.length() & (m_rom.length() - 1)));
 
 	// Allocate the stream
-	m_stream = stream_alloc(0, 2, 66150); //clock() / 384);
+	m_stream = stream_alloc(0, 2, XTAL::u(66150)); //clock() / 384);
 
 	save_item(STRUCT_MEMBER(m_voice, start));
 	save_item(STRUCT_MEMBER(m_voice, end));

@@ -609,13 +609,13 @@ INTERRUPT_GEN_MEMBER(scyclone_state::irq)
 void scyclone_state::scyclone(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 5000000/2); // MOSTEK Z80-CPU   ? MHz  (there's also a 9.987MHz XTAL)  intermissions seem driven directly by CPU speed for reference
+	Z80(config, m_maincpu, XTAL::u(5000000)/2); // MOSTEK Z80-CPU   ? MHz  (there's also a 9.987MHz XTAL)  intermissions seem driven directly by CPU speed for reference
 	m_maincpu->set_addrmap(AS_PROGRAM, &scyclone_state::scyclone_map);
 	m_maincpu->set_addrmap(AS_IO, &scyclone_state::scyclone_iomap);
 	m_maincpu->set_vblank_int("screen", FUNC(scyclone_state::irq));
 
 	// sound ?
-	z80_device &subcpu(Z80(config, "subcpu", 5000000/2)); // LH0080 Z80-CPU SHARP  ? MHz   (5Mhz XTAL on this sub-pcb)
+	z80_device &subcpu(Z80(config, "subcpu", XTAL::u(5000000)/2)); // LH0080 Z80-CPU SHARP  ? MHz   (5Mhz XTAL on this sub-pcb)
 	subcpu.set_addrmap(AS_PROGRAM, &scyclone_state::scyclone_sub_map);
 	subcpu.set_addrmap(AS_IO, &scyclone_state::scyclone_sub_iomap);
 	// no idea, but it does wait on an irq in places, irq0 increases a register checked in the wait loop so without it sound dies after a while

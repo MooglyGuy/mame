@@ -64,10 +64,10 @@ INPUT_PORTS_END
 
 void phusion_state::phusion(machine_config &config)
 {
-	CR16B(config, m_maincpu, 10000000); // FIXME: determine exact type and clock
+	CR16B(config, m_maincpu, XTAL::u(10000000)); // FIXME: determine exact type and clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &phusion_state::phusion_map);
 
-	AMD_29F800B_16BIT(config, "flash", 0);
+	AMD_29F800B_16BIT(config, "flash");
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
 	screen.set_refresh_hz(60);
@@ -76,7 +76,7 @@ void phusion_state::phusion(machine_config &config)
 	screen.set_visarea(0, 160-1, 0, 160-1);
 	screen.set_screen_update(FUNC(phusion_state::screen_update));
 
-	SPEAKER(config, "speaker", 0).front_center();
+	SPEAKER(config, "speaker").front_center();
 }
 
 ROM_START( phusion )

@@ -2053,7 +2053,7 @@ void wpc_s_state::wpc_s(machine_config &config)
 	WPC_SHIFT(config, "shift");
 	WPC_PIC(config, m_pic);
 	WPC_LAMP(config, m_lamp);
-	WPC_OUT(config, m_out, 0, 5);
+	WPC_OUT(config, m_out, XTAL(), 5);
 	WPC_DMD(config, "dmd").scanline_callback().set(FUNC(wpc_s_state::scanline_irq));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);

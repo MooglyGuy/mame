@@ -52,7 +52,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	imi7000_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: imi7000_slot_device(mconfig, tag, owner)
+		: imi7000_slot_device(mconfig, tag, owner, XTAL())
 	{
 		option_reset();
 		opts(*this);

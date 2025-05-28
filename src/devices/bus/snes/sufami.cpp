@@ -58,8 +58,8 @@ static void sufamiturbo_cart(device_slot_interface &device)
 
 void sns_rom_sufami_device::device_add_mconfig(machine_config &config)
 {
-	SNS_SUFAMI_CART_SLOT(config, m_slot1, sufamiturbo_cart, nullptr);
-	SNS_SUFAMI_CART_SLOT(config, m_slot2, sufamiturbo_cart, nullptr);
+	SNS_SUFAMI_CART_SLOT(config, m_slot1, XTAL(), sufamiturbo_cart, nullptr);
+	SNS_SUFAMI_CART_SLOT(config, m_slot2, XTAL(), sufamiturbo_cart, nullptr);
 }
 
 /*-------------------------------------------------

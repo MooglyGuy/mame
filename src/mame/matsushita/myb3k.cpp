@@ -1030,7 +1030,7 @@ void myb3k_state::jb3000(machine_config &config)
 {
 	myb3k(config);
 	/* Keyboard */
-	JB3000_KEYBOARD(config.replace(), m_kb, 0);
+	JB3000_KEYBOARD(config.replace(), m_kb);
 	m_kb->set_keyboard_callback(FUNC(myb3k_state::kbd_set_data_and_interrupt));
 
 	/* software lists */
@@ -1041,7 +1041,7 @@ void myb3k_state::stepone(machine_config &config)
 {
 	myb3k(config);
 	/* Keyboard */
-	STEPONE_KEYBOARD(config.replace(), m_kb, 0);
+	STEPONE_KEYBOARD(config.replace(), m_kb);
 	m_kb->set_keyboard_callback(FUNC(myb3k_state::kbd_set_data_and_interrupt));
 
 	/* software lists */

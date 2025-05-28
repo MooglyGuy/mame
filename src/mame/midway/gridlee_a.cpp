@@ -45,7 +45,7 @@ void gridlee_sound_device::device_start()
 	/* allocate the stream */
 	m_stream = stream_alloc(0, 1, machine().sample_rate());
 
-	m_freq_to_step = (double)(1 << 24) / (double)machine().sample_rate();
+	m_freq_to_step = (1 << 24) / machine().sample_rate().dvalue();
 }
 
 

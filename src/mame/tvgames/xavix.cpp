@@ -1443,7 +1443,7 @@ void xavix_cart_state::xavix_cart(machine_config &config)
 {
 	xavix(config);
 
-	EKARA_CART_SLOT(config, m_cartslot, 0, ekara_cart, nullptr);
+	EKARA_CART_SLOT(config, m_cartslot, XTAL(), ekara_cart, nullptr);
 }
 
 void xavix_i2c_cart_state::xavix_i2c_taiko(machine_config &config)

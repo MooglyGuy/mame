@@ -757,7 +757,7 @@ void z8_device::tmr_write(uint8_t data)
 		{
 			unsigned prescaler = (m_pre[0] >> 2) ? (m_pre[0] >> 2) : 64;
 			unsigned count = (m_t[0] ? m_t[0] : 256) * prescaler;
-			LOGMASKED(LOG_TIMER, "(%04X): Load T0 at %.2f Hz\n", m_ppc, clock() / 8.0 / count);
+			LOGMASKED(LOG_TIMER, "(%04X): Load T0 at %.2f Hz\n", m_ppc, clock().value() / 8.0 / count);
 		}
 
 		if ((data & Z8_TMR_TOUT_MASK) == Z8_TMR_TOUT_T0)
@@ -781,7 +781,7 @@ void z8_device::tmr_write(uint8_t data)
 		{
 			unsigned prescaler = (m_pre[1] >> 2) ? (m_pre[1] >> 2) : 64;
 			unsigned count = (m_t[1] ? m_t[1] : 256) * prescaler;
-			LOGMASKED(LOG_TIMER, "(%04X): Load T1 at %.2f Hz\n", m_ppc, clock() / 8.0 / count);
+			LOGMASKED(LOG_TIMER, "(%04X): Load T1 at %.2f Hz\n", m_ppc, clock().value() / 8.0 / count);
 		}
 
 		if ((data & Z8_TMR_TOUT_MASK) == Z8_TMR_TOUT_T1)

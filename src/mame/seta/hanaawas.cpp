@@ -368,7 +368,7 @@ void hanaawas_state::machine_reset()
 void hanaawas_state::hanaawas(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 18432000 / 6); // 3.072 MHz ???
+	Z80(config, m_maincpu, XTAL::u(18432000) / 6); // 3.072 MHz ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &hanaawas_state::prg_map);
 	m_maincpu->set_addrmap(AS_IO, &hanaawas_state::io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(hanaawas_state::irq0_line_assert));
@@ -389,7 +389,7 @@ void hanaawas_state::hanaawas(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &aysnd(AY8910(config, "aysnd", 18432000 / 12));
+	ay8910_device &aysnd(AY8910(config, "aysnd", XTAL::u(18432000) / 12));
 	aysnd.port_a_read_callback().set_ioport("DSW");
 	aysnd.port_b_write_callback().set(FUNC(hanaawas_state::portb_w));
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.50);

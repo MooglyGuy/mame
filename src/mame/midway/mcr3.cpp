@@ -1126,7 +1126,7 @@ void mcr3_state::mono_tcs(machine_config &config)
 	mcrmono(config);
 
 	/* basic machine hardware */
-	MIDWAY_TURBO_CHEAP_SQUEAK(config, m_turbo_cheap_squeak);
+	MIDWAY_TURBO_CHEAP_SQUEAK(config, m_turbo_cheap_squeak, XTAL(8'000'000));
 	m_turbo_cheap_squeak->add_route(ALL_OUTPUTS, "lspeaker", 0.8);
 	m_turbo_cheap_squeak->add_route(ALL_OUTPUTS, "rspeaker", 0.8);
 }
@@ -1149,7 +1149,7 @@ void mcr3_state::mono_sg(machine_config &config)
 	mcrmono(config);
 
 	/* basic machine hardware */
-	MIDWAY_SOUNDS_GOOD(config, m_sounds_good);
+	MIDWAY_SOUNDS_GOOD(config, m_sounds_good, XTAL(16'000'000));
 	m_sounds_good->add_route(ALL_OUTPUTS, "lspeaker", 0.75);
 	m_sounds_good->add_route(ALL_OUTPUTS, "rspeaker", 0.75);
 }
@@ -1164,7 +1164,7 @@ void mcr3_state::mcrscroll(machine_config &config)
 	mcrmono(config);
 
 	/* basic machine hardware */
-	MIDWAY_SSIO(config, m_ssio);
+	MIDWAY_SSIO(config, m_ssio, XTAL(16'000'000));
 	m_ssio->add_route(0, "lspeaker", 1.0);
 	m_ssio->add_route(1, "rspeaker", 1.0);
 
@@ -1188,7 +1188,7 @@ void mcrsc_csd_state::mcrsc_csd(machine_config &config)
 	mcrscroll(config);
 
 	/* basic machine hardware */
-	MIDWAY_CHEAP_SQUEAK_DELUXE(config, m_cheap_squeak_deluxe);
+	MIDWAY_CHEAP_SQUEAK_DELUXE(config, m_cheap_squeak_deluxe, XTAL(16'000'000));
 	m_cheap_squeak_deluxe->add_route(ALL_OUTPUTS, "lspeaker", 0.8);
 	m_cheap_squeak_deluxe->add_route(ALL_OUTPUTS, "rspeaker", 0.8);
 

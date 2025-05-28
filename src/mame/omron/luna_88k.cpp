@@ -212,11 +212,11 @@ void luna_88k_state::luna88k2(machine_config &config)
 	RAM(config, m_ram);
 	m_ram->set_default_size("16M");
 
-	MC146818(config, m_rtc, 32'768); // DS1397
+	MC146818(config, m_rtc, XTAL(32'768)); // DS1397
 
-	HD647180X(config, m_iop, 12'288'000);
+	HD647180X(config, m_iop, XTAL::u(12288000));
 
-	UPD7201(config, m_sio, 8'000'000); // ?
+	UPD7201(config, m_sio, XTAL::u(8000000)); // ?
 
 	// RS-232C-A
 	RS232_PORT(config, m_serial[0], default_rs232_devices, "terminal");
@@ -234,14 +234,14 @@ void luna_88k_state::luna88k2(machine_config &config)
 	m_serial[1]->rxd_handler().set(m_sio, FUNC(upd7201_device::rxb_w));
 	m_serial[1]->cts_handler().set(m_sio, FUNC(upd7201_device::ctsb_w));
 
-	clock_device &sio_clk(CLOCK(config, "sio_clk", 12'288'000 / 80)); // clock output from iop?
+	clock_device &sio_clk(CLOCK(config, "sio_clk", XTAL::u(12288000) / 80)); // clock output from iop?
 	sio_clk.signal_handler().append(m_sio, FUNC(upd7201_device::rxca_w));
 	sio_clk.signal_handler().append(m_sio, FUNC(upd7201_device::txca_w));
 	sio_clk.signal_handler().append(m_sio, FUNC(upd7201_device::rxcb_w));
 	sio_clk.signal_handler().append(m_sio, FUNC(upd7201_device::txcb_w));
 
-	I8255A(config, m_ppi[0], 8'000'000); // M5M82C55AFP-2
-	I8255A(config, m_ppi[1], 8'000'000); // M5M82C55AFP-2
+	I8255A(config, m_ppi[0], XTAL::u(8000000)); // M5M82C55AFP-2
+	I8255A(config, m_ppi[1], XTAL::u(8000000)); // M5M82C55AFP-2
 }
 
 ROM_START(luna88k2)

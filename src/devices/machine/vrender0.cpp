@@ -161,7 +161,7 @@ void vrender0soc_device::device_start()
 	m_vr0vid->set_areas(m_textureram.get(), m_frameram.get());
 	m_host_space = &m_host_cpu->space(AS_PROGRAM);
 
-	if (this->clock() == 0)
+	if (clock().value() == 0)
 		fatalerror("%s: bus clock not setup properly",this->tag());
 
 	m_Timer[0] = timer_alloc(FUNC(vrender0soc_device::Timercb<0>), this);

@@ -24,7 +24,7 @@ namespace bus::gameboy {
 class mbc_device_base : public device_t, public device_gb_cart_interface
 {
 protected:
-	mbc_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mbc_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -57,7 +57,7 @@ private:
 class mbc_dual_device_base : public device_t, public device_gb_cart_interface
 {
 protected:
-	mbc_dual_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mbc_dual_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -112,7 +112,7 @@ private:
 class mbc_dual_uniform_device_base : public device_t, public device_gb_cart_interface
 {
 protected:
-	mbc_dual_uniform_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mbc_dual_uniform_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -148,7 +148,7 @@ private:
 class banked_32k_device_base : public device_t, public device_gb_cart_interface
 {
 protected:
-	banked_32k_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	banked_32k_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -201,7 +201,7 @@ public:
 	virtual void unload() override ATTR_COLD;
 
 protected:
-	mbc_ram_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mbc_ram_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 

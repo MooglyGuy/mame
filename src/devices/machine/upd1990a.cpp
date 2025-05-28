@@ -272,7 +272,7 @@ WRITE_LINE_MEMBER( upd1990a_device::stb_w )
 			);
 
 			// reset stage 10-15 of clock divider
-			m_timer_clock->adjust(attotime::from_ticks(m_timer_clock->remaining().as_ticks(clock()) % (clock() / 512), clock()), 0, attotime::from_hz(clock() / 32768.0));
+			m_timer_clock->adjust(attotime::from_ticks(m_timer_clock->remaining().as_ticks(clock()) % (clock().value() / 512), clock().value()), 0, attotime::from_hz(clock() / 32768.0));
 
 			// disable(low) time pulse in testmode
 			if (m_testmode)

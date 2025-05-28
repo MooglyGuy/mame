@@ -928,7 +928,7 @@ void monon_color_state::music_mem(address_map &map)
 void monon_color_state::monon_color(machine_config &config)
 {
 	/* basic machine hardware */
-	AX208(config, m_maincpu, 96000000/2); // divider is not correct, need to check if this is configured to run at full speed
+	AX208(config, m_maincpu, XTAL::u(96000000)/2); // divider is not correct, need to check if this is configured to run at full speed
 	m_maincpu->port_in_cb<0>().set(FUNC(monon_color_state::in0_r));
 	m_maincpu->port_in_cb<1>().set(FUNC(monon_color_state::in1_r));
 	m_maincpu->port_in_cb<2>().set(FUNC(monon_color_state::in2_r));
@@ -945,7 +945,7 @@ void monon_color_state::monon_color(machine_config &config)
 	m_maincpu->dac_out_cb<0>().set(FUNC(monon_color_state::dacout0_w));
 	m_maincpu->dac_out_cb<1>().set(FUNC(monon_color_state::dacout1_w));
 
-	M65CE02(config, m_musicmcu, 4000000);
+	M65CE02(config, m_musicmcu, XTAL::u(4000000));
 	m_musicmcu->set_addrmap(AS_PROGRAM, &monon_color_state::music_mem);
 
 	/* video hardware */
@@ -964,9 +964,9 @@ void monon_color_state::monon_color(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_dac, 0).add_route(ALL_OUTPUTS, "mono", 0.500); // should this be in the AX208 device?
+	DAC_8BIT_R2R_TWOS_COMPLEMENT(config, m_dac).add_route(ALL_OUTPUTS, "mono", 0.500); // should this be in the AX208 device?
 
-	mononcol_cartslot_device &cartslot(MONONCOL_CARTSLOT(config, "cartslot", mononcol_plain_slot));
+	mononcol_cartslot_device &cartslot(MONONCOL_CARTSLOT(config, "cartslot", XTAL(), mononcol_plain_slot));
 	cartslot.set_must_be_loaded(true);
 
 	/* software lists */

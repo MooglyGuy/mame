@@ -24,7 +24,7 @@
 //  megaduck_cart_slot_device
 //**************************************************************************
 
-megaduck_cart_slot_device::megaduck_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+megaduck_cart_slot_device::megaduck_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	gb_cart_slot_device_base(mconfig, MEGADUCK_CART_SLOT, tag, owner, clock)
 {
 }

@@ -1634,7 +1634,7 @@ void ymf271_device::init_tables()
 void ymf271_device::calculate_clock_correction()
 {
 	// timing may use a non-standard XTAL
-	double clock_correction = (clock() != 0) ? (double)(STD_CLOCK) / (double)clock() : 0.0;
+	double clock_correction = (clock().value() != 0) ? (double)(STD_CLOCK) / clock().dvalue() : 0.0;
 	for (int i = 0; i < 256; i++)
 	{
 		m_lut_lfo[i] = LFO_frequency_table[i] * clock_correction;
@@ -1729,12 +1729,12 @@ void ymf271_device::device_start()
 
 	m_irq_handler.resolve();
 
-	m_master_clock = clock();
+	m_master_clock = clock().value();
 	init_tables();
 	init_state();
 
 	m_mix_buffer.resize(m_master_clock/(384/4));
-	m_stream = stream_alloc(0, 4, m_master_clock/384);
+	m_stream = stream_alloc(0, 4, clock()/384);
 }
 
 //-------------------------------------------------
@@ -1769,14 +1769,14 @@ void ymf271_device::device_reset()
 void ymf271_device::device_clock_changed()
 {
 	uint32_t old_clock = m_master_clock;
-	m_master_clock = clock();
+	m_master_clock = clock().value();
 
 	if (m_master_clock != old_clock)
 	{
 		if (old_clock < m_master_clock)
 			m_mix_buffer.resize(m_master_clock/(384/4));
 
-		m_stream->set_sample_rate(m_master_clock / 384);
+		m_stream->set_sample_rate(clock() / 384);
 	}
 	calculate_clock_correction();
 }

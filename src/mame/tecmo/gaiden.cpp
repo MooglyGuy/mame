@@ -731,7 +731,7 @@ GFXDECODE_END
 void gaiden_state::shadoww(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 18432000/2); /* 9.216 MHz */
+	M68000(config, m_maincpu, XTAL::u(18432000)/2); /* 9.216 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &gaiden_state::gaiden_map);
 	m_maincpu->set_vblank_int("screen", FUNC(gaiden_state::irq5_line_assert));
 
@@ -813,11 +813,11 @@ void gaiden_state::raiga(machine_config &config)
 void gaiden_state::drgnbowl(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2); /* 10 MHz */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2); /* 10 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &gaiden_state::drgnbowl_map);
 	m_maincpu->set_vblank_int("screen", FUNC(gaiden_state::irq5_line_assert));
 
-	Z80(config, m_audiocpu, 12000000/2);   /* 6 MHz */
+	Z80(config, m_audiocpu, XTAL::u(12000000)/2);   /* 6 MHz */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &gaiden_state::drgnbowl_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &gaiden_state::drgnbowl_sound_port_map);
 

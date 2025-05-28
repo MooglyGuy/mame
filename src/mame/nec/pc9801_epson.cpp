@@ -335,7 +335,7 @@ void pc98_epson_state::config_base_epson(machine_config &config)
 void pc98_epson_state::pc286vs(machine_config &config)
 {
 	pc9801vx(config);
-	i80286_cpu_device &maincpu(I80286(config.replace(), m_maincpu, 10000000));
+	i80286_cpu_device &maincpu(I80286(config.replace(), m_maincpu, XTAL::u(10000000)));
 	maincpu.set_addrmap(AS_PROGRAM, &pc98_epson_state::pc286vs_map);
 	maincpu.set_addrmap(AS_IO, &pc98_epson_state::pc286vs_io);
 	// TODO: seems to work without using A20 gate, verify
@@ -350,7 +350,7 @@ void pc98_epson_state::pc286vs(machine_config &config)
 void pc98_epson_state::pc386m(machine_config &config)
 {
 	pc9801rs(config);
-	I386SX(config.replace(), m_maincpu, 16000000); // i386SX 16MHz, switchable to 10/6 MHz
+	I386SX(config.replace(), m_maincpu, XTAL::u(16000000)); // i386SX 16MHz, switchable to 10/6 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc98_epson_state::pc386m_map);
 	m_maincpu->set_addrmap(AS_IO, &pc98_epson_state::pc386m_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_master", FUNC(pic8259_device::inta_cb));

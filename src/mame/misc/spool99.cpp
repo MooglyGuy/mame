@@ -370,7 +370,7 @@ INPUT_PORTS_END
 
 void spool99_state::spool99(machine_config &config)
 {
-	Z80(config, m_maincpu, 24000000/8);
+	Z80(config, m_maincpu, XTAL::u(24000000)/8);
 	m_maincpu->set_addrmap(AS_PROGRAM, &spool99_state::spool99_map);
 	m_maincpu->set_vblank_int("screen", FUNC(spool99_state::irq0_line_hold));
 

@@ -448,7 +448,7 @@ void sfcbox_state::machine_reset()
 void sfcbox_state::sfcbox(machine_config &config)
 {
 	/* base snes hardware */
-	_5A22(config, m_maincpu, 3580000*6);   /* 2.68Mhz, also 3.58Mhz */
+	_5A22(config, m_maincpu, XTAL::u(3580000)*6);   /* 2.68Mhz, also 3.58Mhz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &sfcbox_state::snes_map);
 
 	// runs at 24.576 MHz / 12 = 2.048 MHz

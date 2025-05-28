@@ -954,7 +954,7 @@ void ql_state::ql(machine_config &config)
 	RS232_PORT(config, m_ser2, default_rs232_devices, nullptr); // wired as DTE
 	m_ser2->cts_handler().set(m_zx8302, FUNC(zx8302_device::write_cts2));
 
-	QL_EXPANSION_SLOT(config, m_exp, 0, ql_expansion_cards, nullptr); // FIXME: what's the clock on the slot?
+	QL_EXPANSION_SLOT(config, m_exp, XTAL(), ql_expansion_cards, nullptr); // FIXME: what's the clock on the slot?
 	//m_exp->ipl0l_wr_callback().set();
 	//m_exp->ipl1l_wr_callback().set();(
 	//m_exp->berrl_wr_callback().set();
@@ -987,7 +987,7 @@ void ql_state::ql_ntsc(machine_config &config)
 	screen.set_refresh_hz(60);
 	screen.set_size(960, 262);
 	screen.set_visarea(0, 512-1, 0, 256-1);
-	}
+}
 
 
 //-------------------------------------------------

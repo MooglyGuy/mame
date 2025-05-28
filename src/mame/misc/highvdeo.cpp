@@ -1296,7 +1296,7 @@ void highvdeo_state::ciclone(machine_config &config)
 {
 	tv_tcf(config);
 
-	I80186(config.replace(), m_maincpu, 20000000);    // ?
+	I80186(config.replace(), m_maincpu, XTAL::u(20000000));    // ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &highvdeo_state::tv_tcf_map);
 	m_maincpu->set_addrmap(AS_IO, &highvdeo_state::ciclone_io);
 }
@@ -1390,7 +1390,7 @@ void highvdeo_state::magicbom(machine_config &config)
 	PALETTE(config, m_palette).set_entries(0x100);
 	m_palette->set_format(palette_device::RGB_565, 0x100);
 
-	ramdac_device &ramdac(RAMDAC(config, "ramdac", 0, m_palette));
+	ramdac_device &ramdac(RAMDAC(config, "ramdac", m_palette));
 	ramdac.set_addrmap(0, &highvdeo_state::ramdac_map);
 
 	/* sound hardware */

@@ -32,7 +32,7 @@ DEFINE_DEVICE_TYPE(DS1287,   ds1287_device,   "ds1287",   "DS1287 RTC")
 mc146818_device::mc146818_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc146818_device(mconfig, MC146818, tag, owner, clock)
 {
-	switch (clock)
+	switch (clock.value())
 	{
 	case 4'194'304:
 	case 1'048'576:
@@ -504,7 +504,7 @@ void mc146818_device::update_timer()
 	{
 		int shift = 22 - bypass;
 
-		double update_hz = (double) clock() / (1 << shift);
+		double update_hz = clock().dvalue() / (1 << shift);
 
 		// TODO: take the time since last timer into account
 		update_period = attotime::from_hz(update_hz * 2);
@@ -517,7 +517,7 @@ void mc146818_device::update_timer()
 			if (shift <= 1)
 				shift += 7;
 
-			double periodic_hz = (double) clock() / (1 << shift);
+			double periodic_hz = clock().dvalue() / (1 << shift);
 
 			// TODO: take the time since last timer into account
 			// periodic frequency is doubled to produce square wave output

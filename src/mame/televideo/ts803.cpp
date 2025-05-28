@@ -437,7 +437,7 @@ void ts803_state::ts803(machine_config &config)
 	PALETTE(config, m_palette, palette_device::MONOCHROME);
 
 	/* crtc */
-	sy6545_1_device &crtc(SY6545_1(config, "crtc", 13608000 / 8));
+	sy6545_1_device &crtc(SY6545_1(config, "crtc", XTAL::u(13608000) / 8));
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8);

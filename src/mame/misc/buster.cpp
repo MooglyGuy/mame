@@ -348,7 +348,7 @@ void buster_state::buster(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	AY8910(config, "aysnd", 1500000/2).add_route(ALL_OUTPUTS, "mono", 0.25);
+	AY8910(config, "aysnd", XTAL::u(1500000)/2).add_route(ALL_OUTPUTS, "mono", 0.25);
 }
 
 

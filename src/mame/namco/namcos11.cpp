@@ -635,7 +635,7 @@ void namcos11_state::coh110(machine_config &config)
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
 
-	c352_device &c352(C352(config, "c352", 25401600, 288));
+	c352_device &c352(C352(config, "c352", XTAL::u(25401600), 288));
 	c352.add_route(0, "lspeaker", 1.00);
 	c352.add_route(1, "rspeaker", 1.00);
 	//c352.add_route(2, "lspeaker", 1.00); // Second DAC not present.

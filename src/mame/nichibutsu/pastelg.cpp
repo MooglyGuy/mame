@@ -359,12 +359,12 @@ INPUT_PORTS_END
 void pastelg_state::pastelg(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 19968000/4);    // unknown divider, galds definitely relies on this for correct voice pitch
+	Z80(config, m_maincpu, XTAL::u(19968000)/4);    // unknown divider, galds definitely relies on this for correct voice pitch
 	m_maincpu->set_addrmap(AS_PROGRAM, &pastelg_state::prg_map);
 	m_maincpu->set_addrmap(AS_IO, &pastelg_state::io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pastelg_state::irq0_line_assert)); // nmiclock not written, chip is 1411M1 instead of 1413M3
 
-	NB1413M3(config, m_nb1413m3, 0, NB1413M3_PASTELG);
+	NB1413M3(config, m_nb1413m3, XTAL(), NB1413M3_PASTELG);
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
@@ -416,7 +416,7 @@ Note
 void threeds_state::threeds(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 19968000/4);    // unknown divider, galds definitely relies on this for correct voice pitch
+	Z80(config, m_maincpu, XTAL::u(19968000)/4);    // unknown divider, galds definitely relies on this for correct voice pitch
 	m_maincpu->set_addrmap(AS_PROGRAM, &threeds_state::prg_map);
 	m_maincpu->set_addrmap(AS_IO, &threeds_state::io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(threeds_state::irq0_line_assert));

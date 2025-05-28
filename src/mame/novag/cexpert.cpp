@@ -242,7 +242,7 @@ void cexpert_state::cexpert(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 15440 / 16); // 965Hz
+	BEEP(config, m_beeper, XTAL::u(15440) / 16); // 965Hz
 	m_beeper->add_route(ALL_OUTPUTS, "mono", 0.25);
 }
 

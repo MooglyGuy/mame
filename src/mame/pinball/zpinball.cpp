@@ -97,7 +97,7 @@ void zpinball_state::machine_reset()
 {
 	m_shift_clock = false;
 	m_shift_enabled = false;
-	m_zpuctc->subdevice("ch0")->set_unscaled_clock(0);
+	m_zpuctc->subdevice("ch0")->set_unscaled_clock(XTAL());
 
 	// Clear latches
 	out1_w(0);
@@ -148,7 +148,7 @@ WRITE_LINE_MEMBER(zpinball_state::clock_off_w)
 	{
 		m_shift_clock = false;
 		m_shift_enabled = false;
-		m_zpuctc->subdevice("ch0")->set_unscaled_clock(0);
+		m_zpuctc->subdevice("ch0")->set_unscaled_clock(XTAL());
 	}
 }
 
@@ -270,8 +270,8 @@ void zpinball_state::zpinball(machine_config &config)
 
 	Z80CTC(config, m_zpuctc, 8_MHz_XTAL / 2);
 	m_zpuctc->set_clk<0>(8_MHz_XTAL / 4);
-	m_zpuctc->set_clk<2>(100); // rectified from power supply
-	m_zpuctc->set_clk<3>(100);
+	m_zpuctc->set_clk<2>(XTAL::u(100)); // rectified from power supply
+	m_zpuctc->set_clk<3>(XTAL::u(100));
 	m_zpuctc->intr_callback().set_inputline(m_zpumpu, INPUT_LINE_IRQ0);
 	m_zpuctc->zc_callback<0>().set(FUNC(zpinball_state::shift_toggle_w));
 	m_zpuctc->zc_callback<0>().append(m_zpuctc, FUNC(z80ctc_device::trg1));

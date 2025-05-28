@@ -401,12 +401,12 @@ static const z80_daisy_config daisy_chain[] =
 void stargame_state::stargame(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 15000000 / 4); // freq=CK4; ic=7D
+	Z80(config, m_maincpu, XTAL::u(15000000) / 4); // freq=CK4; ic=7D
 	m_maincpu->set_addrmap(AS_PROGRAM, &stargame_state::maincpu_map);
 	m_maincpu->set_addrmap(AS_IO, &stargame_state::maincpu_io);
 	m_maincpu->set_daisy_config(daisy_chain);
 
-	Z80(config, m_audiocpu, 15000000 / 3); // freq=CK6; ic=6E
+	Z80(config, m_audiocpu, XTAL::u(15000000) / 3); // freq=CK6; ic=6E
 	m_audiocpu->set_addrmap(AS_PROGRAM, &stargame_state::audiocpu_map);
 	m_audiocpu->set_addrmap(AS_IO, &stargame_state::audiocpu_io);
 
@@ -419,16 +419,16 @@ void stargame_state::stargame(machine_config &config)
 	ctc_clock.signal_handler().set(m_ctc, FUNC(z80ctc_device::trg2));
 	ctc_clock.signal_handler().append(m_ctc, FUNC(z80ctc_device::trg3)).invert();
 
-	Z80CTC(config, m_ctc, 15000000 / 4); // ic=3D
+	Z80CTC(config, m_ctc, XTAL::u(15000000) / 4); // ic=3D
 	m_ctc->intr_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 	m_ctc->zc_callback<0>().set(m_7a, FUNC(ttl7474_device::clock_w));
 
 	/* sound hardware */
 	genpin_audio(config);
 	SPEAKER(config, "measnd").front_center();
-	MEA8000(config, "mea8000", 15000000 / 4).add_route(ALL_OUTPUTS, "measnd", 2.0); // CK4 freq; ic=2E
+	MEA8000(config, "mea8000", XTAL::u(15000000) / 4).add_route(ALL_OUTPUTS, "measnd", 2.0); // CK4 freq; ic=2E
 	SPEAKER(config, "aysnd").front_center();
-	ay8910_device &ay0(AY8910(config, "ay", 15000000 / 8)); // CK2 freq; ic=1E
+	ay8910_device &ay0(AY8910(config, "ay", XTAL::u(15000000) / 8)); // CK2 freq; ic=1E
 	ay0.add_route(ALL_OUTPUTS, "aysnd", 1.5);
 	ay0.set_resistors_load(20000, 20000, 20000);
 	ay0.port_a_write_callback().set("dac", FUNC(dac_byte_interface::write));

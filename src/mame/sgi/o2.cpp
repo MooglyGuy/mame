@@ -72,7 +72,7 @@ INPUT_PORTS_END
 
 void o2_state::o2(machine_config &config)
 {
-	R5000BE(config, m_maincpu, 60000000*3);
+	R5000BE(config, m_maincpu, XTAL::u(60000000)*3);
 	m_maincpu->set_icache_size(32768);
 	m_maincpu->set_dcache_size(32768);
 	m_maincpu->set_addrmap(AS_PROGRAM, &o2_state::mem_map);

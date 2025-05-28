@@ -213,7 +213,7 @@ void sagitta180_state::sagitta180(machine_config &config)
 	screen.set_visarea(0, 80*5-1, 0, 25*8-1);
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_sagitta180);
 
-	I8275(config, m_crtc, 12480000 / 8); /* guessed xtal */
+	I8275(config, m_crtc, XTAL::u(12480000) / 8); /* guessed xtal */
 	m_crtc->set_character_width(8);
 	m_crtc->set_display_callback(FUNC(sagitta180_state::crtc_display_pixels));
 	m_crtc->drq_wr_callback().set(m_dma8257, FUNC(i8257_device::dreq2_w));

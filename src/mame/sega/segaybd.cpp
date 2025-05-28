@@ -214,8 +214,8 @@ EPR-12028 - 27C256 EPROM
 //  CONSTANTS
 //**************************************************************************
 
-const uint32_t MASTER_CLOCK = 50000000;
-const uint32_t SOUND_CLOCK = 32215900;
+const XTAL MASTER_CLOCK = XTAL::u(50000000);
+const XTAL SOUND_CLOCK = XTAL::u(32215900);
 
 // use this to fiddle with the IRQ2 timing
 #define TWEAK_IRQ2_SCANLINE     (0)
@@ -1460,7 +1460,7 @@ void segaybd_state::yboard(machine_config &config)
 
 	SEGA_SYS16B_SPRITES(config, m_bsprites);
 	SEGA_YBOARD_SPRITES(config, m_ysprites);
-	SEGAIC16VID(config, m_segaic16vid, 0, "gfxdecode");
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), "gfxdecode");
 
 	PALETTE(config, m_palette).set_entries(8192*2);
 

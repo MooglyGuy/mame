@@ -57,7 +57,7 @@ mos6530_device::mos6530_device(const machine_config &mconfig, const char *tag, d
 void mos6530_device::device_start()
 {
 	/* set static values */
-	m_clock = clock();
+	m_clock = clock().value();
 
 	/* resolve callbacks */
 	m_in_pa_cb.resolve_safe(0);

@@ -527,7 +527,7 @@ ibm5160_mb_device::ibm5160_mb_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_maincpu(*this, finder_base::DUMMY_TAG)
 	, m_pic8259(*this, "pic8259")

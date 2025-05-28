@@ -1024,9 +1024,9 @@ uint32_t S3C24_CLASS_NAME::s3c24xx_get_fclk()
 	pdiv = BITS( mpllcon, 9, 4);
 	sdiv = BITS( mpllcon, 1, 0);
 #if defined(DEVICE_S3C2400) || defined(DEVICE_S3C2410)
-	temp1 = 1 * (mdiv + 8) * (double)clock();
+	temp1 = 1 * (mdiv + 8) * (double)clock().dvalue();
 #else
-	temp1 = 2 * (mdiv + 8) * (double)clock();
+	temp1 = 2 * (mdiv + 8) * (double)clock().dvalue();
 #endif
 	temp2 = (double)((pdiv + 2) * (1 << sdiv));
 	fclk = (uint32_t)(temp1 / temp2);
@@ -1078,11 +1078,11 @@ void S3C24_CLASS_NAME::s3c24xx_clkpow_w(offs_t offset, uint32_t data, uint32_t m
 	{
 	case S3C24XX_MPLLCON:
 		LOGMASKED(LOG_CLKPOW, "%s: clock/power write: MPLLCON = %08x & %08x - fclk %d hclk %d pclk %d\n", machine().describe_context(), data, mem_mask, s3c24xx_get_fclk(), s3c24xx_get_hclk(), s3c24xx_get_pclk());
-		m_cpu->set_unscaled_clock(s3c24xx_get_fclk() * CLOCK_MULTIPLIER);
+		m_cpu->set_unscaled_clock(XTAL::u(s3c24xx_get_fclk()) * CLOCK_MULTIPLIER);
 		break;
 	case S3C24XX_CLKSLOW:
 		LOGMASKED(LOG_CLKPOW, "%s: clock/power write: CLKSLOW = %08x & %08x - fclk %d hclk %d pclk %d\n", machine().describe_context(), data, mem_mask, s3c24xx_get_fclk(), s3c24xx_get_hclk(), s3c24xx_get_pclk());
-		m_cpu->set_unscaled_clock(s3c24xx_get_fclk() * CLOCK_MULTIPLIER);
+		m_cpu->set_unscaled_clock(XTAL::u(s3c24xx_get_fclk()) * CLOCK_MULTIPLIER);
 		break;
 	case S3C24XX_CLKCON:
 		LOGMASKED(LOG_CLKPOW, "%s: clock/power write: CLKCON = %08x & %08x\n", machine().describe_context(), data, mem_mask);

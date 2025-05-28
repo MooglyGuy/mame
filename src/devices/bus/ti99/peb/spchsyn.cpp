@@ -156,7 +156,7 @@ void ti_speech_synthesizer_device::device_add_mconfig(machine_config& config)
 {
 	SPEECHROM(config, "vsm").set_reverse_bit_order(true);
 	SPEAKER(config, "speech_out").front_center();
-	CD2501E(config, m_vsp, 640000L);
+	CD2501E(config, m_vsp, XTAL::u(640000));
 	m_vsp->set_speechrom_tag("vsm");
 	m_vsp->ready_cb().set(FUNC(ti_speech_synthesizer_device::speech_ready));
 	m_vsp->add_route(ALL_OUTPUTS, "speech_out", 0.50);

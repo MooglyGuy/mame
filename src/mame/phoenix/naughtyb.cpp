@@ -111,7 +111,7 @@ TODO:
 #include "sound/tms36xx.h"
 #include "speaker.h"
 
-#define CLOCK_XTAL 12000000
+#define CLOCK_XTAL XTAL::u(12000000)
 
 uint8_t naughtyb_state::in0_port_r()
 {

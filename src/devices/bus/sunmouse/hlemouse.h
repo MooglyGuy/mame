@@ -28,7 +28,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock,
+			const XTAL &clock,
 			unsigned multiplier);
 
 	// device overrides
@@ -59,7 +59,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock);
+			const XTAL &clock);
 };
 
 
@@ -70,7 +70,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock);
+			const XTAL &clock);
 };
 
 } // namespace bus::sunmouse

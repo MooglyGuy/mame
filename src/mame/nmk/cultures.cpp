@@ -19,7 +19,7 @@
 #include "speaker.h"
 #include "tilemap.h"
 
-#define MCLK 16000000
+#define MCLK XTAL::u(16000000)
 
 class cultures_state : public driver_device
 {

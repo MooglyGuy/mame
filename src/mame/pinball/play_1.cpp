@@ -408,19 +408,19 @@ void play_1_state::port03_w(u8 data)
 		case 1:
 			// a combination of bits could set higher frequencies, but that isn't documented or used
 			if (BIT(m_segment, 0))
-				m_monotone->set_unscaled_clock(523);
+				m_monotone->set_unscaled_clock(XTAL::u(523));
 			else
 			if (BIT(m_segment, 1))
-				m_monotone->set_unscaled_clock(659);
+				m_monotone->set_unscaled_clock(XTAL::u(659));
 			else
 			if (BIT(m_segment, 2))
-				m_monotone->set_unscaled_clock(784);
+				m_monotone->set_unscaled_clock(XTAL::u(784));
 			else
 			if (BIT(m_segment, 3))
-				m_monotone->set_unscaled_clock(988);
+				m_monotone->set_unscaled_clock(XTAL::u(988));
 			else
 			if ((m_segment & 0x0F)==0)
-				m_monotone->set_unscaled_clock(0);
+				m_monotone->set_unscaled_clock(XTAL());
 			// Bit 4 when low makes the sound fade out, not emulated yet
 
 			// display player number

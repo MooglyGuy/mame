@@ -135,7 +135,7 @@ void scc8530_legacy_device::updatebaudtimer(int ch)
 		clockrate = 8 << clockmode;
 	}
 
-	int baudrate = clock() / ((brconst + 2) * 2 * clockrate);
+	int baudrate = clock().value() / ((brconst + 2) * 2 * clockrate);
 	attotime attorate = attotime::from_hz(baudrate);
 	pChan->baudtimer->adjust(attorate, ch, attorate);
 }

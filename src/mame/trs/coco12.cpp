@@ -563,8 +563,8 @@ void coco12_state::cocoe(machine_config &config)
 	cartslot.cart_callback().set([this] (int state) { cart_w(state != 0); }); // lambda because name is overloaded
 	cartslot.nmi_callback().set_inputline(m_maincpu, INPUT_LINE_NMI);
 	cartslot.halt_callback().set_inputline(m_maincpu, INPUT_LINE_HALT);
-	COCO_VHD(config, m_vhd_0, 0, m_maincpu);
-	COCO_VHD(config, m_vhd_1, 0, m_maincpu);
+	COCO_VHD(config, m_vhd_0, XTAL(), m_maincpu);
+	COCO_VHD(config, m_vhd_1, XTAL(), m_maincpu);
 }
 
 void coco12_state::cocoeh(machine_config &config)
@@ -582,8 +582,8 @@ void coco12_state::coco2(machine_config &config)
 	cartslot.cart_callback().set([this] (int state) { cart_w(state != 0); }); // lambda because name is overloaded
 	cartslot.nmi_callback().set_inputline(m_maincpu, INPUT_LINE_NMI);
 	cartslot.halt_callback().set_inputline(m_maincpu, INPUT_LINE_HALT);
-	COCO_VHD(config, m_vhd_0, 0, m_maincpu);
-	COCO_VHD(config, m_vhd_1, 0, m_maincpu);
+	COCO_VHD(config, m_vhd_0, XTAL(), m_maincpu);
+	COCO_VHD(config, m_vhd_1, XTAL(), m_maincpu);
 }
 
 void coco12_state::coco2h(machine_config &config)

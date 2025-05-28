@@ -77,7 +77,7 @@ INPUT_PORTS_END
 void truesys_state::unkts(machine_config &config)
 {
 	// basic machine hardware
-	NIOS2(config, m_maincpu, 32'000'000); // there's no actual CPU, it appears to be run from the FPGA
+	NIOS2(config, m_maincpu, XTAL(32'000'000)); // there's no actual CPU, it appears to be run from the FPGA
 	m_maincpu->set_addrmap(AS_PROGRAM, &truesys_state::main_map);
 
 	// PIC16F874. TODO: not emulated

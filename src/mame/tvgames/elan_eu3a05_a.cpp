@@ -54,7 +54,7 @@ void elan_eu3a05_sound_device::map(address_map &map)
 void elan_eu3a05_sound_device::device_start()
 {
 	m_space_read_cb.resolve_safe(0);
-	m_stream = stream_alloc(0, 1, 8000);
+	m_stream = stream_alloc(0, 1, XTAL::u(8000));
 
 	m_sound_end_cb.resolve_all_safe();
 

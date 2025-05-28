@@ -1503,11 +1503,11 @@ void aerofgt_state::pspikes(machine_config &config)
 void aerofgt_state::spikes91(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::spikes91_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold)); /* all irq vectors are the same */
 
-	Z80(config, m_audiocpu, 24000000/8); // ?
+	Z80(config, m_audiocpu, XTAL::u(24000000)/8); // ?
 	m_audiocpu->set_addrmap(AS_PROGRAM, &aerofgt_state::spikes91_sound_map);
 
 	MCFG_MACHINE_START_OVERRIDE(aerofgt_state,common)
@@ -1534,7 +1534,7 @@ void aerofgt_state::spikes91(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 24000000/8));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(24000000)/8));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	// TODO: OKI M5205
@@ -1543,7 +1543,7 @@ void aerofgt_state::spikes91(machine_config &config)
 void aerofgt_state::pspikesb(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::pspikesb_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold)); /* all irq vectors are the same */
 
@@ -1633,7 +1633,7 @@ void aerofgt_state::kickball(machine_config &config)
 void aerofgt_state::pspikesc(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::pspikesc_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold)); /* all irq vectors are the same */
 
@@ -1671,11 +1671,11 @@ void aerofgt_state::pspikesc(machine_config &config)
 void aerofgt_state::karatblz(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::karatblz_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2); /* 4 MHz ??? */
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); /* 4 MHz ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &aerofgt_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &aerofgt_state::turbofrc_sound_portmap); /* IRQs are triggered by the YM2610 */
 
@@ -1727,11 +1727,11 @@ void aerofgt_state::karatblz(machine_config &config)
 void aerofgt_state::karatblzbl(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::karatblzbl_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2); /* 4 MHz ??? */
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); /* 4 MHz ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &aerofgt_state::karatblzbl_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &aerofgt_state::karatblzbl_sound_portmap);
 
@@ -1895,11 +1895,11 @@ void aerofgt_state::turbofrc(machine_config &config)
 void aerofgt_state::aerofgtb(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::aerofgtb_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold)); /* all irq vectors are the same */
 
-	Z80(config, m_audiocpu, 8000000/2); /* 4 MHz ??? */
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); /* 4 MHz ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &aerofgt_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &aerofgt_state::aerofgt_sound_portmap); /* IRQs are triggered by the YM2610 */
 
@@ -2012,11 +2012,11 @@ void aerofgt_state::aerofgt(machine_config &config)
 void aerofgt_state::aerfboot(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::aerfboot_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2); /* 4 MHz ??? */
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); /* 4 MHz ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &aerofgt_state::aerfboot_sound_map);
 
 	MCFG_MACHINE_START_OVERRIDE(aerofgt_state,common)
@@ -2052,7 +2052,7 @@ void aerofgt_state::aerfboot(machine_config &config)
 void aerofgt_state::aerfboo2(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::aerfboo2_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq2_line_hold));
 
@@ -2085,11 +2085,11 @@ void aerofgt_state::aerfboo2(machine_config &config)
 void aerofgt_state::wbbc97(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);   /* 10 MHz (?) */
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   /* 10 MHz (?) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aerofgt_state::wbbc97_map);
 	m_maincpu->set_vblank_int("screen", FUNC(aerofgt_state::irq1_line_hold)); /* all irq vectors are the same */
 
-	Z80(config, m_audiocpu, 8000000/2); /* 4 MHz ??? */
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); /* 4 MHz ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &aerofgt_state::wbbc97_sound_map); /* IRQs are triggered by the YM3812 */
 	MCFG_MACHINE_START_OVERRIDE(aerofgt_state,common)
 	MCFG_MACHINE_RESET_OVERRIDE(aerofgt_state,common)

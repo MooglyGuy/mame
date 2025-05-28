@@ -48,11 +48,7 @@ DECLARE_DEVICE_TYPE(BALLY_SQUAWK_N_TALK_AY, bally_squawk_n_talk_ay_device)
 class bally_as2888_device : public device_t, public device_mixer_interface
 {
 public:
-	bally_as2888_device(
-			const machine_config &mconfig,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock = 0) :
+	bally_as2888_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		bally_as2888_device(mconfig, BALLY_AS2888, tag, owner)
 	{ }
 
@@ -63,11 +59,7 @@ public:
 	void as2888_map(address_map &map);
 
 protected:
-	bally_as2888_device(
-			const machine_config &mconfig,
-			device_type type,
-			const char *tag,
-			device_t *owner) :
+	bally_as2888_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner) :
 		device_t(mconfig, type, tag, owner),
 		device_mixer_interface(mconfig, *this),
 		m_snd_prom(*this, "sound"),
@@ -104,11 +96,7 @@ private:
 class bally_as3022_device : public device_t, public device_mixer_interface
 {
 public:
-	bally_as3022_device(
-			const machine_config &mconfig,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock = 3'579'545) :
+	bally_as3022_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(3'579'545)) :
 		bally_as3022_device(mconfig, BALLY_AS3022, tag, owner, clock)
 	{ }
 
@@ -120,12 +108,7 @@ public:
 	void as3022_map(address_map &map);
 
 protected:
-	bally_as3022_device(
-			const machine_config &mconfig,
-			device_type type,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock) :
+	bally_as3022_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 		device_t(mconfig, type, tag, owner, clock),
 		device_mixer_interface(mconfig, *this),
 		m_cpu(*this, "cpu"),
@@ -176,11 +159,7 @@ private:
 class bally_sounds_plus_device : public bally_as3022_device
 {
 public:
-	bally_sounds_plus_device(
-			const machine_config &mconfig,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock = 3'579'545) :
+	bally_sounds_plus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(3'579'545)) :
 		bally_as3022_device(mconfig, BALLY_SOUNDS_PLUS, tag, owner, clock)
 	{ }
 
@@ -201,11 +180,7 @@ private:
 class bally_cheap_squeak_device : public device_t, public device_mixer_interface
 {
 public:
-	bally_cheap_squeak_device(
-			const machine_config &mconfig,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock = 3'579'545);
+	bally_cheap_squeak_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(3'579'545));
 
 	auto sound_ack_w_handler() { return m_sound_ack_w_handler.bind(); }
 
@@ -217,12 +192,7 @@ public:
 	void cheap_squeak_map(address_map &map);
 
 protected:
-	bally_cheap_squeak_device(
-			const machine_config &mconfig,
-			device_type type,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock);
+	bally_cheap_squeak_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_add_mconfig(machine_config &config) override;
@@ -258,11 +228,7 @@ private:
 class bally_squawk_n_talk_device : public device_t, public device_mixer_interface
 {
 public:
-	bally_squawk_n_talk_device(
-			const machine_config &mconfig,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock = 3'579'545);
+	bally_squawk_n_talk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(3'579'545));
 
 	// read/write
 	DECLARE_INPUT_CHANGED_MEMBER(sw1);
@@ -272,12 +238,7 @@ public:
 	void squawk_n_talk_map(address_map &map);
 
 protected:
-	bally_squawk_n_talk_device(
-			const machine_config &mconfig,
-			device_type type,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock);
+	bally_squawk_n_talk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_add_mconfig(machine_config &config) override;
@@ -309,11 +270,7 @@ private:
 class bally_squawk_n_talk_ay_device : public bally_squawk_n_talk_device
 {
 public:
-	bally_squawk_n_talk_ay_device(
-			const machine_config &mconfig,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock = 3'579'545);
+	bally_squawk_n_talk_ay_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(3'579'545));
 
 protected:
 	// device-level overrides

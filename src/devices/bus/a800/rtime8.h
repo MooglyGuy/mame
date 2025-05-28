@@ -16,7 +16,7 @@ class a800_rtime8_device : public device_t, public device_a800_cart_interface
 {
 public:
 	// construction/destruction
-	a800_rtime8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	a800_rtime8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

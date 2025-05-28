@@ -474,7 +474,7 @@ void phoenix_state::phoenix(machine_config &config)
 
 	PHOENIX_SOUND(config, "cust").add_route(ALL_OUTPUTS, "mono", 0.4);
 
-	DISCRETE(config, "discrete", 120000, phoenix_discrete).add_route(ALL_OUTPUTS, "mono", 0.6);
+	DISCRETE(config, "discrete", XTAL::u(120000), phoenix_discrete).add_route(ALL_OUTPUTS, "mono", 0.6);
 }
 
 void phoenix_state::pleiads(machine_config &config)
@@ -490,7 +490,7 @@ void phoenix_state::pleiads(machine_config &config)
 	m_palette->set_init(FUNC(phoenix_state::pleiads_palette));
 
 	/* sound hardware */
-	tms36xx_device &tms(TMS36XX(config.replace(), "tms", 247));
+	tms36xx_device &tms(TMS36XX(config.replace(), "tms", XTAL::u(247)));
 	tms.set_subtype(tms36xx_device::subtype::TMS3615);
 	tms.set_decays(0.33, 0.33, 0, 0.33, 0, 0.33);
 	// NOTE: it's unknown if the TMS3615 mixes more than one voice internally.
@@ -544,7 +544,7 @@ void phoenix_state::condor(machine_config &config)
 
 	/* basic machine hardware */
 	/* FIXME: Verify clock. This is most likely 11MHz/2 */
-	Z80(config.replace(), m_maincpu, 11000000/4);    /* 2.75 MHz??? */
+	Z80(config.replace(), m_maincpu, XTAL::u(11000000)/4);    /* 2.75 MHz??? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &phoenix_state::phoenix_memory_map);
 }
 

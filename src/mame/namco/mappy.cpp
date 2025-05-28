@@ -1356,7 +1356,7 @@ void mappy_state::superpac_common(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	NAMCO_15XX(config, m_namco_15xx, 18432000/768);
+	NAMCO_15XX(config, m_namco_15xx, XTAL::u(18432000)/768);
 	m_namco_15xx->set_voices(8);
 	m_namco_15xx->add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
@@ -1474,7 +1474,7 @@ void mappy_state::phozon(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	NAMCO_15XX(config, m_namco_15xx, 18432000/768);
+	NAMCO_15XX(config, m_namco_15xx, XTAL::u(18432000)/768);
 	m_namco_15xx->set_voices(8);
 	m_namco_15xx->add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
@@ -1520,7 +1520,7 @@ void mappy_state::mappy_common(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	NAMCO_15XX(config, m_namco_15xx, 18432000/768);
+	NAMCO_15XX(config, m_namco_15xx, XTAL::u(18432000)/768);
 	m_namco_15xx->set_voices(8);
 	m_namco_15xx->add_route(ALL_OUTPUTS, "speaker", 1.0);
 }

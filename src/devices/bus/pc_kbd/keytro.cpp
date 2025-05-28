@@ -375,7 +375,7 @@ pc_kbd_keytronic_pc3270_device::pc_kbd_keytronic_pc3270_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_pc_kbd_interface(mconfig, *this),
 	m_cpu(*this, "kb_keytr"), m_p1(0), m_p1_data(0), m_p2(0), m_p3(0), m_last_write_addr(0)

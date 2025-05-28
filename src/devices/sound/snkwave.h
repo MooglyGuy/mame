@@ -31,12 +31,13 @@ protected:
 private:
 	static constexpr unsigned WAVEFORM_LENGTH = 16;
 	static constexpr unsigned CLOCK_SHIFT = 8;
+	static constexpr unsigned CLOCK_DIV = 256;
 
 	void update_waveform(unsigned int offset, uint8_t data);
 
 	sound_stream *m_stream;
-	int m_external_clock;
-	int m_sample_rate;
+	XTAL m_external_clock;
+	XTAL m_sample_rate;
 
 	// data about the sound system
 	uint32_t m_frequency;

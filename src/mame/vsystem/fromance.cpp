@@ -903,11 +903,11 @@ void fromance_state::machine_reset()
 void fromance_state::nekkyoku(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 12000000/2); /* 6.00 Mhz ? */
+	Z80(config, m_maincpu, XTAL::u(12000000)/2); /* 6.00 Mhz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &fromance_state::nekkyoku_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(fromance_state::irq0_line_hold));
 
-	Z80(config, m_subcpu, 12000000/2);  /* 6.00 Mhz ? */
+	Z80(config, m_subcpu, XTAL::u(12000000)/2);  /* 6.00 Mhz ? */
 	m_subcpu->set_addrmap(AS_PROGRAM, &fromance_state::nekkyoku_sub_map);
 	m_subcpu->set_addrmap(AS_IO, &fromance_state::nekkyoku_sub_io_map);
 
@@ -925,7 +925,7 @@ void fromance_state::nekkyoku(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_fromance);
 	PALETTE(config, m_palette).set_entries(1024);
 
-	VSYSTEM_GGA(config, m_gga, 14318181 / 2); // clock not verified
+	VSYSTEM_GGA(config, m_gga, XTAL::u(14318181) / 2); // clock not verified
 	m_gga->write_cb().set(FUNC(fromance_state::fromance_gga_data_w));
 
 	MCFG_VIDEO_START_OVERRIDE(fromance_state,nekkyoku)
@@ -933,7 +933,7 @@ void fromance_state::nekkyoku(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	AY8910(config, "aysnd", 12000000/6).add_route(ALL_OUTPUTS, "mono", 0.15); // type not verified
+	AY8910(config, "aysnd", XTAL::u(12000000)/6).add_route(ALL_OUTPUTS, "mono", 0.15); // type not verified
 
 	MSM5205(config, m_msm, XTAL::u(384000));
 	m_msm->vck_legacy_callback().set(FUNC(fromance_state::fromance_adpcm_int)); /* IRQ handler */

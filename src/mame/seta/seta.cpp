@@ -8989,11 +8989,11 @@ void seta_state::orbs(machine_config &config)
 void keroppi_state::keroppi(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 14318180/2); /* 7.143 MHz */
+	M68000(config, m_maincpu, XTAL::u(14318180)/2); /* 7.143 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &keroppi_state::keroppi_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(keroppi_state::seta_interrupt_1_and_2), "screen", 0, 1);
 
-	X1_001(config, m_spritegen, 14318180, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(14318180), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(keroppi_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // unknown
@@ -9114,11 +9114,11 @@ void seta_state::madshark(machine_config &config)
 void seta_state::madsharkbl(machine_config &config) // bootleg doesn't actually use the Seta customs
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 16000000);   /* 16 MHz */
+	M68000(config, m_maincpu, XTAL::u(16000000));   /* 16 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::madsharkbl_map);
 	m_maincpu->set_vblank_int("screen", FUNC(seta_state::irq2_line_assert));
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(seta_state::setac_gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // unknown (wrong when flipped, but along y)
@@ -9141,7 +9141,7 @@ void seta_state::madsharkbl(machine_config &config) // bootleg doesn't actually 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 1'000'000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki, XTAL::u(1'000'000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki->set_addrmap(0, &seta_state::madsharkbl_oki_map);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }

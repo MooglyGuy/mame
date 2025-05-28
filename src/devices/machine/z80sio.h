@@ -283,7 +283,7 @@ protected:
 			device_type type,
 			const char *tag,
 			device_t *owner,
-			uint32_t clock,
+			const XTAL &clock,
 			uint8_t rr1_auto_reset);
 
 	// device-level overrides

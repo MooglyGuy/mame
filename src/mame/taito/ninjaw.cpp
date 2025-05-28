@@ -702,14 +702,14 @@ void ninjaw_state::machine_reset()
 void ninjaw_state::ninjaw(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 16000000/2);  /* 8 MHz ? */
+	M68000(config, m_maincpu, XTAL::u(16000000)/2);  /* 8 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &ninjaw_state::ninjaw_master_map);
 	m_maincpu->set_vblank_int("lscreen", FUNC(ninjaw_state::irq4_line_hold));
 
-	z80_device &audiocpu(Z80(config, "audiocpu", 16000000/4));    /* 16/4 MHz ? */
+	z80_device &audiocpu(Z80(config, "audiocpu", XTAL::u(16000000)/4));    /* 16/4 MHz ? */
 	audiocpu.set_addrmap(AS_PROGRAM, &ninjaw_state::sound_map);
 
-	M68000(config, m_subcpu, 16000000/2);  /* 8 MHz ? */
+	M68000(config, m_subcpu, XTAL::u(16000000)/2);  /* 8 MHz ? */
 	m_subcpu->set_addrmap(AS_PROGRAM, &ninjaw_state::ninjaw_slave_map);
 	m_subcpu->set_vblank_int("lscreen", FUNC(ninjaw_state::irq4_line_hold));
 
@@ -787,7 +787,7 @@ void ninjaw_state::ninjaw(machine_config &config)
 	SPEAKER(config, "rspeaker").front_right();
 	SPEAKER(config, "subwoofer").seat();
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 16000000/2));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(16000000)/2));
 	ymsnd.irq_handler().set_inputline("audiocpu", 0);
 	ymsnd.add_route(0, "subwoofer", 0.25);
 	ymsnd.add_route(1, "2610.1.l", 1.0);
@@ -811,14 +811,14 @@ void ninjaw_state::ninjaw(machine_config &config)
 void ninjaw_state::darius2(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 16000000/2);  /* 8 MHz ? */
+	M68000(config, m_maincpu, XTAL::u(16000000)/2);  /* 8 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &ninjaw_state::darius2_master_map);
 	m_maincpu->set_vblank_int("lscreen", FUNC(ninjaw_state::irq4_line_hold));
 
-	z80_device &audiocpu(Z80(config, "audiocpu", 16000000/4));    /* 4 MHz ? */
+	z80_device &audiocpu(Z80(config, "audiocpu", XTAL::u(16000000)/4));    /* 4 MHz ? */
 	audiocpu.set_addrmap(AS_PROGRAM, &ninjaw_state::sound_map);
 
-	M68000(config, m_subcpu, 16000000/2);  /* 8 MHz ? */
+	M68000(config, m_subcpu, XTAL::u(16000000)/2);  /* 8 MHz ? */
 	m_subcpu->set_addrmap(AS_PROGRAM, &ninjaw_state::darius2_slave_map);
 	m_subcpu->set_vblank_int("lscreen", FUNC(ninjaw_state::irq4_line_hold));
 
@@ -893,7 +893,7 @@ void ninjaw_state::darius2(machine_config &config)
 	SPEAKER(config, "rspeaker").front_right();
 	SPEAKER(config, "subwoofer").seat();
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 16000000/2));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(16000000)/2));
 	ymsnd.irq_handler().set_inputline("audiocpu", 0);
 	ymsnd.add_route(0, "subwoofer", 0.25);
 	ymsnd.add_route(1, "2610.1.l", 1.0);

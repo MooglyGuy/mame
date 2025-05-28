@@ -187,14 +187,14 @@ DEVICE_INPUT_DEFAULTS_END
 
 INPUT_CHANGED_MEMBER(swtpc_state::maincpu_clock_change)
 {
-	m_maincpu->set_clock(newval);
+	m_maincpu->set_clock(XTAL::u(newval));
 }
 
 void swtpc_state::machine_reset()
 {
 	uint32_t maincpu_clock = m_maincpu_clock->read();
 	if (maincpu_clock)
-		m_maincpu->set_clock(maincpu_clock);
+		m_maincpu->set_clock(XTAL::u(maincpu_clock));
 
 	// TODO make these SWTBUG patches conditional on using SWTBUG!
 

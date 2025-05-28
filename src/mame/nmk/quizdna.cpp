@@ -19,7 +19,7 @@ Quiz Gekiretsu Scramble (Gakuen Paradise 2) (c) 1993 Face
 #include "screen.h"
 #include "speaker.h"
 
-#define MCLK 16000000
+#define MCLK XTAL::u(16000000)
 
 void quizdna_state::rombank_w(uint8_t data)
 {

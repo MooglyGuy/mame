@@ -62,7 +62,7 @@ class huc1_device : public mbc_ram_device_base<mbc_dual_device_base>
 public:
 	static constexpr feature_type unemulated_features() { return feature::COMMS; }
 
-	huc1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	huc1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual image_init_result load(std::string &message) override ATTR_COLD;
 
@@ -84,7 +84,7 @@ huc1_device::huc1_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_ram_device_base<mbc_dual_device_base>(mconfig, GB_ROM_HUC1, tag, owner, clock),
 	m_view_ir(*this, "ir")
 {

@@ -213,28 +213,28 @@ void h8_sci_device::clock_update()
 		char buf[4096];
 		switch(clock_mode) {
 		case CLKM_INTERNAL_ASYNC:
-			sprintf(buf, "clock internal at %d Hz, async, bitrate %d bps\n", int(cpu->clock() / divider), int(cpu->clock() / (divider*16)));
+			sprintf(buf, "clock internal at %d Hz, async, bitrate %d bps\n", int(cpu->clock().value() / divider), int(cpu->clock().value() / (divider*16)));
 			break;
 		case CLKM_INTERNAL_ASYNC_OUT:
-			sprintf(buf, "clock internal at %d Hz, async, bitrate %d bps, output\n", int(cpu->clock() / divider), int(cpu->clock() / (divider*16)));
+			sprintf(buf, "clock internal at %d Hz, async, bitrate %d bps, output\n", int(cpu->clock().value() / divider), int(cpu->clock().value() / (divider*16)));
 			break;
 
 		case CLKM_EXTERNAL_ASYNC:
 			sprintf(buf, "clock external, async\n");
 			break;
 		case CLKM_EXTERNAL_RATE_ASYNC:
-			sprintf(buf, "clock external at %d Hz, async, bitrate %d bps\n", int(cpu->clock()*internal_to_external_ratio), int(cpu->clock()*internal_to_external_ratio/16));
+			sprintf(buf, "clock external at %d Hz, async, bitrate %d bps\n", int(cpu->clock().value()*internal_to_external_ratio), int(cpu->clock().value()*internal_to_external_ratio/16));
 			break;
 
 		case CLKM_INTERNAL_SYNC_OUT:
-			sprintf(buf, "clock internal at %d Hz, sync, output\n", int(cpu->clock() / (divider*2)));
+			sprintf(buf, "clock internal at %d Hz, sync, output\n", int(cpu->clock().value() / (divider*2)));
 			break;
 
 		case CLKM_EXTERNAL_SYNC:
 			sprintf(buf, "clock external, sync\n");
 			break;
 		case CLKM_EXTERNAL_RATE_SYNC:
-			sprintf(buf, "clock external at %d Hz, sync\n", int(cpu->clock()*internal_to_external_ratio));
+			sprintf(buf, "clock external at %d Hz, sync\n", int(cpu->clock().value()*internal_to_external_ratio));
 			break;
 		}
 		if(buf != last_clock_message) {
@@ -255,7 +255,7 @@ void h8_sci_device::device_start()
 		internal_to_external_ratio = 0;
 		external_to_internal_ratio = 0;
 	} else {
-		external_to_internal_ratio = (external_clock_period*cpu->clock()).as_double();
+		external_to_internal_ratio = (external_clock_period*cpu->clock().value()).as_double();
 		internal_to_external_ratio = 1/external_to_internal_ratio;
 	}
 

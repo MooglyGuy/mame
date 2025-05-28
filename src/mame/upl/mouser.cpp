@@ -431,8 +431,8 @@ void mouser_state::mouser(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	AY8910(config, "ay1", 4'000'000 / 2).add_route(ALL_OUTPUTS, "mono", 0.50);
-	AY8910(config, "ay2", 4'000'000 / 2).add_route(ALL_OUTPUTS, "mono", 0.50);
+	AY8910(config, "ay1", XTAL::u(4'000'000) / 2).add_route(ALL_OUTPUTS, "mono", 0.50);
+	AY8910(config, "ay2", XTAL::u(4'000'000) / 2).add_route(ALL_OUTPUTS, "mono", 0.50);
 }
 
 

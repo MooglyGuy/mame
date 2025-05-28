@@ -214,7 +214,7 @@ ALLOW_SAVE_TYPE(s14001a_device::states); // allow save_item on a non-fundamental
 
 void s14001a_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, clock() ? clock() : machine().sample_rate());
+	m_stream = stream_alloc(0, 1, clock().value() ? clock() : machine().sample_rate());
 
 	// resolve callbacks
 	m_ext_read_handler.resolve();
@@ -347,10 +347,10 @@ void s14001a_device::start_w(int state)
 	if (m_bStart) m_uStateP1 = states::WORDWAIT;
 }
 
-void s14001a_device::set_clock(uint32_t clock)
+void s14001a_device::set_clock(const XTAL &xtal)
 {
 	m_stream->update();
-	m_stream->set_sample_rate(clock);
+	m_stream->set_sample_rate(xtal);
 }
 
 

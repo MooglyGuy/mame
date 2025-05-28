@@ -425,7 +425,7 @@ void micral_state::micral(machine_config &config)
 	PALETTE(config, "palette", palette_device::MONOCHROME);
 	//GFXDECODE(config, "gfxdecode", "palette", gfx_micral);
 
-	CRT5037(config, m_crtc, 4000000 / 8);  // xtal freq unknown
+	CRT5037(config, m_crtc, XTAL::u(4000000) / 8);  // xtal freq unknown
 	m_crtc->set_char_width(8);  // unknown
 	//m_crtc->vsyn_callback().set(TMS5501_TAG, FUNC(tms5501_device::sens_w));
 	m_crtc->set_screen("screen");

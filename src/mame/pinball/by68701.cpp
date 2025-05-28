@@ -61,7 +61,7 @@ void by68701_state::init_by68701()
 void by68701_state::by68701(machine_config &config)
 {
 	/* basic machine hardware */
-	M6803(config, m_maincpu, 3579545/4);
+	M6803(config, m_maincpu, XTAL::u(3579545)/4);
 	m_maincpu->set_addrmap(AS_PROGRAM, &by68701_state::by68701_map);
 }
 

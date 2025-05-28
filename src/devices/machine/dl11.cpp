@@ -86,10 +86,10 @@ void dl11_device::device_reset()
 
 	// create the timers
 	if (m_rxc > 0)
-		set_rcv_rate(m_rxc);
+		set_rcv_rate(XTAL::u(m_rxc));
 
 	if (m_txc > 0)
-		set_tra_rate(m_txc);
+		set_tra_rate(XTAL::u(m_txc));
 
 	m_rcsr = m_rbuf = m_tbuf = 0;
 	m_tcsr = CSR_DONE;

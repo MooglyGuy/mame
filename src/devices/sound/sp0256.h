@@ -52,7 +52,7 @@ public:
 	void spb640_w(offs_t offset, uint16_t data);
 
 	TIMER_CALLBACK_MEMBER(set_lrq_timer_proc);
-	void set_clock(int clock);
+	void set_clock(const XTAL &clock);
 	void bitrevbuff(uint8_t *buffer, unsigned int start, unsigned int length);
 
 protected:

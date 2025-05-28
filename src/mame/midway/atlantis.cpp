@@ -821,7 +821,7 @@ void atlantis_state::mwskins(machine_config &config)
 
 	PCI_ROOT(config, "pci");
 
-	vrc4373_device &vrc4373(VRC4373(config, PCI_ID_NILE, 0, m_maincpu));
+	vrc4373_device &vrc4373(VRC4373(config, PCI_ID_NILE, m_maincpu));
 	vrc4373.set_ram_size(0x00800000);
 
 	pci9050_device &pci9050(PCI9050(config, PCI_ID_9050));

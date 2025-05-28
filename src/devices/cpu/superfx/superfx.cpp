@@ -546,7 +546,7 @@ void superfx_device::mmio_write(uint32_t addr, uint8_t data)
 	}
 }
 
-void superfx_device::superfx_add_clocks_internal(const XTAL &clocks)
+void superfx_device::superfx_add_clocks_internal(const uint32_t clocks)
 {
 	if(m_romcl)
 	{

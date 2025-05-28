@@ -817,7 +817,7 @@ void pi4d3x_state::common(machine_config &config)
 		{
 			wd33c9x_base_device &wd33c93(downcast<wd33c9x_base_device &>(*device));
 
-			wd33c93.set_clock(10'000'000);
+			wd33c93.set_clock(XTAL::u(10'000'000));
 			wd33c93.irq_cb().set(*this, &pi4d3x_state::lio_interrupt<0, 2>, "lio0.2");
 			//wd33c93.drq_cb().set(*this, FUNC(pi4d2x_state::scsi_drq));
 		});

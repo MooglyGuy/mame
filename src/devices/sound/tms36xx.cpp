@@ -356,8 +356,8 @@ void tms36xx_device::device_start()
 	int enable = 0;
 
 	m_channel = stream_alloc(0, 1, clock() * 64);
-	m_samplerate = clock() * 64;
-	m_basefreq = clock();
+	m_samplerate = clock().value() * 64;
+	m_basefreq = clock().value();
 
 	for (int j = 0; j < 6; j++)
 	{

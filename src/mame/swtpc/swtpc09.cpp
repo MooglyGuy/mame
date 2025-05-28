@@ -504,7 +504,7 @@ void swtpc09_state::swtpc09_base(machine_config &config)
 
 	// IO9 at 0xe090 is used internally by the MPID board 6840 timer.
 	PTM6840(config, m_ptm, XTAL::u(2000000));
-	m_ptm->set_external_clocks(XTAL::u(50), XTAL()0, XTAL::u(50));
+	m_ptm->set_external_clocks(XTAL::u(50), XTAL(), XTAL::u(50));
 	m_ptm->o1_callback().set(FUNC(swtpc09_state::ptm_o1_callback));
 	m_ptm->o3_callback().set(FUNC(swtpc09_state::ptm_o3_callback));
 	m_ptm->irq_callback().set(FUNC(swtpc09_state::ptm_irq));

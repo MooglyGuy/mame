@@ -127,7 +127,7 @@ void mos6551_device::device_start()
 	save_item(NAME(m_tx_irq_enable));
 	save_item(NAME(m_tx_internal_clock));
 
-	m_internal_clock->set_unscaled_clock(m_xtal);
+	m_internal_clock->set_unscaled_clock(XTAL::u(m_xtal));
 
 	output_txd(1);
 	output_rxc(1);
@@ -444,7 +444,7 @@ void mos6551_device::set_xtal(uint32_t xtal)
 
 	if (started())
 	{
-		m_internal_clock->set_unscaled_clock(m_xtal);
+		m_internal_clock->set_unscaled_clock(XTAL::u(m_xtal));
 		update_divider();
 	}
 }

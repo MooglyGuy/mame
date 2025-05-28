@@ -462,7 +462,7 @@ void chance32_state::machine_reset()
 void chance32_state::chance32(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 12000000/2);
+	Z80(config, m_maincpu, XTAL::u(12000000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &chance32_state::chance32_map);
 	m_maincpu->set_addrmap(AS_IO, &chance32_state::chance32_portmap);
 	m_maincpu->set_vblank_int("screen", FUNC(chance32_state::irq0_line_hold));
@@ -476,7 +476,7 @@ void chance32_state::chance32(machine_config &config)
 	screen.set_visarea(0, 35*16-1, 0, 29*8-1);
 	screen.set_screen_update(FUNC(chance32_state::screen_update_chance32));
 
-	hd6845s_device &crtc(HD6845S(config, "crtc", 12000000/16));   /* 52.786 Hz (similar to Major Poker) */
+	hd6845s_device &crtc(HD6845S(config, "crtc", XTAL::u(12000000) / 16));   /* 52.786 Hz (similar to Major Poker) */
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(16);

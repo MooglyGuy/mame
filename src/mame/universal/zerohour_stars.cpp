@@ -24,7 +24,7 @@
 DEFINE_DEVICE_TYPE(ZEROHOUR_STARS, zerohour_stars_device, "zerohour_stars", "Zero Hour/Red Clash/Space Raider starfield")
 
 
-zerohour_stars_device::zerohour_stars_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+zerohour_stars_device::zerohour_stars_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ZEROHOUR_STARS, tag, owner, clock)
 	, m_enable(0)
 	, m_speed(0)

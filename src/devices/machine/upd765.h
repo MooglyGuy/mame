@@ -528,12 +528,12 @@ public:
 
 class pc8477b_device : public ps2_fdc_device {
 public:
-	pc8477b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, mode_t mode)
+	pc8477b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, mode_t mode)
 		: pc8477b_device(mconfig, tag, owner, clock)
 	{
 		set_mode(mode);
 	}
-	pc8477b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pc8477b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void map(address_map &map) override;
 };

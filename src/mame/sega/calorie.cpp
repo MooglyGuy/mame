@@ -506,7 +506,7 @@ void calorie_state::calorie(machine_config &config)
 void calorie_state::caloriee(machine_config &config)
 {
 	calorie(config);
-	sega_317_0004_device &maincpu(SEGA_317_0004(config.replace(), m_maincpu, 4000000));         /* 4 MHz */
+	sega_317_0004_device &maincpu(SEGA_317_0004(config.replace(), m_maincpu, XTAL::u(4000000)));         /* 4 MHz */
 	maincpu.set_addrmap(AS_PROGRAM, &calorie_state::calorie_map);
 	maincpu.set_addrmap(AS_OPCODES, &calorie_state::decrypted_opcodes_map);
 	maincpu.set_vblank_int("screen", FUNC(calorie_state::irq0_line_hold));

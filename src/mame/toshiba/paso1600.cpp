@@ -294,7 +294,7 @@ void paso1600_state::pc_dma_write_byte(offs_t offset, uint8_t data)
 void paso1600_state::paso1600(machine_config &config)
 {
 	/* basic machine hardware */
-	I8086(config, m_maincpu, 16000000/2);
+	I8086(config, m_maincpu, XTAL::u(16000000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &paso1600_state::paso1600_map);
 	m_maincpu->set_addrmap(AS_IO, &paso1600_state::paso1600_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259", FUNC(pic8259_device::inta_cb));
@@ -312,7 +312,7 @@ void paso1600_state::paso1600(machine_config &config)
 	PALETTE(config, m_palette).set_entries(8);
 
 	/* Devices */
-	mc6845_device &crtc(MC6845(config, "crtc", 16000000/4));    /* unknown variant, unknown clock, hand tuned to get ~60 fps */
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(16000000)/4));    /* unknown variant, unknown clock, hand tuned to get ~60 fps */
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8);
@@ -320,7 +320,7 @@ void paso1600_state::paso1600(machine_config &config)
 	PIC8259(config, m_pic);
 	m_pic->out_int_callback().set_inputline(m_maincpu, 0);
 
-	AM9517A(config, m_dma, 16000000/4);
+	AM9517A(config, m_dma, XTAL::u(16000000)/4);
 	m_dma->in_memr_callback().set(FUNC(paso1600_state::pc_dma_read_byte));
 	m_dma->out_memw_callback().set(FUNC(paso1600_state::pc_dma_write_byte));
 }

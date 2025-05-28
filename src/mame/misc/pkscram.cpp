@@ -340,7 +340,7 @@ void pkscram_state::pkscramble(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym2203_device &ymsnd(YM2203(config, "ymsnd", 12000000/4));
+	ym2203_device &ymsnd(YM2203(config, "ymsnd", XTAL::u(12000000)/4));
 	ymsnd.irq_handler().set(FUNC(pkscram_state::irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.60);
 }

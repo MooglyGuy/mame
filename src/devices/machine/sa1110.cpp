@@ -451,8 +451,9 @@ void sa1110_periphs_device::uart_recalculate_divisor()
 {
 	// TODO: Handle external UART clocking
 	const int multiplier = (((m_uart_regs.utcr[1] & 0x0f) << 8) | (m_uart_regs.utcr[2] & 0xff)) + 1;
-	set_rcv_rate(INTERNAL_OSC, multiplier * 16);
-	set_tra_rate(INTERNAL_OSC, multiplier * 16);
+	const XTAL uart_rate = XTAL::u(INTERNAL_OSC) / (multiplier * 16);
+	set_rcv_rate(uart_rate);
+	set_tra_rate(uart_rate);
 
 	receive_register_reset();
 	transmit_register_reset();

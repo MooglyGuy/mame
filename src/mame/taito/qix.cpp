@@ -603,7 +603,7 @@ INPUT_PORTS_END
 void qix_state::qix_base(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809E(config, m_maincpu, MAIN_CLOCK_OSC/4/4);  /* 1.25 MHz */
+	MC6809E(config, m_maincpu, MAIN_CLOCK_OSC / 4 / 4);  /* 1.25 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &qix_state::main_map);
 
 	// high interleave needed to ensure correct text in service mode
@@ -700,7 +700,7 @@ void qix_state::slither(machine_config &config)
 
 	/* basic machine hardware */
 
-	m_maincpu->set_clock(SLITHER_CLOCK_OSC/4/4);   /* 1.34 MHz */
+	m_maincpu->set_clock(SLITHER_CLOCK_OSC / 4 / 4);   /* 1.34 MHz */
 
 	m_pia1->readpa_handler().set(FUNC(qix_state::slither_trak_lr_r));
 	m_pia1->writepb_handler().set(FUNC(qix_state::slither_76489_0_w));

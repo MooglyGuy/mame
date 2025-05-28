@@ -500,7 +500,7 @@ void svision_state::svision_base(machine_config &config)
 
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
-	SVISION_SND(config, m_sound, 4000000, m_maincpu, m_bank1);
+	SVISION_SND(config, m_sound, XTAL::u(4000000), m_maincpu, m_bank1);
 	m_sound->add_route(0, "lspeaker", 0.50);
 	m_sound->add_route(1, "rspeaker", 0.50);
 	m_sound->irq_cb().set(FUNC(svision_state::sound_irq_w));
@@ -548,7 +548,7 @@ void svision_state::svisionp(machine_config &config)
 void svision_state::svisionn(machine_config &config)
 {
 	svision(config);
-	m_maincpu->set_clock(3560000/*?*/);
+	m_maincpu->set_clock(XTAL::u(3560000)/*?*/);
 	m_screen->set_refresh(HZ_TO_ATTOSECONDS(60));
 	m_palette->set_init(FUNC(svision_state::svisionn_palette));
 }

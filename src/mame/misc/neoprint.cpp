@@ -541,7 +541,7 @@ void neoprint_state::neoprint(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 24000000 / 3));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(24000000) / 3));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "lspeaker", 0.60);
 	ymsnd.add_route(0, "rspeaker", 0.60);
@@ -587,7 +587,7 @@ void neoprint_state::nprsp(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 24000000 / 3));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(24000000) / 3));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "lspeaker", 0.60);
 	ymsnd.add_route(0, "rspeaker", 0.60);

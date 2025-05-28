@@ -44,12 +44,7 @@ public:
 	virtual void bus_w(offs_t offset, u8 data);
 
 protected:
-	dl1414_device(
-			machine_config const &mconfig,
-			device_type type,
-			char const *tag,
-			device_t *owner,
-			const XTAL &clock);
+	dl1414_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device-level overrides
 	virtual void device_start() override;

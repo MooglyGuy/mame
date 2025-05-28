@@ -140,7 +140,7 @@ void device_v5x_interface::interface_clock_changed(bool sync_on_new_clock_domain
 void device_v5x_interface::tcu_clock_update()
 {
 	for (int i = 0; i < 3; i++)
-		m_tcu->set_clockin(i, BIT(m_TCKS, i + 2) ? m_tclk : device().clock() / double(4 << (m_TCKS & 3)));
+		m_tcu->set_clockin(i, BIT(m_TCKS, i + 2) ? m_tclk : device().clock().dvalue() / (4 << (m_TCKS & 3)));
 }
 
 WRITE_LINE_MEMBER(device_v5x_interface::tclk_w)

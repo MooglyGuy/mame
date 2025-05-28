@@ -19,7 +19,7 @@ public:
 		m_ram.set_tag(std::forward<V>(ram_tag));
 	}
 
-	m20_8086_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	m20_8086_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint16_t z8000_io_r(offs_t offset, uint16_t mem_mask = ~0);
 	void z8000_io_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);

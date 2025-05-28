@@ -23,7 +23,7 @@
 
 #define C6280_TAG           "c6280"
 
-#define MAIN_CLOCK      21477270
+#define MAIN_CLOCK    		XTAL::u(21477270)
 
 #define TG_16_JOY_SIG       0x00
 #define PCE_JOY_SIG         0x40

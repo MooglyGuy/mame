@@ -175,7 +175,7 @@ void palm_state::palm_map(address_map &map)
 void palm_state::palm(machine_config &config)
 {
 	/* basic machine hardware */
-	MC68328(config, m_maincpu, 32768*506);        /* 16.580608 MHz */
+	MC68328(config, m_maincpu, XTAL::u(32768) * 506);        /* 16.580608 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &palm_state::palm_map);
 	m_maincpu->set_dasm_override(FUNC(palm_state::palm_dasm_override));
 	m_maincpu->out_port_f().set(FUNC(palm_state::palm_port_f_out));

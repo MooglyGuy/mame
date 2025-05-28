@@ -2186,12 +2186,12 @@ INPUT_PORTS_END
 void nbmj8891_state::gionbana(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 20000000/4);    /* 5.00 MHz ? */
+	Z80(config, m_maincpu, XTAL::u(20000000)/4);    /* 5.00 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &nbmj8891_state::gionbana_map);
 	m_maincpu->set_addrmap(AS_IO, &nbmj8891_state::gionbana_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(nbmj8891_state::irq0_line_hold));
 
-	NB1413M3(config, m_nb1413m3, 0, NB1413M3_GIONBANA);
+	NB1413M3(config, m_nb1413m3, XTAL(), NB1413M3_GIONBANA);
 
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
@@ -2239,7 +2239,7 @@ void nbmj8891_state::omotesnd(machine_config &config)
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
 	/* sound hardware */
-	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", 1250000));
+	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", XTAL::u(1250000)));
 	fmsnd.port_a_read_callback().set_ioport("DSWA");
 	fmsnd.port_b_read_callback().set_ioport("DSWB");
 	fmsnd.add_route(ALL_OUTPUTS, "speaker", 0.35);
@@ -2496,7 +2496,7 @@ void nbmj8891_state::mjfocusm(machine_config &config)
 	MCFG_VIDEO_START_OVERRIDE(nbmj8891_state,_1layer)
 
 	/* sound hardware */
-	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", 1250000));
+	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", XTAL::u(1250000)));
 	fmsnd.port_a_read_callback().set_ioport("DSWA");
 	fmsnd.port_b_read_callback().set_ioport("DSWB");
 	fmsnd.add_route(ALL_OUTPUTS, "speaker", 0.7);
@@ -2527,7 +2527,7 @@ void nbmj8891_state::taiwanmb(machine_config &config)
 	MCFG_VIDEO_START_OVERRIDE(nbmj8891_state,_1layer)
 
 	/* sound hardware */
-	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", 1250000));
+	ay8910_device &fmsnd(AY8910(config.replace(), "fmsnd", XTAL::u(1250000)));
 	fmsnd.port_a_read_callback().set_ioport("DSWA");
 	fmsnd.port_b_read_callback().set_ioport("DSWB");
 	fmsnd.add_route(ALL_OUTPUTS, "speaker", 0.7);

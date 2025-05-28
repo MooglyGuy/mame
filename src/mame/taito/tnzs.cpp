@@ -1588,7 +1588,7 @@ void tnzs_base_state::tnzs_base(machine_config &config)
 void tnzs_mcu_state::tnzs(machine_config &config)
 {
 	tnzs_base(config);
-	I8742(config, m_mcu, 12000000/2);  /* 400KHz ??? - Main board Crystal is 12MHz */
+	I8742(config, m_mcu, XTAL::u(12000000)/2);  /* 400KHz ??? - Main board Crystal is 12MHz */
 	m_mcu->p1_in_cb().set(FUNC(tnzs_mcu_state::mcu_port1_r));
 	m_mcu->p2_in_cb().set_ioport("IN2");
 	m_mcu->p2_out_cb().set(FUNC(tnzs_mcu_state::mcu_port2_w));

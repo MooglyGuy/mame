@@ -76,7 +76,7 @@ public:
 	virtual image_init_result load(std::string &message) override ATTR_COLD;
 
 protected:
-	mbc7_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mbc7_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -109,7 +109,7 @@ private:
 class mbc7_2k_device : public mbc7_device_base
 {
 public:
-	mbc7_2k_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	mbc7_2k_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc7_device_base(mconfig, GB_ROM_MBC7_2K, tag, owner, clock)
 	{
 	}
@@ -117,7 +117,7 @@ public:
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD
 	{
-		EEPROM_93C56_16BIT(config, m_eeprom, 0);
+		EEPROM_93C56_16BIT(config, m_eeprom);
 	}
 };
 
@@ -125,7 +125,7 @@ protected:
 class mbc7_4k_device : public mbc7_device_base
 {
 public:
-	mbc7_4k_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	mbc7_4k_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc7_device_base(mconfig, GB_ROM_MBC7_4K, tag, owner, clock)
 	{
 	}
@@ -133,7 +133,7 @@ public:
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD
 	{
-		EEPROM_93C66_16BIT(config, m_eeprom, 0);
+		EEPROM_93C66_16BIT(config, m_eeprom);
 	}
 };
 
@@ -208,7 +208,7 @@ mbc7_device_base::mbc7_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_device_base(mconfig, type, tag, owner, clock),
 	m_eeprom(*this, "eeprom"),
 	m_accel(*this, "ACCEL%c", 'X'),

@@ -36,7 +36,7 @@ protected:
 
 	void set_clock_divider(const uint32_t divider);
 
-	static constexpr double BASE_FREQUENCY = 44100;
+	static constexpr XTAL BASE_FREQUENCY = XTAL::u(44100);
 	static constexpr size_t BUFFER_SIZE = 65536;
 
 	enum : uint8_t
@@ -83,7 +83,6 @@ protected:
 	uint32_t m_bufin[2];
 	uint32_t m_bufout[2];
 	stream_buffer::sample_t m_volume;
-	double m_frequency;
 
 	uint8_t m_data_transfer_mode;
 	uint8_t m_status_reg;

@@ -139,7 +139,7 @@ GFXDECODE_END
 void starcrus_state::starcrus(machine_config &config)
 {
 	/* basic machine hardware */
-	I8080(config, m_maincpu, 9750000/9);  /* 8224 chip is a divide by 9 */
+	I8080(config, m_maincpu, XTAL::u(9750000)/9);  /* 8224 chip is a divide by 9 */
 	m_maincpu->set_addrmap(AS_PROGRAM, &starcrus_state::starcrus_map);
 	m_maincpu->set_addrmap(AS_IO, &starcrus_state::starcrus_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(starcrus_state::irq0_line_hold));

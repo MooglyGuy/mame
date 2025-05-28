@@ -202,7 +202,7 @@ ef9365_device::ef9365_device(const machine_config &mconfig, const char *tag, dev
 	m_palette(*this, finder_base::DUMMY_TAG),
 	m_irq_handler(*this)
 {
-	clock_freq = clock;
+	clock_freq = clock.value();
 }
 
 //-------------------------------------------------

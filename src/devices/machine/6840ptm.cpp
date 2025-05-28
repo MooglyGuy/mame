@@ -281,7 +281,7 @@ int ptm6840_device::compute_counter(int idx) const
 	// determine the clock frequency for this timer
 	if (m_control_reg[idx] & INTERNAL_CLK_EN)
 	{
-		clk = clock();
+		clk = clock().value();
 	}
 	else
 	{
@@ -327,7 +327,7 @@ void ptm6840_device::reload_counter(int idx)
 	double clk;
 	if (m_control_reg[idx] & INTERNAL_CLK_EN)
 	{
-		clk = static_cast<double> (clock());
+		clk = clock().dvalue();
 		LOGMASKED(LOG_COUNTERS, "Timer #%d internal clock freq %f \n", idx + 1, clk);
 	}
 	else
@@ -719,7 +719,7 @@ void ptm6840_device::update_expiration_for_clock_source(int idx, bool changed_to
 	if (!(m_control_reg[0] & RESET_TIMERS))
 	{
 		double divisor = idx == 2 ? m_t3_divisor : 1.0;
-		double clk = (m_control_reg[idx] & INTERNAL_CLK_EN ? static_cast<double>(clock()) : new_external_clock) / divisor;
+		double clk = (m_control_reg[idx] & INTERNAL_CLK_EN ? clock().dvalue() : new_external_clock) / divisor;
 
 		// First, figure out how much time was remaining on the counter
 		if (changed_to_external)

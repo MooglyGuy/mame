@@ -834,7 +834,7 @@ void chinagat_state::saiyugoub1(machine_config &config)
 	ymsnd.add_route(0, "mono", 0.80);
 	ymsnd.add_route(1, "mono", 0.80);
 
-	MSM5205(config, m_adpcm, 9263750 / 24);
+	MSM5205(config, m_adpcm, XTAL::u(9263750) / 24);
 	m_adpcm->vck_legacy_callback().set(FUNC(chinagat_state::saiyugoub1_m5205_irq_w)); /* Interrupt function */
 	m_adpcm->set_prescaler_selector(msm5205_device::S64_4B);    /* vclk input mode (6030Hz, 4-bit) */
 	m_adpcm->add_route(ALL_OUTPUTS, "mono", 0.60);

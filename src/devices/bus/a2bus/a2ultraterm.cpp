@@ -46,8 +46,8 @@ namespace {
 #define ULTRATERM_SCREEN_NAME "uterm_screen"
 #define ULTRATERM_MC6845_NAME "mc6845_uterm"
 
-#define CLOCK_LOW   17430000
-#define CLOCK_HIGH  28759500
+#define CLOCK_LOW   XTAL::u(17430000)
+#define CLOCK_HIGH  XTAL::u(28759500)
 
 #define CT1_MEMSEL  (0x80)  // 0 for read RAM at cc00, 1 for read ROM
 #define CT1_VIDSEL  (0x40)  // 0 for Apple video passthrough, 1 for 6845 video

@@ -642,7 +642,7 @@ uint32_t gt64xxx_device::cpu_if_r(offs_t offset)
 			result = timer->count;
 			if (timer->active)
 			{
-				uint32_t elapsed = (timer->timer->elapsed() * clock()).as_double();
+				uint32_t elapsed = (timer->timer->elapsed() * clock().value()).as_double();
 				result = (result > elapsed) ? (result - elapsed) : 0;
 			}
 
@@ -799,7 +799,7 @@ void gt64xxx_device::cpu_if_w(address_space &space, offs_t offset, uint32_t data
 				}
 				else if (timer->active && !(data & mask))
 				{
-					uint32_t elapsed = (timer->timer->elapsed() * clock()).as_double();
+					uint32_t elapsed = (timer->timer->elapsed() * clock().value()).as_double();
 					timer->active = 0;
 					timer->count = (timer->count > elapsed) ? (timer->count - elapsed) : 0;
 					timer->timer->adjust(attotime::never, which);

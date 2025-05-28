@@ -387,7 +387,7 @@ omti8621_device::omti8621_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_fdc(*this, OMTI_FDC_TAG)
@@ -1348,7 +1348,7 @@ void omti8621_device::fd_rate_w(uint8_t data)
 {
 	// Bit 1 = FD_MINI (connects to pin 3 of FDC9239)
 	// Bit 0 = FD_RATE (inverted output connects to pin 4 of 74F163)
-	u32 fdc_clk = (48_MHz_XTAL / (BIT(data, 0) ? 5 : 3) / (BIT(data, 1) ? 4 : 2)).value();
+	const XTAL fdc_clk = (48_MHz_XTAL / (BIT(data, 0) ? 5 : 3) / (BIT(data, 1) ? 4 : 2));
 	m_fdc->set_unscaled_clock(fdc_clk);
 	m_fdc->set_rate(fdc_clk / 16);
 }

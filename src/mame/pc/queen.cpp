@@ -283,7 +283,7 @@ void queen_state::machine_reset()
 
 void queen_state::queen(machine_config &config)
 {
-	PENTIUM3(config, m_maincpu, 533000000/16); // Celeron or Pentium 3, 533 Mhz
+	PENTIUM3(config, m_maincpu, XTAL::u(533000000)/16); // Celeron or Pentium 3, 533 Mhz
 	m_maincpu->set_addrmap(AS_PROGRAM, &queen_state::queen_map);
 	m_maincpu->set_addrmap(AS_IO, &queen_state::queen_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_1", FUNC(pic8259_device::inta_cb));

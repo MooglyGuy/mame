@@ -24,11 +24,11 @@
 #include "screen.h"
 
 
-#define MAIN_CLOCK_OSC          20000000    /* 20 MHz */
-#define SLITHER_CLOCK_OSC       21300000    /* 21.3 MHz */
-#define SOUND_CLOCK_OSC         7372800     /* 7.3728 MHz */
-#define COIN_CLOCK_OSC          4000000     /* 4 MHz */
-#define QIX_CHARACTER_CLOCK     (20000000/2/16)
+#define MAIN_CLOCK_OSC          XTAL::u(20000000)	/* 20 MHz */
+#define SLITHER_CLOCK_OSC       XTAL::u(21300000)	/* 21.3 MHz */
+#define SOUND_CLOCK_OSC         XTAL::u(7372800)	/* 7.3728 MHz */
+#define COIN_CLOCK_OSC          XTAL::u(4000000)	/* 4 MHz */
+#define QIX_CHARACTER_CLOCK     (XTAL::u(20000000) / 2 / 16)
 
 class qix_state : public driver_device
 {

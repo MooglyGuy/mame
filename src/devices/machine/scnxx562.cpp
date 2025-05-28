@@ -1981,7 +1981,7 @@ void duscc_channel::do_dusccreg_ccr_w(uint8_t data)
 	case REG_CCR_ENABLE_TX: LOGINT("- Enable Tx\n");
 		m_uart->m_gsr |= (m_index == duscc_device::CHANNEL_A ? REG_GSR_CHAN_A_TXREADY : REG_GSR_CHAN_B_TXREADY);
 		m_tra = 1;
-		set_tra_rate(m_brg_tx_rate);
+		set_tra_rate(XTAL::u(m_brg_tx_rate));
 		break;
 
 	/* Disable transmitter. Terminates transmitter operation and places the TXD output in the
@@ -2016,7 +2016,7 @@ void duscc_channel::do_dusccreg_ccr_w(uint8_t data)
 	  channel protocol mode. Has no effect if invoked when the receiver has previously been enabled.*/
 	case REG_CCR_ENABLE_RX: LOGINT("- Enable Rx\n");
 		m_rcv = 1;
-		set_rcv_rate(m_brg_rx_rate);
+		set_rcv_rate(XTAL::u(m_brg_rx_rate));
 		break;
 
 	/* Disable receiver. Terminates operation of the receiver. Any character currently being assembled
@@ -2541,27 +2541,27 @@ void duscc_channel::update_serial()
 
 	if (m_rxc > 0)
 	{
-		set_rcv_rate(m_rxc / clocks);
+		set_rcv_rate(XTAL::u(m_rxc) / clocks);
 				LOG("   - Receiver clock: %d mode: %d rate: %d/%xh\n", m_rxc, clocks, m_rxc / clocks, m_rxc / clocks);
 	}
 
 	clocks = get_tx_clock_mode();
 	if (m_txc > 0)
 	{
-		set_tra_rate(m_txc / clocks);
+		set_tra_rate(XTAL::u(m_txc) / clocks);
 		LOG("   - Transmit clock: %d mode: %d rate: %d/%xh\n", m_rxc, clocks, m_rxc / clocks, m_rxc / clocks);
 	}
 
 	if (m_brg_rx_rate != 0)
 	{
 		if (m_brg_rx_rate == 1) m_brg_rx_rate = 0; // BRG being disabled
-		set_rcv_rate(m_brg_rx_rate);
+		set_rcv_rate(XTAL::u(m_brg_rx_rate));
 		LOG("   - Baud Rate Generator: %d mode: RX:%dx\n", m_brg_rx_rate, get_rx_clock_mode());
 	}
 	if (m_brg_tx_rate != 0)
 	{
 		if (m_brg_tx_rate == 1) m_brg_tx_rate = 0; // BRG being disabled
-		set_tra_rate(m_brg_tx_rate);
+		set_tra_rate(XTAL::u(m_brg_tx_rate));
 		LOG("   - Baud Rate Generator: %d mode: TX:%dx\n", m_brg_tx_rate, get_tx_clock_mode());
 	}
 }

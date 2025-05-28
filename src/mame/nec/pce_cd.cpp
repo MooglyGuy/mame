@@ -73,7 +73,7 @@ CD Interface Register 0x0f - ADPCM fade in/out register
 #include "pce_cd.h"
 
 
-#define PCE_CD_CLOCK    9216000
+#define PCE_CD_CLOCK    XTAL::u(9216000)
 
 
 // TODO: it's actually a common interface with PC-8801, find actual number part

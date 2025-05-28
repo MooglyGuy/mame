@@ -34,7 +34,7 @@ device_mononcol_cart_interface::~device_mononcol_cart_interface()
 //  mononcol_cartslot_device
 //**************************************************************************
 
-mononcol_cartslot_device::mononcol_cartslot_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+mononcol_cartslot_device::mononcol_cartslot_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_cartrom_image_interface(mconfig, *this),
 	device_single_card_slot_interface<device_mononcol_cart_interface>(mconfig, *this),
@@ -43,7 +43,7 @@ mononcol_cartslot_device::mononcol_cartslot_device(machine_config const &mconfig
 }
 
 
-mononcol_cartslot_device::mononcol_cartslot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mononcol_cartslot_device::mononcol_cartslot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mononcol_cartslot_device(mconfig, MONONCOL_CARTSLOT, tag, owner, clock)
 {
 }

@@ -473,10 +473,10 @@ WRITE_LINE_MEMBER(mirax_state::vblank_irq)
 
 void mirax_state::mirax(machine_config &config)
 {
-	Z80(config, m_maincpu, 12000000/4); // ceramic potted module, encrypted z80
+	Z80(config, m_maincpu, XTAL::u(12000000)/4); // ceramic potted module, encrypted z80
 	m_maincpu->set_addrmap(AS_PROGRAM, &mirax_state::mirax_main_map);
 
-	Z80(config, m_audiocpu, 12000000/4);
+	Z80(config, m_audiocpu, XTAL::u(12000000)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &mirax_state::mirax_sound_map);
 	m_audiocpu->set_periodic_int(FUNC(mirax_state::irq0_line_hold), attotime::from_hz(4*60));
 
@@ -506,8 +506,8 @@ void mirax_state::mirax(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	AY8912(config, m_ay[0], 12000000/4).add_route(ALL_OUTPUTS, "mono", 0.80);
-	AY8912(config, m_ay[1], 12000000/4).add_route(ALL_OUTPUTS, "mono", 0.80);
+	AY8912(config, m_ay[0], XTAL::u(12000000)/4).add_route(ALL_OUTPUTS, "mono", 0.80);
+	AY8912(config, m_ay[1], XTAL::u(12000000)/4).add_route(ALL_OUTPUTS, "mono", 0.80);
 }
 
 

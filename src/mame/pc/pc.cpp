@@ -376,7 +376,7 @@ void pc_state::bondwell(machine_config &config)
 {
 	pccga(config);
 
-	i8088_cpu_device &maincpu(I8088(config.replace(), "maincpu", 4772720)); /* turbo? */
+	i8088_cpu_device &maincpu(I8088(config.replace(), "maincpu", XTAL::u(4772720))); /* turbo? */
 	maincpu.set_addrmap(AS_PROGRAM, &pc_state::pc8_map);
 	maincpu.set_addrmap(AS_IO, &pc_state::pc8_io);
 	maincpu.set_irq_acknowledge_callback("mb:pic8259", FUNC(pic8259_device::inta_cb));
@@ -572,7 +572,7 @@ void pc_state::eagle1600(machine_config &config)
 {
 	pccga(config);
 
-	i8086_cpu_device &maincpu(I8086(config.replace(), "maincpu", 8000000));
+	i8086_cpu_device &maincpu(I8086(config.replace(), "maincpu", XTAL::u(8000000)));
 	maincpu.set_addrmap(AS_PROGRAM, &pc_state::pc16_map);
 	maincpu.set_addrmap(AS_IO, &pc_state::pc16_io);
 	maincpu.set_irq_acknowledge_callback("mb:pic8259", FUNC(pic8259_device::inta_cb));
@@ -2306,7 +2306,7 @@ void pc_state::fraking(machine_config &config)
 {
 	pccga(config);
 
-	v20_device &maincpu(V20(config.replace(), "maincpu", 8000000));
+	v20_device &maincpu(V20(config.replace(), "maincpu", XTAL::u(8000000)));
 	maincpu.set_addrmap(AS_PROGRAM, &pc_state::pc8_map);
 	maincpu.set_addrmap(AS_IO, &pc_state::pc8_io);
 	maincpu.set_irq_acknowledge_callback("mb:pic8259", FUNC(pic8259_device::inta_cb));

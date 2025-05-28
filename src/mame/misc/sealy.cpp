@@ -35,7 +35,7 @@ Notes:
 #include "speaker.h"
 
 // 13.0 MHz? PCB is labeled with 13.5M
-#define MAIN_CLOCK  13000000
+#define MAIN_CLOCK  XTAL::u(13000000)
 
 class sealy_state : public driver_device
 {

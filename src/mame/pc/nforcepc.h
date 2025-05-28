@@ -31,7 +31,7 @@ public:
 		set_cpu_tag(std::forward<T>(cpu_tag));
 		biosrom.set_tag(bios_device_tag);
 	}
-	crush11_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	crush11_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_cpu_tag(T &&tag) { cpu.set_tag(std::forward<T>(tag)); }
 	const char *get_cpu_tag() { return cpu.finder_tag(); }
@@ -71,7 +71,7 @@ DECLARE_DEVICE_TYPE(CRUSH11, crush11_host_device)
 class crush11_memory_device : public pci_device {
 public:
 	crush11_memory_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, uint32_t subsystem_id, int ram_size);
-	crush11_memory_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	crush11_memory_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void set_ram_size(int ram_size);
 
@@ -98,7 +98,7 @@ DECLARE_DEVICE_TYPE(CRUSH11_MEMORY, crush11_memory_device)
 class smbus_logger_device : public device_t, public smbus_interface
 {
 public:
-	smbus_logger_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	smbus_logger_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual int execute_command(int command, int rw, int data) override;
 	uint8_t *get_buffer() { return buffer; }
 
@@ -118,7 +118,7 @@ class smbus_rom_device : public device_t, public smbus_interface
 {
 public:
 	smbus_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const uint8_t *data, int size);
-	smbus_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	smbus_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual int execute_command(int command, int rw, int data) override;
 
 protected:
@@ -138,7 +138,7 @@ DECLARE_DEVICE_TYPE(SMBUS_ROM, smbus_rom_device)
 class as99127f_device : public device_t, public smbus_interface
 {
 public:
-	as99127f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	as99127f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual int execute_command(int command, int rw, int data) override;
 	uint8_t *get_buffer() { return buffer; }
 
@@ -154,7 +154,7 @@ DECLARE_DEVICE_TYPE(AS99127F, as99127f_device)
 class as99127f_sensor2_device : public device_t, public smbus_interface
 {
 public:
-	as99127f_sensor2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	as99127f_sensor2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual int execute_command(int command, int rw, int data) override;
 	uint8_t *get_buffer() { return buffer; }
 
@@ -170,7 +170,7 @@ DECLARE_DEVICE_TYPE(AS99127F_SENSOR2, as99127f_sensor2_device)
 class as99127f_sensor3_device : public device_t, public smbus_interface
 {
 public:
-	as99127f_sensor3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	as99127f_sensor3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual int execute_command(int command, int rw, int data) override;
 	uint8_t *get_buffer() { return buffer; }
 
@@ -188,7 +188,7 @@ DECLARE_DEVICE_TYPE(AS99127F_SENSOR3, as99127f_sensor3_device)
 class it8703f_device : public device_t, public lpcbus_device_interface
 {
 public:
-	it8703f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	it8703f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual void map_extra(address_space *memory_space, address_space *io_space) override;
 	virtual void set_host(int index, lpcbus_host_interface *host) override;
 	virtual void device_add_mconfig(machine_config &config) override;

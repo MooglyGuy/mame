@@ -98,12 +98,12 @@ void im6402_device::device_start()
 	// create the timers
 	if (m_rrc > 0)
 	{
-		set_rcv_rate(m_rrc/16);
+		set_rcv_rate(XTAL::u(m_rrc)/16);
 	}
 
 	if (m_trc > 0)
 	{
-		set_tra_rate(m_trc/16);
+		set_tra_rate(XTAL::u(m_trc)/16);
 	}
 
 	// state saving

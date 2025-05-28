@@ -415,7 +415,7 @@ static void europc_fdc(device_slot_interface &device)
 //Euro PC
 void europc_pc_state::europc(machine_config &config)
 {
-	I8088(config, m_maincpu, 4772720*2);
+	I8088(config, m_maincpu, XTAL::u(4772720)*2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &europc_pc_state::europc_map);
 	m_maincpu->set_addrmap(AS_IO, &europc_pc_state::europc_io);
 	m_maincpu->set_irq_acknowledge_callback("mb:pic8259", FUNC(pic8259_device::inta_cb));

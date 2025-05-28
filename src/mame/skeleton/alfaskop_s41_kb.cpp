@@ -203,11 +203,7 @@ DEFINE_DEVICE_TYPE(ALFASKOP_S41_KB, alfaskop_s41_keyboard_device, "alfaskop_s41_
 //  alfaskop_s41_keyboard_device - constructor
 //-------------------------------------------------
 
-alfaskop_s41_keyboard_device::alfaskop_s41_keyboard_device(
-		machine_config const &mconfig,
-		char const *tag,
-		device_t *owner,
-		uint32_t clock)
+alfaskop_s41_keyboard_device::alfaskop_s41_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ALFASKOP_S41_KB, tag, owner, clock)
 	, m_mcu(*this, M6800_TAG)
 	, m_mc6846(*this, "mc6846")

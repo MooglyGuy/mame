@@ -25,7 +25,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	msx_audio_kbdc_port_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: msx_audio_kbdc_port_device(mconfig, tag, owner)
+		: msx_audio_kbdc_port_device(mconfig, tag, owner, XTAL())
 	{
 		option_reset();
 		opts(*this);

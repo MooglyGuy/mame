@@ -29,7 +29,7 @@
 #include "video/pwm.h"
 #include "babbage.lh"
 
-#define MAIN_CLOCK 25e5
+#define MAIN_CLOCK XTAL::u(25e5)
 
 class babbage_state : public driver_device
 {

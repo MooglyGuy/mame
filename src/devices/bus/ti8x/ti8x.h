@@ -75,7 +75,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *owner,
-			u32 clock);
+			const XTAL &clock);
 
 	virtual void device_start() override;
 	virtual void device_config_complete() override;

@@ -221,15 +221,15 @@ void aim65_state::aim65(machine_config &config)
 	config.set_default_layout(layout_aim65);
 
 	/* alpha-numeric display */
-	DL1416T(config, m_ds[0], u32(0));
+	DL1416T(config, m_ds[0]);
 	m_ds[0]->update().set(FUNC(aim65_state::update_ds<1>));
-	DL1416T(config, m_ds[1], u32(0));
+	DL1416T(config, m_ds[1]);
 	m_ds[1]->update().set(FUNC(aim65_state::update_ds<2>));
-	DL1416T(config, m_ds[2], u32(0));
+	DL1416T(config, m_ds[2]);
 	m_ds[2]->update().set(FUNC(aim65_state::update_ds<3>));
-	DL1416T(config, m_ds[3], u32(0));
+	DL1416T(config, m_ds[3]);
 	m_ds[3]->update().set(FUNC(aim65_state::update_ds<4>));
-	DL1416T(config, m_ds[4], u32(0));
+	DL1416T(config, m_ds[4]);
 	m_ds[4]->update().set(FUNC(aim65_state::update_ds<5>));
 
 	// pseudo-"screen" for the thermal printer. Index 0.

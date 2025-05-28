@@ -222,7 +222,7 @@ void bingoc_state::bingoc(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	YM2151(config, "ymsnd", 7159160/2).add_route(0, "lspeaker", 1.0).add_route(1, "rspeaker", 1.0);
+	YM2151(config, "ymsnd", XTAL::u(7159160)/2).add_route(0, "lspeaker", 1.0).add_route(1, "rspeaker", 1.0);
 
 	UPD7759(config, m_upd7759);
 	m_upd7759->add_route(ALL_OUTPUTS, "lspeaker", 1.0);

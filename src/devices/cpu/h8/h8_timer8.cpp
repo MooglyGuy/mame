@@ -77,7 +77,7 @@ void h8_timer8_channel_device::update_tcr()
 	case 1: case 2: case 3:
 		clock_type = DIV;
 		clock_divider = div_tab[((tcr & TCR_CKS)-1)*2 + extra_clock_bit];
-		if(V>=1) p += sprintf(p, "clock %dHz", cpu->clock()/clock_divider);
+		if(V>=1) p += sprintf(p, "clock %dHz", cpu->clock().value()/clock_divider);
 		break;
 
 	case 4:

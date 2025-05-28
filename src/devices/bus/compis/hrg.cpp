@@ -106,7 +106,7 @@ void compis_uhrg_device::device_add_mconfig(machine_config &config)
 	screen.set_visarea(0, 1280-1, 0, 800-1);
 	screen.set_screen_update(UPD7220_TAG, FUNC(upd7220_device::screen_update));
 
-	UPD7220(config, m_crtc, 2252500*2); // unknown clock
+	UPD7220(config, m_crtc, XTAL::u(2252500)*2); // unknown clock
 	m_crtc->set_addrmap(0, &compis_uhrg_device::uhrg_map);
 	m_crtc->set_display_pixels(FUNC(compis_uhrg_device::display_pixels));
 	m_crtc->set_screen(SCREEN_TAG);

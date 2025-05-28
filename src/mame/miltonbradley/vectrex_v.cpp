@@ -195,7 +195,7 @@ void vectrex_base_state::update_vector()
 
 	if (!m_ramp)
 	{
-		length = m_maincpu->clocks_to_cycles(m_maincpu->clock()) * INT_PER_CLOCK
+		length = m_maincpu->clocks_to_cycles(m_maincpu->clock().value()) * INT_PER_CLOCK
 			* (machine().time() - m_vector_start_time).as_double();
 
 		m_x_int += length * (m_analog[A_X] + m_analog[A_ZR]);
@@ -322,7 +322,7 @@ void vectrex_base_state::via_pb_w(uint8_t data)
 						+(double)(m_pen_y - m_y_int) * (m_pen_y - m_y_int);
 					d2 = b2 - ab * ab / a2;
 					if (d2 < 2e10 && m_analog[A_Z] * m_blank > 0)
-						m_lp_t->adjust(attotime::from_double(ab / a2 / (m_maincpu->clocks_to_cycles(m_maincpu->clock()) * INT_PER_CLOCK)));
+						m_lp_t->adjust(attotime::from_double(ab / a2 / (m_maincpu->clocks_to_cycles(m_maincpu->clock().value()) * INT_PER_CLOCK)));
 				}
 			}
 		}

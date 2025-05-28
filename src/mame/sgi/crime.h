@@ -23,7 +23,7 @@ public:
 		m_maincpu.set_tag(std::forward<T>(cpu_tag));
 	}
 
-	crime_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	crime_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_map &map);
 

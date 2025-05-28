@@ -149,6 +149,11 @@ public:
 	{
 		set_ids_bridge(main_id, revision);
 	}
+	pci_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t main_id, uint32_t revision)
+		: pci_bridge_device(mconfig, tag, owner, XTAL(), main_id, revision)
+	{
+	}
+
 	pci_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void set_remap_cb(mapper_cb _remap_cb) override;

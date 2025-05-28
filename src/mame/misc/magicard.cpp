@@ -845,11 +845,11 @@ void magicard_base_state::magicard_base(machine_config &config)
 	m_maincpu->i2c_sda_r().set(FUNC(magicard_base_state::cpu_i2c_sda_read));
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw( CLOCK_A/2, 960, 0, 768, 312, 32, 312);
+	m_screen->set_raw(CLOCK_A / 2, 960, 0, 768, 312, 32, 312);
 	m_screen->set_video_attributes(VIDEO_UPDATE_SCANLINE);
 	m_screen->set_screen_update(FUNC(magicard_base_state::screen_update_magicard));
 
-	SCC66470(config,m_scc66470,CLOCK_A);
+	SCC66470(config, m_scc66470, CLOCK_A);
 	m_scc66470->set_addrmap(0, &magicard_base_state::scc66470_map);
 	m_scc66470->set_screen("screen");
 	m_scc66470->irq().set(FUNC(magicard_base_state::scc66470_irq));

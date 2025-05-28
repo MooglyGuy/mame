@@ -23,7 +23,7 @@
 
 
 /* fixed samplerate of 192khz */
-#define SAMPLE_RATE             (48000 * 4)
+#define SAMPLE_RATE             (XTAL::u(48000) * 4)
 
 #define INTEGRATOR_LEAK_TC      0.001
 #define FILTER_DECAY_TC         0.004
@@ -126,7 +126,7 @@ READ_LINE_MEMBER( cvsd_device_base::digout_r )
 
 inline bool cvsd_device_base::is_external_oscillator()
 {
-	return clock() != 0;
+	return clock().value() != 0;
 }
 
 inline bool cvsd_device_base::is_clock_changed(bool clock_state)
@@ -149,7 +149,7 @@ inline bool cvsd_device_base::current_clock_state()
 	//uint64_t fractions_of_second = (((uint64_t)m_samples_generated)<<32) / SAMPLE_RATE; // 32.32 bits of seconds passed so far
 	//uint32_t clock_edges_passed =  (fractions_of_second * clock() * 2)>>32
 	//return (((((uint64_t)m_samples_generated<<32) * clock() * 2 / SAMPLE_RATE)>>32) & 0x1)?true:false;
-	return (((uint64_t)m_samples_generated * clock() * 2 / SAMPLE_RATE) & 0x01)?true:false;
+	return (((uint64_t)m_samples_generated * clock().value() * 2 / SAMPLE_RATE.value()) & 0x01)?true:false;
 }
 
 void cvsd_device_base::digit_w(int digit)
@@ -204,8 +204,8 @@ void cvsd_device_base::sound_stream_update(sound_stream &stream, std::vector<rea
 	auto &buffer = outputs[0];
 
 	m_samples_generated += buffer.samples();
-	if (m_samples_generated >= SAMPLE_RATE)
-		m_samples_generated -= SAMPLE_RATE;
+	if (m_samples_generated >= SAMPLE_RATE.value())
+		m_samples_generated -= SAMPLE_RATE.value();
 	buffer.fill(0);
 }
 
@@ -515,9 +515,9 @@ void mc3417_device::sound_stream_update(sound_stream &stream, std::vector<read_s
 	{
 		/* track how many samples we've updated without a clock; if it's been more than 1/32 of a second, output silence */
 		m_samples_generated += buffer.samples();
-		if (m_samples_generated > SAMPLE_RATE / 32)
+		if (m_samples_generated > SAMPLE_RATE.value() / 32)
 		{
-			m_samples_generated = SAMPLE_RATE;
+			m_samples_generated = SAMPLE_RATE.value();
 			m_next_sample = 0;
 		}
 	}

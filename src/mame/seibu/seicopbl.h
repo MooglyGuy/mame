@@ -17,7 +17,7 @@ public:
 		m_host_cpu.set_tag(std::forward<T>(cpu_tag));
 	}
 
-	seibu_cop_bootleg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	seibu_cop_bootleg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint16_t read(offs_t offset);
 	void write(offs_t offset, uint16_t data);

@@ -22,8 +22,6 @@ snkwave_device::snkwave_device(const machine_config &mconfig, const char *tag, d
 	: device_t(mconfig, SNKWAVE, tag, owner, clock),
 		device_sound_interface(mconfig, *this),
 		m_stream(nullptr),
-		m_external_clock(0),
-		m_sample_rate(0),
 		m_frequency(0),
 		m_counter(0),
 		m_waveform_position(0)
@@ -41,7 +39,7 @@ void snkwave_device::device_start()
 	m_external_clock = clock();
 
 	/* adjust output clock */
-	m_sample_rate = m_external_clock >> CLOCK_SHIFT;
+	m_sample_rate = m_external_clock / CLOCK_DIV;
 
 	/* get stream channels */
 	m_stream = stream_alloc(0, 1, m_sample_rate);

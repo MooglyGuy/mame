@@ -406,7 +406,7 @@ void tourvision_state::tourvision(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(60));
 
-	I8085A(config, m_subcpu, 18000000/3 /*?*/);
+	I8085A(config, m_subcpu, XTAL::u(18000000)/3 /*?*/);
 	m_subcpu->set_addrmap(AS_PROGRAM, &tourvision_state::tourvision_8085_map);
 
 	// Video hardware
@@ -425,7 +425,7 @@ void tourvision_state::tourvision(machine_config &config)
 	huc6270.set_vram_size(0x10000);
 	huc6270.irq().set_inputline(m_maincpu, 0);
 
-	i8155_device &i8155(I8155(config, "i8155", 1000000 /*?*/));
+	i8155_device &i8155(I8155(config, "i8155", XTAL::u(1000000) /*?*/));
 	i8155.out_pa_callback().set(FUNC(tourvision_state::tourvision_i8155_a_w));
 	i8155.out_pb_callback().set(FUNC(tourvision_state::tourvision_i8155_b_w));
 	i8155.out_pc_callback().set(FUNC(tourvision_state::tourvision_i8155_c_w));

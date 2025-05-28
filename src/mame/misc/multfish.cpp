@@ -1077,7 +1077,7 @@ void igrosoft_gamble_state::igrosoft_gamble(machine_config &config)
 
 
 	SPEAKER(config, "mono").front_center();
-	AY8910(config, "aysnd", 6000000/4).add_route(ALL_OUTPUTS, "mono", 0.30);
+	AY8910(config, "aysnd", XTAL::u(6000000)/4).add_route(ALL_OUTPUTS, "mono", 0.30);
 
 	M48T35(config, m_m48t35);
 	HOPPER(config, m_hopper, attotime::from_msec(100), TICKET_MOTOR_ACTIVE_HIGH, TICKET_STATUS_ACTIVE_HIGH);

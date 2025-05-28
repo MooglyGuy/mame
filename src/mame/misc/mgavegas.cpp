@@ -46,7 +46,7 @@ Ver. 2.2 should exist
 #define MAIN_XTAL XTAL(8'000'000)
 #define CPU_CLK MAIN_XTAL/2
 #define AY_CLK  CPU_CLK/2
-#define MSM_CLK   384000
+#define MSM_CLK   XTAL::u(384000)
 
 
 class mgavegas_state : public driver_device

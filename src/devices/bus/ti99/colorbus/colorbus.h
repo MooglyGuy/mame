@@ -54,7 +54,7 @@ public:
 		set_fixed(false);
 	}
 
-	v9938_colorbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	v9938_colorbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// For the extra button (V9938 only handles 2)
 	auto extra_button_cb() { return m_extra_button.bind(); }

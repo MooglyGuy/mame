@@ -520,18 +520,18 @@ uint32_t mos6560_device::screen_update(screen_device &screen, bitmap_rgb32 &bitm
 #define TONE_FREQUENCY_MIN  (clock()/256/128)
 
 #define TONE1_VALUE (8 * (128 - ((m_reg[0x0a] + 1) & 0x7f)))
-#define TONE1_FREQUENCY (clock()/32/TONE1_VALUE)
+#define TONE1_FREQUENCY (clock().value()/32/TONE1_VALUE)
 
 #define TONE2_VALUE (4 * (128 - ((m_reg[0x0b] + 1) & 0x7f)))
-#define TONE2_FREQUENCY (clock()/32/TONE2_VALUE)
+#define TONE2_FREQUENCY (clock().value()/32/TONE2_VALUE)
 
 #define TONE3_VALUE (2 * (128 - ((m_reg[0x0c] + 1) & 0x7f)))
-#define TONE3_FREQUENCY (clock()/32/TONE3_VALUE)
+#define TONE3_FREQUENCY (clock().value()/32/TONE3_VALUE)
 
 #define NOISE_VALUE (32 * (128 - ((m_reg[0x0d] + 1) & 0x7f)))
-#define NOISE_FREQUENCY (clock()/NOISE_VALUE)
+#define NOISE_FREQUENCY (clock().value()/NOISE_VALUE)
 
-#define NOISE_FREQUENCY_MAX (clock()/32/1)
+#define NOISE_FREQUENCY_MAX (clock().value()/32/1)
 
 
 /*-------------------------------------------------
@@ -550,7 +550,7 @@ void mos6560_device::soundport_w( int offset, int data )
 		if (!(old & 0x80) && TONE1_ON)
 		{
 			m_tone1pos = 0;
-			m_tone1samples = machine().sample_rate() / TONE1_FREQUENCY;
+			m_tone1samples = machine().sample_rate().value() / TONE1_FREQUENCY;
 			if (m_tone1samples == 0)
 				m_tone1samples = 1;
 		}
@@ -561,7 +561,7 @@ void mos6560_device::soundport_w( int offset, int data )
 		if (!(old & 0x80) && TONE2_ON)
 		{
 			m_tone2pos = 0;
-			m_tone2samples = machine().sample_rate() / TONE2_FREQUENCY;
+			m_tone2samples = machine().sample_rate().value() / TONE2_FREQUENCY;
 			if (m_tone2samples == 0)
 				m_tone2samples = 1;
 		}
@@ -572,7 +572,7 @@ void mos6560_device::soundport_w( int offset, int data )
 		if (!(old & 0x80) && TONE3_ON)
 		{
 			m_tone3pos = 0;
-			m_tone3samples = machine().sample_rate() / TONE3_FREQUENCY;
+			m_tone3samples = machine().sample_rate().value() / TONE3_FREQUENCY;
 			if (m_tone3samples == 0)
 				m_tone3samples = 1;
 		}
@@ -582,7 +582,7 @@ void mos6560_device::soundport_w( int offset, int data )
 		m_reg[offset] = data;
 		if (NOISE_ON)
 		{
-			m_noisesamples = (int) ((double) NOISE_FREQUENCY_MAX * machine().sample_rate()
+			m_noisesamples = (int) ((double) NOISE_FREQUENCY_MAX * machine().sample_rate().value()
 									* NOISE_BUFFER_SIZE_SEC / NOISE_FREQUENCY);
 			DBG_LOG (1, "mos6560", ("noise %.2x %d sample:%d\n",
 									data, NOISE_FREQUENCY, m_noisesamples));
@@ -649,7 +649,7 @@ void mos6560_device::sound_start()
 				noiseshift <<= 1;
 		}
 	}
-	m_tonesize = machine().sample_rate() / TONE_FREQUENCY_MIN;
+	m_tonesize = machine().sample_rate().value() / TONE_FREQUENCY_MIN;
 
 	if (m_tonesize > 0)
 	{
@@ -883,7 +883,7 @@ void mos6560_device::sound_stream_update(sound_stream &stream, std::vector<read_
 			if (m_tone1pos >= m_tone1samples)
 			{
 				m_tone1pos = 0;
-				m_tone1samples = buffer.sample_rate() / TONE1_FREQUENCY;
+				m_tone1samples = buffer.sample_rate().value() / TONE1_FREQUENCY;
 				if (m_tone1samples == 0)
 					m_tone1samples = 1;
 			}
@@ -899,7 +899,7 @@ void mos6560_device::sound_stream_update(sound_stream &stream, std::vector<read_
 			if (m_tone2pos >= m_tone2samples)
 			{
 				m_tone2pos = 0;
-				m_tone2samples = buffer.sample_rate() / TONE2_FREQUENCY;
+				m_tone2samples = buffer.sample_rate().value() / TONE2_FREQUENCY;
 				if (m_tone2samples == 0)
 					m_tone2samples = 1;
 			}
@@ -915,7 +915,7 @@ void mos6560_device::sound_stream_update(sound_stream &stream, std::vector<read_
 			if (m_tone3pos >= m_tone3samples)
 			{
 				m_tone3pos = 0;
-				m_tone3samples = buffer.sample_rate() / TONE3_FREQUENCY;
+				m_tone3samples = buffer.sample_rate().value() / TONE3_FREQUENCY;
 				if (m_tone3samples == 0)
 					m_tone3samples = 1;
 			}

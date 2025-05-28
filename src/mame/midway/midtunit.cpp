@@ -33,8 +33,8 @@
 #include "speaker.h"
 
 
-#define CPU_CLOCK       (50000000)
-#define PIXEL_CLOCK     (8000000/2)
+#define CPU_CLOCK       XTAL::u(50000000)
+#define PIXEL_CLOCK     (XTAL::u(8000000) /2)
 
 
 

@@ -55,14 +55,14 @@ class gb_cart_slot_device : public gb_cart_slot_device_base
 public:
 	template <typename T>
 	gb_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt) :
-		gb_cart_slot_device(mconfig, tag, owner, 0U)
+		gb_cart_slot_device(mconfig, tag, owner, XTAL())
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	gb_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	gb_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_image_interface implementation
 	virtual const char *image_interface() const noexcept override { return "gameboy_cart"; }

@@ -76,12 +76,7 @@ public:
 	int m_bppshift; // 4 for 4bpp gfx (NeoGeo) 8 for 8bpp gfx (Midas)
 
 protected:
-	neosprite_base_device(
-			const machine_config &mconfig,
-			device_type type,
-			const char *tag,
-			device_t *owner,
-			uint32_t clock);
+	neosprite_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override;
 	virtual void device_reset() override;

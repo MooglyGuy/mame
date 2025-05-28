@@ -205,13 +205,13 @@ void sn76477_device::device_start()
 {
 	m_channel = stream_alloc(0, 1, machine().sample_rate());
 
-	if (clock() > 0)
+	if (clock().value() != 0)
 	{
-		m_our_sample_rate = clock();
+		m_our_sample_rate = clock().value();
 	}
 	else
 	{
-		m_our_sample_rate = machine().sample_rate();
+		m_our_sample_rate = machine().sample_rate().value();
 	}
 
 	intialize_noise();

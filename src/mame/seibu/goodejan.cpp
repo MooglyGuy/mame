@@ -361,9 +361,9 @@ uint32_t goodejan_state::screen_update(screen_device &screen, bitmap_ind16 &bitm
 }
 
 
-#define GOODEJAN_MHZ1 7159090
-#define GOODEJAN_MHZ2 16000000
-#define GOODEJAN_MHZ3 12000000
+#define GOODEJAN_MHZ1 XTAL::u(7159090)
+#define GOODEJAN_MHZ2 XTAL::u(16000000)
+#define GOODEJAN_MHZ3 XTAL::u(12000000)
 
 
 void goodejan_state::gfxbank_w(uint16_t data)

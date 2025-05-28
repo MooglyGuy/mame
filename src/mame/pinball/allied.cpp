@@ -664,7 +664,7 @@ void allied_state::machine_reset()
 void allied_state::allied(machine_config &config)
 {
 	/* basic machine hardware */
-	M6504(config, m_maincpu, 3572549/4);
+	M6504(config, m_maincpu, XTAL::u(3572549)/4);
 	m_maincpu->set_addrmap(AS_PROGRAM, &allied_state::mem_map);
 
 	/* Video */
@@ -724,16 +724,16 @@ void allied_state::allied(machine_config &config)
 	m_ic8->irqa_handler().set_inputline("maincpu", M6504_IRQ_LINE);
 	m_ic8->irqb_handler().set_inputline("maincpu", M6504_IRQ_LINE);
 
-	mos6530_device &ic3(MOS6530(config, "ic3", 3572549/4)); // unknown where the ram and i/o is located
+	mos6530_device &ic3(MOS6530(config, "ic3", XTAL::u(3572549)/4)); // unknown where the ram and i/o is located
 	ic3.out_pb_callback().set(FUNC(allied_state::ic3_b_w));
 
-	MOS6530(config, m_ic5, 3572549/4);
+	MOS6530(config, m_ic5, XTAL::u(3572549)/4);
 	m_ic5->in_pa_callback().set(FUNC(allied_state::ic5_a_r));
 	//m_ic5->out_pa_callback().set(FUNC(allied_state::ic5_a_w));
 	//m_ic5->in_pb_callback().set(FUNC(allied_state::ic5_b_r));
 	m_ic5->out_pb_callback().set(FUNC(allied_state::ic5_b_w));
 
-	MOS6530(config, m_ic6, 3572549/4);
+	MOS6530(config, m_ic6, XTAL::u(3572549)/4);
 	m_ic6->in_pa_callback().set(FUNC(allied_state::ic6_a_r));
 	//m_ic6->out_pa_callback().set(FUNC(allied_state::ic6_a_w));
 	m_ic6->in_pb_callback().set(FUNC(allied_state::ic6_b_r));

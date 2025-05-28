@@ -91,19 +91,19 @@ a800_rom_microcalc_device::a800_rom_microcalc_device(const machine_config &mconf
 {
 }
 
-a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_rom_bank(0)
 	, m_view_select(0)
 {
 }
 
-a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, A800_ROM_CORINA, tag, owner, clock)
 {
 }
 
-a800_rom_corina_sram_device::a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_corina_sram_device::a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_corina_device(mconfig, A800_ROM_CORINA_SRAM, tag, owner, clock)
 {
 }

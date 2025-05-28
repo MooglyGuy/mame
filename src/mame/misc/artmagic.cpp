@@ -866,7 +866,7 @@ void artmagic_state::shtstar(machine_config &config)
 
 	MC68681(config, "subduart", XTAL::u(3686400));
 
-	YM2149(config, "aysnd", 3686400/2).add_route(ALL_OUTPUTS, "mono", 0.10);
+	YM2149(config, "aysnd", XTAL::u(3686400) / 2).add_route(ALL_OUTPUTS, "mono", 0.10);
 
 	/*gun board cpu*/
 	i80c31_device &guncpu(I80C31(config, "guncpu", XTAL::u(6000000)));

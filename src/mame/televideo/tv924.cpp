@@ -72,7 +72,7 @@ void tv924_state::tv924(machine_config &config)
 	duart.irq_cb().set_inputline(m_maincpu, m6502_device::IRQ_LINE);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(27'576'960, 848 * 2, 0, 640 * 2, 271, 0, 250);
+	screen.set_raw(XTAL::u(27'576'960), 848 * 2, 0, 640 * 2, 271, 0, 250);
 	screen.set_screen_update("pvtc", FUNC(scn2672_device::screen_update));
 
 	SCN2672(config, m_pvtc, XTAL::u(1'723'560)); // SCN2672A (with SCB2673B + AMI gate arrays 130170-00 and 130180-00)

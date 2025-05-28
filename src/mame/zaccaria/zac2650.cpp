@@ -233,7 +233,7 @@ GFXDECODE_END
 void zac2650_state::tinvader(machine_config &config)
 {
 	/* basic machine hardware */
-	s2650_device &maincpu(S2650(config, m_maincpu, 3800000/4));
+	s2650_device &maincpu(S2650(config, m_maincpu, XTAL::u(3800000)/4));
 	maincpu.set_addrmap(AS_PROGRAM, &zac2650_state::main_map);
 	maincpu.sense_handler().set(m_screen, FUNC(screen_device::vblank)).invert();
 

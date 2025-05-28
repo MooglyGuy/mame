@@ -173,7 +173,7 @@ void mm5307_device::control_w(u8 data)
 		if (m_divisors_x2[data] == 0)
 			LOG("%s: External frequency selected\n", machine().describe_context());
 		else
-			LOG("%s: %.1f baud selected\n", machine().describe_context(), clock() / (8.0 * m_divisors_x2[data]));
+			LOG("%s: %.1f baud selected\n", machine().describe_context(), clock().value() / (8.0 * m_divisors_x2[data]));
 
 		// Emulate access time
 		m_periodic_timer->adjust(attotime::from_usec(2800) + clocks_to_attotime(13));

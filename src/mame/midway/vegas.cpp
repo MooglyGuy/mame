@@ -389,7 +389,7 @@ protected:
 	virtual void machine_reset() override;
 
 private:
-	static constexpr unsigned SYSTEM_CLOCK = 100000000;
+	static constexpr XTAL SYSTEM_CLOCK = XTAL::u(100000000);
 
 	required_device<mips3_device> m_maincpu;
 	required_device<vrc5074_device> m_nile;
@@ -1909,12 +1909,12 @@ void vegas_state::vegascore(machine_config &config)
 	R5000LE(config, m_maincpu, vegas_state::SYSTEM_CLOCK * 2);
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK.value());
 
 	// PCI Bus Devices
 	PCI_ROOT(config, "pci");
 
-	VRC5074(config, m_nile, 100000000, m_maincpu);
+	VRC5074(config, m_nile, vegas_state::SYSTEM_CLOCK, m_maincpu);
 	m_nile->set_sdram_size(0, 0x00800000);
 	m_nile->set_map(2, address_map_constructor(&vegas_state::vegas_cs2_map, "vegas_cs2_map", this), this);
 	m_nile->set_map(3, address_map_constructor(&vegas_state::vegas_cs3_map, "vegas_cs3_map", this), this);
@@ -1998,7 +1998,7 @@ void vegas_state::vegasv3(machine_config &config)
 	RM7000LE(config.replace(), m_maincpu, vegas_state::SYSTEM_CLOCK * 2.5);
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK.value());
 
 	voodoo_3_pci_device &voodoo(VOODOO_3_PCI(config.replace(), PCI_ID_VIDEO, m_maincpu, "screen"));
 	voodoo.set_fbmem(16);
@@ -2014,7 +2014,7 @@ void vegas_state::denver(machine_config &config)
 
 	m_maincpu->set_icache_size(16384);
 	m_maincpu->set_dcache_size(16384);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK.value());
 	m_nile->set_sdram_size(0, 0x02000000);
 	m_nile->set_map(8, address_map_constructor(&vegas_state::vegas_cs8_map, "vegas_cs8_map", this), this);
 
@@ -2173,7 +2173,7 @@ void vegas_state::nbagold(machine_config &config)
 	QED5271LE(config.replace(), m_maincpu, vegas_state::SYSTEM_CLOCK * 2.5);
 	m_maincpu->set_icache_size(32768);
 	m_maincpu->set_dcache_size(32768);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK.value());
 	m_nile->set_sdram_size(0, 0x00800000);
 	dcs2_audio_2104_device &dcs(DCS2_AUDIO_2104(config, "dcs"));
 	dcs.set_dram_in_mb(4);

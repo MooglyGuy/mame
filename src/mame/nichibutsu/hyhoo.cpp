@@ -238,7 +238,7 @@ void hyhoo_state::hyhoo(machine_config &config)
 	m_screen->set_visarea(0, 512-1, 16, 240-1);
 	m_screen->set_screen_update(FUNC(hyhoo_state::screen_update_hyhoo));
 
-	NB1413M3(config, m_nb1413m3, 0, NB1413M3_HYHOO);
+	NB1413M3(config, m_nb1413m3, XTAL(), NB1413M3_HYHOO);
 
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();

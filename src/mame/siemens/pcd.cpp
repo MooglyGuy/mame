@@ -558,7 +558,7 @@ void pcd_state::pcx(machine_config &config)
 	pcd(config);
 	m_maincpu->set_addrmap(AS_IO, &pcd_state::pcx_io);
 
-	pcx_video_device &video(PCX_VIDEO(config.replace(), "video", 0));
+	pcx_video_device &video(PCX_VIDEO(config.replace(), "video"));
 	video.txd_handler().set("keyboard", FUNC(pcd_keyboard_device::t0_w));
 
 	subdevice<pcd_keyboard_device>("keyboard")->out_tx_handler().set("video", FUNC(pcx_video_device::rx_w));

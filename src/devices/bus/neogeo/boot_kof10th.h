@@ -15,7 +15,7 @@ class neogeo_kof10th_cart_device : public neogeo_bootleg_cart_device
 {
 public:
 	// construction/destruction
-	neogeo_kof10th_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_kof10th_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual uint16_t get_helper() override;

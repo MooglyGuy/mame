@@ -92,7 +92,7 @@ TODO:
 class astro_cpucode_device : public device_t
 {
 public:
-	astro_cpucode_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	astro_cpucode_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// read handlers
 	DECLARE_READ_LINE_MEMBER(do_read);    // DO
@@ -116,7 +116,7 @@ private:
 
 DEFINE_DEVICE_TYPE(ASTRO_CPUCODE, astro_cpucode_device, "astro_cpucode", "Astro CPU Code")
 
-astro_cpucode_device::astro_cpucode_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+astro_cpucode_device::astro_cpucode_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ASTRO_CPUCODE, tag, owner, clock)
 	, m_region_key(*this, DEVICE_SELF)
 { }
@@ -1234,7 +1234,7 @@ void zoo_state::zoo(machine_config &config)
 
 	m_screen->set_raw(26.824_MHz_XTAL / 4, 437, 0, 320, 261, 0, 240); // ??? ~15.345kHz Hsync, ??? ~58.795Hz Vsync
 
-	ASTRO_CPUCODE(config, m_cpucode, 0);
+	ASTRO_CPUCODE(config, m_cpucode, XTAL());
 }
 
 void zoo_state::magibombd(machine_config &config)

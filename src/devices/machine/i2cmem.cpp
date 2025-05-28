@@ -90,7 +90,7 @@ i2cmem_device::i2cmem_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		int read_page_size,
 		int write_page_size,
 		int data_size) :

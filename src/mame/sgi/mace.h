@@ -23,7 +23,7 @@ public:
 		m_maincpu.set_tag(std::forward<T>(cpu_tag));
 	}
 
-	mace_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	mace_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto rtc_read_callback() { return m_rtc_read_callback.bind(); }
 	auto rtc_write_callback() { return m_rtc_write_callback.bind(); }

@@ -818,7 +818,7 @@ void isa8_aga_device::pc_aga_set_mode(mode_t mode)
 		m_mc6845->set_unscaled_clock(XTAL(14'318'181) / 8);
 		break;
 	case AGA_MONO:
-		m_mc6845->set_unscaled_clock(16257000 / 9);
+		m_mc6845->set_unscaled_clock(XTAL::u(16257000) / 9);
 		break;
 	case AGA_OFF:
 		break;

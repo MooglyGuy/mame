@@ -3201,7 +3201,7 @@ void contcirc_state::contcirc(machine_config &config) //OSC: 26.686, 24.000, 16.
 	m_tc0040ioc->write_4_callback().set(FUNC(contcirc_state::coin_control_w));
 	m_tc0040ioc->read_7_callback().set_ioport("IN2");
 
-	screen_config(config, 24, XTAL::u(248));
+	screen_config(config, 24, 248);
 	m_screen->set_screen_update(FUNC(contcirc_state::screen_update_contcirc));
 	m_screen->set_palette(m_tc0110pcr);
 	m_screen->screen_vblank().set(FUNC(contcirc_state::scope_vblank));
@@ -3261,7 +3261,7 @@ void chasehq_state::chasehq(machine_config &config) //OSC: 26.686, 24.000, 16.00
 	m_tc0040ioc->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(chasehq_state::screen_update_chasehq));
 	m_screen->set_palette(m_tc0110pcr);
 
@@ -3322,7 +3322,7 @@ void contcirc_state::enforce(machine_config &config)
 	m_tc0040ioc->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 24, XTAL::u(248));
+	screen_config(config, 24, 248);
 	m_screen->set_screen_update(FUNC(contcirc_state::screen_update_contcirc));
 	m_screen->set_palette(m_tc0110pcr);
 	m_screen->screen_vblank().set(FUNC(contcirc_state::scope_vblank));
@@ -3380,7 +3380,7 @@ void taitoz_state::bshark_base(machine_config &config)
 	m_tc0220ioc->write_4_callback().set(FUNC(taitoz_state::coin_control_w));
 	m_tc0220ioc->read_7_callback().set_ioport("IN2");
 
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(taitoz_state::screen_update_bshark));
 	m_screen->set_palette("palette");
 
@@ -3396,7 +3396,7 @@ void taitoz_state::bshark_base(machine_config &config)
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 16000000/2));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(16000000)/2));
 	//ymsnd.irq_handler().set_inputline(m_audiocpu, 0); // DG: this is probably specific to Z80 and wrong?
 	ymsnd.add_route(0, "lspeaker", 0.25);
 	ymsnd.add_route(0, "rspeaker", 0.25);
@@ -3455,7 +3455,7 @@ void sci_state::sci(machine_config &config)
 	m_tc0220ioc->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(sci_state::screen_update_sci));
 	m_screen->set_palette("palette");
 
@@ -3523,7 +3523,7 @@ void nightstr_state::nightstr(machine_config &config) //OSC: 26.686, 24.000, 16.
 	m_tc0220ioc->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(nightstr_state::screen_update_chasehq));
 	m_screen->set_palette(m_tc0110pcr);
 
@@ -3584,7 +3584,7 @@ void taitoz_z80_sound_state::aquajack(machine_config &config) //OSC: 26.686, 24.
 	m_tc0220ioc->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(taitoz_z80_sound_state::screen_update_aquajack));
 	m_screen->set_palette(m_tc0110pcr);
 
@@ -3650,7 +3650,7 @@ void spacegun_state::spacegun(machine_config &config) //OSC: 26.686, 24.000, 16.
 	m_tc0510nio->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(spacegun_state::screen_update_spacegun));
 	m_screen->set_palette(m_tc0110pcr);
 
@@ -3768,7 +3768,7 @@ void sci_state::racingb(machine_config &config)
 	m_tc0510nio->read_7_callback().set_ioport("IN2");
 
 	/* video hardware */
-	screen_config(config, 16, XTAL::u(256));
+	screen_config(config, 16, 256);
 	m_screen->set_screen_update(FUNC(sci_state::screen_update_racingb));
 	m_screen->set_palette("palette");
 

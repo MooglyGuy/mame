@@ -271,8 +271,7 @@ void gaelco_gae1_device::gaelcosnd_w(offs_t offset, uint16_t data, uint16_t mem_
 
 void gaelco_gae1_device::device_start()
 {
-	u32 rate = clock() / 128;
-	m_stream = stream_alloc(0, 2, rate);
+	m_stream = stream_alloc(0, 2, clock() / 128);
 
 	/* init volume table */
 	for (int vol = 0; vol < VOLUME_LEVELS; vol++)
@@ -280,7 +279,7 @@ void gaelco_gae1_device::device_start()
 			m_volume_table[vol][(j ^ 0x80) & 0xff] = (vol*j*256)/(VOLUME_LEVELS - 1);
 
 	if (LOG_WAVE)
-		wavraw = util::wav_open("gae1_snd.wav", rate, 2);
+		wavraw = util::wav_open("gae1_snd.wav", clock().value() / 128, 2);
 
 	for (int ch = 0; ch < NUM_CHANNELS; ch++)
 	{
@@ -318,12 +317,11 @@ void gaelco_gae1_device::device_post_load()
 
 void gaelco_gae1_device::device_clock_changed()
 {
-	u32 rate = clock() / 128;
-	m_stream->set_sample_rate(rate);
+	m_stream->set_sample_rate(clock() / 128);
 	wavraw.reset();
 
 	if (LOG_WAVE)
-		wavraw = util::wav_open("gae1_snd.wav", rate, 2);
+		wavraw = util::wav_open("gae1_snd.wav", clock().value() / 128, 2);
 }
 
 

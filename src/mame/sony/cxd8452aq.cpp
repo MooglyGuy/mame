@@ -43,7 +43,7 @@ namespace
 	static constexpr int DMA_TIMER = 100;
 }
 
-cxd8452aq_device::cxd8452aq_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cxd8452aq_device::cxd8452aq_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CXD8452AQ, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	main_bus_config("main_bus", ENDIANNESS_BIG, 32, 32, 0),

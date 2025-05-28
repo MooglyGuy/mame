@@ -71,7 +71,7 @@ hle_device_base::hle_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		unsigned multiplier)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
@@ -157,7 +157,7 @@ void hle_device_base::device_start()
 	save_item(NAME(m_phase));
 
 	set_data_frame(START_BIT_COUNT, DATA_BIT_COUNT, PARITY, STOP_BITS);
-	set_rate(BAUD * m_multiplier);
+	set_rate(XTAL::u(BAUD) * m_multiplier);
 	receive_register_reset();
 	transmit_register_reset();
 
@@ -292,7 +292,7 @@ hle_1200baud_device::hle_1200baud_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_device_base(mconfig, SUN_1200BAUD_HLE_MOUSE, tag, owner, clock, 1U)
 {
 }
@@ -307,7 +307,7 @@ hle_4800baud_device::hle_4800baud_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_device_base(mconfig, SUN_4800BAUD_HLE_MOUSE, tag, owner, clock, 4U)
 {
 }

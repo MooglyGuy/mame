@@ -1538,7 +1538,7 @@ void by35_state::nuovo(machine_config &config)
 {
 	by35(config);
 
-	m6802_cpu_device &maincpu(M6802(config.replace(), m_maincpu, 2000000)); // ? MHz ?  Large crystal next to CPU, schematics don't indicate speed.
+	m6802_cpu_device &maincpu(M6802(config.replace(), m_maincpu, XTAL::u(2000000))); // ? MHz ?  Large crystal next to CPU, schematics don't indicate speed.
 	maincpu.set_addrmap(AS_PROGRAM, &by35_state::nuovo_map);
 	maincpu.set_ram_enable(false); // Schematics imply that the M6802 internal RAM is disabled.
 }

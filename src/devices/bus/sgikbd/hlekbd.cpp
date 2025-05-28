@@ -194,7 +194,7 @@ WRITE_LINE_MEMBER(hle_device::input_txd)
 void hle_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "bell").front_center();
-	BEEP(config, m_beeper, ATTOSECONDS_TO_HZ(480 * ATTOSECONDS_PER_MICROSECOND));
+	BEEP(config, m_beeper, XTAL::u(ATTOSECONDS_TO_HZ(480 * ATTOSECONDS_PER_MICROSECOND)));
 	m_beeper->add_route(ALL_OUTPUTS, "bell", 1.0);
 }
 
@@ -223,7 +223,7 @@ void hle_device::device_reset()
 
 	// configure device_buffered_serial_interface
 	set_data_frame(START_BIT_COUNT, DATA_BIT_COUNT, PARITY, STOP_BITS);
-	set_rate(BAUD);
+	set_rate(XTAL::u(BAUD));
 	receive_register_reset();
 	transmit_register_reset();
 

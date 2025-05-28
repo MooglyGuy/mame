@@ -395,13 +395,13 @@ void lindbergh_state::machine_reset()
 
 void lindbergh_state::lindbergh(machine_config &config)
 {
-	PENTIUM4(config, "maincpu", 28000000U*5); /* Actually Celeron D at 2,8 GHz */
+	PENTIUM4(config, "maincpu", XTAL::u(28000000U)*5); /* Actually Celeron D at 2,8 GHz */
 
 	PCI_ROOT                (config, "pci");
-	I82875P_HOST            (config, "pci:00.0"                         0x103382c0, "maincpu", 512*1024*1024);
+	I82875P_HOST            (config, "pci:00.0",                        0x103382c0, "maincpu", 512*1024*1024);
 	I82875P_AGP             (config, "pci:01.0");
 	GEFORCE_7600GS          (config, "pci:01.0:00.0",                   0x10de02e1);
-	I82875P_OVERFLOW        (config, "pci:06.0",                        0x103382c0);
+	I82875P_OVERFLOW        (config, "pci:06.0",      0x103382c0);
 	PCI_BRIDGE              (config, "pci:1c.0",      0x808625ae, 0x02);
 	I82541                  (config, "pci:1c.0:00.0",                   0x103382c0);
 	USB_UHCI                (config, "pci:1d.0",      0x808625a9, 0x02, 0x103382c0);

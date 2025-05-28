@@ -36,7 +36,7 @@ public:
 
 	uint16_t get_cs(offs_t address);
 
-	void set_crystal(const XTAL &crystal) { set_crystal(crystal.value()); }
+	void set_crystal(const XTAL &crystal);
 
 	// Timer input methods, can be used instead of the corresponding polling MCFG callbacks
 	DECLARE_WRITE_LINE_MEMBER( tin1_w )  { m_timer[0]->tin_w(state);  }
@@ -73,15 +73,8 @@ private:
 	int m_currentcs;
 	uint32_t m_clock_mode;
 	uint32_t m_modck;
-	uint32_t m_crystal;
-	uint32_t m_extal;
-
-	// TODO: Support Limp mode and external clock with no PLL
-	void set_crystal(int crystal)
-	{
-		m_crystal = crystal;
-		m_clock_mode |= (m68340_sim::CLOCK_MODCK | m68340_sim::CLOCK_PLL);
-	}
+	XTAL m_crystal;
+	int m_extal;
 
 	uint16_t m68340_internal_base_r(offs_t offset, uint16_t mem_mask = ~0);
 	void m68340_internal_base_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);

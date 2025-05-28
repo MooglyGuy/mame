@@ -25,7 +25,7 @@ private:
 	u8 p1_r();
 	void p1_w(u8 data);
 	void p2_w(u8 data);
-	void t0_clock(u32 clk);
+	void t0_clock(const XTAL &clk);
 	DECLARE_READ_LINE_MEMBER(t1_r);
 	DECLARE_WRITE_LINE_MEMBER(prog_w);
 

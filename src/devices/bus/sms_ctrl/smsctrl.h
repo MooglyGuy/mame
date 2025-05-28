@@ -40,7 +40,7 @@ public:
 		set_fixed(false);
 	}
 
-	sms_control_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sms_control_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~sms_control_port_device();
 
 	// static configuration helpers

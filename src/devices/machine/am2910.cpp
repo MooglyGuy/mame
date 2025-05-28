@@ -69,7 +69,7 @@ void am2910_device::device_start()
 	m_map.resolve_safe();
 	m_vect.resolve_safe();
 
-	if (clock())
+	if (clock().value())
 		m_execute_timer = timer_alloc(FUNC(am2910_device::clock_tick), this);
 	else
 		m_execute_timer = nullptr;

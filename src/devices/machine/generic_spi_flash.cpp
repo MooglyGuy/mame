@@ -11,7 +11,7 @@
 
 DEFINE_DEVICE_TYPE(GENERIC_SPI_FLASH, generic_spi_flash_device, "generic_spi_flash", "Generic SPI Flash handling")
 
-generic_spi_flash_device::generic_spi_flash_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+generic_spi_flash_device::generic_spi_flash_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, GENERIC_SPI_FLASH, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 {

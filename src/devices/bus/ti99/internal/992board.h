@@ -89,14 +89,14 @@ private:
 class video992_24_device : public video992_device
 {
 public:
-	video992_24_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	video992_24_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 /* Variant for TI-99/2 32K */
 class video992_32_device : public video992_device
 {
 public:
-	video992_32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	video992_32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 /*
@@ -141,14 +141,14 @@ private:
 class io992_24_device : public io992_device
 {
 public:
-	io992_24_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	io992_24_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 /* Variant for TI-99/2 32K */
 class io992_32_device : public io992_device
 {
 public:
-	io992_32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	io992_32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 /********************************************************************
@@ -210,7 +210,7 @@ private:
 class ti992_expram_device : public ti992_expport_attached_device
 {
 public:
-	ti992_expram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	ti992_expram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual void readz(offs_t offset, uint8_t *value) override;
 	virtual void write(offs_t offset, uint8_t data) override;
 

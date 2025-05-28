@@ -409,7 +409,7 @@ void sol20_state::sol20_fa_w(u8 data)
 		m_cassette_timer->adjust(attotime::zero);
 
 	// bit 5 baud rate */
-	m_uart_clock->set_unscaled_clock(BIT(data, 5) ? 4800 : 19200);
+	m_uart_clock->set_unscaled_clock(XTAL::u(BIT(data, 5) ? 4800 : 19200));
 }
 
 void sol20_state::sol20_fd_w(u8 data)
@@ -597,7 +597,7 @@ void sol20_state::machine_reset()
 	else
 		s_clock = s_bauds[s_count] << 4;
 
-	m_uart_s_clock->set_unscaled_clock(s_clock);
+	m_uart_s_clock->set_unscaled_clock(XTAL::u(s_clock));
 
 	m_rs232->write_dtr(0);
 	m_rs232->write_rts(1);
@@ -606,7 +606,7 @@ void sol20_state::machine_reset()
 	m_screen->configure(918, lines, m_screen->visible_area(), attotime::from_ticks(918 * lines, 14.318181_MHz_XTAL).as_attoseconds());
 
 	// set CPU speed (TODO: also present on bus pin 49)
-	double freq = (14.318181_MHz_XTAL / (4 + ((m_iop_config->read() >> 3) & 3))).dvalue();
+	const XTAL freq((14.318181_MHz_XTAL / (4 + ((m_iop_config->read() >> 3) & 3))).dvalue());
 	m_maincpu->set_unscaled_clock(freq);
 
 	// Boot tap

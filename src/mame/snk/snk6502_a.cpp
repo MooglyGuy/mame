@@ -23,7 +23,7 @@
 
 #define TONE_VOLUME 50
 
-#define SAMPLE_RATE (48000)
+#define SAMPLE_RATE XTAL::u(48000)
 #define FRAC_BITS   16
 #define FRAC_ONE    (1 << FRAC_BITS)
 #define FRAC_MASK   (FRAC_ONE - 1)
@@ -315,7 +315,7 @@ void snk6502_sound_device::set_music_freq(int freq)
 
 void snk6502_sound_device::set_music_clock(double clock_time)
 {
-	m_tone_clock_expire = clock_time * SAMPLE_RATE * FRAC_ONE;
+	m_tone_clock_expire = clock_time * SAMPLE_RATE.value() * FRAC_ONE;
 	m_tone_clock = 0;
 }
 

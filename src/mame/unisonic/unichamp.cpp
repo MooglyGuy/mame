@@ -237,7 +237,7 @@ void unichamp_state::unichamp(machine_config &config)
 	//CP1610(config, m_maincpu, XTAL(3'579'545)/4);
 	//But since it is only running 7752/29868 th's of the time...
 	//TODO find a more accurate method? (the emulation will be the same though)
-	CP1610(config, m_maincpu, (7752.0/29868.0)*XTAL(3'579'545)/4);
+	CP1610(config, m_maincpu, XTAL(3'579'545)*(7752/29868)/4);
 	m_maincpu->set_addrmap(AS_PROGRAM, &unichamp_state::unichamp_mem);
 	m_maincpu->bext().set(FUNC(unichamp_state::bext_r));
 	m_maincpu->iab().set(FUNC(unichamp_state::iab_r));

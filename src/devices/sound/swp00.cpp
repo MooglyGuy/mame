@@ -21,7 +21,7 @@ void swp00_device::device_add_mconfig(machine_config &config)
 
 void swp00_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 44100);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100));
 }
 
 void swp00_device::device_reset()

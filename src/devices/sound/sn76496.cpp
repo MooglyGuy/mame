@@ -158,7 +158,7 @@ sn76496_base_device::sn76496_base_device(
 		bool ncr,
 		bool sega,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_ready_handler(*this)
@@ -226,7 +226,7 @@ segapsg_device::segapsg_device(const machine_config &mconfig, const char *tag, d
 
 void sn76496_base_device::device_start()
 {
-	int sample_rate = clock()/2;
+	const XTAL sample_rate = clock()/2;
 	int i;
 	double out;
 	int gain;

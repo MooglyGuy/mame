@@ -284,7 +284,7 @@ void m79152pc_state::m79152pc(machine_config &config)
 
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(50 * 720 * 324, 720, 0, 640, 324, 0, 250);
+	m_screen->set_raw(XTAL::u(50 * 720 * 324), 720, 0, 640, 324, 0, 250);
 	m_screen->set_screen_update(FUNC(m79152pc_state::screen_update));
 	m_screen->set_palette("palette");
 
@@ -318,7 +318,7 @@ void m79152pc_state::m79152pc(machine_config &config)
 
 	z80ctc_device &ctc(Z80CTC(config, "ctc", XTAL::u(4'000'000)));
 	ctc.intr_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
-	ctc.set_clk<2>(921600);
+	ctc.set_clk<2>(XTAL::u(921'600));
 	ctc.zc_callback<2>().set(m_uart, FUNC(z80sio_device::txca_w));
 	ctc.zc_callback<2>().append(m_uart, FUNC(z80sio_device::rxca_w));
 

@@ -11,12 +11,7 @@
 // pure virtual functions
 //const device_type NEOGEO_SPRITE_BASE = device_creator<neosprite_base_device>;
 
-neosprite_base_device::neosprite_base_device(
-		const machine_config &mconfig,
-		device_type type,
-		const char *tag,
-		device_t *owner,
-		uint32_t clock)
+neosprite_base_device::neosprite_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, m_bppshift(4)

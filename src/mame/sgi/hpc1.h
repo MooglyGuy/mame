@@ -28,7 +28,7 @@ public:
 		m_eeprom.set_tag(std::forward<U>(eeprom_tag));
 	}
 
-	hpc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	hpc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint32_t read(offs_t offset, uint32_t mem_mask = ~0);
 	void write(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);

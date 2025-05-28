@@ -24,7 +24,7 @@ protected:
 
 private:
 	sound_stream *m_channel;
-	int m_sample_rate;
+	XTAL m_sample_rate;
 	int m_vol_table[16];    /* volume table         */
 	int32_t m_register[16];   /* registers */
 	int32_t m_last_register[2];   /* last register written */

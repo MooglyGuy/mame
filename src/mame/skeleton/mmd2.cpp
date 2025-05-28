@@ -363,7 +363,7 @@ void mmd2_state::init_mmd2()
 void mmd2_state::mmd2(machine_config &config)
 {
 	/* basic machine hardware */
-	I8080(config, m_maincpu, 6750000 / 9);
+	I8080(config, m_maincpu, XTAL::u(6750000) / 9);
 	m_maincpu->set_addrmap(AS_PROGRAM, &mmd2_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &mmd2_state::io_map);
 	m_maincpu->out_status_func().set(FUNC(mmd2_state::status_callback));

@@ -127,7 +127,7 @@ void pc_fdc_family_device::ccr_w(uint8_t data)
 {
 	static const int rates[4] = { 500000, 300000, 250000, 1000000 };
 	LOG("ccr = %02x\n", data);
-	fdc->set_rate(rates[data & 3]);
+	fdc->set_rate(XTAL::u(rates[data & 3]));
 }
 
 void pc_fdc_xt_device::dor_fifo_w(uint8_t data)

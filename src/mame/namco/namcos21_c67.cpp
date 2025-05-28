@@ -780,12 +780,12 @@ TIMER_DEVICE_CALLBACK_MEMBER(namcos21_c67_state::screen_scanline)
 
 void namcos21_c67_state::configure_c148_standard(machine_config &config)
 {
-	NAMCO_C148(config, m_master_intc, 0, m_maincpu, true);
+	NAMCO_C148(config, m_master_intc, XTAL(), m_maincpu, true);
 	m_master_intc->link_c148_device(m_slave_intc);
 	m_master_intc->out_ext1_callback().set(FUNC(namcos21_c67_state::sound_reset_w));
 	m_master_intc->out_ext2_callback().set(FUNC(namcos21_c67_state::system_reset_w));
 
-	NAMCO_C148(config, m_slave_intc, 0, m_slave, false);
+	NAMCO_C148(config, m_slave_intc, XTAL(), m_slave, false);
 	m_slave_intc->link_c148_device(m_master_intc);
 }
 

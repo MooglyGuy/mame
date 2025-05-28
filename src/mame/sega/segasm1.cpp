@@ -632,7 +632,7 @@ void systemm1_state::m1base(machine_config &config)
 
 	PALETTE(config, m_palette).set_entries(8192);
 
-	S24TILE(config, m_tiles, 0, 0x3fff);
+	S24TILE(config, m_tiles, XTAL(), 0x3fff);
 	m_tiles->set_palette(m_palette);
 
 	S24MIXER(config, m_mixer);

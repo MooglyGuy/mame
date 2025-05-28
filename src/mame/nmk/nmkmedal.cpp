@@ -185,20 +185,20 @@ INPUT_PORTS_END
 
 void trocana_state::trocana(machine_config &config)
 {
-	TMP90841(config, m_maincpu, 16000000 / 2); // actually TMP90C041AN
+	TMP90841(config, m_maincpu, XTAL::u(16000000) / 2); // actually TMP90C041AN
 	m_maincpu->set_addrmap(AS_PROGRAM, &trocana_state::mem_map);
 
 	SPEAKER(config, "mono").front_center();
-	OKIM6650(config, m_oki, 16500000 / 4).add_route(ALL_OUTPUTS, "mono", 1.0);
+	OKIM6650(config, m_oki, XTAL::u(16500000) / 4).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void hpierrot_state::hpierrot(machine_config &config)
 {
-	TMP90841(config, m_maincpu, 16000000 / 2); // actually TMP90C041AN
+	TMP90841(config, m_maincpu, XTAL::u(16000000) / 2); // actually TMP90C041AN
 	m_maincpu->set_addrmap(AS_PROGRAM, &hpierrot_state::mem_map);
 
 	SPEAKER(config, "mono").front_center();
-	OKIM6295(config, m_oki, 16000000 / 16, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0); // divider and pin not verified
+	OKIM6295(config, m_oki, XTAL::u(16000000) / 16, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0); // divider and pin not verified
 }
 
 

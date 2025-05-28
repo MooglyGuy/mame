@@ -3940,7 +3940,7 @@ void segas16b_state::system16b(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	SEGA_SYS16B_SPRITES(config, m_sprites);
-	SEGAIC16VID(config, m_segaic16vid, 0, m_gfxdecode);
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), m_gfxdecode);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
@@ -4163,7 +4163,7 @@ void segas16b_state::lockonph(machine_config &config)
 	m_screen->set_palette(m_palette);
 
 	SEGA_SYS16B_SPRITES(config, m_sprites);
-	SEGAIC16VID(config, m_segaic16vid, 0, m_gfxdecode);
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), m_gfxdecode);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();

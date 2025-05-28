@@ -21,7 +21,7 @@ namespace bus::epson_qx {
 //-------------------------------------------------
 //  cr1510_device - constructor
 //-------------------------------------------------
-cr1510_device::cr1510_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cr1510_device::cr1510_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, EPSON_QX_OPTION_CR1510, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	m_hdd(*this, "hdd")
@@ -33,9 +33,9 @@ cr1510_device::cr1510_device(const machine_config &mconfig, const char *tag, dev
 //-------------------------------------------------
 void cr1510_device::device_add_mconfig(machine_config &config)
 {
-	WD1000(config, m_hdd, 0);
+	WD1000(config, m_hdd);
 
-	HARDDISK(config, "hdd:0", 0);
+	HARDDISK(config, "hdd:0");
 }
 
 //-------------------------------------------------

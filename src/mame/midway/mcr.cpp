@@ -1803,7 +1803,7 @@ void mcr_state::mcr_90009(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
-	MIDWAY_SSIO(config, m_ssio);
+	MIDWAY_SSIO(config, m_ssio, XTAL(16'000'000));
 	m_ssio->add_route(0, "lspeaker", 1.0);
 	m_ssio->add_route(1, "rspeaker", 1.0);
 }
@@ -1874,7 +1874,7 @@ void mcr_state::mcr_91490(machine_config & config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &mcr_state::cpu_91490_map);
 	m_maincpu->set_addrmap(AS_IO, &mcr_state::cpu_91490_portmap);
 
-	m_ctc->set_clock(5000000 /* same as "maincpu" */);
+	m_ctc->set_clock(XTAL::u(5000000) /* same as "maincpu" */);
 }
 
 
@@ -1896,23 +1896,23 @@ void mcr_nflfoot_state::mcr_91490_ipu(machine_config &config)
 	mcr_91490_snt(config);
 
 	/* basic machine hardware */
-	Z80(config, m_ipu, 7372800/2);
+	Z80(config, m_ipu, XTAL::u(7372800) / 2);
 	m_ipu->set_daisy_config(mcr_ipu_daisy_chain);
 	m_ipu->set_addrmap(AS_PROGRAM, &mcr_nflfoot_state::ipu_91695_map);
 	m_ipu->set_addrmap(AS_IO, &mcr_nflfoot_state::ipu_91695_portmap);
 
 	subdevice<timer_device>("scantimer")->set_callback(FUNC(mcr_nflfoot_state::ipu_interrupt));
 
-	Z80CTC(config, m_ipu_ctc, 7372800/2 /* same as "ipu" */);
+	Z80CTC(config, m_ipu_ctc, XTAL::u(7372800) / 2 /* same as "ipu" */);
 	m_ipu_ctc->intr_callback().set_inputline(m_ipu, INPUT_LINE_IRQ0);
 
-	Z80PIO(config, m_ipu_pio0, 7372800/2);
+	Z80PIO(config, m_ipu_pio0, XTAL::u(7372800) / 2);
 	m_ipu_pio0->out_int_callback().set_inputline(m_ipu, INPUT_LINE_IRQ0);
 
-	Z80PIO(config, m_ipu_pio1, 7372800/2);
+	Z80PIO(config, m_ipu_pio1, XTAL::u(7372800) / 2);
 	m_ipu_pio1->out_int_callback().set_inputline(m_ipu, INPUT_LINE_IRQ0);
 
-	Z80SIO(config, m_ipu_sio, 7372800/2); // Z8440BB1
+	Z80SIO(config, m_ipu_sio, XTAL::u(7372800) / 2); // Z8440BB1
 	m_ipu_sio->out_int_callback().set_inputline(m_ipu, INPUT_LINE_IRQ0);
 	m_ipu_sio->out_txda_callback().set(FUNC(mcr_nflfoot_state::sio_txda_w));
 	m_ipu_sio->out_txdb_callback().set(FUNC(mcr_nflfoot_state::sio_txdb_w));
@@ -1925,7 +1925,7 @@ void mcr_state::mcr_91490_tcs(machine_config &config)
 	mcr_91490(config);
 
 	/* basic machine hardware */
-	MIDWAY_TURBO_CHEAP_SQUEAK(config, m_turbo_cheap_squeak);
+	MIDWAY_TURBO_CHEAP_SQUEAK(config, m_turbo_cheap_squeak, XTAL(8'000'000));
 	m_turbo_cheap_squeak->add_route(ALL_OUTPUTS, "lspeaker", 1.0);
 	m_turbo_cheap_squeak->add_route(ALL_OUTPUTS, "rspeaker", 1.0);
 }

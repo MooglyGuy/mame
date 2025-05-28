@@ -115,8 +115,8 @@ private:
 
 
 /* From italiandoh's notes */
-#define CPU_PCB_CLOCK (8000000)
-#define SOUND_PCB_CLOCK (6000000)
+#define CPU_PCB_CLOCK XTAL::u(8000000)
+#define SOUND_PCB_CLOCK XTAL::u(6000000)
 
 
 /* VIDEO GOODS */

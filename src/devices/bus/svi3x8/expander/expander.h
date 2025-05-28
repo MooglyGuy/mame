@@ -62,7 +62,7 @@ public:
 		set_fixed(false);
 	}
 
-	svi_expander_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	svi_expander_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~svi_expander_device();
 
 	// callbacks

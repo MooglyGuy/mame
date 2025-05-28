@@ -28,7 +28,7 @@
 #define FDC_TAG     "wd2797"
 
 
-#define DGNBETA_CPU_SPEED_HZ        2000000 /* 2MHz */
+#define DGNBETA_CPU_SPEED_HZ        XTAL::u(2000000) /* 2MHz */
 #define DGNBETA_FRAMES_PER_SECOND   50
 
 

@@ -494,15 +494,15 @@ void fromanc2_state::machine_reset()
 void fromanc2_state::fromanc2(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 32000000/2);      /* 16.00 MHz */
+	M68000(config, m_maincpu, XTAL::u(32000000)/2);      /* 16.00 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &fromanc2_state::fromanc2_main_map);
 	m_maincpu->set_vblank_int("lscreen", FUNC(fromanc2_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 32000000/4);        /* 8.00 MHz */
+	Z80(config, m_audiocpu, XTAL::u(32000000)/4);        /* 8.00 MHz */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &fromanc2_state::fromanc2_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &fromanc2_state::fromanc2_sound_io_map);
 
-	Z80(config, m_subcpu, 32000000/4);     /* 8.00 MHz */
+	Z80(config, m_subcpu, XTAL::u(32000000)/4);     /* 8.00 MHz */
 	m_subcpu->set_addrmap(AS_PROGRAM, &fromanc2_state::fromanc2_sub_map);
 	m_subcpu->set_addrmap(AS_IO, &fromanc2_state::fromanc2_sub_io_map);
 
@@ -552,15 +552,15 @@ void fromanc2_state::fromanc2(machine_config &config)
 void fromanc2_state::fromancr(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 32000000/2);      /* 16.00 MHz */
+	M68000(config, m_maincpu, XTAL::u(32000000)/2);      /* 16.00 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &fromanc2_state::fromancr_main_map);
 	m_maincpu->set_vblank_int("lscreen", FUNC(fromanc2_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 32000000/4);        /* 8.00 MHz */
+	Z80(config, m_audiocpu, XTAL::u(32000000)/4);        /* 8.00 MHz */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &fromanc2_state::fromanc2_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &fromanc2_state::fromanc2_sound_io_map);
 
-	Z80(config, m_subcpu, 32000000/4);     /* 8.00 MHz */
+	Z80(config, m_subcpu, XTAL::u(32000000)/4);     /* 8.00 MHz */
 	m_subcpu->set_addrmap(AS_PROGRAM, &fromanc2_state::fromanc2_sub_map);
 	m_subcpu->set_addrmap(AS_IO, &fromanc2_state::fromanc2_sub_io_map);
 

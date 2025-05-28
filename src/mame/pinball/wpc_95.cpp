@@ -2307,7 +2307,7 @@ void wpc_95_state::wpc_95(machine_config &config)
 
 	WPC_PIC(config, m_pic);
 	WPC_LAMP(config, m_lamp);
-	WPC_OUT(config, m_out, 0, 3);
+	WPC_OUT(config, m_out, XTAL(), 3);
 	WPC_SHIFT(config, "shift");
 	WPC_DMD(config, "dmd").scanline_callback().set(FUNC(wpc_95_state::scanline_irq));
 

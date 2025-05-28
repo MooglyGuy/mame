@@ -420,7 +420,7 @@ void mpf1_state::mpf1b(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 0.25);
 
-	TMS5220(config, TMS5220_TAG, 680000L).add_route(ALL_OUTPUTS, "mono", 0.50);
+	TMS5220(config, TMS5220_TAG, XTAL::u(680000)).add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	TIMER(config, "halt_timer").configure_periodic(FUNC(mpf1_state::check_halt_callback), attotime::from_hz(1));
 }

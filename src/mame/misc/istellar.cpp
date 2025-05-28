@@ -288,7 +288,7 @@ WRITE_LINE_MEMBER(istellar_state::vblank_irq)
 void istellar_state::istellar(machine_config &config)
 {
 	// There is only 1 crystal on the stack of 3 boards - speed is unknown, the following is Daphne's guess
-	constexpr int GUESSED_CLOCK = 3'072'000;
+	constexpr XTAL GUESSED_CLOCK = XTAL::u(3'072'000);
 
 	Z80(config, m_maincpu, GUESSED_CLOCK);
 	m_maincpu->set_addrmap(AS_PROGRAM, &istellar_state::z80_0_mem);

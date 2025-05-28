@@ -37,7 +37,7 @@ public:
 		set_fixed(false);
 	}
 
-	spc1000_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	spc1000_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~spc1000_exp_device();
 
 	// reading and writing

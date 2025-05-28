@@ -42,7 +42,7 @@ class scudsp_cpu_device : public cpu_device
 {
 public:
 	// construction/destruction
-	scudsp_cpu_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	scudsp_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto out_irq_callback() { return m_out_irq_cb.bind(); }
 	auto in_dma_callback() { return m_in_dma_cb.bind(); }

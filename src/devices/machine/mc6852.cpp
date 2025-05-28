@@ -74,8 +74,8 @@ void mc6852_device::device_start()
 	m_write_sm_dtr.resolve_safe();
 	m_write_tuf.resolve_safe();
 
-	set_rcv_rate(m_rx_clock);
-	set_tra_rate(m_tx_clock);
+	set_rcv_rate(XTAL::u(m_rx_clock));
+	set_tra_rate(XTAL::u(m_tx_clock));
 
 	// register for state saving
 	save_item(NAME(m_status));

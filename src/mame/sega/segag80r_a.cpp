@@ -24,7 +24,7 @@
  *************************************/
 
 #define SEGA005_555_TIMER_FREQ      (1.44 / ((15000 + 2 * 4700) * 1.5e-6))
-#define SEGA005_COUNTER_FREQ        (100000)    /* unknown, just a guess */
+#define SEGA005_COUNTER_FREQ        XTAL::u(100000)    /* unknown, just a guess */
 
 DEFINE_DEVICE_TYPE(SEGA005, sega005_sound_device, "sega005_sound", "Sega 005 Custom Sound")
 

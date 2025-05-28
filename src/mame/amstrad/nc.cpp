@@ -562,15 +562,15 @@ void nc_state::nc_sound_update(int channel)
 	int period = m_sound_channel_periods[channel];
 
 	/* if top bit is 0, sound is on */
-	int on = ((period & (1<<15))==0);
+	bool on = ((period & (1 << 15)) == 0);
 
 	/* calculate frequency from period */
-	int frequency = (int)(1000000.0f/((float)((period & 0x07fff)<<1) * 1.6276f));
+	uint32_t frequency = (int)(1000000.0f / ((float)((period & 0x07fff) << 1) * 1.6276f));
 
 	/* set state */
 	beeper_device->set_state(on);
 	/* set frequency */
-	beeper_device->set_clock(frequency);
+	beeper_device->set_frequency(frequency);
 }
 
 void nc_state::nc_sound_w(offs_t offset, uint8_t data)

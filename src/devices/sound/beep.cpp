@@ -25,7 +25,7 @@ beep_device::beep_device(const machine_config &mconfig, const char *tag, device_
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
 	, m_enable(0)
-	, m_frequency(clock)
+	, m_frequency(clock.value())
 {
 }
 
@@ -36,7 +36,7 @@ beep_device::beep_device(const machine_config &mconfig, const char *tag, device_
 
 void beep_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, BEEP_RATE);
+	m_stream = stream_alloc(0, 1, XTAL::u(BEEP_RATE));
 	m_enable = 0;
 	m_signal = 1.0;
 
@@ -56,16 +56,17 @@ void beep_device::sound_stream_update(sound_stream &stream, std::vector<read_str
 {
 	auto &buffer = outputs[0];
 	int16_t signal = m_signal;
-	int clock = 0, rate = BEEP_RATE / 2;
+	int freq = 0;
+	int rate = BEEP_RATE / 2;
 
 	/* get progress through wave */
 	int incr = m_incr;
 
 	if (m_frequency > 0)
-		clock = m_frequency;
+		freq = m_frequency;
 
 	/* if we're not enabled, just fill with 0 */
-	if ( !m_enable || clock == 0 )
+	if (!m_enable || freq == 0)
 	{
 		buffer.fill(0);
 		return;
@@ -75,8 +76,8 @@ void beep_device::sound_stream_update(sound_stream &stream, std::vector<read_str
 	for (int sampindex = 0; sampindex < buffer.samples(); sampindex++)
 	{
 		buffer.put(sampindex, signal);
-		incr -= clock;
-		while( incr < 0 )
+		incr -= freq;
+		while (incr < 0)
 		{
 			incr += rate;
 			signal = -signal;
@@ -113,13 +114,13 @@ WRITE_LINE_MEMBER(beep_device::set_state)
 //  setting new frequency starts from beginning
 //-------------------------------------------------
 
-void beep_device::set_clock(uint32_t frequency)
+void beep_device::set_frequency(const u32 freq)
 {
-	if (m_frequency == frequency)
+	if (m_frequency == freq)
 		return;
 
 	m_stream->update();
-	m_frequency = frequency;
+	m_frequency = freq;
 	m_signal = 1.0;
 	m_incr = 0;
 }

@@ -187,7 +187,7 @@ void swp30_device::device_add_mconfig(machine_config &config)
 
 void swp30_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 44100, STREAM_SYNCHRONOUS);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100), STREAM_SYNCHRONOUS);
 
 	// Attenuation for panning is 4.4 floating point.  That means 0
 	// to -96.3dB.  Since it's a nice range, we assume it's the same

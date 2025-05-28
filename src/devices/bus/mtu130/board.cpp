@@ -8,7 +8,7 @@
 
 DEFINE_DEVICE_TYPE(MTU130_EXTENSION, mtu130_extension_device, "mtu130_extension", "MTU130 extension board slot")
 
-mtu130_extension_device::mtu130_extension_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mtu130_extension_device::mtu130_extension_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MTU130_EXTENSION, tag, owner, clock),
 	device_single_card_slot_interface<mtu130_extension_interface>(mconfig, *this),
 	m_irq_merger(*this, finder_base::DUMMY_TAG)

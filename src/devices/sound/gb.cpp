@@ -142,7 +142,7 @@ cgb04_apu_device::cgb04_apu_device(const machine_config &mconfig, const char *ta
 
 void gameboy_sound_device::device_start()
 {
-	m_channel = stream_alloc(0, 2, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_channel = stream_alloc(0, 2, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 	m_timer = timer_alloc(FUNC(gameboy_sound_device::timer_callback), this);
 	m_timer->adjust(clocks_to_attotime(FRAME_CYCLES/128), 0, clocks_to_attotime(FRAME_CYCLES/128));
 

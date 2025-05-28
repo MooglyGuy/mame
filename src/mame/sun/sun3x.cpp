@@ -614,9 +614,9 @@ void sun3x_state::sun3_80(machine_config &config)
 	scsi.set_slot_device(1, "harddisk", SCSIHD, DEVICE_INPUT_DEFAULTS_NAME(SCSI_ID_6));
 	scsi.set_slot_device(2, "harddisk", SCSIHD, DEVICE_INPUT_DEFAULTS_NAME(SCSI_ID_5));
 
-	NCR539X(config, ESP_TAG, 20000000/2).set_scsi_port("scsi");
+	NCR539X(config, ESP_TAG, XTAL::u(20000000)/2).set_scsi_port("scsi");
 
-	N82077AA(config, m_fdc, 24000000, n82077aa_device::mode_t::PS2);
+	N82077AA(config, m_fdc, XTAL::u(24000000), n82077aa_device::mode_t::PS2);
 	FLOPPY_CONNECTOR(config, "fdc:0", sun_floppies, "35hd", floppy_image_device::default_pc_floppy_formats);
 
 	// the timekeeper has no interrupt output, so 3/80 includes a dedicated timer circuit

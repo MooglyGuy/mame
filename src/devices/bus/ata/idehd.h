@@ -125,7 +125,7 @@ class ide_cf_device : public ide_hdd_device
 {
 public:
 	// construction/destruction
-	ide_cf_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ide_cf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

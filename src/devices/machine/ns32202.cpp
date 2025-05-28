@@ -482,7 +482,7 @@ void ns32202_device::interrupt_update()
 // N=0 -> l-counter
 template <unsigned N> void ns32202_device::counter(s32 param)
 {
-	u32 const scaled_clock = clock() / ((m_cctl & CCTL_CFNPS) ? 1 : 4);
+	u32 const scaled_clock = clock().value() / ((m_cctl & CCTL_CFNPS) ? 1 : 4);
 
 	// for now, assume this is the periodic timer triggered when we hit zero
 	// reload on cycle after zero
@@ -693,7 +693,7 @@ void ns32202_device::cctl_w(u8 data)
 		m_counter[0]->enable(false);
 
 	// compute scaled clock
-	u32 const scaled_clock = clock() / ((data & CCTL_CFNPS) ? 1 : 4);
+	u32 const scaled_clock = clock().value() / ((data & CCTL_CFNPS) ? 1 : 4);
 
 	// start/stop h-counter
 	if (!(m_cctl & CCTL_CRUNH) && (data & CCTL_CRUNH))
@@ -765,7 +765,7 @@ void ns32202_device::mctl_w(u8 data)
 
 void ns32202_device::update_ccv()
 {
-	u32 const scaled_clock = clock() / ((m_cctl & CCTL_CFNPS) ? 1 : 4);
+	u32 const scaled_clock = clock().value() / ((m_cctl & CCTL_CFNPS) ? 1 : 4);
 
 	if (m_cctl & CCTL_CCON)
 	{

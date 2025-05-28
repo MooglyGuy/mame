@@ -266,7 +266,7 @@ void darkmist_state::darkmist(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 14318180/4));    /* 3.579545 MHz */
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(14318180)/4));    /* 3.579545 MHz */
 	ymsnd.irq_handler().set(m_t5182, FUNC(t5182_device::ym2151_irq_handler));
 	ymsnd.add_route(0, "mono", 1.0);
 	ymsnd.add_route(1, "mono", 1.0);

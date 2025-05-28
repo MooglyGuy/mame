@@ -328,11 +328,11 @@ INPUT_PORTS_END
 void gm_state::v4in1eg(machine_config &config)
 {
 	// basic machine hardware
-	F8(config, m_maincpu, 4200000/2); // MK3870, approximation (internal /2 divider)
+	F8(config, m_maincpu, XTAL::u(4200000)/2); // MK3870, approximation (internal /2 divider)
 	m_maincpu->set_addrmap(AS_PROGRAM, &gm_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &gm_state::main_io);
 
-	F38T56(config, m_psu, 4200000/2);
+	F38T56(config, m_psu, XTAL::u(4200000)/2);
 	m_psu->write_a().set(FUNC(gm_state::sound_w));
 	m_psu->read_a().set(FUNC(gm_state::sound_r));
 	m_psu->write_b().set(FUNC(gm_state::digit_w));

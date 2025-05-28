@@ -306,7 +306,7 @@ void dm7000_state::kbd_put(u8 data)
 void dm7000_state::dm7000(machine_config &config)
 {
 	/* basic machine hardware */
-	PPC405GP(config, m_maincpu, 252000000 / 10); // Should be PPC405D4?
+	PPC405GP(config, m_maincpu, XTAL::u(252000000) / 10); // Should be PPC405D4?
 	// Slowed down 10 times in order to get normal response for now
 	m_maincpu->set_bus_frequency(252000000);
 	m_maincpu->set_addrmap(AS_PROGRAM, &dm7000_state::dm7000_mem);

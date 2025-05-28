@@ -67,7 +67,7 @@ private:
 	util::fifo<uint8_t, 16> m_urxb_fifo; // receive FIFO
 
 	void update_serial_config();
-	inline uint32_t calculate_baud_rate();
+	inline XTAL calculate_baud_rate();
 
 	virtual void tra_callback() override;
 	virtual void tra_complete() override;

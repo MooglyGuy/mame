@@ -22,8 +22,7 @@ public:
 	void start_w(int state);   // START (pin 10)
 	void data_w(uint8_t data); // 6-bit word
 
-	void set_clock(uint32_t clock);       // set new CLK frequency
-	void set_clock(const XTAL &xtal) { set_clock(xtal.value()); }
+	void set_clock(const XTAL &xtal);   // set new CLK frequency
 	void force_update();                // update stream, eg. before external ROM bankswitch
 
 protected:

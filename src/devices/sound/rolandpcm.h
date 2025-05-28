@@ -57,8 +57,8 @@ private:
 
 	devcb_write_line m_int_callback;
 
-	uint32_t m_clock;                   // clock
-	uint32_t m_rate;                    // sample rate (usually 32000 Hz)
+	XTAL m_clock;                       // clock
+	XTAL m_rate;                        // sample rate (usually 32000 Hz)
 	sound_stream* m_stream;             // stream handle
 	pcm_channel m_chns[NUM_CHANNELS];   // channel memory
 	uint8_t m_sel_chn;                  // selected channel

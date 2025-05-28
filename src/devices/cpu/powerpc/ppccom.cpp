@@ -719,7 +719,7 @@ void ppc_device::device_start()
 	m_debugger_temp = 0;
 
 	m_cache_line_size = 32;
-	m_cpu_clock = clock();
+	m_cpu_clock = clock().value();
 	m_program = &space(AS_PROGRAM);
 	if(m_cap & PPCCAP_4XX)
 	{
@@ -746,11 +746,11 @@ void ppc_device::device_start()
 				return ptr;
 			};
 	}
-	m_system_clock = c_bus_frequency != 0 ? c_bus_frequency : clock();
+	m_system_clock = c_bus_frequency != 0 ? c_bus_frequency : clock().value();
 	m_dcr_read_func.set(nullptr);
 	m_dcr_write_func.set(nullptr);
 
-	m_tb_divisor = (m_tb_divisor * clock() + m_system_clock / 2 - 1) / m_system_clock;
+	m_tb_divisor = (m_tb_divisor * clock().value() + m_system_clock / 2 - 1) / m_system_clock;
 
 	/* allocate a timer for the compare interrupt */
 	if ((m_cap & PPCCAP_OEA) && (m_tb_divisor))
