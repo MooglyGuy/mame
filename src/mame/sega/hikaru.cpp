@@ -400,7 +400,7 @@ Notes:
 
 namespace {
 
-#define CPU_CLOCK (200000000)
+#define CPU_CLOCK XTAL::u(200000000)
 
 class hikaru_state : public driver_device
 {

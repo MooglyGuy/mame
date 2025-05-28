@@ -22,7 +22,7 @@ public:
 
 	typedef device_delegate<u8 ()> dma_offs_delegate;
 
-	st0016_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32);
+	st0016_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename... T> void set_dma_offs_callback(T &&... args) { m_dma_offs_cb.set(std::forward<T>(args)...); }
 

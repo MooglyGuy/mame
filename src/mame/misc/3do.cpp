@@ -101,8 +101,8 @@ Part list of Goldstar 3DO Interactive Multiplayer
 #include "imagedev/cdromimg.h"
 
 
-#define X2_CLOCK_PAL    59000000
-#define X2_CLOCK_NTSC   49090000
+#define X2_CLOCK_PAL    XTAL::u(59000000)
+#define X2_CLOCK_NTSC   XTAL::u(49090000)
 #define X601_CLOCK      XTAL(16'934'400)
 
 

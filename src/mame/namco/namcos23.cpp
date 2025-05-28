@@ -1316,9 +1316,9 @@ namespace
 
 #define JVSCLOCK    (XTAL(14'745'600))
 
-#define H8CLOCK     (16934400)      /* based on research (superctr) */
-#define BUSCLOCK    (16934400*2)
-#define C352CLOCK   (25401600)
+#define H8CLOCK     (XTAL::u(16934400))      /* based on research (superctr) */
+#define BUSCLOCK    (XTAL::u(16934400)*2)
+#define C352CLOCK   (XTAL::u(25401600))
 #define C352DIV     (288)
 
 #define PIXEL_CLOCK (51.2_MHz_XTAL/4*2)

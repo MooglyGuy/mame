@@ -229,7 +229,7 @@ void okim6258_device::device_clock_changed()
 
 int okim6258_device::get_vclk()
 {
-	return (clock() / m_divider);
+	return (clock().value() / m_divider);
 }
 
 

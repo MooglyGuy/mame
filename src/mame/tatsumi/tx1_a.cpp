@@ -113,7 +113,7 @@ void tx1_sound_device::device_start()
 
 	/* Allocate the stream */
 	m_stream = stream_alloc(0, 2, machine().sample_rate());
-	m_freq_to_step = (double)(1 << TX1_FRAC) / (double)machine().sample_rate();
+	m_freq_to_step = (1 << TX1_FRAC) / machine().sample_rate().dvalue();
 
 	/* Compute the engine resistor weights */
 	compute_resistor_weights(0, 10000, -1.0,
@@ -370,14 +370,14 @@ void tx1_sound_device::sound_stream_update(sound_stream &stream)
 	double /*gain_0, gain_1,*/ gain_2, gain_3;
 
 	/* 8253 outputs for the player/opponent engine sounds. */
-	step_0 = m_pit8253.counts[0].val ? (TX1_PIT_CLOCK / m_pit8253.counts[0].val * m_freq_to_step) : 0;
-	step_1 = m_pit8253.counts[1].val ? (TX1_PIT_CLOCK / m_pit8253.counts[1].val * m_freq_to_step) : 0;
-	step_2 = m_pit8253.counts[2].val ? (TX1_PIT_CLOCK / m_pit8253.counts[2].val * m_freq_to_step) : 0;
+	const uint32_t step_0 = XTAL(m_pit8253.counts[0].val ? (TX1_PIT_CLOCK / m_pit8253.counts[0].val * m_freq_to_step) : XTAL::u(0)).value();
+	const uint32_t step_1 = XTAL(m_pit8253.counts[1].val ? (TX1_PIT_CLOCK / m_pit8253.counts[1].val * m_freq_to_step) : XTAL::u(0)).value();
+	const uint32_t step_2 = XTAL(m_pit8253.counts[2].val ? (TX1_PIT_CLOCK / m_pit8253.counts[2].val * m_freq_to_step) : XTAL::u(0)).value();
 
-	//gain_0 = tx1_engine_gains[m_ay_outputa & 0xf];
-	//gain_1 = tx1_engine_gains[m_ay_outputa >> 4];
-	gain_2 = tx1_engine_gains[m_ay_outputb & 0xf];
-	gain_3 = BIT(m_ay_outputb, 5) ? 1.0f : 1.5f;
+	//double gain_0 = tx1_engine_gains[m_ay_outputa & 0xf];
+	//double gain_1 = tx1_engine_gains[m_ay_outputa >> 4];
+	double gain_2 = tx1_engine_gains[m_ay_outputb & 0xf];
+	double gain_3 = BIT(m_ay_outputb, 5) ? 1.0f : 1.5f;
 
 	for (int sampindex = 0; sampindex < stream.samples(); sampindex++)
 	{
@@ -652,7 +652,7 @@ void buggyboy_sound_device::device_start()
 
 	/* Allocate the stream */
 	m_stream = stream_alloc(0, 2, machine().sample_rate());
-	m_freq_to_step = (double)(1 << 24) / (double)machine().sample_rate();
+	m_freq_to_step = (1 << 24) / machine().sample_rate().dvalue();
 }
 
 //-------------------------------------------------
@@ -766,19 +766,17 @@ void buggyboy_sound_device::sound_stream_update(sound_stream &stream)
 	double gain0, gain1_l, gain1_r;
 
 	/* 8253 outputs for the player/opponent buggy engine sounds. */
-	step_0 = m_pit8253.counts[0].val ? (BUGGYBOY_PIT_CLOCK / m_pit8253.counts[0].val * m_freq_to_step) : 0;
-	step_1 = m_pit8253.counts[1].val ? (BUGGYBOY_PIT_CLOCK / m_pit8253.counts[1].val * m_freq_to_step) : 0;
+	uint32_t step_0 = (m_pit8253.counts[0].val ? (BUGGYBOY_PIT_CLOCK / m_pit8253.counts[0].val * m_freq_to_step) : XTAL::u(0)).value();
+	uint32_t step_1 = (m_pit8253.counts[1].val ? (BUGGYBOY_PIT_CLOCK / m_pit8253.counts[1].val * m_freq_to_step) : XTAL::u(0)).value();
 
-	if (!strcmp(machine().system().name, "buggyboyjr"))
-		gain0 = BIT(m_ym2_outputb, 3) ? 1.0 : 2.0;
-	else
-		gain0 = BIT(m_ym1_outputa, 3) ? 1.0 : 2.0;
+	const bool gain0_source = !strcmp(machine().system().name, "buggyboyjr") ? BIT(m_ym2_outputb, 3) : BIT(m_ym1_outputa, 3);
+	double gain0 = gain0_source ? 1.0 : 2.0;
 
-	n1_en = BIT(m_ym2_outputb, 4);
-	n2_en = BIT(m_ym2_outputb, 5);
+	bool n1_en = BIT(m_ym2_outputb, 4);
+	bool n2_en = BIT(m_ym2_outputb, 5);
 
-	gain1_l = bb_engine_gains[m_ym2_outputa >> 4] * 5;
-	gain1_r = bb_engine_gains[m_ym2_outputa & 0xf] * 5;
+	double gain1_l = bb_engine_gains[m_ym2_outputa >> 4] * 5;
+	double gain1_r = bb_engine_gains[m_ym2_outputa & 0xf] * 5;
 
 	for (int sampindex = 0; sampindex < stream.samples(); sampindex++)
 	{

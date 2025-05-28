@@ -319,7 +319,7 @@ INTERRUPT_GEN_MEMBER(ettrivia_state::interrupt)
 
 void ettrivia_state::ettrivia(machine_config &config)
 {
-	Z80(config, m_maincpu, 12'000'000 / 4 - 48'000); //should be ok, it gives the 300 interrupts expected
+	Z80(config, m_maincpu, XTAL::u(11'808'000) / 4); //should be 12000000/4, but had a -48000 to give the 300 interrupts expected(?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &ettrivia_state::program_map);
 	m_maincpu->set_addrmap(AS_IO, &ettrivia_state::io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(ettrivia_state::interrupt));

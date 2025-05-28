@@ -40,14 +40,14 @@ class mononcol_cartslot_device : public device_t,
 {
 public:
 	template <typename T>
-	mononcol_cartslot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts)
-		: mononcol_cartslot_device(mconfig, tag, owner, u32(0))
+	mononcol_cartslot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, T &&opts)
+		: mononcol_cartslot_device(mconfig, tag, owner, XTAL())
 	{
 		opts(*this);
 		set_fixed(false);
 	}
 
-	mononcol_cartslot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	mononcol_cartslot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual ~mononcol_cartslot_device();
 
@@ -82,7 +82,7 @@ public:
 
 
 protected:
-	mononcol_cartslot_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mononcol_cartslot_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

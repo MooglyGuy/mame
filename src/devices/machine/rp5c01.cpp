@@ -199,7 +199,7 @@ rp5c01_device::rp5c01_device(const machine_config &mconfig, device_type type, co
 void rp5c01_device::device_start()
 {
 	// allocate timers
-	if (clock() > 0)
+	if (clock().value() > 0)
 	{
 		m_clock_timer = timer_alloc(FUNC(rp5c01_device::advance_1hz_clock), this);
 		m_clock_timer->adjust(attotime::from_hz(clock() / 16384), 0, attotime::from_hz(clock() / 16384));

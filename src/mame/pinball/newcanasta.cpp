@@ -47,7 +47,7 @@ INPUT_PORTS_END
 void newcanasta_state::newcanasta(machine_config &config)
 {
 	// Basic machine hardware
-	PENTIUM4(config, m_maincpu, 100'000'000); // 775-pin LGA "Socket T" CPU, exact model unknown
+	PENTIUM4(config, m_maincpu, XTAL::u(100'000'000)); // 775-pin LGA "Socket T" CPU, exact model unknown
 	m_maincpu->set_addrmap(AS_PROGRAM, &newcanasta_state::newcanasta_map);
 
 	PCI_ROOT(config, "pci", 0);

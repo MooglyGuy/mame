@@ -866,7 +866,7 @@ void sat_console_state::saturn(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	SCSP(config, m_scsp, 8467200*8/3); // 8.4672 MHz EXTCLK * 8 / 3 = 22.5792 MHz
+	SCSP(config, m_scsp, XTAL::u(8467200)*8/3); // 8.4672 MHz EXTCLK * 8 / 3 = 22.5792 MHz
 	m_scsp->set_addrmap(0, &sat_console_state::scsp_mem);
 	m_scsp->irq_cb().set(FUNC(saturn_state::scsp_irq));
 	m_scsp->main_irq_cb().set(m_scu, FUNC(sega_scu_device::sound_req_w));

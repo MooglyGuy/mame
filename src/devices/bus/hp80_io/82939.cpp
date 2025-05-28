@@ -198,7 +198,7 @@ void hp82939_io_card_device::device_add_mconfig(machine_config &config)
 	I8049(config, m_cpu, XTAL(5'529'600));
 	m_cpu->set_addrmap(AS_IO, &hp82939_io_card_device::cpu_io_map);
 	m_cpu->t1_in_cb().set("xlator", FUNC(hp_1mb5_device::int_r));
-	m_cpu->set_t0_clk_cb("uart" , FUNC(device_t::set_unscaled_clock_int));
+	m_cpu->set_t0_clk_cb("uart" , FUNC(device_t::set_unscaled_clock_ns));
 	m_cpu->p1_in_cb().set(FUNC(hp82939_io_card_device::p1_r));
 	m_cpu->p1_out_cb().set(FUNC(hp82939_io_card_device::p1_w));
 	m_cpu->p2_in_cb().set(FUNC(hp82939_io_card_device::p2_r));
@@ -210,7 +210,7 @@ void hp82939_io_card_device::device_add_mconfig(machine_config &config)
 
 	RS232_PORT(config, m_rs232, default_rs232_devices, nullptr);
 
-	INS8250(config , m_uart , 0);
+	INS8250(config , m_uart , XTAL());
 	m_uart->out_int_callback().set_inputline(m_cpu , MCS48_INPUT_IRQ);
 	m_uart->out_tx_callback().set(m_rs232 , FUNC(rs232_port_device::write_txd));
 	m_uart->out_dtr_callback().set(m_rs232 , FUNC(rs232_port_device::write_dtr));

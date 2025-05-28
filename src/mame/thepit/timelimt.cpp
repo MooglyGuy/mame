@@ -464,7 +464,7 @@ void timelimt_state::timelimt(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &timelimt_state::main_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(timelimt_state::main_nmi));
 
-	Z80(config, m_audiocpu, 10'000'000 / 4);
+	Z80(config, m_audiocpu, XTAL::u(10'000'000) / 4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &timelimt_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &timelimt_state::sound_io_map);
 	m_audiocpu->set_vblank_int("screen", FUNC(timelimt_state::irq0_line_hold)); // ?
@@ -497,9 +497,9 @@ void timelimt_state::timelimt(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	AY8910(config, "ay1", 18'432'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.25);
+	AY8910(config, "ay1", XTAL::u(18'432'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.25);
 
-	ay8910_device &ay2(AY8910(config, "ay2", 18'432'000 / 12));
+	ay8910_device &ay2(AY8910(config, "ay2", XTAL::u(18'432'000) / 12));
 	ay2.port_a_read_callback().set("soundlatch", FUNC(generic_latch_8_device::read));
 	ay2.add_route(ALL_OUTPUTS, "mono", 0.25);
 }

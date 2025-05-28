@@ -108,7 +108,7 @@ void ondra_state::port0a_w(u8 data)
 	u16 tone = tones[BIT(data, 5, 3)];
 	m_beep->set_state(tone? 1 : 0);
 	if (tone)
-		m_beep->set_clock(tone);
+		m_beep->set_frequency(tone);
 }
 
 void ondra_state::machine_reset()

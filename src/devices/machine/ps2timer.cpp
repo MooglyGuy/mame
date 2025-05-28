@@ -109,16 +109,16 @@ void ps2_timer_device::update_count()
 	switch (m_clk_select)
 	{
 		case CLKS_BUSCLK1:
-			frequency = clock();
+			frequency = clock().value();
 			break;
 		case CLKS_BUSCLK16:
-			frequency = clock() / 16;
+			frequency = clock().value() / 16;
 			break;
 		case CLKS_BUSCLK256:
-			frequency = clock() / 256;
+			frequency = clock().value() / 256;
 			break;
 		case CLKS_HBLNK:
-			frequency = clock() / 18700;
+			frequency = clock().value() / 18700;
 			break;
 	}
 

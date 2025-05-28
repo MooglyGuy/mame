@@ -1640,12 +1640,12 @@ void namcos2_state::configure_c116_standard(machine_config &config)
 
 void namcos2_state::configure_c148_standard(machine_config &config)
 {
-	NAMCO_C148(config, m_master_intc, 0, m_maincpu, true);
+	NAMCO_C148(config, m_master_intc, XTAL(), m_maincpu, true);
 	m_master_intc->link_c148_device(m_slave_intc);
 	m_master_intc->out_ext1_callback().set(FUNC(namcos2_state::sound_reset_w));
 	m_master_intc->out_ext2_callback().set(FUNC(namcos2_state::system_reset_w));
 
-	NAMCO_C148(config, m_slave_intc, 0, m_slave, false);
+	NAMCO_C148(config, m_slave_intc, XTAL(), m_slave, false);
 	m_slave_intc->link_c148_device(m_master_intc);
 }
 
@@ -1902,7 +1902,7 @@ void namcos2_state::finallap(machine_config &config)
 {
 	base_fl(config);
 
-	NAMCOS2_SPRITE_FINALLAP(config.replace(), m_ns2sprite, 0, m_c116, gfx_namcos2_spr);
+	NAMCOS2_SPRITE_FINALLAP(config.replace(), m_ns2sprite, m_c116, gfx_namcos2_spr);
 	m_ns2sprite->set_spriteram_tag("spriteram");
 }
 

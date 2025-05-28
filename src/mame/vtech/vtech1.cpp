@@ -58,7 +58,7 @@ namespace {
     CONSTANTS & MACROS
 ***************************************************************************/
 
-#define VTECH1_CLK        3579500
+#define VTECH1_CLK        XTAL::u(3579500)
 #define VZ300_XTAL1_CLK   XTAL(17'734'470)
 
 

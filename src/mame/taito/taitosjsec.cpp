@@ -6,11 +6,7 @@
 DEFINE_DEVICE_TYPE(TAITO_SJ_SECURITY_MCU,  taito_sj_security_mcu_device, "taitosjsecmcu", "Taito SJ Security MCU Interface")
 
 
-taito_sj_security_mcu_device::taito_sj_security_mcu_device(
-		machine_config const &mconfig,
-		char const *tag,
-		device_t *owner,
-		u32 clock)
+taito_sj_security_mcu_device::taito_sj_security_mcu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig,TAITO_SJ_SECURITY_MCU, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_int_mode(int_mode::NONE)

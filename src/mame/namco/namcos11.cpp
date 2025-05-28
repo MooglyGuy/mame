@@ -777,7 +777,7 @@ void namcos11_state::coh110(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	c352_device &c352(C352(config, "c352", 25401600, 288));
+	c352_device &c352(C352(config, "c352", XTAL::u(25401600), 288));
 	c352.add_route(0, "speaker", 1.00, 0);
 	c352.add_route(1, "speaker", 1.00, 1);
 	//c352.add_route(2, "speaker", 1.00); // Second DAC not present.

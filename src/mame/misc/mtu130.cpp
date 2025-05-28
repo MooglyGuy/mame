@@ -41,9 +41,9 @@
 
 class mtu130_rom_device : public device_t, public device_rom_image_interface {
 public:
-	mtu130_rom_device(const machine_config &mconfig, char const *tag, device_t *owner, uint32_t clock);
+	mtu130_rom_device(const machine_config &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 	template <typename T> mtu130_rom_device(const machine_config &mconfig, char const *tag, device_t *owner, T &&romdata_tag, offs_t load_offset) :
-		mtu130_rom_device(mconfig, tag, owner, 0)
+		mtu130_rom_device(mconfig, tag, owner, XTAL())
 	{
 		m_load_offset = load_offset;
 		m_romdata.set_tag(std::forward<T>(romdata_tag));
@@ -223,7 +223,7 @@ private:
 
 DEFINE_DEVICE_TYPE(MTU130_ROM, mtu130_rom_device, "mtu130_rom", "MTU130 rom slot")
 
-	mtu130_rom_device::mtu130_rom_device(const machine_config &mconfig, char const *tag, device_t *owner, uint32_t clock) :
+mtu130_rom_device::mtu130_rom_device(const machine_config &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MTU130_ROM, tag, owner, clock),
 	device_rom_image_interface(mconfig, *this),
 	m_romdata(*this, finder_base::DUMMY_TAG),
@@ -385,7 +385,7 @@ void mtu130_state::machine_start()
 
 	m_timer_lightpen_hit = timer_alloc(FUNC(mtu130_state::lightpen_hit), this);
 
-	m_fdc->set_rate(500000);
+	m_fdc->set_rate(XTAL::u(500000));
 	m_io_view.select(1);
 	m_rom_view.disable();
 	m_rof_view.disable();
@@ -799,7 +799,7 @@ void mtu130_state::mtu130(machine_config &config)
 	FLOPPY_CONNECTOR(config, m_floppy[2], mtu130_state::floppies, nullptr, floppy_image_device::default_mfm_floppy_formats);
 	FLOPPY_CONNECTOR(config, m_floppy[3], mtu130_state::floppies, nullptr, floppy_image_device::default_mfm_floppy_formats);
 
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, m_speaker, 1.0);
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, m_speaker, 1.0);
 	SPEAKER(config, m_speaker).front_center();
 
 	extension_board(config, 0, "ext0", "datamover");

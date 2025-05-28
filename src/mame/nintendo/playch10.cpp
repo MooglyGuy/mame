@@ -1899,7 +1899,7 @@ void playch10_state::vblank_irq(int state)
 void playch10_state::playch10(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 8000000/2); // 4 MHz
+	Z80(config, m_maincpu, XTAL::u(8000000)/2); // 4 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &playch10_state::bios_map);
 	m_maincpu->set_addrmap(AS_IO, &playch10_state::bios_io_map);
 

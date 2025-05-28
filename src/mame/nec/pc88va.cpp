@@ -374,7 +374,7 @@ void pc88va_state::pc88va_fdc_w(offs_t offset, uint8_t data)
 			//m_fdd[1]->get_device()->ds_w(!BIT(data, 4));
 
 			// TODO: is this correct? sounds more like a controller clock change, while TD1/TD0 should do the rate change
-			m_fdc->set_rate(clk ? 500000 : 250000);
+			m_fdc->set_rate(clk ? XTAL::u(500000) : XTAL::u(250000));
 			break;
 		}
 		/*
@@ -1491,7 +1491,7 @@ void pc88va_state::pc88va(machine_config &config)
 
 	pc88va_sasi(config);
 
-	UPD765A(config, m_fdc, 4000000, true, true);
+	UPD765A(config, m_fdc, XTAL::u(4000000), true, true);
 	m_fdc->intrq_wr_callback().set(FUNC(pc88va_state::fdc_irq));
 	m_fdc->drq_wr_callback().set(m_maincpu, FUNC(v50_device::dreq_w<2>));
 	FLOPPY_CONNECTOR(config, m_fdd[0], pc88va_floppies, "525hd", pc88va_state::floppy_formats).enable_sound(true);

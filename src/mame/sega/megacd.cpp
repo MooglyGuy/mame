@@ -7,7 +7,7 @@
 #include "megacd.lh"
 
 
-#define SEGACD_CLOCK      12500000
+#define SEGACD_CLOCK      XTAL::u(12500000)
 
 #define RAM_MODE_2MEG (0)
 #define RAM_MODE_1MEG (2)

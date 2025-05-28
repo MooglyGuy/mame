@@ -546,7 +546,7 @@ void aica_device::Init()
 
 void aica_device::ClockChange()
 {
-	m_rate = ((double)clock()) / 512.0;
+	m_rate = clock().dvalue() / 512.0;
 }
 
 void aica_device::UpdateSlotReg(int s,int r)
@@ -669,7 +669,7 @@ void aica_device::UpdateReg(int reg)
 
 				if ((m_udata.data[0x90 / 2] & 0xff) != 255)
 				{
-					time = (clock() / m_TimPris[0]) / (255 - (m_udata.data[0x90 / 2] & 0xff));
+					time = (clock().value() / m_TimPris[0]) / (255 - (m_udata.data[0x90 / 2] & 0xff));
 					if (time)
 					{
 						m_timerA->adjust(attotime::from_ticks(512, time));
@@ -688,7 +688,7 @@ void aica_device::UpdateReg(int reg)
 
 				if ((m_udata.data[0x94 / 2] & 0xff) != 255)
 				{
-					time = (clock() / m_TimPris[1]) / (255 - (m_udata.data[0x94 / 2] & 0xff));
+					time = (clock().value() / m_TimPris[1]) / (255 - (m_udata.data[0x94 / 2] & 0xff));
 					if (time)
 					{
 						m_timerB->adjust(attotime::from_ticks(512, time));
@@ -707,7 +707,7 @@ void aica_device::UpdateReg(int reg)
 
 				if ((m_udata.data[0x98 / 2] & 0xff) != 255)
 				{
-					time = (clock() / m_TimPris[2]) / (255 - (m_udata.data[0x98 / 2] & 0xff));
+					time = (clock().value() / m_TimPris[2]) / (255 - (m_udata.data[0x98 / 2] & 0xff));
 					if (time)
 					{
 						m_timerC->adjust(attotime::from_ticks(512, time));
@@ -1402,7 +1402,7 @@ void aica_device::device_start()
 	// init the emulation
 	Init();
 
-	m_stream = stream_alloc(2, 2, (int)m_rate);
+	m_stream = stream_alloc(2, 2, XTAL::u(m_rate));
 
 	// save state
 	save_item(NAME(m_udata.data));
@@ -1493,7 +1493,7 @@ void aica_device::device_post_load()
 void aica_device::device_clock_changed()
 {
 	ClockChange();
-	m_stream->set_sample_rate((int)m_rate);
+	m_stream->set_sample_rate(XTAL::u(m_rate));
 }
 
 //-------------------------------------------------

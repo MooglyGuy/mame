@@ -64,7 +64,7 @@ void serial_printer_device::update_serial(int state)
 
 	set_data_frame(startbits, databits, parity, stopbits);
 
-	int rxbaud = convert_baud(m_rs232_rxbaud->read());
+	const XTAL rxbaud = XTAL::u(convert_baud(m_rs232_rxbaud->read()));
 	set_rcv_rate(rxbaud);
 
 	// TODO: make this configurable

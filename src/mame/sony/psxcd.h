@@ -20,7 +20,7 @@ public:
 		m_spu.set_tag(std::forward<U>(spu_tag));
 	}
 
-	psxcd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	psxcd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// configuration helpers
 	auto irq_handler() { return m_irq_handler.bind(); }

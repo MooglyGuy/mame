@@ -389,7 +389,7 @@ static INPUT_PORTS_START( laserbas )
 	PORT_BIT( 0x03f, 0x00, IPT_TRACKBALL_Y ) PORT_SENSITIVITY(30) PORT_KEYDELTA(20)
 INPUT_PORTS_END
 
-#define CLOCK 16680000
+#define CLOCK XTAL::u(16680000)
 #define PIT_CLOCK (CLOCK/16) // 12 divider ?
 
 void laserbas_state::laserbas(machine_config &config)
@@ -420,7 +420,7 @@ void laserbas_state::laserbas(machine_config &config)
 	screen.set_raw(XTAL::u(6000000), 360, 0, 256, 274, 0, 224);
 	screen.set_screen_update("crtc", FUNC(mc6845_device::screen_update));
 
-	mc6845_device &crtc(MC6845(config, "crtc", 3000000/4)); /* unknown clock, hand tuned to get ~60 fps */
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(3000000)/4)); /* unknown clock, hand tuned to get ~60 fps */
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8);

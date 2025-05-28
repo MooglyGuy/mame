@@ -1147,11 +1147,11 @@ INTERRUPT_GEN_MEMBER(wiz_state::sound_interrupt)
 void wiz_state::kungfut(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 18'432'000 / 6); // 3.072 MHz ???
+	Z80(config, m_maincpu, XTAL::u(18'432'000) / 6); // 3.072 MHz ???
 	m_maincpu->set_addrmap(AS_PROGRAM, &wiz_state::kungfut_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(wiz_state::vblank_interrupt));
 
-	Z80(config, m_audiocpu, 18'432'000 / 6); // 3.072 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(18'432'000) / 6); // 3.072 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &wiz_state::sound_map);
 	m_audiocpu->set_periodic_int(FUNC(wiz_state::sound_interrupt), attotime::from_hz(4*60)); // ???
 
@@ -1172,11 +1172,11 @@ void wiz_state::kungfut(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	AY8910(config, "8910.1", 18'432'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.10);
+	AY8910(config, "8910.1", XTAL::u(18'432'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.10);
 
-	AY8910(config, "8910.2", 18'432'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.10);
+	AY8910(config, "8910.2", XTAL::u(18'432'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.10);
 
-	AY8910(config, "8910.3", 18'432'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.10);
+	AY8910(config, "8910.3", XTAL::u(18'432'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.10);
 }
 
 void wiz_state::kungfuta(machine_config &config)

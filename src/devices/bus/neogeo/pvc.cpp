@@ -19,7 +19,7 @@
 DEFINE_DEVICE_TYPE(NEOGEO_PVC_CART, neogeo_pvc_cart_device, "neocart_pvc", "Neo Geo PVC Cart")
 
 
-neogeo_pvc_cart_device::neogeo_pvc_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_pvc_cart_device::neogeo_pvc_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, type, tag, owner, clock),
 	m_cmc_prot(*this, "cmc_prot"),
 	m_pcm2_prot(*this, "pcm2_prot"),
@@ -27,7 +27,7 @@ neogeo_pvc_cart_device::neogeo_pvc_cart_device(const machine_config &mconfig, de
 {
 }
 
-neogeo_pvc_cart_device::neogeo_pvc_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_pvc_cart_device::neogeo_pvc_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_pvc_cart_device(mconfig, NEOGEO_PVC_CART, tag, owner, clock)
 {
 }

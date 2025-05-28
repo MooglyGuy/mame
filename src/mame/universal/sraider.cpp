@@ -619,11 +619,11 @@ GFXDECODE_END
 void mrsdyna_state::mrsdyna(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 4000000);
+	Z80(config, m_maincpu, XTAL::u(4000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &mrsdyna_state::cpu1_map);
 	m_maincpu->set_vblank_int("screen", FUNC(mrsdyna_state::irq0_line_hold));
 
-	Z80(config, m_subcpu, 4000000);
+	Z80(config, m_subcpu, XTAL::u(4000000));
 	m_subcpu->set_addrmap(AS_PROGRAM, &mrsdyna_state::cpu2_map);
 	m_subcpu->set_addrmap(AS_IO, &mrsdyna_state::cpu2_io_map);
 	m_subcpu->set_vblank_int("screen", FUNC(mrsdyna_state::irq0_line_hold));
@@ -636,23 +636,23 @@ void mrsdyna_state::mrsdyna(machine_config &config)
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(9'828'000 / 2, 312, 8, 248, 262, 32, 224);
+	screen.set_raw(XTAL::u(9'828'000) / 2, 312, 8, 248, 262, 32, 224);
 	screen.set_screen_update(FUNC(mrsdyna_state::screen_update));
 	screen.set_palette(m_palette);
 
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_mrsdyna);
 	PALETTE(config, m_palette, FUNC(mrsdyna_state::mrsdyna_palette), 4*8 + 4*16, 32);
 
-	LADYBUG_VIDEO(config, m_video, 4000000).set_gfxdecode_tag(m_gfxdecode);
+	LADYBUG_VIDEO(config, m_video, XTAL::u(4000000)).set_gfxdecode_tag(m_gfxdecode);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	SN76489(config, "sn1", 4000000).add_route(ALL_OUTPUTS, "mono", 0.2);
-	SN76489(config, "sn2", 4000000).add_route(ALL_OUTPUTS, "mono", 0.2);
-	SN76489(config, "sn3", 4000000).add_route(ALL_OUTPUTS, "mono", 0.2);
-	SN76489(config, "sn4", 4000000).add_route(ALL_OUTPUTS, "mono", 0.2);
-	SN76489(config, "sn5", 4000000).add_route(ALL_OUTPUTS, "mono", 0.2);
+	SN76489(config, "sn1", XTAL::u(4000000)).add_route(ALL_OUTPUTS, "mono", 0.2);
+	SN76489(config, "sn2", XTAL::u(4000000)).add_route(ALL_OUTPUTS, "mono", 0.2);
+	SN76489(config, "sn3", XTAL::u(4000000)).add_route(ALL_OUTPUTS, "mono", 0.2);
+	SN76489(config, "sn4", XTAL::u(4000000)).add_route(ALL_OUTPUTS, "mono", 0.2);
+	SN76489(config, "sn5", XTAL::u(4000000)).add_route(ALL_OUTPUTS, "mono", 0.2);
 }
 
 void sraider_state::sraider(machine_config &config)

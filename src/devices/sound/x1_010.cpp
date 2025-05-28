@@ -88,12 +88,10 @@ x1_010_device::x1_010_device(const machine_config &mconfig, const char *tag, dev
 	: device_t(mconfig, X1_010, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, device_rom_interface(mconfig, *this)
-	, m_rate(0)
 	, m_stream(nullptr)
 	, m_sound_enable(0)
 	, m_reg(nullptr)
 	, m_HI_WORD_BUF(nullptr)
-	, m_base_clock(0)
 {
 	std::fill(std::begin(m_smp_offset), std::end(m_smp_offset), 0);
 	std::fill(std::begin(m_env_offset), std::end(m_env_offset), 0);
@@ -105,30 +103,25 @@ x1_010_device::x1_010_device(const machine_config &mconfig, const char *tag, dev
 
 void x1_010_device::device_start()
 {
-	m_base_clock    = clock();
-	m_rate          = clock() / 512;
-
 	for (int i = 0; i < NUM_CHANNELS; i++)
 	{
 		m_smp_offset[i] = 0;
 		m_env_offset[i] = 0;
 	}
 	/* Print some more debug info */
-	LOGMASKED(LOG_SOUND, "masterclock = %d rate = %d\n", clock(), m_rate);
+	LOGMASKED(LOG_SOUND, "masterclock = %d rate = %d\n", clock().value(), clock.value() / 512);
 
 	/* get stream channels */
-	m_stream = stream_alloc(0, 2, m_rate);
+	m_stream = stream_alloc(0, 2, clock() / 512);
 
 	m_reg = make_unique_clear<u8[]>(0x2000);
 	m_HI_WORD_BUF = make_unique_clear<u8[]>(0x2000);
 
-	save_item(NAME(m_rate));
 	save_item(NAME(m_sound_enable));
 	save_pointer(NAME(m_reg), 0x2000);
 	save_pointer(NAME(m_HI_WORD_BUF), 0x2000);
 	save_item(NAME(m_smp_offset));
 	save_item(NAME(m_env_offset));
-	save_item(NAME(m_base_clock));
 }
 
 //-------------------------------------------------
@@ -138,10 +131,7 @@ void x1_010_device::device_start()
 
 void x1_010_device::device_clock_changed()
 {
-	m_base_clock    = clock();
-	m_rate          = clock() / 512;
-
-	m_stream->set_sample_rate(m_rate);
+	m_stream->set_sample_rate(clock() / 512);
 }
 
 //-------------------------------------------------

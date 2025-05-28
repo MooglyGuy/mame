@@ -87,7 +87,7 @@ TODO
 
 namespace {
 
-#define XTAL_MEKD2 1228800
+#define XTAL_MEKD2 XTAL::u(1228800)
 
 class mekd2_state : public driver_device
 {

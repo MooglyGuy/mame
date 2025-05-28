@@ -38,7 +38,7 @@ filter_rc_device::filter_rc_device(const machine_config &mconfig, const char *ta
 
 void filter_rc_device::device_start()
 {
-	m_stream = stream_alloc(1, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(1, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 	m_last_sample_rate = 0;
 
 	save_item(NAME(m_k));
@@ -59,10 +59,10 @@ void filter_rc_device::sound_stream_update(sound_stream &stream)
 {
 	sound_stream::sample_t memory = m_memory;
 
-	if (m_last_sample_rate != stream.sample_rate())
+	if (m_last_sample_rate != stream.sample_rate().value())
 	{
 		recalc();
-		m_last_sample_rate = stream.sample_rate();
+		m_last_sample_rate = stream.sample_rate().value();
 	}
 
 	switch (m_type)

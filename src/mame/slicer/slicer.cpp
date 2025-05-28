@@ -67,7 +67,7 @@ void slicer_state::drive_sel_w(int state)
 
 void slicer_state::drive_size_w(int state)
 {
-	m_fdc->set_unscaled_clock (state ? XTAL::u(1'000'000) : 2'000'000);
+	m_fdc->set_unscaled_clock(XTAL::u(state ? 1'000'000 : 2'000'000));
 }
 
 void slicer_state::slicer_map(address_map &map)

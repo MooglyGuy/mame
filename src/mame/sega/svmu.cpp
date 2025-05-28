@@ -339,7 +339,7 @@ void svmu_state::svmu(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &svmu_state::svmu_io_mem);
 
 	/* specific LC8670 configurations */
-	m_maincpu->set_clock_sources(XTAL(32'768), 600000, XTAL(6'000'000)); // tolerance range of the RC oscillator is 600kHz to 1200kHz
+	m_maincpu->set_clock_sources(XTAL(32'768), XTAL::u(600000), XTAL(6'000'000)); // tolerance range of the RC oscillator is 600kHz to 1200kHz
 	m_maincpu->bank_cb().set(FUNC(svmu_state::page_w));
 	m_maincpu->set_lcd_update_cb(FUNC(svmu_state::svmu_lcd_update));
 

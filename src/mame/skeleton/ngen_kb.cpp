@@ -12,7 +12,7 @@
 #include "ngen_kb.h"
 
 ngen_keyboard_device::ngen_keyboard_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock)
-	: serial_keyboard_device(mconfig, NGEN_KEYBOARD, tag, owner)
+	: serial_keyboard_device(mconfig, NGEN_KEYBOARD, tag, owner, clock)
 	, m_keys_down(0U)
 	, m_last_reset(0U)
 {

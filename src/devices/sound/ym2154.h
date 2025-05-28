@@ -75,7 +75,7 @@ private:
 	};
 
 	// internal helpers
-	u32 sample_rate() const { return device_t::clock() / 18 / 6; }
+	XTAL sample_rate() const { return device_t::clock() / 18 / 6; }
 	void update_irq_state(u8 state) { if (m_irq_state != state) { m_irq_state = state; m_update_irq(state); } }
 
 	// internal state

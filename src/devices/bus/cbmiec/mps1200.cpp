@@ -33,14 +33,14 @@ DEFINE_DEVICE_TYPE(MPS1250, mps1250_device, "mps1250", "Commodore MPS-1250 Dot M
 //  mps1200_device - constructor
 //-------------------------------------------------
 
-mps1200_device::mps1200_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+mps1200_device::mps1200_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_cbm_iec_interface(mconfig, *this)
 	, m_mpscpu(*this, "mpscpu")
 {
 }
 
-mps1200_device::mps1200_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mps1200_device::mps1200_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mps1200_device(mconfig, MPS1200, tag, owner, clock)
 {
 }
@@ -50,7 +50,7 @@ mps1200_device::mps1200_device(const machine_config &mconfig, const char *tag, d
 //  mps1250_device - constructor
 //-------------------------------------------------
 
-mps1250_device::mps1250_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mps1250_device::mps1250_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mps1200_device(mconfig, MPS1250, tag, owner, clock)
 {
 }

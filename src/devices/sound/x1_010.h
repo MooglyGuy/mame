@@ -37,15 +37,12 @@ private:
 	// internal state
 
 	/* Variables only used here */
-	int m_rate;                              // Output sampling rate (Hz)
 	sound_stream *  m_stream;                // Stream handle
 	int m_sound_enable;                      // sound output enable/disable
 	std::unique_ptr<u8[]>   m_reg;                 // X1-010 Register & wave form area
 	std::unique_ptr<u8[]>   m_HI_WORD_BUF;         // X1-010 16bit access ram check avoidance work
 	u32  m_smp_offset[NUM_CHANNELS];
 	u32  m_env_offset[NUM_CHANNELS];
-
-	u32 m_base_clock;
 };
 
 DECLARE_DEVICE_TYPE(X1_010, x1_010_device)

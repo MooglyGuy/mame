@@ -84,7 +84,7 @@ private:
 
 
 /* From daphne */
-#define PCB_CLOCK (18432000)
+#define PCB_CLOCK XTAL::u(18432000)
 
 
 /* VIDEO GOODS */

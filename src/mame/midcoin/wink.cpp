@@ -381,7 +381,7 @@ void wink_state::machine_reset()
 void wink_state::wink(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 12000000 / 4);
+	Z80(config, m_maincpu, XTAL::u(12000000 / 4));
 	m_maincpu->set_addrmap(AS_PROGRAM, &wink_state::wink_map);
 	m_maincpu->set_addrmap(AS_IO, &wink_state::wink_io);
 
@@ -395,7 +395,7 @@ void wink_state::wink(machine_config &config)
 	mainlatch.q_out_cb<6>().set(FUNC(wink_state::coin_counter_w<1>));
 	mainlatch.q_out_cb<7>().set(FUNC(wink_state::coin_counter_w<2>));
 
-	Z80(config, m_audiocpu, 12000000 / 8);
+	Z80(config, m_audiocpu, XTAL::u(12'000'000) / 8);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &wink_state::wink_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &wink_state::wink_sound_io);
 	m_audiocpu->set_periodic_int(FUNC(wink_state::wink_sound), attotime::from_hz(15625));
@@ -420,7 +420,7 @@ void wink_state::wink(machine_config &config)
 
 	GENERIC_LATCH_8(config, "soundlatch");
 
-	ay8912_device &aysnd(AY8912(config, "aysnd", 12000000 / 8));
+	ay8912_device &aysnd(AY8912(config, "aysnd", XTAL::u(12000000 / 8)));
 	aysnd.port_a_read_callback().set(FUNC(wink_state::sound_r));
 	aysnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 }

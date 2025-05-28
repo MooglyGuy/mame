@@ -376,7 +376,7 @@ void _2mindril_state::drill(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	ym2610b_device &ymsnd(YM2610B(config, "ymsnd", 16000000/2));
+	ym2610b_device &ymsnd(YM2610B(config, "ymsnd", XTAL::u(16000000)/2));
 	ymsnd.irq_handler().set(FUNC(_2mindril_state::irqhandler));
 	ymsnd.add_route(0, "speaker", 0.75, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 1);

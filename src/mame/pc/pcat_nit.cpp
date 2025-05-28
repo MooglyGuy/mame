@@ -245,7 +245,7 @@ void pcat_nit_state::machine_start()
 void pcat_nit_state::pcat_nit(machine_config &config)
 {
 	/* basic machine hardware */
-	I386(config, m_maincpu, 14318180*2);   /* I386 ?? Mhz */
+	I386(config, m_maincpu, XTAL::u(14318180)*2);   /* I386 ?? Mhz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &pcat_nit_state::pcat_map);
 	m_maincpu->set_addrmap(AS_IO, &pcat_nit_state::pcat_nit_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_1", FUNC(pic8259_device::inta_cb));
@@ -274,7 +274,7 @@ void pcat_nit_state::pcat_nit(machine_config &config)
 void pcat_nit_state::bonanza(machine_config &config)
 {
 	/* basic machine hardware */
-	I386(config, m_maincpu, 14318180*2);   /* I386 ?? Mhz */
+	I386(config, m_maincpu, XTAL::u(14318180)*2);   /* I386 ?? Mhz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &pcat_nit_state::bonanza_map);
 	m_maincpu->set_addrmap(AS_IO, &pcat_nit_state::bonanza_io_map);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_1", FUNC(pic8259_device::inta_cb));

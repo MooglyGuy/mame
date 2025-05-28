@@ -154,7 +154,7 @@ void i80130_device::device_start()
 void i80130_device::device_reset()
 {
 	// set PIT clocks
-	m_pit->set_clockin(0, clock());
-	m_pit->set_clockin(1, clock());
-	m_pit->set_clockin(2, clock());
+	m_pit->set_clockin(0, clock().dvalue());
+	m_pit->set_clockin(1, clock().dvalue());
+	m_pit->set_clockin(2, clock().dvalue());
 }

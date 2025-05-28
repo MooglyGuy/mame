@@ -383,7 +383,7 @@ void cdp1869_device::device_start()
 	m_bkg = 0;
 
 	// create sound stream
-	m_stream = stream_alloc(0, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(0, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 
 	// initialize other
 	m_tonediv = 0;
@@ -499,10 +499,10 @@ void cdp1869_device::sound_stream_update(sound_stream &stream)
 
 	if (!m_toneoff && m_toneamp)
 	{
-		double frequency = (clock() / 2) / (512 >> m_tonefreq) / (m_tonediv + 1);
+		double frequency = (clock().dvalue() / 2) / (512 >> m_tonefreq) / (m_tonediv + 1);
 //      double amplitude = m_toneamp * ((0.78*5) / 15);
 
-		int rate = stream.sample_rate() / 2;
+		int rate = stream.sample_rate().value() / 2;
 
 		/* get progress through wave */
 		int incr = m_incr;

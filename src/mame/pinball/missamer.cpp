@@ -511,7 +511,7 @@ void missamer_state::missamer(machine_config &config)
 {
 	I8085A(config, m_maincpu, 6.144_MHz_XTAL);
 	m_maincpu->set_addrmap(AS_PROGRAM, &missamer_state::mem_map);
-	m_maincpu->set_clk_out(m_ramio[1], FUNC(i8155_device::set_unscaled_clock_int));
+	m_maincpu->set_clk_out(m_ramio[1], FUNC(i8155_device::set_unscaled_clock_ns));
 
 	clock_device &vco_clock(CLOCK(config, "vco_clock", XTAL::u(500))); // 74LS124
 	vco_clock.signal_handler().set_inputline(m_maincpu, I8085_RST75_LINE);

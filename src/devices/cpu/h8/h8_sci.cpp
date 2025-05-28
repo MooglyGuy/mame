@@ -259,25 +259,25 @@ void h8_sci_device::clock_update()
 		std::string new_message;
 		switch(m_clock_mode) {
 		case INTERNAL_ASYNC:
-			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps\n", int(m_cpu->system_clock() / m_divider), int(m_cpu->system_clock() / (m_divider*16)));
+			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps\n", int(m_cpu->system_clock().value() / m_divider), int(m_cpu->system_clock().value() / (m_divider*16)));
 			break;
 		case INTERNAL_ASYNC_OUT:
-			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps, output\n", int(m_cpu->system_clock() / m_divider), int(m_cpu->system_clock() / (m_divider*16)));
+			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps, output\n", int(m_cpu->system_clock().value() / m_divider), int(m_cpu->system_clock().value() / (m_divider*16)));
 			break;
 		case EXTERNAL_ASYNC:
 			new_message = "clock external, async\n";
 			break;
 		case EXTERNAL_RATE_ASYNC:
-			new_message = util::string_format("clock external at %d Hz, async, bitrate %d bps\n", int(m_cpu->system_clock()*m_internal_to_external_ratio), int(m_cpu->system_clock()*m_internal_to_external_ratio/16));
+			new_message = util::string_format("clock external at %d Hz, async, bitrate %d bps\n", int(m_cpu->system_clock().value()*m_internal_to_external_ratio), int(m_cpu->system_clock().value()*m_internal_to_external_ratio/16));
 			break;
 		case INTERNAL_SYNC_OUT:
-			new_message = util::string_format("clock internal at %d Hz, sync, output\n", int(m_cpu->system_clock() / (m_divider*2)));
+			new_message = util::string_format("clock internal at %d Hz, sync, output\n", int(m_cpu->system_clock().value() / (m_divider*2)));
 			break;
 		case EXTERNAL_SYNC:
 			new_message = "clock external, sync\n";
 			break;
 		case EXTERNAL_RATE_SYNC:
-			new_message = util::string_format("clock external at %d Hz, sync\n", int(m_cpu->system_clock()*m_internal_to_external_ratio));
+			new_message = util::string_format("clock external at %d Hz, sync\n", int(m_cpu->system_clock().value()*m_internal_to_external_ratio));
 			break;
 		}
 		if(new_message != m_last_clock_message) {
@@ -295,7 +295,7 @@ void h8_sci_device::device_start()
 		m_internal_to_external_ratio = 0;
 		m_external_to_internal_ratio = 0;
 	} else {
-		m_external_to_internal_ratio = (m_external_clock_period*m_cpu->system_clock()).as_double();
+		m_external_to_internal_ratio = (m_external_clock_period*m_cpu->system_clock().value()).as_double();
 		m_internal_to_external_ratio = 1/m_external_to_internal_ratio;
 	}
 

@@ -41,8 +41,8 @@
 #include "speaker.h"
 
 
-#define MAIN_OSC    14318180
-#define SOUND_OSC   24000000
+#define MAIN_OSC    XTAL::u(14318180)
+#define SOUND_OSC   XTAL::u(24000000)
 
 
 /*************************************
@@ -382,7 +382,7 @@ void dcheese_state::dcheese(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &dcheese_state::main_cpu_map);
 	m_maincpu->set_addrmap(m68000_device::AS_CPU_SPACE, &dcheese_state::main_fc7_map);
 
-	M6809(config, m_audiocpu, SOUND_OSC/16); // TODO : Unknown CPU type
+	M6809(config, m_audiocpu, SOUND_OSC / 16); // TODO : Unknown CPU type
 	m_audiocpu->set_addrmap(AS_PROGRAM, &dcheese_state::sound_cpu_map);
 	m_audiocpu->set_periodic_int(FUNC(dcheese_state::irq1_line_hold), attotime::from_hz(480));   /* accurate for fredmem */
 

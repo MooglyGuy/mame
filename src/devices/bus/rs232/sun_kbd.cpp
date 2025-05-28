@@ -13,7 +13,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock)
+			const XTAL &clock)
 		: device_t(mconfig, SUN_KBD_ADAPTOR, tag, owner, clock)
 		, device_rs232_port_interface(mconfig, *this)
 		, m_keyboard_port(*this, "keyboard")

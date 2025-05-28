@@ -390,7 +390,7 @@ protected:
 	virtual void machine_reset() override ATTR_COLD;
 
 private:
-	static constexpr unsigned SYSTEM_CLOCK = 100'000'000;
+	static constexpr XTAL SYSTEM_CLOCK = XTAL::u(100'000'000);
 
 	required_device<mips3_device> m_maincpu;
 	required_device<vrc5074_device> m_nile;
@@ -1865,10 +1865,10 @@ void vegas_state::vegas_cs8_map(address_map &map)
 void vegas_state::vegascore(machine_config &config)
 {
 	// basic machine hardware
-	R5000LE(config, m_maincpu, vegas_state::SYSTEM_CLOCK * 2);
+	R5000LE(config, m_maincpu, SYSTEM_CLOCK * 2);
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(SYSTEM_CLOCK.value());
 
 	// PCI Bus Devices
 	PCI_ROOT(config, "pci");
@@ -1955,10 +1955,10 @@ void vegas_state::vegasv3(machine_config &config)
 {
 	vegas32m(config);
 
-	RM7000LE(config.replace(), m_maincpu, vegas_state::SYSTEM_CLOCK * 2.5);
+	RM7000LE(config.replace(), m_maincpu, SYSTEM_CLOCK * 2.5);
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(SYSTEM_CLOCK.value());
 
 	voodoo_3_pci_device &voodoo(VOODOO_3_PCI(config.replace(), PCI_ID_VIDEO, m_maincpu, "screen"));
 	voodoo.set_fbmem(16);
@@ -1970,11 +1970,11 @@ void vegas_state::vegasv3(machine_config &config)
 void vegas_state::denver(machine_config &config)
 {
 	vegascore(config);
-	RM7000LE(config.replace(), m_maincpu, vegas_state::SYSTEM_CLOCK * 2.5);
+	RM7000LE(config.replace(), m_maincpu, SYSTEM_CLOCK * 2.5);
 
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(SYSTEM_CLOCK.value());
 	m_nile->set_sdram_size(0, 0x02000000);
 	m_nile->set_map(8, address_map_constructor(&vegas_state::vegas_cs8_map, "vegas_cs8_map", this), this);
 
@@ -2210,7 +2210,7 @@ void vegas_state::nbagold(machine_config &config)
 	QED5271LE(config.replace(), m_maincpu, vegas_state::SYSTEM_CLOCK * 2.5);
 	m_maincpu->set_icache_size(32768);
 	m_maincpu->set_dcache_size(32768);
-	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK);
+	m_maincpu->set_system_clock(vegas_state::SYSTEM_CLOCK.value());
 	m_nile->set_sdram_size(0, 0x00800000);
 
 	SPEAKER(config, "speaker", 2).front();

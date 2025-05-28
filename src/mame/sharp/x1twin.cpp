@@ -28,7 +28,7 @@ TODO:
 
 
 // copied from pce.h until it's turned into a device properly
-#define MAIN_CLOCK      21477270
+#define MAIN_CLOCK      XTAL::u(21477270)
 
 namespace {
 

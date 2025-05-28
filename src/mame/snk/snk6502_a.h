@@ -79,7 +79,7 @@ private:
 class vanguard_sound_device : public device_t
 {
 public:
-	vanguard_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	vanguard_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void sound_w(offs_t offset, uint8_t data);
 	void speech_w(uint8_t data);
@@ -101,13 +101,13 @@ private:
 class fantasy_sound_device : public device_t
 {
 public:
-	fantasy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	fantasy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void sound_w(offs_t offset, uint8_t data);
 	void speech_w(uint8_t data);
 
 protected:
-	fantasy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	fantasy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clocK);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -125,7 +125,7 @@ private:
 class nibbler_sound_device : public fantasy_sound_device
 {
 public:
-	nibbler_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	nibbler_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -135,7 +135,7 @@ protected:
 class pballoon_sound_device : public fantasy_sound_device
 {
 public:
-	pballoon_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pballoon_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -146,7 +146,7 @@ protected:
 class sasuke_sound_device : public device_t
 {
 public:
-	sasuke_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sasuke_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void sound_w(offs_t offset, uint8_t data);
 
@@ -166,7 +166,7 @@ private:
 class satansat_sound_device : public device_t
 {
 public:
-	satansat_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	satansat_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void sound_w(offs_t offset, uint8_t data);
 

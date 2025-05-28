@@ -238,7 +238,7 @@ void pwp14_state::pwp14(machine_config &config)
 	/* internal ram */
 	RAM(config, m_ram).set_default_size("76K").set_default_value(0x00); // 64K DRAM + 2*2K SRAM (VRAM) + 8K SRAM
 
-	CRT5037(config, m_crtc, 14'364'000 / 8); // unknown clock
+	CRT5037(config, m_crtc, XTAL::u(14'364'000) / 8); // unknown clock
 	m_crtc->set_char_width(8);
 	m_crtc->set_screen("screen");
 

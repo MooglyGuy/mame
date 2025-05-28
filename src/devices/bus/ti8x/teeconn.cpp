@@ -39,7 +39,7 @@ tee_connector_device::tee_connector_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, TI8X_TEE_CONNECTOR, tag, owner, clock)
 	, device_ti8x_link_port_interface(mconfig, *this)
 	, m_port_a(*this, "a")

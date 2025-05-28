@@ -735,7 +735,7 @@ void dwarfd_state::dwarfd(machine_config &config)
 {
 	/* basic machine hardware */
 	/* FIXME: The 8085A had a max clock of 6MHz, internally divided by 2! */
-	I8085A(config, m_maincpu, 10595000/3*2); /* ? MHz */
+	I8085A(config, m_maincpu, XTAL::u(10595000)/3*2); /* ? MHz */
 	m_maincpu->out_sod_func().set(FUNC(dwarfd_state::dwarfd_sod_callback));
 	m_maincpu->set_addrmap(AS_PROGRAM, &dwarfd_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &dwarfd_state::io_map);
@@ -747,7 +747,7 @@ void dwarfd_state::dwarfd(machine_config &config)
 	screen.set_visarea(0, 272*2-1, 0, 200-1);
 	screen.set_screen_update("i8275", FUNC(i8275_device::screen_update));
 
-	I8275(config, m_crtc, 10595000/8);
+	I8275(config, m_crtc, XTAL::u(10595000)/8);
 	m_crtc->set_character_width(8);
 	m_crtc->set_display_callback(FUNC(dwarfd_state::display_pixels));
 	m_crtc->irq_wr_callback().set_inputline("maincpu", I8085_RST55_LINE);

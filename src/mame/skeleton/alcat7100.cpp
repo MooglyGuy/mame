@@ -96,10 +96,10 @@ void alcat7100_state::alcat7100(machine_config &config)
 	ctc.intr_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(15'900'000, 1200, 0, 960, 265, 0, 240);
+	screen.set_raw(XTAL::u(15'900'000), 1200, 0, 960, 265, 0, 240);
 	screen.set_screen_update("crtc", FUNC(mc6845_device::screen_update));
 
-	mc6845_device &crtc(MC6845(config, "crtc", 15'900'000 / 12));
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(15'900'000) / 12));
 	crtc.set_screen("screen");
 	crtc.set_char_width(12);
 	crtc.set_show_border_area(false);

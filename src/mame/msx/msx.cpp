@@ -460,7 +460,7 @@ void msx_state::msx_base(ay8910_type ay8910_type, machine_config &config, const 
 
 	// sound hardware
 	SPEAKER(config, m_speaker).front_center();
-	DAC_1BIT(config, m_dac, 0);
+	DAC_1BIT(config, m_dac);
 	m_dac->add_route(ALL_OUTPUTS, m_speaker, 0.1);
 
 	if (ay8910_type == SND_AY8910)

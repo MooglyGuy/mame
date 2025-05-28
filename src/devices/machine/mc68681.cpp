@@ -372,8 +372,6 @@ uint8_t mc68681_device::get_irq_vector()
 
 uint32_t duart_base_device::get_ct_rate()
 {
-	uint32_t rate = 0;
-
 	if (ACR & 0x40)
 	{
 		// Timer mode
@@ -382,14 +380,11 @@ uint32_t duart_base_device::get_ct_rate()
 		case 0: // IP2
 		case 1: // IP2 / 16
 			//logerror( "68681 (%s): Unhandled timer/counter mode %d\n", duart68681->tag(), (duart68681->ACR >> 4) & 3);
-			rate = clock();
-			break;
+			return clock().value();
 		case 2: // X1/CLK
-			rate = clock();
-			break;
+			return clock().value();
 		case 3: // X1/CLK / 16
-			rate = clock() / 16;
-			break;
+			return clock().value() / 16;
 		}
 	}
 	else
@@ -399,21 +394,17 @@ uint32_t duart_base_device::get_ct_rate()
 		{
 		case 0: // IP2
 			//logerror( "68681 (%s): Unhandled timer/counter mode %d\n", device->tag(), (duart68681->ACR >> 4) & 3);
-			rate = clock();
-			break;
+			return clock().value();
 		case 1: // TxCA
-			rate = m_chanA->get_tx_rate();
-			break;
+			return m_chanA->get_tx_rate();
 		case 2: // TxCB
-			rate = m_chanB->get_tx_rate();
-			break;
+			return m_chanB->get_tx_rate();
 		case 3: // X1/CLK / 16
-			rate = clock() / 16;
-			break;
+			return clock().value() / 16;
 		}
 	}
 
-	return rate;
+	return 0;
 }
 
 uint16_t duart_base_device::get_ct_count()
@@ -1454,8 +1445,8 @@ void duart_channel::write_chan_reg(int reg, uint8_t data)
 		tx_baud_rate = m_uart->calc_baud(m_ch, false, data & 0xf);
 		rx_baud_rate = m_uart->calc_baud(m_ch, true, (data>>4) & 0xf);
 		//printf("%s ch %d CSR %02x Tx baud %d Rx baud %d\n", tag(), m_ch, data, tx_baud_rate, rx_baud_rate);
-		set_rcv_rate(rx_baud_rate);
-		set_tra_rate(tx_baud_rate);
+		set_rcv_rate(XTAL::u(rx_baud_rate));
+		set_tra_rate(XTAL::u(tx_baud_rate));
 		break;
 
 	case 0x02: /* CR */

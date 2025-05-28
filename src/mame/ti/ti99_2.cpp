@@ -477,10 +477,10 @@ void ti99_2_state::ti99_2(machine_config& config)
 	CASSETTE(config, "cassette");
 
 	// Hexbus
-	HEXBUS(config, TI992_HEXBUS_TAG, 0, hexbus_options, nullptr);
+	HEXBUS(config, TI992_HEXBUS_TAG, XTAL(), hexbus_options, nullptr);
 
 	// Expansion port (backside)
-	TI992_EXPPORT(config, m_expport, 0, ti992_expport_options, nullptr);
+	TI992_EXPPORT(config, m_expport, XTAL(), ti992_expport_options, nullptr);
 }
 
 /*

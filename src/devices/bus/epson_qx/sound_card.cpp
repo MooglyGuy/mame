@@ -43,7 +43,7 @@ INPUT_PORTS_END
 //-------------------------------------------------
 //  ym2149_sound_card_device - constructor
 //-------------------------------------------------
-ym2149_sound_card_device::ym2149_sound_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ym2149_sound_card_device::ym2149_sound_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, EPSON_QX_OPTION_YM2149, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	m_mpu401(*this, "mpu401"),

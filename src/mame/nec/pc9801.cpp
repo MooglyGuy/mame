@@ -923,7 +923,7 @@ void pc9801vm_state::fdc_set_density_mode(bool is_2hd)
 	floppy0->set_rpm(is_2hd ? 360 : 300);
 	floppy1->set_rpm(is_2hd ? 360 : 300);
 
-	m_fdc_2hd->set_rate(is_2hd ? 500000 : 250000);
+	m_fdc_2hd->set_rate(XTAL::u(is_2hd ? 500000 : 250000));
 //  printf("FDC set new mode %s\n", is_2hd ? "2HD" : "2DD");
 	logerror("%s: FDC set new mode %s\n", machine().describe_context(), is_2hd ? "2HD" : "2DD");
 }
@@ -2539,7 +2539,7 @@ void pc9801vm_state::pc9801rs(machine_config &config)
 void pc9801vm_state::pc9801vm(machine_config &config)
 {
 	pc9801rs(config);
-	V30(config.replace(), m_maincpu, 10000000);
+	V30(config.replace(), m_maincpu, XTAL::u(10000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9801vm_state::pc9801ux_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9801vm_state::pc9801ux_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_master", FUNC(pic8259_device::inta_cb));
@@ -2564,7 +2564,7 @@ void pc9801vm_state::pc9801uv(machine_config &config)
 void pc9801vm_state::pc9801ux(machine_config &config)
 {
 	pc9801rs(config);
-	i80286_cpu_device &maincpu(I80286(config.replace(), m_maincpu, 10000000));
+	i80286_cpu_device &maincpu(I80286(config.replace(), m_maincpu, XTAL::u(10000000)));
 	maincpu.set_addrmap(AS_PROGRAM, &pc9801vm_state::pc9801ux_map);
 	maincpu.set_addrmap(AS_IO, &pc9801vm_state::pc9801ux_io);
 	maincpu.set_a20_callback(FUNC(pc9801vm_state::a20_286));
@@ -2577,7 +2577,7 @@ void pc9801vm_state::pc9801ux(machine_config &config)
 void pc9801vm_state::pc9801dx(machine_config &config)
 {
 	pc9801rs(config);
-	i80286_cpu_device &maincpu(I80286(config.replace(), m_maincpu, 12000000));
+	i80286_cpu_device &maincpu(I80286(config.replace(), m_maincpu, XTAL::u(12000000)));
 	maincpu.set_addrmap(AS_PROGRAM, &pc9801vm_state::pc9801ux_map);
 	maincpu.set_addrmap(AS_IO, &pc9801vm_state::pc9801ux_io);
 	maincpu.set_a20_callback(FUNC(pc9801vm_state::a20_286));

@@ -29,7 +29,7 @@ class vga_device : public device_t
 
 public:
 	// construction/destruction
-	vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void zero();
 	virtual uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);

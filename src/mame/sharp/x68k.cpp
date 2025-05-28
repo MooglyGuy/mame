@@ -281,7 +281,7 @@ void x68k_state::fdc_w(offs_t offset, uint16_t data)
 	case 0x01: {
 		x = data & 3;
 		m_upd72065->set_floppy(m_fdc.floppy[x]);
-		m_upd72065->set_rate((data & 0x10) ? 300000 : 500000);
+		m_upd72065->set_rate(XTAL::u((data & 0x10) ? 300000 : 500000));
 		m_fdc.motor = data & 0x80;
 
 		for(int i = 0; i < 4; i++)
@@ -344,7 +344,7 @@ void x68k_state::ct_w(uint8_t data)
 
 	m_adpcm.clock = (data & 0x02) >> 1;
 	set_adpcm();
-	m_okim6258->set_unscaled_clock(adpcm_clock[m_adpcm.clock]);
+	m_okim6258->set_unscaled_clock(XTAL::u(adpcm_clock[m_adpcm.clock]));
 }
 
 enum ioc_irq_number : unsigned

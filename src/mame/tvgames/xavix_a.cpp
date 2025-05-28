@@ -24,7 +24,7 @@ xavix_sound_device::xavix_sound_device(const machine_config &mconfig, const char
 
 void xavix_sound_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 163840);
+	m_stream = stream_alloc(0, 2, XTAL::u(163840));
 }
 
 void xavix_sound_device::device_reset()

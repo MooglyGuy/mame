@@ -122,10 +122,8 @@ void c64_currah_speech_cartridge_device::device_add_mconfig(machine_config &conf
 
 void c64_currah_speech_cartridge_device::set_osc1(int voice, int intonation)
 {
-	int dotclock = m_slot->dotclock();
-
 	// TODO intonation and correct dividers
-	m_nsp->set_clock(dotclock / (2 << voice));
+	m_nsp->set_clock(m_slot->dotclock() / (2 << voice));
 }
 
 

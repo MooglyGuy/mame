@@ -251,12 +251,12 @@ offs_t okim6650_device::get_start_position(int channel)
 }
 
 
-u32 okim6376_device::get_sample_rate()
+XTAL okim6376_device::get_sample_rate()
 {
 	return clock() / m_divisor;
 }
 
-u32 okim6650_device::get_sample_rate()
+XTAL okim6650_device::get_sample_rate()
 {
 	return clock() / 64 / m_divisor;
 }

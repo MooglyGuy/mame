@@ -509,7 +509,7 @@ void bagman_state::bagman(machine_config &config)
 {
 	bagman_base(config);
 
-	TMSPROM(config, m_tmsprom, 640000 / 2);  // ROM clock
+	TMSPROM(config, m_tmsprom, XTAL::u(640000) / 2);  // ROM clock
 	m_tmsprom->set_region("5110ctrl"); // PROM memory region - sound region is automatically assigned
 	m_tmsprom->set_rom_size(0x1000);   // Individual rom_size
 	m_tmsprom->set_pdc_bit(1);         // bit # of pdc line

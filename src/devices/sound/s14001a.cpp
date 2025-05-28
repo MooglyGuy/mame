@@ -220,7 +220,7 @@ ALLOW_SAVE_TYPE(s14001a_device::states); // allow save_item on a non-fundamental
 
 void s14001a_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, clock() ? clock() : machine().sample_rate());
+	m_stream = stream_alloc(0, 1, clock().value() ? clock() : machine().sample_rate());
 
 	// zero-fill
 	m_bPhase1 = false;

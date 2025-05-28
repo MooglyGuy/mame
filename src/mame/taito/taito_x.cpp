@@ -1158,7 +1158,7 @@ void taitox_state::ballbros(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(600));   // 10 CPU slices per frame - enough for the sound CPU to read all commands
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_taito_x);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_taito_x);
 	// position kludges
 	m_spritegen->set_fg_yoffsets(-0x0a, 0x0e);
 	m_spritegen->set_bg_yoffsets(0x1, -0x1);

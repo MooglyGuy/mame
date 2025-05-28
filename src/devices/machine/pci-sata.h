@@ -9,8 +9,8 @@
 
 class sata_device : public pci_device {
 public:
-	sata_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, uint32_t main_id, uint32_t revision, uint32_t subdevice_id)
-		: sata_device(mconfig, tag, owner, clock)
+	sata_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t main_id, uint32_t revision, uint32_t subdevice_id)
+		: sata_device(mconfig, tag, owner, XTAL())
 	{
 		set_ids(main_id, revision, 0x01018a, subdevice_id);
 	}

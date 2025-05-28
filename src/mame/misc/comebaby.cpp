@@ -271,7 +271,7 @@ void comebaby_state::superio_config(device_t *device)
 // TODO: unverified PCI config space
 void comebaby_state::comebaby(machine_config &config)
 {
-	PENTIUM2(config, m_maincpu, 66'666'666); // Actually a Celeron (66'666'666 * 19) / 2
+	PENTIUM2(config, m_maincpu, XTAL::u(66'666'666)); // Actually a Celeron (66'666'666 * 19) / 2
 	m_maincpu->set_addrmap(AS_PROGRAM, &comebaby_state::comebaby_map);
 	//m_maincpu->set_addrmap(AS_IO, &comebaby_state::comebaby_io);
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));

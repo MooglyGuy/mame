@@ -312,11 +312,8 @@ void ie15_device::update_serial(int state)
 
 	set_data_frame(startbits, databits, parity, stopbits);
 
-	int txbaud = m_rs232_txbaud->read();
-	set_tra_rate(txbaud);
-
-	int rxbaud = m_rs232_rxbaud->read();
-	set_rcv_rate(rxbaud);
+	set_tra_rate(XTAL::u(m_rs232_txbaud->read()));
+	set_rcv_rate(XTAL::u(m_rs232_rxbaud->read()));
 }
 
 uint8_t ie15_device::flag_r(offs_t offset)

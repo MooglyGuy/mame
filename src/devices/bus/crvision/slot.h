@@ -67,7 +67,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	crvision_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	crvision_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~crvision_cart_slot_device();
 
 	// device_image_interface implementation

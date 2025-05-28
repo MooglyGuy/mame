@@ -28,7 +28,7 @@ Todo:
 
 namespace {
 
-#define SCHEMATIC_CLOCK (20000000)
+#define SCHEMATIC_CLOCK XTAL::u(20000000)
 
 class segald_state : public driver_device
 {

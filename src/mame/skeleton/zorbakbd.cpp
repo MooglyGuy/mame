@@ -248,11 +248,7 @@ ROM_END
 DEFINE_DEVICE_TYPE(ZORBA_KEYBOARD, zorba_keyboard_device, "zorba_kbd", "Zorba Keyboard")
 
 
-zorba_keyboard_device::zorba_keyboard_device(
-		machine_config const &mconfig,
-		char const *tag,
-		device_t *owner,
-		uint32_t clock)
+zorba_keyboard_device::zorba_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ZORBA_KEYBOARD, tag, owner, clock)
 	, m_rows(*this, "ROW%u", 0)
 	, m_beeper(*this, "beeper")
@@ -323,7 +319,7 @@ void zorba_keyboard_device::device_add_mconfig(machine_config &config)
 
 	// TODO: beeper frequency is unknown, using value from Sun keyboard for now
 	SPEAKER(config, "bell").front_center();
-	BEEP(config, m_beeper, ATTOSECONDS_TO_HZ(480 * ATTOSECONDS_PER_MICROSECOND));
+	BEEP(config, m_beeper, XTAL::u(ATTOSECONDS_TO_HZ(480 * ATTOSECONDS_PER_MICROSECOND)));
 	m_beeper->add_route(ALL_OUTPUTS, "bell", 0.4);
 }
 

@@ -66,7 +66,7 @@ namespace {
  *
  *************************************/
 
-#define I486_CLOCK          33000000
+#define I486_CLOCK          XTAL::u(33000000)
 #define MC68000_CLOCK       XTAL(10'000'000)
 #define TMS320C1_CLOCK      XTAL(33'833'000)
 #define MC88110_CLOCK       XTAL(40'000'000)

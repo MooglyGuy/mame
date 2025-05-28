@@ -562,11 +562,11 @@ void sengokmj_state::layer_scroll_w(offs_t offset, uint16_t data, uint16_t mem_m
 void sengokmj_state::sengokmj(machine_config &config)
 {
 	/* basic machine hardware */
-	V30(config, m_maincpu, 16000000/2); /* V30-8 */
+	V30(config, m_maincpu, XTAL::u(16000000)/2); /* V30-8 */
 	m_maincpu->set_addrmap(AS_PROGRAM, &sengokmj_state::sengokmj_map);
 	m_maincpu->set_addrmap(AS_IO, &sengokmj_state::sengokmj_io_map);
 
-	z80_device &audiocpu(Z80(config, "audiocpu", 14318180/4));
+	z80_device &audiocpu(Z80(config, "audiocpu", XTAL::u(14318180)/4));
 	audiocpu.set_addrmap(AS_PROGRAM, &sengokmj_state::seibu_sound_map);
 	audiocpu.set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -595,7 +595,7 @@ void sengokmj_state::sengokmj(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 14318180/4));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set("seibu_sound", FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 

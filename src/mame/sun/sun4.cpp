@@ -1542,15 +1542,15 @@ void sun4c_state::sun4_25(machine_config& config)
 	//m_mmu->set_ctx_mask(0xf);
 	m_mmu->set_pmeg_mask(0xff);
 	m_mmu->set_cache_line_size(32);
-	m_mmu->set_clock(33'000'000);
-	m_maincpu->set_clock(33'000'000);
+	m_mmu->set_clock(XTAL::u(33'000'000));
+	m_maincpu->set_clock(XTAL::u(33'000'000));
 
 	m_ram->set_default_size("64M");
 
-	m_sbus->set_clock(25'000'000);
-	m_sbus_slot[0]->set_clock(25'000'000);
-	m_sbus_slot[1]->set_clock(25'000'000);
-	m_sbus_slot[2]->set_clock(25'000'000);
+	m_sbus->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[0]->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[1]->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[2]->set_clock(XTAL::u(25'000'000));
 
 	m_sbus_slot[0]->set_fixed(true);
 	m_sbus_slot[1]->set_fixed(true);
@@ -1564,13 +1564,13 @@ void sun4c_state::sun4_40(machine_config &config)
 
 	m_ram->set_extra_options("4M,8M,12M,16M,20M,24M,32M,36M,48M");
 
-	m_mmu->set_clock(25'000'000);
-	m_maincpu->set_clock(25'000'000);
+	m_mmu->set_clock(XTAL::u(25'000'000));
+	m_maincpu->set_clock(XTAL::u(25'000'000));
 
-	m_sbus->set_clock(25'000'000);
-	m_sbus_slot[0]->set_clock(25'000'000);
-	m_sbus_slot[1]->set_clock(25'000'000);
-	m_sbus_slot[2]->set_clock(25'000'000);
+	m_sbus->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[0]->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[1]->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[2]->set_clock(XTAL::u(25'000'000));
 	m_sbus_slot[2]->set_default_option("bwtwo");
 	m_sbus_slot[2]->set_fixed(true);
 }
@@ -1583,13 +1583,13 @@ void sun4c_state::sun4_50(machine_config &config)
 	m_mmu->set_pmeg_mask(0xff);
 	m_mmu->set_cache_line_size(32);
 
-	m_mmu->set_clock(40'000'000);
-	m_maincpu->set_clock(40'000'000);
+	m_mmu->set_clock(XTAL::u(40'000'000));
+	m_maincpu->set_clock(XTAL::u(40'000'000));
 
-	m_sbus->set_clock(20'000'000);
-	m_sbus_slot[0]->set_clock(20'000'000);
-	m_sbus_slot[1]->set_clock(20'000'000);
-	m_sbus_slot[2]->set_clock(20'000'000);
+	m_sbus->set_clock(XTAL::u(20'000'000));
+	m_sbus_slot[0]->set_clock(XTAL::u(20'000'000));
+	m_sbus_slot[1]->set_clock(XTAL::u(20'000'000));
+	m_sbus_slot[2]->set_clock(XTAL::u(20'000'000));
 	m_sbus_slot[2]->set_default_option("turbogx"); // not accurate, should be gxp, not turbogx
 	m_sbus_slot[2]->set_fixed(true);
 }
@@ -1603,13 +1603,13 @@ void sun4c_state::sun4_65(machine_config &config)
 {
 	sun4c(config);
 
-	m_mmu->set_clock(25'000'000);
-	m_maincpu->set_clock(25'000'000);
+	m_mmu->set_clock(XTAL::u(25'000'000));
+	m_maincpu->set_clock(XTAL::u(25'000'000));
 
-	m_sbus->set_clock(25'000'000);
-	m_sbus_slot[0]->set_clock(25'000'000);
-	m_sbus_slot[1]->set_clock(25'000'000);
-	m_sbus_slot[2]->set_clock(25'000'000);
+	m_sbus->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[0]->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[1]->set_clock(XTAL::u(25'000'000));
+	m_sbus_slot[2]->set_clock(XTAL::u(25'000'000));
 	m_sbus_slot[2]->set_default_option("bwtwo");
 }
 
@@ -1621,8 +1621,8 @@ void sun4c_state::sun4_75(machine_config &config)
 	m_mmu->set_pmeg_mask(0xff);
 	m_mmu->set_cache_line_size(32);
 
-	m_mmu->set_clock(40'000'000);
-	m_maincpu->set_clock(40'000'000);
+	m_mmu->set_clock(XTAL::u(40'000'000));
+	m_maincpu->set_clock(XTAL::u(40'000'000));
 }
 
 /*

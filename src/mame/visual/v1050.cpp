@@ -1075,7 +1075,7 @@ void v1050_state::v1050(machine_config &config)
 	m_ppi_6502->in_pa_callback().set(m_ppi_disp, FUNC(i8255_device::pb_r));
 	m_ppi_6502->out_pc_callback().set(FUNC(v1050_state::m6502_ppi_pc_w));
 
-	I8251(config, m_uart_kb, 0/*16_MHz_XTAL/8,*/);
+	I8251(config, m_uart_kb, XTAL()/*16_MHz_XTAL/8,*/);
 	m_uart_kb->txd_handler().set(V1050_KEYBOARD_TAG, FUNC(v1050_keyboard_device::si_w));
 	m_uart_kb->rxrdy_handler().set(FUNC(v1050_state::kb_rxrdy_w));
 
@@ -1086,7 +1086,7 @@ void v1050_state::v1050(machine_config &config)
 	v1050_keyboard_device &keyboard(V1050_KEYBOARD(config, V1050_KEYBOARD_TAG));
 	keyboard.out_tx_handler().set(m_uart_kb, FUNC(i8251_device::write_rxd));
 
-	I8251(config, m_uart_sio, 0/*16_MHz_XTAL/8,*/);
+	I8251(config, m_uart_sio, XTAL()/*16_MHz_XTAL/8,*/);
 	m_uart_sio->txd_handler().set(RS232_TAG, FUNC(rs232_port_device::write_txd));
 	m_uart_sio->dtr_handler().set(RS232_TAG, FUNC(rs232_port_device::write_dtr));
 	m_uart_sio->rts_handler().set(RS232_TAG, FUNC(rs232_port_device::write_rts));

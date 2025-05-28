@@ -14,14 +14,14 @@ class neogeo_rom_device : public device_t, public device_neogeo_cart_interface
 {
 public:
 	// construction/destruction
-	neogeo_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual uint16_t rom_r(offs_t offset) override;
 	virtual void banksel_w(uint16_t data) override;
 
 protected:
-	neogeo_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

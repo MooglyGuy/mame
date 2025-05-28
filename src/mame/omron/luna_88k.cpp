@@ -396,14 +396,14 @@ void luna_88k_state_base::common_config(machine_config &config, XTAL clock)
 	RAM(config, m_ram);
 	m_ram->set_default_size("16M");
 
-	clock_device &sys_clk(CLOCK(config, "sys_clk", 200 / 2));
+	clock_device &sys_clk(CLOCK(config, "sys_clk", XTAL::u(200) / 2));
 	sys_clk.signal_handler().set([this](int state) { if (state) irq(0, 6, 1); });
 
-	HD647180X(config, m_iop, 12'288'000);
+	HD647180X(config, m_iop, XTAL::u(12'288'000));
 	m_iop->set_addrmap(AS_PROGRAM, &luna_88k_state_base::iop_map_mem);
 	m_iop->set_addrmap(AS_IO, &luna_88k_state_base::iop_map_pio);
 
-	UPD7201(config, m_sio, 19'660'800); // ?
+	UPD7201(config, m_sio, XTAL::u(19'660'800)); // ?
 	m_sio->out_int_callback().set(&luna_88k_state_base::irq<0, 5>, "irq0,5");
 
 	// RS-232C-A
@@ -428,7 +428,7 @@ void luna_88k_state_base::common_config(machine_config &config, XTAL clock)
 	sio_clk.signal_handler().append(m_sio, FUNC(upd7201_device::rxcb_w));
 	sio_clk.signal_handler().append(m_sio, FUNC(upd7201_device::txcb_w));
 
-	I8255A(config, m_pio[0], 8'000'000); // M5M82C55AFP-2
+	I8255A(config, m_pio[0], XTAL::u(8'000'000)); // M5M82C55AFP-2
 	/*
 	 * pio0
 	 *   port a: dipsw1 (r/o)
@@ -460,7 +460,7 @@ void luna_88k_state_base::common_config(machine_config &config, XTAL clock)
 	m_pio[0]->out_pc_callback().append(m_pio[0], FUNC(i8255_device::pc2_w)).bit(1);
 	m_pio[0]->out_pc_callback().append(m_pio[0], FUNC(i8255_device::pc4_w)).bit(5);
 
-	I8255A(config, m_pio[1], 8'000'000); // M5M82C55AFP-2
+	I8255A(config, m_pio[1], XTAL::u(8'000'000)); // M5M82C55AFP-2
 	/*
 	 * pio1
 	 *   port a: lcd data (r/w)
@@ -485,12 +485,12 @@ void luna_88k_state_base::common_config(machine_config &config, XTAL clock)
 
 	// TODO: crt timing control by HD6445CP4
 	screen_device &crt(SCREEN(config, "crt", SCREEN_TYPE_RASTER));
-	crt.set_raw(108'992'000, 2048, 0, 1280, 1024, 0, 1024);
+	crt.set_raw(XTAL::u(108'992'000), 2048, 0, 1280, 1024, 0, 1024);
 	crt.set_screen_update(FUNC(luna_88k_state_base::screen_update));
 
-	BT458(config, m_ramdac, 108'992'000);
+	BT458(config, m_ramdac, XTAL::u(108'992'000));
 
-	KS0066(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+	KS0066(config, m_lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	m_lcdc->set_default_bios_tag("f00");
 	m_lcdc->set_function_set_at_any_time(true);
 	m_lcdc->set_lcd_size(2, 16);
@@ -498,7 +498,7 @@ void luna_88k_state_base::common_config(machine_config &config, XTAL clock)
 	palette_device &palette(PALETTE(config, "palette", palette_device::MONOCHROME));
 
 	screen_device &lcd(SCREEN(config, "lcd", SCREEN_TYPE_LCD));
-	lcd.set_raw(192'000, 40 * 6, 0, 16 * 6, 2 * 8, 0, 2 * 8);
+	lcd.set_raw(XTAL::u(192'000), 40 * 6, 0, 16 * 6, 2 * 8, 0, 2 * 8);
 	lcd.set_screen_update(m_lcdc, FUNC(ks0066_device::screen_update));
 	lcd.set_palette(palette);
 }

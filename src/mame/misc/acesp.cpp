@@ -177,7 +177,7 @@ void ace_sp_state::ace_sp_pcp(machine_config &config)
 {
 	ace_sp(config);
 
-	ACE_SP_REELCTRL_PCP(config.replace(), m_reelctrl, 2000000);
+	ACE_SP_REELCTRL_PCP(config.replace(), m_reelctrl, XTAL::u(2000000));
 }
 
 

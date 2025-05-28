@@ -100,7 +100,7 @@ mm5837_stream_device::mm5837_stream_device(const machine_config &mconfig, const 
 
 void mm5837_stream_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, mm5837_source::frequency(m_vdd));
+	m_stream = stream_alloc(0, 1, XTAL::u(mm5837_source::frequency(m_vdd)));
 	save_item(NAME(m_source.m_shift));
 }
 

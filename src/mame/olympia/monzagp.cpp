@@ -513,7 +513,7 @@ GFXDECODE_END
 
 void monzagp_state::monzagp(machine_config &config)
 {
-	I8035(config, m_maincpu, 12'000'000 / 4); // 400KHz ??? - Main board Crystal is 12MHz
+	I8035(config, m_maincpu, XTAL::u(12'000'000) / 4); // 400KHz ??? - Main board Crystal is 12MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &monzagp_state::program_map);
 	m_maincpu->set_addrmap(AS_IO, &monzagp_state::io_map);
 	m_maincpu->p1_out_cb().set(FUNC(monzagp_state::port1_w));

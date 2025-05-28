@@ -1929,7 +1929,7 @@ void chihiro_state::chihiro_base(machine_config &config)
 	OHCI_USB_CONNECTOR(config, "pci:02.0:port4", usb_baseboard, nullptr, false);
 
 	JVS_MASTER(config, "jvs_master");
-	sega_837_13551_device &sega837(SEGA_837_13551(config, "837_13551", 0, "jvs_master"));
+	sega_837_13551_device &sega837(SEGA_837_13551(config, "837_13551", XTAL(), "jvs_master"));
 	sega837.set_port_tag<0>("TILT");
 	sega837.set_port_tag<1>("P1");
 	sega837.set_port_tag<2>("P2");
@@ -1947,7 +1947,7 @@ void chihiro_state::chihiro_base(machine_config &config)
 void chihiro_state::chihirogd(machine_config &config)
 {
 	chihiro_base(config);
-	NAOMI_GDROM_BOARD(config, m_dimmboard, 0, ":gdrom", "pic");
+	NAOMI_GDROM_BOARD(config, m_dimmboard, XTAL(), ":gdrom", "pic");
 	m_dimmboard->irq_callback().set_nop();
 	SEGA_NETWORK_BOARD(config, "network");
 }

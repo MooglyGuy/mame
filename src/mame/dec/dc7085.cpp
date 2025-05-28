@@ -350,8 +350,8 @@ void dc7085_channel::set_format(unsigned baud, unsigned data_bits, unsigned pari
 	set_data_frame(1, data_bits, parity ? (parity == 1 ? PARITY_ODD : PARITY_EVEN) : PARITY_NONE,
 		stop_bits == 1 ? STOP_BITS_1 : (data_bits == 5 ? STOP_BITS_1_5 : STOP_BITS_2));
 
-	set_tra_rate(baud);
-	set_rcv_rate(baud);
+	set_tra_rate(XTAL::u(baud));
+	set_rcv_rate(XTAL::u(baud));
 }
 
 void dc7085_channel::tx_w(u8 data)

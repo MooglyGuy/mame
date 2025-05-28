@@ -496,7 +496,7 @@ void hektor_state::hektor(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &hektor_state::hektor_io);
 	m_maincpu->in_sid_func().set(FUNC(hektor_state::sid_r));
 	m_maincpu->out_sod_func().set(FUNC(hektor_state::sod_w));
-	m_maincpu->set_clk_out("i8155", FUNC(i8155_device::set_unscaled_clock_int));
+	m_maincpu->set_clk_out("i8155", FUNC(i8155_device::set_unscaled_clock_ns));
 
 	I8155(config, m_i8155, 6.144_MHz_XTAL / 2);
 	m_i8155->out_pa_callback().set(FUNC(hektor_state::i8155_porta_w));
@@ -554,7 +554,7 @@ void hektor3_state::hektor3(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &hektor3_state::hektor3_io);
 	m_maincpu->in_sid_func().set(FUNC(hektor3_state::sid_r));
 	m_maincpu->out_sod_func().set(FUNC(hektor3_state::sod_w));
-	m_maincpu->set_clk_out("i8155", FUNC(i8155_device::set_unscaled_clock_int));
+	m_maincpu->set_clk_out("i8155", FUNC(i8155_device::set_unscaled_clock_ns));
 
 	I8155(config, m_i8155, 16_MHz_XTAL / 4);
 	m_i8155->out_pa_callback().set(FUNC(hektor3_state::i8155_porta_w));

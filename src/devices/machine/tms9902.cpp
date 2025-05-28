@@ -904,7 +904,7 @@ void tms9902_device::device_reset()
 
 void tms9902_device::device_start()
 {
-	m_clock_rate = clock();
+	m_clock_rate = clock().value();
 
 	m_dectimer = timer_alloc(FUNC(tms9902_device::decrementer_expired), this);
 	m_recvtimer = timer_alloc(FUNC(tms9902_device::recv_tick), this);

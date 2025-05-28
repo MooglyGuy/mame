@@ -205,7 +205,7 @@ mcms_device::mcms_device(const machine_config &mconfig, const char *tag, device_
 
 void mcms_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 31250);
+	m_stream = stream_alloc(0, 2, XTAL::u(31250));
 	m_timer = timer_alloc(FUNC(mcms_device::set_irq_tick), this);
 	m_clrtimer = timer_alloc(FUNC(mcms_device::clr_irq_tick), this);
 	m_enabled = false;

@@ -415,7 +415,7 @@ static const char *const tattack_sample_names[] =
 void tattack_state::tattack(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 8000000 / 2);   /* 4 MHz ? */
+	Z80(config, m_maincpu, XTAL::u(8000000) / 2);   /* 4 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &tattack_state::prg_map);
 	m_maincpu->set_vblank_int("screen", FUNC(tattack_state::irq0_line_hold));
 

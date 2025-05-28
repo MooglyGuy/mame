@@ -54,7 +54,7 @@ void rc2014_bus_device::add_card(device_rc2014_card_interface &card)
 
 void rc2014_bus_device::set_bus_clock(u32 clock)
 {
-	set_clock(clock);
+	set_clock(XTAL::u(clock));
 	notify_clock_changed();
 }
 

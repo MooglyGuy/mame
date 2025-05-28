@@ -306,12 +306,12 @@ INPUT_PORTS_END
 void nbmj8900_state::ohpaipee(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 20000000/4);    /* 5.00 MHz ? */
+	Z80(config, m_maincpu, XTAL::u(20000000)/4);    /* 5.00 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &nbmj8900_state::ohpaipee_map);
 	m_maincpu->set_addrmap(AS_IO, &nbmj8900_state::ohpaipee_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(nbmj8900_state::irq0_line_hold));
 
-	NB1413M3(config, m_nb1413m3, 0, nb1413m3_device::NB1413M3_OHPAIPEE);
+	NB1413M3(config, m_nb1413m3, nb1413m3_device::NB1413M3_OHPAIPEE);
 	m_nb1413m3->set_blitter_rom_tag("gfx");
 
 	/* video hardware */

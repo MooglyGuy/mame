@@ -734,7 +734,7 @@ void slither_state::slither(machine_config &config)
 
 	/* basic machine hardware */
 
-	m_maincpu->set_clock(SLITHER_CLOCK_OSC/4/4);   /* 1.34 MHz */
+	m_maincpu->set_clock(SLITHER_CLOCK_OSC / 4 / 4);   /* 1.34 MHz */
 
 	m_pia[1]->readpa_handler().set(FUNC(slither_state::trak_r<1>));
 	m_pia[1]->cb2_handler().set(FUNC(slither_state::sn76489_ctrl_w<0>));

@@ -205,7 +205,7 @@ void am9513_device::init_freq_timer(int f)
 		m_freq_timer[f]->adjust(freq / 2, f, freq / 2);
 	m_freq_timer[f]->enable(m_freq_timer_selected[f] != 0);
 
-	LOG("F%d = %f Hz (%s cycle emulation)\n", f + 1, double(clock()) / scale,
+	LOG("F%d = %f Hz (%s cycle emulation)\n", f + 1, clock().dvalue() / scale,
 			m_freq_timer_selected[f] == 0 ? "no" : m_freq_timer_cycle[f] == 0 ? "partial" : "full");
 }
 

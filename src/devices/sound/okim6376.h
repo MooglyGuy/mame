@@ -38,7 +38,7 @@ protected:
 	virtual void rom_bank_pre_change() override;
 
 	virtual offs_t get_start_position(int channel);
-	virtual u32 get_sample_rate();
+	virtual XTAL get_sample_rate();
 
 	/* struct describing a single playing ADPCM voice */
 	struct ADPCMVoice
@@ -90,7 +90,7 @@ public:
 
 protected:
 	virtual offs_t get_start_position(int channel) override;
-	virtual u32 get_sample_rate() override;
+	virtual XTAL get_sample_rate() override;
 };
 
 DECLARE_DEVICE_TYPE(OKIM6376, okim6376_device)

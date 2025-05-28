@@ -71,7 +71,7 @@ ef9364_device::ef9364_device(const machine_config &mconfig, const char *tag, dev
 	m_charset(*this, DEVICE_SELF),
 	m_palette(*this, finder_base::DUMMY_TAG)
 {
-	clock_freq = clock;
+	clock_freq = clock.value();
 
 	erase_char = 0x00;
 }

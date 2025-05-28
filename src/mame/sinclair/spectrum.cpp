@@ -518,8 +518,8 @@ uint8_t spectrum_state::floating_bus_r()
 	if (!m_contention_pattern.empty() && vpos >= screen.top() && vpos <= screen.bottom())
 	{
 		u64 now = m_maincpu->total_cycles() - m_int_at;
-		u64 cf = vpos * m_screen->width() * m_maincpu->clock() / m_screen->clock() + m_contention_offset;
-		u64 ct = cf + screen.width() * m_maincpu->clock() / m_screen->clock();
+		u64 cf = vpos * m_screen->width() * m_maincpu->clock().value() / m_screen->clock().value() + m_contention_offset;
+		u64 ct = cf + screen.width() * m_maincpu->clock().value() / m_screen->clock().value();
 		if (cf <= now && now < ct)
 		{
 			u64 clocks = now - cf;

@@ -760,7 +760,7 @@ void mos7360_device::soundport_w(int offset, int data)
 		else
 			m_reg[offset & 0x1f] = data;
 
-		m_tone1samples = machine().sample_rate() / TONE_FREQUENCY (TONE1_VALUE);
+		m_tone1samples = machine().sample_rate().value() / TONE_FREQUENCY (TONE1_VALUE);
 		DBG_LOG(1, "ted7360", ("tone1 %d %d sample:%d\n", TONE1_VALUE, TONE_FREQUENCY(TONE1_VALUE), m_tone1samples));
 		break;
 
@@ -768,10 +768,10 @@ void mos7360_device::soundport_w(int offset, int data)
 	case 0x10:
 		m_reg[offset & 0x1f] = data;
 
-		m_tone2samples = machine().sample_rate() / TONE_FREQUENCY (TONE2_VALUE);
+		m_tone2samples = machine().sample_rate().value() / TONE_FREQUENCY (TONE2_VALUE);
 		DBG_LOG (1, "ted7360", ("tone2 %d %d sample:%d\n", TONE2_VALUE, TONE_FREQUENCY(TONE2_VALUE), m_tone2samples));
 
-		m_noisesamples = (int) ((double) NOISE_FREQUENCY_MAX * machine().sample_rate() * NOISE_BUFFER_SIZE_SEC / NOISE_FREQUENCY);
+		m_noisesamples = (int) ((double) NOISE_FREQUENCY_MAX * machine().sample_rate().value() * NOISE_BUFFER_SIZE_SEC / NOISE_FREQUENCY);
 		DBG_LOG (1, "ted7360", ("noise %d sample:%d\n", NOISE_FREQUENCY, m_noisesamples));
 
 		if (!NOISE_ON || ((double) m_noisepos / m_noisesamples >= 1.0))

@@ -569,7 +569,7 @@ void ssingles_state::ssingles(machine_config &config)
 
 	GFXDECODE(config, "gfxdecode", "palette", gfx_ssingles);
 
-	mc6845_device &crtc(MC6845(config, "crtc", 1'000'000)); // ? MHz
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(1'000'000))); // ? MHz
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8);

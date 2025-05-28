@@ -63,7 +63,7 @@ void am2910_device::device_start()
 	save_item(NAME(m_d));
 	save_item(NAME(m_i));
 
-	if (clock())
+	if (clock().value())
 		m_execute_timer = timer_alloc(FUNC(am2910_device::clock_tick), this);
 	else
 		m_execute_timer = nullptr;

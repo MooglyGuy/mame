@@ -502,7 +502,7 @@ void wiping_state::wiping(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	WIPING_CUSTOM(config, "wiping", 96'000 / 2).add_route(ALL_OUTPUTS, "mono", 1.0); // 48000 Hz?
+	WIPING_CUSTOM(config, "wiping", XTAL::u(96'000) / 2).add_route(ALL_OUTPUTS, "mono", 1.0); // 48000 Hz?
 }
 
 

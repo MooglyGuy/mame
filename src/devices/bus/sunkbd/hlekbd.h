@@ -32,7 +32,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock);
+			const XTAL &clock);
 
 	// device overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

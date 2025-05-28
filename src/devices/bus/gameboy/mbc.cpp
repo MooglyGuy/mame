@@ -194,7 +194,7 @@ public:
 	}
 
 protected:
-	mbc5_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+	mbc5_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 		rom_mbc_device_base(mconfig, type, tag, owner, clock)
 	{
 	}
@@ -256,7 +256,7 @@ public:
 	}
 
 protected:
-	mbc5_logo_spoof_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+	mbc5_logo_spoof_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_device_base(mconfig, type, tag, owner, clock),
 		m_ram_tap(),
 		m_notif_cart_space(),
@@ -543,7 +543,7 @@ private:
 class mbc1_device : public rom_mbc_device_base
 {
 public:
-	mbc1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	mbc1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		rom_mbc_device_base(mconfig, GB_ROM_MBC1, tag, owner, clock)
 	{
 	}
@@ -686,7 +686,7 @@ private:
 class mbc5_device : public mbc5_device_base
 {
 public:
-	mbc5_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	mbc5_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_device_base(mconfig, GB_ROM_MBC5, tag, owner, clock),
 		m_rumble(*this, "rumble"),
 		m_has_rumble(false)
@@ -922,7 +922,7 @@ protected:
 class sintax_device : public mbc5_logo_spoof_device_base
 {
 public:
-	sintax_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	sintax_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_logo_spoof_device_base(mconfig, GB_ROM_SINTAX, tag, owner, clock),
 		m_scramble_mode(0U),
 		m_xor_index(0U)
@@ -1077,7 +1077,7 @@ private:
 class chongwu_device : public mbc5_logo_spoof_device_base
 {
 public:
-	chongwu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	chongwu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_logo_spoof_device_base(mconfig, GB_ROM_CHONGWU, tag, owner, clock),
 		m_protection_checked(0U),
 		m_installing_tap(false)
@@ -1155,7 +1155,7 @@ private:
 class licheng_device : public mbc5_logo_spoof_device_base
 {
 public:
-	licheng_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	licheng_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_logo_spoof_device_base(mconfig, GB_ROM_LICHENG, tag, owner, clock)
 	{
 	}
@@ -1186,7 +1186,7 @@ public:
 class ngbchk_device : public rom_mbc_device_base
 {
 public:
-	ngbchk_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	ngbchk_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		rom_mbc_device_base(mconfig, GB_ROM_NEWGBCHK, tag, owner, clock),
 		m_view_prot(*this, "protection")
 	{
@@ -1300,7 +1300,7 @@ private:
 class vf001_device : public mbc5_logo_spoof_device_base
 {
 public:
-	vf001_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	vf001_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_logo_spoof_device_base(mconfig, GB_ROM_VF001, tag, owner, clock),
 		m_bank_rom_upper(*this, "upper"),
 		m_bank_mask_rom_upper(0U),

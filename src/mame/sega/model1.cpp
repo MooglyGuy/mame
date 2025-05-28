@@ -1729,7 +1729,7 @@ void model1_state::model1(machine_config &config)
 	m_tgp_copro->set_addrmap(AS_IO, &model1_state::copro_io_map);
 	m_tgp_copro->set_addrmap(mb86233_device::AS_RF, &model1_state::copro_rf_map);
 
-	S24TILE(config, m_tiles, 0, 0x3fff).set_palette(m_palette);
+	S24TILE(config, m_tiles, XTAL(), 0x3fff).set_palette(m_palette);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_video_attributes(VIDEO_UPDATE_AFTER_VBLANK);
@@ -1834,7 +1834,7 @@ void model1_state::wingwar(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &model1_state::model1_comm_mem);
 
-	model1io2_device &ioboard(SEGA_MODEL1IO2(config.replace(), "ioboard", 0));
+	model1io2_device &ioboard(SEGA_MODEL1IO2(config.replace(), "ioboard"));
 	ioboard.set_default_bios_tag("epr16891");
 	ioboard.read_callback().set(m_dpram, FUNC(mb8421_device::left_r));
 	ioboard.write_callback().set(m_dpram, FUNC(mb8421_device::left_w));
@@ -1878,7 +1878,7 @@ void model1_state::netmerc(machine_config &config)
 	i386sx_device &polhemus(I386SX(config, "polhemus", XTAL::u(16000000)));
 	polhemus.set_addrmap(AS_PROGRAM, &model1_state::polhemus_map);
 
-	model1io2_device &ioboard(SEGA_MODEL1IO2(config.replace(), "ioboard", 0));
+	model1io2_device &ioboard(SEGA_MODEL1IO2(config.replace(), "ioboard"));
 	ioboard.set_default_bios_tag("epr18021");
 	ioboard.read_callback().set(m_dpram, FUNC(mb8421_device::left_r));
 	ioboard.write_callback().set(m_dpram, FUNC(mb8421_device::left_w));

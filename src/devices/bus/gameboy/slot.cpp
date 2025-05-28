@@ -31,7 +31,7 @@ void gb_cart_slot_device_base::call_unload()
 }
 
 
-gb_cart_slot_device_base::gb_cart_slot_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+gb_cart_slot_device_base::gb_cart_slot_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_cartrom_image_interface(mconfig, *this),
 	device_single_card_slot_interface<device_gb_cart_interface>(mconfig, *this),

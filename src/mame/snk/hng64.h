@@ -205,10 +205,10 @@ public:
 	required_ioport m_vblank;
 
 private:
-	static constexpr int HNG64_MASTER_CLOCK = 50'000'000;
+	static constexpr XTAL HNG64_MASTER_CLOCK = XTAL(50'000'000);
 
 	/* TODO: NOT measured! */
-	static constexpr int PIXEL_CLOCK = (HNG64_MASTER_CLOCK*2)/4; // x 2 is due to the interlaced screen ...
+	static constexpr XTAL PIXEL_CLOCK = (HNG64_MASTER_CLOCK * 2) / 4; // x 2 is due to the interlaced screen ...
 
 	static constexpr int HTOTAL = 0x200+0x100;
 	static constexpr int HBEND = 0;

@@ -1030,23 +1030,23 @@ void gsword_state::gsword(machine_config &config)
 void josvolly_state::josvolly(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 18'000'000 / 4);     // ?
+	Z80(config, m_maincpu, XTAL::u(18'000'000) / 4);     // ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &josvolly_state::cpu1_map);
 	m_maincpu->set_addrmap(AS_IO, &josvolly_state::josvolly_cpu1_io_map);
 	m_maincpu->set_periodic_int(FUNC(josvolly_state::irq0_line_hold), attotime::from_hz(2*60));
 
-	Z80(config, m_audiocpu, 12'000'000 / 4);    // ?
+	Z80(config, m_audiocpu, XTAL::u(12'000'000) / 4);    // ?
 	m_audiocpu->set_addrmap(AS_PROGRAM, &josvolly_state::josvolly_cpu2_map);
 	m_audiocpu->set_addrmap(AS_IO, &josvolly_state::josvolly_cpu2_io_map);
 	m_audiocpu->set_vblank_int("screen", FUNC(josvolly_state::irq0_line_assert));
 
-	upi41_cpu_device &mcu1(I8741A(config, "mcu1", 18'000'000 / 2)); // ?
+	upi41_cpu_device &mcu1(I8741A(config, "mcu1", XTAL::u(18'000'000) / 2)); // ?
 	mcu1.p1_in_cb().set(FUNC(josvolly_state::mcu1_p1_r));
 	mcu1.p1_out_cb().set(FUNC(josvolly_state::mcu1_p1_w));
 	mcu1.p2_in_cb().set(FUNC(josvolly_state::mcu1_p2_r));
 	mcu1.p2_out_cb().set(FUNC(josvolly_state::mcu1_p2_w));
 
-	upi41_cpu_device &mcu2(I8741A(config, "mcu2", 12'000'000 / 2)); // ?
+	upi41_cpu_device &mcu2(I8741A(config, "mcu2", XTAL::u(12'000'000) / 2)); // ?
 	mcu2.p1_in_cb().set(FUNC(josvolly_state::mcu2_p1_r));
 	mcu2.p1_out_cb().set(FUNC(josvolly_state::mcu2_p1_w));
 	mcu2.p2_in_cb().set(FUNC(josvolly_state::mcu2_p2_r));

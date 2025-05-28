@@ -92,7 +92,7 @@ static INPUT_PORTS_START(opus108pm)
 	PORT_DIPSETTING(   0x07, "IRQ 7")
 INPUT_PORTS_END
 
-isa8_opus108pm_device::isa8_opus108pm_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+isa8_opus108pm_device::isa8_opus108pm_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA8_OPUS108PM, tag, owner, clock)
 	, device_isa8_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")

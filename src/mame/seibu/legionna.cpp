@@ -1185,7 +1185,7 @@ void legionna_state::legionna(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &legionna_state::legionna_map);
 	m_maincpu->set_vblank_int("screen", FUNC(legionna_state::irq4_line_hold)); /* VBL */
 
-	Z80(config, m_audiocpu, 14318180/4);
+	Z80(config, m_audiocpu, XTAL::u(14318180)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &legionna_state::seibu_sound_map);
 	m_audiocpu->set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -1219,7 +1219,7 @@ void legionna_state::legionna(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 14318180/4));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set("seibu_sound", FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 
@@ -1242,7 +1242,7 @@ void legionna_state::heatbrl(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &legionna_state::heatbrl_map);
 	m_maincpu->set_vblank_int("screen", FUNC(legionna_state::irq4_line_hold)); /* VBL */
 
-	Z80(config, m_audiocpu, 14318180/4);
+	Z80(config, m_audiocpu, XTAL::u(14318180)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &legionna_state::seibu_sound_map);
 	m_audiocpu->set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -1276,7 +1276,7 @@ void legionna_state::heatbrl(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 14318180/4));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set("seibu_sound", FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 
@@ -1299,7 +1299,7 @@ void legionna_state::godzilla(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &legionna_state::godzilla_map);
 	m_maincpu->set_vblank_int("screen", FUNC(legionna_state::irq4_line_hold));
 
-	Z80(config, m_audiocpu, 14318180/4);
+	Z80(config, m_audiocpu, XTAL::u(14318180)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &legionna_state::seibu_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &legionna_state::godzilla_sound_io_map);
 	m_audiocpu->set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
@@ -1315,7 +1315,7 @@ void legionna_state::godzilla(machine_config &config)
 //  screen.set_vblank_time(ATTOSECONDS_IN_USEC(2500));
 //  screen.set_size(42*8, 36*8);
 //  screen.set_visarea(0*8, 40*8-1, 0*8, 28*8-1);
-	screen.set_raw(14318180/2,455,0,320,258,0,224); // ~61 Hz, 15.734 kHz
+	screen.set_raw(XTAL::u(14318180)/2,455,0,320,258,0,224); // ~61 Hz, 15.734 kHz
 	screen.set_screen_update(FUNC(legionna_state::screen_update_godzilla));
 	screen.set_palette(m_palette);
 
@@ -1337,7 +1337,7 @@ void legionna_state::godzilla(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 14318180/4));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set(m_seibu_sound, FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(0, "mono", 0.50);
 	ymsnd.add_route(1, "mono", 0.50);
@@ -1361,7 +1361,7 @@ void legionna_state::denjinmk(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &legionna_state::denjinmk_map);
 	m_maincpu->set_vblank_int("screen", FUNC(legionna_state::irq4_line_hold));
 
-	Z80(config, m_audiocpu, 14318180/4);
+	Z80(config, m_audiocpu, XTAL::u(14318180)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &legionna_state::seibu_sound_map);
 	m_audiocpu->set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -1396,7 +1396,7 @@ void legionna_state::denjinmk(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 14318180/4));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set(m_seibu_sound, FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(0, "mono", 0.50);
 	ymsnd.add_route(1, "mono", 0.50);
@@ -1420,7 +1420,7 @@ void legionna_state::grainbow(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &legionna_state::grainbow_map);
 	m_maincpu->set_vblank_int("screen", FUNC(legionna_state::irq4_line_hold));
 
-	Z80(config, m_audiocpu, 14318180/4);
+	Z80(config, m_audiocpu, XTAL::u(14318180)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &legionna_state::seibu_sound_map);
 	m_audiocpu->set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -1455,7 +1455,7 @@ void legionna_state::grainbow(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 14318180/4));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set(m_seibu_sound, FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(0, "mono", 0.50);
 	ymsnd.add_route(1, "mono", 0.50);
@@ -1479,7 +1479,7 @@ void legionna_state::cupsoc(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &legionna_state::cupsoc_map);
 	m_maincpu->set_vblank_int("screen", FUNC(legionna_state::irq4_line_hold)); /* VBL */
 
-	Z80(config, m_audiocpu, 14318180/4);
+	Z80(config, m_audiocpu, XTAL::u(14318180)/4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &legionna_state::seibu_sound_map);
 	m_audiocpu->set_irq_acknowledge_callback("seibu_sound", FUNC(seibu_sound_device::im0_vector_cb));
 
@@ -1517,7 +1517,7 @@ void legionna_state::cupsoc(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 14318180/4));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(14318180)/4));
 	ymsnd.irq_handler().set("seibu_sound", FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 

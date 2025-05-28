@@ -321,13 +321,10 @@ void mpcc_device::dcd_w(int state)
 //-------------------------------------------------
 uint32_t mpcc_device::get_brg_rate()
 {
-	uint32_t rate;
-	uint32_t brg_const;
-
-	brg_const = (m_brdr1 | m_brdr2 << 8); // Baud rate divider
+	uint32_t brg_const = (m_brdr1 | m_brdr2 << 8); // Baud rate divider
 	brg_const += (m_ccr & REG_CCR_PSCDIV) ? 3 : 2; // Add prescaler factor
 	brg_const += (m_psr2 & REG_PSR2_PSEL_MSK) == REG_PSR2_PSEL_ASCII ? 2 : 1; // Add K factor
-	rate = clock() / brg_const;
+	uint32_t rate = clock().value() / brg_const;
 
 	return rate;
 }
@@ -337,19 +334,12 @@ uint32_t mpcc_device::get_brg_rate()
 //-------------------------------------------------
 uint32_t mpcc_device::get_tx_rate()
 {
-	uint32_t rate;
-
 	// Check if TxC is an input and use it instead of the BRG
 	if ((m_ccr & REG_CCR_TCLO) == 0)
 	{
-		rate = m_txc;
+		return m_txc;
 	}
-	else
-	{
-		rate = get_brg_rate();
-	}
-
-	return rate;
+	return get_brg_rate();
 }
 
 //-------------------------------------------------
@@ -357,17 +347,15 @@ uint32_t mpcc_device::get_tx_rate()
 //-------------------------------------------------
 uint32_t mpcc_device::get_clock_div()
 {
-	uint32_t clk_div = 1;
-
 	switch (m_ccr & REG_CCR_CLKDIV_MSK)
 	{
-	case REG_CCR_CLKDIV_X1 : clk_div =  1; break;
-	case REG_CCR_CLKDIV_X16: clk_div = 16; break;
-	case REG_CCR_CLKDIV_X32: clk_div = 32; break;
-	case REG_CCR_CLKDIV_X64: clk_div = 64; break;
+	case REG_CCR_CLKDIV_X1 : return  1;
+	case REG_CCR_CLKDIV_X16: return 16;
+	case REG_CCR_CLKDIV_X32: return 32;
+	case REG_CCR_CLKDIV_X64: return 64;
 	}
 
-	return clk_div;
+	return 1;
 }
 
 //-------------------------------------------------
@@ -375,19 +363,12 @@ uint32_t mpcc_device::get_clock_div()
 //-------------------------------------------------
 uint32_t mpcc_device::get_rx_rate()
 {
-	uint32_t rate;
-
 	// Check if TxC is an input and use it instead of the BRG
 	if ((m_ccr & REG_CCR_RCLKIN) == 0)
 	{
-		rate = m_rxc / get_clock_div();
+		return m_rxc / get_clock_div();
 	}
-	else
-	{
-		rate = get_brg_rate();
-	}
-
-	return rate;
+	return get_brg_rate();
 }
 
 //-------------------------------------------------
@@ -395,17 +376,15 @@ uint32_t mpcc_device::get_rx_rate()
 //-------------------------------------------------
 uint32_t mpcc_device::get_word_length()
 {
-	int bits = 5;
-
 	switch (m_psr2 & REG_PSR2_CHLN_MSK)
 	{
-	case REG_PSR2_CHLN_5:  bits = 5;   break;
-	case REG_PSR2_CHLN_6:  bits = 6;   break;
-	case REG_PSR2_CHLN_7:  bits = 7;   break;
-	case REG_PSR2_CHLN_8:  bits = 8;   break;
+	case REG_PSR2_CHLN_5:  return 5;
+	case REG_PSR2_CHLN_6:  return 6;
+	case REG_PSR2_CHLN_7:  return 7;
+	case REG_PSR2_CHLN_8:  return 8;
 	}
 
-	return bits;
+	return 5;
 }
 
 //-------------------------------------------------
@@ -428,20 +407,14 @@ device_serial_interface::stop_bits_t mpcc_device::get_stop_bits()
 //-------------------------------------------------
 device_serial_interface::parity_t mpcc_device::get_parity()
 {
-	parity_t parity;
-
 	if (m_ecr & REG_ECR_PAREN)
 	{
 		if (m_ecr & REG_ECR_ODDPAR)
-			parity = PARITY_ODD;
+			return PARITY_ODD;
 		else
-			parity = PARITY_EVEN;
+			return PARITY_EVEN;
 	}
-	else
-	{
-		parity = PARITY_NONE;
-	}
-	return parity;
+	return PARITY_NONE;
 }
 
 //-------------------------------------------------
@@ -473,7 +446,7 @@ void mpcc_device::update_serial()
 		m_brg_rate = get_rx_rate();
 
 		LOGSETUP("- BRG rate %d\n", m_brg_rate);
-		set_rcv_rate(m_brg_rate);
+		set_rcv_rate(XTAL::u(m_brg_rate));
 	}
 
 	// Setup the Transmitter
@@ -493,7 +466,7 @@ void mpcc_device::update_serial()
 			m_brg_rate = get_tx_rate();
 
 			LOGSETUP("- BRG rate %d\n", m_brg_rate);
-			set_tra_rate(m_brg_rate);
+			set_tra_rate(XTAL::u(m_brg_rate));
 		}
 		else
 		{

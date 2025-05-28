@@ -100,7 +100,7 @@ namespace {
 class mbc3_device_base : public mbc_ram_device_base<mbc_dual_device_base>, public device_rtc_interface, public device_nvram_interface
 {
 protected:
-	mbc3_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mbc3_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -157,7 +157,7 @@ private:
 class mbc3_device : public mbc3_device_base
 {
 public:
-	mbc3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mbc3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 };
@@ -166,7 +166,7 @@ public:
 class mbc30_device : public mbc3_device_base
 {
 public:
-	mbc30_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mbc30_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 };
@@ -201,7 +201,7 @@ mbc3_device_base::mbc3_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_ram_device_base<mbc_dual_device_base>(mconfig, type, tag, owner, clock),
 	device_rtc_interface(mconfig, *this),
 	device_nvram_interface(mconfig, *this),
@@ -719,7 +719,7 @@ mbc3_device::mbc3_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc3_device_base(mconfig, GB_ROM_MBC3, tag, owner, clock)
 {
 }
@@ -740,7 +740,7 @@ mbc30_device::mbc30_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc3_device_base(mconfig, GB_ROM_MBC30, tag, owner, clock)
 {
 }

@@ -488,7 +488,7 @@ void zwackery_state::zwackery(machine_config &config)
 
 	WATCHDOG_TIMER(config, m_watchdog);
 
-	PTM6840(config, m_ptm, 7652400 / 10);
+	PTM6840(config, m_ptm, XTAL::u(7652400) / 10);
 	m_ptm->irq_callback().set_inputline("maincpu", 6);
 
 	PIA6821(config, m_pia0);
@@ -523,7 +523,7 @@ void zwackery_state::zwackery(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	MIDWAY_CHEAP_SQUEAK_DELUXE(config, m_cheap_squeak_deluxe);
+	MIDWAY_CHEAP_SQUEAK_DELUXE(config, m_cheap_squeak_deluxe, XTAL(16'000'000));
 	m_cheap_squeak_deluxe->add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 

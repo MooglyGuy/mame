@@ -19,7 +19,7 @@
 DEFINE_DEVICE_TYPE(NEOGEO_FATFURY2_CART, neogeo_fatfury2_cart_device, "neocart_fatfury2", "Neo Geo Fatal Furty 2 Cart")
 
 
-neogeo_fatfury2_cart_device::neogeo_fatfury2_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_fatfury2_cart_device::neogeo_fatfury2_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, NEOGEO_FATFURY2_CART, tag, owner, clock),
 	m_prot(*this, "fatfury2_prot")
 {

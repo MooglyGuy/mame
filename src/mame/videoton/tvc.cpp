@@ -799,7 +799,7 @@ void tvc_state::tvc(machine_config &config)
 
 	PALETTE(config, m_palette, FUNC(tvc_state::tvc_palette), 16);
 
-	mc6845_device &crtc(MC6845(config, "crtc", 3125000/2)); // clk taken from schematics
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(3125000)/2)); // clk taken from schematics
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8); /*?*/

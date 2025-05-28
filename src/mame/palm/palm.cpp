@@ -580,7 +580,7 @@ INPUT_PORTS_END
 void palm_state::palm_base(machine_config &config)
 {
 	/* basic machine hardware */
-	MC68328(config, m_maincpu, 32768*506);        /* 16.580608 MHz */
+	MC68328(config, m_maincpu, XTAL::u(32768)*506);        /* 16.580608 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &palm_state::mem_map);
 	m_maincpu->set_dasm_override(FUNC(palm_state::dasm_override));
 

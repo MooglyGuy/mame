@@ -44,7 +44,7 @@ namespace {
 class mbc2_device : public mbc_device_base
 {
 public:
-	mbc2_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mbc2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 	virtual void unload() override ATTR_COLD;
@@ -71,7 +71,7 @@ mbc2_device::mbc2_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_device_base(mconfig, GB_ROM_MBC2, tag, owner, clock),
 	m_ram_mbc_enable(0U),
 	m_battery_present(false)

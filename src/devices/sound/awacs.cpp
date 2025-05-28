@@ -291,7 +291,7 @@ void awacs_device::write(offs_t offset, uint8_t data)
 		m_ctrl0 = data;
 		m_stream->set_sample_rate(clock()/64/divider[(m_ctrl0 >> 1) & 3]);
 
-		logerror("ctr0_w %02x - play=%s rate=%d\n", m_ctrl0, m_ctrl0 & 1 ? "on" : "off", clock()/64/divider[(m_ctrl0 >> 1) & 3]);
+		logerror("ctr0_w %02x - play=%s rate=%d\n", m_ctrl0, m_ctrl0 & 1 ? "on" : "off", clock().value()/64/divider[(m_ctrl0 >> 1) & 3]);
 		break;
 
 	case 0x11:

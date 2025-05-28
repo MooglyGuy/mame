@@ -358,13 +358,13 @@ INPUT_PORTS_END
 
 void crospuzl_state::crospuzl(machine_config &config)
 {
-	SE3208(config, m_maincpu, 14318180 * 3); // FIXME: 72 MHz-ish
+	SE3208(config, m_maincpu, XTAL::u(14318180) * 3); // FIXME: 72 MHz-ish
 	m_maincpu->set_addrmap(AS_PROGRAM, &crospuzl_state::crospuzl_mem);
 	m_maincpu->iackx_cb().set(m_vr0soc, FUNC(vrender0soc_device::irq_callback));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	VRENDER0_SOC(config, m_vr0soc, 14318180 * 3); // FIXME: 72 MHz-ish
+	VRENDER0_SOC(config, m_vr0soc, XTAL::u(14318180) * 3); // FIXME: 72 MHz-ish
 	m_vr0soc->set_host_cpu_tag(m_maincpu);
 	m_vr0soc->set_external_vclk(14318180 * 2); // Unknown clock, should output ~70 Hz?
 

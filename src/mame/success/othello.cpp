@@ -414,7 +414,7 @@ void othello_state::othello(machine_config &config)
 
 	PALETTE(config, m_palette, FUNC(othello_state::othello_palette), 0x10);
 
-	hd6845s_device &crtc(HD6845S(config, "crtc", 1000000 /* ? MHz */)); // HD46505SP @ CPU clock
+	hd6845s_device &crtc(HD6845S(config, "crtc", XTAL::u(1000000) /* ? MHz */)); // HD46505SP @ CPU clock
 	crtc.set_screen("screen");
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(TILE_WIDTH);

@@ -327,7 +327,7 @@ void rc759_state::floppy_control_w(uint8_t data)
 	if (m_floppy[1]->get_device()) m_floppy[1]->get_device()->mon_w(!BIT(data, 2));
 
 	m_fdc->dden_w(BIT(data, 5));
-	m_fdc->set_unscaled_clock(BIT(data, 6) ? 2000000 : 1000000);
+	m_fdc->set_unscaled_clock(XTAL::u(BIT(data, 6) ? 2000000 : 1000000));
 	m_fdc->set_force_ready(BIT(data, 7));
 }
 
@@ -614,11 +614,11 @@ void rc759_state::rc759(machine_config &config)
 
 	// video
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(1250000 * 16, 896, 96, 816, 377, 4, 364); // 22 kHz setting
+	screen.set_raw(XTAL::u(1250000) * 16, 896, 96, 816, 377, 4, 364); // 22 kHz setting
 	screen.set_screen_update("txt", FUNC(i82730_device::screen_update));
 	screen.screen_vblank().set(m_maincpu, FUNC(i80186_cpu_device::tmrin0_w)); // TMRIN0 source not documented, but self-test needs something like this
 
-	I82730(config, m_txt, 1250000, m_maincpu);
+	I82730(config, m_txt, XTAL::u(1250000), m_maincpu);
 	m_txt->set_screen("screen");
 	m_txt->set_update_row_callback(FUNC(rc759_state::txt_update_row));
 	m_txt->sint().set(m_pic, FUNC(pic8259_device::ir4_w));

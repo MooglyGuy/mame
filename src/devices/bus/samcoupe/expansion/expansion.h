@@ -69,7 +69,7 @@ public:
 		set_fixed(false);
 	}
 
-	samcoupe_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	samcoupe_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~samcoupe_expansion_device();
 
 	// callbacks

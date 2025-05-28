@@ -629,7 +629,7 @@ void othunder_state::othunder(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 16000000/2));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(16000000)/2));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "2610.0l", 0.75);
 	ymsnd.add_route(0, "2610.0r", 0.75);

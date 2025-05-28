@@ -26,7 +26,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	gio64_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&gio64_tag, slot_type_t slot_type, U &&opts, const char *dflt)
-		: gio64_slot_device(mconfig, tag, owner, slot_type)
+		: gio64_slot_device(mconfig, tag, owner, XTAL(), slot_type)
 	{
 		option_reset();
 		opts(*this);
@@ -84,7 +84,7 @@ public:
 	{
 	}
 
-	gio64_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	gio64_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// inline configuration
 	template <int N> auto interrupt_cb() { return m_interrupt_cb[N].bind(); }

@@ -636,10 +636,10 @@ void fortyl_state::machine_reset()
 void fortyl_state::common(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 8000000/2);
+	Z80(config, m_maincpu, XTAL::u(8000000)/2);
 	m_maincpu->set_vblank_int("screen", FUNC(fortyl_state::irq0_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2);
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &fortyl_state::sound_map);
 	m_audiocpu->set_periodic_int(FUNC(fortyl_state::irq0_line_hold), attotime::from_hz(2*60)); /* source/number of IRQs is unknown */
 
@@ -648,7 +648,7 @@ void fortyl_state::common(machine_config &config)
 
 	INPUT_MERGER_ALL_HIGH(config, "soundnmi").output_handler().set_inputline("audiocpu", INPUT_LINE_NMI);
 
-	TAITO68705_MCU(config, m_bmcu, 18432000/6); /* OK */
+	TAITO68705_MCU(config, m_bmcu, XTAL::u(18432000)/6); /* OK */
 
 	config.set_maximum_quantum(attotime::from_hz(6000));  /* high interleave to ensure proper synchronization of CPUs */
 
@@ -676,7 +676,7 @@ void fortyl_state::common(machine_config &config)
 	m_ay->port_b_write_callback().set(FUNC(fortyl_state::sound_control_3_w));
 	m_ay->add_route(ALL_OUTPUTS, "speaker", 0.1);
 
-	MSM5232(config, m_msm, 8000000/4);
+	MSM5232(config, m_msm, XTAL::u(8000000)/4);
 	m_msm->set_capacitors(1.0e-6, 1.0e-6, 1.0e-6, 1.0e-6, 1.0e-6, 1.0e-6, 1.0e-6, 1.0e-6); /* 1.0 uF capacitors (verified on real PCB) */
 	m_msm->add_route(0, "speaker", 1.0);   // pin 28  2'-1
 	m_msm->add_route(1, "speaker", 1.0);   // pin 29  4'-1

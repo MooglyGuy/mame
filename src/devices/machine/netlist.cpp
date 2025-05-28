@@ -1233,9 +1233,9 @@ void netlist_mame_cpu_device::device_start()
 void netlist_mame_cpu_device::device_clock_changed()
 {
 	m_div = static_cast<netlist::netlist_time_ext>(
-		(netlist::netlist_time_ext::resolution() << MDIV_SHIFT) / clock());
+		(netlist::netlist_time_ext::resolution() << MDIV_SHIFT) / clock().value());
 	//printf("m_div %d\n", (int) m_div.as_raw());
-	netlist().log().debug("Setting clock {1} and divisor {2}\n", clock(), m_div.as_double());
+	netlist().log().debug("Setting clock {1} and divisor {2}\n", clock().value(), m_div.as_double());
 }
 
 void netlist_mame_cpu_device::nl_register_devices(netlist::nlparse_t &parser) const
@@ -1317,11 +1317,11 @@ offs_t netlist_disassembler::disassemble(std::ostream &stream, offs_t pc, const 
 // ----------------------------------------------------------------------------------------
 
 netlist_mame_sound_device::netlist_mame_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: netlist_mame_device(mconfig, NETLIST_SOUND, tag, owner)
+	: netlist_mame_device(mconfig, NETLIST_SOUND, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
 	, m_cur_time(attotime::zero)
-	, m_sound_clock(clock)
+	, m_sound_clock(clock.value())
 	, m_attotime_per_clock(attotime::zero)
 	, m_last_update_to_current_time(attotime::zero)
 {
@@ -1405,7 +1405,7 @@ void netlist_mame_sound_device::device_start()
 	m_inbuffer.resize(m_in.size());
 
 	/* initialize the stream(s) */
-	m_stream = stream_alloc(0, m_out.size(), m_sound_clock);
+	m_stream = stream_alloc(0, m_out.size(), XTAL::u(m_sound_clock));
 
 	LOGDEVCALLS("sound device_start exit\n");
 }

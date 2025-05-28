@@ -217,7 +217,7 @@ public:
 		set_fixed(false);
 	}
 
-	md_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	md_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_image_interface implementation
 	virtual const char *image_interface() const noexcept override { return "megadriv_cart"; }
@@ -239,7 +239,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	pico_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pico_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_image_interface implementation
 	virtual const char *image_interface() const noexcept override { return "pico_cart"; }
@@ -261,7 +261,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	copera_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	copera_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_image_interface implementation
 	virtual const char *image_interface() const noexcept override { return "copera_cart"; }

@@ -944,7 +944,7 @@ void segag80r_state::pignewt(machine_config &config)
 	SPEAKER(config, "speaker").front_center();
 
 	/* sound boards */
-	SEGAUSB(config, m_usbsnd, 0, m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	SEGAUSB(config, m_usbsnd, XTAL(), m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 
 

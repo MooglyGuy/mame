@@ -111,7 +111,7 @@ void ncr53c7xx_device::device_start()
 	m_tm = timer_alloc(FUNC(ncr53c7xx_device::step_timer), this);
 
 	// The SCRIPTS processor runs at ~2 MIPS so approximate this
-	set_unscaled_clock(2000000);
+	set_unscaled_clock(XTAL::u(2000000));
 
 	// savestate support
 	save_item(NAME(m_scntl));

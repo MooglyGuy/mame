@@ -728,7 +728,7 @@ void gf1_device::global_reg_data_w(offs_t offset, uint8_t data)
 			m_stream->set_sample_rate(clock() / (m_active_voices * 16));
 			m_voltimer->adjust(attotime::zero,0,attotime::from_usec(1000/(1.6*m_active_voices)));
 		}
-		logerror("GUS: Active Voices write %02x (%d voices at %u Hz)\n", data, m_active_voices, clock() / (m_active_voices * 16));
+		logerror("GUS: Active Voices write %02x (%d voices at %u Hz)\n", data, m_active_voices, clock().value() / (m_active_voices * 16));
 		break;
 	case 0x41:
 /* bit 0 - Enable the DMA channel.

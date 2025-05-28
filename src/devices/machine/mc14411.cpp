@@ -174,7 +174,7 @@ void mc14411_device::arm_timer(int i)
 		divider *= s_divider_select[m_divider];
 	attotime half_cycle = clocks_to_attotime(divider) / 2; // 2 flanks per cycle
 	m_fx_timers[i].timer->adjust(half_cycle, i, half_cycle);
-	LOGSETUP(" - arming timer for F%d at %fHz (/%d)\n", i + 1, double(clock()) / divider, divider);
+	LOGSETUP(" - arming timer for F%d at %fHz (/%d)\n", i + 1, clock().dvalue() / divider, divider);
 }
 
 

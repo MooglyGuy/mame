@@ -959,7 +959,7 @@ z80sio_channel::z80sio_channel(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		uint8_t rr1_auto_reset)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_rx_fifo_depth(0)
@@ -3003,8 +3003,8 @@ void mk68564_device::write(offs_t offset, uint8_t data)
 void mk68564_device::set_xtal(uint32_t clock)
 {
 	assert(!configured());
-	subdevice<mk68564_channel>(CHANA_TAG)->set_clock(clock);
-	subdevice<mk68564_channel>(CHANB_TAG)->set_clock(clock);
+	subdevice<mk68564_channel>(CHANA_TAG)->set_clock(XTAL::u(clock));
+	subdevice<mk68564_channel>(CHANB_TAG)->set_clock(XTAL::u(clock));
 }
 
 void mk68564_channel::brg_update()

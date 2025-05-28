@@ -31,8 +31,6 @@ mb87419_mb87420_device::mb87419_mb87420_device(const machine_config &mconfig, co
 	, device_sound_interface(mconfig, *this)
 	, device_rom_interface(mconfig, *this)
 	, m_int_callback(*this)
-	, m_clock(0)
-	, m_rate(0)
 	, m_stream(nullptr)
 	, m_sel_chn(0)
 {
@@ -45,11 +43,11 @@ mb87419_mb87420_device::mb87419_mb87420_device(const machine_config &mconfig, co
 void mb87419_mb87420_device::device_start()
 {
 	m_clock = clock() / 2;
-	m_rate = m_clock / 512; // usually 32 KHz
+	m_rate = m_clock / 1024; // usually 32 KHz
 
 	m_stream = stream_alloc(0, 2, m_rate);
 
-	logerror("Roland PCM: Clock %u, Rate %u\n", m_clock, m_rate);
+	logerror("Roland PCM: Clock %u, Rate %u\n", m_clock.value(), m_rate.value());
 }
 
 //-------------------------------------------------

@@ -591,7 +591,7 @@ void suprridr_state::suprridr(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &suprridr_state::main_portmap);
 	m_maincpu->set_vblank_int("screen", FUNC(suprridr_state::main_nmi_gen));
 
-	Z80(config, m_audiocpu, 10'000'000 / 4);
+	Z80(config, m_audiocpu, XTAL::u(10'000'000) / 4);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &suprridr_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &suprridr_state::sound_portmap);
 	m_audiocpu->set_vblank_int("screen", FUNC(suprridr_state::irq0_line_hold)); // ?

@@ -111,7 +111,7 @@ i8279_device::i8279_device(const machine_config &mconfig, const char *tag, devic
 
 void i8279_device::device_start()
 {
-	m_scanclock = clock();
+	m_scanclock = clock().value();
 	m_timer = timer_alloc(FUNC(i8279_device::timerproc_callback), this);
 
 	// save state
@@ -169,7 +169,7 @@ void i8279_device::timer_adjust()
 // this is the case. If this is too long, the sensor mode doesn't work correctly.
 
 	u8 divider = (m_cmd[1] >= 2) ? m_cmd[1] : 2;
-	u32 new_clock = clock() / divider;
+	u32 new_clock = clock().value() / divider;
 
 	if (m_scanclock != new_clock)
 	{

@@ -21,7 +21,7 @@ DEFINE_DEVICE_TYPE(A800_RTIME8, a800_rtime8_device, "a800_rtime8", "ICD R-Time 8
 //  a800_rtime8_device - constructor
 //-------------------------------------------------
 
-a800_rtime8_device::a800_rtime8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_rtime8_device::a800_rtime8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, A800_RTIME8, tag, owner, clock)
 	, device_a800_cart_interface(mconfig, *this)
 	, m_rtc(*this, "rtc")

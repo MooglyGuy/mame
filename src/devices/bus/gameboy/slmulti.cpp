@@ -96,7 +96,7 @@ namespace {
 class slmulti_device : public mbc_ram_device_base<mbc_dual_uniform_device_base>
 {
 public:
-	slmulti_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	slmulti_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 
@@ -168,7 +168,7 @@ slmulti_device::slmulti_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_ram_device_base<mbc_dual_uniform_device_base>(mconfig, GB_ROM_SLMULTI, tag, owner, clock),
 	m_view_ctrl(*this, "ctrl"),
 	m_view_ram(*this, "ram"),

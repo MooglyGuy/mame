@@ -75,7 +75,7 @@ INPUT_PORTS_END
 
 void generalplus_gpspispi_game_state::generalplus_gpspispi(machine_config &config)
 {
-	GP_SPISPI(config, m_maincpu, 96000000/2, m_screen);
+	GP_SPISPI(config, m_maincpu, XTAL::u(96000000)/2, m_screen);
 	m_maincpu->porta_in().set(FUNC(generalplus_gpspispi_game_state::porta_r));
 	m_maincpu->portb_in().set(FUNC(generalplus_gpspispi_game_state::portb_r));
 	m_maincpu->portc_in().set(FUNC(generalplus_gpspispi_game_state::portc_r));

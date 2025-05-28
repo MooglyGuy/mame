@@ -13,7 +13,7 @@
 #include "machine/rescap.h"
 
 
-#define OUTPUT_RATE         24000
+#define OUTPUT_RATE         XTAL::u(24000)
 
 #define POLEPOS_R166        1000.0
 #define POLEPOS_R167        2200.0
@@ -80,7 +80,7 @@ struct filter_state
  */
 void polepos_sound_device::filter2_context::setup(device_t *device, int type, double fc, double d, double gain)
 {
-	int const sample_rate = device->machine().sample_rate();
+	int const sample_rate = device->machine().sample_rate().value();
 	double const two_over_T = 2*sample_rate;
 	double const two_over_T_squared = two_over_T * two_over_T;
 
@@ -277,7 +277,7 @@ void polepos_sound_device::sound_stream_update(sound_stream &stream)
 		return;
 
 	/* determine the effective clock rate */
-	uint32_t clock = (unscaled_clock() / 16) * ((m_sample_msb + 1) * 64 + m_sample_lsb + 1) / (64*64);
+	uint32_t clock = (unscaled_clock().value() / 16) * ((m_sample_msb + 1) * 64 + m_sample_lsb + 1) / (64*64);
 	uint32_t step = (clock << 12) / OUTPUT_RATE;
 
 	/* determine the volume */

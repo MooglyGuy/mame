@@ -45,7 +45,7 @@ bit_socket_device::bit_socket_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, TI8X_BIT_SOCKET, tag, owner, clock)
 	, device_ti8x_link_port_interface(mconfig, *this)
 	, m_stream(*this, "stream")

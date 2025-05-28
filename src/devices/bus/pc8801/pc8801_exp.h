@@ -23,7 +23,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	pc8801_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pc8801_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~pc8801_exp_slot_device();
 
 	template <typename T> void set_iospace(T &&tag, int spacenum) { m_iospace.set_tag(std::forward<T>(tag), spacenum); }

@@ -101,7 +101,7 @@ void pc98lt_state::floppy_mode_w(offs_t offset, u8 data)
 	m_fdc->subdevice<floppy_connector>("0")->get_device()->set_rpm(data & 0x02 ? 360 : 300);
 	m_fdc->subdevice<floppy_connector>("1")->get_device()->set_rpm(data & 0x02 ? 360 : 300);
 
-	m_fdc->set_rate(data & 0x02 ? 500000 : 250000);
+	m_fdc->set_rate(XTAL::u(data & 0x02 ? 500000 : 250000));
 }
 
 u8 pc98lt_state::fdc_ctrl_r(offs_t offset)

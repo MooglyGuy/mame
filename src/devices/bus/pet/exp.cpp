@@ -166,7 +166,7 @@ void pet_expansion_slot_device::dma_bd_w(offs_t offset, uint8_t data)
 
 int pet_expansion_slot_device::phi2()
 {
-	return clock();
+	return clock().value();
 }
 
 

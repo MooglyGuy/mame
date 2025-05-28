@@ -124,6 +124,12 @@ uint8_t m68340_cpu_device::int_ack(offs_t offset)
 	return vector;
 }
 
+// TODO: Support Limp mode and external clock with no PLL
+void m68340_cpu_device::set_crystal(const XTAL &crystal)
+{
+	m_crystal = crystal;
+	m_clock_mode |= (m68340_sim::CLOCK_MODCK | m68340_sim::CLOCK_PLL);
+}
 
 /* 68340 specifics - MOVE */
 
@@ -226,7 +232,6 @@ m68340_cpu_device::m68340_cpu_device(const machine_config &mconfig, const char *
 	, m_serial(*this, "serial")
 	, m_timer(*this, "timer%u", 1U)
 	, m_clock_mode(0)
-	, m_crystal(0)
 	, m_extal(0)
 	, m_pa_out_cb(*this)
 	, m_pa_in_cb(*this, 0)

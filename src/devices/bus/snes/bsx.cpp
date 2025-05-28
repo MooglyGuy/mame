@@ -246,17 +246,17 @@ static void bsx_cart(device_slot_interface &device)
 
 void sns_rom_bsx_device::device_add_mconfig(machine_config &config)
 {
-	SNS_BSX_CART_SLOT(config, m_slot, bsx_cart, nullptr);
+	SNS_BSX_CART_SLOT(config, m_slot, XTAL(), bsx_cart, nullptr);
 }
 
 void sns_rom_bsxlo_device::device_add_mconfig(machine_config &config)
 {
-	SNS_BSX_CART_SLOT(config, m_slot, bsx_cart, nullptr);
+	SNS_BSX_CART_SLOT(config, m_slot, XTAL(), bsx_cart, nullptr);
 }
 
 void sns_rom_bsxhi_device::device_add_mconfig(machine_config &config)
 {
-	SNS_BSX_CART_SLOT(config, m_slot, bsx_cart, nullptr);
+	SNS_BSX_CART_SLOT(config, m_slot, XTAL(), bsx_cart, nullptr);
 }
 
 

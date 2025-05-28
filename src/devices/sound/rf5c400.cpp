@@ -133,7 +133,7 @@ rf5c400_device::rf5c400_device(const machine_config &mconfig, const char *tag, d
 void rf5c400_device::device_start()
 {
 	init_static_tables();
-	m_env_tables.init(clock());
+	m_env_tables.init(clock().value());
 
 	// init channel info
 	for (rf5c400_channel &chan : m_channels)
@@ -197,7 +197,7 @@ void rf5c400_device::device_start()
 
 void rf5c400_device::device_clock_changed()
 {
-	m_env_tables.init(clock());
+	m_env_tables.init(clock().value());
 	m_stream->set_sample_rate(clock() / 384);
 }
 

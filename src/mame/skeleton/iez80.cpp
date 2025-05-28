@@ -195,14 +195,14 @@ void iez80_state::iez80(machine_config &config)
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(17'550'000, 816, 0, 640, 358, 0, 288); // unknown clock, hand-tuned to ~60fps
+	screen.set_raw(XTAL::u(17'550'000), 816, 0, 640, 358, 0, 288); // unknown clock, hand-tuned to ~60fps
 	screen.set_screen_update(FUNC(iez80_state::screen_update));
 
 	GFXDECODE(config, "gfxdecode", "palette", gfx_crt8002);
 
 	PALETTE(config, m_palette, palette_device::MONOCHROME);
 
-	CRT5037(config, m_crtc, 17'550'000 / 8); // unknown clock
+	CRT5037(config, m_crtc, XTAL::u(17'550'000) / 8); // unknown clock
 	m_crtc->set_char_width(8);
 	m_crtc->set_screen("screen");
 }

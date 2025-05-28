@@ -318,7 +318,7 @@ INPUT_PORTS_END
 
 INPUT_CHANGED_MEMBER(exorciser_state::maincpu_clock_change)
 {
-	m_maincpu->set_clock(newval);
+	m_maincpu->set_clock(XTAL::u(newval));
 }
 
 
@@ -588,7 +588,7 @@ void exorciser_state::machine_reset()
 {
 	uint32_t maincpu_clock = m_maincpu_clock->read();
 	if (maincpu_clock)
-		m_maincpu->set_clock(maincpu_clock);
+		m_maincpu->set_clock(XTAL::u(maincpu_clock));
 
 	m_brg->rsa_w(0);
 	m_brg->rsb_w(1);

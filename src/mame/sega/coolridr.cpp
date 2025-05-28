@@ -3291,7 +3291,7 @@ void coolridr_state::aquastge(machine_config &config)
 
 	m_subcpu->set_addrmap(AS_PROGRAM, &coolridr_state::aquastge_submap);
 
-	sega_315_5649_device &io(SEGA_315_5649(config.replace(), "io", 0));
+	sega_315_5649_device &io(SEGA_315_5649(config.replace(), "io"));
 	io.in_pc_callback().set_ioport("IN0");
 	io.in_pd_callback().set_ioport("IN1");
 }

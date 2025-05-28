@@ -1411,10 +1411,10 @@ Note:
 #include "screen.h"
 #include "speaker.h"
 
-#define SA1110_CLOCK 206000000
-#define PXA250_CLOCK 400000000
-#define PXA255_CLOCK 400000000
-#define PXA270_CLOCK 416000000
+#define SA1110_CLOCK XTAL::u(206000000)
+#define PXA250_CLOCK XTAL::u(400000000)
+#define PXA255_CLOCK XTAL::u(400000000)
+#define PXA270_CLOCK XTAL::u(416000000)
 
 namespace {
 

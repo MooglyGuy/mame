@@ -66,7 +66,7 @@ namespace {
 class mmm01_device : public mbc_ram_device_base<mbc_dual_uniform_device_base>
 {
 public:
-	mmm01_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mmm01_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 
@@ -146,7 +146,7 @@ mmm01_device::mmm01_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_ram_device_base<mbc_dual_uniform_device_base>(mconfig, GB_ROM_MMM01, tag, owner, clock),
 	m_view_ram(*this, "ram"),
 	m_config(0U),

@@ -79,7 +79,7 @@ private:
 class pcx_video_device : public pcdx_video_device
 {
 public:
-	pcx_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pcx_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	auto txd_handler() { return m_txd_handler.bind(); }
 	void rx_w(int state);
 

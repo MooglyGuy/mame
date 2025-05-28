@@ -853,7 +853,7 @@ void wgp_state::wgp(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &wgp_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(wgp_state::irq4_line_hold));
 
-	Z80(config, m_audiocpu, 16000000/4);    /* 4 MHz ??? */
+	Z80(config, m_audiocpu, XTAL::u(16000000)/4);    /* 4 MHz ??? */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &wgp_state::z80_sound_map);
 
 	M68000(config, m_subcpu, XTAL::u(12000000));     /* 12 MHz ??? */
@@ -897,7 +897,7 @@ void wgp_state::wgp(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 16000000/2));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(16000000)/2));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0); // assumes Z80 sandwiched between 68Ks
 	ymsnd.add_route(0, "speaker", 0.75, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 1);

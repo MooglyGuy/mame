@@ -228,7 +228,7 @@ const std::array<s32, 0x20> swp00_device::decay_linear_step = {
 
 void swp00_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 44100);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100));
 
 	save_item(NAME(m_waverom_access));
 	save_item(NAME(m_waverom_val));

@@ -153,9 +153,9 @@ private:
 	// SPACEFB_PIXEL_CLOCK clocks the star generator circuit.  The rest of the graphics
 	// use a clock half of SPACEFB_PIXEL_CLOCK, thus creating double width pixels.
 	static constexpr int SPACEFB_MASTER_CLOCK        = 20160000;
-	static constexpr int SPACEFB_MAIN_CPU_CLOCK      = 6000000 / 2;
-	static constexpr int SPACEFB_AUDIO_CPU_CLOCK     = 6000000;   // this goes to X2, pixel clock goes to X1
-	static constexpr int SPACEFB_PIXEL_CLOCK         = SPACEFB_MASTER_CLOCK / 2;
+	static constexpr XTAL SPACEFB_MAIN_CPU_CLOCK     = XTAL::u(6000000) / 2;
+	static constexpr XTAL SPACEFB_AUDIO_CPU_CLOCK    = XTAL::u(6000000);   // this goes to X2, pixel clock goes to X1
+	static constexpr XTAL SPACEFB_PIXEL_CLOCK        = XTAL::u(SPACEFB_MASTER_CLOCK) / 2;
 	static constexpr int SPACEFB_HTOTAL              = 0x280;
 	static constexpr int SPACEFB_HBEND               = 0x000;
 	static constexpr int SPACEFB_HBSTART             = 0x200;
@@ -275,7 +275,7 @@ static const char *const spacefb_sample_names[] =
 void spacefb_state::spacefb_audio(machine_config &config)
 {
 	SPEAKER(config, "speaker").front_center();
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
 
 	SAMPLES(config, m_samples);
 	m_samples->set_channels(3);

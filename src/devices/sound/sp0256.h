@@ -51,7 +51,7 @@ public:
 	uint16_t spb640_r(offs_t offset);
 	void spb640_w(offs_t offset, uint16_t data);
 
-	void set_clock(int clock);
+	void set_clock(const XTAL &clock);
 	void bitrevbuff(uint8_t *buffer, unsigned int start, unsigned int length);
 
 protected:

@@ -549,7 +549,7 @@ void de_3_state::de_3_dmd1(machine_config &config)
 void de_3_state::de_3_dmdo(machine_config &config)
 {
 	de_3(config);
-	DECODMD1(config, m_dmdtype1, 0);
+	DECODMD1(config, m_dmdtype1);
 	de_bg_audio(config);
 }
 
@@ -568,7 +568,7 @@ void de_3_state::de_3b(machine_config &config)
 
 	genpin_audio(config);
 
-	DECODMD3(config, m_dmdtype3, 0);
+	DECODMD3(config, m_dmdtype3);
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();

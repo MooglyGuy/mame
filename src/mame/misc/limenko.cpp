@@ -692,7 +692,7 @@ GFXDECODE_END
 
 void limenko_state::limenko(machine_config &config)
 {
-	E132X(config, m_maincpu, 20'000'000*4); // E1-32XN (PQFP), 4x internal multiplier
+	E132X(config, m_maincpu, XTAL::u(20'000'000)*4); // E1-32XN (PQFP), 4x internal multiplier
 	m_maincpu->set_addrmap(AS_PROGRAM, &limenko_state::limenko_map);
 	m_maincpu->set_addrmap(AS_IO, &limenko_state::limenko_io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(limenko_state::irq0_line_hold));
@@ -760,7 +760,7 @@ void limenko_state::spotty(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	OKIM6295(config, m_oki, 4000000 / 4 , okim6295_device::PIN7_HIGH); //?
+	OKIM6295(config, m_oki, XTAL::u(4000000) / 4, okim6295_device::PIN7_HIGH); //?
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 

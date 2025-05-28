@@ -206,7 +206,7 @@ void magtouch_state::magtouch_sb_conf(device_t *device)
 void magtouch_state::magtouch(machine_config &config)
 {
 	/* basic machine hardware */
-	I386(config, m_maincpu, 14318180*2);   /* I386 ?? Mhz */
+	I386(config, m_maincpu, XTAL::u(14318180)*2);   /* I386 ?? Mhz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &magtouch_state::magtouch_map);
 	m_maincpu->set_addrmap(AS_IO, &magtouch_state::magtouch_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_1", FUNC(pic8259_device::inta_cb));
@@ -217,7 +217,7 @@ void magtouch_state::magtouch(machine_config &config)
 	screen.set_raw(25.1748_MHz_XTAL, 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(tvga9000_device::screen_update));
 
-	tvga9000_device &vga(TVGA9000_VGA(config, "vga", 0));
+	tvga9000_device &vga(TVGA9000_VGA(config, "vga"));
 	vga.set_screen("screen");
 	vga.set_vram_size(0x200000);
 

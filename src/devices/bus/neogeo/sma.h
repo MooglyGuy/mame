@@ -14,7 +14,7 @@ class neogeo_sma_cart_device : public neogeo_rom_device
 {
 public:
 	// construction/destruction
-	neogeo_sma_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_sma_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual uint16_t protection_r(address_space &space, offs_t offset) override { return m_sma_prot->prot_9a37_r(); }
@@ -25,7 +25,7 @@ public:
 	virtual int get_fixed_bank_type() override { return 0; }
 
 protected:
-	neogeo_sma_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_sma_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

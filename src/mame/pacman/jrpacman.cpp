@@ -265,7 +265,7 @@ GFXDECODE_END
 void jrpacman_state::jrpacman(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 18432000/6);    /* 3.072 MHz */
+	Z80(config, m_maincpu, XTAL::u(18432000)/6);    /* 3.072 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &jrpacman_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &jrpacman_state::port_map);
 	m_maincpu->set_irq_acknowledge_callback(FUNC(jrpacman_state::interrupt_vector_r));
@@ -303,7 +303,7 @@ void jrpacman_state::jrpacman(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	NAMCO(config, m_namco_sound, 3072000/32);
+	NAMCO(config, m_namco_sound, XTAL::u(3072000)/32);
 	m_namco_sound->set_voices(3);
 	m_namco_sound->add_route(ALL_OUTPUTS, "mono", 1.0);
 }

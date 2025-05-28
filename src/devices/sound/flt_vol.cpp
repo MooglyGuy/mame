@@ -26,7 +26,7 @@ filter_volume_device::filter_volume_device(const machine_config &mconfig, const 
 
 void filter_volume_device::device_start()
 {
-	m_stream = stream_alloc(1, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(1, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 	save_item(NAME(m_gain));
 }
 

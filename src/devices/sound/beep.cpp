@@ -21,8 +21,8 @@ beep_device::beep_device(const machine_config &mconfig, const char *tag, device_
 	: device_t(mconfig, BEEP, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
-	, m_enable(false)
-	, m_frequency(clock)
+	, m_enable(0)
+	, m_frequency(clock.value())
 {
 }
 
@@ -34,7 +34,7 @@ beep_device::beep_device(const machine_config &mconfig, const char *tag, device_
 void beep_device::device_start()
 {
 	// large stream buffer to favour emu/sound.cpp resample quality
-	m_stream = stream_alloc(0, 1, 48000 * 32);
+	m_stream = stream_alloc(0, 1, XTAL::u(48000) * 32);
 
 	m_enable = false;
 	m_incr = 0;
@@ -64,7 +64,7 @@ void beep_device::sound_stream_update(sound_stream &stream)
 		m_incr -= m_frequency;
 		while (m_incr < 0)
 		{
-			m_incr += stream.sample_rate() / 2;
+			m_incr += stream.sample_rate().value() / 2;
 			m_signal = -m_signal;
 		}
 
@@ -96,9 +96,9 @@ void beep_device::set_state(int state)
 //  setting new frequency starts from beginning
 //-------------------------------------------------
 
-void beep_device::set_clock(uint32_t frequency)
+void beep_device::set_frequency(const u32 freq)
 {
-	if (m_frequency == frequency)
+	if (m_frequency == freq)
 		return;
 
 	m_stream->update();

@@ -52,7 +52,7 @@
 
 // ======================> gf1_device
 
-#define GF1_CLOCK 9878400
+#define GF1_CLOCK XTAL::u(9878400)
 
 class gf1_device :
 	public acia6850_device,

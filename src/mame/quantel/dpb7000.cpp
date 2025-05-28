@@ -3778,7 +3778,7 @@ void dpb7000_state::dpb7000(machine_config &config)
 	config.set_perfect_quantum(m_fddcpu);
 
 	// Hard Disk
-	HARDDISK(config, "hdd", 0);
+	HARDDISK(config, "hdd");
 
 	// Keyboard
 	I8039(config, m_keybcpu, 4.608_MHz_XTAL);

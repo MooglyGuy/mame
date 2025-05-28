@@ -19,13 +19,13 @@
 DEFINE_DEVICE_TYPE(NEOGEO_BOOTLEG_CART, neogeo_bootleg_cart_device, "neocart_boot", "Neo Geo Bootleg Protected Cart")
 
 
-neogeo_bootleg_cart_device::neogeo_bootleg_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_bootleg_cart_device::neogeo_bootleg_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, type, tag, owner, clock),
 	m_prot(*this, "bootleg_prot")
 {
 }
 
-neogeo_bootleg_cart_device::neogeo_bootleg_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_bootleg_cart_device::neogeo_bootleg_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_bootleg_cart_device(mconfig, NEOGEO_BOOTLEG_CART, tag, owner, clock)
 {
 }

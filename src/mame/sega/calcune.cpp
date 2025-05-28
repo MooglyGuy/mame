@@ -26,7 +26,7 @@
 
 namespace {
 
-#define OSC1_CLOCK 53693175 // same as NTSC genesis / mega drive master clock
+#define OSC1_CLOCK XTAL::u(53693175) // same as NTSC genesis / mega drive master clock
 
 class calcune_state : public driver_device
 {
@@ -261,8 +261,8 @@ void calcune_state::calcune(machine_config &config)
 	Z80(config, "z80", OSC1_CLOCK / 15).set_disable(); /* 3.58 MHz, no code is ever uploaded for the Z80, so it's unused here even if it is present on the PCB */
 
 	screen_device &screen(SCREEN(config, "megadriv", SCREEN_TYPE_RASTER));
-	screen.set_refresh_hz(double(OSC1_CLOCK) / 10.0 / 262.0 / 342.0); // same as SMS?
-//  screen.set_refresh_hz(double(OSC1_CLOCK) / 8.0 / 262.0 / 427.0); // or 427 Htotal?
+	screen.set_refresh_hz(OSC1_CLOCK / 10.0 / 262.0 / 342.0); // same as SMS?
+//  screen.set_refresh_hz(OSC1_CLOCK / 8.0 / 262.0 / 427.0); // or 427 Htotal?
 	screen.set_vblank_time(ATTOSECONDS_IN_USEC(0)); // Vblank handled manually.
 	screen.set_size(64*8, 620);
 	screen.set_visarea(0, 40*8-1, 0, 28*8-1);

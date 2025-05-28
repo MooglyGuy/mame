@@ -305,19 +305,19 @@ void tms5501_device::rr_w(uint8_t data)
 
 	set_data_frame(1, 8, PARITY_NONE, stop_bits);
 
-	int rate = 0;
+	XTAL rate = XTAL::u(0);
 
-	if (m_rr & RR_9600) rate = 9600;
-	else if (m_rr & RR_4800) rate = 4800;
-	else if (m_rr & RR_2400) rate = 2400;
-	else if (m_rr & RR_1200) rate = 1200;
-	else if (m_rr & RR_300) rate = 300;
-	else if (m_rr & RR_150) rate = 150;
-	else if (m_rr & RR_110) rate = 110;
+	if (m_rr & RR_9600) rate = XTAL::u(9600);
+	else if (m_rr & RR_4800) rate = XTAL::u(4800);
+	else if (m_rr & RR_2400) rate = XTAL::u(2400);
+	else if (m_rr & RR_1200) rate = XTAL::u(1200);
+	else if (m_rr & RR_300) rate = XTAL::u(300);
+	else if (m_rr & RR_150) rate = XTAL::u(150);
+	else if (m_rr & RR_110) rate = XTAL::u(110);
 
 	if (m_cmd & CMD_TST1)
 	{
-		rate *= 8;
+		rate = rate * 8;
 	}
 
 	set_rcv_rate(rate);

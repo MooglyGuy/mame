@@ -704,7 +704,7 @@ void p1_state::poisk1(machine_config &config)
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 1.00);
 
 	// fake hsync
-	TIMER(config, "scantimer").configure_scanline(FUNC(p1_state::hsync_changed), "screen", 1);
+	TIMER(config, "scantimer").configure_scanline(FUNC(p1_state::hsync_changed), "screen", 0, 1);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_raw(XTAL(15'000'000), 912,0,640, 262,0,200);

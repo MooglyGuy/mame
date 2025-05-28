@@ -127,7 +127,7 @@ void l7a1045_sound_device::device_start()
 	// Allocate the stream
 //  m_stream = stream_alloc(0, 2, 66150); //clock() / 384);
 	// TODO: confirm frequency
-	m_stream = stream_alloc(0, 2, 44100);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100));
 
 	save_item(STRUCT_MEMBER(m_voice, start));
 	save_item(STRUCT_MEMBER(m_voice, end));

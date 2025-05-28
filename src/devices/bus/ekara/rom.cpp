@@ -243,7 +243,7 @@ void ekara_rom_i2c_24lc02_gc0010_device::device_add_mconfig(machine_config &conf
 
 void ekara_rom_i2c_24lc08_evio_device::device_add_mconfig(machine_config &config)
 {
-	I2C_24C08(config, "i2cmem", 0);
+	I2C_24C08(config, "i2cmem");
 }
 
 /*-------------------------------------------------

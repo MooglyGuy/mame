@@ -100,10 +100,10 @@ void dave_device::device_start()
 	save_item(NAME(m_mame_volumes));
 
 	for (auto & elem : m_period)
-		elem = (STEP * machine().sample_rate()) / 125000;
+		elem = (machine().sample_rate().value() * STEP) / 125000;
 
 	for (auto & elem : m_count)
-		elem = (STEP * machine().sample_rate()) / 125000;
+		elem = (machine().sample_rate().value() * STEP) / 125000;
 
 	for (auto & elem : m_level)
 		elem = 0;
@@ -428,8 +428,7 @@ void dave_device::io_w(offs_t offset, uint8_t data)
 
 				count++;
 
-
-				m_period[channel_index] = ((STEP  * machine().sample_rate())/125000) * count;
+				m_period[channel_index] = ((machine().sample_rate().value() * STEP) / 125000) * count;
 
 				m_regs[offset & 0x1f] = data;
 			}

@@ -319,7 +319,7 @@ int usb_sound_device::t1_r()
 inline void usb_sound_device::g80_filter_state::configure(double r, double c)
 {
 	capval = 0.0;
-	exponent = 1.0 - std::exp(-1.0 / (r * c * USB_2MHZ_CLOCK));
+	exponent = 1.0 - std::exp(-1.0 / (r * c * USB_2MHZ_CLOCK.value()));
 }
 
 inline void usb_sound_device::timer8253::channel::clock()
@@ -473,7 +473,7 @@ void usb_sound_device::sound_stream_update(sound_stream &stream)
 		{
 			m_noise_shift = (m_noise_shift << 1) | (((m_noise_shift >> 13) ^ (m_noise_shift >> 16)) & 1);
 			m_noise_state = (m_noise_shift >> 16) & 1;
-			m_noise_subcount += USB_2MHZ_CLOCK / MM5837_CLOCK;
+			m_noise_subcount += (int)(USB_2MHZ_CLOCK.dvalue() / MM5837_CLOCK.dvalue());
 		}
 
 		// update the filtered noise value -- this is just an approximation to the pink noise filter
@@ -505,7 +505,7 @@ void usb_sound_device::sound_stream_update(sound_stream &stream)
 			// channel 0 clocks with the PCS clock
 			if (group.chan[0].subcount-- == 0)
 			{
-				group.chan[0].subcount += USB_2MHZ_CLOCK / USB_PCS_CLOCK;
+				group.chan[0].subcount += (int)(USB_2MHZ_CLOCK.dvalue() / USB_PCS_CLOCK.dvalue());
 				group.chan[0].gate = 1;
 				group.chan[0].clock();
 			}
@@ -524,7 +524,7 @@ void usb_sound_device::sound_stream_update(sound_stream &stream)
 			// channel 1 clocks with the PCS clock
 			if (group.chan[1].subcount-- == 0)
 			{
-				group.chan[1].subcount += USB_2MHZ_CLOCK / USB_PCS_CLOCK;
+				group.chan[1].subcount += (int)(USB_2MHZ_CLOCK.dvalue() / USB_PCS_CLOCK.dvalue());
 				group.chan[1].gate = 1;
 				group.chan[1].clock();
 			}
@@ -552,7 +552,7 @@ void usb_sound_device::sound_stream_update(sound_stream &stream)
 			// channel 2 clocks with the 2MHZ clock and triggers with the GOS clock
 			if (group.chan[2].subcount-- == 0)
 			{
-				group.chan[2].subcount += USB_2MHZ_CLOCK / USB_GOS_CLOCK / 2;
+				group.chan[2].subcount += (int)(USB_2MHZ_CLOCK.dvalue() / USB_GOS_CLOCK.dvalue() / 2);
 				group.chan[2].gate = !group.chan[2].gate;
 			}
 			group.chan[2].clock();

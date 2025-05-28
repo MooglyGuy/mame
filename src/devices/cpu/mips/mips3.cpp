@@ -396,7 +396,7 @@ void mips3_device::device_start()
 	/* initialize based on the config */
 	memset(m_core, 0, sizeof(internal_mips3_state));
 
-	m_cpu_clock = clock();
+	m_cpu_clock = clock().value();
 	m_program = &space(AS_PROGRAM);
 	if(m_program->endianness() == ENDIANNESS_LITTLE)
 	{

@@ -14,8 +14,8 @@
 #include "screen.h"
 
 
-#define MCLK_NTSC   (21477272)  /* verified */
-#define MCLK_PAL    (21218370)  /* verified */
+#define MCLK_NTSC   XTAL::u(21477272)  /* verified */
+#define MCLK_PAL    XTAL::u(21218370)  /* verified */
 
 #define DOTCLK_NTSC (MCLK_NTSC/4)
 #define DOTCLK_PAL  (MCLK_PAL/4)

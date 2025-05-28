@@ -767,7 +767,7 @@ void scsp_device::UpdateReg(int reg)
 
 				if ((m_udata.data[0x18/2] & 0xff) != 255)
 				{
-					u32 time = (clock() / m_TimPris[0]) / (255 - (m_udata.data[0x18/2] & 0xff));
+					u32 time = (clock().value() / m_TimPris[0]) / (255 - (m_udata.data[0x18/2] & 0xff));
 					if (time)
 					{
 						m_timerA->adjust(attotime::from_ticks(512, time));
@@ -784,7 +784,7 @@ void scsp_device::UpdateReg(int reg)
 
 				if ((m_udata.data[0x1A/2] & 0xff) != 255)
 				{
-					u32 time = (clock() / m_TimPris[1]) / (255 - (m_udata.data[0x1A/2] & 0xff));
+					u32 time = (clock().value() / m_TimPris[1]) / (255 - (m_udata.data[0x1A/2] & 0xff));
 					if (time)
 					{
 						m_timerB->adjust(attotime::from_ticks(512, time));
@@ -801,7 +801,7 @@ void scsp_device::UpdateReg(int reg)
 
 				if ((m_udata.data[0x1C/2] & 0xff) != 255)
 				{
-					u32 time = (clock() / m_TimPris[2]) / (255 - (m_udata.data[0x1C/2] & 0xff));
+					u32 time = (clock().value() / m_TimPris[2]) / (255 - (m_udata.data[0x1C/2] & 0xff));
 					if (time)
 					{
 						m_timerC->adjust(attotime::from_ticks(512, time));

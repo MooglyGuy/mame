@@ -160,14 +160,13 @@ void acorn_ioc_device::set_timer(int tmr)
 			break;
 
 		case 2: // Baud generator
-			freq = (double)clock() / 8 / (double)(m_timercnt[tmr] + 1);
+			freq = clock().dvalue() / 8 / (double)(m_timercnt[tmr] + 1);
 			if (!m_baud_w.isunset())
 				m_timers[tmr]->adjust(attotime::from_usec(freq), tmr);
 			break;
 
 		case 3: // KART clock
-			freq = (double)clock() / 8 / (double)((m_timercnt[tmr] + 1) * 16);
-			set_rate((int)freq);
+			set_rate(clock() / 8 / ((m_timercnt[tmr] + 1) * 16));
 			break;
 	}
 }

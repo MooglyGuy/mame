@@ -410,14 +410,14 @@ void gottlieb_sound_speech_r1_device::votrax_data_w(u8 data)
 //  the Votrax SC-01 speech chip
 //-------------------------------------------------
 
-u32 gottlieb_sound_speech_r1_device::convert_speech_clock(u8 data)
+XTAL gottlieb_sound_speech_r1_device::convert_speech_clock(u8 data)
 {
 	// prevent negative clock values (and possible crash)
 	if (data < 0x40) data = 0x40;
 
 	// totally random guesswork; would like to get real measurements on a board
 	m_speech_clock = 950000 + (data - 0xa0) * 5500;
-	return m_speech_clock;
+	return XTAL::u(m_speech_clock);
 }
 
 void gottlieb_sound_speech_r1_device::speech_clock_dac_w(u8 data)
@@ -1011,7 +1011,7 @@ gottlieb_sound_p5_device::gottlieb_sound_p5_device(const machine_config &mconfig
 {
 }
 
-gottlieb_sound_p5_device::gottlieb_sound_p5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p5_device::gottlieb_sound_p5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_p4_device(mconfig, type, tag, owner, clock)
 	, m_ym2151(*this, "ym2151")
 {

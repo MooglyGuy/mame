@@ -633,9 +633,9 @@ void pit68230_device::wr_pitreg_tcr(uint8_t data)
 		}
 		if (clk == 1)
 		{
-			int rate = clock() / (psc == 1 ? 32 : 1);
+			int rate = clock().value() / (psc == 1 ? 32 : 1);
 			pit_timer->adjust(attotime::from_hz(rate), 0, attotime::from_hz(rate));
-			LOG("PIT timer started @ rate: %d and CLK: %d,\n", rate, clock());
+			LOG("PIT timer started @ rate: %d and CLK: %d,\n", rate, clock().value());
 		}
 	}
 	else

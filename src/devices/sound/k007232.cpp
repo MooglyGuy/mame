@@ -225,7 +225,7 @@ void k007232_device::sound_stream_update(sound_stream &stream)
 			{
 				char filebuf[256];
 				snprintf(filebuf, 256, "pcm%08x.wav", channel.start);
-				util::wav_file_ptr file = util::wav_open(filebuf, stream.sample_rate(), 1);
+				util::wav_file_ptr file = util::wav_open(filebuf, stream.sample_rate().value(), 1);
 				if (file)
 				{
 					u32 addr = channel.start;

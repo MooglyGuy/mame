@@ -35,7 +35,6 @@ private:
 	static const int divisor[TMS3615_TONES];
 
 	sound_stream *m_channel;        // returned by stream_create()
-	int m_samplerate;               // output sample rate
 	int m_basefreq;                 // chip's base frequency
 	int m_counter8[TMS3615_TONES];  // tone frequency counter for 8'
 	int m_counter16[TMS3615_TONES]; // tone frequency counter for 16'

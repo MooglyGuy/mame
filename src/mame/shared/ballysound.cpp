@@ -444,20 +444,11 @@ static INPUT_PORTS_START(cheap_squeak)
 		PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_SERVICE3 ) PORT_NAME("Sound Test") PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(bally_cheap_squeak_device::sw1), 0)
 INPUT_PORTS_END
 
-bally_cheap_squeak_device::bally_cheap_squeak_device(
-		const machine_config &mconfig,
-		const char *tag,
-		device_t *owner,
-		uint32_t clock) :
+bally_cheap_squeak_device::bally_cheap_squeak_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bally_cheap_squeak_device(mconfig, BALLY_CHEAP_SQUEAK, tag, owner, clock)
 { }
 
-bally_cheap_squeak_device::bally_cheap_squeak_device(
-		const machine_config &mconfig,
-		device_type type,
-		const char *tag,
-		device_t *owner,
-		uint32_t clock) :
+bally_cheap_squeak_device::bally_cheap_squeak_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_mixer_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),
@@ -584,20 +575,11 @@ void bally_cheap_squeak_device::update_led()
 //  Squawk & Talk
 //**************************************************************************
 
-bally_squawk_n_talk_device::bally_squawk_n_talk_device(
-		const machine_config &mconfig,
-		const char *tag,
-		device_t *owner,
-		uint32_t clock) :
+bally_squawk_n_talk_device::bally_squawk_n_talk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bally_squawk_n_talk_device(mconfig, BALLY_SQUAWK_N_TALK, tag, owner, clock)
 { }
 
-bally_squawk_n_talk_device::bally_squawk_n_talk_device(
-		const machine_config &mconfig,
-		device_type type,
-		const char *tag,
-		device_t *owner,
-		uint32_t clock) :
+bally_squawk_n_talk_device::bally_squawk_n_talk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_mixer_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),
@@ -609,11 +591,7 @@ bally_squawk_n_talk_device::bally_squawk_n_talk_device(
 	m_tms5200(*this, "tms5200")
 { }
 
-bally_squawk_n_talk_ay_device::bally_squawk_n_talk_ay_device(
-		const machine_config &mconfig,
-		const char *tag,
-		device_t *owner,
-		uint32_t clock) :
+bally_squawk_n_talk_ay_device::bally_squawk_n_talk_ay_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bally_squawk_n_talk_device(mconfig, BALLY_SQUAWK_N_TALK_AY, tag, owner, clock),
 	m_ay_filters(*this, "ay_filter%u", 0),
 	m_ay(*this, "ay")

@@ -634,9 +634,9 @@ void sun3x_state::sun3_80(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsibus:4", scsi_devices, "tape");
 	NSCSI_CONNECTOR(config, "scsibus:5", scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsibus:6", scsi_devices, "cdrom");
-	NSCSI_CONNECTOR(config, "scsibus:7").option_set("esp", NCR53C90).clock(20000000/2); // Emulex 2400138 (68-pin PLCC)
+	NSCSI_CONNECTOR(config, "scsibus:7").option_set("esp", NCR53C90).clock(XTAL::u(20000000)/2); // Emulex 2400138 (68-pin PLCC)
 
-	N82077AA(config, m_fdc, 24000000, n82077aa_device::mode_t::PS2);
+	N82077AA(config, m_fdc, XTAL::u(24000000), n82077aa_device::mode_t::PS2);
 	FLOPPY_CONNECTOR(config, "fdc:0", sun_floppies, "35hd", floppy_image_device::default_pc_floppy_formats);
 
 	// the timekeeper has no interrupt output, so 3/80 includes a dedicated timer circuit

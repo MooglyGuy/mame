@@ -59,7 +59,7 @@ void electron_voxbox_device::device_add_mconfig(machine_config &config)
 //  electron_voxbox_device - constructor
 //-------------------------------------------------
 
-electron_voxbox_device::electron_voxbox_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+electron_voxbox_device::electron_voxbox_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ELECTRON_VOXBOX, tag, owner, clock)
 	, device_electron_expansion_interface(mconfig, *this)
 	, m_nsp(*this, "sp0256")

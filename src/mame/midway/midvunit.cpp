@@ -307,7 +307,7 @@ void midvunit_base_state::tms32031_control_w(offs_t offset, uint32_t data, uint3
 
 		// bit 0x200 selects internal clocking, which is 1/2 the main CPU clock rate
 		if (data & 0x200)
-			m_timer_rate = (double)(m_maincpu->unscaled_clock() * 0.5);
+			m_timer_rate = m_maincpu->unscaled_clock().dvalue() * 0.5;
 		else
 			m_timer_rate = 10000000.;
 	}

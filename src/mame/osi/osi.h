@@ -22,7 +22,7 @@
 #define M6502_TAG       "m6502"
 #define DISCRETE_TAG    "discrete"
 
-#define X1          3932160
+#define X1          XTAL::u(3932160)
 #define UK101_X1    XTAL(8'000'000)
 
 #define OSI600_VIDEORAM_SIZE    0x400

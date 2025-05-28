@@ -534,10 +534,10 @@ void a2bus_phasor_device::set_clocks()
 {
 	if (m_native)
 	{
-		m_ay1->set_clock(1022727*2);
-		m_ay2->set_clock(1022727*2);
-		m_ay3->set_clock(1022727*2);
-		m_ay4->set_clock(1022727*2);
+		m_ay1->set_clock(XTAL::u(1022727)*2);
+		m_ay2->set_clock(XTAL::u(1022727)*2);
+		m_ay3->set_clock(XTAL::u(1022727)*2);
+		m_ay4->set_clock(XTAL::u(1022727)*2);
 	}
 	else
 	{

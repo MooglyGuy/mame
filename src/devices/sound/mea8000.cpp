@@ -244,8 +244,8 @@ int mea8000_device::noise_gen()
 int mea8000_device::freq_gen()
 {
 	int pitch = interp(m_last_pitch, m_pitch);
-	m_phi = (m_phi + pitch) % F0;
-	return ((m_phi % F0) * QUANT * 2) / F0 - QUANT;
+	m_phi = (m_phi + pitch) % F0.value();
+	return ((m_phi % F0.value()) * QUANT * 2) / F0.value() - QUANT;
 }
 
 

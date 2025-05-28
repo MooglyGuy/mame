@@ -206,13 +206,13 @@ INPUT_PORTS_END
 void heromem_state::heromem(machine_config &config)
 {
 	// basic machine hardware
-	z80_device &maincpu(Z80(config, "maincpu", 16000000 / 2)); // divider unverified
+	z80_device &maincpu(Z80(config, "maincpu", XTAL::u(16000000) / 2)); // divider unverified
 	maincpu.set_addrmap(AS_PROGRAM, &heromem_state::maincpu_prg_map);
 
-	z80_device &audiocpu_l(Z80(config, "audiocpu_l", 16000000 / 4)); // divider unverified
+	z80_device &audiocpu_l(Z80(config, "audiocpu_l", XTAL::u(16000000) / 4)); // divider unverified
 	audiocpu_l.set_addrmap(AS_PROGRAM, &heromem_state::audiocpu_l_prg_map);
 
-	z80_device &audiocpu_r(Z80(config, "audiocpu_r", 16000000 / 4)); // divider unverified
+	z80_device &audiocpu_r(Z80(config, "audiocpu_r", XTAL::u(16000000) / 4)); // divider unverified
 	audiocpu_r.set_addrmap(AS_PROGRAM, &heromem_state::audiocpu_r_prg_map);
 
 	TIMER(config, "scantimer_l").configure_scanline(FUNC(heromem_state::irq_scanline_l), "lscreen", 0, 1);
@@ -249,10 +249,10 @@ void heromem_state::heromem(machine_config &config)
 	ciu_r.nmi_callback().set_inputline(m_tc0091lvc_r, INPUT_LINE_NMI);
 	ciu_r.reset_callback().set_inputline(m_tc0091lvc_r, INPUT_LINE_RESET);
 
-	tc0091lvc_device &vdp_l(TC0091LVC(config, m_tc0091lvc_l, 16000000 / 4));
+	tc0091lvc_device &vdp_l(TC0091LVC(config, m_tc0091lvc_l, XTAL::u(16000000) / 4));
 	vdp_l.set_addrmap(AS_PROGRAM, &heromem_state::tc0091lvc_l_prg_map);
 
-	tc0091lvc_device &vdp_r(TC0091LVC(config, m_tc0091lvc_r, 16000000 / 4));
+	tc0091lvc_device &vdp_r(TC0091LVC(config, m_tc0091lvc_r, XTAL::u(16000000) / 4));
 	vdp_r.set_addrmap(AS_PROGRAM, &heromem_state::tc0091lvc_r_prg_map);
 
 	// sound hardware
@@ -266,14 +266,14 @@ void heromem_state::heromem(machine_config &config)
 	syt_r.nmi_callback().set_inputline("audiocpu_r", INPUT_LINE_NMI);
 	syt_r.reset_callback().set_inputline("audiocpu_r", INPUT_LINE_RESET);
 
-	ym2610b_device &ym_l(YM2610B(config, "ym_l", 16000000 / 2));
+	ym2610b_device &ym_l(YM2610B(config, "ym_l", XTAL::u(16000000) / 2));
 	ym_l.irq_handler().set_inputline("audiocpu_l", 0);
 	ym_l.add_route(0, "speaker", 0.75, 0);
 	ym_l.add_route(0, "speaker", 0.75, 0);
 	ym_l.add_route(1, "speaker", 1.0, 0);
 	ym_l.add_route(2, "speaker", 1.0, 0);
 
-	ym2610b_device &ym_r(YM2610B(config, "ym_r", 16000000 / 2));
+	ym2610b_device &ym_r(YM2610B(config, "ym_r", XTAL::u(16000000) / 2));
 	ym_r.irq_handler().set_inputline("audiocpu_r", 0);
 	ym_r.add_route(0, "speaker", 0.75, 1);
 	ym_r.add_route(0, "speaker", 0.75, 1);

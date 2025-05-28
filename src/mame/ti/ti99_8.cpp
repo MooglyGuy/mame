@@ -712,7 +712,7 @@ void ti99_8_state::ti99_8(machine_config& config)
 	m_mainboard->hold_cb().set(FUNC(ti99_8_state::cpu_hold));
 
 	// Cartridge port
-	TI99_GROMPORT(config, m_gromport, 0, ti99_gromport_options_998, "single").extend();
+	TI99_GROMPORT(config, m_gromport, XTAL(), ti99_gromport_options_998, "single").extend();
 	m_gromport->ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::system_grom_ready));
 	m_gromport->reset_cb().set(FUNC(ti99_8_state::console_reset));
 
@@ -724,12 +724,12 @@ void ti99_8_state::ti99_8(machine_config& config)
 	SOFTWARE_LIST(config, "cart_list_ti99").set_original("ti99_cart");
 
 	// I/O port
-	TI99_IOPORT(config, m_ioport, 0, ti99_ioport_options_plain, nullptr);
+	TI99_IOPORT(config, m_ioport, XTAL(), ti99_ioport_options_plain, nullptr);
 	m_ioport->extint_cb().set(FUNC(ti99_8_state::extint));
 	m_ioport->ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::pbox_ready));
 
 	// Hexbus
-	HEXBUS(config, TI998_HEXBUS_TAG, 0, hexbus_options, nullptr);
+	HEXBUS(config, TI998_HEXBUS_TAG, XTAL(), hexbus_options, nullptr);
 
 	// Sound hardware
 	SPEAKER(config, "sound_out").front_center();
@@ -741,7 +741,7 @@ void ti99_8_state::ti99_8(machine_config& config)
 	// Note: SPEECHROM uses its tag for referencing the region
 	SPEAKER(config, "speech_out").front_center();
 
-	cd2501ecd_device& vsp(CD2501ECD(config, TI998_SPEECHSYN_TAG, 640000L));
+	cd2501ecd_device& vsp(CD2501ECD(config, TI998_SPEECHSYN_TAG, XTAL::u(640000)));
 	vsp.ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::speech_ready));
 	vsp.add_route(ALL_OUTPUTS, "speech_out", 0.50);
 
@@ -785,7 +785,7 @@ void ti99_8_state::ti99_8(machine_config& config)
 	TMC0430(config, TI998_GLIB32_TAG, TI998_GROMLIB3_REG, 0x4000, 2).ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::p3_grom_ready));
 
 	// Joystick port
-	TI99_JOYPORT(config, m_joyport, 0, ti99_joyport_options_mouse, "twinjoy");
+	TI99_JOYPORT(config, m_joyport, XTAL(), ti99_joyport_options_mouse, "twinjoy");
 }
 
 /*

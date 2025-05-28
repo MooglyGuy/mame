@@ -100,7 +100,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	pc9801_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pc9801_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_memspace(T &&tag, int spacenum) { m_memspace.set_tag(std::forward<T>(tag), spacenum); }
 	template <typename T> void set_iospace(T &&tag, int spacenum) { m_iospace.set_tag(std::forward<T>(tag), spacenum); }

@@ -236,7 +236,7 @@ void rex6000_state::beep_w(offs_t offset, uint8_t data)
 				if (BIT(data, 1))
 				{
 					uint16_t div = ((m_beep_io[2] | m_beep_io[3]<<8) & 0x0fff) + 2;
-					m_beep->set_clock(16384 / div);
+					m_beep->set_frequency(16384 / div);
 				}
 			}
 			break;

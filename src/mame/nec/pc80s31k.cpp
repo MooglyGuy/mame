@@ -470,7 +470,7 @@ void pc80s31k_device::drive_mode_w(uint8_t data)
 	m_floppy[0]->get_device()->set_rpm(BIT(data, 0) ? 360 : 300);
 	m_floppy[1]->get_device()->set_rpm(BIT(data, 1) ? 360 : 300);
 
-	m_fdc->set_rate(BIT(data, 5) ? 500000 : 250000);
+	m_fdc->set_rate(XTAL::u(BIT(data, 5) ? 500000 : 250000));
 }
 
 void pc80s31k_device::fdc_io(address_map &map)

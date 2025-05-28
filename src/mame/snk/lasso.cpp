@@ -932,7 +932,7 @@ void lasso_state::machine_start()
 void lasso_state::base(machine_config &config)
 {
 	// basic machine hardware
-	M6502(config, m_maincpu, 11'289'000/16); // guess
+	M6502(config, m_maincpu, XTAL::u(11'289'000)/16); // guess
 	m_maincpu->set_addrmap(AS_PROGRAM, &lasso_state::lasso_main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(lasso_state::irq0_line_hold));
 
@@ -965,7 +965,7 @@ void lasso_state::lasso(machine_config &config)
 	base(config);
 
 	// basic machine hardware
-	m6502_device &blitter(M6502(config, "blitter", 11'289'000/16)); // guess
+	m6502_device &blitter(M6502(config, "blitter", XTAL::u(11'289'000)/16)); // guess
 	blitter.set_addrmap(AS_PROGRAM, &lasso_state::lasso_coprocessor_map);
 
 	config.set_maximum_quantum(attotime::from_hz(6000));

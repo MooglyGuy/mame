@@ -295,7 +295,7 @@ GFXDECODE_END
 
 void good_state::good(machine_config &config)
 {
-	M68000(config, m_maincpu, 16000000 /2);
+	M68000(config, m_maincpu, XTAL::u(16000000)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &good_state::good_map);
 	m_maincpu->set_vblank_int("screen", FUNC(good_state::irq2_line_hold));
 

@@ -19,7 +19,7 @@ public:
 		NORMAL_MEM = 3,
 	};
 
-	am9516_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	am9516_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// output lines
 	auto out_int() { return m_int.bind(); }

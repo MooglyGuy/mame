@@ -581,7 +581,7 @@ void pcipc_state::pcipc(machine_config &config)
 	maincpu.smiact().set("pci:00.0", FUNC(i82439hx_host_device::smi_act_w));
 
 	PCI_ROOT(config, "pci");
-	I82439HX(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
+	I82439HX(config, "pci:00.0", XTAL(), "maincpu", 256*1024*1024);
 
 	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", "maincpu"));
 	isa.boot_state_hook().set(FUNC(pcipc_state::boot_state_phoenix_ver40_rev6_w));
@@ -638,7 +638,7 @@ void pcipc_state::pcipctx(machine_config &config)
 	maincpu.set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 
 	PCI_ROOT(config, "pci");
-	I82439TX(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
+	I82439TX(config, "pci:00.0", XTAL(), "maincpu", 256*1024*1024);
 
 	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", "maincpu"));
 	isa.boot_state_hook().set(FUNC(pcipc_state::boot_state_award_w));

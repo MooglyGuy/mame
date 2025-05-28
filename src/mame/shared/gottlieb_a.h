@@ -148,7 +148,7 @@ protected:
 	virtual void r1_map(address_map &map) override ATTR_COLD;
 
 	// internal communications
-	u32 convert_speech_clock(u8 data);
+	XTAL convert_speech_clock(u8 data);
 
 	// devices
 	required_device<votrax_sc01_device> m_votrax;

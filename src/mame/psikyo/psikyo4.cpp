@@ -605,7 +605,7 @@ void psikyo4_state::machine_reset()
 void psikyo4_state::ps4big(machine_config &config)
 {
 	/* basic machine hardware */
-	SH7604(config, m_maincpu, 57272700/2);
+	SH7604(config, m_maincpu, XTAL::u(57272700)/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &psikyo4_state::ps4_map);
 	m_maincpu->set_vblank_int("lscreen", FUNC(psikyo4_state::interrupt));
 
@@ -635,7 +635,7 @@ void psikyo4_state::ps4big(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
 
-	ymf278b_device &ymf(YMF278B(config, "ymf", 57272700/2));
+	ymf278b_device &ymf(YMF278B(config, "ymf", XTAL::u(57272700)/2));
 	ymf.set_addrmap(0, &psikyo4_state::ps4_ymf_map);
 	ymf.irq_handler().set_inputline("maincpu", 12);
 	ymf.add_route(0, "speaker", 1.0, 1); // Output for each screen

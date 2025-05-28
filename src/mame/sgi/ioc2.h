@@ -71,7 +71,7 @@ public:
 	void set_mappable_int(uint8_t mask, bool state);
 
 protected:
-	ioc2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	ioc2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -204,7 +204,7 @@ public:
 	}
 
 	void map(address_map &map) ATTR_COLD;
-	ioc2_guinness_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	ioc2_guinness_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	uint8_t get_system_id() override { return 0x26; }
@@ -220,7 +220,7 @@ public:
 		set_cpu_tag(std::forward<T>(cpu_tag));
 	}
 
-	ioc2_full_house_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	ioc2_full_house_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_map &map) ATTR_COLD;
 	void int2_map(address_map &map) ATTR_COLD;

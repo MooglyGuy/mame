@@ -122,7 +122,7 @@ void SID6581_t::postload()
 
 static void filterTableInit(running_machine &machine)
 {
-	int sample_rate = machine.sample_rate();
+	int sample_rate = machine.sample_rate().value();
 	uint16_t uk;
 	/* Parameter calculation has not been moved to a separate function */
 	/* by purpose. */

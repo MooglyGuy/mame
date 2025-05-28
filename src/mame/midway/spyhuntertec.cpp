@@ -706,17 +706,17 @@ void spyhuntertec_state::spyhuntertec(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	m_soundlatch->data_pending_callback().set_inputline(m_audiocpu, INPUT_LINE_NMI);
 
-	ay8912_device &ay1(AY8912(config, "ay1", 3000000/2)); // AY-3-8912
+	ay8912_device &ay1(AY8912(config, "ay1", XTAL::u(3000000)/2)); // AY-3-8912
 	ay1.add_route(ALL_OUTPUTS, "mono", 0.25);
 	ay1.port_a_read_callback().set(FUNC(spyhuntertec_state::ay1_porta_r));
 	ay1.port_a_write_callback().set(FUNC(spyhuntertec_state::ay1_porta_w));
 
-	ay8912_device &ay2(AY8912(config, "ay2", 3000000/2)); // "
+	ay8912_device &ay2(AY8912(config, "ay2", XTAL::u(3000000)/2)); // "
 	ay2.add_route(ALL_OUTPUTS, "mono", 0.25);
 	ay2.port_a_read_callback().set(FUNC(spyhuntertec_state::ay2_porta_r));
 	ay2.port_a_write_callback().set(FUNC(spyhuntertec_state::ay2_porta_w));
 
-	AY8912(config, "ay3", 3000000/2).add_route(ALL_OUTPUTS, "mono", 0.25); // "
+	AY8912(config, "ay3", XTAL::u(3000000)/2).add_route(ALL_OUTPUTS, "mono", 0.25); // "
 }
 
 

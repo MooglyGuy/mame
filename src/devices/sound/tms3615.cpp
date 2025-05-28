@@ -22,7 +22,6 @@ tms3615_device::tms3615_device(const machine_config &mconfig, const char *tag, d
 	: device_t(mconfig, TMS3615, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_channel(nullptr)
-	, m_samplerate(0)
 	, m_basefreq(0)
 	, m_output8(0)
 	, m_output16(0)
@@ -40,8 +39,7 @@ tms3615_device::tms3615_device(const machine_config &mconfig, const char *tag, d
 void tms3615_device::device_start()
 {
 	m_channel = stream_alloc(0, 2, clock()/8);
-	m_samplerate = clock()/8;
-	m_basefreq = clock();
+	m_basefreq = clock().value();
 }
 
 

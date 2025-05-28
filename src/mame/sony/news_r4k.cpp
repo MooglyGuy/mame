@@ -416,8 +416,8 @@ void news_r4k_state::machine_common(machine_config &config)
 	m_escc->out_dtrb_callback().set(m_serial[1], FUNC(rs232_port_device::write_dtr));
 	m_escc->out_int_callback().set(FUNC(news_r4k_state::irq_w<ESCC>));
 
-	CXD8442Q(config, m_fifo0, 0);
-	CXD8442Q(config, m_fifo1, 0);
+	CXD8442Q(config, m_fifo0);
+	CXD8442Q(config, m_fifo1);
 
 	// Reverse polarity for ESCC DMA signals
 	m_escc->out_dtra_callback().set(
@@ -442,14 +442,14 @@ void news_r4k_state::machine_common(machine_config &config)
 				escc1_int_status = status ? 0x8 : 0x0; // guess
 			});
 
-	CXD8452AQ(config, m_sonic3, 0);
+	CXD8452AQ(config, m_sonic3);
 	m_sonic3->set_addrmap(0, &news_r4k_state::sonic3_map);
 	m_sonic3->irq_out().set(FUNC(news_r4k_state::irq_w<irq0_number::SONIC>));
 	m_sonic3->set_bus(m_cpu, 0);
 	m_sonic3->set_apbus_address_translator(FUNC(news_r4k_state::apbus_virt_to_phys));
 
 	// TODO: actual clock frequency - there is a 20MHz crystal nearby on the board, but traces need to be confirmed
-	DP83932C(config, m_sonic, 20'000'000);
+	DP83932C(config, m_sonic, XTAL::u(20'000'000));
 	m_sonic->out_int_cb().set(m_sonic3, FUNC(cxd8452aq_device::irq_w));
 	m_sonic->set_bus(m_sonic3, 1);
 
@@ -472,7 +472,7 @@ void news_r4k_state::machine_common(machine_config &config)
 			[this] ()
 			{ return uint32_t(m_fdc->dma_r()); });
 
-	DMAC3(config, m_dmac, 0);
+	DMAC3(config, m_dmac);
 	m_dmac->set_apbus_address_translator(FUNC(news_r4k_state::apbus_virt_to_phys));
 	m_dmac->set_bus(m_cpu, 0);
 	m_dmac->irq_out().set(FUNC(news_r4k_state::irq_w<DMAC>));
@@ -498,7 +498,7 @@ void news_r4k_state::machine_common(machine_config &config)
 
 	// TODO: Actual SPIFI3 clock frequency
 	NSCSI_CONNECTOR(config, "scsi0:7").option_set("spifi3", SPIFI3)
-		.clock(16'000'000)
+		.clock(XTAL::u(16'000'000))
 		.machine_config(
 			[this](device_t *device)
 			{
@@ -507,7 +507,7 @@ void news_r4k_state::machine_common(machine_config &config)
 				adapter.drq_handler_cb().set(m_dmac, FUNC(dmac3_device::drq_w<dmac3_device::CTRL0>));
 			});
 	NSCSI_CONNECTOR(config, "scsi1:7").option_set("spifi3", SPIFI3)
-		.clock(16'000'000)
+		.clock(XTAL::u(16'000'000))
 		.machine_config(
 			[this](device_t *device)
 			{

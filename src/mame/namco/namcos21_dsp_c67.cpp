@@ -147,7 +147,7 @@ void namcos21_dsp_c67_device::device_add_mconfig(machine_config &config)
 		if (i!=0)
 			dspslave.set_disable();
 		else
-			dspslave.set_clock(24000000*4);
+			dspslave.set_clock(XTAL::u(24000000)*4);
 	}
 }
 

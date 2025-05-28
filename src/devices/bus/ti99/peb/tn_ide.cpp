@@ -672,7 +672,7 @@ void nouspikel_ide_card_device::device_reset()
 	m_sram->set_buffered(m_rtctype == RTC47);
 
 	// Only activate the selected RTC
-	m_rtc47->set_unscaled_clock((ioport("RTC")->read()==1) ? 32768 : 0);
+	m_rtc47->set_unscaled_clock((ioport("RTC")->read()==1) ? XTAL::u(32768) : XTAL::u(0));
 	m_rtc42->connect_osc(ioport("RTC")->read()==2);
 	m_rtc52->connect_osc(ioport("RTC")->read()==3);
 }

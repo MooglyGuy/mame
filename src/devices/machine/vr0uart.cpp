@@ -77,11 +77,11 @@ inline void vr0uart_device::tx_send_byte(uint8_t val)
 	m_ustat |= 0x20;
 }
 
-inline uint32_t vr0uart_device::calculate_baud_rate()
+inline XTAL vr0uart_device::calculate_baud_rate()
 {
 	uint32_t div_rate = ((m_ubdr & 0xffff) + 1) * 16;
 	// TODO: external / internal serial clock config
-	return (this->clock() / 2) / div_rate;
+	return clock() / (2 * div_rate);
 }
 
 void vr0uart_device::update_serial_config()
@@ -96,7 +96,7 @@ void vr0uart_device::update_serial_config()
 
 	if (m_ucon & 0x100) // UART Enable
 	{
-		uint32_t clock_rate = calculate_baud_rate();
+		const XTAL clock_rate = calculate_baud_rate();
 		set_rcv_rate(clock_rate);
 		set_tra_rate(clock_rate);
 	}

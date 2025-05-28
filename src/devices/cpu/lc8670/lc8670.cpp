@@ -1184,7 +1184,7 @@ inline void lc8670_cpu_device::change_clock_source()
 			break;
 	}
 
-	set_unscaled_clock(new_clock);
+	set_unscaled_clock(XTAL::u(new_clock));
 	set_clock_scale(1.0 / (REG_OCR & 0x80 ? 6.0 : 12.0));
 	m_clocktimer->adjust(attotime::from_hz(clock()), 0, attotime::from_hz(clock()));
 	m_clock_changed = false;

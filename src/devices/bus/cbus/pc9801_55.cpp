@@ -79,7 +79,7 @@ void pc9801_55_device::device_add_mconfig(machine_config &config)
 			wd33c9x_base_device &adapter = downcast<wd33c9x_base_device &>(*device);
 
 			// TODO: unknown clock
-			adapter.set_clock(10'000'000);
+			adapter.set_clock(XTAL::u(10'000'000));
 			adapter.irq_cb().set(*this, FUNC(pc9801_55_device::scsi_irq_w));
 			// TODO: DRQ on C-bus
 			//adapter.drq_cb().set(*this, FUNC(pc9801_55_device::scsi_drq));

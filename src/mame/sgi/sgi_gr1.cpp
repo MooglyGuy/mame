@@ -143,7 +143,7 @@ void sgi_gr1_device::map_bank(address_map &map)
 
 void sgi_gr1_device::device_add_mconfig(machine_config &config)
 {
-	unsigned pixel_clock = 107'352'000;
+	const XTAL pixel_clock = XTAL::u(107'352'000);
 
 	ADDRESS_MAP_BANK(config, m_bank).set_map(&sgi_gr1_device::map_bank).set_options(ENDIANNESS_NATIVE, 32, 32, 0x8000);
 

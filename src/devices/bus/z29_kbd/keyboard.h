@@ -27,7 +27,7 @@ class z29_keyboard_port_device : public device_t, public device_single_card_slot
 
 public:
 	// construction/destruction
-	z29_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	z29_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T>
 	z29_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
 		: z29_keyboard_port_device(mconfig, tag, owner)

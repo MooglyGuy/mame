@@ -108,7 +108,7 @@ private:
 
 
 /* Assumed to be the same as segald hardware */
-#define GUESSED_CLOCK (5000000)
+#define GUESSED_CLOCK XTAL::u(5000000)
 
 
 

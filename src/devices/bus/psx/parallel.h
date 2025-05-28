@@ -27,7 +27,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	psx_parallel_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	psx_parallel_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~psx_parallel_slot_device();
 
 	uint16_t exp_r(offs_t offset);

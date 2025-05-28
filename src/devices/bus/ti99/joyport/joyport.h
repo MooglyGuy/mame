@@ -68,7 +68,7 @@ public:
 		set_fixed(false);
 	}
 
-	joyport_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	joyport_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	uint8_t   read_port();
 	void    write_port(int data);
 	void    set_interrupt(int state);

@@ -791,7 +791,7 @@ void pc9821_state::pc9821(machine_config &config)
 	// TODO: specs for a vanilla MULTi doesn't match
 	// should be 386sx at 20 MHz, this may be "just" a FA/BX class instead
 	pc9801rs(config);
-	const auto xtal = BASE_CLOCK / 2;
+	const XTAL xtal = BASE_CLOCK / 2;
 	I486(config.replace(), m_maincpu, xtal); // unknown clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_state::pc9821_io);
@@ -910,7 +910,7 @@ void pc9821_mate_x_state::pc9821xs(machine_config &config)
 void pc9821_mate_x_state::pc9821xa16(machine_config &config)
 {
 	pc9821(config);
-	PENTIUM(config.replace(), m_maincpu, 166000000); // Pentium P54C
+	PENTIUM(config.replace(), m_maincpu, XTAL::u(166000000)); // Pentium P54C
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_mate_x_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_mate_x_state::pc9821_io);
 	m_maincpu->set_irq_acknowledge_callback("pic8259_master", FUNC(pic8259_device::inta_cb));
@@ -928,7 +928,7 @@ void pc9821_mate_r_state::pc9821ra20(machine_config &config)
 void pc9821_mate_r_state::pc9821ra266(machine_config &config)
 {
 	pc9821(config);
-	const double xtal = 266000000;
+	const XTAL xtal = XTAL::u(266000000);
 	PENTIUM2(config.replace(), m_maincpu, xtal);
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_mate_r_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_mate_r_state::pc9821_io);
@@ -944,7 +944,7 @@ void pc9821_mate_r_state::pc9821ra266(machine_config &config)
 void pc9821_mate_r_state::pc9821ra333(machine_config &config)
 {
 	pc9821(config);
-	const double xtal = 333000000;
+	const XTAL xtal = XTAL::u(333000000);
 	PENTIUM2(config.replace(), m_maincpu, xtal); // actually a Celeron
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_mate_r_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_mate_r_state::pc9821_io);
@@ -962,8 +962,7 @@ void pc9821_mate_r_state::pc9821ra333(machine_config &config)
 void pc9821_note_lavie_state::pc9821nr15(machine_config &config)
 {
 	pc9821(config);
-//  const XTAL xtal = XTAL(150'000'000);
-	const double xtal = 150000000;
+	const XTAL xtal = XTAL::u(150000000);
 	PENTIUM_PRO(config.replace(), m_maincpu, xtal); // unsure if normal or pro, clock and cache size suggests latter
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_note_lavie_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_note_lavie_state::pc9821_io);
@@ -983,7 +982,7 @@ void pc9821_note_lavie_state::pc9821nr15(machine_config &config)
 void pc9821_note_lavie_state::pc9821nr166(machine_config &config)
 {
 	pc9821(config);
-	const double xtal = 166000000;
+	const XTAL xtal = XTAL::u(166000000);
 	PENTIUM_MMX(config.replace(), m_maincpu, xtal);
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_note_lavie_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_note_lavie_state::pc9821_io);
@@ -1001,7 +1000,7 @@ void pc9821_note_lavie_state::pc9821nr166(machine_config &config)
 void pc9821_note_lavie_state::pc9821nw150(machine_config &config)
 {
 	pc9821(config);
-	const double xtal = 150000000;
+	const XTAL xtal = XTAL::u(150000000);
 	PENTIUM_MMX(config.replace(), m_maincpu, xtal);
 	m_maincpu->set_addrmap(AS_PROGRAM, &pc9821_note_lavie_state::pc9821_map);
 	m_maincpu->set_addrmap(AS_IO, &pc9821_note_lavie_state::pc9821_io);

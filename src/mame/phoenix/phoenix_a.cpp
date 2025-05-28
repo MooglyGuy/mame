@@ -524,7 +524,7 @@ void phoenix_sound_device::control_b_w(uint8_t data)
 
 void phoenix_sound_device::sound_stream_update(sound_stream &stream)
 {
-	int samplerate = stream.sample_rate();
+	int samplerate = stream.sample_rate().value();
 
 	for (int sampindex = 0; sampindex < stream.samples(); sampindex++)
 	{

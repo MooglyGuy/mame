@@ -1325,14 +1325,14 @@ void champwr_state::champwr(machine_config &config)
 
 void taitol_2cpu_state::raimais(machine_config &config)
 {
-	TC0090LVC(config, m_main_cpu, 13330560/2);    // needs verification from pin122 of TC0090LVC
+	TC0090LVC(config, m_main_cpu, XTAL::u(13330560)/2);    // needs verification from pin122 of TC0090LVC
 	m_main_cpu->set_addrmap(AS_PROGRAM, &taitol_2cpu_state::raimais_map);
 	m_main_cpu->set_irq_acknowledge_callback(FUNC(taitol_state::irq_callback));
 
-	Z80(config, m_audio_cpu, 12000000/3);   // not verified
+	Z80(config, m_audio_cpu, XTAL::u(12000000)/3);   // not verified
 	m_audio_cpu->set_addrmap(AS_PROGRAM, &taitol_2cpu_state::raimais_3_map);
 
-	z80_device &slave(Z80(config, "slave", 12000000/3));    // not verified
+	z80_device &slave(Z80(config, "slave", XTAL::u(12000000)/3));    // not verified
 	slave.set_addrmap(AS_PROGRAM, &taitol_2cpu_state::raimais_2_map);
 	slave.set_vblank_int("screen", FUNC(taitol_state::irq0_line_hold));
 

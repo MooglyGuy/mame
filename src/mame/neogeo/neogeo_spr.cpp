@@ -16,7 +16,7 @@ neosprite_base_device::neosprite_base_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		u32 clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, m_bppshift(4)

@@ -206,7 +206,7 @@ void vme_hcpu30_card_device::device_add_mconfig(machine_config &config)
 		{
 			wd33c9x_base_device &wd33c93(downcast<wd33c9x_base_device &>(*device));
 
-			wd33c93.set_clock(16670000/4); // default internal divisor is 2
+			wd33c93.set_clock(XTAL::u(16670000)/4); // default internal divisor is 2
 			wd33c93.irq_cb().set(*this, FUNC(vme_hcpu30_card_device::scsiirq_callback)).invert();
 			wd33c93.drq_cb().set(*this, FUNC(vme_hcpu30_card_device::scsidrq_callback));
 		});
@@ -231,7 +231,7 @@ void vme_hcpu30_card_device::device_add_mconfig(machine_config &config)
 	OUTPUT_LATCH(config, m_cent_data_out);
 
 	// OS CPU
-	M68030(config, m_oscpu, 2*16670000);
+	M68030(config, m_oscpu, XTAL::u(16670000)*2);
 	m_oscpu->set_addrmap(AS_PROGRAM, &vme_hcpu30_card_device::hcpu30_os_mem);
 	m_oscpu->set_addrmap(m68000_base_device::AS_CPU_SPACE, &vme_hcpu30_card_device::oscpu_space_map);
 	m_oscpu->set_disable();

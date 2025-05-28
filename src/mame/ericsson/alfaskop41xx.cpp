@@ -372,7 +372,7 @@ void alfaskop4110_state::alfaskop4110(machine_config &config)
 	//m_crtc->out_vsync_callback().set("irq1", FUNC(input_merger_device::in_w<1>));
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(19'170'000, 80 * 8, 0, 80 * 8, 400, 0, 400);
+	m_screen->set_raw(XTAL::u(19'170'000), 80 * 8, 0, 80 * 8, 400, 0, 400);
 	m_screen->set_screen_update("crtc", FUNC(mc6845_device::screen_update));
 
 	PIA6821(config, m_mic_pia); // Main board PIA

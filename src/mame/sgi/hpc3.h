@@ -31,7 +31,7 @@ public:
 		AS_PIO9
 	};
 
-	hpc3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	hpc3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
 	hpc3_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&hal2_tag)

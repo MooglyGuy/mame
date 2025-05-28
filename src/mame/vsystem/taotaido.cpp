@@ -559,11 +559,11 @@ GFXDECODE_END
 
 void taotaido_state::taotaido(machine_config &config)
 {
-	M68000(config, m_maincpu, 32'000'000 / 2);
+	M68000(config, m_maincpu, XTAL::u(32'000'000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &taotaido_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(taotaido_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 20'000'000 / 4); // ??
+	Z80(config, m_audiocpu, XTAL::u(20'000'000) / 4); // ??
 	m_audiocpu->set_addrmap(AS_PROGRAM, &taotaido_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &taotaido_state::sound_port_map); // IRQs are triggered by the YM2610
 

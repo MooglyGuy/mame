@@ -787,15 +787,15 @@ INPUT_PORTS_END
 void tubep_state::tubep(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 16000000 / 4);    /* 4 MHz */
+	Z80(config, m_maincpu, XTAL::u(16000000) / 4);    /* 4 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &tubep_state::tubep_main_map);
 	m_maincpu->set_addrmap(AS_IO, &tubep_state::tubep_main_portmap);
 
-	Z80(config, m_slave, 16000000 / 4);     /* 4 MHz */
+	Z80(config, m_slave, XTAL::u(16000000) / 4);     /* 4 MHz */
 	m_slave->set_addrmap(AS_PROGRAM, &tubep_state::tubep_second_map);
 	m_slave->set_addrmap(AS_IO, &tubep_state::tubep_second_portmap);
 
-	Z80(config, m_soundcpu, 19968000 / 8);  /* X2 19968000 Hz divided by LS669 (on Qc output) (signal RH0) */
+	Z80(config, m_soundcpu, XTAL::u(19968000) / 8);  /* X2 19968000 Hz divided by LS669 (on Qc output) (signal RH0) */
 	m_soundcpu->set_addrmap(AS_PROGRAM, &tubep_state::tubep_sound_map);
 	m_soundcpu->set_addrmap(AS_IO, &tubep_state::tubep_sound_portmap);
 
@@ -829,17 +829,17 @@ void tubep_state::tubep(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &ay1(AY8910(config, "ay1", 19968000 / 8 / 2));
+	ay8910_device &ay1(AY8910(config, "ay1", XTAL::u(19968000) / 8 / 2));
 	ay1.port_a_write_callback().set(FUNC(tubep_state::ay8910_portA_0_w));
 	ay1.port_b_write_callback().set(FUNC(tubep_state::ay8910_portB_0_w));
 	ay1.add_route(ALL_OUTPUTS, "mono", 0.10);
 
-	ay8910_device &ay2(AY8910(config, "ay2", 19968000 / 8 / 2));
+	ay8910_device &ay2(AY8910(config, "ay2", XTAL::u(19968000) / 8 / 2));
 	ay2.port_a_write_callback().set(FUNC(tubep_state::ay8910_portA_1_w));
 	ay2.port_b_write_callback().set(FUNC(tubep_state::ay8910_portB_1_w));
 	ay2.add_route(ALL_OUTPUTS, "mono", 0.10);
 
-	ay8910_device &ay3(AY8910(config, "ay3", 19968000 / 8 / 2));
+	ay8910_device &ay3(AY8910(config, "ay3", XTAL::u(19968000) / 8 / 2));
 	ay3.port_a_write_callback().set(FUNC(tubep_state::ay8910_portA_2_w));
 	ay3.port_b_write_callback().set(FUNC(tubep_state::ay8910_portB_2_w));
 	ay3.add_route(ALL_OUTPUTS, "mono", 0.10);
@@ -849,7 +849,7 @@ void tubep_state::tubepb(machine_config &config)
 {
 	tubep(config);
 
-	M6802(config.replace(), m_mcu, 6000000); /* ? MHz Xtal */
+	M6802(config.replace(), m_mcu, XTAL::u(6000000)); /* ? MHz Xtal */
 	m_mcu->set_ram_enable(false);
 	m_mcu->set_addrmap(AS_PROGRAM, &tubep_state::nsc_map);
 
@@ -867,7 +867,7 @@ void rjammer_state::rjammer(machine_config &config)
 	m_slave->set_addrmap(AS_PROGRAM, &rjammer_state::rjammer_second_map);
 	m_slave->set_addrmap(AS_IO, &rjammer_state::rjammer_second_portmap);
 
-	Z80(config, m_soundcpu, 19968000 / 8);  // X2 19968000 Hz (schematic says 20 MHz?) divided by LS669 (on Qc output) (signal RH0)
+	Z80(config, m_soundcpu, XTAL::u(19968000) / 8);  // X2 19968000 Hz (schematic says 20 MHz?) divided by LS669 (on Qc output) (signal RH0)
 	m_soundcpu->set_addrmap(AS_PROGRAM, &rjammer_state::rjammer_sound_map);
 	m_soundcpu->set_addrmap(AS_IO, &rjammer_state::rjammer_sound_portmap);
 
@@ -884,7 +884,7 @@ void rjammer_state::rjammer(machine_config &config)
 
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(19968000 / 4, 320, 0, 256, 264, 16, 240);
+	m_screen->set_raw(XTAL::u(19968000) / 4, 320, 0, 256, 264, 16, 240);
 	m_screen->set_screen_update(FUNC(rjammer_state::screen_update));
 	m_screen->set_palette("palette");
 
@@ -893,17 +893,17 @@ void rjammer_state::rjammer(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &ay1(AY8910(config, "ay1", 19968000 / 8 / 2));
+	ay8910_device &ay1(AY8910(config, "ay1", XTAL::u(19968000) / 8 / 2));
 	ay1.port_a_write_callback().set(FUNC(rjammer_state::ay8910_portA_0_w));
 	ay1.port_b_write_callback().set(FUNC(rjammer_state::ay8910_portB_0_w));
 	ay1.add_route(ALL_OUTPUTS, "mono", 0.075);
 
-	ay8910_device &ay2(AY8910(config, "ay2", 19968000 / 8 / 2));
+	ay8910_device &ay2(AY8910(config, "ay2", XTAL::u(19968000) / 8 / 2));
 	ay2.port_a_write_callback().set(FUNC(rjammer_state::ay8910_portA_1_w));
 	ay2.port_b_write_callback().set(FUNC(rjammer_state::ay8910_portB_1_w));
 	ay2.add_route(ALL_OUTPUTS, "mono", 0.075);
 
-	ay8910_device &ay3(AY8910(config, "ay3", 19968000 / 8 / 2));
+	ay8910_device &ay3(AY8910(config, "ay3", XTAL::u(19968000) / 8 / 2));
 	ay3.port_a_write_callback().set(FUNC(rjammer_state::ay8910_portA_2_w));
 	ay3.port_b_write_callback().set(FUNC(rjammer_state::ay8910_portB_2_w));
 	ay3.add_route(ALL_OUTPUTS, "mono", 0.075);

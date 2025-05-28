@@ -28,7 +28,7 @@ mbc_device_base::mbc_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_gb_cart_interface(mconfig, *this),
 	m_bank_rom(*this, "rom"),
@@ -114,7 +114,7 @@ mbc_dual_device_base::mbc_dual_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_gb_cart_interface(mconfig, *this),
 	m_bank_rom(*this, { "low", "high" }),
@@ -261,7 +261,7 @@ mbc_dual_uniform_device_base::mbc_dual_uniform_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_gb_cart_interface(mconfig, *this),
 	m_bank_rom(*this, { "low", "high" }),
@@ -461,7 +461,7 @@ banked_32k_device_base::banked_32k_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_gb_cart_interface(mconfig, *this),
 	m_bank_rom(*this, "rom"),

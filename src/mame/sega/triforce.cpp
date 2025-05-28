@@ -610,7 +610,7 @@ void triforce_state::triforce_base(machine_config &config)
 void triforce_state::triforcegd(machine_config &config)
 {
 	triforce_base(config);
-	naomi_gdrom_board &rom_board(NAOMI_GDROM_BOARD(config, "rom_board", 0, ":gdrom", "pic"));
+	naomi_gdrom_board &rom_board(NAOMI_GDROM_BOARD(config, "rom_board", XTAL(), ":gdrom", "pic"));
 	rom_board.irq_callback().set_nop();
 }
 

@@ -100,7 +100,7 @@ sun_keyboard_port_device::sun_keyboard_port_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: sun_keyboard_port_device(mconfig, SUNKBD_PORT, tag, owner, clock)
 {
 }
@@ -111,7 +111,7 @@ sun_keyboard_port_device::sun_keyboard_port_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_single_card_slot_interface<device_sun_keyboard_port_interface>(mconfig, *this)
 	, m_rxd(0)

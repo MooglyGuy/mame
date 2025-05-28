@@ -33,7 +33,7 @@
 class i3002_device : public device_t
 {
 public:
-	i3002_device(const machine_config &mconfig , const char *tag , device_t *owner , uint32_t clock = 0);
+	i3002_device(const machine_config &mconfig , const char *tag , device_t *owner , const XTAL &clock = XTAL());
 
 	// Output callbacks
 	template <typename... T> void set_co_w_cb(T &&... args) { m_co_handler.set(std::forward<T>(args)...); }

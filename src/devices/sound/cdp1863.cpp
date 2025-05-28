@@ -51,7 +51,7 @@ cdp1863_device::cdp1863_device(const machine_config &mconfig, const char *tag, d
 	: device_t(mconfig, CDP1863, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
-	, m_clock1(clock)
+	, m_clock1(clock.value())
 	, m_clock2(0)
 	, m_oe(0)
 	, m_latch(0)
@@ -68,7 +68,7 @@ cdp1863_device::cdp1863_device(const machine_config &mconfig, const char *tag, d
 void cdp1863_device::device_start()
 {
 	// create sound stream
-	m_stream = stream_alloc(0, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(0, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 
 	// register for state saving
 	save_item(NAME(m_clock1));
@@ -92,7 +92,7 @@ void cdp1863_device::sound_stream_update(sound_stream &stream)
 	if (m_oe)
 	{
 		double frequency;
-		int rate = stream.sample_rate() / 2;
+		int rate = stream.sample_rate().value() / 2;
 
 		// get progress through wave
 		int incr = m_incr;

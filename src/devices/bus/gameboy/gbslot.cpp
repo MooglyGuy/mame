@@ -979,7 +979,7 @@ char const *guess_cart_type(std::string_view tag, util::random_read &file, u64 l
 //  gb_cart_slot_device
 //**************************************************************************
 
-gb_cart_slot_device::gb_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+gb_cart_slot_device::gb_cart_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	gb_cart_slot_device_base(mconfig, GB_CART_SLOT, tag, owner, clock)
 {
 }

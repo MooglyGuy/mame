@@ -267,7 +267,7 @@ void d6800_state::d6800_cassette_w(uint8_t data)
 	    are in progress (DMA/CB2 line low).
 	*/
 
-	m_beeper->set_clock(BIT(data, 0) ? 2400 : 1200);
+	m_beeper->set_frequency(BIT(data, 0) ? 2400 : 1200);
 	m_beeper->set_state(BIT(data, 6) & (m_cb2 ? 1 : 0));
 
 	m_portb = data & 0x7f;

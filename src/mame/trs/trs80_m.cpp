@@ -345,7 +345,6 @@ void trs80_state::machine_reset()
 	if (m_io_baud)
 	{
 		const uint16_t s_bauds[8]={ 110, 300, 600, 1200, 2400, 4800, 9600, 19200 };
-		u16 s_clock = s_bauds[m_io_baud->read()] << 4;
-		m_uart_clock->set_unscaled_clock(s_clock);
+		m_uart_clock->set_unscaled_clock(XTAL::u(s_bauds[m_io_baud->read()] << 4));
 	}
 }

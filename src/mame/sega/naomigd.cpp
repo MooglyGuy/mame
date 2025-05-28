@@ -1061,8 +1061,8 @@ void naomi_gdrom_board::board_advance(uint32_t size)
 		dimm_cur_address %= dimm_data_size;
 }
 
-#define CPU_CLOCK 200000000 // need to set the correct value here
-#define PIC_CLOCK 20000000  // and here
+#define CPU_CLOCK XTAL::u(200000000) // need to set the correct value here
+#define PIC_CLOCK XTAL::u(20000000)  // and here
 
 void naomi_gdrom_board::device_add_mconfig(machine_config &config)
 {
@@ -1083,7 +1083,7 @@ void naomi_gdrom_board::device_add_mconfig(machine_config &config)
 	PCI_ROOT(config, "pci");
 	SEGA315_6154(config, m_315_6154);
 	m_315_6154->set_addrmap(sega_315_6154_device::AS_PCI_MEMORY, &naomi_gdrom_board::pci_map);
-	IDE_GDROM(config, m_idegdrom, 0, image_tag, m_315_6154->tag(), sega_315_6154_device::AS_PCI_MEMORY);
+	IDE_GDROM(config, m_idegdrom, XTAL(), image_tag, m_315_6154->tag(), sega_315_6154_device::AS_PCI_MEMORY);
 	m_idegdrom->irq_callback().set_inputline(m_maincpu, SH4_IRL2);
 	PIC16C622(config, m_securitycpu, PIC_CLOCK);
 	m_securitycpu->read_b().set(FUNC(naomi_gdrom_board::pic_dimm_r));

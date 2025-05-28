@@ -108,10 +108,10 @@ static constexpr u32 clock_mapping[] =
 
 void dual_clock_base::device_reset()
 {
-	u32 clk1 = clock_mapping[m_clk_sel_1->read()];
+	const XTAL clk1 = XTAL::u(clock_mapping[m_clk_sel_1->read()]);
 	m_clock_1->set_clock(clk1);
 
-	u32 clk2 = clock_mapping[m_clk_sel_2->read()];
+	const XTAL clk2 = XTAL::u(clock_mapping[m_clk_sel_2->read()]);
 	m_clock_2->set_clock(clk2);
 
 	notify_clock_changed();

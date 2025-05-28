@@ -348,9 +348,9 @@ void jr200_state::jr200_beep_freq_w(offs_t offset, uint8_t data)
 	u32 beep_freq = ((m_freq_reg[0]<<8) | (m_freq_reg[1] & 0xff)) + 1;
 
 	if (beep_freq)
-		m_beeper->set_clock(84000 / beep_freq);
+		m_beeper->set_frequency(84000 / beep_freq);
 	else
-		m_beeper->set_clock(XTAL::u(0));
+		m_beeper->set_frequency(0);
 }
 
 void jr200_state::jr200_border_col_w(uint8_t data)

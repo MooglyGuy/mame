@@ -716,7 +716,7 @@ attotime scc2698b_device::generate_baudrate(int block, int tx, int table_index)
 			return attotime::never;
 		}
 
-		int frequency = configured_clock() / (divider * 8);
+		int frequency = configured_clock().value() / (divider * 8);
 		TRACE_CONFIG("Set %s baud rate to %dHz (clock divider = %d)\n", tx ? "Transmit" : "Receive", frequency, divider * 8);
 
 		return attotime::from_hz(configured_clock()) * (divider * 8);

@@ -56,7 +56,7 @@ protected:
 			device_type type,
 			const char *tag,
 			device_t *owner,
-			u32 clock);
+			const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

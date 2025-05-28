@@ -115,11 +115,11 @@ c219_device::c219_device(const machine_config &mconfig, const char *tag, device_
 
 void c140_device::device_start()
 {
-	m_sample_rate = m_baserate = clock();
+	m_sample_rate = m_baserate = clock().value();
 
 	m_int1_timer = timer_alloc(FUNC(c140_device::int1_on), this);
 
-	m_stream = stream_alloc(0, 2, m_sample_rate);
+	m_stream = stream_alloc(0, 2, clock());
 
 	// make decompress pcm table (Verified from Wii Virtual Console Arcade Starblade)
 	for (int i = 0; i < 256; i++)
@@ -195,9 +195,9 @@ void c219_device::device_start()
 
 void c140_device::device_clock_changed()
 {
-	m_sample_rate = m_baserate = clock();
+	m_sample_rate = m_baserate = clock().value();
 
-	m_stream->set_sample_rate(m_sample_rate);
+	m_stream->set_sample_rate(clock());
 
 	/* allocate a pair of buffers to mix into - 1 second's worth should be more than enough */
 	m_mixer_buffer_left = std::make_unique<s16[]>(m_sample_rate);

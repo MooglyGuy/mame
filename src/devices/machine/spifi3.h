@@ -35,7 +35,7 @@ class spifi3_device
 	  public nscsi_slot_card_interface
 {
 public:
-	spifi3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	spifi3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 	void map(address_map &map) ATTR_COLD;
 
 	auto irq_handler_cb() { return m_irq_handler.bind(); }

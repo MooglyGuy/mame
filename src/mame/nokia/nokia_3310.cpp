@@ -684,7 +684,7 @@ INPUT_PORTS_END
 void noki3310_state::noki3310(machine_config &config)
 {
 	/* basic machine hardware */
-	ARM7_BE(config, m_maincpu, 26000000 / 2);  // MAD2WD1 13 MHz, clock internally supplied to ARM core can be divided by 2, in sleep mode a 32768 Hz clock is used
+	ARM7_BE(config, m_maincpu, XTAL::u(26000000) / 2);  // MAD2WD1 13 MHz, clock internally supplied to ARM core can be divided by 2, in sleep mode a 32768 Hz clock is used
 	m_maincpu->set_addrmap(AS_PROGRAM, &noki3310_state::noki3310_map);
 
 	/* video hardware */

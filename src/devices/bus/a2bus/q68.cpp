@@ -84,13 +84,13 @@ ROM_END
 
 void a2bus_q68_device::device_add_mconfig(machine_config &config)
 {
-	M68008(config, m_m68008, 1021800*7); // M68008 runs at 7.16 MHz
+	M68008(config, m_m68008, XTAL::u(1021800)*7); // M68008 runs at 7.16 MHz
 	m_m68008->set_addrmap(AS_PROGRAM, &a2bus_q68_device::m68008_mem);
 }
 
 void a2bus_q68plus_device::device_add_mconfig(machine_config &config)
 {
-	M68008(config, m_m68008, 1021800*7); // M68008 runs at 7.16 MHz
+	M68008(config, m_m68008, XTAL::u(1021800)*7); // M68008 runs at 7.16 MHz
 	m_m68008->set_addrmap(AS_PROGRAM, &a2bus_q68plus_device::m68008_mem);
 }
 

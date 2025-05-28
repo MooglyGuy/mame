@@ -332,7 +332,7 @@ TIMER_DEVICE_CALLBACK_MEMBER(zac_2_state::zac_2_outtimer)
 void zac_2_state::zac_2(machine_config &config)
 {
 	/* basic machine hardware */
-	S2650(config, m_maincpu, 6000000/2); // according to sch the speed is half this, but then the last ball timer runs far too slowly
+	S2650(config, m_maincpu, XTAL::u(6000000)/2); // according to sch the speed is half this, but then the last ball timer runs far too slowly
 	m_maincpu->set_addrmap(AS_PROGRAM, &zac_2_state::zac_2_map);
 	m_maincpu->set_addrmap(AS_IO, &zac_2_state::zac_2_io);
 	m_maincpu->set_addrmap(AS_DATA, &zac_2_state::zac_2_data);

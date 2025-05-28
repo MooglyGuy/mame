@@ -443,7 +443,7 @@ GFXDECODE_END
 void ssrj_state::ssrj(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 8000000 / 2);
+	Z80(config, m_maincpu, XTAL::u(8000000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ssrj_state::prg_map);
 	m_maincpu->set_vblank_int("screen", FUNC(ssrj_state::irq0_line_hold));
 
@@ -465,7 +465,7 @@ void ssrj_state::ssrj(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &aysnd(AY8910(config, "aysnd", 8000000 / 5));
+	ay8910_device &aysnd(AY8910(config, "aysnd", XTAL::u(8000000) / 5));
 	aysnd.port_b_read_callback().set_ioport("IN3");
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.30);
 }

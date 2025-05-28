@@ -285,7 +285,7 @@ void hprot1_state::hprotr8a(machine_config &config)
 {
 	hprot1(config);
 
-	I80C31(config.replace(), m_maincpu, 11059200); // value of X1 crystal on the PCB
+	I80C31(config.replace(), m_maincpu, XTAL::u(11059200)); // value of X1 crystal on the PCB
 	m_maincpu->set_addrmap(AS_PROGRAM, &hprot1_state::i80c31_prg);
 	m_maincpu->set_addrmap(AS_IO, &hprot1_state::i80c31_io);
 
@@ -303,7 +303,7 @@ void hprot1_state::hprot2r6(machine_config &config)
 {
 	hprot1(config);
 
-	I80C31(config.replace(), m_maincpu, 11059200); // value of X1 crystal on the PCB
+	I80C31(config.replace(), m_maincpu, XTAL::u(11059200)); // value of X1 crystal on the PCB
 	m_maincpu->set_addrmap(AS_PROGRAM, &hprot1_state::i80c31_prg);
 	m_maincpu->set_addrmap(AS_IO, &hprot1_state::i80c31_io);
 

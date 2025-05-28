@@ -54,7 +54,7 @@ public:
 	typedef device_delegate<uint32_t (bitmap_ind16 &bitmap, const rectangle &cliprect, uint8_t* vram, bool lcd_enabled, uint8_t stad)> lcd_update_delegate;
 
 	// construction/destruction
-	lc8670_cpu_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	lc8670_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// public interfaces
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
@@ -68,8 +68,7 @@ public:
 	void xram_w(offs_t offset, uint8_t data);
 
 	// configuration helpers
-	void set_cpu_clock(clock_source source, const XTAL &clock) { m_clocks[unsigned(source)] = clock; }
-	void set_cpu_clock(clock_source source, const XTAL &clock) { set_cpu_clock(source, clock.value()); }
+	void set_cpu_clock(clock_source source, const XTAL &clock) { m_clocks[unsigned(source)] = clock.value(); }
 	template <typename T, typename U, typename V>
 	void set_clock_sources(T &&sub_clock, U &&rc_clock, V &&cf_clock)
 	{

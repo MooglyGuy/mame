@@ -16,7 +16,7 @@ msm5232_device::msm5232_device(const machine_config &mconfig, const char *tag, d
 	: device_t(mconfig, MSM5232, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
-	, m_noise_cnt(0), m_noise_step(0), m_noise_rng(0), m_noise_clocks(0), m_UpdateStep(0), m_control1(0), m_control2(0), m_gate(0), m_chip_clock(0), m_rate(0)
+	, m_noise_cnt(0), m_noise_step(0), m_noise_rng(0), m_noise_clocks(0), m_UpdateStep(0), m_control1(0), m_control2(0), m_gate(0), m_rate(0)
 	, m_gate_handler_cb(*this)
 {
 }
@@ -27,12 +27,9 @@ msm5232_device::msm5232_device(const machine_config &mconfig, const char *tag, d
 
 void msm5232_device::device_start()
 {
-	int rate = clock()/CLOCK_RATE_DIVIDER;
-	int voicenum;
+	init(clock(), clock().value() / CLOCK_RATE_DIVIDER);
 
-	init(clock(), rate);
-
-	m_stream = stream_alloc(0, 11, rate);
+	m_stream = stream_alloc(0, 11, clock() / CLOCK_RATE_DIVIDER);
 
 	/* register with the save state system */
 	save_item(NAME(m_EN_out16));
@@ -49,7 +46,7 @@ void msm5232_device::device_start()
 	save_item(NAME(m_rate));
 
 	/* register voice-specific data for save states */
-	for (voicenum = 0; voicenum < 8; voicenum++)
+	for (int voicenum = 0; voicenum < 8; voicenum++)
 	{
 		VOICE *voice = &m_voi[voicenum];
 
@@ -237,20 +234,20 @@ void msm5232_device::init_tables()
 	m_UpdateStep = int(double(1 << STEP_SH) * double(m_rate) / double(m_chip_clock));
 	//logerror("clock=%i Hz rate=%i Hz, UpdateStep=%i\n", m_chip_clock, m_rate, m_UpdateStep);
 
-	double const scale = double(m_chip_clock) / double(m_rate);
+	double const scale = m_chip_clock.dvalue() / double(m_rate);
 	m_noise_step = ((1 << STEP_SH) / 128.0) * scale; // step of the rng reg in 16.16 format
 	//logerror("noise step=%8x\n", m_noise_step);
 
 	for (int i = 0; i < 8; i++)
 	{
-		double const clockscale = double(m_chip_clock) / 2119040.0;
+		double const clockscale = m_chip_clock.dvalue() / 2119040.0;
 		int const rcp_duty_cycle = 1 << ((i & 4) ? (i & ~2) : i); // bit 1 is ignored if bit 2 is set
 		m_ar_tbl[i] = (rcp_duty_cycle / clockscale) * R51;
 	}
 
 	for (int i = 0; i < 8; i++)
 	{
-		double const clockscale = double(m_chip_clock) / 2119040.0;
+		double const clockscale = m_chip_clock.dvalue() / 2119040.0;
 		int const rcp_duty_cycle = 1 << ((i & 4) ? (i & ~2) : i); // bit 1 is ignored if bit 2 is set
 		m_dr_tbl[i] = (rcp_duty_cycle / clockscale) * R52;
 		m_dr_tbl[i + 8] = (rcp_duty_cycle / clockscale) * R53;
@@ -296,7 +293,7 @@ void msm5232_device::gate_update()
 	}
 }
 
-void msm5232_device::init(int clock, int rate)
+void msm5232_device::init(const XTAL clock, int rate)
 {
 	int j;
 
@@ -691,15 +688,15 @@ void msm5232_device::device_post_load()
 	init_tables();
 }
 
-void msm5232_device::set_clock(int clock)
+void msm5232_device::set_clock(const XTAL &clock)
 {
 	if (m_chip_clock != clock)
 	{
-		m_stream->update ();
+		m_stream->update();
 		m_chip_clock = clock;
-		m_rate = clock/CLOCK_RATE_DIVIDER;
+		m_rate = clock.value() / CLOCK_RATE_DIVIDER;
 		init_tables();
-		m_stream->set_sample_rate(m_rate);
+		m_stream->set_sample_rate(clock / CLOCK_RATE_DIVIDER);
 	}
 }
 

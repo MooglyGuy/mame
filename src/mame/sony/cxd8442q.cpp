@@ -56,7 +56,7 @@ namespace
 	}
 }
 
-cxd8442q_device::cxd8442q_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cxd8442q_device::cxd8442q_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CXD8442Q, tag, owner, clock), out_irq(*this),
 	fifo_channels{{ *this }, { *this }, { *this }, { *this }}
 {

@@ -257,7 +257,7 @@ void micronic_state::beep_w(uint8_t data)
 		500,  444,  400,  364,  333, 308, 286, 267
 	};
 
-	m_beep->set_clock(frequency[data & 0x0f]);
+	m_beep->set_clock(XTAL::u(frequency[data & 0x0f]));
 	m_beep->set_state((data & 0x0f) ? 1 : 0);
 }
 

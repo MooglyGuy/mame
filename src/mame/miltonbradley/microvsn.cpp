@@ -229,13 +229,13 @@ DEVICE_IMAGE_LOAD_MEMBER(microvision_state::cart_load)
 	{
 		// 8021 MCU
 		memcpy(memregion("i8021_cpu")->base(), m_cart->get_rom_base(), size);
-		m_i8021->set_clock(clock);
+		m_i8021->set_clock(XTAL::u(clock));
 	}
 	else
 	{
 		// TMS1100 MCU
 		memcpy(memregion("tms1100_cpu")->base(), m_cart->get_rom_base(), size);
-		m_tms1100->set_clock(clock);
+		m_tms1100->set_clock(XTAL::u(clock));
 	}
 
 	return std::make_pair(std::error_condition(), std::string());

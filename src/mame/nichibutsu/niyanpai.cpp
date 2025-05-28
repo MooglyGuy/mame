@@ -677,7 +677,7 @@ INPUT_PORTS_END
 void niyanpai_state::niyanpai(machine_config &config)
 {
 	/* basic machine hardware */
-	TMP68301(config, m_maincpu, 12288000/2); /* TMP68301, 6.144 MHz */
+	TMP68301(config, m_maincpu, XTAL::u(12288000)/2); /* TMP68301, 6.144 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &niyanpai_state::niyanpai_map);
 	m_maincpu->parallel_w_cb().set(FUNC(niyanpai_state::tmp68301_parallel_port_w));
 

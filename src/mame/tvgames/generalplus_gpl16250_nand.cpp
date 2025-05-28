@@ -73,7 +73,7 @@ uint8_t generalplus_gpac800_game_state::read_nand(offs_t offset)
 
 void generalplus_gpac800_game_state::generalplus_gpac800(machine_config &config)
 {
-	GPAC800(config, m_maincpu, 96000000/2, m_screen);
+	GPAC800(config, m_maincpu, XTAL::u(96000000)/2, m_screen);
 	m_maincpu->porta_in().set(FUNC(generalplus_gpac800_game_state::porta_r));
 	m_maincpu->portb_in().set(FUNC(generalplus_gpac800_game_state::portb_r));
 	m_maincpu->portc_in().set(FUNC(generalplus_gpac800_game_state::portc_r));

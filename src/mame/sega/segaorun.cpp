@@ -292,9 +292,9 @@ Notes:
 //  CONSTANTS
 //**************************************************************************
 
-const auto MASTER_CLOCK = XTAL(40'000'000);
-const auto SOUND_CLOCK = XTAL(16'000'000);
-const auto MASTER_CLOCK_25MHz = XTAL(25'174'800);
+const XTAL MASTER_CLOCK = XTAL(40'000'000);
+const XTAL SOUND_CLOCK = XTAL(16'000'000);
+const XTAL MASTER_CLOCK_25MHz = XTAL(25'174'800);
 
 //**************************************************************************
 //  PPI READ/WRITE CALLBACKS
@@ -1198,7 +1198,7 @@ void segaorun_state::outrun_base(machine_config &config)
 	m_screen->set_screen_update(FUNC(segaorun_state::screen_update_outrun));
 	m_screen->set_palette(m_palette);
 
-	SEGAIC16VID(config, m_segaic16vid, 0, "gfxdecode");
+	SEGAIC16VID(config, m_segaic16vid, XTAL(), "gfxdecode");
 	SEGAIC16_ROAD(config, m_segaic16road);
 
 	// sound hardware

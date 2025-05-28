@@ -997,7 +997,7 @@ void ngen_state::ngen(machine_config &config)
 	screen.set_refresh_hz(60);
 	screen.set_screen_update("crtc", FUNC(mc6845_device::screen_update));
 
-	MC6845(config, m_crtc, 19980000 / 9);  // divisor unknown -- /9 gives 60Hz output, so likely correct
+	MC6845(config, m_crtc, XTAL::u(19980000) / 9);  // divisor unknown -- /9 gives 60Hz output, so likely correct
 	m_crtc->set_screen("screen");
 	m_crtc->set_show_border_area(false);
 	m_crtc->set_char_width(9);
@@ -1110,7 +1110,7 @@ void ngen386_state::ngen386(machine_config &config)
 	screen.set_refresh_hz(60);
 	screen.set_screen_update("crtc", FUNC(mc6845_device::screen_update));
 
-	MC6845(config, m_crtc, 19980000 / 9);  // divisor unknown -- /9 gives 60Hz output, so likely correct
+	MC6845(config, m_crtc, XTAL::u(19980000) / 9);  // divisor unknown -- /9 gives 60Hz output, so likely correct
 	m_crtc->set_screen("screen");
 	m_crtc->set_show_border_area(false);
 	m_crtc->set_char_width(9);

@@ -29,7 +29,7 @@ class rtc9701_device :  public device_t,
 {
 public:
 	// construction/destruction
-	rtc9701_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = 32'768);
+	rtc9701_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32'768));
 
 
 	// I/O operations

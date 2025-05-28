@@ -774,7 +774,7 @@ void ss50_dc5_device::register_write(offs_t offset, uint8_t data)
 			uint32_t expected_clock_div = m_expected_clock->read();
 			if (expected_clock_div && clock_div != expected_clock_div)
 			{
-				logerror("%s Unexpected clock rate of %dHz expected %dHz.\n", machine().describe_context(), XTAL::u(12'000'000) / clock_div, 12'000'000 / expected_clock_div);
+				logerror("%s Unexpected clock rate of %dHz expected %dHz.\n", machine().describe_context(), 12'000'000 / clock_div, 12'000'000 / expected_clock_div);
 				clock_div = expected_clock_div;
 			}
 

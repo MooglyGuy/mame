@@ -45,7 +45,7 @@ public:
 		set_fixed(false);
 	}
 
-	samcoupe_mouse_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	samcoupe_mouse_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~samcoupe_mouse_port_device();
 
 	// callbacks

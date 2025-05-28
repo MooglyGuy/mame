@@ -99,7 +99,7 @@ INPUT_PORTS_END
 
 void crimson_state::crimson(machine_config &config)
 {
-	R4000BE(config, m_maincpu, 50000000*2);
+	R4000BE(config, m_maincpu, XTAL::u(50000000)*2);
 	m_maincpu->set_icache_size(32768);
 	m_maincpu->set_dcache_size(32768);
 	m_maincpu->set_addrmap(AS_PROGRAM, &crimson_state::mem_map);

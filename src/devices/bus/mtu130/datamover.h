@@ -12,7 +12,7 @@
 class mtu130_datamover_base_device : public device_t, public mtu130_extension_interface
 {
 public:
-	mtu130_datamover_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t base_address, uint32_t clock = 0);
+	mtu130_datamover_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t base_address, const XTAL &clock = XTAL());
 	virtual ~mtu130_datamover_base_device() = default;
 
 	virtual void write23(offs_t offset, u8 data) override;
@@ -55,14 +55,14 @@ private:
 class mtu130_datamover0_device : public mtu130_datamover_base_device
 {
 public:
-	mtu130_datamover0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mtu130_datamover0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~mtu130_datamover0_device() = default;
 };
 
 class mtu130_datamover1_device : public mtu130_datamover_base_device
 {
 public:
-	mtu130_datamover1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mtu130_datamover1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~mtu130_datamover1_device() = default;
 };
 

@@ -50,7 +50,7 @@ graph_link_hle_device::graph_link_hle_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, TI8X_GRAPH_LINK_HLE, tag, owner, clock)
 	, device_ti8x_link_port_byte_interface(mconfig, *this)
 	, device_serial_interface(mconfig, *this)

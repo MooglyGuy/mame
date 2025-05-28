@@ -91,7 +91,7 @@ protected:
 class nscsi_cdrom_news_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_cdrom_news_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_cdrom_news_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_dec_rrd45_device : public nscsi_cdrom_device

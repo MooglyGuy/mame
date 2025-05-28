@@ -74,7 +74,7 @@ const tiny_rom_entry *ibm_pc_xt_83_keyboard_device::device_rom_region() const
 
 void ibm_pc_xt_83_keyboard_device::device_add_mconfig(machine_config &config)
 {
-	I8048(config, m_maincpu, MCS48_LC_CLOCK(IND_U(47), CAP_P(20.7)));
+	I8048(config, m_maincpu, XTAL::u(MCS48_LC_CLOCK(IND_U(47), CAP_P(20.7))));
 	m_maincpu->bus_in_cb().set(FUNC(ibm_pc_xt_83_keyboard_device::bus_r));
 	m_maincpu->bus_out_cb().set(FUNC(ibm_pc_xt_83_keyboard_device::bus_w));
 	m_maincpu->p1_out_cb().set(FUNC(ibm_pc_xt_83_keyboard_device::p1_w));

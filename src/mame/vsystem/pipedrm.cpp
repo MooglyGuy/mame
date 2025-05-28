@@ -682,11 +682,7 @@ void pipedrm_state::pipedrm(machine_config &config)
 	m_soundlatch->data_pending_callback().set_inputline(m_subcpu, INPUT_LINE_NMI);
 	m_soundlatch->set_separate_acknowledge(true);
 
-<<<<<<< HEAD
 	ym2610_device &ymsnd(YM2610(config, "ymsnd", 8_MHz_XTAL));
-=======
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(8000000)));
->>>>>>> 45d4cd52a81 (full xtal conversion)
 	ymsnd.irq_handler().set_inputline("sub", 0);
 	ymsnd.add_route(0, "mono", 0.75);
 	ymsnd.add_route(1, "mono", 0.5);
@@ -730,11 +726,7 @@ void hatris_state::hatris(machine_config &config)
 	// sound board.
 	//m_soundlatch->data_pending_callback().set_inputline(m_subcpu, INPUT_LINE_NMI);
 
-<<<<<<< HEAD
 	ym2608_device &ym2608(YM2608(config, "ymsnd", 8_MHz_XTAL));
-=======
-	ym2608_device &ym2608(YM2608(config, "ymsnd", XTAL::u(8000000)));
->>>>>>> 45d4cd52a81 (full xtal conversion)
 	ym2608.irq_handler().set_inputline("sub", 0);
 	ym2608.add_route(0, "mono", 0.75);
 	ym2608.add_route(1, "mono", 0.5);

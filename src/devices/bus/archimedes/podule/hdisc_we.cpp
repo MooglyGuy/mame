@@ -29,7 +29,7 @@ public:
 	static constexpr feature_type unemulated_features() { return feature::DISK; }
 
 	// construction/destruction
-	arc_hdisc_we_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	arc_hdisc_we_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -92,7 +92,7 @@ void arc_hdisc_we_device::device_add_mconfig(machine_config &config)
 //  arc_hdisc_we_device - constructor
 //-------------------------------------------------
 
-arc_hdisc_we_device::arc_hdisc_we_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_hdisc_we_device::arc_hdisc_we_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ARC_HDISC_WE, tag, owner, clock)
 	, device_archimedes_podule_interface(mconfig, *this)
 	, m_podule_rom(*this, "podule_rom")

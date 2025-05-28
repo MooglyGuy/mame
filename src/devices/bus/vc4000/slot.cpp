@@ -82,7 +82,7 @@ vc4000_cart_slot_device::vc4000_cart_slot_device(
 		device_type type,
 		const char *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_cartrom_image_interface(mconfig, *this)
 	, device_single_card_slot_interface<device_vc4000_cart_interface>(mconfig, *this)

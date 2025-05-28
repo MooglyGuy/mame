@@ -169,7 +169,7 @@ void taito_en_device::es5505_clock_changed(u32 data)
 {
 	if (m_old_clock != data)
 	{
-		m_pump->set_unscaled_clock(data);
+		m_pump->set_unscaled_clock(XTAL::u(data));
 		m_old_clock = data;
 	}
 }

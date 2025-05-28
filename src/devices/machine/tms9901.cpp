@@ -229,7 +229,7 @@ void tms9901_device::prioritize_interrupts()
 	m_int_pending = found;
 
 	// Only for asynchronous emulation
-	if (clock()!=0) signal_int();
+	if (clock().value()!=0) signal_int();
 }
 
 bool tms9901_device::is_output(int p)
@@ -619,7 +619,7 @@ void tms9901_device::do_reset()
 void tms9901_device::device_start()
 {
 	// Allow for using asynchronous and synchronous clocks
-	if (clock() != 0)
+	if (clock().value() != 0)
 	{
 		m_decrementer = timer_alloc(FUNC(tms9901_device::decrement_tick), this);
 		m_decrementer->adjust(attotime::from_hz(clock() / 64.), 0, attotime::from_hz(clock() / 64.));

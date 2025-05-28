@@ -1019,7 +1019,7 @@ void zaxxon_state::razmataze(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
-	SEGAUSBROM(config, "usbsnd", 0, m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	SEGAUSBROM(config, "usbsnd", XTAL(), m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 
 
@@ -1041,7 +1041,7 @@ void zaxxon_state::ixion(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
-	SEGAUSBROM(config, "usbsnd", 0, m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	SEGAUSBROM(config, "usbsnd", XTAL(), m_maincpu).add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 
 

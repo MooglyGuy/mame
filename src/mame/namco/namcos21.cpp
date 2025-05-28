@@ -871,12 +871,12 @@ TIMER_DEVICE_CALLBACK_MEMBER(namcos21_state::screen_scanline)
 
 void namcos21_state::configure_c148_standard(machine_config &config)
 {
-	NAMCO_C148(config, m_master_intc, 0, m_maincpu, true);
+	NAMCO_C148(config, m_master_intc, XTAL(), m_maincpu, true);
 	m_master_intc->link_c148_device(m_slave_intc);
 	m_master_intc->out_ext1_callback().set(FUNC(namcos21_state::sound_reset_w));
 	m_master_intc->out_ext2_callback().set(FUNC(namcos21_state::system_reset_w));
 
-	NAMCO_C148(config, m_slave_intc, 0, m_slave, false);
+	NAMCO_C148(config, m_slave_intc, XTAL(), m_slave, false);
 	m_slave_intc->link_c148_device(m_master_intc);
 }
 
@@ -902,7 +902,7 @@ void namcos21_state::winrun(machine_config &config)
 	gpu.set_addrmap(AS_PROGRAM, &namcos21_state::winrun_gpu_map);
 
 	configure_c148_standard(config);
-	NAMCO_C148(config, m_gpu_intc, 0, "gpu", false);
+	NAMCO_C148(config, m_gpu_intc, XTAL(), "gpu", false);
 	NAMCO_C139(config, m_sci);
 
 	config.set_maximum_quantum(attotime::from_hz(6000)); /* 100 CPU slices per frame */

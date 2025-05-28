@@ -140,7 +140,7 @@ void rmnimbus_keyboard_device::device_reset()
 	clear_fifo();
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(9'600);
+	set_rate(XTAL::u(9'600));
 	receive_register_reset();
 	transmit_register_reset();
 

@@ -416,7 +416,7 @@ void anzterm_state::anzterm_mem(address_map &map)
 
 void anzterm_state::anzterm(machine_config &config)
 {
-	m6809_device &maincpu(M6809(config, "maincpu", 15974400/4));
+	m6809_device &maincpu(M6809(config, "maincpu", XTAL::u(15974400)/4));
 	maincpu.set_addrmap(AS_PROGRAM, &anzterm_state::anzterm_mem);
 
 	I8214(config, "pic.ic39");
@@ -428,7 +428,7 @@ void anzterm_state::anzterm(machine_config &config)
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER, rgb_t::green()));
 	screen.set_screen_update(FUNC(anzterm_state::screen_update));
 	screen.set_palette("palette");
-	screen.set_raw(15974400/4, 1024, 0, 104*8, 260, 0, 24*10); // this is totally wrong, it just stops a validation error
+	screen.set_raw(XTAL::u(15974400)/4, 1024, 0, 104*8, 260, 0, 24*10); // this is totally wrong, it just stops a validation error
 
 	PALETTE(config, "palette", palette_device::MONOCHROME);
 

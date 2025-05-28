@@ -683,7 +683,7 @@ void hx5102_device::device_add_mconfig(machine_config& config)
 	m_hexbus_ctrl->hsklatch_cb().set(FUNC(hx5102_device::hsklatch_out));
 
 	// Outgoing socket for downstream devices
-	HEXBUS(config, "hexbus", 0, hexbus_options, nullptr);
+	HEXBUS(config, "hexbus", XTAL(), hexbus_options, nullptr);
 
 	// TMS9995 CPU @ 12.0 MHz
 	TMS9995(config, m_flopcpu, 12_MHz_XTAL);

@@ -681,22 +681,22 @@ u32 arm_vidc20_device::get_pixel_clock()
 	// TODO: for now we just multiply source clock by 2, enough for ssfindo.cpp games.
 	//printf("%d %02x %02x %d %d\n",this->clock(), 1 << m_pixel_rate, m_pixel_source, m_vco_v_modulo, m_vco_r_modulo);
 	if (m_pixel_source == 2) // RCLK
-		return (this->clock() << 1) >> m_pixel_rate;
+		return (clock().value() << 1) >> m_pixel_rate;
 
 	// VCLK source is just an external connection
 	// TODO: get clock from outside world, understand how the modulos are really used,
 	//       understand if SW do some VCO testing before setting CRTC params,
 	//       if there isn't a monitor ID mechanism that copes with this
 	if (m_pixel_source == 0) // VCLK
-		return (25175000);
+		return 25175000;
 
-	throw emu_fatalerror("%s unhandled pixel source %02x selected",this->tag(), m_pixel_source);
+	throw emu_fatalerror("%s unhandled pixel source %02x selected", tag(), m_pixel_source);
 }
 
 void arm_vidc20_device::vidc20_crtc_w(offs_t offset, u32 data)
 {
 	if (offset & 0x8)
-		throw emu_fatalerror("%s accessing CRTC test register %02x, please call the ambulance",this->tag(),offset+0x80);
+		throw emu_fatalerror("%s accessing CRTC test register %02x, please call the ambulance", tag(), offset+0x80);
 
 	const u8 crtc_offset = (offset & 0x7) | ((offset & 0x10) >> 1);
 

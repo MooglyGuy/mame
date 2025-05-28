@@ -740,7 +740,7 @@ void ppc_device::device_start()
 	m_serial_clock = 0;
 
 	m_cache_line_size = 32;
-	m_cpu_clock = clock();
+	m_cpu_clock = clock().value();
 	m_program = &space(AS_PROGRAM);
 	if(m_cap & PPCCAP_4XX)
 	{
@@ -767,11 +767,11 @@ void ppc_device::device_start()
 				return ptr;
 			};
 	}
-	m_system_clock = c_bus_frequency != 0 ? c_bus_frequency : clock();
+	m_system_clock = c_bus_frequency != 0 ? c_bus_frequency : clock().value();
 	m_dcr_read_func.set(nullptr);
 	m_dcr_write_func.set(nullptr);
 
-	m_tb_divisor = (m_tb_divisor * clock() + m_system_clock / 2 - 1) / m_system_clock;
+	m_tb_divisor = (m_tb_divisor * clock().value() + m_system_clock / 2 - 1) / m_system_clock;
 
 	m_serial_clock = c_serial_clock != 0 ? c_serial_clock : 3'686'400; // TODO: get rid of this hard-coded magic number
 	if (m_serial_clock > m_system_clock / 2)

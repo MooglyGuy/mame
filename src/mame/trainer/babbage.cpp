@@ -32,7 +32,7 @@
 
 namespace {
 
-#define MAIN_CLOCK 25e5
+#define MAIN_CLOCK XTAL::u(2500000)
 
 class babbage_state : public driver_device
 {

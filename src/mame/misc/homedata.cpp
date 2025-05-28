@@ -1232,7 +1232,7 @@ void mrokumei_state::mrokumei(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	SN76489A(config, m_sn, 16000000/4);     // SN76489AN actually
+	SN76489A(config, m_sn, XTAL::u(16000000)/4);     // SN76489AN actually
 	m_sn->add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 1.0); // unknown DAC
@@ -1299,7 +1299,7 @@ void homedata_upd7807_state::reikaids(machine_config &config)
 void homedata_upd7807_state::pteacher(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809E(config, m_maincpu, 16000000/8);  /* 2MHz ? */
+	MC6809E(config, m_maincpu, XTAL::u(16000000)/8);  /* 2MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &homedata_upd7807_state::pteacher_map);
 	m_maincpu->set_vblank_int("screen", FUNC(homedata_upd7807_state::homedata_irq)); /* also triggered by the blitter */
 
@@ -1339,7 +1339,7 @@ void homedata_upd7807_state::pteacher(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	GENERIC_LATCH_8(config, m_mainlatch);
 
-	SN76489A(config, m_sn, 16000000/4);     // SN76489AN actually
+	SN76489A(config, m_sn, XTAL::u(16000000)/4);     // SN76489AN actually
 	m_sn->add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 1.0); // unknown DAC

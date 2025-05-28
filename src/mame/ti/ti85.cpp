@@ -716,7 +716,7 @@ void ti85_state::ti83pse(machine_config &config)
 	m_membank[3]->set_map(&ti85_state::ti83pse_banked_mem);
 
 	MCFG_MACHINE_START_OVERRIDE(ti85_state, ti83pse )
-	FUJITSU_29F160TE(config.replace(), m_flash, 0);
+	FUJITSU_29F160TE(config.replace(), m_flash);
 }
 
 void ti85_state::ti84p(machine_config &config)
@@ -731,7 +731,7 @@ void ti85_state::ti84p(machine_config &config)
 	m_membank[3]->set_map(&ti85_state::ti84p_banked_mem);
 
 	MCFG_MACHINE_START_OVERRIDE(ti85_state, ti84p )
-	AMD_29F800T(config.replace(), m_flash, 0);
+	AMD_29F800T(config.replace(), m_flash);
 }
 
 void ti85_state::ti84pse(machine_config &config)
@@ -744,7 +744,7 @@ void ti85_state::ti84pce(machine_config &config)
 {
 	ti84pse(config);
 
-	EZ80(config.replace(), m_maincpu, 15000000);
+	EZ80(config.replace(), m_maincpu, XTAL::u(15000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &ti85_state::ti83p_asic_mem);
 	m_maincpu->set_addrmap(AS_IO, &ti85_state::ti83pse_io);
 }

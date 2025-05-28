@@ -115,7 +115,7 @@ void micro2_state::machine_start()
 void micro2_state::set_cpu_freq()
 {
 	// known CPU speeds: 6MHz(XTAL), 6MHz(LC), ~15MHz(may vary, LC)
-	u32 freq = (ioport("CPU")->read() & 1) ? 15'000'000 : 6'000'000;
+	XTAL freq = (ioport("CPU")->read() & 1) ? XTAL::u(15'000'000) : XTAL::u(6'000'000);
 	m_maincpu->set_unscaled_clock(freq);
 
 	m_board->set_delay(attotime::from_ticks(2'000'000, freq)); // see BTANB

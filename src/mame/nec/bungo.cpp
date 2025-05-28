@@ -127,6 +127,7 @@ void bungo_mini5sx_state::mini5sx_config(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &bungo_mini5sx_state::mini5sx_io);
 //  m_maincpu->set_irq_acknowledge_callback("pic8259_master", FUNC(pic8259_device::inta_cb));
 
+<<<<<<< HEAD
 	I8251(config, m_sio_kbd, 0);
 //  m_sio_kbd->txd_handler().set("keyb", FUNC(pc9801_kbd_device::input_txd));
 //  m_sio_kbd->rxrdy_handler().set_inputline(m_maincpu, INPUT_LINE_IRQ1);
@@ -138,17 +139,25 @@ void bungo_mini5sx_state::mini5sx_config(machine_config &config)
 	// TODO: should be PC-98 based with no numpad and some extra keys.
 	PC98_KBD(config, m_keyb, 0);
 //  m_keyb->rxd_callback().set("sio_kbd", FUNC(i8251_device::write_rxd));
+=======
+	PC9801_KBD(config, m_keyb, XTAL::u(53));
+//  m_keyb->irq_wr_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ1);
+>>>>>>> 2cb35ce4f3c (Compilation fixes for OG's xtal branch.)
 
-	I8255(config, m_ppi_sys, 0);
+	I8255(config, m_ppi_sys);
 //  m_ppi_sys->in_pa_callback().set(m_ppi_sys, FUNC(i8255_device::pa_r));
 //  m_ppi_sys->in_pb_callback().set_ioport("SYSB");
 //  m_ppi_sys->in_pc_callback().set_constant(0xa0); // 0x80 cpu triple fault reset flag?
 //  m_ppi_sys->out_pc_callback().set(FUNC(pc98lt_state::ppi_sys_beep_portc_w));
 
+<<<<<<< HEAD
 	// TODO: unverified, known to have a 8-pin "sheet feeder" port
 	pc9801_serial(config);
 
 	I8255(config, m_ppi_prn, 0);
+=======
+	I8255(config, m_ppi_prn);
+>>>>>>> 2cb35ce4f3c (Compilation fixes for OG's xtal branch.)
 //  m_ppi_prn->in_pb_callback().set_ioport("PRNB");
 
 	SCREEN(config, m_screen, SCREEN_TYPE_LCD);
@@ -160,7 +169,7 @@ void bungo_mini5sx_state::mini5sx_config(machine_config &config)
 	PALETTE(config, m_palette, FUNC(bungo_mini5sx_state::bungo_palette), 2);
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_bungo);
 
-	UPD765A(config, m_fdc, 8'000'000, false, true);
+	UPD765A(config, m_fdc, XTAL(8'000'000), false, true);
 //  m_fdc->intrq_wr_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ6);
 //  m_fdc->drq_wr_callback().set(m_maincpu, FUNC(v50_device::dreq_w<2>)).invert();
 //  m_fdc->drq_wr_callback().set(m_maincpu, FUNC(v50_device::dreq_w<3>)).invert(); // 2dd
@@ -171,7 +180,7 @@ void bungo_mini5sx_state::mini5sx_config(machine_config &config)
 	SOFTWARE_LIST(config, "disk_list").set_original("bungo_flop");
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 2400).add_route(ALL_OUTPUTS, "mono", 0.05);
+	BEEP(config, m_beeper, XTAL::u(2400)).add_route(ALL_OUTPUTS, "mono", 0.05);
 }
 
 ROM_START( mini5sx )

@@ -559,7 +559,7 @@ void pockstat_state::clock_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 		case 0x0000/4:
 			LOGMASKED(LOG_CLOCK, "%s: Clock Mode = %08x & %08x\n", machine().describe_context(), data, mem_mask);
 			COMBINE_DATA(&m_clock_regs.mode);
-			m_maincpu->set_unscaled_clock(CPU_FREQ[m_clock_regs.mode & 0x0f]);
+			m_maincpu->set_unscaled_clock(XTAL::u(CPU_FREQ[m_clock_regs.mode & 0x0f]));
 			break;
 		case 0x0004/4:
 			LOGMASKED(LOG_CLOCK, "%s: Clock Control = %08x & %08x\n", machine().describe_context(), data, mem_mask);
@@ -985,7 +985,7 @@ DEVICE_IMAGE_LOAD_MEMBER(pockstat_state::flash_load)
 
 void pockstat_state::pockstat(machine_config &config)
 {
-	static constexpr uint32_t DEFAULT_CLOCK = 2000000;
+	static constexpr XTAL DEFAULT_CLOCK = XTAL::u(2000000);
 
 	/* basic machine hardware */
 	ARM7(config, m_maincpu, DEFAULT_CLOCK);

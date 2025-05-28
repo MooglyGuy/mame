@@ -320,7 +320,7 @@ void aic6250_device::offset_cntrl_w(u8 data)
 			double divisor = 4.0 + ((data & R04W_SYNC_XFER_RATE) >> 4);
 
 			LOGMASKED(LOG_CONFIG, "synchronous offset %d speed %.3f\n",
-				data & R04W_OFFSET, clock() / divisor);
+				data & R04W_OFFSET, clock().value() / divisor);
 		}
 		else
 			LOGMASKED(LOG_CONFIG, "asynchronous transfer mode\n");

@@ -782,10 +782,10 @@ GFXDECODE_END
 
 void wheelfir_state::wheelfir(machine_config &config)
 {
-	M68000(config, m_maincpu, 32000000 / 2);
+	M68000(config, m_maincpu, XTAL::u(32000000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &wheelfir_state::wheelfir_main);
 
-	M68000(config, m_subcpu, 32000000 / 2);
+	M68000(config, m_subcpu, XTAL::u(32000000) / 2);
 	m_subcpu->set_addrmap(AS_PROGRAM, &wheelfir_state::wheelfir_sub);
 
 	config.set_maximum_quantum(attotime::from_hz(12000));

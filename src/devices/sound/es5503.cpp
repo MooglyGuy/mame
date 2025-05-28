@@ -292,9 +292,9 @@ void es5503_device::device_clock_changed()
 	output_rate = (clock() / 8) / (oscsenabled + 2);
 	m_stream->set_sample_rate(output_rate);
 
-	m_mix_buffer.resize((output_rate/50)*8);
+	m_mix_buffer.resize((output_rate.value()/50)*8);
 
-	attotime update_rate = output_rate ? attotime::from_hz(output_rate) : attotime::never;
+	attotime update_rate = output_rate.value() ? attotime::from_hz(output_rate) : attotime::never;
 	m_timer->adjust(update_rate, 0, update_rate);
 }
 

@@ -413,7 +413,7 @@ void mycom_state::port0a_w(u8 data)
 		m_cass->output( BIT(data, 2) ? -1.0 : +1.0);
 
 	if ( (BIT(data, 7)) != (BIT(m_port0a, 7)) )
-		m_crtc->set_unscaled_clock(BIT(data, 7) ? 1008000 : 2016000);
+		m_crtc->set_unscaled_clock(XTAL::u(BIT(data, 7) ? 1008000 : 2016000));
 
 	m_port0a = data;
 

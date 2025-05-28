@@ -1596,7 +1596,7 @@ void tx0_state::tx0_8kwo(machine_config &config)
 	/* basic machine hardware */
 	/* TX0 CPU @ approx. 167 kHz (no master clock, but the memory cycle time is
 	approximately 6usec) */
-	TX0_8KW_OLD(config.replace(), m_maincpu, 166667);
+	TX0_8KW_OLD(config.replace(), m_maincpu, XTAL::u(166667));
 	m_maincpu->cpy().set(FUNC(tx0_state::tx0_io_cpy));
 	m_maincpu->r1l().set(FUNC(tx0_state::tx0_io_r1l));
 	m_maincpu->dis().set(FUNC(tx0_state::tx0_io_dis));
@@ -1621,7 +1621,7 @@ void tx0_state::tx0_8kw(machine_config &config)
 	/* basic machine hardware */
 	/* TX0 CPU @ approx. 167 kHz (no master clock, but the memory cycle time is
 	approximately 6usec) */
-	TX0_8KW(config.replace(), m_maincpu, 166667);
+	TX0_8KW(config.replace(), m_maincpu, XTAL::u(166667));
 	m_maincpu->cpy().set(FUNC(tx0_state::tx0_io_cpy));
 	m_maincpu->r1l().set(FUNC(tx0_state::tx0_io_r1l));
 	m_maincpu->dis().set(FUNC(tx0_state::tx0_io_dis));

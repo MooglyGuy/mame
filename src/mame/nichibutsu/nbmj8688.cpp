@@ -2686,7 +2686,7 @@ void nbmj8688_state::barline(machine_config &config)
 
 	m_nb1413m3->set_type(nb1413m3_device::NB1413M3_BARLINE);
 
-	YM3812(config.replace(), "psg", 20000000/8).add_route(ALL_OUTPUTS, "speaker", 0.35);
+	YM3812(config.replace(), "psg", XTAL::u(20000000)/8).add_route(ALL_OUTPUTS, "speaker", 0.35);
 
 	config.device_remove("dac");
 }
@@ -2739,7 +2739,7 @@ void nbmj8688_state::mbmj_p16bit_LCD(machine_config &config)
 	lcd0.set_visarea(0, 480-1, 0, 64-1);
 	lcd0.set_screen_update("lcdc0", FUNC(hd61830_device::screen_update));
 	lcd0.set_palette("palette_lcd");
-	HD61830B(config, m_lcdc0,  5000000/2); // ???
+	HD61830B(config, m_lcdc0,  XTAL::u(5000000)/2); // ???
 	m_lcdc0->set_screen("lcd0");
 
 	screen_device &lcd1(SCREEN(config, "lcd1", SCREEN_TYPE_LCD));
@@ -2751,7 +2751,7 @@ void nbmj8688_state::mbmj_p16bit_LCD(machine_config &config)
 	lcd1.set_visarea(0, 480-1, 0, 64-1);
 	lcd1.set_screen_update("lcdc1", FUNC(hd61830_device::screen_update));
 	lcd1.set_palette("palette_lcd");
-	HD61830B(config, m_lcdc1,  5000000/2); // ???
+	HD61830B(config, m_lcdc1,  XTAL::u(5000000)/2); // ???
 	m_lcdc1->set_screen("lcd1");
 
 	MCFG_VIDEO_START_OVERRIDE(nbmj8688_state,mbmj8688_pure_16bit_LCD)
@@ -2984,7 +2984,7 @@ void nbmj8688_state::mjsikaku(machine_config &config)
 	m_nb1413m3->set_type(nb1413m3_device::NB1413M3_MJSIKAKU);
 
 	/* sound hardware */
-	YM3812(config.replace(), "psg", 20000000/8).add_route(ALL_OUTPUTS, "speaker", 0.7);
+	YM3812(config.replace(), "psg", XTAL::u(20000000)/8).add_route(ALL_OUTPUTS, "speaker", 0.7);
 }
 
 void nbmj8688_state::mmsikaku(machine_config &config)

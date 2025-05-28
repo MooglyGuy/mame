@@ -26,12 +26,7 @@ DECLARE_DEVICE_TYPE(ZACCARIA_1B11142, zac1b11142_audio_device)
 class zac1b111xx_melody_base : public device_t, public device_mixer_interface
 {
 protected:
-	zac1b111xx_melody_base(
-			machine_config const &mconfig,
-			device_type devtype,
-			char const *tag,
-			device_t *owner,
-			u32 clock);
+	zac1b111xx_melody_base(machine_config const &mconfig, device_type devtype, char const *tag, device_t *owner, const XTAL &clock);
 
 	u8 melodypia_porta_r();
 	void melodypia_porta_w(u8 data);

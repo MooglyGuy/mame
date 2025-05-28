@@ -61,7 +61,7 @@ nesapu_device::nesapu_device(const machine_config& mconfig, const char* tag, dev
 {
 }
 
-apu2a03_device::apu2a03_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock)
+apu2a03_device::apu2a03_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock)
 	: nesapu_device(mconfig, APU_2A03, tag, owner, clock)
 {
 }
@@ -96,12 +96,10 @@ void nesapu_device::calculate_rates()
 	for (int i = 0; i < SYNCS_MAX2; i++)
 		m_sync_times2[i] = (m_samps_per_sync * i) >> 2;
 
-	int rate = clock() / 4;
-
 	if (m_stream != nullptr)
-		m_stream->set_sample_rate(rate);
+		m_stream->set_sample_rate(clock() / 4);
 	else
-		m_stream = stream_alloc(0, 1, rate);
+		m_stream = stream_alloc(0, 1, clock() / 4);
 }
 
 //-------------------------------------------------

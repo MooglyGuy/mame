@@ -515,12 +515,12 @@ void snug_enhanced_video_device::device_add_mconfig(machine_config& config)
 
 	// Sound hardware
 	SPEAKER(config, "sound_out").front_center();
-	sn94624_device& soundgen(SN94624(config, SOUNDCHIP_TAG, 3579545/8));
+	sn94624_device& soundgen(SN94624(config, SOUNDCHIP_TAG, XTAL::u(3579545)/8));
 	soundgen.ready_cb().set(FUNC(snug_enhanced_video_device::ready_line));
 	soundgen.add_route(ALL_OUTPUTS, "sound_out", 0.75);
 
 	// Mouse connected to the color bus of the v9938; default: none
-	V9938_COLORBUS(config, m_colorbus, 0, ti99_colorbus_options, nullptr);
+	V9938_COLORBUS(config, m_colorbus, XTAL(), ti99_colorbus_options, nullptr);
 }
 
 } // end namespace bus::ti99::peb

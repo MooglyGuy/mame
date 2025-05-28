@@ -94,7 +94,7 @@ void rtc9701_device::device_start()
 {
 	/* let's call the timer callback every second */
 	m_timer = timer_alloc(FUNC(rtc9701_device::timer_callback), this);
-	m_timer->adjust(attotime::from_hz(clock() / XTAL(32'768)), 0, attotime::from_hz(clock() / XTAL(32'768)));
+	m_timer->adjust(attotime::from_hz(clock().value() / 32'768), 0, attotime::from_hz(clock().value() / 32'768));
 
 	rtc_state = state_t::CMD_WAIT;
 	cmd_stream_pos = 0;

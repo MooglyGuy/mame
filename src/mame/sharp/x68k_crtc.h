@@ -21,7 +21,7 @@ public:
 	void set_clock_69m(const XTAL &xtal) { set_clock_69m(xtal.value()); }
 	void set_clock_50m(uint32_t clock) { m_clock_50m = clock; }
 	void set_clock_50m(const XTAL &xtal) { set_clock_50m(xtal.value()); }
-	u32 clock_39m() const { return clock(); }
+	u32 clock_39m() const { return clock().value(); }
 	u32 clock_69m() const { return m_clock_69m; }
 	u32 clock_50m() const { return m_clock_50m; }
 

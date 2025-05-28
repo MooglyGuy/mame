@@ -30,7 +30,6 @@ public:
 
 	// configuration (TODO: callbacks)
 	void set_subclock(const XTAL &clock) { m_subclock = clock; }
-	void set_subclock(const XTAL &xtal) { m_subclock = xtal.value(); }
 
 protected:
 	upd78k0_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 iram_size, address_map_constructor mem_map, address_map_constructor sfr_map);
@@ -67,7 +66,7 @@ private:
 	memory_access< 8, 1, 0, ENDIANNESS_LITTLE>::specific m_sfr_space;
 
 	// miscellaneous configuration
-	u32 m_subclock;
+	XTAL m_subclock;
 
 	// core registers and execution state
 	u16 m_pc;

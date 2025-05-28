@@ -4363,7 +4363,7 @@ void bermudat_state::chopper1(machine_config &config)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &bermudat_state::chopper1_sound_map);
 
 	/* sound hardware */
-	ym3812_device &ym1(YM3812(config.replace(), "ym1", 4000000));
+	ym3812_device &ym1(YM3812(config.replace(), "ym1", XTAL::u(4000000)));
 	ym1.irq_handler().set(FUNC(bermudat_state::ymirq_callback_1));
 	ym1.add_route(ALL_OUTPUTS, "mono", 1.0);
 }

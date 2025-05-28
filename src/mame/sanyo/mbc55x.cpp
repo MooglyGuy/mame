@@ -274,7 +274,7 @@ void mbc55x_state::mbc55x(machine_config &config)
 
 	/* video hardware */
 	screen_device &screen(SCREEN(config, SCREEN_TAG, SCREEN_TYPE_RASTER));
-	screen.set_raw(14.318181_MHz_XTAL, 896, 640, 262, 0, 200);
+	screen.set_raw(14.318181_MHz_XTAL, 896, 0, 640, 262, 0, 200);
 	screen.set_screen_update(VID_MC6845_NAME, FUNC(mc6845_device::screen_update));
 
 	PALETTE(config, m_palette, FUNC(mbc55x_state::mbc55x_palette), SCREEN_NO_COLOURS * 3);

@@ -46,7 +46,7 @@ void wiping_sound_device::device_start()
 	m_stream = stream_alloc(0, 1, clock()); // 48000 Hz
 
 	/* allocate a buffer to mix into - 1 second's worth should be more than enough */
-	m_mixer_buffer.resize(clock());
+	m_mixer_buffer.resize(clock().value());
 
 	/* extract globals from the interface */
 	m_num_voices = 8;

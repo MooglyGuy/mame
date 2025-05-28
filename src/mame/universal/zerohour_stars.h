@@ -10,7 +10,7 @@
 class zerohour_stars_device : public device_t
 {
 public:
-	zerohour_stars_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	zerohour_stars_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// configuration helpers
 	zerohour_stars_device &has_va_bit(bool va) { m_has_va_bit = va; return *this; } // default yes (sraider does not)

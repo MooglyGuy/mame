@@ -1473,7 +1473,7 @@ cdicdic_device::cdicdic_device(const machine_config &mconfig, const char *tag, d
 	, m_dmadac(*this, ":dac%u", 1U)
 	, m_scc(*this, ":maincpu")
 	, m_cdrom(*this, ":cdrom")
-	, m_clock2(clock)
+	, m_clock2(clock.value())
 {
 }
 

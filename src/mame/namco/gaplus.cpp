@@ -515,7 +515,7 @@ void gaplus_base_state::gaplus_base(machine_config &config)
 
 	WATCHDOG_TIMER(config, "watchdog");
 
-	NAMCO_62XX(config, "62xx", 24576000 / 6 / 2);  /* totally made up - TODO: fix */
+	NAMCO_62XX(config, "62xx", XTAL(24'576'000) / 6 / 2);  /* totally made up - TODO: fix */
 	//n62xx.input_callback<0>().set_ioport("IN0L");
 	//n62xx.input_callback<1>().set_ioport("IN0H");
 	//n62xx.input_callback<2>().set_ioport("IN1L");

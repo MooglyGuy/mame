@@ -19,13 +19,13 @@
 DEFINE_DEVICE_TYPE(NEOGEO_CTHD2K3_CART, neogeo_cthd2k3_cart_device, "neocart_ct2k3", "Neo Geo CTHD 2003 Cart")
 
 
-neogeo_cthd2k3_cart_device::neogeo_cthd2k3_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_cthd2k3_cart_device::neogeo_cthd2k3_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, type, tag, owner, clock),
 	m_prot(*this, "cthd_prot")
 {
 }
 
-neogeo_cthd2k3_cart_device::neogeo_cthd2k3_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_cthd2k3_cart_device::neogeo_cthd2k3_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_cthd2k3_cart_device(mconfig, NEOGEO_CTHD2K3_CART, tag, owner, clock)
 {
 }

@@ -18,7 +18,7 @@ class isa8_opus108pm_device
 	, public device_isa8_card_interface
 {
 public:
-	isa8_opus108pm_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	isa8_opus108pm_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t overrides

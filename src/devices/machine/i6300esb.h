@@ -138,8 +138,8 @@ private:
 
 class i6300esb_watchdog_device : public pci_device {
 public:
-	i6300esb_watchdog_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, uint32_t subdevice_id)
-		: i6300esb_watchdog_device(mconfig, tag, owner, clock)
+	i6300esb_watchdog_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t subdevice_id)
+		: i6300esb_watchdog_device(mconfig, tag, owner, XTAL())
 	{
 		set_ids(0x808625ab, 0x02, 0x088000, subdevice_id);
 	}

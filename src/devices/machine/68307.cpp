@@ -47,7 +47,7 @@ void m68307_cpu_device::cpu_space_map(address_map &map)
 
 void m68307_cpu_device::device_add_mconfig(machine_config &config)
 {
-	MC68681(config, m_duart, 16000000/4); // ?? Mhz - should be specified in inline config
+	MC68681(config, m_duart, XTAL::u(16000000)/4); // ?? Mhz - should be specified in inline config
 	m_duart->irq_cb().set(FUNC(m68307_cpu_device::m68307_duart_irq_handler));
 	m_duart->a_tx_cb().set(FUNC(m68307_cpu_device::m68307_duart_txa));
 	m_duart->b_tx_cb().set(FUNC(m68307_cpu_device::m68307_duart_txb));

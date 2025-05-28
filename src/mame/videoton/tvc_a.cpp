@@ -61,7 +61,7 @@ TIMER_CALLBACK_MEMBER(tvc_sound_device::trigger_int)
 
 void tvc_sound_device::sound_stream_update(sound_stream &stream)
 {
-	int rate = stream.sample_rate() / 2;
+	int rate = stream.sample_rate().value() / 2;
 	if (m_enabled && m_freq)
 	{
 		for (int sampindex = 0; sampindex < stream.samples(); sampindex++)

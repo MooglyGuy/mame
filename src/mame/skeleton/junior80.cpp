@@ -235,7 +235,7 @@ void junior80_state::drive_w(offs_t offset, u8 data)
 	}
 
 	//m_fdc->dden_w(!BIT(data, 6));
-	m_fdc->set_unscaled_clock(BIT(data, 4) ? 4000000 : 8000000);
+	m_fdc->set_unscaled_clock(XTAL::u(BIT(data, 4) ? 4000000 : 8000000));
 	if (!BIT(data, 5))
 		m_fdc->reset();
 }

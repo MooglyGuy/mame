@@ -603,7 +603,7 @@ GFXDECODE_END
 void lvcards_state::lvcards(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 18'432'000 / 4); // unknown frequency, assume same as tehkanwc.cpp
+	Z80(config, m_maincpu, XTAL::u(18'432'000) / 4); // unknown frequency, assume same as tehkanwc.cpp
 	m_maincpu->set_addrmap(AS_PROGRAM, &lvcards_state::lvcards_map);
 	m_maincpu->set_addrmap(AS_IO, &lvcards_state::io_map);
 	m_maincpu->set_vblank_int("screen", FUNC(lvcards_state::irq0_line_hold));
@@ -623,7 +623,7 @@ void lvcards_state::lvcards(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &aysnd(AY8910(config, "aysnd", 18'432'000 / 12)); // unknown frequency, assume same as tehkanwc.cpp
+	ay8910_device &aysnd(AY8910(config, "aysnd", XTAL::u(18'432'000) / 12)); // unknown frequency, assume same as tehkanwc.cpp
 	aysnd.port_a_read_callback().set_ioport("DSW0");
 	aysnd.port_b_read_callback().set_ioport("DSW1");
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.25);

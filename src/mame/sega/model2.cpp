@@ -2489,7 +2489,7 @@ void model2_state::model2_timers(machine_config &config)
 
 void model2_state::model2_screen(machine_config &config)
 {
-	S24TILE(config, m_tiles, 0, 0x3fff);
+	S24TILE(config, m_tiles, XTAL(), 0x3fff);
 	m_tiles->set_palette(m_palette);
 	m_tiles->xhout_write_callback().set(FUNC(model2_state::horizontal_sync_w));
 	m_tiles->xvout_write_callback().set(FUNC(model2_state::vertical_sync_w));
@@ -2660,7 +2660,7 @@ void model2o_state::vcop(machine_config &config)
 {
 	model2o(config);
 
-	model1io2_device &ioboard(SEGA_MODEL1IO2(config.replace(), "ioboard", 0));
+	model1io2_device &ioboard(SEGA_MODEL1IO2(config.replace(), "ioboard"));
 	ioboard.set_default_bios_tag("epr17181");
 	ioboard.read_callback().set("dpram", FUNC(mb8421_device::left_r));
 	ioboard.write_callback().set("dpram", FUNC(mb8421_device::left_w));

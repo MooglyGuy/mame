@@ -178,7 +178,7 @@ void pcat_dyn_state::pcat_dyn(machine_config &config)
 	screen.set_raw(25.1748_MHz_XTAL, 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(tvga9000_device::screen_update));
 
-	tvga9000_device &vga(TVGA9000_VGA(config, "vga", 0));
+	tvga9000_device &vga(TVGA9000_VGA(config, "vga"));
 	vga.set_screen("screen");
 	vga.set_vram_size(0x200000);
 
@@ -253,7 +253,7 @@ ROM_START(toursol)
 	ROM_FILL(0x51bd2, 2, 0x90) // opl2 probe expects timer expiration too quickly
 
 	ROM_REGION(0x2000, "nvram", 0)
-	ROM_LOAD("sol.u28", 0x2000, CRC(c9374d50) SHA1(49173bc69f70bb2a7e8af9d03e2538b34aa881d8))
+	ROM_LOAD("sol.u28", 0x0000, 0x2000, CRC(c9374d50) SHA1(49173bc69f70bb2a7e8af9d03e2538b34aa881d8))
 
 	ROM_REGION(128, "rtc", 0)
 	ROM_LOAD("rtc", 0, 128, BAD_DUMP CRC(b0906127) SHA1(a771b1e6fc4916c319c7d44391af95bb821e3a7b))
@@ -276,7 +276,7 @@ ROM_START(toursol1)
 	ROM_FILL(0x334f6, 1, 0xeb) // skip prot(?) check
 
 	ROM_REGION(0x2000, "nvram", 0)
-	ROM_LOAD("prom.7", 0x2000, CRC(154c8092) SHA1(4439ee82f36d5d5c334494ba7bb4848e839213a7))
+	ROM_LOAD("prom.7", 0x0000, 0x2000, CRC(154c8092) SHA1(4439ee82f36d5d5c334494ba7bb4848e839213a7))
 
 	ROM_REGION(128, "rtc", 0)
 	ROM_LOAD("rtc", 0, 128, BAD_DUMP CRC(b0906127) SHA1(a771b1e6fc4916c319c7d44391af95bb821e3a7b))

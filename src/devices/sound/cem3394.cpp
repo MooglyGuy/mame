@@ -358,7 +358,7 @@ void cem3394_device::device_start()
 	m_inv_sample_rate = 1.0 / double(sample_rate);
 
 	// allocate stream channels, 1 per chip, with one external input
-	m_stream = stream_alloc(1, 1, sample_rate);
+	m_stream = stream_alloc(1, 1, XTAL::u(sample_rate));
 
 	save_item(NAME(m_values));
 	save_item(NAME(m_wave_select));

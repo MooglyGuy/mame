@@ -1094,7 +1094,7 @@ void spu_device::init_stream()
 	const unsigned int hz=44100;
 
 	// TODO: Rewrite SPU stream update code to work such that Taiko no Tatsujin no longer needs synchronous streams
-	m_stream = stream_alloc(0, 2, hz, m_stream_flags);
+	m_stream = stream_alloc(0, 2, XTAL::u(hz), m_stream_flags);
 
 	rev=new reverb(hz);
 

@@ -34,7 +34,7 @@ public:
 			const machine_config &mconfig,
 			const char *tag,
 			device_t *owner,
-			u32 clock);
+			const XTAL &clock = XTAL());
 
 	template <typename... T>
 	void set_keyboard_callback(T &&... args)
@@ -48,7 +48,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *owner,
-			u32 clock);
+			const XTAL &clock);
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -81,7 +81,7 @@ public:
 		 const machine_config &mconfig,
 		 char const *tag,
 		 device_t *owner,
-		 u32 clock);
+		 const XTAL &clock = XTAL());
 private:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 };
@@ -93,7 +93,7 @@ public:
 		 const machine_config &mconfig,
 		 char const *tag,
 		 device_t *owner,
-		 u32 clock);
+		 const XTAL &clock = XTAL());
 private:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 };

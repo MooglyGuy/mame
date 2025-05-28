@@ -25,12 +25,7 @@ public:
 	int mcu_semaphore_r() { return m_mcu_flag ? 1 : 0; }
 
 protected:
-	taito68705_mcu_device_base(
-			machine_config const &mconfig,
-			device_type type,
-			char const *tag,
-			device_t *owner,
-			u32 clock);
+	taito68705_mcu_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	auto semaphore_cb() { return m_semaphore_cb.bind(); }
 
@@ -101,12 +96,7 @@ public:
 	auto portb_r_cb() { return m_portb_r_cb.bind(); }
 
 protected:
-	arkanoid_mcu_device_base(
-			machine_config const &mconfig,
-			device_type type,
-			char const *tag,
-			device_t *owner,
-			u32 clock);
+	arkanoid_mcu_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// MCU callbacks
 	u8 mcu_pb_r();

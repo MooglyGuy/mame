@@ -83,7 +83,7 @@ class camera_device : public mbc_ram_device_base<mbc_device_base>
 public:
 	static constexpr feature_type imperfect_features() { return feature::CAMERA; }
 
-	camera_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	camera_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 
@@ -289,11 +289,7 @@ private:
 };
 
 
-camera_device::camera_device(
-		machine_config const &mconfig,
-		char const *tag,
-		device_t *owner,
-		u32 clock) :
+camera_device::camera_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	mbc_ram_device_base<mbc_device_base>(mconfig, GB_ROM_CAMERA, tag, owner, clock),
 	m_picture(*this, "picture"),
 	m_view_cam(*this, "cam"),

@@ -241,7 +241,7 @@ void skeetsht_state::skeetsht(machine_config &config)
 	m_tlc34076->set_bits(tlc34076_device::TLC34076_6_BIT);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(48000000 / 8, 156*4, 0, 100*4, 328, 0, 300); // FIXME
+	screen.set_raw(XTAL::u(48000000) / 8, 156*4, 0, 100*4, 328, 0, 300); // FIXME
 	screen.set_screen_update("tms", FUNC(tms34010_device::tms340x0_rgb32));
 
 	SPEAKER(config, "mono").front_center();

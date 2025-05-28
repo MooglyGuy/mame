@@ -186,7 +186,7 @@ void z180asci_channel_base::device_clock_changed()
 
 	if (brg_divisor)
 	{
-		LOG("Z180 ASCI%d set bitrate %d\n", m_id, uint32_t(clock() / brg_divisor / m_divisor));
+		LOG("Z180 ASCI%d set bitrate %d\n", m_id, clock().value() / brg_divisor / m_divisor);
 		m_bit_rate = attotime::from_hz(clock() / brg_divisor / m_divisor);
 		m_sample_rate = attotime::from_hz(clock() / brg_divisor);
 	}

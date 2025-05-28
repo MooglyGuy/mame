@@ -9,17 +9,17 @@
 DEFINE_DEVICE_TYPE(MTU130_DATAMOVER0, mtu130_datamover0_device, "datamover0", "Datamover")
 DEFINE_DEVICE_TYPE(MTU130_DATAMOVER1, mtu130_datamover1_device, "datamover1", "Datamover (alt address)")
 
-mtu130_datamover0_device::mtu130_datamover0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mtu130_datamover0_device::mtu130_datamover0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mtu130_datamover_base_device(mconfig, MTU130_DATAMOVER0, tag, owner, 0xbfbe, clock)
 {
 }
 
-mtu130_datamover1_device::mtu130_datamover1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mtu130_datamover1_device::mtu130_datamover1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mtu130_datamover_base_device(mconfig, MTU130_DATAMOVER1, tag, owner, 0xbfbc, clock)
 {
 }
 
-mtu130_datamover_base_device::mtu130_datamover_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t base_address, uint32_t clock) :
+mtu130_datamover_base_device::mtu130_datamover_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t base_address, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	mtu130_extension_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),

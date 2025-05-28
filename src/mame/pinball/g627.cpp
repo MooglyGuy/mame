@@ -347,11 +347,11 @@ void g627_state::machine_reset()
 void g627_state::g627(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 14138000/8);
+	Z80(config, m_maincpu, XTAL::u(14138000)/8);
 	m_maincpu->set_addrmap(AS_PROGRAM, &g627_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &g627_state::io_map);
 
-	i8156_device &i8156(I8156(config, "i8156", 14138000/8));
+	i8156_device &i8156(I8156(config, "i8156", XTAL::u(14138000)/8));
 	i8156.in_pa_callback().set(FUNC(g627_state::porta_r));
 	i8156.in_pb_callback().set(FUNC(g627_state::portb_r));
 	i8156.out_pc_callback().set(FUNC(g627_state::portc_w));
@@ -362,7 +362,7 @@ void g627_state::g627(machine_config &config)
 	/* Sound */
 	genpin_audio(config);
 	SPEAKER(config, "mono").front_center();
-	ASTROCADE_IO(config, "astrocade", 14138000/8).add_route(ALL_OUTPUTS, "mono", 1.0); // 0066-117XX audio chip
+	ASTROCADE_IO(config, "astrocade", XTAL::u(14138000)/8).add_route(ALL_OUTPUTS, "mono", 1.0); // 0066-117XX audio chip
 
 	/* Video */
 	config.set_default_layout(layout_g627);

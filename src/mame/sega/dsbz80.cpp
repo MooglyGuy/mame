@@ -96,7 +96,7 @@ dsbz80_device::dsbz80_device(const machine_config &mconfig, const char *tag, dev
 void dsbz80_device::device_start()
 {
 	m_decoder.reset(new mpeg_audio(&m_mpeg_rom[0], mpeg_audio::L2, false, 0));
-	stream_alloc(0, 2, 32000);
+	stream_alloc(0, 2, XTAL::u(32000));
 
 	save_item(NAME(m_mp_start));
 	save_item(NAME(m_mp_end));

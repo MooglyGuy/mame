@@ -143,7 +143,7 @@ void miconkit_state::sound_w(u8 data)
 	// d0-d3: beeper pitch (0 is off)
 	data &= 0xf;
 	m_beeper->set_state(data != 0);
-	m_beeper->set_clock(248 * data);
+	m_beeper->set_frequency(248 * data);
 }
 
 void miconkit_state::select_w(u8 data)

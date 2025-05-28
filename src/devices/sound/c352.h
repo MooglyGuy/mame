@@ -93,7 +93,7 @@ private:
 
 	sound_stream *m_stream;
 
-	int m_sample_rate_base;
+	XTAL m_sample_rate_base;
 	int m_divider;
 
 	c352_voice_t m_c352_v[32];

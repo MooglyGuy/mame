@@ -563,7 +563,7 @@ TIMER_DEVICE_CALLBACK_MEMBER( s3_state::irq )
 void s3_state::s3(machine_config &config)
 {
 	// basic machine hardware
-	M6800(config, m_maincpu, 3580000/4);   // 3.58MHz xtal and mc6875
+	M6800(config, m_maincpu, XTAL::u(3580000)/4);   // 3.58MHz xtal and mc6875
 	m_maincpu->set_addrmap(AS_PROGRAM, &s3_state::main_map);
 	TIMER(config, "ne556").configure_periodic(FUNC(s3_state::irq), attotime::from_hz(923));  // NE556, freq from online calculator
 

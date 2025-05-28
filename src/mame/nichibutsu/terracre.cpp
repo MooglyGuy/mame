@@ -798,8 +798,8 @@ void terracre_state::ym3526(machine_config &config)
 
 	YM3526(config, "ymsnd", XTAL(16'000'000) / 4).add_route(ALL_OUTPUTS, m_ymfilter, 0.2558); // 4MHz verified on PCB
 
-	DAC_8BIT_R2R(config, "dac1", 0).add_route(ALL_OUTPUTS, m_dacfilter1, 0.2326); // SIP R2R DAC @ RA-1 with 74HC374P latch
-	DAC_8BIT_R2R(config, "dac2", 0).add_route(ALL_OUTPUTS, m_dacfilter2, 0.5116); // SIP R2R DAC @ RA-2 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac1").add_route(ALL_OUTPUTS, m_dacfilter1, 0.2326); // SIP R2R DAC @ RA-1 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac2").add_route(ALL_OUTPUTS, m_dacfilter2, 0.5116); // SIP R2R DAC @ RA-2 with 74HC374P latch
 }
 
 void terracre_state::ym2203(machine_config &config)
@@ -884,8 +884,8 @@ void terracre_state::ym2203(machine_config &config)
 	ym1.add_route(2, m_ssgfilter_cfilt, 0.033666 * ssg_hack_factor); // SSG C
 	ym1.add_route(3, m_ymfilter, 0.241517); // FM
 
-	DAC_8BIT_R2R(config, "dac1", 0).add_route(ALL_OUTPUTS, m_dacfilter1, 0.219561); // SIP R2R DAC @ RA-1 with 74HC374P latch
-	DAC_8BIT_R2R(config, "dac2", 0).add_route(ALL_OUTPUTS, m_dacfilter2, 0.483035); // SIP R2R DAC @ RA-2 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac1").add_route(ALL_OUTPUTS, m_dacfilter1, 0.219561); // SIP R2R DAC @ RA-1 with 74HC374P latch
+	DAC_8BIT_R2R(config, "dac2").add_route(ALL_OUTPUTS, m_dacfilter2, 0.483035); // SIP R2R DAC @ RA-2 with 74HC374P latch
 }
 
 void terracre_state::amazon_base(machine_config &config)

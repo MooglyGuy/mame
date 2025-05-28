@@ -764,7 +764,7 @@ void pentevo_state::pentevo(machine_config &config)
 	RAM(config, m_char_ram).set_default_size("2048").set_default_value(0);
 
 	GLUKRS(config, m_glukrs);
-	SPI_SDCARD(config, m_sdcard, 0);
+	SPI_SDCARD(config, m_sdcard);
 	m_sdcard->set_prefer_sdhc();
 	m_sdcard->spi_miso_callback().set(FUNC(pentevo_state::spi_miso_w));
 

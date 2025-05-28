@@ -176,7 +176,7 @@ void m20_keyboard_device::device_reset()
 	clear_fifo();
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_2);
-	set_rate(1'200);
+	set_rate(XTAL::u(1200));
 	receive_register_reset();
 	transmit_register_reset();
 

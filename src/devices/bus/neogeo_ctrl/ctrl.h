@@ -49,7 +49,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(fixed);
 	}
-	neogeo_control_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	neogeo_control_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~neogeo_control_port_device();
 
 	uint8_t read_ctrl();
@@ -95,7 +95,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(fixed);
 	}
-	neogeo_ctrl_edge_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	neogeo_ctrl_edge_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~neogeo_ctrl_edge_port_device();
 
 	uint8_t read_start_sel();

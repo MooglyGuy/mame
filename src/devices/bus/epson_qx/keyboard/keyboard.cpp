@@ -36,7 +36,7 @@ namespace bus::epson_qx::keyboard {
 //  keyboard_port_device - constructor
 //-------------------------------------------------
 
-keyboard_port_device::keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+keyboard_port_device::keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, EPSON_QX_KEYBOARD_PORT, tag, owner, clock)
 	, device_single_card_slot_interface<keyboard_device>(mconfig, *this)
 	, m_kbd(nullptr)
@@ -97,7 +97,7 @@ ROM_END
 //  keyboard_device - constructor
 //-------------------------------------------------
 
-keyboard_device::keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+keyboard_device::keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_interface(*this, "epson_qx_kbd")
 	, m_rows(*this, "LINE%X", 0U)
@@ -162,7 +162,7 @@ void keyboard_device::clk_w(int state)
 //  HASCI KEYBOARD DEVICE
 //**************************************************************************
 
-qx10_keyboard_hasci::qx10_keyboard_hasci(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock)
+qx10_keyboard_hasci::qx10_keyboard_hasci(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock)
 	: keyboard_device(mconfig, QX10_KEYBOARD_HASCI, tag, owner, clock)
 {
 }
@@ -181,7 +181,7 @@ const internal_layout &qx10_keyboard_hasci::layout() const
 //  ASCII KEYBOARD DEVICE
 //**************************************************************************
 
-qx10_keyboard_ascii::qx10_keyboard_ascii(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock)
+qx10_keyboard_ascii::qx10_keyboard_ascii(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock)
 	: keyboard_device(mconfig, QX10_KEYBOARD_ASCII, tag, owner, clock)
 {
 }

@@ -40,7 +40,7 @@ INPUT_PORTS_END
 //-------------------------------------------------
 //  ide_device - constructor
 //-------------------------------------------------
-ide_device::ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ide_device::ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	ide_hdd_device_base(mconfig, EPSON_QX_OPTION_IDE, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	m_iobase(*this, "IOBASE"),

@@ -15,7 +15,7 @@ class neogeo_mslugx_cart_device : public neogeo_rom_device
 {
 public:
 	// construction/destruction
-	neogeo_mslugx_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock);
+	neogeo_mslugx_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual uint16_t protection_r(address_space &space, offs_t offset) override { return m_prot->protection_r(space, offset); }

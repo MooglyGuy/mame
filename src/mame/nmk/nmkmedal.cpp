@@ -324,11 +324,11 @@ INPUT_PORTS_END
 
 void trocana_state::trocana(machine_config &config)
 {
-	TMP90841(config, m_maincpu, 16'000'000 / 2); // actually TMP90C041AN
+	TMP90841(config, m_maincpu, XTAL::u(16'000'000) / 2); // actually TMP90C041AN
 	m_maincpu->set_addrmap(AS_PROGRAM, &trocana_state::mem_map);
 
 	SPEAKER(config, "mono").front_center();
-	OKIM6650(config, m_oki, 16'500'000 / 4).add_route(ALL_OUTPUTS, "mono", 1.0);
+	OKIM6650(config, m_oki, XTAL::u(16'500'000) / 4).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void hpierrot_state::hpierrot(machine_config &config)
@@ -345,7 +345,7 @@ void hpierrot_state::drail(machine_config &config)
 	TMP90841(config, m_maincpu, 16_MHz_XTAL / 2); // exact model unknown as the socket was empty
 	m_maincpu->set_addrmap(AS_PROGRAM, &hpierrot_state::drail_mem_map);
 
-	nmk112_device &nmk112(NMK112(config, "nmk112", 0));
+	nmk112_device &nmk112(NMK112(config, "nmk112"));
 	nmk112.set_rom0_tag("oki");
 
 	SPEAKER(config, "mono").front_center();
@@ -357,7 +357,7 @@ void hpierrot_state::sweethrt(machine_config &config)
 	TMP90841(config, m_maincpu, 16_MHz_XTAL / 2); // actually a NMK-113 custom
 	m_maincpu->set_addrmap(AS_PROGRAM, &hpierrot_state::sweethrt_mem_map);
 
-	nmk112_device &nmk112(NMK112(config, "nmk112", 0)); // actually thought to be included in the NMK-113 custom
+	nmk112_device &nmk112(NMK112(config, "nmk112")); // actually thought to be included in the NMK-113 custom
 	nmk112.set_rom0_tag("oki");
 	nmk112.set_rom1_tag("oki2");
 

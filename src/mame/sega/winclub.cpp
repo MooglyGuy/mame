@@ -88,7 +88,7 @@ INPUT_PORTS_END
 void winclub_state::winclub(machine_config &config)
 {
 	// basic machine hardware
-	sh4_device &maincpu(SH4(config, "maincpu", 14'318'000)); // TODO: SH-4 based custom, unknown type and clock
+	sh4_device &maincpu(SH4(config, "maincpu", XTAL::u(14'318'000))); // TODO: SH-4 based custom, unknown type and clock
 	maincpu.set_addrmap(AS_PROGRAM, &winclub_state::prg_map);
 	// maincpu.set_vblank_int("screen", FUNC(winclub_state::irq2_line_hold));
 
@@ -103,7 +103,7 @@ void winclub_state::winclub(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	ymz770_device &ymz770(YMZ770(config, "ymz", 16'384'000)); // internal clock?
+	ymz770_device &ymz770(YMZ770(config, "ymz", XTAL::u(16'384'000))); // internal clock?
 	ymz770.add_route(0, "speaker", 1.0, 0);
 	ymz770.add_route(1, "speaker", 1.0, 1);
 }

@@ -196,10 +196,10 @@ const tiny_rom_entry *votrax_sc01a_device::device_rom_region() const
 void votrax_sc01_device::device_start()
 {
 	// initialize internal state
-	m_mainclock = clock();
+	m_mainclock = clock().value();
 	m_sclock = m_mainclock / 18.0;
 	m_cclock = m_mainclock / 36.0;
-	m_stream = stream_alloc(0, 1, m_sclock);
+	m_stream = stream_alloc(0, 1, clock() / 18.0);
 	m_timer = timer_alloc(FUNC(votrax_sc01_device::phone_tick), this);
 
 	// reset outputs
@@ -339,7 +339,7 @@ void votrax_sc01_device::device_reset()
 void votrax_sc01_device::device_clock_changed()
 {
 	// lookup the new frequency of the master clock, and update if changed
-	u32 newfreq = clock();
+	u32 newfreq = clock().value();
 	if(newfreq != m_mainclock) {
 		m_stream->update();
 
@@ -353,7 +353,7 @@ void votrax_sc01_device::device_clock_changed()
 		m_mainclock = newfreq;
 		m_sclock = m_mainclock / 18.0;
 		m_cclock = m_mainclock / 36.0;
-		m_stream->set_sample_rate(m_sclock);
+		m_stream->set_sample_rate(clock() / 18);
 		filters_commit(true);
 	}
 }

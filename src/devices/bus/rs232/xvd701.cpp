@@ -44,10 +44,10 @@ void jvc_xvd701_device::device_start()
 
 	set_data_frame(startbits, databits, parity, stopbits);
 
-	int txbaud = 9600;
+	const XTAL txbaud = XTAL::u(9600);
 	set_tra_rate(txbaud);
 
-	int rxbaud = 9600;
+	const XTAL rxbaud = XTAL::u(9600);
 	set_rcv_rate(rxbaud);
 
 	output_rxd(1);

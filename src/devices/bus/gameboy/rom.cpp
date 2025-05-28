@@ -180,7 +180,7 @@ public:
 	using Base::logerror;
 
 protected:
-	gbc_logo_spoof_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+	gbc_logo_spoof_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 		Base(mconfig, type, tag, owner, clock),
 		m_ram_tap(),
 		m_notif_cart_space(),
@@ -305,7 +305,7 @@ private:
 class megaduck_flat_device : public device_t, public device_gb_cart_interface
 {
 public:
-	megaduck_flat_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	megaduck_flat_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		megaduck_flat_device(mconfig, MEGADUCK_ROM_STD, tag, owner, clock)
 	{
 	}
@@ -348,7 +348,7 @@ public:
 	}
 
 protected:
-	megaduck_flat_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+	megaduck_flat_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 		device_t(mconfig, type, tag, owner, clock),
 		device_gb_cart_interface(mconfig, *this)
 	{
@@ -368,7 +368,7 @@ protected:
 class megaduck_banked_device : public device_t, public device_gb_cart_interface
 {
 public:
-	megaduck_banked_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	megaduck_banked_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		device_t(mconfig, MEGADUCK_ROM_BANKED, tag, owner, clock),
 		device_gb_cart_interface(mconfig, *this),
 		m_bank_rom_low(*this, "low"),
@@ -541,7 +541,7 @@ private:
 class flat_rom_ram_device : public flat_ram_device_base<megaduck_flat_device>
 {
 public:
-	flat_rom_ram_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	flat_rom_ram_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<megaduck_flat_device>(mconfig, GB_ROM_STD, tag, owner, clock)
 	{
 	}
@@ -572,7 +572,7 @@ public:
 class m161_device : public flat_ram_device_base<banked_32k_device_base>
 {
 public:
-	m161_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	m161_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<banked_32k_device_base>(mconfig, GB_ROM_M161, tag, owner, clock),
 		m_bank_lock(0U)
 	{
@@ -632,7 +632,7 @@ private:
 class wisdom_device : public flat_ram_device_base<banked_32k_device_base>
 {
 public:
-	wisdom_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	wisdom_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<banked_32k_device_base>(mconfig, GB_ROM_WISDOM, tag, owner, clock)
 	{
 	}
@@ -670,7 +670,7 @@ private:
 class yong_device : public flat_ram_device_base<mbc_device_base>
 {
 public:
-	yong_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	yong_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<mbc_device_base>(mconfig, GB_ROM_YONG, tag, owner, clock)
 	{
 	}
@@ -715,7 +715,7 @@ private:
 class rockman8_device : public flat_ram_device_base<mbc_device_base>
 {
 public:
-	rockman8_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	rockman8_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<mbc_device_base>(mconfig, GB_ROM_ROCKMAN8, tag, owner, clock)
 	{
 	}
@@ -780,7 +780,7 @@ private:
 class sm3sp_device : public flat_ram_device_base<mbc_device_base>
 {
 public:
-	sm3sp_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	sm3sp_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<mbc_device_base>(mconfig, GB_ROM_SM3SP, tag, owner, clock),
 		m_bank_rom_mode(0U)
 	{
@@ -897,7 +897,7 @@ private:
 class sachen_mmc1_device : public sachen_mmc_device_base
 {
 public:
-	sachen_mmc1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	sachen_mmc1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		sachen_mmc_device_base(mconfig, GB_ROM_SACHEN1, tag, owner, clock),
 		m_counter(0U)
 	{
@@ -961,7 +961,7 @@ private:
 class sachen_mmc2_device : public gbc_logo_spoof_device_base<sachen_mmc_device_base>
 {
 public:
-	sachen_mmc2_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	sachen_mmc2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		gbc_logo_spoof_device_base<sachen_mmc_device_base>(mconfig, GB_ROM_SACHEN2, tag, owner, clock)
 	{
 	}
@@ -999,7 +999,7 @@ private:
 class rocket_device : public flat_ram_device_base<gbc_logo_spoof_device_base<mbc_dual_device_base> >
 {
 public:
-	rocket_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	rocket_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<gbc_logo_spoof_device_base<mbc_dual_device_base> >(mconfig, GB_ROM_ROCKET, tag, owner, clock)
 	{
 	}
@@ -1074,7 +1074,7 @@ private:
 class lasama_device : public flat_ram_device_base<mbc_dual_device_base>
 {
 public:
-	lasama_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock) :
+	lasama_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		flat_ram_device_base<mbc_dual_device_base>(mconfig, GB_ROM_LASAMA, tag, owner, clock)
 	{
 	}

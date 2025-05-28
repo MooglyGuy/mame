@@ -19,7 +19,7 @@
 DEFINE_DEVICE_TYPE(NEOGEO_MSLUGX_CART, neogeo_mslugx_cart_device, "neocart_mslugx", "Neo Geo Metal Slug X Cart")
 
 
-neogeo_mslugx_cart_device::neogeo_mslugx_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint16_t clock) :
+neogeo_mslugx_cart_device::neogeo_mslugx_cart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	neogeo_rom_device(mconfig, NEOGEO_MSLUGX_CART, tag, owner, clock),
 	m_prot(*this, "mslugx_prot")
 {

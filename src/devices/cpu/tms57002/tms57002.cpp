@@ -968,7 +968,7 @@ void tms57002_device::device_start()
 	state_add(TMS57002_HOST3, "HOST3",  host[3]);
 
 	set_icountptr(icount);
-	stream_alloc(4, 4, SAMPLE_RATE_INPUT_ADAPTIVE, STREAM_SYNCHRONOUS);
+	stream_alloc(4, 4, XTAL(), (sound_stream_flags)(SAMPLE_RATE_INPUT_ADAPTIVE | STREAM_SYNCHRONOUS));
 
 	save_item(NAME(macc));
 	save_item(NAME(macc_read));

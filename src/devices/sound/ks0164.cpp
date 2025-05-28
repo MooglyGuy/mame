@@ -111,7 +111,7 @@ void ks0164_device::device_start()
 	m_timer = timer_alloc(FUNC(ks0164_device::irq_timer_tick), this);
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(clock(), 542);
+	set_rate(clock() / 542);
 
 	save_item(NAME(m_bank1_base));
 	save_item(NAME(m_bank1_select));

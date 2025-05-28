@@ -36,7 +36,7 @@ protected:
 
 	void set_clock_divider(const uint32_t divider);
 
-	static constexpr double BASE_FREQUENCY = 44100;
+	static constexpr XTAL BASE_FREQUENCY = XTAL::u(44100);
 	static constexpr size_t BUFFER_SIZE = 65536;
 
 	enum : uint8_t

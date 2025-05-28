@@ -150,9 +150,9 @@ void upd800468_device::device_add_mconfig(machine_config &config)
 	// this is probably not 100% accurate timing-wise
 	// for the ctk2100 it works ok for e.g. MIDI tempo and the auto power off interval
 	// it's unclear if there's supposed to be a register for setting a divider for each timer
-	UPD800468_TIMER(config, m_timer[0], clock() >> 3);
-	UPD800468_TIMER(config, m_timer[1], clock() >> 3);
-	UPD800468_TIMER(config, m_timer[2], clock() >> 3);
+	UPD800468_TIMER(config, m_timer[0], clock() / 8);
+	UPD800468_TIMER(config, m_timer[1], clock() / 8);
+	UPD800468_TIMER(config, m_timer[2], clock() / 8);
 	m_timer[0]->irq_cb().set(m_vic, FUNC(vic_upd800468_device::irq_w<21>));
 	m_timer[1]->irq_cb().set(m_vic, FUNC(vic_upd800468_device::irq_w<22>));
 	m_timer[2]->irq_cb().set(m_vic, FUNC(vic_upd800468_device::irq_w<23>));

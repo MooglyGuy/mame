@@ -13,9 +13,9 @@ class namcos2_sprite_device : public device_t, public device_gfx_interface
 {
 public:
 	// construction/destruction
-	namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T> namcos2_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: namcos2_sprite_device(mconfig, tag, owner, XTAL())
+		: namcos2_sprite_device(mconfig, tag, owner)
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));
@@ -44,7 +44,7 @@ class namcos2_sprite_finallap_device : public namcos2_sprite_device
 {
 public:
 	// construction/destruction
-	namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T> namcos2_sprite_finallap_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
 		: namcos2_sprite_finallap_device(mconfig, tag, owner, XTAL())
 	{
@@ -61,7 +61,7 @@ class namcos2_sprite_metalhawk_device : public namcos2_sprite_device
 {
 public:
 	// construction/destruction
-	namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template <typename T> namcos2_sprite_metalhawk_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
 		: namcos2_sprite_metalhawk_device(mconfig, tag, owner, XTAL())
 	{

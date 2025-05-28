@@ -767,7 +767,7 @@ void firebatl_state::firebatl(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	WIPING_CUSTOM(config, "custom", 96000 / 2).add_route(ALL_OUTPUTS, "mono", 1.0); // 48000 Hz?
+	WIPING_CUSTOM(config, "custom", XTAL::u(96000) / 2).add_route(ALL_OUTPUTS, "mono", 1.0); // 48000 Hz?
 }
 
 void clshroad_state::clshroad(machine_config &config)

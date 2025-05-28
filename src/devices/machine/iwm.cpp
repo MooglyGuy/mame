@@ -26,8 +26,8 @@ iwm_device::iwm_device(const machine_config &mconfig, const char *tag, device_t 
 	m_floppy(nullptr),
 	m_q3_clock(q3_clock)
 {
-	m_q3_fclk_ratio = q3_clock ? double(clock)/double(q3_clock) : 0; // ~0.25
-	m_fclk_q3_ratio = q3_clock ? double(q3_clock)/double(clock) : 0; // ~4
+	m_q3_fclk_ratio = q3_clock ? clock.dvalue() / double(q3_clock) : 0; // ~0.25
+	m_fclk_q3_ratio = q3_clock ? double(q3_clock) / clock.dvalue() : 0; // ~4
 }
 
 void iwm_device::device_start()
@@ -312,12 +312,12 @@ void iwm_device::data_w(u8 data)
 
 u64 iwm_device::time_to_cycles(const attotime &tm) const
 {
-	return tm.as_ticks(m_q3_clock_active ? m_q3_clock : clock());
+	return tm.as_ticks(m_q3_clock_active ? m_q3_clock : clock().value());
 }
 
 attotime iwm_device::cycles_to_time(u64 cycles) const
 {
-	return attotime::from_ticks(cycles, m_q3_clock_active ? m_q3_clock : clock());
+	return attotime::from_ticks(cycles, m_q3_clock_active ? m_q3_clock : clock().value());
 }
 
 bool iwm_device::is_sync() const
@@ -382,7 +382,7 @@ void iwm_device::sync()
 	if(!m_active)
 		return;
 
-	u64 next_sync = machine().time().as_ticks(m_q3_clock_active ? m_q3_clock : clock());
+	u64 next_sync = machine().time().as_ticks(m_q3_clock_active ? m_q3_clock : clock().value());
 	switch(m_rw) {
 	case MODE_IDLE:
 		m_last_sync = next_sync;

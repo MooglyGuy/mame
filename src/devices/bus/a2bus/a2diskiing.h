@@ -100,7 +100,7 @@ private:
 class a2bus_agat7flop_device : public diskiing_device
 {
 public:
-	a2bus_agat7flop_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_agat7flop_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -109,7 +109,7 @@ protected:
 class a2bus_agat9flop_device : public diskiing_device
 {
 public:
-	a2bus_agat9flop_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_agat9flop_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

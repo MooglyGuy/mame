@@ -732,18 +732,18 @@ void renegade_state::machine_reset()
 void renegade_state::renegade(machine_config &config)
 {
 	/* basic machine hardware */
-	M6502(config, m_maincpu, 12000000/8);  /* 1.5 MHz (measured) */
+	M6502(config, m_maincpu, XTAL::u(12000000)/8);  /* 1.5 MHz (measured) */
 	m_maincpu->set_addrmap(AS_PROGRAM, &renegade_state::renegade_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(renegade_state::interrupt), "screen", 0, 1);
 
-	MC6809(config, m_audiocpu, 12000000/2); /* HD68A09P 6 MHz (measured) */
+	MC6809(config, m_audiocpu, XTAL::u(12000000)/2); /* HD68A09P 6 MHz (measured) */
 	m_audiocpu->set_addrmap(AS_PROGRAM, &renegade_state::renegade_sound_map);    /* IRQs are caused by the main CPU */
 
-	TAITO68705_MCU(config, m_mcu, 12000000/4); /* 3 MHz (measured) */
+	TAITO68705_MCU(config, m_mcu, XTAL::u(12000000)/4); /* 3 MHz (measured) */
 
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(12000000/2, 384, 0, 256, 272, 19, 257);
+	m_screen->set_raw(XTAL::u(12000000)/2, 384, 0, 256, 272, 19, 257);
 	m_screen->set_screen_update(FUNC(renegade_state::screen_update));
 	m_screen->set_palette("palette");
 
@@ -756,11 +756,11 @@ void renegade_state::renegade(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	m_soundlatch->data_pending_callback().set_inputline(m_audiocpu, M6809_IRQ_LINE);
 
-	ym3526_device &ymsnd(YM3526(config, "ymsnd", 12000000/4)); /* 3 MHz (measured) */
+	ym3526_device &ymsnd(YM3526(config, "ymsnd", XTAL::u(12000000)/4)); /* 3 MHz (measured) */
 	ymsnd.irq_handler().set_inputline(m_audiocpu, M6809_FIRQ_LINE);
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 
-	MSM5205(config, m_msm, 12000000/32); /* 375 KHz (measured) */
+	MSM5205(config, m_msm, XTAL::u(12000000)/32); /* 375 KHz (measured) */
 	m_msm->vck_callback().set(FUNC(renegade_state::adpcm_int));
 	m_msm->add_route(ALL_OUTPUTS, "mono", 1.0);
 }

@@ -1669,7 +1669,7 @@ static const z80_daisy_config daisy_chain_main[] =
 
 void nbmj9195_state::nbmjtype1(machine_config &config)
 {
-	TMPZ84C011(config, m_maincpu, 12000000/2); /* TMPZ84C011, 6.00 MHz */
+	TMPZ84C011(config, m_maincpu, XTAL::u(12000000)/2); /* TMPZ84C011, 6.00 MHz */
 	m_maincpu->set_daisy_config(daisy_chain_main);
 	m_maincpu->set_addrmap(AS_PROGRAM, &nbmj9195_state::sailorws_map);
 	m_maincpu->set_addrmap(AS_IO, &nbmj9195_state::sailorws_io_map);

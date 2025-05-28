@@ -200,8 +200,8 @@ void mos6581_device::device_start()
 	m_token = std::make_unique<SID6581_t>();
 	m_token->device = this;
 	m_token->mixer_channel = m_stream;
-	m_token->PCMfreq = machine().sample_rate();
-	m_token->clock = clock();
+	m_token->PCMfreq = machine().sample_rate().value();
+	m_token->clock = clock().value();
 	m_token->type = m_variant;
 
 	m_token->init();

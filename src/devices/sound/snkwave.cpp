@@ -41,7 +41,7 @@ void snkwave_device::device_start()
 	m_external_clock = clock();
 
 	/* adjust output clock */
-	m_sample_rate = m_external_clock >> CLOCK_SHIFT;
+	m_sample_rate = m_external_clock / CLOCK_DIV;
 
 	/* get stream channels */
 	m_stream = stream_alloc(0, 1, m_sample_rate);

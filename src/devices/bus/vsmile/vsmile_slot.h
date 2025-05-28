@@ -76,7 +76,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	vsmile_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	vsmile_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~vsmile_cart_slot_device();
 
 	// device_image_interface implementation

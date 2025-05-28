@@ -159,7 +159,7 @@ Natural Keyboard and Paste:
 
 namespace {
 
-#define Z80NE_CPU_SPEED_HZ      1920000 /* 1.92 MHz */
+#define Z80NE_CPU_SPEED_HZ      XTAL::u(1920000)
 
 #define LX383_KEYS              16
 #define LX383_DOWNSAMPLING      16
@@ -612,7 +612,7 @@ void z80ne_state::base_reset()
 	m_uart->write_eps(1);
 	m_uart->write_np(m_io_lx_385->read() & 0x80 ? 1 : 0);
 	m_uart->write_cs(1);
-	m_uart_clock->set_unscaled_clock(m_cass_data.speed * 16);
+	m_uart_clock->set_unscaled_clock(XTAL::u(m_cass_data.speed) * 16);
 
 	lx385_ctrl_w(0);
 }

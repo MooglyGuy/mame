@@ -153,7 +153,7 @@ void cpc_playcity_device::update_ymz_clock()
 	}
 
 	clk = clk / 2;  // YMZ294 has an internal /2 divider (not handled in AY core?)
-	m_ymz1->ay_set_clock(clk);
-	m_ymz2->ay_set_clock(clk);
+	m_ymz1->ay_set_clock(XTAL::u(clk));
+	m_ymz2->ay_set_clock(XTAL::u(clk));
 	popmessage("YMZ clocks set to %d Hz",clk);
 }

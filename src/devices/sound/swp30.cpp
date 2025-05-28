@@ -462,7 +462,7 @@ void swp30_device::device_start()
 
 	set_icountptr(m_icount);
 
-	m_stream = stream_alloc(0, 2, 44100, STREAM_SYNCHRONOUS);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100), STREAM_SYNCHRONOUS);
 
 	for(int i=0; i != 128; i++) {
 		u32 v = 0;

@@ -1939,7 +1939,7 @@ void segas24_state::system24(machine_config &config)
 	TIMER(config, "frc_timer").configure_generic(nullptr);
 	TIMER(config, "irq_frc").configure_periodic(FUNC(segas24_state::irq_frc_cb), attotime::from_hz(FRC_CLOCK_MODE1));
 
-	S24TILE(config, m_vtile, 0, 0xfff).set_palette("palette");
+	S24TILE(config, m_vtile, XTAL(), 0xfff).set_palette("palette");
 	S24SPRITE(config, m_vsprite);
 	S24MIXER(config, m_vmixer);
 

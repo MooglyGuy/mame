@@ -722,7 +722,7 @@ void skykid_state::skykid(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	NAMCO_CUS30(config, m_cus30, 49152000 / 2048);
+	NAMCO_CUS30(config, m_cus30, XTAL::u(49152000) / 2048);
 	m_cus30->set_voices(8);
 	m_cus30->add_route(ALL_OUTPUTS, "mono", 1.0);
 }

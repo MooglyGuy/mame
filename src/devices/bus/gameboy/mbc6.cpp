@@ -76,7 +76,7 @@ class mbc6_device : public mbc_8k_device_base
 public:
 	static constexpr feature_type imperfect_features() { return feature::ROM; }
 
-	mbc6_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	mbc6_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 	virtual void unload() override ATTR_COLD;
@@ -119,7 +119,7 @@ mbc6_device::mbc6_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_8k_device_base(mconfig, GB_ROM_MBC6, tag, owner, clock),
 	m_flash(*this, "flash"),
 	m_view_rom{ { *this, "romlow"}, { *this, "romhigh" } },

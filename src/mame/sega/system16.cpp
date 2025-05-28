@@ -2196,7 +2196,7 @@ void segas1x_bootleg_state::shinobi_datsu(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::shinobib_map);
 
-	BOOTLEG_SYS16A_SPRITES(config, m_sprites, 0, 189-117, 0, 1, 2, 3, 4, 5, 6, 7);
+	BOOTLEG_SYS16A_SPRITES(config, m_sprites, XTAL(), 189-117, 0, 1, 2, 3, 4, 5, 6, 7);
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state, s16a_bootleg_shinobi )
 	m_screen->set_screen_update(FUNC(segas1x_bootleg_state::screen_update_s16a_bootleg));
@@ -2211,7 +2211,7 @@ void segas1x_bootleg_state::passshtb(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::passshtb_map);
 
-	BOOTLEG_SYS16A_SPRITES(config, m_sprites, 0, 189-117, 1, 0, 3, 2, 5, 4, 7, 6);
+	BOOTLEG_SYS16A_SPRITES(config, m_sprites, XTAL(), 189-117, 1, 0, 3, 2, 5, 4, 7, 6);
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state, s16a_bootleg_passsht )
 	m_screen->set_screen_update(FUNC(segas1x_bootleg_state::screen_update_s16a_bootleg));
@@ -2227,7 +2227,7 @@ void segas1x_bootleg_state::passsht4b(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::passht4b_map);
 
 	// wrong
-	BOOTLEG_SYS16A_SPRITES(config, m_sprites, 0, 189-117, 1, 0, 3, 2, 5, 4, 7, 6);
+	BOOTLEG_SYS16A_SPRITES(config, m_sprites, XTAL(), 189-117, 1, 0, 3, 2, 5, 4, 7, 6);
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state, s16a_bootleg_passsht)
 	m_screen->set_screen_update(FUNC(segas1x_bootleg_state::screen_update_s16a_bootleg_passht4b));
@@ -2243,7 +2243,7 @@ void segas1x_bootleg_state::wb3bb(machine_config &config)
 	/* basic machine hardware */
 	m_maincpu->set_addrmap(AS_PROGRAM, &segas1x_bootleg_state::wb3bbl_map);
 
-	BOOTLEG_SYS16A_SPRITES(config, m_sprites, 0, 189-117, 4, 0, 5, 1, 6, 2, 7, 3);
+	BOOTLEG_SYS16A_SPRITES(config, m_sprites, XTAL(), 189-117, 4, 0, 5, 1, 6, 2, 7, 3);
 	m_sprites->set_local_originy(0);
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state, s16a_bootleg_wb3bl)
@@ -2590,7 +2590,7 @@ void segas1x_bootleg_state::ddcrewbl(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	okim6295_device &oki(OKIM6295(config, "oki", 10000000/10, okim6295_device::PIN7_HIGH)); // clock and pin not verified
+	okim6295_device &oki(OKIM6295(config, "oki", XTAL::u(10000000)/10, okim6295_device::PIN7_HIGH)); // clock and pin not verified
 	oki.add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 

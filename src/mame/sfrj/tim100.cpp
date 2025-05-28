@@ -183,7 +183,7 @@ void tim100_state::tim100(machine_config &config)
 	/* video hardware */
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
 	screen.set_screen_update("crtc", FUNC(i8276_device::screen_update));
-	screen.set_raw(9'600'000, 600, 0, 480, 320, 0, 272);
+	screen.set_raw(XTAL::u(9'600'000), 600, 0, 480, 320, 0, 272);
 
 	GFXDECODE(config, "gfxdecode", m_palette, gfx_tim100);
 

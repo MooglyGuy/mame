@@ -24,7 +24,7 @@
 #include "screen.h"
 
 #define CPU_CLOCK           8000000     /* not used when video boards are connected */
-#define VIDEO_CLOCK         15468480
+#define VIDEO_CLOCK         XTAL::u(15468480)
 
 class segag80v_state : public driver_device
 {

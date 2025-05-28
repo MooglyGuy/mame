@@ -135,7 +135,7 @@ uint8_t isa8_upd765_fdc_device::dor_r()
 
 void isa8_upd765_fdc_device::ccr_w(uint8_t data)
 {
-	static const int rates[4] = { 500000, 300000, 250000, 1000000 };
+	static const XTAL rates[4] = { XTAL::u(500000), XTAL::u(300000), XTAL::u(250000), XTAL::u(1000000) };
 	LOG("ccr = %02x\n", data);
 	m_fdc->set_rate(rates[data & 3]);
 }

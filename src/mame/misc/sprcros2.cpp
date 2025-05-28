@@ -484,9 +484,9 @@ void sprcros2_state::sprcros2(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
-	SN76489(config, "sn1", 10000000/4).add_route(ALL_OUTPUTS, "mono", 0.50);
-	SN76489(config, "sn2", 10000000/4).add_route(ALL_OUTPUTS, "mono", 0.50);
-	SN76489(config, "sn3", 10000000/4).add_route(ALL_OUTPUTS, "mono", 0.50);
+	SN76489(config, "sn1", XTAL::u(10000000)/4).add_route(ALL_OUTPUTS, "mono", 0.50);
+	SN76489(config, "sn2", XTAL::u(10000000)/4).add_route(ALL_OUTPUTS, "mono", 0.50);
+	SN76489(config, "sn3", XTAL::u(10000000)/4).add_route(ALL_OUTPUTS, "mono", 0.50);
 }
 
 

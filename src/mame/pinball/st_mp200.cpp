@@ -66,7 +66,7 @@ ToDo:
 
 namespace{
 
-#define S14001_CLOCK                (25e5)
+#define S14001_CLOCK                XTAL::u(25e5)
 
 class st_mp200_state : public genpin_class
 {

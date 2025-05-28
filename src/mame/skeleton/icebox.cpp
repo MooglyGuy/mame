@@ -322,7 +322,7 @@ DEVICE_INPUT_DEFAULTS_END
 void icebox_state::icebox(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 9'830'400 / 4); // unknown divisor
+	Z80(config, m_maincpu, XTAL::u(9'830'400) / 4); // unknown divisor
 	m_maincpu->set_addrmap(AS_PROGRAM, &icebox_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &icebox_state::io_map);
 

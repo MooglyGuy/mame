@@ -348,7 +348,7 @@ void tk80_state::mikrolab(machine_config &config)
 
 void tk80_state::nd80z(machine_config &config)
 {
-	Z80(config, m_maincpu, 1e6); // Sharp LH0080A, can't see writing on xtal
+	Z80(config, m_maincpu, XTAL::u(1000000)); // Sharp LH0080A, can't see writing on xtal
 	m_maincpu->set_addrmap(AS_PROGRAM, &tk80_state::tk85_mem);
 	m_maincpu->set_addrmap(AS_IO, &tk80_state::nd80z_io);
 

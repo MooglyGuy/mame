@@ -483,7 +483,7 @@ GFXDECODE_END
 void seabattl_state::seabattl(machine_config &config)
 {
 	/* basic machine hardware */
-	S2650(config, m_maincpu, 14318180/4/2);
+	S2650(config, m_maincpu, XTAL::u(14318180)/4/2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &seabattl_state::seabattl_map);
 	m_maincpu->set_addrmap(AS_DATA, &seabattl_state::seabattl_data_map);
 	m_maincpu->sense_handler().set("screen", FUNC(screen_device::vblank));

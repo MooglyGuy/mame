@@ -838,7 +838,7 @@ uint32_t s3c44b0_device::get_mclk()
 	mdiv = BITS(data, 19, 12);
 	pdiv = BITS(data, 9, 4);
 	sdiv = BITS(data, 1, 0);
-	return (uint32_t)((double)((mdiv + 8) * clock()) / (double)((pdiv + 2) * (1 << sdiv)));
+	return (uint32_t)((double)((mdiv + 8) * clock().value()) / (double)((pdiv + 2) * (1 << sdiv)));
 }
 
 uint32_t s3c44b0_device::clkpow_r(offs_t offset, uint32_t mem_mask)
@@ -857,7 +857,7 @@ void s3c44b0_device::clkpow_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 		case S3C44B0_PLLCON :
 		{
 			verboselog( *this, 5, "CLKPOW - mclk %d\n", get_mclk());
-			m_cpu->set_unscaled_clock(get_mclk() * CLOCK_MULTIPLIER);
+			m_cpu->set_unscaled_clock(XTAL::u(get_mclk()) * CLOCK_MULTIPLIER);
 		}
 		break;
 		case S3C44B0_CLKCON :

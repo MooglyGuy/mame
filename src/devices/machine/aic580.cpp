@@ -128,7 +128,7 @@ void aic580_device::transfer_speed_w(u8 data)
 		int(1.0E9 * (((data & 0x30) >> 4) + 2) / clock()),
 		int(1.0E9 * (((data & 0x08) >> 3) + 2) / clock()),
 		int(1.0E9 * ((data & 0x07) + 2) / clock()),
-		clock() * 2.0E-6 / ((BIT(data, 3) ? 5 : 4) + (data & 7)));
+		clock().value() * 2.0E-6 / ((BIT(data, 3) ? 5 : 4) + (data & 7)));
 }
 
 

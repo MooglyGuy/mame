@@ -32,7 +32,7 @@ tia_device::tia_device(const machine_config &mconfig, const char *tag, device_t 
 void tia_device::device_start()
 {
 	m_channel = stream_alloc(0, 1, clock());
-	m_chip = tia_sound_init(this, clock(), clock(), 16);
+	m_chip = tia_sound_init(this, clock().value(), clock().value(), 16);
 	if (!m_chip)
 		throw emu_fatalerror("tia_device(%s): Error creating TIA chip", tag());
 }

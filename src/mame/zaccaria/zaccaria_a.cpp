@@ -172,12 +172,7 @@ INPUT_PORTS_END
 //  BASE MELODY GENERATOR DEVICE CLASS
 //**************************************************************************
 
-zac1b111xx_melody_base::zac1b111xx_melody_base(
-		machine_config const &mconfig,
-		device_type devtype,
-		char const *tag,
-		device_t *owner,
-		u32 clock)
+zac1b111xx_melody_base::zac1b111xx_melody_base(machine_config const &mconfig, device_type devtype, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, devtype, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_melodycpu(*this, "melodycpu")

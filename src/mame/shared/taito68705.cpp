@@ -86,12 +86,7 @@ void taito68705_mcu_device_base::reset_w(int state)
 	m_mcu->set_input_line(INPUT_LINE_RESET, state);
 }
 
-taito68705_mcu_device_base::taito68705_mcu_device_base(
-		machine_config const &mconfig,
-		device_type type,
-		char const *tag,
-		device_t *owner,
-		u32 clock)
+taito68705_mcu_device_base::taito68705_mcu_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_semaphore_cb(*this)
@@ -270,12 +265,7 @@ u8 taito68705_mcu_tiger_device::mcu_portc_r()
 
 // Arkanoid/Puzznic (latch control on PC2 and PC3 instead of PB1 and PB2)
 
-arkanoid_mcu_device_base::arkanoid_mcu_device_base(
-		machine_config const &mconfig,
-		device_type type,
-		char const *tag,
-		device_t *owner,
-		u32 clock)
+arkanoid_mcu_device_base::arkanoid_mcu_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: taito68705_mcu_device_base(mconfig, type, tag, owner, clock)
 	, m_portb_r_cb(*this, 0xff)
 	, m_pc_output(0xff)
@@ -311,11 +301,7 @@ void arkanoid_mcu_device_base::device_start()
 }
 
 
-arkanoid_68705p3_device::arkanoid_68705p3_device(
-		machine_config const &mconfig,
-		char const *tag,
-		device_t *owner,
-		u32 clock)
+arkanoid_68705p3_device::arkanoid_68705p3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: arkanoid_mcu_device_base(mconfig, ARKANOID_68705P3, tag, owner, clock)
 {
 }
@@ -330,11 +316,7 @@ void arkanoid_68705p3_device::device_add_mconfig(machine_config &config)
 }
 
 
-arkanoid_68705p5_device::arkanoid_68705p5_device(
-		machine_config const &mconfig,
-		char const *tag,
-		device_t *owner,
-		u32 clock)
+arkanoid_68705p5_device::arkanoid_68705p5_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: arkanoid_mcu_device_base(mconfig, ARKANOID_68705P5, tag, owner, clock)
 {
 }

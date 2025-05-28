@@ -50,7 +50,7 @@ INPUT_PORTS_END
 
 void octane_state::octane(machine_config &config)
 {
-	R5000BE(config, m_maincpu, 50000000*4); // NOTE: Wrong - should be R10000BE!
+	R5000BE(config, m_maincpu, XTAL::u(50000000)*4); // NOTE: Wrong - should be R10000BE!
 	m_maincpu->set_icache_size(32768);      // Unknown CPU cache size
 	m_maincpu->set_dcache_size(32768);
 	m_maincpu->set_addrmap(AS_PROGRAM, &octane_state::mem_map);

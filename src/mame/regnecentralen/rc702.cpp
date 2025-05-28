@@ -169,7 +169,7 @@ void rc702_state::machine_reset()
 	m_eop = 0;
 	m_7474->preset_w(1);
 	m_fdc->set_ready_line_connected(1); // always ready for minifloppy; controlled by fdc for 20cm
-	m_fdc->set_unscaled_clock(4000000); // 4MHz for minifloppy; 8MHz for 20cm
+	m_fdc->set_unscaled_clock(XTAL::u(4000000)); // 4MHz for minifloppy; 8MHz for 20cm
 	m_maincpu->reset();
 }
 
@@ -395,7 +395,7 @@ void rc702_state::rc702(machine_config &config)
 	screen.set_visarea(0, 272*2-1, 0, 200-1);
 	screen.set_screen_update("crtc", FUNC(i8275_device::screen_update));
 
-	i8275_device &crtc(I8275(config, "crtc", 11640000/7));
+	i8275_device &crtc(I8275(config, "crtc", XTAL::u(11640000)/7));
 	crtc.set_character_width(7);
 	crtc.set_display_callback(FUNC(rc702_state::display_pixels));
 	crtc.irq_wr_callback().set(m_7474, FUNC(ttl7474_device::clear_w)).invert();

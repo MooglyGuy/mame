@@ -180,7 +180,7 @@ void lancelot_state::lancelot(machine_config &config)
 	genpin_audio(config);
 
 	SPEAKER(config, "mono").front_center();   // MSM6295
-	OKIM6295(config, m_oki, 1'656'000, okim6295_device::PIN7_HIGH); // pin7 is controlled by P63 from the audio cpu
+	OKIM6295(config, m_oki, XTAL::u(1'656'000), okim6295_device::PIN7_HIGH); // pin7 is controlled by P63 from the audio cpu
 	m_oki->add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	SPEAKER(config, "speaker", 2).front();  // YAC512 left/right

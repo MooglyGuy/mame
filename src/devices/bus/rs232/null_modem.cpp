@@ -62,10 +62,10 @@ void null_modem_device::update_serial(int state)
 
 	set_data_frame(startbits, databits, parity, stopbits);
 
-	int txbaud = convert_baud(m_rs232_txbaud->read());
+	const XTAL txbaud = XTAL::u(convert_baud(m_rs232_txbaud->read()));
 	set_tra_rate(txbaud);
 
-	int rxbaud = convert_baud(m_rs232_rxbaud->read());
+	const XTAL rxbaud = XTAL::u(convert_baud(m_rs232_rxbaud->read()));
 	set_rcv_rate(rxbaud);
 
 	output_rxd(1);

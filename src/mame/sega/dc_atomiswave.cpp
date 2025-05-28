@@ -815,28 +815,28 @@ void atomiswave_state::aw_base(machine_config &config)
 void atomiswave_state::aw1c(machine_config &config)
 {
 	aw_base(config);
-	dc_controller_device &dcctrl0(DC_CONTROLLER(config, "dcctrl0", 0, m_maple, 0));
+	dc_controller_device &dcctrl0(DC_CONTROLLER(config, "dcctrl0", XTAL(), m_maple, 0));
 	dcctrl0.set_port_tags("P1.0", "P1.1", "P1.A0", "P1.A1", "P1.A2", "P1.A3", "P1.A4", "P1.A5");
 	// TODO: isn't it supposed to be just one controller?
-	dc_controller_device &dcctrl1(DC_CONTROLLER(config, "dcctrl1", 0, m_maple, 1));
+	dc_controller_device &dcctrl1(DC_CONTROLLER(config, "dcctrl1", XTAL(), m_maple, 1));
 	dcctrl1.set_port_tags("P2.0", "P2.1", "P2.A0", "P2.A1", "P2.A2", "P2.A3", "P2.A4", "P2.A5");
 }
 
 void atomiswave_state::aw2c(machine_config &config)
 {
 	aw_base(config);
-	dc_controller_device &dcctrl0(DC_CONTROLLER(config, "dcctrl0", 0, m_maple, 0));
+	dc_controller_device &dcctrl0(DC_CONTROLLER(config, "dcctrl0", XTAL(), m_maple, 0));
 	dcctrl0.set_port_tags("P1.0", "P1.1", "P1.A0", "P1.A1", "P1.A2", "P1.A3", "P1.A4", "P1.A5");
-	dc_controller_device &dcctrl1(DC_CONTROLLER(config, "dcctrl1", 0, m_maple, 1));
+	dc_controller_device &dcctrl1(DC_CONTROLLER(config, "dcctrl1", XTAL(), m_maple, 1));
 	dcctrl1.set_port_tags("P2.0", "P2.1", "P2.A0", "P2.A1", "P2.A2", "P2.A3", "P2.A4", "P2.A5");
 }
 
 void atomiswave_state::aw4c(machine_config &config)
 {
 	aw2c(config);
-	dc_controller_device &dcctrl2(DC_CONTROLLER(config, "dcctrl2", 0, m_maple, 2));
+	dc_controller_device &dcctrl2(DC_CONTROLLER(config, "dcctrl2", XTAL(), m_maple, 2));
 	dcctrl2.set_port_tags("P3.0", "P3.1", "P3.A0", "P3.A1", "P3.A2", "P3.A3", "P3.A4", "P3.A5");
-	dc_controller_device &dcctrl3(DC_CONTROLLER(config, "dcctrl3", 0, m_maple, 3));
+	dc_controller_device &dcctrl3(DC_CONTROLLER(config, "dcctrl3", XTAL(), m_maple, 3));
 	dcctrl3.set_port_tags("P4.0", "P4.1", "P4.A0", "P4.A1", "P4.A2", "P4.A3", "P4.A4", "P4.A5");
 }
 

@@ -274,8 +274,8 @@ void sis630_state::sis630(machine_config &config)
 
 	PCI_ROOT(config, "pci");
 	// up to 512MB, 2 x DIMM sockets
-	SIS630_HOST(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
-	SIS5513_IDE(config, m_ide_00_1, 0, "maincpu");
+	SIS630_HOST(config, "pci:00.0", XTAL(), "maincpu", 256*1024*1024);
+	SIS5513_IDE(config, m_ide_00_1, XTAL(), "maincpu");
 	// TODO: both on same line as default, should also trigger towards LPC
 	m_ide_00_1->irq_pri().set("pci:01.0:pic_slave", FUNC(pic8259_device::ir6_w));
 		//FUNC(sis950_lpc_device::pc_irq14_w));
@@ -292,14 +292,14 @@ void sis630_state::sis630(machine_config &config)
 
 	SIS900_ETH(config, "pci:01.1");
 	// USB config: 2 on back, 3 on front. Front is fn 2
-	SIS7001_USB(config, "pci:01.2", 0, 3);
-	SIS7001_USB(config, "pci:01.3", 0, 2);
+	SIS7001_USB(config, "pci:01.2", XTAL(), 3);
+	SIS7001_USB(config, "pci:01.3", XTAL(), 2);
 	SIS7018_AUDIO(config, "pci:01.4");
 	// documentation doesn't mention modem part #, derived from Shuttle MS11 MB manual
 //  SIS7013_MODEM_AC97(config, "pci:01.6"
 
 	// "Virtual PCI-to-PCI Bridge"
-	SIS630_BRIDGE(config, "pci:02.0", 0, "pci:02.0:00.0");
+	SIS630_BRIDGE(config, "pci:02.0", XTAL(), "pci:02.0:00.0");
 	// GUI must go under the virtual bridge
 	// This will be correctly identified as bus #1-dev #0-func #0 by the Award BIOS
 	SIS630_GUI(config, "pci:02.0:00.0");
@@ -372,7 +372,7 @@ void sis630_state::gamecstl(machine_config &config)
 {
 	sis630_state::sis630(config);
 	// TODO: Actually Celeron, as also stated by the BIOS
-	PENTIUM3(config.replace(), m_maincpu, 100'000'000);
+	PENTIUM3(config.replace(), m_maincpu, XTAL::u(100'000'000));
 
 	// tries to install '900 on Windows boot, which implies it doesn't have it
 	// (leave it on for now since it has specific option in Setup BIOS)

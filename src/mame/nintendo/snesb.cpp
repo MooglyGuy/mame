@@ -994,7 +994,7 @@ INPUT_PORTS_END
 void snesb_state::base(machine_config &config)
 {
 	// basic machine hardware
-	_5A22(config, m_maincpu, 3580000 * 6);   // 2.68Mhz, also 3.58Mhz
+	_5A22(config, m_maincpu, XTAL::u(3580000) * 6);   // 2.68Mhz, also 3.58Mhz
 	m_maincpu->set_addrmap(AS_PROGRAM, &snesb_state::snesb_map);
 
 	// audio CPU, runs at 24.576 MHz / 12 = 2.048 MHz

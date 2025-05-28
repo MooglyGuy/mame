@@ -696,7 +696,7 @@ void pleiads_sound_device::common_start()
 
 void pleiads_sound_device::sound_stream_update(sound_stream &stream)
 {
-	int rate = stream.sample_rate();
+	int rate = stream.sample_rate().value();
 
 	for (int sampindex = 0; sampindex < stream.samples(); sampindex++)
 	{

@@ -132,11 +132,11 @@ void v0bowl_state::machine_reset()
 void v0bowl_state::v0bowl(machine_config &config)
 {
 	// TODO: clock to be tuned up
-	SE3208(config, m_maincpu, 14318180 * 3);
+	SE3208(config, m_maincpu, XTAL::u(14318180) * 3);
 	m_maincpu->set_addrmap(AS_PROGRAM, &v0bowl_state::v0bowl_map);
 	m_maincpu->iackx_cb().set(m_vr0soc, FUNC(vrender0soc_device::irq_callback));
 
-	VRENDER0_SOC(config, m_vr0soc, 14318180 * 3);
+	VRENDER0_SOC(config, m_vr0soc, XTAL::u(14318180) * 3);
 	m_vr0soc->set_host_cpu_tag(m_maincpu);
 }
 

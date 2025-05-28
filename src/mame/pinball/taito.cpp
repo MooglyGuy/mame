@@ -541,7 +541,7 @@ void taito_state::taito_common(machine_config &config)
 void taito_8080::taito(machine_config &config)
 {
 	taito_common(config);
-	I8080(config, m_maincpu, 19000000/9);
+	I8080(config, m_maincpu, XTAL::u(19000000)/9);
 	m_maincpu->set_addrmap(AS_PROGRAM, &taito_8080::main_map);
 }
 

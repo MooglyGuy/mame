@@ -314,7 +314,7 @@ void mmd1_state::machine_reset()
 void mmd1_state::mmd1(machine_config &config)
 {
 	/* basic machine hardware */
-	I8080(config, m_maincpu, 6750000 / 9);
+	I8080(config, m_maincpu, XTAL::u(6750000) / 9);
 	m_maincpu->set_addrmap(AS_PROGRAM, &mmd1_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &mmd1_state::io_map);
 

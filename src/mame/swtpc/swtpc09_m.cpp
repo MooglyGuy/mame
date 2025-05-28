@@ -923,7 +923,7 @@ void swtpc09_state::m6844_w(offs_t offset, uint8_t data)
 
 INPUT_CHANGED_MEMBER(swtpc09_state::maincpu_clock_change)
 {
-	m_maincpu->set_clock(newval * 4);
+	m_maincpu->set_clock(XTAL::u(newval * 4));
 }
 
 INPUT_CHANGED_MEMBER(swtpc09_state::fdc_clock_change)
@@ -932,7 +932,7 @@ INPUT_CHANGED_MEMBER(swtpc09_state::fdc_clock_change)
 		m_system_type == UNIFLEX_DMAF2 ||
 		m_system_type == UNIFLEX_DMAF3)
 	{
-		m_fdc->set_unscaled_clock(newval);
+		m_fdc->set_unscaled_clock(XTAL::u(newval));
 	}
 }
 
@@ -944,14 +944,14 @@ INPUT_CHANGED_MEMBER(swtpc09_state::baud_rate_high_change)
 void swtpc09_state::machine_reset()
 {
 	uint32_t maincpu_clock = m_maincpu_clock->read();
-	m_maincpu->set_clock(maincpu_clock * 4);
+	m_maincpu->set_clock(XTAL::u(maincpu_clock * 4));
 
 	if (m_system_type == FLEX_DMAF2 ||
 		m_system_type == UNIFLEX_DMAF2 ||
 		m_system_type == UNIFLEX_DMAF3)
 	{
 		uint32_t fdc_clock = m_fdc_clock->read();
-		m_fdc->set_unscaled_clock(fdc_clock);
+		m_fdc->set_unscaled_clock(XTAL::u(fdc_clock));
 	}
 
 	// Divider select X64 is the default Low baud rate setting. A High

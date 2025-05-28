@@ -386,12 +386,12 @@ void cs4031_device::update_dma_clock()
 {
 	if (m_dma_clock_divider[m_registers[DMA_CLOCK] & 0x0f] != 0)
 	{
-		uint32_t dma_clock = clock() / m_dma_clock_divider[m_registers[DMA_CLOCK] & 0x0f];
+		XTAL dma_clock = clock() / m_dma_clock_divider[m_registers[DMA_CLOCK] & 0x0f];
 
 		if (!BIT(m_registers[DMA_WAIT_STATE], 0))
-			dma_clock /= 2;
+			dma_clock = dma_clock / 2;
 
-		logerror("cs4031_device::update_dma_clock: dma clock is now %u\n", dma_clock);
+		logerror("cs4031_device::update_dma_clock: dma clock is now %u\n", dma_clock.value());
 
 		m_dma1->set_unscaled_clock(dma_clock);
 		m_dma2->set_unscaled_clock(dma_clock);

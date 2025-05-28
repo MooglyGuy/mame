@@ -17,7 +17,7 @@
 class idegdrom_device : public pci_device {
 public:
 	idegdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const char *image_tag, const char *space_tag, int space_id);
-	idegdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	idegdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto irq_callback() { return irq_cb.bind(); }
 

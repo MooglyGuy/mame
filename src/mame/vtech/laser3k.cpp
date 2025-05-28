@@ -365,7 +365,7 @@ void laser3k_state::do_io(int offset)
 
 		case 0x4c:  // low resolution (40 column)
 			m_80col = false;
-			m_maincpu->set_unscaled_clock(1021800);
+			m_maincpu->set_unscaled_clock(XTAL::u(1021800));
 			break;
 
 		case 0x4d:  // RGB mode
@@ -375,12 +375,12 @@ void laser3k_state::do_io(int offset)
 		case 0x4e:  // double hi-res
 			m_80col = true;
 			m_gfxmode = DHIRES;
-			m_maincpu->set_unscaled_clock(1021800*2);
+			m_maincpu->set_unscaled_clock(XTAL::u(1021800)*2);
 			break;
 
 		case 0x4f:  // high resolution (80 column).  Yes, the CPU clock also doubles when the pixel clock does (!)
 			m_80col = true;
-			m_maincpu->set_unscaled_clock(1021800*2);
+			m_maincpu->set_unscaled_clock(XTAL::u(1021800)*2);
 			break;
 
 		case 0x50:  // graphics mode

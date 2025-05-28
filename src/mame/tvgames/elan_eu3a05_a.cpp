@@ -53,7 +53,7 @@ void elan_eu3a05_sound_device::map(address_map &map)
 
 void elan_eu3a05_sound_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, 8000);
+	m_stream = stream_alloc(0, 1, XTAL::u(8000));
 
 	save_item(NAME(m_sound_byte_address));
 	save_item(NAME(m_sound_byte_len));

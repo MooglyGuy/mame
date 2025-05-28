@@ -224,7 +224,7 @@ void a2bus_transwarp_device::device_reset()
 	}
 	else
 	{
-		m_ourcpu->set_unscaled_clock(1021800);
+		m_ourcpu->set_unscaled_clock(XTAL::u(1021800));
 	}
 }
 
@@ -232,7 +232,7 @@ TIMER_CALLBACK_MEMBER(a2bus_transwarp_device::clock_adjust_tick)
 {
 	if (m_bIn1MHzMode)
 	{
-		m_ourcpu->set_unscaled_clock(1021800);
+		m_ourcpu->set_unscaled_clock(XTAL::u(1021800));
 	}
 	else
 	{
@@ -306,7 +306,7 @@ void a2bus_transwarp_device::dma_w(offs_t offset, uint8_t data)
 		}
 		else if (data == 1)
 		{
-			m_ourcpu->set_unscaled_clock(1021800);
+			m_ourcpu->set_unscaled_clock(XTAL::u(1021800));
 			m_bIn1MHzMode = true;
 		}
 		else if (data == 3)
@@ -343,7 +343,7 @@ void a2bus_transwarp_device::hit_slot(int slot)
 		// accleration's on, check the specific slot
 		if (!(m_dsw2->read() & (1<<(slot-1))))
 		{
-			m_ourcpu->set_unscaled_clock(1021800);
+			m_ourcpu->set_unscaled_clock(XTAL::u(1021800));
 			// slow down for 20 uSec, should be more than enough
 			m_timer->adjust(attotime::from_usec(20));
 		}
@@ -356,7 +356,7 @@ void a2bus_transwarp_device::hit_slot_joy()
 	if (!(m_dsw2->read() & 0x80))
 	{
 		// accleration's on
-		m_ourcpu->set_unscaled_clock(1021800);
+		m_ourcpu->set_unscaled_clock(XTAL::u(1021800));
 		// PREAD main loop counts up to 11*256 uSec, add 1 to cover the setup
 		m_timer->adjust(attotime::from_usec(11*257));
 	}

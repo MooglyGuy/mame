@@ -122,7 +122,7 @@ void st2205u_base_device::sound_stream_update(sound_stream &stream)
 
 void st2205u_base_device::base_init(std::unique_ptr<mi_st2xxx> &&intf)
 {
-	m_stream = stream_alloc(0, 4, 48000);
+	m_stream = stream_alloc(0, 4, XTAL::u(48000));
 
 	m_timer_12bit[0] = timer_alloc(FUNC(st2205u_device::t0_interrupt), this);
 	m_timer_12bit[1] = timer_alloc(FUNC(st2205u_device::t1_interrupt), this);

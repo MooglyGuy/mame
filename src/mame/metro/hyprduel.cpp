@@ -422,12 +422,12 @@ void hyprduel_state::i4220_config(machine_config &config)
 void hyprduel_state::hyprduel(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);      /* 10MHz */
+	M68000(config, m_maincpu, XTAL::u(20000000) / 2);      /* 10MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &hyprduel_state::hyprduel_map);
 
 	TIMER(config, "scantimer").configure_scanline(FUNC(hyprduel_state::interrupt), "screen", 0, 1);
 
-	M68000(config, m_subcpu, 20000000/2);      /* 10MHz */
+	M68000(config, m_subcpu, XTAL::u(20000000) / 2);      /* 10MHz */
 	m_subcpu->set_addrmap(AS_PROGRAM, &hyprduel_state::hyprduel_map2);
 
 	/* video hardware */
@@ -440,19 +440,19 @@ void hyprduel_state::hyprduel(machine_config &config)
 	ymsnd.irq_handler().set_inputline(m_subcpu, 1);
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.80);
 
-	OKIM6295(config, "oki", 4000000/16/16*132, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.57); // clock frequency & pin 7 not verified
+	OKIM6295(config, "oki", XTAL::u(4000000) / 16 / 16 * 132, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.57); // clock frequency & pin 7 not verified
 }
 
 
 void hyprduel_state::magerror(machine_config &config)
 {
 	/* basic machine hardware */
-	M68000(config, m_maincpu, 20000000/2);      /* 10MHz */
+	M68000(config, m_maincpu, XTAL::u(20000000) / 2);      /* 10MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &hyprduel_state::magerror_map);
 
 	TIMER(config, "scantimer").configure_scanline(FUNC(hyprduel_state::interrupt), "screen", 0, 1);
 
-	M68000(config, m_subcpu, 20000000/2);      /* 10MHz */
+	M68000(config, m_subcpu, XTAL::u(20000000) / 2);      /* 10MHz */
 	m_subcpu->set_addrmap(AS_PROGRAM, &hyprduel_state::magerror_map2);
 	m_subcpu->set_periodic_int(FUNC(hyprduel_state::irq1_line_hold), attotime::from_hz(968));        /* tempo? */
 
@@ -464,7 +464,7 @@ void hyprduel_state::magerror(machine_config &config)
 
 	YM2413(config, "ymsnd", XTAL::u(3579545)).add_route(ALL_OUTPUTS, "mono", 1.00);
 
-	OKIM6295(config, "oki", 4000000/16/16*132, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.57); // clock frequency & pin 7 not verified
+	OKIM6295(config, "oki", XTAL::u(4000000) / 16 / 16 * 132, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.57); // clock frequency & pin 7 not verified
 }
 
 /***************************************************************************

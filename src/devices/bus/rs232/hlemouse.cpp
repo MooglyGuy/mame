@@ -187,7 +187,7 @@ hle_msmouse_device_base::hle_msmouse_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: buffered_rs232_device<8>(mconfig, type, tag, owner, clock)
 	, m_buttons(*this, "BTN")
 	, m_x_axis(*this, "X")
@@ -227,7 +227,7 @@ void hle_msmouse_device_base::device_start()
 	save_item(NAME(m_enable));
 
 	set_data_frame(1, 7, PARITY_NONE, STOP_BITS_2);
-	set_rate(1'200);
+	set_rate(XTAL::u(1'200));
 	receive_register_reset();
 	transmit_register_reset();
 
@@ -318,7 +318,7 @@ hle_msft_mouse_device::hle_msft_mouse_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_msmouse_device_base(mconfig, MSFT_HLE_SERIAL_MOUSE, tag, owner, clock)
 {
 }
@@ -376,7 +376,7 @@ hle_wheel_mouse_device::hle_wheel_mouse_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_msmouse_device_base(mconfig, WHEEL_HLE_SERIAL_MOUSE, tag, owner, clock)
 	, m_wheel(*this, "WHEEL")
 	, m_wheel_delta(0)
@@ -444,7 +444,7 @@ hle_msystems_device_base::hle_msystems_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_rs232_port_interface(mconfig, *this)
 	, device_serial_interface(mconfig, *this)
@@ -457,7 +457,7 @@ void hle_msystems_device_base::device_start()
 	save_item(NAME(m_phase));
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(1'200);
+	set_rate(XTAL::u(1'200));
 	receive_register_reset();
 	transmit_register_reset();
 
@@ -519,7 +519,7 @@ hle_msystems_mouse_device::hle_msystems_mouse_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_msystems_device_base(mconfig, type, tag, owner, clock)
 	, m_buttons(*this, "BTN")
 	, m_x_axis(*this, "X")
@@ -537,7 +537,7 @@ hle_msystems_mouse_device::hle_msystems_mouse_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_msystems_mouse_device(mconfig, MSYSTEMS_HLE_SERIAL_MOUSE, tag, owner, clock)
 {
 }
@@ -606,7 +606,7 @@ hle_rotatable_mouse_device::hle_rotatable_mouse_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_msystems_device_base(mconfig, ROTATABLE_HLE_SERIAL_MOUSE, tag, owner, clock)
 	, m_buttons(*this, "BTN")
 	, m_x_axis(*this, "X")
@@ -707,7 +707,7 @@ hle_sgi_mouse_device::hle_sgi_mouse_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock)
+		const XTAL &clock)
 	: hle_msystems_mouse_device(mconfig, SGI_HLE_SERIAL_MOUSE, tag, owner, clock)
 {
 }
@@ -715,7 +715,7 @@ hle_sgi_mouse_device::hle_sgi_mouse_device(
 void hle_sgi_mouse_device::device_start()
 {
 	hle_msystems_mouse_device::device_start();
-	set_rate(4'800);
+	set_rate(XTAL::u(4'800));
 	receive_register_reset();
 	transmit_register_reset();
 }
