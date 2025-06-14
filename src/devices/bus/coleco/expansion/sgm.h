@@ -22,7 +22,7 @@ class coleco_sgm_device : public device_t, public device_coleco_expansion_interf
 {
 public:
 	// construction/destruction
-	coleco_sgm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	coleco_sgm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

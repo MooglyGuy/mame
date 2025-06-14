@@ -684,7 +684,7 @@ void ns32081_device_base::complete(s32 param)
 	m_out_spc(1);
 }
 
-ns32081_device::ns32081_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ns32081_device::ns32081_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ns32081_device_base(mconfig, NS32081, tag, owner, clock)
 	, ns32000_slow_slave_interface(mconfig, *this)
 {
@@ -751,7 +751,7 @@ void ns32081_device::slow_write(u16 data)
 	write<u16>(data);
 }
 
-ns32381_device::ns32381_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ns32381_device::ns32381_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ns32081_device_base(mconfig, NS32381, tag, owner, clock)
 	, ns32000_slow_slave_interface(mconfig, *this)
 	, ns32000_fast_slave_interface(mconfig, *this)

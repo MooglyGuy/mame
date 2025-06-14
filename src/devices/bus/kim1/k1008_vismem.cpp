@@ -30,7 +30,7 @@ class kim1bus_k1008_device:
 {
 public:
 	// construction/destruction
-	kim1bus_k1008_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	kim1bus_k1008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -73,7 +73,7 @@ ioport_constructor kim1bus_k1008_device::device_input_ports() const
 	return INPUT_PORTS_NAME(dips);
 }
 
-kim1bus_k1008_device::kim1bus_k1008_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+kim1bus_k1008_device::kim1bus_k1008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, KIM1BUS_K1008, tag, owner, clock)
 	, device_kim1bus_card_interface(mconfig, *this)
 	, m_dips(*this, "DIPS")

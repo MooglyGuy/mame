@@ -19,7 +19,7 @@ protected:
 
 	void handle_output(ioport_port *port, uint8_t id, uint8_t val);
 
-	jvs_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	jvs_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

@@ -240,7 +240,7 @@ void jackpot_state::jackpot(machine_config &config) // clocks not verified
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
 	// TODO: Serial comms with a master unit for game override?
-	ins8250_device &uart(INS8250(config, "uart", 1843200)); // actual type and clock unknown
+	ins8250_device &uart(INS8250(config, "uart", XTAL::u(1843200))); // actual type and clock unknown
 	uart.out_int_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 
 	// reset by the CRTC with 384x256, 55.93 Hz (tentative)

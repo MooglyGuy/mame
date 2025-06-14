@@ -25,7 +25,7 @@ DEFINE_DEVICE_TYPE(LOGIMUS_MIDIPAK, logimus_midipak_device, "logimus_midipak", "
 //  logimus_midipak_device - constructor
 //-------------------------------------------------
 
-logimus_midipak_device::logimus_midipak_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+logimus_midipak_device::logimus_midipak_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, LOGIMUS_MIDIPAK, tag, owner, clock)
 	, thomson_extension_interface(mconfig, *this)
 {

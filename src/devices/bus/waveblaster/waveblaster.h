@@ -15,7 +15,7 @@ class waveblaster_connector: public device_t, public device_single_card_slot_int
 public:
 	template <typename T>
 	waveblaster_connector(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: waveblaster_connector(mconfig, tag, owner, (uint32_t)0)
+		: waveblaster_connector(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -23,7 +23,7 @@ public:
 		set_fixed(false);
 	}
 
-	waveblaster_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	waveblaster_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void midi_rx(int state);
 	auto midi_tx() { return m_midi_tx.bind(); }

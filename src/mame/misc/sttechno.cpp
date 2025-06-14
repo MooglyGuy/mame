@@ -228,7 +228,7 @@ void sttechno_state::machine_start()
 
 	// TODO: Exact parameters for the UART are unknown
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(115200);
+	set_rate(XTAL::u(115200));
 }
 
 void sttechno_state::machine_reset()

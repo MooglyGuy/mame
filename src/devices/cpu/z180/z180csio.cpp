@@ -35,7 +35,7 @@ static constexpr u8 Z180_CNTR_MASK = 0xf7;
 //  z180csio_device
 //**************************************************************************
 
-z180csio_device::z180csio_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+z180csio_device::z180csio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, Z180CSIO, tag, owner, clock)
 	, m_cks_cb(*this)
 	, m_txs_cb(*this)

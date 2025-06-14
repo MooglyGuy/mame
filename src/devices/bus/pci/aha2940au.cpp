@@ -31,7 +31,7 @@ DEFINE_DEVICE_TYPE(AHA2940AU, aha2940au_scsi_device,   "aha2940au",   "Adaptec A
 
 
 
-aha2940au_scsi_device::aha2940au_scsi_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+aha2940au_scsi_device::aha2940au_scsi_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_eeprom(*this, "eeprom")
 	, m_scsi_rom(*this, "scsi_rom")
@@ -41,7 +41,7 @@ aha2940au_scsi_device::aha2940au_scsi_device(const machine_config &mconfig, devi
 	set_ids(0x90046178, 0x00, 0x010000, 0x90046178);
 }
 
-aha2940au_scsi_device::aha2940au_scsi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+aha2940au_scsi_device::aha2940au_scsi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: aha2940au_scsi_device(mconfig, AHA2940AU, tag, owner, clock)
 {
 }

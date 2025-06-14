@@ -67,7 +67,7 @@ DEVICE_INPUT_DEFAULTS_END
 class mpf_iom_device : public device_t, public device_mpf1_exp_interface
 {
 public:
-	mpf_iom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_iom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MPF_IOM_IP, tag, owner, clock)
 		, device_mpf1_exp_interface(mconfig, *this)
 		, m_rom(*this, "rom")

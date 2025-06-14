@@ -534,7 +534,7 @@ void igs_fear_state::igs_fear(machine_config &config)
 	TICKET_DISPENSER(config, m_ticket, attotime::from_msec(200));
 
 	/* sound hardware */
-	IGS_XA_ICS_SOUND(config, m_xa, 50'000'000/3);
+	IGS_XA_ICS_SOUND(config, m_xa, XTAL::u(50'000'000)/3);
 	m_xa->irq().set_inputline(m_maincpu, arm7_cpu_device::ARM7_IRQ_LINE);
 }
 

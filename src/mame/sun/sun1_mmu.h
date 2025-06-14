@@ -22,7 +22,7 @@ public:
 	};
 	auto error() { return m_error.bind(); }
 
-	sun1mmu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	sun1mmu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// register access
 	void context_w(u16 data);

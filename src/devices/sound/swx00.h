@@ -14,7 +14,7 @@
 class swx00_sound_device : public device_t, public device_sound_interface, public device_rom_interface<24, 1, -1, ENDIANNESS_BIG>
 {
 public:
-	swx00_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	swx00_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_map &map) ATTR_COLD;
 

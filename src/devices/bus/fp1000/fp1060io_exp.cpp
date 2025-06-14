@@ -24,7 +24,7 @@ List of known devices:
 
 DEFINE_DEVICE_TYPE(FP1060IO_EXP_SLOT, fp1060io_exp_slot_device, "fp1060io_exp_slot", "FP-1060I/O Expansion Slot")
 
-fp1060io_exp_slot_device::fp1060io_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+fp1060io_exp_slot_device::fp1060io_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, FP1060IO_EXP_SLOT, tag, owner, clock)
 	, device_single_card_slot_interface<device_fp1060io_exp_interface>(mconfig, *this)
 	, m_inta_cb(*this)
@@ -75,7 +75,7 @@ void device_fp1060io_exp_interface::intc_w(int state) { m_slot->m_intc_cb(state)
 void device_fp1060io_exp_interface::intd_w(int state) { m_slot->m_intd_cb(state); }
 
 
-fp1060io_exp_device::fp1060io_exp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+fp1060io_exp_device::fp1060io_exp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_fp1060io_exp_interface(mconfig, *this)
 {

@@ -77,12 +77,12 @@ void atirage_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(FUNC(atirage_device::screen_update));
 
-	ATIMACH64(config, m_mach64, 0);
+	ATIMACH64(config, m_mach64);
 	m_mach64->set_screen("screen");
 	m_mach64->set_vram_size(0x600000);
 }
 
-atirage_device::atirage_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+atirage_device::atirage_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, type, tag, owner, clock),
 	m_mach64(*this, "vga"),
 	m_screen(*this, "screen"),
@@ -95,23 +95,23 @@ atirage_device::atirage_device(const machine_config &mconfig, device_type type, 
 
 }
 
-atirageii_device::atirageii_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atirageii_device::atirageii_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: atirage_device(mconfig, ATI_RAGEII, tag, owner, clock)
 {
 }
 
-atirageiic_device::atirageiic_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atirageiic_device::atirageiic_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: atirage_device(mconfig, ATI_RAGEIIC, tag, owner, clock)
 {
 }
 
-atirageiidvd_device::atirageiidvd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atirageiidvd_device::atirageiidvd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: atirage_device(mconfig, ATI_RAGEIIDVD, tag, owner, clock)
 	, m_vga_rom(*this, "vga_rom")
 {
 }
 
-atiragepro_device::atiragepro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+atiragepro_device::atiragepro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: atirage_device(mconfig, ATI_RAGEPRO, tag, owner, clock)
 {
 }
@@ -498,7 +498,7 @@ void atirage_device::update_mode()
 			break;
 
 		case 3: // PLLVCLK
-			vpll_frequency = ((clock() * 2.0) * m_pll_regs[VCLK0_FB_DIV + clk_source]) / m_pll_regs[PLL_REF_DIV];
+			vpll_frequency = ((clock().value() * 2.0) * m_pll_regs[VCLK0_FB_DIV + clk_source]) / m_pll_regs[PLL_REF_DIV];
 			break;
 
 		default:

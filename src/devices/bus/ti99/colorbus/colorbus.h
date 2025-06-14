@@ -45,8 +45,8 @@ class v9938_colorbus_device : public device_t, public device_single_card_slot_in
 {
 public:
 	template <typename U>
-	v9938_colorbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, U &&opts, const char *dflt)
-		: v9938_colorbus_device(mconfig, tag, owner, clock)
+	v9938_colorbus_device(const machine_config &mconfig, const char *tag, device_t *owner, U &&opts, const char *dflt)
+		: v9938_colorbus_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);

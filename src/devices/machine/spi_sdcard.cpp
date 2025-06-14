@@ -143,7 +143,7 @@ ALLOW_SAVE_TYPE(spi_sdcard_device::sd_state);
 
 DEFINE_DEVICE_TYPE(SPI_SDCARD, spi_sdcard_device, "spi_sdcard", "SD Card (SPI interface)")
 
-spi_sdcard_device::spi_sdcard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+spi_sdcard_device::spi_sdcard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	spi_sdcard_device(mconfig, SPI_SDCARD, tag, owner, clock)
 {
 }

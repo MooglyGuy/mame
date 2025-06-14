@@ -14,7 +14,7 @@
 
 class vt3xx_spu_device : public m6502_device {
 public:
-	vt3xx_spu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vt3xx_spu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 	virtual void do_exec_full() override;
@@ -30,7 +30,7 @@ public:
 	O(vtsetdbk_imp);
 	O(vtgetdbk_imp);
 
-	O(vtldabank_abx);	
+	O(vtldabank_abx);
 	O(vtldabank_idy);
 	O(vtadcx_aba);
 
@@ -39,7 +39,7 @@ public:
 protected:
 	uint8_t m_databank;
 
-	vt3xx_spu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	vt3xx_spu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

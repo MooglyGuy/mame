@@ -25,7 +25,7 @@ DEFINE_DEVICE_TYPE(SH7014_DMAC, sh7014_dmac_device, "sh7014dmac", "SH7014 Direct
 DEFINE_DEVICE_TYPE(SH7014_DMAC_CHANNEL, sh7014_dmac_channel_device, "sh7014dmacchan", "SH7014 Direct Memory Access Controller Channel")
 
 
-sh7014_dmac_device::sh7014_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_dmac_device::sh7014_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_DMAC, tag, owner, clock)
 	, m_cpu(*this, finder_base::DUMMY_TAG)
 	, m_intc(*this, finder_base::DUMMY_TAG)
@@ -112,7 +112,7 @@ void sh7014_dmac_channel_device::map(address_map &map)
 	map(0x0c, 0x0f).rw(FUNC(sh7014_dmac_channel_device::chcr_r), FUNC(sh7014_dmac_channel_device::chcr_w));
 }
 
-sh7014_dmac_channel_device::sh7014_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_dmac_channel_device::sh7014_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_DMAC_CHANNEL, tag, owner, clock)
 	, m_dmac(*this, finder_base::DUMMY_TAG)
 	, m_cpu(*this, finder_base::DUMMY_TAG)

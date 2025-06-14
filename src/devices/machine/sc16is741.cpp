@@ -130,7 +130,7 @@ enum sc16is741a_device::interrupt : u8
 };
 
 
-sc16is741a_device::sc16is741a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sc16is741a_device::sc16is741a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SC16IS741A, tag, owner, clock),
 	m_so_cb(*this),
 	m_irq_cb(*this),

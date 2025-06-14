@@ -103,9 +103,9 @@ public:
 		TILEMAP(config, m_tilemap, m_gfxdecode, 1, 8, 12, TILEMAP_SCAN_ROWS, 32, 16).set_info_callback(FUNC(blockfvr_state::tile_info));
 
 		SPEAKER(config, "mono").front_center();
-		BEEP(config, m_beep[0], 1332).add_route(ALL_OUTPUTS, "mono", 0.25); // bounce
-		BEEP(config, m_beep[1], 666).add_route(ALL_OUTPUTS, "mono", 0.25); // block
-		BEEP(config, m_beep[2], 333).add_route(ALL_OUTPUTS, "mono", 0.25); // flashing block
+		BEEP(config, m_beep[0], XTAL::u(1332)).add_route(ALL_OUTPUTS, "mono", 0.25); // bounce
+		BEEP(config, m_beep[1], XTAL::u(666)).add_route(ALL_OUTPUTS, "mono", 0.25); // block
+		BEEP(config, m_beep[2], XTAL::u(333)).add_route(ALL_OUTPUTS, "mono", 0.25); // flashing block
 	}
 
 protected:

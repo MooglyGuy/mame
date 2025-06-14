@@ -224,7 +224,7 @@ INPUT_PORTS_END
 void pixter_multimedia_state::pixter_multimedia(machine_config &config)
 {
 	// User's Guide - 1.3 Clock Strategy - AHB Fast CPU Clock (FCLK)
-	ARM7(config, m_maincpu, 76'205'000);
+	ARM7(config, m_maincpu, XTAL::u(76'205'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &pixter_multimedia_state::arm7_map);
 
 	GENERIC_CARTSLOT(config, m_cart, generic_plain_slot, "pixter_cart");

@@ -11,7 +11,7 @@ static constexpr const float DEFAULT_MAX_VPP = 100;
 
 DEFINE_DEVICE_TYPE(VA_VCA, va_vca_device, "va_vca", "Voltage Controlled Amplifier")
 
-va_vca_device::va_vca_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+va_vca_device::va_vca_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VA_VCA, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
@@ -51,7 +51,7 @@ void va_vca_device::set_fixed_cv(float cv)
 void va_vca_device::device_start()
 {
 	const int input_count = m_has_cv_stream ? 2 : 1;
-	m_stream = stream_alloc(input_count, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(input_count, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 	save_item(NAME(m_fixed_gain));
 }
 

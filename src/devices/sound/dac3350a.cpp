@@ -110,7 +110,7 @@ enum
 
 DEFINE_DEVICE_TYPE(DAC3350A, dac3350a_device, "dac3350a", "Micronas DAC 3550A Stereo Audio DAC")
 
-dac3350a_device::dac3350a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dac3350a_device::dac3350a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DAC3350A, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 {
@@ -119,7 +119,7 @@ dac3350a_device::dac3350a_device(const machine_config &mconfig, const char *tag,
 void dac3350a_device::device_start()
 {
 	// TODO: use configured clock for sample rate and respond to device_clock_changed
-	m_stream = stream_alloc(2, 2, 44100);
+	m_stream = stream_alloc(2, 2, XTAL::u(44100));
 
 	save_item(NAME(m_i2c_bus_state));
 	save_item(NAME(m_i2c_bus_address));

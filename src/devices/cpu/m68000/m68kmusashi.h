@@ -61,7 +61,7 @@ class m68000_musashi_device : public m68000_base_device
 {
 public:
 	// construction/destruction
-	m68000_musashi_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m68000_musashi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual bool supervisor_mode() const noexcept override;
 
@@ -126,10 +126,10 @@ public:
 	void restart_this_instruction();
 
 protected:
-	m68000_musashi_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock,
+	m68000_musashi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
 						const device_type type, u32 prg_data_width, u32 prg_address_bits);
 
-	m68000_musashi_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock,
+	m68000_musashi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
 						const device_type type, u32 prg_data_width, u32 prg_address_bits, address_map_constructor internal_map);
 
 	bool m_has_fpu;     /* Indicates if a FPU is available (yes on 030, 040, may be on 020) */

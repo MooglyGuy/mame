@@ -27,7 +27,7 @@
 
 DEFINE_DEVICE_TYPE(SED1375, sed1375_device, "sed1375", "Epson SED1375")
 
-sed1375_device::sed1375_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+sed1375_device::sed1375_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SED1375, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, m_vram(*this, "vram", 80 * 1024, ENDIANNESS_BIG)

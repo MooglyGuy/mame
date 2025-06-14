@@ -64,6 +64,7 @@ melps4_cpu_device::melps4_cpu_device(const machine_config &mconfig, device_type 
 	m_write_f(*this),
 	m_write_g(*this),
 	m_write_u(*this),
+	m_write_t(*this)
 { }
 
 // disasm

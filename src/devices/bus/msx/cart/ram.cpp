@@ -148,7 +148,7 @@ namespace {
 class msx_cart_base_ram_device : public device_t, public msx_cart_interface
 {
 protected:
-	msx_cart_base_ram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 ram_size)
+	msx_cart_base_ram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 ram_size)
 		: device_t(mconfig, type, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_ram_size(ram_size)
@@ -179,7 +179,7 @@ private:
 class msx_cart_16k_ram_device : public msx_cart_base_ram_device
 {
 public:
-	msx_cart_16k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_16k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_ram_device(mconfig, MSX_CART_16K_RAM, tag, owner, clock, 16 * 1024)
 	{ }
 
@@ -194,7 +194,7 @@ protected:
 class msx_cart_32k_ram_device : public msx_cart_base_ram_device
 {
 public:
-	msx_cart_32k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_32k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_ram_device(mconfig, MSX_CART_32K_RAM, tag, owner, clock, 32 * 1024)
 	{ }
 
@@ -210,7 +210,7 @@ protected:
 class msx_cart_48k_ram_device : public msx_cart_base_ram_device
 {
 public:
-	msx_cart_48k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_48k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_ram_device(mconfig, MSX_CART_48K_RAM, tag, owner, clock, 48 * 1024)
 	{ }
 
@@ -227,7 +227,7 @@ protected:
 class msx_cart_64k_ram_device : public msx_cart_base_ram_device
 {
 public:
-	msx_cart_64k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_64k_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_ram_device(mconfig, MSX_CART_64K_RAM, tag, owner, clock, 64 * 1024)
 	{ }
 
@@ -246,7 +246,7 @@ protected:
 class msx_cart_base_mm_ram_device : public msx_cart_base_ram_device
 {
 protected:
-	msx_cart_base_mm_ram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 ram_size)
+	msx_cart_base_mm_ram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 ram_size)
 		: msx_cart_base_ram_device(mconfig, type, tag, owner, clock, ram_size)
 		, m_rambank(*this, "rambank%u", 0U)
 		, m_bank_mask(0)
@@ -300,7 +300,7 @@ void msx_cart_base_mm_ram_device::bank_w(u8 data)
 class msx_cart_256k_mm_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_256k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_256k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_256K_MM_RAM, tag, owner, clock, 256 * 1024)
 	{ }
 };
@@ -308,7 +308,7 @@ public:
 class msx_cart_512k_mm_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_512k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_512k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_512K_MM_RAM, tag, owner, clock, 512 * 1024)
 	{ }
 };
@@ -316,7 +316,7 @@ public:
 class msx_cart_768k_mm_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_768k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_768k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_768K_MM_RAM, tag, owner, clock, 768 * 1024)
 	{ }
 };
@@ -324,7 +324,7 @@ public:
 class msx_cart_1024k_mm_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_1024k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_1024k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_1024K_MM_RAM, tag, owner, clock, 1024 * 1024)
 	{ }
 };
@@ -332,7 +332,7 @@ public:
 class msx_cart_2048k_mm_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_2048k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_2048k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_2048K_MM_RAM, tag, owner, clock, 2048 * 1024)
 	{ }
 };
@@ -340,7 +340,7 @@ public:
 class msx_cart_4096k_mm_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_4096k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_4096k_mm_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_4096K_MM_RAM, tag, owner, clock, 4096 * 1024)
 	{ }
 };
@@ -349,7 +349,7 @@ public:
 class msx_cart_mmm_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_mmm_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_mmm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_MMM, tag, owner, clock, 1024 * 1024)
 		, m_sn76489a(*this, "sn76489a")
 		, m_access_enabled(false)
@@ -402,7 +402,7 @@ void msx_cart_mmm_device::device_add_mconfig(machine_config &config)
 class msx_cart_double_ram_device : public msx_cart_base_mm_ram_device
 {
 public:
-	msx_cart_double_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_double_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_base_mm_ram_device(mconfig, MSX_CART_DOUBLE_RAM, tag, owner, clock, 4 * 1024 * 1024)
 		, m_mode_switch(*this, "MODE")
 		, m_view{ {*this, "view0"}, {*this, "view1"}, {*this, "view2"}, {*this, "view3"} }

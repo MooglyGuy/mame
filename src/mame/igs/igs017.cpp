@@ -128,7 +128,7 @@ class igs_mux_device :
 	public device_memory_interface
 {
 public:
-	igs_mux_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	igs_mux_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void address_w(u8 data);
 	void data_w(u8 data);
@@ -193,7 +193,7 @@ u8 igs_mux_device::data_r()
 class igs_string_device : public device_t
 {
 public:
-	igs_string_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	igs_string_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u8 result_r();                                  // 0x05:        result_r
 	void do_bitswap_w(offs_t offset, u8 data);      // 0x20-0x27:   do_bitswap_w
@@ -4975,7 +4975,7 @@ void igs017_state::sdmg2p(machine_config &config)
 
 	HOPPER(config, m_hopper, attotime::from_msec(50));
 
-	IGS_STRING(config, m_igs_string, 0);
+	IGS_STRING(config, m_igs_string);
 }
 
 void igs017_state::jking302us(machine_config &config)
@@ -4993,7 +4993,7 @@ void igs017_state::jking302us(machine_config &config)
 
 	HOPPER(config, m_hopper, attotime::from_msec(50));
 
-	IGS_STRING(config, m_igs_string, 0);
+	IGS_STRING(config, m_igs_string);
 }
 
 

@@ -22,7 +22,7 @@ namespace {
 class msx_cart_sfg_device : public device_t, public msx_cart_interface
 {
 protected:
-	msx_cart_sfg_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, u32 clock);
+	msx_cart_sfg_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -44,7 +44,7 @@ protected:
 	u32 m_rom_mask;
 };
 
-msx_cart_sfg_device::msx_cart_sfg_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, u32 clock)
+msx_cart_sfg_device::msx_cart_sfg_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, msx_cart_interface(mconfig, *this)
 	, m_region_sfg(*this, "sfg")
@@ -141,13 +141,13 @@ void msx_cart_sfg_device::check_irq()
 class msx_cart_sfg01_device : public msx_cart_sfg_device
 {
 public:
-	msx_cart_sfg01_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_cart_sfg01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 };
 
-msx_cart_sfg01_device::msx_cart_sfg01_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_cart_sfg01_device::msx_cart_sfg01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_cart_sfg_device(mconfig, MSX_CART_SFG01, tag, owner, clock)
 {
 }
@@ -167,14 +167,14 @@ const tiny_rom_entry *msx_cart_sfg01_device::device_rom_region() const
 class msx_cart_sfg05_device : public msx_cart_sfg_device
 {
 public:
-	msx_cart_sfg05_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_cart_sfg05_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 };
 
-msx_cart_sfg05_device::msx_cart_sfg05_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_cart_sfg05_device::msx_cart_sfg05_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_cart_sfg_device(mconfig, MSX_CART_SFG05, tag, owner, clock)
 {
 }

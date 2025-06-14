@@ -195,7 +195,7 @@ INPUT_PORTS_END
 void pmicrodx_state::pmicrodx(machine_config &config)
 {
 	// basic machine hardware
-	HD44868(config, m_maincpu, 800'000); // approximation
+	HD44868(config, m_maincpu, XTAL::u(800'000)); // approximation
 	m_maincpu->write_r<0>().set(FUNC(pmicrodx_state::seg_w<0>));
 	m_maincpu->write_r<1>().set(FUNC(pmicrodx_state::seg_w<1>));
 	m_maincpu->write_r<2>().set(FUNC(pmicrodx_state::seg_w<2>));

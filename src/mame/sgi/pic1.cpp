@@ -53,7 +53,7 @@ enum sid_mask : u32
 	SID_REVC    = 0x0080,
 };
 
-sgi_pic1_device::sgi_pic1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_pic1_device::sgi_pic1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_PIC1, tag, owner, clock)
 	, m_bus(*this, finder_base::DUMMY_TAG, -1, 32)
 	, m_simms(*this, "SIMMS")

@@ -34,13 +34,13 @@ DEFINE_DEVICE_TYPE(VANTA,           vanta_device,           "vanta",         "nV
 DEFINE_DEVICE_TYPE(RIVATNT2_M64,    rivatnt2_model64_device,"rivatnt2_m64",  "nVidia Riva TNT2 Model 64 (NV5)")
 
 
-rivatnt_device::rivatnt_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rivatnt_device::rivatnt_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: riva128_device(mconfig, type, tag, owner, clock)
 {
 
 }
 
-rivatnt_device::rivatnt_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rivatnt_device::rivatnt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt_device(mconfig, RIVATNT, tag, owner, clock)
 {
 	// device ID 0x10de nVidia
@@ -90,12 +90,12 @@ void rivatnt_device::device_start()
  *
  *******************************************/
 
-rivatnt2_device::rivatnt2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rivatnt2_device::rivatnt2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt_device(mconfig, type, tag, owner, clock)
 {
 }
 
-rivatnt2_device::rivatnt2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rivatnt2_device::rivatnt2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt2_device(mconfig, RIVATNT2, tag, owner, clock)
 {
 	// device ID 0x10de nVidia
@@ -134,7 +134,7 @@ void rivatnt2_device::device_start()
 
 /********************************************/
 
-rivatnt2_ultra_device::rivatnt2_ultra_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rivatnt2_ultra_device::rivatnt2_ultra_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt2_device(mconfig, RIVATNT2_ULTRA, tag, owner, clock)
 {
 	// device ID 0x10de nVidia
@@ -154,7 +154,7 @@ const tiny_rom_entry *rivatnt2_ultra_device::device_rom_region() const
 
 /********************************************/
 
-vanta_device::vanta_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vanta_device::vanta_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt2_device(mconfig, VANTA, tag, owner, clock)
 {
 	// device ID 0x10de nVidia
@@ -180,7 +180,7 @@ const tiny_rom_entry *vanta_device::device_rom_region() const
 
 /********************************************/
 
-rivatnt2_model64_device::rivatnt2_model64_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rivatnt2_model64_device::rivatnt2_model64_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt2_device(mconfig, RIVATNT2_M64, tag, owner, clock)
 {
 	// device ID 0x10de nVidia

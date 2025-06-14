@@ -11,31 +11,31 @@ DEFINE_DEVICE_TYPE(SH7042A, sh7042a_device, "sh7042a", "Hitachi SH-2 (SH7042A)")
 DEFINE_DEVICE_TYPE(SH7043,  sh7043_device,  "sh7043",  "Hitachi SH-2 (SH7043)")
 DEFINE_DEVICE_TYPE(SH7043A, sh7043a_device, "sh7043a", "Hitachi SH-2 (SH7043A)")
 
-sh7042_device::sh7042_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sh7042_device::sh7042_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sh7042_device(mconfig, SH7042, tag, owner, clock)
 {
 	m_die_a = false;
 }
 
-sh7042a_device::sh7042a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sh7042a_device::sh7042a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sh7042_device(mconfig, SH7042A, tag, owner, clock)
 {
 	m_die_a = true;
 }
 
-sh7043_device::sh7043_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sh7043_device::sh7043_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sh7042_device(mconfig, SH7043, tag, owner, clock)
 {
 	m_die_a = false;
 }
 
-sh7043a_device::sh7043a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sh7043a_device::sh7043a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sh7042_device(mconfig, SH7043A, tag, owner, clock)
 {
 	m_die_a = true;
 }
 
-sh7042_device::sh7042_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+sh7042_device::sh7042_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	sh2_device(mconfig, type, tag, owner, clock, CPU_TYPE_SH2, address_map_constructor(FUNC(sh7042_device::map), this), 32, 0xffffffff),
 	m_intc(*this, "intc"),
 	m_adc0(*this, "adc0"),

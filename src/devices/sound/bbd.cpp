@@ -25,7 +25,7 @@ void bbd_device_base::set_bucket_count(int buckets)
 
 void bbd_device_base::device_start()
 {
-	m_stream = stream_alloc(1, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE, STREAM_SYNCHRONOUS);
+	m_stream = stream_alloc(1, 1, XTAL(), (sound_stream_flags)(SAMPLE_RATE_OUTPUT_ADAPTIVE | STREAM_SYNCHRONOUS));
 	save_item(NAME(m_buffer));
 	save_item(NAME(m_curpos));
 
@@ -120,7 +120,7 @@ mn3204p_device::mn3204p_device(const machine_config &mconfig, const char *tag, d
 // device type definition
 DEFINE_DEVICE_TYPE(MN3207, mn3207_device, "mn3207", "MN3207 BBD")
 
-mn3207_device::mn3207_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mn3207_device::mn3207_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bbd_device_base(mconfig, tag, owner, clock, MN3207)
 {
 	set_bucket_count(1024);

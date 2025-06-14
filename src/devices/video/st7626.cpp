@@ -6,7 +6,7 @@
 
 DEFINE_DEVICE_TYPE(ST7626, st7626_device, "st7626", "ST7626 LCD Controller")
 
-st7626_device::st7626_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+st7626_device::st7626_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ST7626, tag, owner, clock),
 	m_vram(*this, "vram", 98*78, ENDIANNESS_LITTLE)
 {

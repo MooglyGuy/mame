@@ -34,7 +34,7 @@ private:
 
 void piece_state::piece512k(machine_config &config)
 {
-	S1C33209(config, m_maincpu, 24'000'000);
+	S1C33209(config, m_maincpu, XTAL::u(24'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &piece_state::mem_512k);
 }
 

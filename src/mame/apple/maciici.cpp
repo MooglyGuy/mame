@@ -291,13 +291,13 @@ void maciici_state::via_sync()
 	u64 cycle = m_maincpu->total_cycles();
 
 	// Get the number of the cycle the via is in at that time
-	u64 via_cycle = cycle * m_via1->clock() / m_maincpu->clock();
+	u64 via_cycle = cycle * m_via1->clock().value() / m_maincpu->clock().value();
 
 	// The access is going to start at via_cycle+1 and end at
 	// via_cycle+1.5, compute what that means in maincpu cycles (the
 	// +1 rounds up, since the clocks are too different to ever be
 	// synced).
-	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock() / (2 * m_via1->clock()) + 1;
+	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock().value() / (2 * m_via1->clock().value()) + 1;
 
 	// Finally adjust the main cpu icount as needed.
 	m_maincpu->adjust_icount(-int(main_cycle - cycle));
@@ -513,7 +513,7 @@ INPUT_PORTS_END
 ***************************************************************************/
 void maciici_state::maciixi_base(machine_config &config)
 {
-	M68030(config, m_maincpu, 25000000);
+	M68030(config, m_maincpu, XTAL::u(25000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &maciici_state::maciici_map);
 	m_maincpu->set_dasm_override(std::function(&mac68k_dasm_override), "mac68k_dasm_override");
 
@@ -530,7 +530,7 @@ void maciici_state::maciixi_base(machine_config &config)
 	SOFTWARE_LIST(config, "flop35hd_list").set_original("mac_hdflop");
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(FUNC(maciici_state::scc_irq_w));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
@@ -604,7 +604,7 @@ void maciici_state::maciixi_base(machine_config &config)
 	m_ram->set_default_size("2M");
 	m_ram->set_extra_options("4M,8M,16M,32M,48M,64M,128M");
 
-	nubus_device &nubus(NUBUS(config, "nubus", 0));
+	nubus_device &nubus(NUBUS(config, "nubus"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.out_irq9_callback().set(m_rbv, FUNC(rbv_device::slot_irq_w<0x01>));
 	nubus.out_irqa_callback().set(m_rbv, FUNC(rbv_device::slot_irq_w<0x02>));
@@ -638,7 +638,7 @@ void maciici_state::maciisi(machine_config &config)
 {
 	maciixi_base(config);
 
-	M68030(config.replace(), m_maincpu, 20000000);
+	M68030(config.replace(), m_maincpu, XTAL::u(20000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &maciici_state::maciici_map);
 	m_maincpu->set_dasm_override(std::function(&mac68k_dasm_override), "mac68k_dasm_override");
 
@@ -664,7 +664,7 @@ void maciici_state::maciisi(machine_config &config)
 	config.device_remove("nubus");
 
 	// TODO: IIsi takes an adapter card that can accept either one SE/30 PDS card or one NuBus card
-	nubus_device &nubus(NUBUS(config, "pds", 0));
+	nubus_device &nubus(NUBUS(config, "pds"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.out_irq9_callback().set(m_rbv, FUNC(rbv_device::slot_irq_w<0x01>));
 	nubus.out_irqa_callback().set(m_rbv, FUNC(rbv_device::slot_irq_w<0x02>));

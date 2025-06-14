@@ -8,7 +8,7 @@ namespace {
 class msx_cart_ascii8_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_ascii8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_ascii8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_ASCII8, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -82,7 +82,7 @@ void msx_cart_ascii8_device::bank_w(u8 data)
 class msx_cart_ascii16_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_ascii16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_ascii16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_ASCII16, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -154,7 +154,7 @@ void msx_cart_ascii16_device::bank_w(u8 data)
 class msx_cart_ascii8_sram_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_ascii8_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_ascii8_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_ASCII8_SRAM, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -260,7 +260,7 @@ void msx_cart_ascii8_sram_device::mapper_write(offs_t offset, u8 data)
 class msx_cart_ascii16_sram_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_ascii16_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_ascii16_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_ASCII16_SRAM, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)

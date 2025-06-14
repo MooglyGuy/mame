@@ -30,7 +30,7 @@ DEFINE_DEVICE_TYPE(H83212, h83212_device, "h83212", "Hitachi H8/3212")
 DEFINE_DEVICE_TYPE(H83202, h83202_device, "h83202", "Hitachi H8/3202")
 
 
-h83217_device::h83217_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size) :
+h83217_device::h83217_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size) :
 	h8_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(h83217_device::map), this)),
 	m_intc(*this, "intc"),
 	m_port(*this, "port%u", 1),
@@ -45,27 +45,27 @@ h83217_device::h83217_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-h83217_device::h83217_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83217_device::h83217_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83217_device(mconfig, H83217, tag, owner, clock, 0xf000, 0x800)
 {
 }
 
-h83216_device::h83216_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83216_device::h83216_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83217_device(mconfig, H83216, tag, owner, clock, 0xc000, 0x800)
 {
 }
 
-h83214_device::h83214_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83214_device::h83214_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83217_device(mconfig, H83214, tag, owner, clock, 0x8000, 0x400)
 {
 }
 
-h83212_device::h83212_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83212_device::h83212_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83217_device(mconfig, H83212, tag, owner, clock, 0x4000, 0x200)
 {
 }
 
-h83202_device::h83202_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83202_device::h83202_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h83217_device(mconfig, H83202, tag, owner, clock, 0x4000, 0x200)
 {
 }

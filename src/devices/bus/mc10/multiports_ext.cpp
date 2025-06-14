@@ -37,14 +37,14 @@ namespace {
 class mc10_multiports_ext_device : public device_t, public device_mc10cart_interface
 {
 public:
-	mc10_multiports_ext_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mc10_multiports_ext_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual int max_rom_length() const override;
 
 	virtual std::pair<std::error_condition, std::string> load() override;
 
 protected:
-	mc10_multiports_ext_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	mc10_multiports_ext_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -63,12 +63,12 @@ private:
 //   IMPLEMENTATION
 //-------------------------------------------------
 
-mc10_multiports_ext_device::mc10_multiports_ext_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc10_multiports_ext_device::mc10_multiports_ext_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc10_multiports_ext_device(mconfig, ALICE_MULTIPORTS_EXT, tag, owner, clock)
 {
 }
 
-mc10_multiports_ext_device::mc10_multiports_ext_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+mc10_multiports_ext_device::mc10_multiports_ext_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_mc10cart_interface(mconfig, *this)
 	, m_bank(*this, "cart_bank")

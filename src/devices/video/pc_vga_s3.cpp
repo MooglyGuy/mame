@@ -26,12 +26,12 @@ DEFINE_DEVICE_TYPE(S3_VISION964_VGA,  s3vision964_vga_device,  "s3_86c964_vga", 
 DEFINE_DEVICE_TYPE(S3_VISION968_VGA,  s3vision968_vga_device,  "s3_86c968_vga",     "S3 86c968 Vision968 VGA i/f")
 DEFINE_DEVICE_TYPE(S3_TRIO64_VGA,     s3trio64_vga_device,     "s3_86c764_vga",     "S3 86c764 Trio64 VGA i/f")
 
-s3vision864_vga_device::s3vision864_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3vision864_vga_device::s3vision864_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3vision864_vga_device(mconfig, S3_VISION864_VGA, tag, owner, clock)
 {
 }
 
-s3vision864_vga_device::s3vision864_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+s3vision864_vga_device::s3vision864_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, type, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3vision864_vga_device::crtc_map), this));
@@ -40,7 +40,7 @@ s3vision864_vga_device::s3vision864_vga_device(const machine_config &mconfig, de
 
 void s3vision864_vga_device::device_add_mconfig(machine_config &config)
 {
-	IBM8514A(config, "8514a", 0).set_vga_owner();
+	IBM8514A(config, "8514a").set_vga_owner();
 }
 
 uint32_t s3vision864_vga_device::latch_start_addr()
@@ -1153,12 +1153,12 @@ uint32_t s3vision864_vga_device::screen_update(screen_device &screen, bitmap_rgb
  *
  *****************/
 
-s3vision964_vga_device::s3vision964_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3vision964_vga_device::s3vision964_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3vision964_vga_device(mconfig, S3_VISION964_VGA, tag, owner, clock)
 {
 }
 
-s3vision964_vga_device::s3vision964_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+s3vision964_vga_device::s3vision964_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: s3vision864_vga_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -1176,12 +1176,12 @@ void s3vision964_vga_device::device_start()
  *
  *****************/
 
-s3vision968_vga_device::s3vision968_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3vision968_vga_device::s3vision968_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3vision968_vga_device(mconfig, S3_VISION968_VGA, tag, owner, clock)
 {
 }
 
-s3vision968_vga_device::s3vision968_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+s3vision968_vga_device::s3vision968_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: s3vision964_vga_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -1201,12 +1201,12 @@ void s3vision968_vga_device::device_start()
  *
  *****************/
 
-s3trio64_vga_device::s3trio64_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3trio64_vga_device::s3trio64_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3trio64_vga_device(mconfig, S3_TRIO64_VGA, tag, owner, clock)
 {
 }
 
-s3trio64_vga_device::s3trio64_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+s3trio64_vga_device::s3trio64_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: s3vision968_vga_device(mconfig, type, tag, owner, clock)
 {
 }

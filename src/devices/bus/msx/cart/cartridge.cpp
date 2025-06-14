@@ -117,7 +117,7 @@ void msx_cart(device_slot_interface &device, bool is_in_subslot)
 }
 
 
-msx_slot_cartridge_device::msx_slot_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_cartridge_device::msx_slot_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_cartridge_base_device(mconfig, MSX_SLOT_CARTRIDGE, tag, owner, clock)
 {
 }

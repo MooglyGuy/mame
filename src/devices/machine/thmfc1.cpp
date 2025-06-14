@@ -9,7 +9,7 @@
 
 DEFINE_DEVICE_TYPE(THMFC1, thmfc1_device, "thmfc1", "SGS-Thomson THM-FC-1 Diskette Controller") // SGS logo used on silkscreen
 
-thmfc1_device::thmfc1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+thmfc1_device::thmfc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, THMFC1, tag, owner, clock),
 	m_floppy(*this, "%u", 0U)
 {

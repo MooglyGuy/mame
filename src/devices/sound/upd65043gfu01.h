@@ -9,7 +9,7 @@
 class upd65043gfu01_device : public device_t, public device_sound_interface
 {
 public:
-	upd65043gfu01_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	upd65043gfu01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 

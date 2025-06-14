@@ -251,7 +251,7 @@ void yamaha_dx9_state::dx9(machine_config &config)
 	NVRAM(config, "ram2", nvram_device::DEFAULT_ALL_0);
 
 	// Configure the ADC. The clock speed here is a guess.
-	M58990(config, m_adc, 500'000);
+	M58990(config, m_adc, XTAL::u(500'000));
 
 	// ADC source 4 is the battery voltage. Set this input to always read 0x80.
 	// If the read value is below 0x6f, the firmware considers this a low battery voltage.
@@ -277,7 +277,7 @@ void yamaha_dx9_state::dx9(machine_config &config)
 
 	PALETTE(config, "palette", FUNC(yamaha_dx9_state::palette_init), 3);
 
-	hd44780_device &lcdc(HD44780(config, "lcdc", 270'000)); // TODO: clock not measured, datasheet typical clock used
+	hd44780_device &lcdc(HD44780(config, "lcdc", XTAL::u(270'000))); // TODO: clock not measured, datasheet typical clock used
 	lcdc.set_lcd_size(2, 16);
 	lcdc.set_pixel_update_cb(FUNC(yamaha_dx9_state::lcd_pixel_update));
 

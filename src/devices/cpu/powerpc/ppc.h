@@ -710,14 +710,14 @@ private:
 //class ppc403_device : public ppc_device
 //{
 //public:
-//  ppc403_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+//  ppc403_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 //};
 //
 //
 //class ppc405_device : public ppc_device
 //{
 //public:
-//  ppc405_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+//  ppc405_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 //};
 
 

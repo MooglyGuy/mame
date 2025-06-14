@@ -114,7 +114,7 @@ void star_state::machine_start()
 INPUT_CHANGED_MEMBER(star_state::change_cpu_freq)
 {
 	static const XTAL xtal[3] = { 2_MHz_XTAL, 4_MHz_XTAL, 5.5296_MHz_XTAL };
-	u32 freq = xtal[newval % 3].value();
+	const XTAL freq = xtal[newval % 3];
 	m_maincpu->set_unscaled_clock(freq);
 
 	// change NMI frequency as well
@@ -229,7 +229,7 @@ void star_state::sstar28k(machine_config &config)
 	M6502(config, m_maincpu, XTAL::u(2'000'000)); // no XTAL
 	m_maincpu->set_addrmap(AS_PROGRAM, &star_state::sstar28k_map);
 
-	CLOCK(config, m_nmi_clock, 2'000'000 / 0x2000); // 4020 Q13
+	CLOCK(config, m_nmi_clock, XTAL::u(2'000'000) / 0x2000); // 4020 Q13
 	m_nmi_clock->signal_handler().set_inputline(m_maincpu, INPUT_LINE_NMI);
 
 	SENSORBOARD(config, m_board).set_type(sensorboard_device::BUTTONS);

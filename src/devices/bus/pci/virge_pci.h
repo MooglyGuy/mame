@@ -70,12 +70,12 @@ class virgevx_pci_device : public virge_pci_device
 {
 public:
 	template <typename T>
-	virgevx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&screen_tag)
+	virgevx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&screen_tag)
 		: virgevx_pci_device(mconfig, tag, owner, clock)
 	{
 		set_screen_tag(std::forward<T>(screen_tag));
 	}
-	virgevx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	virgevx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

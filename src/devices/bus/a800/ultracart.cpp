@@ -29,13 +29,13 @@ DEFINE_DEVICE_TYPE(A800_ROM_BLIZZARD_32KB, a800_rom_blizzard_32kb_device, "a800_
 DEFINE_DEVICE_TYPE(A800_ROM_ADAWLIAH,      a800_rom_adawliah_device,      "a800_adawliah",    "Atari 8-bit aDawliah 32KB cart")
 
 
-a800_rom_ultracart_device::a800_rom_ultracart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_ultracart_device::a800_rom_ultracart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_bank(0)
 {
 }
 
-a800_rom_ultracart_device::a800_rom_ultracart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_ultracart_device::a800_rom_ultracart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_ultracart_device(mconfig, A800_ROM_ULTRACART, tag, owner, clock)
 {
 }
@@ -96,7 +96,7 @@ void a800_rom_ultracart_device::config_bank_w(offs_t offset, u8 data)
 
  -------------------------------------------------*/
 
-a800_rom_blizzard_32kb_device::a800_rom_blizzard_32kb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_blizzard_32kb_device::a800_rom_blizzard_32kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_ultracart_device(mconfig, A800_ROM_BLIZZARD_32KB, tag, owner, clock)
 {
 }
@@ -118,7 +118,7 @@ inline void a800_rom_blizzard_32kb_device::binary_counter_access()
 
  -------------------------------------------------*/
 
-a800_rom_adawliah_device::a800_rom_adawliah_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_adawliah_device::a800_rom_adawliah_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_ultracart_device(mconfig, A800_ROM_ADAWLIAH, tag, owner, clock)
 {
 }

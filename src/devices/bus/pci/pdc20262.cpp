@@ -35,7 +35,7 @@ DEFINE_DEVICE_TYPE(PDC20262, pdc20262_device,   "pdc20262",   "Promise PDC20262 
 
 
 
-pdc20262_device::pdc20262_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pdc20262_device::pdc20262_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_ide1(*this, "ide1")
 	, m_ide2(*this, "ide2")
@@ -53,7 +53,7 @@ pdc20262_device::pdc20262_device(const machine_config &mconfig, device_type type
 	set_ids(0x105a4d38, 0x02, 0x018000, 0x105a4d33);
 }
 
-pdc20262_device::pdc20262_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pdc20262_device::pdc20262_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pdc20262_device(mconfig, PDC20262, tag, owner, clock)
 {
 }

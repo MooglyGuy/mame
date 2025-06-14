@@ -13,13 +13,11 @@
 DEFINE_DEVICE_TYPE(TC6116, tc6116_device, "tc6116", "Roland GP TC6116 PCM")
 
 
-tc6116_device::tc6116_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tc6116_device::tc6116_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TC6116, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, device_rom_interface(mconfig, *this)
 	, m_int_callback(*this)
-	, m_clock(0)
-	, m_rate(0)
 	, m_stream(nullptr)
 	, m_sel_chn(0)
 {
@@ -36,7 +34,7 @@ void tc6116_device::device_start()
 
 	m_stream = stream_alloc(0, 2, m_rate);
 
-	logerror("Roland GP: Clock %u, Rate %u\n", m_clock, m_rate);
+	logerror("Roland GP: Clock %u, Rate %u\n", m_clock.value(), m_rate.value());
 }
 
 //-------------------------------------------------

@@ -366,7 +366,7 @@ const tiny_rom_entry *cuda_2xx_device::device_rom_region() const
 	return ROM_NAME( cuda2xx );
 }
 
-cuda_2xx_device::cuda_2xx_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+cuda_2xx_device::cuda_2xx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	cuda_device(mconfig, CUDA_V2XX, tag, owner, clock)
 {
 }

@@ -32,7 +32,7 @@ INPUT_PORTS_END
 class sms_hypershot_device : public device_t, public device_sms_control_interface
 {
 public:
-	sms_hypershot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_hypershot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 in_r() override;
 
@@ -45,7 +45,7 @@ private:
 };
 
 
-sms_hypershot_device::sms_hypershot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_hypershot_device::sms_hypershot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_HYPERSHOT, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_buttons(*this, "BUTTONS")

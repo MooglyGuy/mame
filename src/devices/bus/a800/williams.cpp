@@ -20,13 +20,13 @@ DEFINE_DEVICE_TYPE(A800_ROM_EXPRESS,   a800_rom_express_device,   "a800_express"
 DEFINE_DEVICE_TYPE(A800_ROM_DIAMOND,   a800_rom_diamond_device,   "a800_diamond",  "Atari 8-bit Diamond cart")
 DEFINE_DEVICE_TYPE(A800_ROM_TURBO,     a800_rom_turbo_device,     "a800_turbo",    "Atari 8-bit Turbosoft 64KB/128KB cart")
 
-a800_rom_williams_device::a800_rom_williams_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_williams_device::a800_rom_williams_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_bank(0)
 {
 }
 
-a800_rom_williams_device::a800_rom_williams_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_williams_device::a800_rom_williams_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_williams_device(mconfig, A800_ROM_WILLIAMS, tag, owner, clock)
 {
 }
@@ -92,12 +92,12 @@ void a800_rom_williams_device::rom_bank_w(offs_t offset, uint8_t data)
 
  -------------------------------------------------*/
 
-a800_rom_express_device::a800_rom_express_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_express_device::a800_rom_express_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_williams_device(mconfig, type, tag, owner, clock)
 {
 }
 
-a800_rom_express_device::a800_rom_express_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_express_device::a800_rom_express_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_williams_device(mconfig, A800_ROM_EXPRESS, tag, owner, clock)
 {
 }
@@ -131,7 +131,7 @@ void a800_rom_express_device::rom_bank_w(offs_t offset, uint8_t data)
  -------------------------------------------------*/
 
 
-a800_rom_diamond_device::a800_rom_diamond_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_diamond_device::a800_rom_diamond_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_express_device(mconfig, A800_ROM_DIAMOND, tag, owner, clock)
 {
 }
@@ -148,7 +148,7 @@ void a800_rom_diamond_device::cctl_map(address_map &map)
 
  -------------------------------------------------*/
 
-a800_rom_turbo_device::a800_rom_turbo_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_turbo_device::a800_rom_turbo_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_williams_device(mconfig, A800_ROM_TURBO, tag, owner, clock)
 {
 }

@@ -48,7 +48,7 @@ DEFINE_DEVICE_TYPE(TO770_VIDEO, to770_video_device, "to770_video", "Thomson TO7/
 DEFINE_DEVICE_TYPE(TO9_VIDEO, to9_video_device, "to9_video", "Thomson TO9 video components")
 DEFINE_DEVICE_TYPE(TO8_VIDEO, to8_video_device, "to8_video", "Thomson TO8 video components")
 
-thomson_video_device::thomson_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+thomson_video_device::thomson_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, m_io_lightpen_x(*this, "^lightpen_x")
@@ -61,28 +61,28 @@ thomson_video_device::thomson_video_device(const machine_config &mconfig, device
 {
 }
 
-to7_video_device::to7_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+to7_video_device::to7_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: thomson_video_device(mconfig, TO7_VIDEO, tag, owner, clock)
 {
 }
 
-to770_video_device::to770_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+to770_video_device::to770_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: thomson_video_device(mconfig, TO770_VIDEO, tag, owner, clock)
 {
 }
 
-to9_video_device::to9_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+to9_video_device::to9_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: to9_video_device(mconfig, TO9_VIDEO, tag, owner, clock)
 {
 	m_style = 0;
 }
 
-to9_video_device::to9_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+to9_video_device::to9_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: thomson_video_device(mconfig, type, tag, owner, clock)
 {
 }
 
-to8_video_device::to8_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+to8_video_device::to8_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: to9_video_device(mconfig, TO8_VIDEO, tag, owner, clock)
 	, m_update_ram_bank_cb(*this)
 	, m_update_cart_bank_cb(*this)

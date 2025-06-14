@@ -17,7 +17,7 @@ class pc87306_device : public device_t,
 					   public device_memory_interface
 {
 public:
-	pc87306_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pc87306_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	~pc87306_device() {}
 
 	void remap(int space_id, offs_t start, offs_t end) override;

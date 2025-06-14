@@ -187,7 +187,7 @@ static const std::pair<u8, u8>typamatic_keys[] =
 	std::make_pair(17, 1), // cursor left
 };
 
-ibm5100_keyboard_device::ibm5100_keyboard_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+ibm5100_keyboard_device::ibm5100_keyboard_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_matrix_keyboard_interface(mconfig, *this
 		, "col.0", "col.1", "col.2", "col.3", "col.4", "col.5", "col.6", "col.7"
@@ -199,12 +199,12 @@ ibm5100_keyboard_device::ibm5100_keyboard_device(machine_config const &mconfig, 
 {
 }
 
-ibm5100_keyboard_device::ibm5100_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ibm5100_keyboard_device::ibm5100_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ibm5100_keyboard_device(mconfig, IBM5100_KEYBOARD, tag, owner, clock)
 {
 }
 
-ibm5110_keyboard_device::ibm5110_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ibm5110_keyboard_device::ibm5110_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ibm5100_keyboard_device(mconfig, IBM5110_KEYBOARD, tag, owner, clock)
 {
 }

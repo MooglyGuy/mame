@@ -119,7 +119,7 @@ void video21_state::sound_w(uint8_t data)
 {
 	// beeper pitch
 	m_beeper->set_state(data != 0xff); // FF is off
-	m_beeper->set_frequency(4 * data);
+	m_beeper->set_clock(4 * data);
 }
 
 void video21_state::lamp1_w(uint8_t data)

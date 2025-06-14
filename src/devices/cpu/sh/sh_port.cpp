@@ -16,7 +16,7 @@
 DEFINE_DEVICE_TYPE(SH_PORT16, sh_port16_device, "sh_port16", "SH 16-bits port")
 DEFINE_DEVICE_TYPE(SH_PORT32, sh_port32_device, "sh_port32", "SH 32-bits port")
 
-sh_port16_device::sh_port16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_port16_device::sh_port16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_PORT16, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG)
 {
@@ -62,7 +62,7 @@ void sh_port16_device::io_w(offs_t, u16 data, u16 mem_mask)
 }
 
 
-sh_port32_device::sh_port32_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_port32_device::sh_port32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_PORT32, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG)
 {

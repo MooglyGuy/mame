@@ -23,7 +23,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(MEDIAGX_VGA,  mediagx_vga_device,  "mediagx_vga",  "MediaGX Virtual VGA i/f")
 
-mediagx_vga_device::mediagx_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mediagx_vga_device::mediagx_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, MEDIAGX_VGA, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(mediagx_vga_device::crtc_map), this));

@@ -51,13 +51,6 @@ sm5l_device::sm5l_device(const machine_config &mconfig, const char *tag, device_
 	sm5a_device(mconfig, SM5L, tag, owner, clock, 1, 9, 11, address_map_constructor(FUNC(sm5l_device::program_1_8k), this), 7, address_map_constructor(FUNC(sm5l_device::data_5x13x4), this))
 { }
 
-<<<<<<< HEAD
-=======
-kb1013vk12_device::kb1013vk12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
-	sm5a_device(mconfig, KB1013VK12, tag, owner, clock, 1, 9, 11, address_map_constructor(FUNC(kb1013vk12_device::program_1_8k), this), 7, address_map_constructor(FUNC(kb1013vk12_device::data_5x13x4), this))
-{ }
-
->>>>>>> 45d4cd52a81 (full xtal conversion)
 
 // disasm
 std::unique_ptr<util::disasm_interface> sm5a_device::create_disassembler()

@@ -707,12 +707,12 @@ upd7220_device::upd7220_device(const machine_config &mconfig, device_type type, 
 	memset(&m_figs, 0x00, sizeof(m_figs));
 }
 
-upd7220_device::upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+upd7220_device::upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd7220_device(mconfig, UPD7220, tag, owner, clock)
 {
 }
 
-upd7220a_device::upd7220a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+upd7220a_device::upd7220a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd7220_device(mconfig, UPD7220A, tag, owner, clock)
 {
 }

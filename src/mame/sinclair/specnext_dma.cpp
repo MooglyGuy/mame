@@ -32,7 +32,7 @@ DEFINE_DEVICE_TYPE(SPECNEXT_DMA, specnext_dma_device, "specnext_dma", "Spectrum 
 #define TRANSFER_MODE           (WR0 & 0x03)
 
 
-specnext_dma_device::specnext_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_dma_device::specnext_dma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: z80dma_device(mconfig, SPECNEXT_DMA, tag, owner, clock)
 {
 }

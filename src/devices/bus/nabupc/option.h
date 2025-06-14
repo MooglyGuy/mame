@@ -73,7 +73,7 @@ public:
 		m_bus.set_tag(std::forward<T>(bus_tag));
 		m_slot = slot;
 	}
-	option_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	option_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t io_read(offs_t offset);
 	void io_write(offs_t offset, uint8_t data);
@@ -95,7 +95,7 @@ class option_bus_device :  public device_t
 {
 public:
 	// construction/destruction
-	option_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	option_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <unsigned Slot> auto out_int_callback() { return m_int_cb[Slot].bind(); }
 

@@ -59,7 +59,7 @@ public:
 		set_fixed(false);
 	}
 
-	exp_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock = 0);
+	exp_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_io_space(T &&tag, int spacenum) { m_io.set_tag(std::forward<T>(tag), spacenum); }
 

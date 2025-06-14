@@ -39,7 +39,7 @@
 
 DEFINE_DEVICE_TYPE(VME_TSVME104, vme_tsvme104_card_device, "tsvme104", "Tekmis TSVME104")
 
-vme_tsvme104_card_device::vme_tsvme104_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_tsvme104_card_device::vme_tsvme104_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_TSVME104, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -94,7 +94,7 @@ void vme_tsvme104_card_device::device_add_mconfig(machine_config &config)
 	m_cpu->set_addrmap(AS_PROGRAM, &vme_tsvme104_card_device::cpu_mem);
 	m_cpu->set_addrmap(m68000_base_device::AS_CPU_SPACE, &vme_tsvme104_card_device::cpu_int);
 
-	PTM6840(config, m_ptm, 0); // ST EF68B40P
+	PTM6840(config, m_ptm, XTAL()); // ST EF68B40P
 
 	MC68681(config, m_duart[0], 3.6864_MHz_XTAL);
 	m_duart[0]->irq_cb().set_inputline(m_cpu, INPUT_LINE_IRQ3);

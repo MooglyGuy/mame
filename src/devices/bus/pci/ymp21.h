@@ -17,7 +17,7 @@ class ymp21_device : public pci_card_device {
 protected:
 	devcb_write_line::array<2> m_tx_cb;
 
-	ymp21_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	ymp21_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

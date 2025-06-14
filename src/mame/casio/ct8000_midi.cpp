@@ -97,7 +97,7 @@ INPUT_PORTS_END
 
 } // anonymous namespace
 
-ct8000_midi_device::ct8000_midi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ct8000_midi_device::ct8000_midi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CT8000_MIDI, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, m_channel(*this, "CHANNEL")
@@ -124,8 +124,8 @@ void ct8000_midi_device::device_start()
 	m_in_strobe = 0;
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rcv_rate(31250);
-	set_tra_rate(0);
+	set_rcv_rate(XTAL::u(31250));
+	set_tra_rate(XTAL());
 
 	save_item(NAME(m_status));
 	save_item(NAME(m_midi_data));

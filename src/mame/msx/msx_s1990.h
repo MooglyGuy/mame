@@ -14,7 +14,7 @@ class msx_s1990_device : public device_t,
 	public device_memory_interface
 {
 public:
-	msx_s1990_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	msx_s1990_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type imperfect_features() { return feature::TIMING; }
 

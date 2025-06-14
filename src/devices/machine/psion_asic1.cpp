@@ -29,7 +29,7 @@ DEFINE_DEVICE_TYPE(PSION_ASIC1, psion_asic1_device, "psion_asic1", "Psion ASIC1"
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_asic1_device::psion_asic1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_asic1_device::psion_asic1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_ASIC1, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_video_interface(mconfig, *this)
@@ -346,7 +346,7 @@ void psion_asic1_device::io_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 		//  b0-b4  LcdRate      - LCDCLK = SYSCLK / (2*(n+1))
 		//  b5-b9  LcdMLineRate - 13
 		// b10-b11 LcdMode      - 3 (Dual Screen mode)
-		LOG("%s io_w: A1LcdControl <= %04x, LCD clock %dHz, %s\n", machine().describe_context(), data, clock() * 4 / (screen().width() * screen().height() * 2 * (BIT(data, 0, 5) + 1)), BIT(data, 10, 2) == 3 ? "Dual screen" : "Single screen");
+		LOG("%s io_w: A1LcdControl <= %04x, LCD clock %dHz, %s\n", machine().describe_context(), data, clock().value() * 4 / (screen().width() * screen().height() * 2 * (BIT(data, 0, 5) + 1)), BIT(data, 10, 2) == 3 ? "Dual screen" : "Single screen");
 		m_a1_lcd_control = data;
 		break;
 

@@ -964,7 +964,7 @@ void cyclwarr_state::cyclwarr(machine_config &config)
 	screen.set_raw(cyclwarr_state::CLOCK_2 / 8, 400, 0, 320, 272, 0, 240); // TODO: Hook up CRTC
 	screen.set_screen_update(FUNC(cyclwarr_state::screen_update));
 
-	TZB315_SPRITES(config, m_sprites, 0, 0x1000);
+	TZB315_SPRITES(config, m_sprites, 0x1000);
 	m_sprites->set_sprite_palette_base(4096);
 	m_sprites->set_palette("sprites:palette_clut");
 	m_sprites->set_basepalette(m_palette);

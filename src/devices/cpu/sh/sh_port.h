@@ -17,7 +17,7 @@ class sh7042_device;
 
 class sh_port16_device : public device_t {
 public:
-	sh_port16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_port16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> sh_port16_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int index, u16 default_io, u16 mask) :
 		sh_port16_device(mconfig, tag, owner)
 	{
@@ -44,7 +44,7 @@ protected:
 
 class sh_port32_device : public device_t {
 public:
-	sh_port32_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_port32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> sh_port32_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int index, u32 default_io, u32 mask) :
 		sh_port32_device(mconfig, tag, owner)
 	{

@@ -72,7 +72,7 @@ void sp0256_device::device_start()
 	m_sby_cb(1);
 	m_sby_line = 1;
 
-	int sample_rate = clock() / CLOCK_DIVIDER;
+	XTAL sample_rate = clock() / CLOCK_DIVIDER;
 	m_stream = stream_alloc(0, 1, sample_rate);
 
 	// if callbacks are used, update the stream at sample rate frequency to ensure they get picked up in a timely matter

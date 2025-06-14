@@ -54,7 +54,7 @@ public:
 	virtual void z80daisy_irq_reti() override;
 
 protected:
-	dl11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	dl11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -106,7 +106,7 @@ class k1801vp065_device : public dl11_device
 {
 public:
 	// construction/destruction
-	k1801vp065_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	k1801vp065_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint16_t read(offs_t offset);
 	void write(offs_t offset, uint16_t data);

@@ -58,10 +58,10 @@ class bbc_sdcard_device : public device_t, public device_bbc_userport_interface
 {
 public:
 	// construction/destruction
-	bbc_sdcard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_sdcard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	bbc_sdcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bbc_sdcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -81,7 +81,7 @@ class bbc_sdcardt_device : public bbc_sdcard_device
 {
 public:
 	// construction/destruction
-	bbc_sdcardt_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_sdcardt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

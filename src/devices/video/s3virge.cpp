@@ -63,34 +63,34 @@ DEFINE_DEVICE_TYPE(S3VIRGE,    s3virge_vga_device,        "virge_vga",      "S3 
 DEFINE_DEVICE_TYPE(S3VIRGEVX,  s3virgevx_vga_device,      "virgevx_vga",    "S3 86C988 VGA core")
 DEFINE_DEVICE_TYPE(S3VIRGEDX,  s3virgedx_vga_device,      "virgedx_vga",    "S3 86C375 VGA core")
 
-s3virge_vga_device::s3virge_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3virge_vga_device::s3virge_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3virge_vga_device(mconfig, S3VIRGE, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3virge_vga_device::crtc_map), this));
 	m_seq_space_config = address_space_config("sequencer_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3virge_vga_device::sequencer_map), this));
 }
 
-s3virge_vga_device::s3virge_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+s3virge_vga_device::s3virge_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: s3trio64_vga_device(mconfig, type, tag, owner, clock)
 	, m_linear_config_changed_cb(*this)
 {
 }
 
-s3virgevx_vga_device::s3virgevx_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3virgevx_vga_device::s3virgevx_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3virge_vga_device(mconfig, S3VIRGEVX, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3virgevx_vga_device::crtc_map), this));
 	m_seq_space_config = address_space_config("sequencer_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3virgevx_vga_device::sequencer_map), this));
 }
 
-s3virgedx_vga_device::s3virgedx_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s3virgedx_vga_device::s3virgedx_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: s3virgedx_vga_device(mconfig, S3VIRGEDX, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3virgedx_vga_device::crtc_map), this));
 	m_seq_space_config = address_space_config("sequencer_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(s3virgedx_vga_device::sequencer_map), this));
 }
 
-s3virgedx_vga_device::s3virgedx_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+s3virgedx_vga_device::s3virgedx_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: s3virge_vga_device(mconfig, type, tag, owner, clock)
 {
 }

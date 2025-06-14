@@ -17,7 +17,7 @@
 class rmMQ2_device : public device_t, public device_rs232_port_interface
 {
 public:
-	rmMQ2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rmMQ2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	bool m_8inch_sel = false;

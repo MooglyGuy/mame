@@ -29,7 +29,7 @@ class arc_scsi_a500_device :
 {
 public:
 	// construction/destruction
-	arc_scsi_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	arc_scsi_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::DISK; }
 
@@ -103,7 +103,7 @@ void arc_scsi_a500_device::device_add_mconfig(machine_config &config)
 //  arc_scsi_a500_device - constructor
 //-------------------------------------------------
 
-arc_scsi_a500_device::arc_scsi_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_scsi_a500_device::arc_scsi_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ARC_SCSI_A500, tag, owner, clock)
 	, device_archimedes_podule_interface(mconfig, *this)
 	, m_wd33c93(*this, "scsi:7:wd33c93")

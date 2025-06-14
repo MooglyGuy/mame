@@ -104,7 +104,7 @@ votrax_sc01_device::votrax_sc01_device(const machine_config &mconfig, device_typ
 {
 }
 
-votrax_sc01a_device::votrax_sc01a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+votrax_sc01a_device::votrax_sc01a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: votrax_sc01_device(mconfig, VOTRAX_SC01A, tag, owner, clock)
 {
 }

@@ -30,7 +30,7 @@
 
 DEFINE_DEVICE_TYPE(VME_MVME181, vme_mvme181_card_device, "mvme181", "Motorola MVME181")
 
-vme_mvme181_card_device::vme_mvme181_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_mvme181_card_device::vme_mvme181_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_MVME181, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")

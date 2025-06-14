@@ -36,7 +36,7 @@ DEFINE_DEVICE_TYPE(PSION_ASIC9MX, psion_asic9mx_device, "psion_asic9mx", "Psion 
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_asic9_device::psion_asic9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+psion_asic9_device::psion_asic9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_video_interface(mconfig, *this)
@@ -62,12 +62,12 @@ psion_asic9_device::psion_asic9_device(const machine_config &mconfig, device_typ
 {
 }
 
-psion_asic9_device::psion_asic9_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_asic9_device::psion_asic9_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: psion_asic9_device(mconfig, PSION_ASIC9, tag, owner, clock)
 {
 }
 
-psion_asic9mx_device::psion_asic9mx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_asic9mx_device::psion_asic9mx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: psion_asic9_device(mconfig, PSION_ASIC9MX, tag, owner, clock)
 {
 }

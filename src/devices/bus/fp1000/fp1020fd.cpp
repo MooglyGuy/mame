@@ -10,7 +10,7 @@
 
 DEFINE_DEVICE_TYPE(FP1020FD, fp1020fd_device, "fp1020fd", "FP-1020FD FDCPACK")
 
-fp1020fd_device::fp1020fd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+fp1020fd_device::fp1020fd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fp1060io_exp_device(mconfig, FP1020FD, tag, owner, clock)
 	, m_fdc(*this, "fdc")
 	, m_floppy(*this, "fdc:%u", 0)
@@ -68,7 +68,7 @@ void fp1020fd_device::device_add_mconfig(machine_config &config)
 	// UPD765AC
 	// TODO: verify clock
 	// ready and select lines = true verified (pukes any floppy bootstrap if either is false)
-	UPD765A(config, m_fdc, 8'000'000, true, true);
+	UPD765A(config, m_fdc, XTAL::u(8'000'000), true, true);
 	m_fdc->intrq_wr_callback().set(FUNC(fp1020fd_device::intrq_w));
 	m_fdc->drq_wr_callback().set(FUNC(fp1020fd_device::drq_w));
 	FLOPPY_CONNECTOR(config, "fdc:0", fd1020fd_floppies, "525dsdd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);

@@ -38,7 +38,7 @@ DEFINE_DEVICE_TYPE(RTL8139_PCI, rtl8139_pci_device,   "rtl8139_pci",   "Realtek 
 // RTL8100B / RTL8139D
 // RTL8101
 
-rtl8139_pci_device::rtl8139_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rtl8139_pci_device::rtl8139_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 {
 	// NOTE: later cards actually pick ups device ID from EEPROM, falling back to 0x8139 if there isn't one
@@ -48,7 +48,7 @@ rtl8139_pci_device::rtl8139_pci_device(const machine_config &mconfig, device_typ
 	set_ids(0x10ec8139, 0x00, 0x020000, 0x10ec8139);
 }
 
-rtl8139_pci_device::rtl8139_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rtl8139_pci_device::rtl8139_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rtl8139_pci_device(mconfig, RTL8139_PCI, tag, owner, clock)
 {
 }

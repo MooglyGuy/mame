@@ -17,7 +17,7 @@ namespace {
 class msx_cart_konami_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_konami_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_konami_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KONAMI, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -94,7 +94,7 @@ void msx_cart_konami_device::bank_w(u8 data)
 class msx_cart_konami_scc_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_konami_scc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_konami_scc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KONAMI_SCC, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_k051649(*this, "k051649")
@@ -204,7 +204,7 @@ void msx_cart_konami_scc_device::bank_w(u8 data)
 class msx_cart_sunrise_scc_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_sunrise_scc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_sunrise_scc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_SUNRISE_SCC, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_k051649(*this, "k051649")
@@ -340,7 +340,7 @@ void msx_cart_sunrise_scc_device::bank_w(offs_t offset, u8 data)
 class msx_cart_gamemaster2_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_gamemaster2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_gamemaster2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_GAMEMASTER2, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -446,7 +446,7 @@ void msx_cart_gamemaster2_device::bank_w(u8 data)
 class msx_cart_synthesizer_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_synthesizer_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_synthesizer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_SYNTHESIZER, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_dac(*this, "dac")
@@ -466,7 +466,7 @@ private:
 
 void msx_cart_synthesizer_device::device_add_mconfig(machine_config &config)
 {
-	DAC_8BIT_R2R(config, m_dac, 0); // unknown DAC
+	DAC_8BIT_R2R(config, m_dac); // unknown DAC
 	if (parent_slot())
 		m_dac->add_route(ALL_OUTPUTS, soundin(), 0.3);
 }
@@ -501,7 +501,7 @@ public:
 	virtual std::error_condition initialize_cartridge(std::string &message) override;
 
 protected:
-	msx_cart_konami_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u8 min_rambank, u8 max_rambank)
+	msx_cart_konami_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u8 min_rambank, u8 max_rambank)
 		: device_t(mconfig, type, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_k052539(*this, "k052539")
@@ -702,7 +702,7 @@ class msx_cart_konami_sound_snatcher_device : public msx_cart_konami_sound_devic
 {
 public:
 	// The Snatcher Sound cartridge has 64KB RAM available by selecting ram banks 0-7
-	msx_cart_konami_sound_snatcher_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_konami_sound_snatcher_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_konami_sound_device(mconfig, MSX_CART_SOUND_SNATCHER, tag, owner, clock, 0, 7)
 	{ }
 
@@ -731,7 +731,7 @@ class msx_cart_konami_sound_sdsnatcher_device : public msx_cart_konami_sound_dev
 {
 public:
 	// The SD Snatcher Sound cartridge has 64KB RAM available by selecting ram banks 8-15
-	msx_cart_konami_sound_sdsnatcher_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_konami_sound_sdsnatcher_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_konami_sound_device(mconfig, MSX_CART_SOUND_SDSNATCHER, tag, owner, clock, 8, 15)
 	{ }
 
@@ -760,7 +760,7 @@ std::error_condition msx_cart_konami_sound_sdsnatcher_device::initialize_cartrid
 class msx_cart_keyboard_master_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_keyboard_master_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_keyboard_master_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KEYBOARD_MASTER, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_vlm5030(*this, "vlm5030")
@@ -855,7 +855,7 @@ uint8_t msx_cart_keyboard_master_device::io_00_r()
 class msx_cart_ec701_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_ec701_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_ec701_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_EC701, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank")

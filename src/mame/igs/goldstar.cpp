@@ -10406,7 +10406,7 @@ constexpr XTAL MASTER_CLOCK = 12_MHz_XTAL;
 constexpr XTAL CPU_CLOCK    = MASTER_CLOCK / 4;
 constexpr XTAL PSG_CLOCK    = MASTER_CLOCK / 4;
 constexpr XTAL AY_CLOCK     = MASTER_CLOCK / 8;
-#define OKI_CLOCK       1056000      // unverified resonator
+constexpr XTAL OKI_CLOCK    = XTAL::u(1056000);     // unverified resonator
 
 void goldstar_state::goldstar(machine_config &config)
 {

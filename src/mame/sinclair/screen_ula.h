@@ -34,7 +34,7 @@ public:
 	void draw(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect, bool flash = 0, u8 pcode = 0);
 
 protected:
-	screen_ula_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	screen_ula_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	enum ula_type : u8
 	{
@@ -84,13 +84,13 @@ private:
 class screen_ula_plus_device : public screen_ula_device
 {
 public:
-	screen_ula_plus_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	screen_ula_plus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class screen_ula_next_device : public screen_ula_device
 {
 public:
-	screen_ula_next_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	screen_ula_next_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(SCREEN_ULA_PLUS, screen_ula_plus_device)

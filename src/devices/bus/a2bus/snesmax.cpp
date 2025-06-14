@@ -14,7 +14,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			u32 clock) :
+			const XTAL &clock) :
 		device_t(mconfig, A2BUS_SNES_MAX, tag, owner, clock),
 		device_a2bus_card_interface(mconfig, *this),
 		m_controllers(*this, "%u", 1U),

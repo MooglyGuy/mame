@@ -7,7 +7,7 @@
 
 DEFINE_DEVICE_TYPE(SW1000XG, sw1000xg_device, "sw1000xg", "Yamaha SW1000XG")
 
-sw1000xg_device::sw1000xg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sw1000xg_device::sw1000xg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ymp21_device(mconfig, SW1000XG, tag, owner, clock),
 	  m_maincpu(*this, "maincpu"),
 	  m_swp30(*this, "swp30")

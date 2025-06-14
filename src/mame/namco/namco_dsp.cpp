@@ -25,7 +25,7 @@ namco_c67_device::namco_c67_device(const machine_config &mconfig, const char *ta
 	set_mp_mc(false);
 }
 
-namco_c71_device::namco_c71_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namco_c71_device::namco_c71_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	tms32025_device(mconfig, NAMCO_C71, tag, owner, clock)
 {
 	set_mp_mc(false);

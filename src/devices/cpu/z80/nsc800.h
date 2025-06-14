@@ -18,7 +18,7 @@ enum
 class nsc800_device : public z80_device
 {
 public:
-	nsc800_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nsc800_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

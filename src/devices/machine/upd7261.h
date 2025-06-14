@@ -12,7 +12,7 @@ class upd7261_device
 	: public device_t
 {
 public:
-	upd7261_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	upd7261_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// output lines
 	auto out_dreq() { return m_dreq.bind(); }

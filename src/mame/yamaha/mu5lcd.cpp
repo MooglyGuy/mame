@@ -18,7 +18,7 @@ const tiny_rom_entry *mu5lcd_device::device_rom_region() const
 	return ROM_NAME(mu5lcd);
 }
 
-mu5lcd_device::mu5lcd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mu5lcd_device::mu5lcd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MU5LCD, tag, owner, clock),
 	m_lcd(*this, "lcd"),
 	m_outputs(*this, "%x.%x.%x.%x", 0U, 0U, 0U, 0U)

@@ -375,7 +375,7 @@ void mcm70_state::mcm70_palette(palette_device &palette) const
 
 void mcm70_state::mcm70(machine_config &config)
 {
-	I8008(config, m_maincpu, 400000); // TODO: verify clock
+	I8008(config, m_maincpu, XTAL::u(400000)); // TODO: verify clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &mcm70_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &mcm70_state::io_map);
 

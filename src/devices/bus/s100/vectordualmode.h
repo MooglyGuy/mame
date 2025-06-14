@@ -14,7 +14,7 @@ class s100_vector_dualmode_device :
 		public device_s100_card_interface
 {
 public:
-	s100_vector_dualmode_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	s100_vector_dualmode_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	void device_start() override ATTR_COLD;

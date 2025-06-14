@@ -3001,7 +3001,7 @@ void cobra_state::cobra(machine_config &config)
 void cobra_state::bujutsu(machine_config &config)
 {
 	cobra(config);
-	KONAMI_WINDY2_JVS_IO_2L12B_PANEL(config, "windy2_jvsio", 0, m_jvs_host);
+	KONAMI_WINDY2_JVS_IO_2L12B_PANEL(config, "windy2_jvsio", m_jvs_host);
 }
 
 void cobra_state::rf5c400_map(address_map& map)

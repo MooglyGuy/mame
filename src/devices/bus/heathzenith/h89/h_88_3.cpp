@@ -22,13 +22,13 @@ namespace {
 class h_88_3_device : public device_t, public device_h89bus_right_card_interface
 {
 public:
-	h_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = XTAL(1'843'200).value());
+	h_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(1'843'200));
 
 	virtual void write(u8 select_lines, u8 offset, u8 data) override;
 	virtual u8 read(u8 select_lines, u8 offset) override;
 
 protected:
-	h_88_3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	h_88_3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -76,18 +76,18 @@ private:
 class ha_88_3_device : public h_88_3_device
 {
 public:
-	ha_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = XTAL(1'843'200).value());
+	ha_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(1'843'200));
 
 protected:
 	virtual ioport_constructor device_input_ports() const override;
 };
 
-h_88_3_device::h_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h_88_3_device::h_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h_88_3_device(mconfig, H89BUS_H_88_3, tag, owner, clock)
 {
 }
 
-h_88_3_device::h_88_3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock):
+h_88_3_device::h_88_3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, type, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_int_cb(*this),
@@ -278,7 +278,7 @@ void h_88_3_device::modem_int(int data)
 void h_88_3_device::device_add_mconfig(machine_config &config)
 {
 	// LP DCE 0xE0-0xE7 (340 - 347 octal)
-	INS8250(config, m_lp, m_clock);
+	INS8250(config, m_lp, clock());
 	m_lp->out_tx_callback().set("dce1", FUNC(rs232_port_device::write_txd));
 	m_lp->out_dtr_callback().set("dce1", FUNC(rs232_port_device::write_dtr));
 	m_lp->out_rts_callback().set("dce1", FUNC(rs232_port_device::write_rts));
@@ -293,7 +293,7 @@ void h_88_3_device::device_add_mconfig(machine_config &config)
 
 
 	// AUX DCE 0xD0-0xD7 (320 - 327 octal)
-	INS8250(config, m_aux, m_clock);
+	INS8250(config, m_aux, clock());
 	m_aux->out_tx_callback().set("dce2", FUNC(rs232_port_device::write_txd));
 	m_aux->out_dtr_callback().set("dce2", FUNC(rs232_port_device::write_dtr));
 	m_aux->out_rts_callback().set("dce2", FUNC(rs232_port_device::write_rts));
@@ -308,7 +308,7 @@ void h_88_3_device::device_add_mconfig(machine_config &config)
 
 
 	// Modem DTE 0xD7-0xDF (330 - 337 octal)
-	INS8250(config, m_modem, m_clock);
+	INS8250(config, m_modem, clock());
 	m_modem->out_tx_callback().set("dte", FUNC(rs232_port_device::write_txd));
 	m_modem->out_dtr_callback().set("dte", FUNC(rs232_port_device::write_dtr));
 	m_modem->out_rts_callback().set("dte", FUNC(rs232_port_device::write_rts));
@@ -378,7 +378,7 @@ ioport_constructor ha_88_3_device::device_input_ports() const
 	return INPUT_PORTS_NAME(ha_88_3_device);
 }
 
-ha_88_3_device::ha_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+ha_88_3_device::ha_88_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h_88_3_device(mconfig, H89BUS_HA_88_3, tag, owner, clock)
 {
 }

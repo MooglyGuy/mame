@@ -1672,7 +1672,7 @@ void blackbox_base_state::blackbox_base(machine_config &config)
 	m_pia->writepb_handler().set(FUNC(blackbox_base_state::pia_portb_w));
 	m_pia->cb2_handler().set_nop(); // Not connected
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 
 	FRUIT_SAMPLES(config, m_samples);
 }
@@ -1737,7 +1737,7 @@ void blackbox_em_opto_sndgen_state::blackbox_em_opto_sndgen(machine_config &conf
 	m_maincpu->set_addrmap(AS_PROGRAM, &blackbox_em_opto_sndgen_state::blackbox_em_opto_sndgen_map);
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 1000).add_route(ALL_OUTPUTS, "mono", 0.2);
+	BEEP(config, m_beep, XTAL::u(1000)).add_route(ALL_OUTPUTS, "mono", 0.2);
 }
 
 void blackbox_em_opto_aux_state::blackbox_em_opto_aux_base(machine_config &config)
@@ -1745,7 +1745,7 @@ void blackbox_em_opto_aux_state::blackbox_em_opto_aux_base(machine_config &confi
 	blackbox_base(config);
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 1000).add_route(ALL_OUTPUTS, "mono", 0.2);
+	BEEP(config, m_beep, XTAL::u(1000)).add_route(ALL_OUTPUTS, "mono", 0.2);
 }
 
 void blackbox_em_opto_aux_state::blackbox_em_opto_aux(machine_config &config)
@@ -1762,7 +1762,7 @@ void blackbox_em_opto_music_state::blackbox_em_opto_music(machine_config &config
 	add_em_reels(config, 20, attotime::from_double(1.1));
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &blackbox_em_opto_music_state::blackbox_em_opto_music_map);
-	TMS1000(config, m_tms1000, 452000); // R and C unknown, pitch matches a real machine
+	TMS1000(config, m_tms1000, XTAL::u(452000)); // R and C unknown, pitch matches a real machine
 
 	m_tms1000->read_k().set(FUNC(blackbox_em_opto_music_state::tms1000_k_r));
 	m_tms1000->write_r().set(FUNC(blackbox_em_opto_music_state::tms1000_r_w));

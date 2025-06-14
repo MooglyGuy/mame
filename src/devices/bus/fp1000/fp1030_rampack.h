@@ -12,7 +12,7 @@
 class fp1030_rampack_device : public fp1060io_exp_device
 {
 public:
-	fp1030_rampack_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fp1030_rampack_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void io_map(address_map &map) override ATTR_COLD;
 	virtual u8 get_id() override { return 0x01; };

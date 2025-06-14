@@ -325,7 +325,7 @@ void discrete_task::check(discrete_task &dest_task)
 						{
 							output_buffer buf;
 
-							buf.node_buf = std::make_unique<double []>((task_node->sample_rate() + sound_manager::STREAMS_UPDATE_FREQUENCY) / sound_manager::STREAMS_UPDATE_FREQUENCY);
+							buf.node_buf = std::make_unique<double []>((task_node->sample_rate() + sound_manager::STREAMS_UPDATE_FREQUENCY.value()) / sound_manager::STREAMS_UPDATE_FREQUENCY.value());
 							buf.ptr.store(buf.node_buf.get(), std::memory_order_relaxed);
 							buf.source = dest_node->m_input[inputnum];
 							buf.node_num = inputnode_num;

@@ -148,7 +148,7 @@ void jankmg2_state::jankmg2(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // TODO: wrong type, verify
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.5); // TODO: wrong type, verify
 }
 
 

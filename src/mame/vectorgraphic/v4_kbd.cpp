@@ -125,7 +125,7 @@ Row 6
 #include "v4_kbd.h"
 #include "speaker.h"
 
-vector4_keyboard_device::vector4_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+vector4_keyboard_device::vector4_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VECTOR4_KEYBOARD, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_beeper(*this, "beeper")
@@ -177,14 +177,15 @@ void vector4_keyboard_device::prog_map(address_map &map)
 
 void vector4_keyboard_device::device_add_mconfig(machine_config &config)
 {
-	I8035(config, m_mcu, 3'580'000); // P8048H in EA mode
+
+	I8035(config, m_mcu, XTAL::u(3'580'000)); // P8048H in EA mode
 	m_mcu->set_addrmap(AS_PROGRAM, &vector4_keyboard_device::prog_map);
 	m_mcu->p1_in_cb().set(FUNC(vector4_keyboard_device::p1_r));
 	m_mcu->p2_out_cb().set(FUNC(vector4_keyboard_device::p2_w));
 
 	SPEAKER(config, "mono").front_center();
 	// Correct frequency, but lacking harmonics
-	BEEP(config, m_beeper, 786).add_route(ALL_OUTPUTS, "mono", 0.125);
+	BEEP(config, m_beeper, XTAL::u(786)).add_route(ALL_OUTPUTS, "mono", 0.125);
 }
 
 INPUT_PORTS_START(vector4_keyboard)

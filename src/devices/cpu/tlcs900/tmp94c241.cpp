@@ -94,7 +94,7 @@ static constexpr u8 NUM_MASKABLE_IRQS = sizeof(tmp94c241_irq_vector_map) / 4;
 //  tmp94c241_device - constructor
 //-------------------------------------------------
 
-tmp94c241_device::tmp94c241_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+tmp94c241_device::tmp94c241_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	tlcs900h_device(mconfig, TMP94C241, tag, owner, clock),
 	m_an_read(*this, 0),
 	m_port_read(*this, 0),

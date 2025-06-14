@@ -9,7 +9,7 @@
 class juku_mouse_device : public device_t
 {
 public:
-	juku_mouse_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	juku_mouse_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto int_handler() { return m_int_handler.bind(); }
 

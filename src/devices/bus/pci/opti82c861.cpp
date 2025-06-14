@@ -15,12 +15,12 @@
 
 DEFINE_DEVICE_TYPE(OPTI_82C861, opti_82c861_device, "opti82c861", "OPTi 82C861 \"FireLink\" USB OHCI controller")
 
-opti_82c861_device::opti_82c861_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+opti_82c861_device::opti_82c861_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 {
 }
 
-opti_82c861_device::opti_82c861_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+opti_82c861_device::opti_82c861_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: opti_82c861_device(mconfig, OPTI_82C861, tag, owner, clock)
 {
 }

@@ -48,7 +48,7 @@ public:
 	static constexpr XTAL NOMINAL_CLOCK = XTAL::u(90'000'000);
 
 	// construction
-	voodoo_banshee_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
+	voodoo_banshee_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		voodoo_banshee_device(mconfig, VOODOO_BANSHEE, tag, owner, clock, voodoo::voodoo_model::VOODOO_BANSHEE) { }
 
 	// core address map and read/write helpers
@@ -175,7 +175,7 @@ public:
 	static constexpr XTAL NOMINAL_CLOCK = XTAL::u(132'000'000);
 
 	// construction
-	voodoo_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	voodoo_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// device-level overrides

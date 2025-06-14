@@ -18,7 +18,7 @@
 class vpx3220a_device : public device_t, public i2c_hle_interface
 {
 public:
-	vpx3220a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	vpx3220a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override;

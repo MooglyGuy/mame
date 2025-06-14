@@ -23,7 +23,7 @@ DEFINE_DEVICE_TYPE(H8323, h8323_device, "h8323", "Hitachi H8/323")
 DEFINE_DEVICE_TYPE(H8322, h8322_device, "h8322", "Hitachi H8/322")
 
 
-h8325_device::h8325_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size) :
+h8325_device::h8325_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size) :
 	h8_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(h8325_device::map), this)),
 	m_intc(*this, "intc"),
 	m_port(*this, "port%u", 1),
@@ -37,32 +37,32 @@ h8325_device::h8325_device(const machine_config &mconfig, device_type type, cons
 {
 }
 
-h83257_device::h83257_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83257_device::h83257_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8325_device(mconfig, H83257, tag, owner, clock, 0xf000, 0x800)
 {
 }
 
-h83256_device::h83256_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h83256_device::h83256_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8325_device(mconfig, H83256, tag, owner, clock, 0xc000, 0x800)
 {
 }
 
-h8325_device::h8325_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8325_device::h8325_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8325_device(mconfig, H8325, tag, owner, clock, 0x8000, 0x400)
 {
 }
 
-h8324_device::h8324_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8324_device::h8324_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8325_device(mconfig, H8324, tag, owner, clock, 0x6000, 0x400)
 {
 }
 
-h8323_device::h8323_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8323_device::h8323_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8325_device(mconfig, H8323, tag, owner, clock, 0x4000, 0x200)
 {
 }
 
-h8322_device::h8322_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8322_device::h8322_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8325_device(mconfig, H8322, tag, owner, clock, 0x2000, 0x100)
 {
 }

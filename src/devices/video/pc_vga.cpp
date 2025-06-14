@@ -1887,7 +1887,7 @@ void vga_device::mode_setup_w(offs_t offset, u8 data)
  *
  *************************************/
 
-svga_device::svga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+svga_device::svga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: vga_device(mconfig, type, tag, owner, clock)
 {
 }

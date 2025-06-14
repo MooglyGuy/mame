@@ -18,7 +18,7 @@ constexpr u8 OUT_PORT_MASK = 0x1f; // 5-bit output port
 DEFINE_DEVICE_TYPE(IGS027A, igs027a_cpu_device, "igs027a", "IGS 027A ARM CPU (little)")
 
 
-igs027a_cpu_device::igs027a_cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+igs027a_cpu_device::igs027a_cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	arm7_cpu_device(
 			mconfig,
 			IGS027A,

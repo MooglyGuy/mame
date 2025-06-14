@@ -176,7 +176,7 @@ protected:
 	int m_post_run_cycles;
 
 	// Typed constructor
-	m68000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	m68000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// Create the decode table
 	void init_decode_table();

@@ -51,7 +51,7 @@ Internal registers:
 DEFINE_DEVICE_TYPE(MSX_S1990, msx_s1990_device, "msx_s1990", "MSX-Engine S1990")
 
 
-msx_s1990_device::msx_s1990_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_s1990_device::msx_s1990_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_S1990, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_program_config("program", ENDIANNESS_LITTLE, 8, 16, 0)

@@ -37,7 +37,7 @@
 DEFINE_DEVICE_TYPE(ICD2061A, icd2061a_device, "icd2061a", "IC Designs 2061A Dual Programmable Graphics Clock Generator")
 
 
-icd2061a_device::icd2061a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+icd2061a_device::icd2061a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ICD2061A, tag, owner, clock)
 	, m_vclkout_changed_cb(*this)
 	, m_mclkout_changed_cb(*this)
@@ -165,13 +165,13 @@ TIMER_CALLBACK_MEMBER( icd2061a_device::update_clock_callback )
 		if (m_powerdown_mode == 1 || m_powerdown_divisor == 0)
 			m_reg_clocks[MREG] = 0;
 		else
-			m_reg_clocks[MREG] = clock() / ((17 - m_powerdown_divisor) * 2); // 1 = divisor of 32, 15 = divisor of 4
+			m_reg_clocks[MREG] = clock().value() / ((17 - m_powerdown_divisor) * 2); // 1 = divisor of 32, 15 = divisor of 4
 	} else if (m_mclkout_select == MCLKOUT_MREG) {
 		const int a = BIT(m_regs[MREG], 21, 2); // register addr
 		const int p = BIT(m_regs[MREG], 10, 7) + 3; // p counter value
 		const int m = BIT(m_regs[MREG], 7, 3); // post-vco divisor
 		const int q = BIT(m_regs[MREG], 0, 7) + 2; // q counter value
-		m_reg_clocks[MREG] = (clock() * m_prescale[a] * (p / double(q))) / (1 << m);
+		m_reg_clocks[MREG] = (clock().value() * m_prescale[a] * (p / double(q))) / (1 << m);
 	} else {
 		LOGTODO("unimplemented mclkout selected %d\n", m_mclkout_select);
 	}
@@ -203,7 +203,7 @@ TIMER_CALLBACK_MEMBER( icd2061a_device::update_clock_callback )
 		const int p = BIT(m_regs[m_vclkout_select], 10, 7) + 3; // p counter value
 		const int m = BIT(m_regs[m_vclkout_select], 7, 3); // post-vco divisor
 		const int q = BIT(m_regs[m_vclkout_select], 0, 7) + 2; // q counter value
-		vclkout_clock = m_reg_clocks[m_vclkout_select] = (clock() * m_prescale[a] * (p / double(q))) / (1 << m);
+		vclkout_clock = m_reg_clocks[m_vclkout_select] = (clock().value() * m_prescale[a] * (p / double(q))) / (1 << m);
 	} else {
 		LOGTODO("unimplemented vclkout selected %d\n", m_vclkout_select);
 	}
@@ -217,7 +217,7 @@ TIMER_CALLBACK_MEMBER( icd2061a_device::update_clock_callback )
 void icd2061a_device::update_clock()
 {
 	// Set muxed clock during transition period
-	m_vclkout_changed_cb(m_muxref_vclkout_source ? m_mclkout_clock : clock());
+	m_vclkout_changed_cb(m_muxref_vclkout_source ? m_mclkout_clock : clock().value());
 
 	m_watchdog_timer->adjust(attotime::never);
 	m_update_timer->adjust(attotime::from_msec(m_timeout_interval));
@@ -290,7 +290,7 @@ void icd2061a_device::clk_w(int state)
 				const int p = BIT(m_cmd, 10, 7) + 3; // p counter value
 				const int m = BIT(m_cmd, 7, 3); // post-vco divisor
 				const int q = BIT(m_cmd, 0, 7) + 2; // q counter value
-				const double outclock = (clock() * m_prescale[a] * (p / double(q))) / 1000000.0;
+				const double outclock = (clock().dvalue() * m_prescale[a] * (p / double(q))) / 1000000.0;
 				const double outclock_scaled = outclock / (1 << m);
 
 				m_regs[idx] = m_cmd;

@@ -13,7 +13,7 @@
 class tc0140syt_device : public device_t
 {
 public:
-	tc0140syt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	tc0140syt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto nmi_callback() { return m_nmi_cb.bind(); }
 	auto reset_callback() { return m_reset_cb.bind(); }
@@ -54,7 +54,7 @@ private:
 class pc060ha_device : public tc0140syt_device
 {
 public:
-	pc060ha_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	pc060ha_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(TC0140SYT, tc0140syt_device)

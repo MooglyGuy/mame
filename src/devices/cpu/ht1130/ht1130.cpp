@@ -30,7 +30,7 @@ DEFINE_DEVICE_TYPE(HT1190, ht1190_device, "ht1190", "Holtek HT1190")
 
 
 
-ht1130_device::ht1130_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor data)
+ht1130_device::ht1130_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor data)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_tempram(*this, "tempram")
 	, m_displayram(*this, "displayram")
@@ -44,12 +44,12 @@ ht1130_device::ht1130_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-ht1130_device::ht1130_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ht1130_device::ht1130_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ht1130_device(mconfig, HT1130, tag, owner, clock, address_map_constructor(FUNC(ht1130_device::internal_data_map), this))
 {
 }
 
-ht1190_device::ht1190_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ht1190_device::ht1190_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ht1130_device(mconfig, HT1190, tag, owner, clock, address_map_constructor(FUNC(ht1190_device::internal_data_map_ht1190), this))
 {
 }

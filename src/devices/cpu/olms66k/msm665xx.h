@@ -31,7 +31,7 @@ public:
 	// TODO: port callbacks
 
 protected:
-	msm665xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor mem_map, address_map_constructor data_map);
+	msm665xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor mem_map, address_map_constructor data_map);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -185,7 +185,7 @@ class msm66573_device : public msm665xx_device
 {
 public:
 	// device type constructor
-	msm66573_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msm66573_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	void data_map(address_map &map) ATTR_COLD;

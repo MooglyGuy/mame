@@ -10,7 +10,7 @@
 
 class st_video_device : public device_t, public device_video_interface, public device_palette_interface {
 public:
-	st_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	st_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_ram(T &&tag) { m_ram.set_tag(std::forward<T>(tag)); }
 	template <typename T> void set_mmu(T &&tag) { m_mmu.set_tag(std::forward<T>(tag)); }

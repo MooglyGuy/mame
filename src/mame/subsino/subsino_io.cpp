@@ -31,7 +31,7 @@
 DEFINE_DEVICE_TYPE(SS9602, ss9602_device, "ss9602", "Subsino SS9602 I/O")
 DEFINE_DEVICE_TYPE(SS9802, ss9802_device, "ss9802", "Subsino SS9802 I/O")
 
-subsino_io_device::subsino_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+subsino_io_device::subsino_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_in_port_callback(*this, 0xff)
 	, m_out_port_callback(*this)
@@ -40,12 +40,12 @@ subsino_io_device::subsino_io_device(const machine_config &mconfig, device_type 
 {
 }
 
-ss9602_device::ss9602_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ss9602_device::ss9602_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: subsino_io_device(mconfig, SS9602, tag, owner, clock)
 {
 }
 
-ss9802_device::ss9802_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ss9802_device::ss9802_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: subsino_io_device(mconfig, SS9802, tag, owner, clock)
 {
 }

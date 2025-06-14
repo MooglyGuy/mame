@@ -405,20 +405,20 @@ INPUT_PORTS_END
 void paracaidista_state::paracaidista(machine_config &config)
 {
 	// basic machine hardware
-	I8085A(config, m_maincpu, 6'553'600);
+	I8085A(config, m_maincpu, XTAL::u(6'553'600));
 	m_maincpu->set_addrmap(AS_PROGRAM, &paracaidista_state::paraca_map);
 	m_maincpu->set_addrmap(AS_IO, &paracaidista_state::paraca_portmap);
 	m_maincpu->set_vblank_int("screen", FUNC(paracaidista_state::interrupts));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	I8155(config, m_ppi8155, 6'553'600 / 16);  // port A input, B output, C special mode 2
+	I8155(config, m_ppi8155, XTAL::u(6'553'600) / 16);  // port A input, B output, C special mode 2
 	m_ppi8155->in_pa_callback().set(FUNC(paracaidista_state::input_r));
 	m_ppi8155->out_pb_callback().set(FUNC(paracaidista_state::outputb_w));
 	m_ppi8155->out_pc_callback().set(FUNC(paracaidista_state::outputc_w));
 	m_ppi8155->out_to_callback().set(FUNC(paracaidista_state::sound_out));
 
-	I8257(config, m_dma8257, 6'553'600 / 2);
+	I8257(config, m_dma8257, XTAL::u(6'553'600) / 2);
 	m_dma8257->out_tc_cb().set_inputline(m_maincpu, I8085_RST65_LINE);   // under test
 	m_dma8257->out_hrq_cb().set(FUNC(paracaidista_state::dmac_hrq_w));   // tied to HALT(HOLD) 8085 line
 	m_dma8257->in_memr_cb().set(FUNC(paracaidista_state::dmac_mem_r));   // under test

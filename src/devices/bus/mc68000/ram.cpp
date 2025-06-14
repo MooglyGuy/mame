@@ -11,7 +11,7 @@
 
 DEFINE_DEVICE_TYPE(MC68000_RAM, mc68000_ram_device, "mc68000_ram", "mc-68000 2 MB RAM Expansion")
 
-mc68000_ram_device::mc68000_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mc68000_ram_device::mc68000_ram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MC68000_RAM, tag, owner, clock),
 	device_mc68000_sysbus_card_interface(mconfig, *this)
 {

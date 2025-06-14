@@ -13,7 +13,7 @@
 class matrox_vga_device :  public svga_device
 {
 public:
-	matrox_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	matrox_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void ramdac_ext_map(address_map &map) ATTR_COLD;
 

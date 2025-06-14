@@ -28,7 +28,7 @@ public:
 
 protected:
 	// overridable type for subclass
-	votrax_sc01_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	votrax_sc01_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	// device-level overrides
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -184,7 +184,7 @@ private:
 class votrax_sc01a_device : public votrax_sc01_device
 {
 public:
-	votrax_sc01a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	votrax_sc01a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	// device-level overrides
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

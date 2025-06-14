@@ -46,7 +46,7 @@ const std::array<s32, 16> swx00_sound_device::panmap = {
 
 const std::array<u8, 4> swx00_sound_device::dpcm_offset = { 7, 6, 4, 0 };
 
-swx00_sound_device::swx00_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+swx00_sound_device::swx00_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SWX00_SOUND, tag, owner, clock),
 	  device_sound_interface(mconfig, *this),
 	  device_rom_interface(mconfig, *this)
@@ -59,7 +59,7 @@ void swx00_sound_device::device_add_mconfig(machine_config &config)
 
 void swx00_sound_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 44100);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100));
 
 	save_item(NAME(m_sample_start));
 	save_item(NAME(m_sample_end));

@@ -46,7 +46,7 @@ namespace {
 class nss_tvinterface_device : public device_t, public device_rs232_port_interface
 {
 public:
-	nss_tvinterface_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nss_tvinterface_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -82,7 +82,7 @@ private:
 	void p2_w(u8 data);
 };
 
-nss_tvinterface_device::nss_tvinterface_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nss_tvinterface_device::nss_tvinterface_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NSS_TVINTERFACE, tag, owner, clock),
 	device_rs232_port_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),

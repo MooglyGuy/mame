@@ -45,7 +45,7 @@ class sp400_printer_device : public device_t, public device_sk1100_printer_port_
 public:
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 
-	sp400_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sp400_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -81,7 +81,7 @@ private:
 	required_ioport m_buttons;
 };
 
-sp400_printer_device::sp400_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sp400_printer_device::sp400_printer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SP400_PRINTER, tag, owner, clock),
 	device_sk1100_printer_port_interface(mconfig, *this),
 	m_dsercpu(*this, "dsercpu"),

@@ -197,7 +197,7 @@ INPUT_PORTS_END
 void cnchess_state::cnchess(machine_config &config)
 {
 	// basic machine hardware
-	HD6305Y0(config, m_maincpu, 8'000'000); // approximation, no XTAL
+	HD6305Y0(config, m_maincpu, XTAL::u(8'000'000)); // approximation, no XTAL
 	m_maincpu->read_porta().set(FUNC(cnchess_state::input1_r));
 	m_maincpu->read_portb().set(FUNC(cnchess_state::input2_r));
 	m_maincpu->write_porte().set(FUNC(cnchess_state::input_w<0>));

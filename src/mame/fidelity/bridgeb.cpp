@@ -248,21 +248,21 @@ static const z80_daisy_config daisy_chain[] =
 void bridgeb_state::bridgeb(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 1'000'000); // R/C clock, appromixation
+	Z80(config, m_maincpu, XTAL::u(1'000'000)); // R/C clock, appromixation
 	m_maincpu->set_addrmap(AS_PROGRAM, &bridgeb_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &bridgeb_state::main_io);
 	m_maincpu->set_daisy_config(daisy_chain);
 
-	Z80PIO(config, m_z80pio, 1'000'000);
+	Z80PIO(config, m_z80pio, XTAL::u(1'000'000));
 	m_z80pio->out_int_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 	m_z80pio->out_pa_callback().set(FUNC(bridgeb_state::control_w));
 	m_z80pio->in_pa_callback().set(FUNC(bridgeb_state::input_r));
 	m_z80pio->out_pb_callback().set(FUNC(bridgeb_state::input_w));
 
 	// video hardware
-	DL1414T(config, m_dl1414[0], 0U).update().set(FUNC(bridgeb_state::update_digits<0>));
-	DL1414T(config, m_dl1414[1], 0U).update().set(FUNC(bridgeb_state::update_digits<1>));
-	DL1414T(config, m_dl1414[2], 0U).update().set(FUNC(bridgeb_state::update_digits<2>));
+	DL1414T(config, m_dl1414[0]).update().set(FUNC(bridgeb_state::update_digits<0>));
+	DL1414T(config, m_dl1414[1]).update().set(FUNC(bridgeb_state::update_digits<1>));
+	DL1414T(config, m_dl1414[2]).update().set(FUNC(bridgeb_state::update_digits<2>));
 
 	PWM_DISPLAY(config, m_led_pwm).set_size(1, 4);
 	config.set_default_layout(layout_fidel_bridgeb);

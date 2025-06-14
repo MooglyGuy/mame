@@ -25,7 +25,7 @@ chips but only cartridges using 2 2KB SRAM chips were produced.
 class msx_cart_hbi55_device : public device_t, public msx_cart_interface, public device_memcard_image_interface
 {
 public:
-	msx_cart_hbi55_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_hbi55_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_HBI55, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, device_memcard_image_interface(mconfig, *this)

@@ -80,62 +80,12 @@ class vme_bus_device
 	, public device_memory_interface
 {
 public:
-<<<<<<< HEAD
 	vme_bus_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL(16'000'000), u8 datawidth = 32);
-=======
-	// VME BUS signals driven to or drived by the VME bus
-	enum class control
-	{
-		AS,
-		DS0,
-		DS1,
-		BERR,
-		DTACK,
-		WRITE
-	};
-
-	enum class address
-	{
-		DS0,
-		DS1,
-		LWORD
-	};
-
-	// construction/destruction
-	template <typename T, typename U>
-	vme_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt, uint32_t slot_nbr, U &&bus_tag)
-		: vme_slot_device(mconfig, tag, owner)
-	{
-		option_reset();
-		opts(*this);
-		set_default_option(dflt);
-		set_fixed(false);
-		set_vme_slot(std::forward<U>(bus_tag), slot_nbr);
-	}
-
-	vme_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
-
-	// Callbacks to the board from the VME bus comes through here
-	auto vme_j1_callback()  { return m_vme_j1_callback.bind(); }
-
-	template <typename T> void set_vme_slot(T &&tag, uint32_t slot_nbr) { m_vme.set_tag(std::forward<T>(tag)); m_slot_nbr = slot_nbr; }
-
-	virtual uint8_t read8(offs_t offset);
-	virtual void write8(offs_t offset, uint8_t data);
-
-protected:
-	vme_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
-
-	// device-level overrides
-	virtual void device_start() override;
-	virtual void device_resolve_objects() override;
->>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	// configuration
 	auto berr() { return m_berr.bind(); }
 	template <unsigned I> auto irq() { return m_irq[I - 1].bind(); }
 
-<<<<<<< HEAD
 	// runtime
 	void berr_w(int state) { m_berr(state); }
 	int iackin_r() { return !m_iack; }
@@ -145,83 +95,6 @@ protected:
 protected:
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
-=======
-	// callbacks
-	devcb_write_line        m_vme_j1_callback;
-	device_vme_card_interface *m_card;
-};
-
-DECLARE_DEVICE_TYPE(VME, vme_device)
-
-
-class vme_card_interface;
-
-class vme_device : public device_t,
-	public device_memory_interface
-{
-public:
-	vme_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
-	~vme_device();
-
-	// inline configuration
-	void set_cputag(const char *tag) { m_cputag = tag; }
-	void use_owner_spaces();
-
-	const address_space_config m_a32_config;
-
-	void add_vme_card(device_vme_card_interface *card);
-
-	//
-	// Address Modifiers
-	//
-	/* There are 6 address modifier lines. They allow the MASTER to pass additional binary
-	   information to the SLAVE during data transfers. Table 2-3 lists all of the 64 possible
-	   address modifier (AM) codes and classifies each into one of three categories:
-	   - Defined
-	   - Reserved
-	   - User defined
-	   The defined address modifier codes can be further classified into three categories:
-	   Short addressing AM codes indicate that address lines A02-A15 are being used to select a BYTE(0-3) group.
-	   Standard addressing AM codes ,indicate that address lines A02-A23 are being used to select a BYTE(0-3) group.
-	   Extended addressing AM codes indicate that address lines A02-A31 are being used to select a BYTE(0-3) group.*/
-
-	enum vme_amod_t
-	{   // Defined and User Defined Address Modifier Values (long bnames from VME standard text. please use short)
-		AMOD_EXTENDED_NON_PRIV_DATA = 0x09, //A32 SC (Single Cycle)
-		A32_SC                      = 0x09, //A32 SC (Single Cycle)
-		AMOD_EXTENDED_NON_PRIV_PRG  = 0x0A,
-		AMOD_EXTENDED_NON_PRIV_BLK  = 0x0B,
-		AMOD_EXTENDED_SUPERVIS_DATA = 0x0D,
-		AMOD_EXTENDED_SUPERVIS_PRG  = 0x0E,
-		AMOD_EXTENDED_SUPERVIS_BLK  = 0x0F,
-		AMOD_USER_DEFINED_FIRST     = 0x10,
-		AMOD_USER_DEFINED_LAST      = 0x1F,
-		AMOD_SHORT_NON_PRIV_ACCESS  = 0x29, //A16 SC
-		A16_SC                      = 0x29, //A16 SC
-		AMOD_SHORT_SUPERVIS_ACCESS  = 0x2D,
-		AMOD_STANDARD_NON_PRIV_DATA = 0x39, //A24 SC
-		A24_SC                      = 0x39, //A24 SC
-		AMOD_STANDARD_NON_PRIV_PRG  = 0x3A,
-		AMOD_STANDARD_NON_PRIV_BLK  = 0x3B, //A24 BLT
-		AMOD_STANDARD_SUPERVIS_DATA = 0x3D,
-		AMOD_STANDARD_SUPERVIS_PRG  = 0x3E,
-		AMOD_STANDARD_SUPERVIS_BLK  = 0x3F
-	};
-	void install_device(vme_amod_t amod, offs_t start, offs_t end, read8_delegate rhandler, write8_delegate whandler, uint32_t mask);
-	void install_device(vme_amod_t amod, offs_t start, offs_t end, read8sm_delegate rhandler, write8sm_delegate whandler, uint32_t mask);
-	void install_device(vme_amod_t amod, offs_t start, offs_t end, read8smo_delegate rhandler, write8smo_delegate whandler, uint32_t mask);
-	//  void install_device(vme_amod_t amod, offs_t start, offs_t end, read8_delegate rhandler, write8_delegate whandler);
-	void install_device(vme_amod_t amod, offs_t start, offs_t end, read16_delegate rhandler, write16_delegate whandler, uint32_t mask);
-	void install_device(vme_amod_t amod, offs_t start, offs_t end, read32_delegate rhandler, write32_delegate whandler, uint32_t mask);
-
-protected:
-	vme_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
-
-	// device-level overrides
-	virtual void device_start() override;
-	virtual void device_reset() override;
-	simple_list<device_vme_card_interface> m_device_list;
->>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	// device_memory_interface implementation
 	virtual space_config_vector memory_space_config() const override;
@@ -250,7 +123,7 @@ class vme_slot_device
 	, public device_slot_interface
 {
 public:
-	vme_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = DERIVED_CLOCK(1, 1));
+	vme_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = DERIVED_CLOCK(1, 1));
 
 	template <typename T>
 	vme_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&slot_options, char const *default_option, bool const fixed = false)

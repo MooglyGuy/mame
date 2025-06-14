@@ -1989,7 +1989,7 @@ void usclssic_state::usclssic(machine_config &config)
 	m_upd4701->set_portx_tag("TRACKX");
 	m_upd4701->set_porty_tag("TRACKY");
 
-	HC157(config, m_buttonmux, 0);
+	HC157(config, m_buttonmux);
 	m_buttonmux->out_callback().set(m_upd4701, FUNC(upd4701_device::middle_w)).bit(0);
 	m_buttonmux->out_callback().append(m_upd4701, FUNC(upd4701_device::right_w)).bit(1);
 	m_buttonmux->out_callback().append(m_upd4701, FUNC(upd4701_device::left_w)).bit(2);
@@ -2108,14 +2108,14 @@ void downtown_state::calibr50(machine_config &config)
 void downtown_state::metafox(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 16000000/2); // 8 MHz
+	M68000(config, m_maincpu, XTAL::u(16000000)/2); // 8 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &downtown_state::downtown_map);
 
-	W65C02(config, m_subcpu, 16000000/8); // 2 MHz
+	W65C02(config, m_subcpu, XTAL::u(16000000)/8); // 2 MHz
 	m_subcpu->set_addrmap(AS_PROGRAM, &downtown_state::metafox_sub_map);
 	TIMER(config, "s_scantimer").configure_scanline(FUNC(downtown_state::sub_interrupt), "screen", 0, 1);
 
-	X1_001(config, m_spritegen, 16000000, m_palette, gfx_sprites);
+	X1_001(config, m_spritegen, XTAL::u(16000000), m_palette, gfx_sprites);
 	m_spritegen->set_gfxbank_callback(FUNC(downtown_state::gfxbank_callback));
 	// position kludges
 	m_spritegen->set_fg_xoffsets(0, 0); // sprites unknown, tilemap correct (test grid)
@@ -2145,7 +2145,7 @@ void downtown_state::metafox(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch[0]);
 	GENERIC_LATCH_8(config, m_soundlatch[1]);
 
-	X1_010(config, m_x1snd, 16000000);   // 16 MHz
+	X1_010(config, m_x1snd, XTAL::u(16000000));   // 16 MHz
 	m_x1snd->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 

@@ -29,7 +29,7 @@ class tanbus_tugcombo_device
 	, public device_tanbus_interface
 {
 protected:
-	tanbus_tugcombo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -60,10 +60,10 @@ private:
 class tanbus_tugcombo2716_device : public tanbus_tugcombo_device
 {
 public:
-	tanbus_tugcombo2716_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo2716_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	tanbus_tugcombo2716_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo2716_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// optional information overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -80,10 +80,10 @@ private:
 class tanbus_tugcombo2732_device : public tanbus_tugcombo_device
 {
 public:
-	tanbus_tugcombo2732_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo2732_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	tanbus_tugcombo2732_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo2732_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// optional information overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -100,10 +100,10 @@ private:
 class tanbus_tugcombo6116_device : public tanbus_tugcombo_device
 {
 public:
-	tanbus_tugcombo6116_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo6116_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	tanbus_tugcombo6116_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugcombo6116_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// optional information overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -118,7 +118,7 @@ private:
 class tanbus_tugesc2716_device : public tanbus_tugcombo2716_device
 {
 public:
-	tanbus_tugesc2716_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugesc2716_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -127,7 +127,7 @@ public:
 class tanbus_tugesc2732_device : public tanbus_tugcombo2732_device
 {
 public:
-	tanbus_tugesc2732_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_tugesc2732_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

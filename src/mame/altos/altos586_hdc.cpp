@@ -58,7 +58,7 @@
 
 DEFINE_DEVICE_TYPE(ALTOS586_HDC, altos586_hdc_device, "altos586_hdc", "Disk Controller board for Altos 586")
 
-altos586_hdc_device::altos586_hdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+altos586_hdc_device::altos586_hdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ALTOS586_HDC, tag, owner, clock)
 	, m_bus(*this, finder_base::DUMMY_TAG, -1)
 	, m_iop(*this, "iop")
@@ -340,11 +340,11 @@ void altos586_hdc_device::device_add_mconfig(machine_config &config)
 	m_iop->set_addrmap(AS_IO, &altos586_hdc_device::altos586_hdc_io);
 	m_iop->set_data_width(16);
 
-	harddisk_image_device &hdd0(HARDDISK(config, "hdd0", 0));
+	harddisk_image_device &hdd0(HARDDISK(config, "hdd0"));
 	hdd0.set_device_load(FUNC(altos586_hdc_device::hdd_load<0U>));
 	hdd0.set_device_unload(FUNC(altos586_hdc_device::hdd_unload<0U>));
 
-	harddisk_image_device &hdd1(HARDDISK(config, "hdd1", 0));
+	harddisk_image_device &hdd1(HARDDISK(config, "hdd1"));
 	hdd1.set_device_load(FUNC(altos586_hdc_device::hdd_load<1U>));
 	hdd1.set_device_unload(FUNC(altos586_hdc_device::hdd_unload<1U>));
 }

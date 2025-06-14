@@ -140,7 +140,7 @@ void gfamily_state::gfamily(machine_config &config)
 	SIS900_ETH(config, "pci:01.1");
 	SIS7001_USB(config, "pci:01.2", 3);
 	SIS7001_USB(config, "pci:01.3", 2);
-	SIS7018_AUDIO(config, "pci:01.4", 0);
+	SIS7018_AUDIO(config, "pci:01.4");
 	// documentation doesn't mention modem part #, derived from Shuttle MS11 MB manual
 //  SIS7013_MODEM_AC97(config, "pci:01.6"
 

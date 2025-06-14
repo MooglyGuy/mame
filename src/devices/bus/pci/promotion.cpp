@@ -41,7 +41,7 @@ DEFINE_DEVICE_TYPE(PROMOTION3210,   promotion3210_device,   "promotion3210",   "
 //DEFINE_DEVICE_TYPE(PROMOTIONAT25,   promotionat25_device,   "promotionat25",   "Alliance Semiconductor ProMotion aT25")
 
 
-promotion3210_device::promotion3210_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+promotion3210_device::promotion3210_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_vga(*this, "vga")
 	, m_vga_rom(*this, "vga_rom")
@@ -51,7 +51,7 @@ promotion3210_device::promotion3210_device(const machine_config &mconfig, device
 	set_ids(0x11423210, 0x00, 0x030000, 0x11423210);
 }
 
-promotion3210_device::promotion3210_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+promotion3210_device::promotion3210_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: promotion3210_device(mconfig, PROMOTION3210, tag, owner, clock)
 {
 }
@@ -73,7 +73,7 @@ void promotion3210_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(vga_device::screen_update));
 
-	PROMOTION_VGA(config, m_vga, 0);
+	PROMOTION_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// TODO: configurable between 1 and 4 MB (2x EDO slots on board)
 	// Only known OEM Board (Miro) has 1MB

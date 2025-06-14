@@ -20,7 +20,7 @@ class nlq401_device : public device_t, public device_centronics_peripheral_inter
 {
 public:
 	// device type constructor
-	nlq401_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nlq401_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 

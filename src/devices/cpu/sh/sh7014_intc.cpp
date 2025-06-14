@@ -17,7 +17,7 @@
 DEFINE_DEVICE_TYPE(SH7014_INTC, sh7014_intc_device, "sh7014intc", "SH7014 Interrupt Controller")
 
 
-sh7014_intc_device::sh7014_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_intc_device::sh7014_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_INTC, tag, owner, clock)
 	, m_set_irq_cb(*this)
 {

@@ -12,7 +12,7 @@
 class gsx8800_device : public pc8801_exp_device
 {
 public:
-	gsx8800_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	gsx8800_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::SOUND; }
 

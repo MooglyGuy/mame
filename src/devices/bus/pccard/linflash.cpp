@@ -68,7 +68,7 @@
 #define LOGREAD(...) LOGMASKED(LOG_READ, __VA_ARGS__)
 #define LOGWRITE(...) LOGMASKED(LOG_WRITE, __VA_ARGS__)
 
-linear_flash_pccard_device::linear_flash_pccard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor amap) :
+linear_flash_pccard_device::linear_flash_pccard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor amap) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_pccard_interface(mconfig, *this),
 	device_memory_interface(mconfig, *this),
@@ -138,7 +138,7 @@ void linear_flash_pccard_device::update_wp(int state)
 
 
 template<unsigned N>
-linear_flash_pccard_8bit_device<N>::linear_flash_pccard_8bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+linear_flash_pccard_8bit_device<N>::linear_flash_pccard_8bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(linear_flash_pccard_8bit_device<N>::amap), this)),
 	m_l(*this, "%ul", 1U),
 	m_u(*this, "%uu", 1U)
@@ -159,7 +159,7 @@ void linear_flash_pccard_8bit_device<N>::amap(address_map &map)
 
 
 template<unsigned N>
-linear_flash_pccard_16bit_device<N>::linear_flash_pccard_16bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+linear_flash_pccard_16bit_device<N>::linear_flash_pccard_16bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(linear_flash_pccard_16bit_device<N>::amap), this)),
 	m_flash(*this, "flash.%u", 1U)
 {
@@ -176,7 +176,7 @@ void linear_flash_pccard_16bit_device<N>::amap(address_map &map)
 
 
 template<unsigned N>
-linear_flash_pccard_29f017a_device<N>::linear_flash_pccard_29f017a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+linear_flash_pccard_29f017a_device<N>::linear_flash_pccard_29f017a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_8bit_device<N>(mconfig, type, tag, owner, clock)
 {
 }
@@ -193,7 +193,7 @@ void linear_flash_pccard_29f017a_device<N>::device_add_mconfig(machine_config &c
 
 
 template<unsigned N>
-linear_flash_pccard_lh28f016s_device<N>::linear_flash_pccard_lh28f016s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+linear_flash_pccard_lh28f016s_device<N>::linear_flash_pccard_lh28f016s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_8bit_device<N>(mconfig, type, tag, owner, clock)
 {
 }
@@ -211,7 +211,7 @@ void linear_flash_pccard_lh28f016s_device<N>::device_add_mconfig(machine_config 
 
 
 template<unsigned N>
-linear_flash_pccard_28f640j5_device<N>::linear_flash_pccard_28f640j5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+linear_flash_pccard_28f640j5_device<N>::linear_flash_pccard_28f640j5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_16bit_device<N>(mconfig, type, tag, owner, clock)
 {
 }
@@ -223,22 +223,22 @@ void linear_flash_pccard_28f640j5_device<N>::device_add_mconfig(machine_config &
 		INTEL_28F640J5(config, linear_flash_pccard_16bit_device<N>::m_flash[i]);
 }
 
-fujitsu_16mb_flash_card_device::fujitsu_16mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+fujitsu_16mb_flash_card_device::fujitsu_16mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_29f017a_device(mconfig, FUJITSU_16MB_FLASH_CARD, tag, owner, clock)
 {
 }
 
-fujitsu_32mb_flash_card_device::fujitsu_32mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+fujitsu_32mb_flash_card_device::fujitsu_32mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_29f017a_device(mconfig, FUJITSU_32MB_FLASH_CARD, tag, owner, clock)
 {
 }
 
-id245p01_device::id245p01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+id245p01_device::id245p01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_lh28f016s_device(mconfig, ID245P01, tag, owner, clock)
 {
 }
 
-pm24276_device::pm24276_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pm24276_device::pm24276_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	linear_flash_pccard_28f640j5_device(mconfig, PM24276, tag, owner, clock)
 {
 }

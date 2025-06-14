@@ -56,11 +56,11 @@ class device_zxbus_card_interface;
 class zxbus_slot_device : public device_t, public device_single_card_slot_interface<device_zxbus_card_interface>
 {
 public:
-	zxbus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	zxbus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T, typename U>
-	zxbus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, T &&zxbus_tag, U &&slot_options, const char *dflt)
-		: zxbus_slot_device(mconfig, tag, owner, clock)
+	zxbus_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&zxbus_tag, U &&slot_options, const char *dflt)
+		: zxbus_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		slot_options(*this);
@@ -70,7 +70,7 @@ public:
 	}
 
 protected:
-	zxbus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	zxbus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -83,7 +83,7 @@ DECLARE_DEVICE_TYPE(ZXBUS_SLOT, zxbus_slot_device)
 class zxbus_device : public device_t
 {
 public:
-	zxbus_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	zxbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_iospace(T &&tag, int spacenum) { m_iospace.set_tag(std::forward<T>(tag), spacenum); }
 	template<typename T> void install_device(offs_t addrstart, offs_t addrend, T &device, void (T::*map)(class address_map &map), u64 unitmask = ~u64(0))
@@ -95,7 +95,7 @@ public:
 	void install_shadow_io(memory_view::memory_view_entry &io_view);
 
 protected:
-	zxbus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	zxbus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 

@@ -58,11 +58,11 @@ INPUT_PORTS_END
 void stvdev_state::stvdev(machine_config &config)
 {
 	// TODO: two other clocks, one at 36 MHz near CAK chip and another at 14.318 MHz near 486 socket
-	I486(config, m_maincpu, 33'000'000);
+	I486(config, m_maincpu, XTAL::u(33'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &stvdev_state::stvdev_map);
 	m_maincpu->set_addrmap(AS_IO, &stvdev_state::stvdev_io);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

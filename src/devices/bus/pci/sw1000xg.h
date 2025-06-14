@@ -14,7 +14,7 @@
 
 class sw1000xg_device : public ymp21_device {
 public:
-	sw1000xg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	sw1000xg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

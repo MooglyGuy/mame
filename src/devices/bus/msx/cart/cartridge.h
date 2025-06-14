@@ -17,7 +17,7 @@ DECLARE_DEVICE_TYPE(MSX_SLOT_CARTRIDGE, msx_slot_cartridge_device)
 class msx_slot_cartridge_device : public msx_slot_cartridge_base_device
 {
 public:
-	msx_slot_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::string get_default_card_software(get_default_card_software_hook &hook) const override;
 

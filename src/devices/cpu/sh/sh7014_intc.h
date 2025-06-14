@@ -67,7 +67,7 @@ public:
 
 	typedef device_delegate<void (int vector, int level, bool is_internal)> set_irq_delegate;
 
-	sh7014_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	sh7014_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename... T> void set_irq_callback(T &&... args) { m_set_irq_cb.set(std::forward<T>(args)...); }
 

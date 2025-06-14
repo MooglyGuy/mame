@@ -1062,7 +1062,7 @@ void pc9801vm_state::fdc_3mode_w(offs_t offset, uint8_t data)
 		if (m_fdc_3mode.access_144mb)
 		{
 			floppy->set_rpm(300);
-			m_fdc_2hd->set_rate(500000);
+			m_fdc_2hd->set_rate(XTAL::u(500000));
 		}
 		else
 		{
@@ -2365,7 +2365,7 @@ void pc9801vm_state::pc9801_ide(machine_config &config)
 void pc98_base_state::pc9801_serial(machine_config &config)
 {
 	// clocked by PIT channel 2
-	I8251(config, m_sio_rs, 0);
+	I8251(config, m_sio_rs);
 	m_sio_rs->txd_handler().set("serial", FUNC(rs232_port_device::write_txd));
 	m_sio_rs->rts_handler().set("serial", FUNC(rs232_port_device::write_rts));
 	m_sio_rs->dtr_handler().set("serial", FUNC(rs232_port_device::write_dtr));
@@ -2617,10 +2617,10 @@ void pc9801us_state::pc9801us(machine_config &config)
 
 	pit_clock_config(config, xtal / 4);
 
-	PC98_119_KBD(config.replace(), m_keyb, 0);
+	PC98_119_KBD(config.replace(), m_keyb);
 	m_keyb->rxd_callback().set("sio_kbd", FUNC(i8251_device::write_rxd));
 
-	PC98_SDIP(config, "sdip", 0);
+	PC98_SDIP(config, "sdip");
 }
 
 void pc9801us_state::pc9801fs(machine_config &config)
@@ -2642,7 +2642,7 @@ void pc9801us_state::pc9801fs(machine_config &config)
 //	PC98_119_KBD(config.replace(), m_keyb, 0);
 //	m_keyb->rxd_callback().set("sio_kbd", FUNC(i8251_device::write_rxd));
 
-	PC98_SDIP(config, "sdip", 0);
+	PC98_SDIP(config, "sdip");
 }
 
 void pc9801bx_state::pc9801bx2(machine_config &config)
@@ -2659,7 +2659,7 @@ void pc9801bx_state::pc9801bx2(machine_config &config)
 
 	pit_clock_config(config, xtal / 4); // unknown, fixes timer error at POST, /4 ~ /7
 
-	PC98_SDIP(config, "sdip", 0);
+	PC98_SDIP(config, "sdip");
 
 	// minimum RAM: 1.8 / 3.6 MB (?)
 	// maximum RAM: 19.6 MB

@@ -8,7 +8,7 @@
 
 DEFINE_DEVICE_TYPE(MATROX_VGA,  matrox_vga_device,  "matrox_vga",  "Matrox MGA2064W VGA i/f")
 
-matrox_vga_device::matrox_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+matrox_vga_device::matrox_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, MATROX_VGA, tag, owner, clock)
 {
 	m_main_if_space_config = address_space_config("io_regs", ENDIANNESS_LITTLE, 8, 4, 0, address_map_constructor(FUNC(matrox_vga_device::io_3bx_3dx_map), this));

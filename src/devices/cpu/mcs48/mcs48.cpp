@@ -1268,7 +1268,7 @@ void mcs48_cpu_device::device_reset()
 	port_w(2, m_p2);
 
 	if (!m_t0_clk_func.isnull())
-		m_t0_clk_func(0);
+		m_t0_clk_func(XTAL());
 }
 
 

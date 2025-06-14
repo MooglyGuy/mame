@@ -55,7 +55,7 @@ public:
 		IRQ_E = 0x80
 	};
 
-	sh_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T, typename U> sh_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int tgr_count, int tier_mask, U &&intc, int irq_base,
 															int t0, int t1, int t2, int t3, int t4, int t5, int t6, int t7)
@@ -133,7 +133,7 @@ protected:
 
 class sh_mtu_device : public device_t {
 public:
-	sh_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> sh_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, int timer_count)
 		: sh_mtu_device(mconfig, tag, owner)

@@ -26,7 +26,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(PC87306, pc87306_device, "pc87306", "National Semiconductor PC87306 Super I/O Enhanced Sidewinder Lite")
 
-pc87306_device::pc87306_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc87306_device::pc87306_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PC87306, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)

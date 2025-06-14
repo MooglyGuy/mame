@@ -63,7 +63,7 @@ enum parerr_mask : u8
 
 DEFINE_DEVICE_TYPE(SGI_CTL1, sgi_ctl1_device, "sgi_ctl1", "SGI CTL1")
 
-sgi_ctl1_device::sgi_ctl1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_ctl1_device::sgi_ctl1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_CTL1, tag, owner, clock)
 	, m_bus(*this, finder_base::DUMMY_TAG, -1, 32)
 	, m_simms(*this, "SIMMS")

@@ -28,7 +28,7 @@ public:
 	virtual uint8_t data_r() { return 0x00; }
 
 protected:
-	psion_asic3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_asic3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -52,7 +52,7 @@ class psion_psu_asic5_device : public psion_asic3_device
 {
 public:
 	// construction/destruction
-	psion_psu_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_psu_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void data_w(uint16_t data) override;
 	virtual uint8_t data_r() override;
@@ -65,7 +65,7 @@ class psion_psu_asic3_device : public psion_asic3_device
 {
 public:
 	// construction/destruction
-	psion_psu_asic3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_psu_asic3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void data_w(uint16_t data) override;
 	virtual uint8_t data_r() override;

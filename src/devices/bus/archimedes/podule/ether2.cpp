@@ -24,7 +24,7 @@ class arc_ether2_aeh50_device :
 {
 public:
 	// construction/destruction
-	arc_ether2_aeh50_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	arc_ether2_aeh50_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::COMMS; }
 
@@ -96,7 +96,7 @@ void arc_ether2_aeh50_device::device_add_mconfig(machine_config &config)
 //  arc_ether2_aeh50_device - constructor
 //-------------------------------------------------
 
-arc_ether2_aeh50_device::arc_ether2_aeh50_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_ether2_aeh50_device::arc_ether2_aeh50_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ARC_ETHER2_AEH50, tag, owner, clock)
 	, device_archimedes_podule_interface(mconfig, *this)
 	, m_podule_rom(*this, "podule_rom")

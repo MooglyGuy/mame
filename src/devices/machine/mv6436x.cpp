@@ -29,7 +29,7 @@ DEFINE_DEVICE_TYPE(MV64361_PCI_HOST, mv64361_pci_host_device, "mv64361_pci_host"
 //  MV64361 SYSTEM CONTROLLER
 //**************************************************************************
 
-mv64361_device::mv64361_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mv64361_device::mv64361_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MV64361, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_pcihost(*this, finder_base::DUMMY_TAG, 0)
@@ -1125,7 +1125,7 @@ void mv64361_device::pci1_mem3_w(offs_t offset, uint32_t data, uint32_t mem_mask
 //  MV64361 PCI HOST
 //**************************************************************************
 
-mv64361_pci_host_device::mv64361_pci_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mv64361_pci_host_device::mv64361_pci_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	pci_host_device(mconfig, MV64361_PCI_HOST, tag, owner, clock),
 	m_mem_config("memory_space", ENDIANNESS_LITTLE, 32, 32),
 	m_io_config("io_space", ENDIANNESS_LITTLE, 32, 32)

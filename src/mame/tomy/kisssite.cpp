@@ -89,7 +89,7 @@ void kisssite_state::mem(address_map &map)
 
 void kisssite_state::kisssite(machine_config &config)
 {
-	MIPSX(config, m_maincpu, 60'000'000);
+	MIPSX(config, m_maincpu, XTAL::u(60'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &kisssite_state::mem);
 
 	CDROM(config, "cdrom").set_interface("cdrom");

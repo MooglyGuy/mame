@@ -1392,7 +1392,7 @@ void netlist_mame_sound_device::device_start()
 		// always audio.  In particular the ay8910 may send a stream
 		// of resistor values, which would be destroyed by resampling.
 
-		e->m_stream = stream_alloc(1, 0, SAMPLE_RATE_INPUT_ADAPTIVE);
+		e->m_stream = stream_alloc(1, 0, XTAL(), SAMPLE_RATE_INPUT_ADAPTIVE);
 		m_in.emplace(e->id(), e);
 		const auto sample_time = netlist::netlist_time::from_raw(static_cast<netlist::netlist_time::internal_type>(nltime_from_attotime(m_attotime_per_clock).as_raw()));
 		e->resolve_params(sample_time);

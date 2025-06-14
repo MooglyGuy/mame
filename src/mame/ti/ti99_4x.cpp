@@ -961,7 +961,7 @@ void ti99_4x_state::ti99_4(machine_config& config)
 	m_tms9901->read_cb().set(FUNC(ti99_4x_state::psi_input_4)); // use a separate one for 99/4
 
 	// Input/output port: normal config
-	TI99_IOPORT(config, m_ioport, XTAL(), ti99_ioport_options_plain, nullptr);
+	TI99_IOPORT(config, m_ioport, ti99_ioport_options_plain, nullptr);
 	m_ioport->extint_cb().set(FUNC(ti99_4x_state::extint));
 	m_ioport->ready_cb().set(TI99_DATAMUX_TAG, FUNC(bus::ti99::internal::datamux_device::ready_line));
 
@@ -972,7 +972,7 @@ void ti99_4x_state::ti99_4(machine_config& config)
 	soundgen.add_route(ALL_OUTPUTS, "sound_out", 0.75);
 
 	// Joystick port. We can connect a joyport mouse or a handset (99/4-specific).
-	TI99_JOYPORT(config, m_joyport, XTAL(), ti99_joyport_options_994, "twinjoy");
+	TI99_JOYPORT(config, m_joyport, ti99_joyport_options_994, "twinjoy");
 	m_joyport->int_cb().set(FUNC(ti99_4x_state::handset_interrupt_in));
 }
 
@@ -1022,7 +1022,7 @@ void ti99_4x_state::ti99_4a(machine_config& config)
 	m_tms9901->read_cb().set(FUNC(ti99_4x_state::psi_input_4a));
 
 	// Input/output port: Normal config
-	TI99_IOPORT(config, m_ioport, XTAL(), ti99_ioport_options_plain, nullptr);
+	TI99_IOPORT(config, m_ioport, ti99_ioport_options_plain, nullptr);
 	m_ioport->extint_cb().set(FUNC(ti99_4x_state::extint));
 	m_ioport->ready_cb().set(TI99_DATAMUX_TAG, FUNC(bus::ti99::internal::datamux_device::ready_line));
 
@@ -1033,7 +1033,7 @@ void ti99_4x_state::ti99_4a(machine_config& config)
 	soundgen.add_route(ALL_OUTPUTS, "sound_out", 0.75);
 
 	// Joystick port
-	TI99_JOYPORT(config, m_joyport, XTAL(), ti99_joyport_options_mouse, "twinjoy");
+	TI99_JOYPORT(config, m_joyport, ti99_joyport_options_mouse, "twinjoy");
 }
 
 /*
@@ -1118,13 +1118,13 @@ void ti99_4x_state::ti99_4ev_60hz(machine_config& config)
 	TI99_EVPCCONN(config, TI99_EVPC_CONN_TAG).vdpint_cb().set(FUNC(ti99_4x_state::video_interrupt_evpc_in));
 
 	// Input/output port: Configure for EVPC
-	TI99_IOPORT(config, m_ioport, XTAL(), ti99_ioport_options_evpc, "peb");
+	TI99_IOPORT(config, m_ioport, ti99_ioport_options_evpc, "peb");
 	m_ioport->extint_cb().set(FUNC(ti99_4x_state::extint));
 	m_ioport->ready_cb().set(TI99_DATAMUX_TAG, FUNC(bus::ti99::internal::datamux_device::ready_line));
 
 	// Joystick port
 	// No joyport mouse, since we have a bus mouse with the EVPC
-	TI99_JOYPORT(config, m_joyport, XTAL(), ti99_joyport_options_plain, "twinjoy");
+	TI99_JOYPORT(config, m_joyport, ti99_joyport_options_plain, "twinjoy");
 }
 
 /*****************************************************************************

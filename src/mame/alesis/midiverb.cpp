@@ -71,7 +71,7 @@ Audio inputs are emulated using MAME's audio input capabilities.
 class midiverb_dsp_device : public device_t, public device_sound_interface
 {
 public:
-	midiverb_dsp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) ATTR_COLD;
+	midiverb_dsp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) ATTR_COLD;
 
 	void program_select_w(u8 data);
 
@@ -100,7 +100,7 @@ private:
 
 DEFINE_DEVICE_TYPE(MIDIVERB_DSP, midiverb_dsp_device, "midiverb_dsp", "MIDIverb discrete DSP");
 
-midiverb_dsp_device::midiverb_dsp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+midiverb_dsp_device::midiverb_dsp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MIDIVERB_DSP, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_microcode(*this, ":dsp_microcode")
@@ -124,7 +124,7 @@ void midiverb_dsp_device::device_start()
 	// The actual sample rate works out to 23,437.5 KHz. But stream_alloc takes
 	// a u32, and .value() will round it down to 23,437 KHz.
 	const XTAL sample_clock = 6_MHz_XTAL / CLOCKS_PER_INSTRUCTION / INSTRUCTIONS_PER_SAMPLE;
-	m_stream = stream_alloc(1, 2, sample_clock.value());
+	m_stream = stream_alloc(1, 2, sample_clock);
 
 	save_item(NAME(m_program));
 	save_item(NAME(m_accum));

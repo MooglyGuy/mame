@@ -24,7 +24,7 @@ class namco_c77_device :
 	public h8_device
 {
 public:
-	namco_c77_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namco_c77_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_port1()  { return m_read_port [PORT_1].bind(); }
 	auto write_port1() { return m_write_port[PORT_1].bind(); }
@@ -54,7 +54,7 @@ public:
 	void mdcr_w(uint8_t data);
 
 protected:
-	namco_c77_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint32_t start);
+	namco_c77_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint32_t start);
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

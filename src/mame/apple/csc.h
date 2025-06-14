@@ -12,7 +12,7 @@
 class csc_device : public device_t
 {
 public:
-	csc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	csc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~csc_device() = default;
 
 	auto write_irq() { return m_irq.bind(); }

@@ -55,13 +55,13 @@ private:
 class konami_gn676a_lan_device : public konami_gn676_lan_device
 {
 public:
-	konami_gn676a_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	konami_gn676a_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class konami_gn676b_lan_device : public konami_gn676_lan_device
 {
 public:
-	konami_gn676b_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	konami_gn676b_lan_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

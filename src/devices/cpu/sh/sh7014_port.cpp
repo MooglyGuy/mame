@@ -23,7 +23,7 @@
 DEFINE_DEVICE_TYPE(SH7014_PORT, sh7014_port_device, "sh7014port", "SH7014 I/O Port")
 
 
-sh7014_port_device::sh7014_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_port_device::sh7014_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_PORT, tag, owner, clock)
 	, m_port_a_read_cb(*this, 0)
 	, m_port_a_write_cb(*this)

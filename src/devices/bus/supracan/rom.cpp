@@ -12,7 +12,7 @@
 DEFINE_DEVICE_TYPE(SUPERACAN_ROM_STD,     superacan_rom_device,    "superacan_rom",    "Super A'Can Standard Cart")
 
 
-superacan_rom_device::superacan_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+superacan_rom_device::superacan_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock), device_superacan_cart_interface(mconfig, *this)
 	, m_rom_base(nullptr)
 	, m_nvram_base(nullptr)
@@ -21,7 +21,7 @@ superacan_rom_device::superacan_rom_device(const machine_config &mconfig, device
 {
 }
 
-superacan_rom_device::superacan_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+superacan_rom_device::superacan_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: superacan_rom_device(mconfig, SUPERACAN_ROM_STD, tag, owner, clock)
 {
 }

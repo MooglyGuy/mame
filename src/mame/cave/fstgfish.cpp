@@ -121,11 +121,11 @@ INPUT_PORTS_END
 
 void fstgfish_state::fstgfish(machine_config &config)
 {
-	PENTIUM3(config, m_maincpu, 200'000'000); //  Intel Core 2 Duo, 333/266/200 FSB clocks
+	PENTIUM3(config, m_maincpu, XTAL::u(200'000'000)); //  Intel Core 2 Duo, 333/266/200 FSB clocks
 	m_maincpu->set_addrmap(AS_PROGRAM, &fstgfish_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &fstgfish_state::main_io);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

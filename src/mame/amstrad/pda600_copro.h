@@ -23,7 +23,7 @@ class pda600_copro_device : public device_t,
 							public device_buffered_serial_interface<1 + 1 + 255 + 1>
 {
 public:
-	pda600_copro_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pda600_copro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto tx_callback()    { return m_tx_cb.bind(); }
 	auto tone_callback()  { return m_tone_cb.bind(); }

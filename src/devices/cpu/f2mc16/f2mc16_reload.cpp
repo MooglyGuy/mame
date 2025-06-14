@@ -43,7 +43,7 @@ struct TMCSR { enum : uint16_t
 
 DEFINE_DEVICE_TYPE(F2MC16_RELOAD_TIMER, f2mc16_reload_timer_device, "f2mc16_reload_timer", "F2MC16 16-bit reload timer")
 
-f2mc16_reload_timer_device::f2mc16_reload_timer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t vector) :
+f2mc16_reload_timer_device::f2mc16_reload_timer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t vector) :
 	f2mc16_reload_timer_device(mconfig, tag, owner, clock)
 {
 	m_cpu = downcast<f2mc16_device *>(owner);
@@ -51,7 +51,7 @@ f2mc16_reload_timer_device::f2mc16_reload_timer_device(const machine_config &mco
 	m_vector = vector;
 }
 
-f2mc16_reload_timer_device::f2mc16_reload_timer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_reload_timer_device::f2mc16_reload_timer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_RELOAD_TIMER, tag, owner, clock),
 	m_cpu(nullptr),
 	m_intc(*this, finder_base::DUMMY_TAG),
@@ -98,9 +98,9 @@ void f2mc16_reload_timer_device::device_start()
 void f2mc16_reload_timer_device::device_clock_changed()
 {
 	if (machine().scheduler().currently_executing())
-		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_reload_timer_device::update_peripheral_clock), this), clock());
+		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_reload_timer_device::update_peripheral_clock), this), clock().value());
 	else
-		update_peripheral_clock(clock());
+		update_peripheral_clock(clock().value());
 }
 
 void f2mc16_reload_timer_device::device_reset()
@@ -259,9 +259,9 @@ void f2mc16_reload_timer_device::update()
 			m_tin_hz) :
 		(((m_tmcsr & TMCSR::MOD_GATE) == TMCSR::MOD_GATE_LOW && m_tin) ? 0 :
 			((m_tmcsr & TMCSR::MOD_GATE) == TMCSR::MOD_GATE_HIGH && !m_tin) ? 0 :
-			((m_tmcsr & TMCSR::CSL) == TMCSR::CSL_DIV2) ? clock() / 2 :
-			((m_tmcsr & TMCSR::CSL) == TMCSR::CSL_DIV8) ? clock() / 8 :
-			((m_tmcsr & TMCSR::CSL) == TMCSR::CSL_DIV32) ? clock() / 32 :
+			((m_tmcsr & TMCSR::CSL) == TMCSR::CSL_DIV2) ? clock().value() / 2 :
+			((m_tmcsr & TMCSR::CSL) == TMCSR::CSL_DIV8) ? clock().value() / 8 :
+			((m_tmcsr & TMCSR::CSL) == TMCSR::CSL_DIV32) ? clock().value() / 32 :
 			0);
 
 	attotime event_time = attotime::never;

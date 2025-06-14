@@ -75,7 +75,7 @@ const uint16_t addr_table[] = {0x1e0, 0x080, 0x060, 0x04d, 0x040, 0x036, 0x02d, 
 
 DEFINE_DEVICE_TYPE(ROLAND_SA, roland_sa_device, "roland_sa", "Roland SA CPU-B Sound Generator")
 
-roland_sa_device::roland_sa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+roland_sa_device::roland_sa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ROLAND_SA, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_int_callback(*this)

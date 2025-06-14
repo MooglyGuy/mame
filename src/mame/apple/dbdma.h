@@ -13,13 +13,13 @@ class dbdma_device :  public device_t
 {
 public:
 	// construction/destruction
-	dbdma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, address_space *space)
-		: dbdma_device(mconfig, tag, owner, clock)
+	dbdma_device(const machine_config &mconfig, const char *tag, device_t *owner, address_space *space)
+		: dbdma_device(mconfig, tag, owner)
 	{
 		set_address_space(space);
 	}
 
-	dbdma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dbdma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u32 dma_read(u32 offset);
 	void dma_write(u32 offset, u32 data);

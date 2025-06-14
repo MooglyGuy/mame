@@ -51,7 +51,7 @@ const tiny_rom_entry *psion_3link_serial_device::device_rom_region() const
 
 void psion_3link_serial_device::device_add_mconfig(machine_config &config)
 {
-	PSION_ASIC5(config, m_asic5, 1'536'000).set_mode(psion_asic5_device::PERIPHERAL_MODE); // TODO: clock derived from host
+	PSION_ASIC5(config, m_asic5, XTAL::u(1'536'000)).set_mode(psion_asic5_device::PERIPHERAL_MODE); // TODO: clock derived from host
 	m_asic5->set_info_byte(0x05); // ROM + RS232
 	m_asic5->readpa_handler().set([this]() { return m_rom[m_addr_latch & 0x1ffff]; });
 	m_asic5->writepb_handler().set([this](uint8_t data) { m_addr_latch = (m_addr_latch & 0xffff00) | (data << 0); });
@@ -71,7 +71,7 @@ void psion_3link_serial_device::device_add_mconfig(machine_config &config)
 
 void psion_3link_parallel_device::device_add_mconfig(machine_config &config)
 {
-	PSION_ASIC5(config, m_asic5, 1'536'000).set_mode(psion_asic5_device::PERIPHERAL_MODE); // TODO: clock derived from host
+	PSION_ASIC5(config, m_asic5, XTAL::u(1'536'000)).set_mode(psion_asic5_device::PERIPHERAL_MODE); // TODO: clock derived from host
 	m_asic5->set_info_byte(0x02); // Parallel
 	m_asic5->readpa_handler().set("cent_status_in", FUNC(input_buffer_device::read));
 	m_asic5->writepb_handler().set("cent_data_out", FUNC(output_latch_device::write));
@@ -104,7 +104,7 @@ void psion_3link_parallel_device::device_add_mconfig(machine_config &config)
 //  psion_3link_device - constructor
 //-------------------------------------------------
 
-psion_3link_serial_device::psion_3link_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_3link_serial_device::psion_3link_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_3LINK_SERIAL, tag, owner, clock)
 	, device_psion_sibo_interface(mconfig, *this)
 	, m_rom(*this, "rom")
@@ -113,7 +113,7 @@ psion_3link_serial_device::psion_3link_serial_device(const machine_config &mconf
 {
 }
 
-psion_3link_parallel_device::psion_3link_parallel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_3link_parallel_device::psion_3link_parallel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_3LINK_PARALLEL, tag, owner, clock)
 	, device_psion_sibo_interface(mconfig, *this)
 	, m_asic5(*this, "asic5")

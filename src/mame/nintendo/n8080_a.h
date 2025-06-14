@@ -20,7 +20,7 @@ public:
 	void sound2_w(u8 data);
 
 protected:
-	n8080_sound_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *parent, const XTAL &clock);
+	n8080_sound_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *parent, const XTAL &clock = XTAL());
 
 	required_device<i8035_device> m_cpu;
 

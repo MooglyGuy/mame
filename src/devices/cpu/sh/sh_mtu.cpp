@@ -17,7 +17,7 @@
 DEFINE_DEVICE_TYPE(SH_MTU, sh_mtu_device, "sh_mtu", "SH Multifuntion timer pulse unit")
 DEFINE_DEVICE_TYPE(SH_MTU_CHANNEL, sh_mtu_channel_device, "sh_mtu_channel", "SH Multifuntion timer pulse unit channel")
 
-sh_mtu_device::sh_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_mtu_device::sh_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_MTU, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_timer_channel(*this, "%u", 0)
@@ -164,7 +164,7 @@ void sh_mtu_device::tcbr_w(offs_t, u16 data, u16 mem_mask)
 	logerror("tcbr_w %04x\n", m_tcbr);
 }
 
-sh_mtu_channel_device::sh_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_mtu_channel_device::sh_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_MTU_CHANNEL, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG),

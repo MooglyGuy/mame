@@ -28,7 +28,7 @@ namespace {
 class liebao_device : public mbc_ram_device_base<mbc_8k_device_base>
 {
 public:
-	liebao_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	liebao_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 
@@ -52,7 +52,7 @@ liebao_device::liebao_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_ram_device_base<mbc_8k_device_base>(mconfig, GB_ROM_LIEBAO, tag, owner, clock),
 	m_view_ram(*this, "ram"),
 	m_bank_high_set(0U)

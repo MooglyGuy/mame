@@ -1930,7 +1930,7 @@ void xavix_i2c_state::xavix_i2c_24c16(machine_config& config)
 {
 	xavix(config);
 
-	I2C_24C16(config, "i2cmem", 0);
+	I2C_24C16(config, "i2cmem");
 }
 
 void xavix_i2c_state::xavix_i2c_24c16_4mb(machine_config& config)

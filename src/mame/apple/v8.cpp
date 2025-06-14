@@ -169,7 +169,7 @@ void v8_device::device_start()
 {
 	m_vram = std::make_unique<u32[]>(0x100000 / sizeof(u32));
 
-	m_stream = stream_alloc(8, 2, 22257, STREAM_SYNCHRONOUS);
+	m_stream = stream_alloc(8, 2, XTAL::u(22257), STREAM_SYNCHRONOUS);
 
 	m_6015_timer = timer_alloc(FUNC(v8_device::mac_6015_tick), this);
 	m_6015_timer->adjust(attotime::never);
@@ -982,7 +982,7 @@ void spice_device::bright_contrast_w(offs_t offset, u8 data)
 void tinkerbell_device::device_add_mconfig(machine_config &config)
 {
 	spice_device::device_add_mconfig(config);
-	m_screen->set_raw(25175000, 800, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(25175000), 800, 0, 640, 525, 0, 480);
 
 	m_pseudovia->readvideo_handler().set(FUNC(tinkerbell_device::via2_video_config_r));
 }

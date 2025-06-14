@@ -13,12 +13,12 @@ class pvga1a_vga_device : public svga_device
 public:
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
-	pvga1a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pvga1a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual uint8_t mem_r(offs_t offset) override;
 	virtual void mem_w(offs_t offset, uint8_t data) override;
 protected:
-	pvga1a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pvga1a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -52,7 +52,7 @@ private:
 class wd90c00_vga_device : public pvga1a_vga_device
 {
 public:
-	wd90c00_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wd90c00_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// TODO: backport to original PVGA1A
 	// claims these as CNF(7)-CNF(4), which implies input sense read from GC register instead.
@@ -67,7 +67,7 @@ public:
 	ioport_value egasw2_r();
 	ioport_value egasw1_r();
 protected:
-	wd90c00_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	wd90c00_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_reset() override ATTR_COLD;
 
@@ -111,10 +111,10 @@ private:
 class wd90c11a_vga_device : public wd90c00_vga_device
 {
 public:
-	wd90c11a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wd90c11a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	wd90c11a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	wd90c11a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void sequencer_map(address_map &map) override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -136,10 +136,10 @@ private:
 class wd90c30_vga_device : public wd90c11a_vga_device
 {
 public:
-	wd90c30_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wd90c30_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	wd90c30_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	wd90c30_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void crtc_map(address_map &map) override ATTR_COLD;
 	virtual void sequencer_map(address_map &map) override ATTR_COLD;
@@ -156,24 +156,24 @@ private:
 class wd90c31_vga_device : public wd90c30_vga_device
 {
 public:
-	wd90c31_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wd90c31_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void ext_io_map(address_map &map) ATTR_COLD;
 
 protected:
-	wd90c31_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	wd90c31_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class wd90c33_vga_device : public wd90c31_vga_device
 {
 public:
-	wd90c33_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wd90c33_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void ext_io_map(address_map &map) override ATTR_COLD;
 	void localbus_if_map(address_map &map) ATTR_COLD;
 
 protected:
-	wd90c33_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	wd90c33_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(PVGA1A, pvga1a_vga_device)

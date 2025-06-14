@@ -644,7 +644,7 @@ void sbackgc_base_state::shared(machine_config &config)
 void sbackgc_state::sbackgc(machine_config &config)
 {
 	// basic machine hardware
-	hmcs400_cpu_device &maincpu(HD614085(config, m_maincpu, 5'000'000)); // approximation, no XTAL
+	hmcs400_cpu_device &maincpu(HD614085(config, m_maincpu, XTAL::u(5'000'000))); // approximation, no XTAL
 	maincpu.nvram_enable_backup(true);
 	maincpu.stop_cb().set(maincpu, FUNC(hmcs400_cpu_device::nvram_set_battery));
 	maincpu.stop_cb().append([this](int state) { if (state) clear_display(); });
@@ -671,7 +671,7 @@ void sbackgc_state::sbackgc(machine_config &config)
 void ecbackg_state::ecbackg(machine_config &config)
 {
 	// basic machine hardware
-	hd6301y0_cpu_device &maincpu(HD6301Y0(config, m_maincpu, 4'000'000)); // approximation, no XTAL
+	hd6301y0_cpu_device &maincpu(HD6301Y0(config, m_maincpu, XTAL::u(4'000'000))); // approximation, no XTAL
 	maincpu.nvram_enable_backup(true);
 	maincpu.standby_cb().set(maincpu, FUNC(hd6301y0_cpu_device::nvram_set_battery));
 	maincpu.standby_cb().append([this](int state) { if (state) clear_display(); });

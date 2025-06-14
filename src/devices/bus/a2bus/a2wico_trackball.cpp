@@ -30,13 +30,13 @@ class a2bus_wicotrackball_device:
 {
 public:
 	// construction/destruction
-	a2bus_wicotrackball_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_wicotrackball_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// optional information overrides
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 
 protected:
-	a2bus_wicotrackball_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_wicotrackball_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -98,7 +98,7 @@ ioport_constructor a2bus_wicotrackball_device::device_input_ports() const
     LIVE DEVICE
 ***************************************************************************/
 
-a2bus_wicotrackball_device::a2bus_wicotrackball_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_wicotrackball_device::a2bus_wicotrackball_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_a2bus_card_interface(mconfig, *this),
 	m_wicotrackballb(*this, WICOTRACKBALL_BUTTONS_TAG), m_wicotrackballxy(*this, { WICOTRACKBALL_XAXIS_TAG, WICOTRACKBALL_YAXIS_TAG }),
@@ -107,7 +107,7 @@ a2bus_wicotrackball_device::a2bus_wicotrackball_device(const machine_config &mco
 {
 }
 
-a2bus_wicotrackball_device::a2bus_wicotrackball_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_wicotrackball_device::a2bus_wicotrackball_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	a2bus_wicotrackball_device(mconfig, A2BUS_WICOTRACKBALL, tag, owner, clock)
 {
 }

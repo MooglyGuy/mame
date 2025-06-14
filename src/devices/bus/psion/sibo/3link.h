@@ -25,7 +25,7 @@ class psion_3link_serial_device : public device_t, public device_psion_sibo_inte
 {
 public:
 	// construction/destruction
-	psion_3link_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	psion_3link_serial_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t overrides
@@ -54,7 +54,7 @@ class psion_3link_parallel_device : public device_t, public device_psion_sibo_in
 {
 public:
 	// construction/destruction
-	psion_3link_parallel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	psion_3link_parallel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t overrides

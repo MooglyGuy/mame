@@ -14,7 +14,7 @@
 class mscvia_device : public via6522_device
 {
 public:
-	mscvia_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mscvia_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// Something is definitely customized with how PB1 interrupts work in the MSC's internal VIA1.
 	// This makes CPU/PMU comms work properly and fits with what we see in the leaked System 7.1
@@ -31,12 +31,7 @@ public:
 class msc_device :  public device_t, public device_sound_interface
 {
 public:
-	msc_device(const machine_config &mconfig, const char *tag, device_t *owner)
-		: msc_device(mconfig, tag, owner, (uint32_t)0)
-	{
-	}
-
-	msc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	msc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto pb4_callback() { return write_pb4.bind(); }
 	auto pb5_callback() { return write_pb5.bind(); }
@@ -87,7 +82,7 @@ private:
 
 	sound_stream *m_stream;
 	emu_timer *m_6015_timer;
-	u32 m_cpu_clock;
+	XTAL m_cpu_clock;
 	int m_via_interrupt, m_pmu_interrupt, m_via2_interrupt, m_scc_interrupt, m_last_taken_interrupt;
 	bool m_overlay;
 	u32 *m_ram_ptr, *m_rom_ptr;

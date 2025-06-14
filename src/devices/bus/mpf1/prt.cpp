@@ -51,13 +51,13 @@ class mpf_prt_device : public device_t, public device_mpf1_exp_interface
 public:
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 
-	mpf_prt_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_prt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: mpf_prt_device(mconfig, MPF_PRT, tag, owner, clock)
 	{
 	}
 
 protected:
-	mpf_prt_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	mpf_prt_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, type, tag, owner, clock)
 		, device_mpf1_exp_interface(mconfig, *this)
 		, m_rom_u5(*this, "u5")
@@ -118,7 +118,7 @@ private:
 class mpf_prt_ip_device : public mpf_prt_device
 {
 public:
-	mpf_prt_ip_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_prt_ip_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: mpf_prt_device(mconfig, MPF_PRT_IP, tag, owner, clock)
 	{
 	}

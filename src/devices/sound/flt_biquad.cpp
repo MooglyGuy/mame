@@ -505,12 +505,12 @@ void filter_biquad_device::recalc()
 	LOGMASKED(LOG_PARAMS,"Filter cutoff is: %f Hz\n",m_fc);
 	LOGMASKED(LOG_PARAMS,"Filter Q factor is: %f (damping ratio is: %f)\n",m_q,(1.0/(2.0*m_q)));
 	LOGMASKED(LOG_PARAMS,"Filter (multiplicative) gain is: %f\n",m_gain);
-	LOGMASKED(LOG_PARAMS,"Stream sample rate is: %f\n",m_stream->sample_rate());
+	LOGMASKED(LOG_PARAMS,"Stream sample rate is: %f\n",m_stream->sample_rate().dvalue());
 
 	// if the nyquist frequency of the stream sample rate is below the cutoff,
 	// we need to sanely bail out or we'll get all sorts of horrible aliasing
 	// and noise.
-	if (m_fc >= m_stream->sample_rate() / 2.0)
+	if (m_fc >= m_stream->sample_rate().value() / 2.0)
 	{
 		switch (m_type)
 		{

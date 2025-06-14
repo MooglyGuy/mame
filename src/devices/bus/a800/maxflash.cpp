@@ -17,14 +17,14 @@ TODO:
 DEFINE_DEVICE_TYPE(A800_MAXFLASH_128KB, a800_maxflash_128kb_device, "maxflash_128kb", "Atari 8-bit Atarimax Maxflash 128K flash ROM cart")
 DEFINE_DEVICE_TYPE(A800_MAXFLASH_1MB,   a800_maxflash_1mb_device,   "maxflash_1mb",   "Atari 8-bit Atarimax Maxflash 1MB flash ROM cart")
 
-a800_maxflash_128kb_device::a800_maxflash_128kb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_maxflash_128kb_device::a800_maxflash_128kb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_flash(*this, "flash")
 	, m_bank(0)
 {
 }
 
-a800_maxflash_128kb_device::a800_maxflash_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_maxflash_128kb_device::a800_maxflash_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_maxflash_128kb_device(mconfig, A800_MAXFLASH_128KB, tag, owner, clock)
 {
 }
@@ -100,7 +100,7 @@ void a800_maxflash_128kb_device::rom_bank_w(offs_t offset, uint8_t data)
 
 // 8MB overrides
 
-a800_maxflash_1mb_device::a800_maxflash_1mb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_maxflash_1mb_device::a800_maxflash_1mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_maxflash_128kb_device(mconfig, A800_MAXFLASH_1MB, tag, owner, clock)
 {
 }

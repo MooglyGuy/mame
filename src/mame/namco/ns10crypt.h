@@ -22,7 +22,7 @@ public:
 	virtual uint16_t decrypt(uint16_t cipherword) = 0;
 
 protected:
-	ns10_decrypter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	ns10_decrypter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -69,8 +69,8 @@ public:
 		iv_calculation_function iv_calculation = nullptr;
 	};
 
-	ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
-	ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, ns10_crypto_logic &&logic);
+	ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, ns10_crypto_logic &&logic);
 
 	virtual uint16_t decrypt(uint16_t cipherword) override;
 
@@ -112,8 +112,8 @@ public:
 		iv_calculation_function iv_calculation = nullptr;
 	};
 
-	ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-	ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, ns10_crypto_logic &&logic);
+	ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, ns10_crypto_logic &&logic);
 
 	virtual uint16_t decrypt(uint16_t cipherword) override;
 

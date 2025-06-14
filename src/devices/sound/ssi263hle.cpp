@@ -39,7 +39,7 @@ static const u8 PHONEMES_TO_SC01[0x40] =
 
 } // anonymous namespace
 
-ssi263hle_device::ssi263hle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ssi263hle_device::ssi263hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SSI263HLE, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_votrax(*this, "votrax")

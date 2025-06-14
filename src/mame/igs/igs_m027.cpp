@@ -2016,7 +2016,7 @@ void igs_m027_state::counter_w(int state)
 template <bool Xor>
 void igs_m027_state::m027_noppi(machine_config &config)
 {
-	IGS027A(config, m_maincpu, 22'000'000); // Jungle King 2002 has a 22MHz Xtal, what about the others?
+	IGS027A(config, m_maincpu, XTAL::u(22'000'000)); // Jungle King 2002 has a 22MHz Xtal, what about the others?
 	m_maincpu->set_addrmap(AS_PROGRAM, &igs_m027_state::m027_noppi_map<Xor>);
 	m_maincpu->out_port().set(FUNC(igs_m027_state::io_select_w<1>));
 
@@ -2165,7 +2165,7 @@ void igs_m027_state::lhzb4(machine_config &config)
 {
 	cjddz(config);
 
-	m_oki->set_clock(2'000'000);
+	m_oki->set_clock(XTAL::u(2'000'000));
 }
 
 void igs_m027_state::xypdk(machine_config &config)
@@ -2177,7 +2177,7 @@ void igs_m027_state::xypdk(machine_config &config)
 	// using a PAL) and pin 7 high.  This makes the voices too high-pitched.
 	// Possibly supposed to be 2 MHz with pin 7 low, or 1.375 MHz (22 MHz/16)
 	// with pin 7 high.
-	m_oki->set_clock(2'000'000);
+	m_oki->set_clock(XTAL::u(2'000'000));
 	m_oki->config_pin7(okim6295_device::PIN7_LOW);
 }
 
@@ -2284,7 +2284,7 @@ void igs_m027_state::ccly(machine_config &config)
 
 	HOPPER(config, m_hopper, attotime::from_msec(50));
 
-	m_oki->set_clock(2'000'000);
+	m_oki->set_clock(XTAL::u(2'000'000));
 }
 
 void igs_m027_state::extradrw(machine_config &config)

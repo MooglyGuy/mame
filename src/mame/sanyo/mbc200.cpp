@@ -456,7 +456,7 @@ void mbc200_state::mbc200(machine_config &config)
 	//uart1.txd_handler().set(...); to keyboard
 	uart1.rts_handler().set("uart1", FUNC(i8251_device::write_cts));
 
-	i8251_device &uart2(I8251(config, "uart2", 0)); // INS8251A
+	i8251_device &uart2(I8251(config, "uart2")); // INS8251A
 	uart2.txd_handler().set("rs232c", FUNC(rs232_port_device::write_txd));
 	uart2.rts_handler().set("rs232c", FUNC(rs232_port_device::write_rts));
 	uart2.dtr_handler().set("rs232c", FUNC(rs232_port_device::write_dtr));

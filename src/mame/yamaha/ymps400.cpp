@@ -46,7 +46,7 @@ void ps400_state::ps400_map(address_map &map)
 
 void ps400_state::ps400(machine_config &config)
 {
-	I8039(config, m_maincpu, 6'000'000);
+	I8039(config, m_maincpu, XTAL::u(6'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &ps400_state::ps400_map);
 
 	SPEAKER(config, "speaker").front_center();

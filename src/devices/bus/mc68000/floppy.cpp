@@ -20,7 +20,7 @@
 
 DEFINE_DEVICE_TYPE(MC68000_FLOPPY, mc68000_floppy_device, "mc68000_floppy", "mc-68000 Floppy Interface")
 
-mc68000_floppy_device::mc68000_floppy_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mc68000_floppy_device::mc68000_floppy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MC68000_FLOPPY, tag, owner, clock),
 	device_mc68000_sysbus_card_interface(mconfig, *this),
 	m_fdc(*this, "fdc"),

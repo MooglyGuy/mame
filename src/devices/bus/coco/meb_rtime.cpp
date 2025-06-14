@@ -28,7 +28,7 @@ namespace
 	{
 		public:
 			// construction/destruction
-			disto_rtime_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+			disto_rtime_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 		protected:
 			// device-level overrides
@@ -57,7 +57,7 @@ namespace
 	//  disto_rtime_device - constructor
 	//-------------------------------------------------
 
-	disto_rtime_device::disto_rtime_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	disto_rtime_device::disto_rtime_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, DISTOMEB_RTIME, tag, owner, clock)
 		, device_distomeb_interface(mconfig, *this)
 		, m_rtc(*this, "rtc")

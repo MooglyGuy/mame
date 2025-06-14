@@ -22,7 +22,7 @@ class bbc_barrybox_device : public device_t, public device_bbc_1mhzbus_interface
 public:
 	static constexpr feature_type unemulated_features() { return feature::MICROPHONE; }
 
-	bbc_barrybox_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	bbc_barrybox_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, BBC_BARRYBOX, tag, owner, clock)
 		, device_bbc_1mhzbus_interface(mconfig, *this)
 		, m_dac(*this,"dac")
@@ -51,7 +51,7 @@ private:
 void bbc_barrybox_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "speaker").front_center();
-	ZN428E(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	ZN428E(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	// TODO: ZN449E ADC
 }

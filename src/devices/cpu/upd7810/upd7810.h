@@ -1373,7 +1373,7 @@ class upd7811_device : public upd7810_device
 {
 public:
 	// construction/destruction
-	upd7811_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	upd7811_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -1381,7 +1381,7 @@ class upd78c11_device : public upd78c10_device
 {
 public:
 	// construction/destruction
-	upd78c11_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	upd78c11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -1389,7 +1389,7 @@ class upd78c14_device : public upd78c10_device
 {
 public:
 	// construction/destruction
-	upd78c14_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	upd78c14_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

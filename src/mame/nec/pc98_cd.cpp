@@ -6,7 +6,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(PC98_CD, pc98_cd_device, "pc98_cd", "NEC PC-98 CD-ROM Drive")
 
-pc98_cd_device::pc98_cd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pc98_cd_device::pc98_cd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	atapi_cdrom_device(mconfig, PC98_CD, tag, owner, clock)
 {
 }

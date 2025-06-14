@@ -28,7 +28,7 @@ namespace bus::ti99::sidecar {
 /*
     Constructor called from subclasses.
 */
-arcturus_device::arcturus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+arcturus_device::arcturus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bus::ti99::internal::ioport_attached_device(mconfig, TI99_ARCTURUS, tag, owner, clock),
 	m_ram(*this, TI99_CARTSC_RAM)
 {

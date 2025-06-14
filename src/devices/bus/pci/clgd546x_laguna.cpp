@@ -18,7 +18,7 @@
 
 DEFINE_DEVICE_TYPE(GD5465_LAGUNA3D, cirrus_gd5465_laguna3d_device, "clgd5465_laguna", "Cirrus Logic GD-5465 \"Laguna 3D\"")
 
-cirrus_gd5465_laguna3d_device::cirrus_gd5465_laguna3d_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+cirrus_gd5465_laguna3d_device::cirrus_gd5465_laguna3d_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, GD5465_LAGUNA3D, tag, owner, clock)
 	, m_vga(*this, "vga")
 	, m_vga_rom(*this, "vga_rom")
@@ -59,7 +59,7 @@ void cirrus_gd5465_laguna3d_device::device_add_mconfig(machine_config &config)
 	screen.set_screen_update(m_vga, FUNC(cirrus_gd5446_vga_device::screen_update));
 
 	// TODO: bump to GD5465
-	CIRRUS_GD5446_VGA(config, m_vga, 0);
+	CIRRUS_GD5446_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// FIXME: shared RAM
 	// in 4 and 8 MB versions

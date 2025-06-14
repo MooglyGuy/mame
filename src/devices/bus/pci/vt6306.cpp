@@ -28,7 +28,7 @@ DEFINE_DEVICE_TYPE(VT6306_PCI, vt6306_device,   "vt6306",   "VT6306 VIA Fire II 
 
 
 
-vt6306_device::vt6306_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+vt6306_device::vt6306_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 {
 	set_ids(0x11063044, 0x00, 0x0c0010, 0x11063044);
@@ -36,7 +36,7 @@ vt6306_device::vt6306_device(const machine_config &mconfig, device_type type, co
 //  set_ids(0x11063044, 0x46, 0x0c0010, 0x1106e8c1);
 }
 
-vt6306_device::vt6306_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vt6306_device::vt6306_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vt6306_device(mconfig, VT6306_PCI, tag, owner, clock)
 {
 }

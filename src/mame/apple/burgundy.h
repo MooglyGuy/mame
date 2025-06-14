@@ -23,7 +23,7 @@ class burgundy_device : public device_t, public device_sound_interface
 {
 public:
 	// construction/destruction
-	burgundy_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	burgundy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto dma_output() { return m_output_cb.bind(); }
 	auto dma_input() { return m_input_cb.bind(); }

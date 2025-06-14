@@ -19,13 +19,13 @@ class altos586_hdc_device : public device_t
 {
 public:
 	template <typename T>
-	altos586_hdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&bus_tag)
+	altos586_hdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&bus_tag)
 		: altos586_hdc_device(mconfig, tag, owner, clock)
 	{
 		m_bus.set_tag(std::forward<T>(bus_tag), AS_PROGRAM);
 	}
 
-	altos586_hdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	altos586_hdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint16_t mem_r(offs_t offset, uint16_t mem_mask = ~0);
 	void mem_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);

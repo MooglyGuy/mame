@@ -258,7 +258,7 @@ void mcpx_isalpc_device::device_add_mconfig(machine_config &config)
 	dma8237_1.out_dack_callback<2>().set(FUNC(mcpx_isalpc_device::dma1_dack2_w));
 	dma8237_1.out_dack_callback<3>().set(FUNC(mcpx_isalpc_device::dma1_dack3_w));
 
-	pit8254_device &pit8254(PIT8254(config, "pit8254", 0));
+	pit8254_device &pit8254(PIT8254(config, "pit8254"));
 	pit8254.set_clk<0>(1125000); /* heartbeat IRQ */
 	pit8254.out_handler<0>().set(FUNC(mcpx_isalpc_device::pit8254_out0_changed));
 	pit8254.set_clk<1>(1125000); /* originally dram refresh, now only legacy support */

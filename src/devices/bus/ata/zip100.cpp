@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(ZIP100_IDE, zip100_ide_device, "zip100_ide", "Iomega Zip 100MB IDE Drive")
 
-zip100_ide_device::zip100_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+zip100_ide_device::zip100_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ZIP100_IDE, tag, owner, clock)
 	, device_ata_interface(mconfig, *this)
 {
@@ -83,7 +83,7 @@ void zip100_ide_device::ext_map(address_map &map)
 
 void zip100_ide_device::device_add_mconfig(machine_config &config)
 {
-	i80c32_device &mcu(I80C32(config, "mcu", 12'000'000)); // custom SoC; clock unknown
+	i80c32_device &mcu(I80C32(config, "mcu", XTAL::u(12'000'000))); // custom SoC; clock unknown
 	mcu.set_addrmap(AS_PROGRAM, &zip100_ide_device::mem_map);
 	mcu.set_addrmap(AS_IO, &zip100_ide_device::ext_map);
 }

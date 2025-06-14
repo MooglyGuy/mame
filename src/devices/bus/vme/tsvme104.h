@@ -21,7 +21,7 @@ class vme_tsvme104_card_device
 	, public device_vme_card_interface
 {
 public:
-	vme_tsvme104_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	vme_tsvme104_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

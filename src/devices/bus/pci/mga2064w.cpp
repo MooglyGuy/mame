@@ -20,7 +20,7 @@
 
 DEFINE_DEVICE_TYPE(MGA2064W, mga2064w_device, "mga2064w", "Matrox Millennium \"IS-STORM / MGA-2064W\"")
 
-mga2064w_device::mga2064w_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mga2064w_device::mga2064w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, MGA2064W, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_svga(*this, "svga")
@@ -56,7 +56,7 @@ void mga2064w_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_svga, FUNC(matrox_vga_device::screen_update));
 
-	MATROX_VGA(config, m_svga, 0);
+	MATROX_VGA(config, m_svga);
 	m_svga->set_screen("screen");
 	m_svga->set_vram_size(8*1024*1024);
 }

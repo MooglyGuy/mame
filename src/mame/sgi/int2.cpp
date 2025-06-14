@@ -28,7 +28,7 @@
 
 DEFINE_DEVICE_TYPE(SGI_INT2, sgi_int2_device, "sgi_int2", "SGI INT2")
 
-sgi_int2_device::sgi_int2_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_int2_device::sgi_int2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_INT2, tag, owner, clock)
 	, m_pit(*this, "pit")
 	, m_vme(*this, "vme%u_int", 0U)

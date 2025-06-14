@@ -22,7 +22,7 @@ namespace {
 class db50xg_device : public device_t, public device_waveblaster_interface
 {
 public:
-	db50xg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	db50xg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~db50xg_device();
 
 	virtual void midi_rx(int state) override;
@@ -40,7 +40,7 @@ private:
 	void map(address_map &map) ATTR_COLD;
 };
 
-db50xg_device::db50xg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+db50xg_device::db50xg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, DB50XG, tag, owner, clock),
 	device_waveblaster_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),

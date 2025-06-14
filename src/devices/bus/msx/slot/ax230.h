@@ -14,7 +14,7 @@ DECLARE_DEVICE_TYPE(MSX_SLOT_AX230, msx_slot_ax230_device)
 class msx_slot_ax230_device : public device_t, public msx_internal_slot_interface
 {
 public:
-	msx_slot_ax230_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_ax230_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	void set_rom_start(const char *region, u32 offset) { m_rom_region.set_tag(region); m_region_offset = offset; }

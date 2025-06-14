@@ -25,7 +25,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(MBS1_MMU, mbs1_mmu_device, "mbs1_mmu", "Hitachi MB-S1 MMU")
 
-mbs1_mmu_device::mbs1_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mbs1_mmu_device::mbs1_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MBS1_MMU, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_space_config("memory_map", ENDIANNESS_BIG, 8, 20, 0)

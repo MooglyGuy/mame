@@ -44,7 +44,7 @@ enum : uint8_t
 
 DEFINE_DEVICE_TYPE(TRS80_QUICKLOAD, trs80_quickload_device, "trs80_quickload", "TRS-80 /CMD quickload")
 
-trs80_quickload_device::trs80_quickload_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+trs80_quickload_device::trs80_quickload_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: snapshot_image_device(mconfig, TRS80_QUICKLOAD, tag, owner, clock)
 	, m_maincpu(*this, finder_base::DUMMY_TAG)
 {

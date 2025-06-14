@@ -103,12 +103,12 @@ cgb04_apu_device::cgb04_apu_device(const machine_config &mconfig, device_type ty
 {
 }
 
-cgb04_apu_device::cgb04_apu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+cgb04_apu_device::cgb04_apu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: cgb04_apu_device(mconfig, CGB04_APU, tag, owner, clock)
 {
 }
 
-agb_apu_device::agb_apu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+agb_apu_device::agb_apu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: cgb04_apu_device(mconfig, AGB_APU, tag, owner, clock)
 {
 }

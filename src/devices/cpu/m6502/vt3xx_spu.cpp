@@ -21,12 +21,12 @@
 
 DEFINE_DEVICE_TYPE(VT3XX_SPU, vt3xx_spu_device, "vt3xx_spu", "VT3xx SPU")
 
-vt3xx_spu_device::vt3xx_spu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+vt3xx_spu_device::vt3xx_spu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	vt3xx_spu_device(mconfig, VT3XX_SPU, tag, owner, clock)
 {
 }
 
-vt3xx_spu_device::vt3xx_spu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+vt3xx_spu_device::vt3xx_spu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	m6502_device(mconfig, type, tag, owner, clock),
 	m_extdata_config("extdata", ENDIANNESS_LITTLE, 8, 24)
 {

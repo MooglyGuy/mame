@@ -26,7 +26,7 @@ enum
 class z84c015_device : public tmpz84c015_device
 {
 public:
-	z84c015_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	z84c015_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u8 csbr_r() { return m_csbr; }
 

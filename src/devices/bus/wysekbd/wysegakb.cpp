@@ -33,7 +33,7 @@ DEFINE_DEVICE_TYPE(WYSE_PCEINT_KEYBOARD, wyse_pceint_keyboard_device, "wyse_pcei
 //  WYSE GATE ARRAY KEYBOARD EMULATION
 //**************************************************************************
 
-wyse_gate_array_keyboard_device::wyse_gate_array_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+wyse_gate_array_keyboard_device::wyse_gate_array_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, wyse_keyboard_interface(mconfig, *this)
 	, m_r(*this, "R%u", 0U)
@@ -100,7 +100,7 @@ void wyse_gate_array_keyboard_device::wysekbd_update_leds(u8 index)
 //  KEYBOARD DEVICES
 //**************************************************************************
 
-wy85_keyboard_device::wy85_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wy85_keyboard_device::wy85_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_gate_array_keyboard_device(mconfig, WY85_KEYBOARD, tag, owner, clock)
 {
 }
@@ -249,7 +249,7 @@ u8 wy85_keyboard_device::wysekbd_get_id()
 }
 
 
-wy30_keyboard_device::wy30_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wy30_keyboard_device::wy30_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_gate_array_keyboard_device(mconfig, WY30_KEYBOARD, tag, owner, clock)
 {
 }
@@ -383,7 +383,7 @@ u8 wy30_keyboard_device::wysekbd_get_id()
 }
 
 
-wy60_ascii_keyboard_device::wy60_ascii_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wy60_ascii_keyboard_device::wy60_ascii_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_gate_array_keyboard_device(mconfig, WY60_ASCII_KEYBOARD, tag, owner, clock)
 {
 }
@@ -531,7 +531,7 @@ u8 wy60_ascii_keyboard_device::wysekbd_get_id()
 }
 
 
-wyse_at_keyboard_device::wyse_at_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+wyse_at_keyboard_device::wyse_at_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_gate_array_keyboard_device(mconfig, type, tag, owner, clock)
 	, m_caps_led(*this, "caps_led")
 	, m_num_led(*this, "num_led")
@@ -539,7 +539,7 @@ wyse_at_keyboard_device::wyse_at_keyboard_device(const machine_config &mconfig, 
 {
 }
 
-wyse_at_keyboard_device::wyse_at_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wyse_at_keyboard_device::wyse_at_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_at_keyboard_device(mconfig, WYSE_AT_KEYBOARD, tag, owner, clock)
 {
 }
@@ -691,7 +691,7 @@ void wyse_at_keyboard_device::wysekbd_update_leds(u8 index)
 }
 
 
-wyse_316x_keyboard_device::wyse_316x_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wyse_316x_keyboard_device::wyse_316x_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_gate_array_keyboard_device(mconfig, WYSE_316X_KEYBOARD, tag, owner, clock)
 	, m_lclr(*this, "LCLR")
 {
@@ -846,7 +846,7 @@ u8 wyse_316x_keyboard_device::wysekbd_get_id()
 }
 
 
-wyse_pce_keyboard_device::wyse_pce_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wyse_pce_keyboard_device::wyse_pce_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_at_keyboard_device(mconfig, WYSE_PCE_KEYBOARD, tag, owner, clock)
 {
 }
@@ -994,7 +994,7 @@ u8 wyse_pce_keyboard_device::wysekbd_get_id()
 	return 0x82 ^ 0xff;
 }
 
-wyse_pceint_keyboard_device::wyse_pceint_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wyse_pceint_keyboard_device::wyse_pceint_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wyse_at_keyboard_device(mconfig, WYSE_PCEINT_KEYBOARD, tag, owner, clock)
 {
 }

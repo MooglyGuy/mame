@@ -253,7 +253,7 @@ const tiny_rom_entry *microtan_kbd_mt009::device_rom_region() const
 //  microtan_kbd_mt009 - constructor
 //-------------------------------------------------
 
-microtan_kbd_mt009::microtan_kbd_mt009(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+microtan_kbd_mt009::microtan_kbd_mt009(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MICROTAN_KBD_MT009, tag, owner, clock)
 	, device_microtan_kbd_interface(mconfig, *this)
 	, m_rom(*this, "rom")

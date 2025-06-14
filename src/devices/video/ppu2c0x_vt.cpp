@@ -575,7 +575,7 @@ void ppu_vt03_device::videobank0_extra_w(offs_t offset, u8 data) { m_videobank0_
 /* 201e read gun 2 read x (older VT chipsets) */
 /* 201f read gun 2 read y (older VT chipsets) */
 
-ppu_vt3xx_device::ppu_vt3xx_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock) :
+ppu_vt3xx_device::ppu_vt3xx_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	ppu_vt03_device(mconfig, PPU_VT3XX, tag, owner, clock)
 {
 	m_spriteramsize = 0x200;

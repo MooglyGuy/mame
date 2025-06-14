@@ -23,7 +23,7 @@ namespace bus::amiga::zorro {
 class oktagon2008_device : public device_t, public device_zorro2_card_interface, public amiga_autoconfig
 {
 public:
-	oktagon2008_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	oktagon2008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t overrides
@@ -60,7 +60,7 @@ private:
 };
 
 
-oktagon2008_device::oktagon2008_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+oktagon2008_device::oktagon2008_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, AMIGA_OKTAGON2008, tag, owner, clock)
 	, device_zorro2_card_interface(mconfig, *this)
 	, m_scsic(*this, "scsi:7:scsic")

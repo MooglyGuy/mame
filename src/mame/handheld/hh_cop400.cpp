@@ -1659,7 +1659,7 @@ INPUT_PORTS_END
 void minspace_state::minspace(machine_config &config)
 {
 	// basic machine hardware
-	COP421(config, m_maincpu, 850000); // frequency guessed
+	COP421(config, m_maincpu, XTAL::u(850000)); // frequency guessed
 	m_maincpu->set_config(COP400_CKI_DIVISOR_4, COP400_CKO_OSCILLATOR_OUTPUT, false); // guessed
 	m_maincpu->write_g().set(FUNC(minspace_state::write_g));
 	m_maincpu->write_d().set(FUNC(minspace_state::write_d));
@@ -2639,7 +2639,7 @@ INPUT_PORTS_END
 void comparca_state::comparca(machine_config &config)
 {
 	// basic machine hardware
-	COP421(config, m_maincpu, 550000); // approximation - RC osc. R=33K, C=56pF
+	COP421(config, m_maincpu, XTAL::u(550000)); // approximation - RC osc. R=33K, C=56pF
 	m_maincpu->set_config(COP400_CKI_DIVISOR_4, COP400_CKO_OSCILLATOR_OUTPUT, false); // guessed
 	m_maincpu->write_d().set(FUNC(comparca_state::write_d));
 	m_maincpu->write_l().set(FUNC(comparca_state::write_l));
@@ -2780,7 +2780,7 @@ INPUT_PORTS_END
 void lilcomp_state::lilcomp(machine_config &config)
 {
 	// basic machine hardware
-	COP444L(config, m_maincpu, 800000); // approximation - RC osc. R=46.4K, C=100pF
+	COP444L(config, m_maincpu, XTAL::u(800000)); // approximation - RC osc. R=46.4K, C=100pF
 	m_maincpu->set_config(COP400_CKI_DIVISOR_16, COP400_CKO_OSCILLATOR_OUTPUT, false); // guessed
 	m_maincpu->write_d().set(FUNC(lilcomp_state::write_d));
 	m_maincpu->write_l().set(FUNC(lilcomp_state::write_l));

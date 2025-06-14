@@ -45,7 +45,7 @@ const tiny_rom_entry *mm1_keyboard_device::device_rom_region() const
 void mm1_keyboard_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 2600);
+	BEEP(config, m_beeper, XTAL::u(2600));
 	m_beeper->add_route(ALL_OUTPUTS, "mono", 0.25);
 }
 

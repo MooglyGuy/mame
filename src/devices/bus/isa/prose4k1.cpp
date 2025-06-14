@@ -29,7 +29,7 @@ class prose4k1_device : public device_t, public device_isa8_card_interface
 public:
 	static constexpr feature_type unemulated_features() { return feature::SOUND; }
 
-	prose4k1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	prose4k1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		device_t(mconfig, ISA8_PROSE4001, tag, owner, clock),
 		device_isa8_card_interface(mconfig, *this)
 	{
@@ -68,9 +68,9 @@ tiny_rom_entry const *prose4k1_device::device_rom_region() const
 
 void prose4k1_device::device_add_mconfig(machine_config &config)
 {
-	I80188(config, "u8", 8'000'000).set_addrmap(AS_PROGRAM, &prose4k1_device::main_map); // TODO: measure clock
+	I80188(config, "u8", XTAL::u(8'000'000)).set_addrmap(AS_PROGRAM, &prose4k1_device::main_map); // TODO: measure clock
 
-	I8251(config, "u27", 0);
+	I8251(config, "u27");
 }
 
 

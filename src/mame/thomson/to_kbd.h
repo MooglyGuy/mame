@@ -16,7 +16,7 @@
 class to8_keyboard_device : public device_t
 {
 public:
-	to8_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0U);
+	to8_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto data_cb() { return m_data_cb.bind(); }
 
@@ -54,7 +54,7 @@ private:
 class to9_keyboard_device : public device_t
 {
 public:
-	to9_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0U);
+	to9_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto irq_cb() { return m_irq_cb.bind(); }
 
@@ -64,7 +64,7 @@ public:
 	int ktest_r();
 
 protected:
-	to9_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0U);
+	to9_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -105,7 +105,7 @@ private:
 class to9p_keyboard_device : public to9_keyboard_device
 {
 public:
-	to9p_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0U);
+	to9p_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

@@ -778,7 +778,7 @@ public:
 	template<uint8_t Pin> auto adc_in() { return m_adc_in_cb[Pin].bind(); }
 
 protected:
-	avr8_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, const device_type type, uint32_t address_mask, address_map_constructor internal_map);
+	avr8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const device_type type, uint32_t address_mask, address_map_constructor internal_map);
 
 	typedef delegate<void (void)> timer_func;
 

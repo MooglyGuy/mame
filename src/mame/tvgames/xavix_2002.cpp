@@ -563,7 +563,7 @@ void superxavix_i2c_state::superxavix_i2c_24c16(machine_config &config)
 {
 	xavix2002(config);
 
-	I2C_24C16(config, "i2cmem", 0);
+	I2C_24C16(config, "i2cmem");
 }
 
 void superxavix_i2c_state::superxavix_i2c_24c08(machine_config &config)

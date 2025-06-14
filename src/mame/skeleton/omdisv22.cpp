@@ -89,7 +89,7 @@ INPUT_PORTS_END
 /**************************************************************************/
 void omdisv22_state::omdisv22(machine_config &config)
 {
-	UPD78C14(config, m_maincpu, 3'145'728); // 128*64*384, generates 1 Hz INTFT1 and 8192 Hz SCK
+	UPD78C14(config, m_maincpu, XTAL::u(3'145'728)); // 128*64*384, generates 1 Hz INTFT1 and 8192 Hz SCK
 	m_maincpu->pa_in_cb().set_ioport("PA");
 	m_maincpu->pa_out_cb().set_ioport("PA");
 	m_maincpu->pb_in_cb().set_constant(0xff); // bit 1 = display ready

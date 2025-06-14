@@ -18,7 +18,7 @@ class luna_keyboard_device
 	, protected device_matrix_keyboard_interface<8U>
 {
 public:
-	luna_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	luna_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void input_txd(int state) override { device_buffered_serial_interface::rx_w(state); }
 
@@ -45,7 +45,7 @@ private:
 	static constexpr int DATA_BIT_COUNT = 8;
 	static constexpr device_serial_interface::parity_t PARITY = device_serial_interface::PARITY_NONE;
 	static constexpr device_serial_interface::stop_bits_t STOP_BITS = device_serial_interface::STOP_BITS_1;
-	static constexpr int BAUD = 9'600;
+	static constexpr XTAL BAUD = XTAL::u(9'600);
 
 	required_device<beep_device> m_beep;
 	output_finder<2> m_leds;

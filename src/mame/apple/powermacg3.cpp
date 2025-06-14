@@ -140,14 +140,14 @@ void pwrmacg3_state::write_sense(u16 data)
 
 void pwrmacg3_state::pwrmacg3(machine_config &config)
 {
-	PPC750(config, m_maincpu, 66000000);    // actually 233 MHz
+	PPC750(config, m_maincpu, XTAL::u(66000000));    // actually 233 MHz
 	m_maincpu->ppcdrc_set_options(PPCDRC_COMPATIBLE_OPTIONS);
 	m_maincpu->set_addrmap(AS_PROGRAM, &pwrmacg3_state::pwrmacg3_map);
 
-	PCI_ROOT(config, "pci", 0);
-	MPC106(config, m_mpc106, 0, mpc106_host_device::MAP_TYPE_B, "maincpu", "bootrom");
+	PCI_ROOT(config, "pci");
+	MPC106(config, m_mpc106, XTAL(), mpc106_host_device::MAP_TYPE_B, "maincpu", "bootrom");
 
-	heathrow_device &heathrow(HEATHROW(config, "pci:10.0", 0));
+	heathrow_device &heathrow(HEATHROW(config, "pci:10.0", XTAL()));
 	heathrow.set_maincpu_tag("maincpu");
 
 	// Apple's documentation says systems with the 4.0f2 ROM use a Rage II+, but

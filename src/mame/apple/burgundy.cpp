@@ -30,7 +30,7 @@ constexpr u32 CODEC_PRESENT = (1 << 22);
 //  burgundy_device - constructor
 //-------------------------------------------------
 
-burgundy_device::burgundy_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+burgundy_device::burgundy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BURGUNDY, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_output_cb(*this, 0)

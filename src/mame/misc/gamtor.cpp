@@ -42,7 +42,7 @@ class gamtor_vga_device : public svga_device
 {
 public:
 	// construction/destruction
-	gamtor_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	gamtor_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 //  virtual uint8_t mem_r(offs_t offset) override;
 //  virtual void mem_w(offs_t offset, uint8_t data) override;
@@ -58,7 +58,7 @@ protected:
 
 DEFINE_DEVICE_TYPE(GAMTOR_VGA, gamtor_vga_device, "gamtor_vga", "CT-65550 SVGA")
 
-gamtor_vga_device::gamtor_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+gamtor_vga_device::gamtor_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, GAMTOR_VGA, tag, owner, clock)
 {
 	m_main_if_space_config = address_space_config("io_regs", ENDIANNESS_LITTLE, 8, 4, 0, address_map_constructor(FUNC(gamtor_vga_device::io_3bx_3dx_map), this));

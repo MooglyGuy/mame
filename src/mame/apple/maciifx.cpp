@@ -214,13 +214,13 @@ void maciifx_state::via_sync()
 	u64 cycle = m_maincpu->total_cycles();
 
 	// Get the number of the cycle the via is in at that time
-	u64 via_cycle = cycle * m_via1->clock() / m_maincpu->clock();
+	u64 via_cycle = cycle * m_via1->clock().value() / m_maincpu->clock().value();
 
 	// The access is going to start at via_cycle+1 and end at
 	// via_cycle+1.5, compute what that means in maincpu cycles (the
 	// +1 rounds up, since the clocks are too different to ever be
 	// synced).
-	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock() / (2 * m_via1->clock()) + 1;
+	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock().value() / (2 * m_via1->clock().value()) + 1;
 
 	// Finally adjust the main cpu icount as needed.
 	m_maincpu->adjust_icount(-int(main_cycle - cycle));
@@ -415,7 +415,7 @@ INPUT_PORTS_END
 void maciifx_state::maciifx(machine_config &config)
 {
 	/* basic machine hardware */
-	M68030(config, m_maincpu, 40000000);
+	M68030(config, m_maincpu, XTAL::u(40000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &maciifx_state::maciifx_map);
 	m_maincpu->set_dasm_override(std::function(&mac68k_dasm_override), "mac68k_dasm_override");
 
@@ -431,7 +431,7 @@ void maciifx_state::maciifx(machine_config &config)
 	applefdintf_device::add_35_nc(config, m_floppy[1]);
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
 
@@ -494,7 +494,7 @@ void maciifx_state::maciifx(machine_config &config)
 	SOFTWARE_LIST(config, "flop_mac35_clean").set_original("mac_flop_clcracked");
 	SOFTWARE_LIST(config, "flop35_list").set_original("mac_flop");
 
-	nubus_device &nubus(NUBUS(config, "nubus", 0));
+	nubus_device &nubus(NUBUS(config, "nubus"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.out_irq9_callback().set(FUNC(maciifx_state::oss_interrupt<0>));
 	nubus.out_irqa_callback().set(FUNC(maciifx_state::oss_interrupt<1>));

@@ -11,10 +11,8 @@
 class sis7001_usb_device : public pci_device
 {
 public:
-	sis7001_usb_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, 
-		int num_ports
-	) : sis7001_usb_device(mconfig, tag, owner, clock)
+	sis7001_usb_device(const machine_config &mconfig, const char *tag, device_t *owner, int num_ports)
+		: sis7001_usb_device(mconfig, tag, owner)
 	{
 		// 0x0c0310 - Serial Bus Controller, USB, OpenHCI Host
 		// Assume no rev.
@@ -22,7 +20,7 @@ public:
 		// TODO: should really read from a std::list interface
 		m_downstream_ports = num_ports;
 	}
-	sis7001_usb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sis7001_usb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type unemulated_features() { return feature::MEDIA; }
 

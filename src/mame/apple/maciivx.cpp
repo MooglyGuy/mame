@@ -362,7 +362,7 @@ void maciivx_state::maciiv_base(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	APPLE_DFAC(config, m_dfac, 22257);
+	APPLE_DFAC(config, m_dfac, XTAL::u(22257));
 	m_dfac->add_route(0, "speaker", 1.0, 0);
 	m_dfac->add_route(1, "speaker", 1.0, 1);
 

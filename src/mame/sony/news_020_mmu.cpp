@@ -104,7 +104,7 @@ namespace
 	};
 }
 
-news_020_mmu_device::news_020_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+news_020_mmu_device::news_020_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NEWS_020_MMU, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	m_hyperbus_config("hyperbus", ENDIANNESS_BIG, 32, 32, 0),

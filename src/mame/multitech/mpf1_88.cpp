@@ -338,7 +338,7 @@ void mpf1_88_state::mpf1_88(machine_config &config)
 
 	PALETTE(config, "palette", FUNC(mpf1_88_state::lcd_palette), 3);
 
-	hd44780_device &lcdc(HD44780(config, "lcdc", 270'000)); // TODO: clock not measured, datasheet typical clock used
+	hd44780_device &lcdc(HD44780(config, "lcdc", XTAL::u(270'000))); // TODO: clock not measured, datasheet typical clock used
 	lcdc.set_lcd_size(2, 20);
 	lcdc.set_pixel_update_cb(FUNC(mpf1_88_state::lcd_pixel_update));
 	lcdc.set_function_set_at_any_time(true);
@@ -368,9 +368,9 @@ void mpf1_88_state::mpf1_88(machine_config &config)
 	isa8_device &isa8(ISA8(config, "isa", 3.579545_MHz_XTAL/2));
 	isa8.set_memspace(m_maincpu, AS_PROGRAM);
 	isa8.set_iospace(m_maincpu, AS_IO);
-	ISA8_SLOT(config, "isa1", 0, "isa", mpf1_88_isa8_cards, nullptr, false);
-	ISA8_SLOT(config, "isa2", 0, "isa", mpf1_88_isa8_cards, nullptr, false);
-	ISA8_SLOT(config, "isa3", 0, "isa", mpf1_88_isa8_cards, nullptr, false);
+	ISA8_SLOT(config, "isa1", "isa", mpf1_88_isa8_cards, nullptr, false);
+	ISA8_SLOT(config, "isa2", "isa", mpf1_88_isa8_cards, nullptr, false);
+	ISA8_SLOT(config, "isa3", "isa", mpf1_88_isa8_cards, nullptr, false);
 }
 
 } // anonymous namespace

@@ -666,7 +666,7 @@ void mc6847_base_device::device_config_complete()
 		// 256 pixels of active video area per line, with apparently no roundoff
 		// error or drift.
 		screen().set_raw(
-				uint32_t(clock() * 2),
+				clock() * 2,
 				456,                                        // htotal
 				0,                                          // hbend
 				BMP_L_OR_R_BORDER * 2 + BMP_ACTIVE_VIDEO,   // hbstart
@@ -1807,7 +1807,7 @@ mc6847t1_ntsc_device::mc6847t1_ntsc_device(const machine_config &mconfig, device
 {
 }
 
-mc6847t1_ntsc_device::mc6847t1_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mc6847t1_ntsc_device::mc6847t1_ntsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6847t1_ntsc_device(mconfig, MC6847T1_NTSC, tag, owner, clock, vdg_t1_fontdata8x12, 262.0, false)
 {
 }

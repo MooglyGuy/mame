@@ -26,7 +26,7 @@ TODO:
 DEFINE_DEVICE_TYPE(SAA7110A, saa7110a_device, "saa7110a", "SAA7110A OCF1")
 
 // TODO: pin address overridable with SA pin = 1 (0x9e >> 1)
-saa7110a_device::saa7110a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+saa7110a_device::saa7110a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SAA7110A, tag, owner, clock)
 	, i2c_hle_interface(mconfig, *this, 0x9c >> 1)
 	, device_memory_interface(mconfig, *this)

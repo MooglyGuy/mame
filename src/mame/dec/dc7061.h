@@ -13,7 +13,7 @@ class dc7061_device
 	, public nscsi_slot_card_interface
 {
 public:
-	dc7061_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	dc7061_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device configuration
 	auto sys_int() { return m_sys_int.bind(); }

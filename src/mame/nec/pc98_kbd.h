@@ -14,7 +14,7 @@ class pc98_kbd_device : public device_t
 						, protected device_matrix_keyboard_interface<16>
 {
 public:
-	pc98_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pc98_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 
@@ -29,7 +29,7 @@ public:
 	void input_kbde(int state);
 
 protected:
-	pc98_kbd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pc98_kbd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_validity_check(validity_checker &valid) const override;
 	virtual void device_start() override ATTR_COLD;
@@ -54,7 +54,7 @@ private:
 	static constexpr int DATA_BIT_COUNT = 8;
 	static constexpr device_serial_interface::parity_t PARITY = device_serial_interface::PARITY_ODD;
 	static constexpr device_serial_interface::stop_bits_t STOP_BITS = device_serial_interface::STOP_BITS_1;
-	static constexpr int BAUD = 1'200;
+	static constexpr XTAL BAUD = XTAL::u(1'200);
 
 	devcb_write_line m_tx_cb;
 //  devcb_write_line m_rdy_cb;
@@ -68,7 +68,7 @@ private:
 class pc98_119_kbd_device : public pc98_kbd_device
 {
 public:
-	pc98_119_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pc98_119_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

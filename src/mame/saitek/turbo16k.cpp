@@ -146,7 +146,7 @@ void turbo16k_state::machine_start()
 INPUT_CHANGED_MEMBER(turbo16k_state::change_cpu_freq)
 {
 	// 4MHz and 16MHz versions don't exist, but the software supports it
-	static const u32 freq[4] = { 4'000'000, 8'000'000, 12'000'000, 16'000'000 };
+	static const XTAL freq[4] = { XTAL::u(4'000'000), XTAL::u(8'000'000), XTAL::u(12'000'000), XTAL::u(16'000'000) };
 	m_maincpu->set_unscaled_clock(freq[bitswap<2>(newval,4,0)]);
 }
 
@@ -420,7 +420,7 @@ INPUT_PORTS_END
 void turbo16k_state::compan3(machine_config &config)
 {
 	// basic machine hardware
-	HD6301Y0(config, m_maincpu, 8'000'000); // approximation, no XTAL
+	HD6301Y0(config, m_maincpu, XTAL::u(8'000'000)); // approximation, no XTAL
 	m_maincpu->nvram_enable_backup(true);
 	m_maincpu->standby_cb().set(m_maincpu, FUNC(hd6301y0_cpu_device::nvram_set_battery));
 	m_maincpu->standby_cb().append([this](int state) { if (state) m_display->clear(); });
@@ -454,7 +454,7 @@ void turbo16k_state::turbo16k(machine_config &config)
 	compan3(config);
 
 	// basic machine hardware
-	m_maincpu->set_clock(12'000'000);
+	m_maincpu->set_clock(XTAL::u(12'000'000));
 	m_maincpu->standby_cb().append([this](int state) { if (state) lcd_enable(0); });
 	m_maincpu->out_p2_cb().set(FUNC(turbo16k_state::p2l_w));
 

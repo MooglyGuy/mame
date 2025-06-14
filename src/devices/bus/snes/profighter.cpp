@@ -44,7 +44,7 @@ HM6264LP-15 standard SRAM
 MCM60L256AF10 standard SRAM
 */
 
-sns_pro_fighter_q_device::sns_pro_fighter_q_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sns_pro_fighter_q_device::sns_pro_fighter_q_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SNS_PRO_FIGHTER_Q, tag, owner, clock)
 	, device_sns_cart_interface(mconfig, *this)
 {
@@ -86,7 +86,7 @@ void sns_pro_fighter_q_device::device_add_mconfig(machine_config &config)
 	N82077AA(config, "fdc", 24_MHz_XTAL); // actually MCCS3201FN, divider?
 	FLOPPY_CONNECTOR(config, "fdc:0", profght_floppies, "35dd", floppy_image_device::default_pc_floppy_formats).enable_sound(true);
 
-	SNS_CART_SLOT(config, "cartslot", 0, snes_cart, nullptr);
+	SNS_CART_SLOT(config, "cartslot", DERIVED_CLOCK(1, 1), snes_cart, nullptr);
 }
 
 
@@ -103,7 +103,7 @@ M5M5256FP CMOS Static RAM
 6 x HY524800J-80 Fast Page DRAM (on a sub board)
 */
 
-sns_pro_fighter_qa_device::sns_pro_fighter_qa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sns_pro_fighter_qa_device::sns_pro_fighter_qa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SNS_PRO_FIGHTER_QA, tag, owner, clock)
 	, device_sns_cart_interface(mconfig, *this)
 {
@@ -146,7 +146,7 @@ void sns_pro_fighter_qa_device::device_add_mconfig(machine_config &config)
 	WD37C65C(config, "fdc", 16_MHz_XTAL); // actually GM82C765B
 	FLOPPY_CONNECTOR(config, "fdc:0", profght_floppies, "35dd", floppy_image_device::default_pc_floppy_formats).enable_sound(true);
 
-	SNS_CART_SLOT(config, "cartslot", 0, snes_cart, nullptr);
+	SNS_CART_SLOT(config, "cartslot", DERIVED_CLOCK(1, 1), snes_cart, nullptr);
 }
 
 
@@ -162,7 +162,7 @@ D43256AGU-15LL CMOS Static RAM
 4 x GM71C4400BJ70 + 4 x KM44C1000BLJ-6 Fast Page DRAM (on a sub board)
 */
 
-sns_pro_fighter_qb_device::sns_pro_fighter_qb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sns_pro_fighter_qb_device::sns_pro_fighter_qb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SNS_PRO_FIGHTER_QB, tag, owner, clock)
 	, device_sns_cart_interface(mconfig, *this)
 {
@@ -202,7 +202,7 @@ void sns_pro_fighter_qb_device::device_add_mconfig(machine_config &config)
 	N82077AA(config, "fdc", 24_MHz_XTAL); // actually ACCMicro 3201, divider?
 	FLOPPY_CONNECTOR(config, "fdc:0", profght_floppies, "35dd", floppy_image_device::default_pc_floppy_formats).enable_sound(true);
 
-	SNS_CART_SLOT(config, "cartslot", 0, snes_cart, nullptr);
+	SNS_CART_SLOT(config, "cartslot", DERIVED_CLOCK(1, 1), snes_cart, nullptr);
 }
 
 
@@ -220,7 +220,7 @@ MS62256L-10PC CMOS Static RAM on one PCB; CXK58257M-10LL Static RAM on another
 2 x D421700G5-80L-7JD Fast Page DRAM (on a sub board)
 */
 
-sns_pro_fighter_x_device::sns_pro_fighter_x_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sns_pro_fighter_x_device::sns_pro_fighter_x_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SNS_PRO_FIGHTER_X, tag, owner, clock)
 	, device_sns_cart_interface(mconfig, *this)
 {
@@ -262,5 +262,5 @@ void sns_pro_fighter_x_device::device_add_mconfig(machine_config &config)
 	WD37C65C(config, "fdc", 16_MHz_XTAL); // actually GM82C765B
 	FLOPPY_CONNECTOR(config, "fdc:0", profght_floppies, "35dd", floppy_image_device::default_pc_floppy_formats).enable_sound(true);
 
-	SNS_CART_SLOT(config, "cartslot", 0, snes_cart, nullptr);
+	SNS_CART_SLOT(config, "cartslot", DERIVED_CLOCK(1, 1), snes_cart, nullptr);
 }

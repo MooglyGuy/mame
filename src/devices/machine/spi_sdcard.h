@@ -13,7 +13,7 @@
 class spi_sdcard_device : public device_t
 {
 public:
-	spi_sdcard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	spi_sdcard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~spi_sdcard_device();
 
 	void set_prefer_sd() { m_preferred_type = SD_TYPE_V2; }

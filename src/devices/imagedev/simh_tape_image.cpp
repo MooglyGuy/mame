@@ -15,14 +15,14 @@ DEFINE_DEVICE_TYPE(SIMH_TAPE_IMAGE, simh_tape_image_device, "simh_tape_image", "
 
 // construction
 
-simh_tape_image_device::simh_tape_image_device(const machine_config &config, device_type type, const char *tag, device_t *owner, u32 clock)
+simh_tape_image_device::simh_tape_image_device(const machine_config &config, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: microtape_image_device(config, type, tag, owner, clock)
 	, m_file()
 	, m_interface(nullptr)
 {
 }
 
-simh_tape_image_device::simh_tape_image_device(const machine_config &config, const char *tag, device_t *owner, u32 clock)
+simh_tape_image_device::simh_tape_image_device(const machine_config &config, const char *tag, device_t *owner, const XTAL &clock)
 	: simh_tape_image_device(config, SIMH_TAPE_IMAGE, tag, owner, clock)
 {
 }

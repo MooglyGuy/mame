@@ -59,7 +59,7 @@
 
 DEFINE_DEVICE_TYPE(VME_MVME187, vme_mvme187_card_device, "mvme187", "Motorola MVME187")
 
-vme_mvme187_card_device::vme_mvme187_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_mvme187_card_device::vme_mvme187_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_MVME187, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -122,7 +122,7 @@ void vme_mvme187_card_device::device_add_mconfig(machine_config &config)
 	RS232_PORT(config, m_serial[5], default_rs232_devices, nullptr);
 
 	//NCR53C7XX(config, m_scsi, 0);
-	I82596_BE32(config, m_lan, 20'000'000);
+	I82596_BE32(config, m_lan, XTAL::u(20'000'000));
 }
 
 void vme_mvme187_card_device::cpu_mem(address_map &map)

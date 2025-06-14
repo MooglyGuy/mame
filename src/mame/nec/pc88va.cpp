@@ -1391,7 +1391,7 @@ static void pc88va_cbus_devices(device_slot_interface &device)
 // TODO: make it to work and backport to C-Bus
 void pc88va_state::pc88va_sasi(machine_config &config)
 {
-	SCSI_PORT(config, m_sasibus, 0);
+	SCSI_PORT(config, m_sasibus);
 	m_sasibus->set_data_input_buffer("sasi_data_in");
 	m_sasibus->io_handler().set(FUNC(pc88va_state::write_sasi_io)); // bit2
 	m_sasibus->cd_handler().set("sasi_ctrl_in", FUNC(input_buffer_device::write_bit3));

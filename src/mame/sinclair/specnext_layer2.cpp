@@ -9,7 +9,7 @@
 
 #include "screen.h"
 
-specnext_layer2_device::specnext_layer2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_layer2_device::specnext_layer2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SPECNEXT_LAYER2, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 {

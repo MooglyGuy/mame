@@ -43,7 +43,7 @@ namespace {
 class msx_cart_slotexpander_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_slotexpander_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_slotexpander_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_SLOTEXPANDER, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_cartslot(*this, "cartslot%u", 1)

@@ -44,7 +44,7 @@
 class europc_fdc_device : public isa8_fdc_device
 {
 public:
-	europc_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	europc_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -56,7 +56,7 @@ private:
 
 DEFINE_DEVICE_TYPE(EUROPC_FDC, europc_fdc_device, "europc_fdc", "EURO PC FDC hookup")
 
-europc_fdc_device::europc_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+europc_fdc_device::europc_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: isa8_fdc_device(mconfig, EUROPC_FDC, tag, owner, clock)
 {
 }

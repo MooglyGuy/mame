@@ -25,7 +25,7 @@ DEFINE_DEVICE_TYPE(TO8_KEYBOARD, to8_keyboard_device, "to8_kbd", "Thomson TO8 ke
 DEFINE_DEVICE_TYPE(TO9_KEYBOARD, to9_keyboard_device, "to9_kbd", "Thomson TO9 keyboard")
 DEFINE_DEVICE_TYPE(TO9P_KEYBOARD, to9p_keyboard_device, "to9p_kbd", "Thomson TO9+ keyboard")
 
-to8_keyboard_device::to8_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+to8_keyboard_device::to8_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TO8_KEYBOARD, tag, owner, clock)
 	, m_data_cb(*this)
 	, m_io_keyboard(*this, "keyboard.%u", 0)
@@ -33,7 +33,7 @@ to8_keyboard_device::to8_keyboard_device(const machine_config &mconfig, const ch
 {
 }
 
-to9_keyboard_device::to9_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+to9_keyboard_device::to9_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_irq_cb(*this)
 	, m_io_keyboard(*this, "keyboard.%u", 0)
@@ -44,12 +44,12 @@ to9_keyboard_device::to9_keyboard_device(const machine_config &mconfig, device_t
 {
 }
 
-to9_keyboard_device::to9_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+to9_keyboard_device::to9_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: to9_keyboard_device(mconfig, TO9_KEYBOARD, tag, owner, clock)
 {
 }
 
-to9p_keyboard_device::to9p_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+to9p_keyboard_device::to9p_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: to9_keyboard_device(mconfig, TO9P_KEYBOARD, tag, owner, clock)
 {
 }

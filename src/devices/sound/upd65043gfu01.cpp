@@ -34,7 +34,7 @@ constexpr s8 OUTPUT_LEVEL[16] =
 DEFINE_DEVICE_TYPE(UPD65043GFU01, upd65043gfu01_device, "upd65043gfu01", "NEC uPD65043GF-U01")
 
 //**************************************************************************
-upd65043gfu01_device::upd65043gfu01_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+upd65043gfu01_device::upd65043gfu01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UPD65043GFU01, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_irq_cb(*this)

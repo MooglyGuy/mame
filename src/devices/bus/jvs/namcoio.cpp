@@ -305,7 +305,7 @@ Note both games use a CCD camera for the gun sensor.
 
 #define LOGOUTPUT(...)       LOGMASKED(LOG_OUTPUT, __VA_ARGS__)
 
-namco_amc_device::namco_amc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namco_amc_device::namco_amc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NAMCO_AMC, tag, owner, clock),
 	device_jvs_interface(mconfig, *this),
 	device_rs232_port_interface(mconfig, *this),
@@ -529,7 +529,7 @@ class namco_c78_jvs_io_device :
 	public device_jvs_interface
 {
 protected:
-	namco_c78_jvs_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+	namco_c78_jvs_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 		device_t(mconfig, type, tag, owner, clock),
 		device_jvs_interface(mconfig, *this),
 		m_iocpu(*this, "iocpu"),
@@ -709,13 +709,13 @@ class namco_asca_1_device :
 	public namco_c78_jvs_io_device
 {
 public:
-	namco_asca_1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_asca_1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_asca_1_device(mconfig, NAMCO_ASCA1, tag, owner, clock)
 	{
 	}
 
 protected:
-	namco_asca_1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+	namco_asca_1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 		namco_c78_jvs_io_device(mconfig, type, tag, owner, clock),
 		m_output(0)
 	{
@@ -886,13 +886,13 @@ class namco_asca_3_device :
 	public namco_asca_1_device
 {
 public:
-	namco_asca_3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_asca_3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_asca_3_device(mconfig, NAMCO_ASCA3, tag, owner, clock)
 	{
 	}
 
 protected:
-	namco_asca_3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+	namco_asca_3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 		namco_asca_1_device(mconfig, type, tag, owner, clock),
 		m_rotary_prev{}
 	{
@@ -993,7 +993,7 @@ class namco_asca_3a_device :
 	public namco_asca_3_device
 {
 public:
-	namco_asca_3a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_asca_3a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_asca_3_device(mconfig, NAMCO_ASCA3A, tag, owner, clock)
 	{
 	}
@@ -1016,7 +1016,7 @@ class namco_asca_5_device :
 	public namco_asca_3_device
 {
 public:
-	namco_asca_5_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_asca_5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_asca_3_device(mconfig, NAMCO_ASCA5, tag, owner, clock)
 	{
 	}
@@ -1039,7 +1039,7 @@ class namco_em_io1_02_device :
 	public namco_asca_1_device
 {
 public:
-	namco_em_io1_02_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_em_io1_02_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_asca_1_device(mconfig, NAMCO_EMIO102, tag, owner, clock)
 	{
 	}
@@ -1130,13 +1130,13 @@ class namco_tss_io_device :
 	public namco_c78_jvs_io_device
 {
 public:
-	namco_tss_io_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_tss_io_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_tss_io_device(mconfig, NAMCO_TSSIO, tag, owner, clock)
 	{
 	}
 
 protected:
-	namco_tss_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_tss_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_c78_jvs_io_device(mconfig, type, tag, owner, clock),
 		m_sw(*this, "SW"),
 		m_output(0)
@@ -1297,7 +1297,7 @@ class namco_csz1_device :
 	public namco_tss_io_device
 {
 public:
-	namco_csz1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_csz1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_tss_io_device(mconfig, NAMCO_CSZ1, tag, owner, clock)
 	{
 	}
@@ -1354,7 +1354,7 @@ class namco_xmiu1_device :
 	public namco_tss_io_device
 {
 public:
-	namco_xmiu1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_xmiu1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_tss_io_device(mconfig, NAMCO_XMIU1, tag, owner, clock)
 	{
 	}
@@ -1385,13 +1385,13 @@ class namco_fca_11_device :
 	public namco_asca_3_device
 {
 public:
-	namco_fca_11_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_fca_11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_fca_11_device(mconfig, NAMCO_FCA11, tag, owner, clock)
 	{
 	}
 
 protected:
-	namco_fca_11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+	namco_fca_11_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 		namco_asca_3_device(mconfig, type, tag, owner, clock),
 		m_iocpu2(*this, "iocpu2")
 	{
@@ -1451,7 +1451,7 @@ class namco_fca_10_device :
 	public namco_fca_11_device
 {
 public:
-	namco_fca_10_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_fca_10_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_fca_11_device(mconfig, NAMCO_FCA10, tag, owner, clock)
 	{
 	}
@@ -1492,7 +1492,7 @@ class namco_fcb_device :
 	public namco_fca_11_device
 {
 public:
-	namco_fcb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_fcb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		namco_fca_11_device(mconfig, NAMCO_FCB, tag, owner, clock)
 	{
 	}
@@ -1510,7 +1510,7 @@ class namco_em_pri1_01_device :
 	public jvs_hle_device
 {
 public:
-	namco_em_pri1_01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	namco_em_pri1_01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		jvs_hle_device(mconfig, NAMCO_EMPRI101, tag, owner, clock)
 	{
 	}

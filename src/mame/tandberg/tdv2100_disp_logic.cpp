@@ -93,7 +93,7 @@ static constexpr XTAL DOT_CLOCK_3 = DOT_CLOCK/3;
 
 DEFINE_DEVICE_TYPE(TANDBERG_TDV2100_DISPLAY_LOGIC, tandberg_tdv2100_disp_logic_device, "tandberg_tdv2100_disp_logic", "Tandberg TDV-2100 series Display Logic terminal module");
 
-tandberg_tdv2100_disp_logic_device::tandberg_tdv2100_disp_logic_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock):
+tandberg_tdv2100_disp_logic_device::tandberg_tdv2100_disp_logic_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, TANDBERG_TDV2100_DISPLAY_LOGIC, tag, owner, clock),
 	m_screen(*this, "screen"),
 	m_palette(*this, "palette"),
@@ -964,7 +964,7 @@ void tandberg_tdv2100_disp_logic_device::device_add_mconfig(machine_config &mcon
 
 	/* Sound */
 	SPEAKER(mconfig, "mono").front_center();
-	BEEP(mconfig, m_beep, 2000);
+	BEEP(mconfig, m_beep, XTAL::u(2000));
 	m_beep->add_route(ALL_OUTPUTS, "mono", 1.0);
 
 	RS232_PORT(mconfig, m_rs232, default_rs232_devices, nullptr);
@@ -981,7 +981,7 @@ void tandberg_tdv2100_disp_logic_device::device_add_mconfig(machine_config &mcon
 	m_uart->write_tbmt_callback().set(FUNC(tandberg_tdv2100_disp_logic_device::uart_tx));
 	m_uart->write_pe_callback().set(FUNC(tandberg_tdv2100_disp_logic_device::check_rs232_rx_error));
 
-	CLOCK(mconfig, m_uart_clock, 1);
+	CLOCK(mconfig, m_uart_clock, XTAL::u(1));
 	// NOTE: Frequency set with the rest of the UART settings
 	m_uart_clock->signal_handler().set(m_uart, FUNC(ay51013_device::write_rcp));
 	m_uart_clock->signal_handler().append(m_uart, FUNC(ay51013_device::write_tcp));

@@ -11,8 +11,8 @@ public:
 	typedef device_delegate<u32 (u8 pri, u8 ext)> pri_cb_delegate;
 	typedef device_delegate<u32 (u32 code, u8 ext, u8 y)> gfxbank_cb_delegate;
 
-	sei0210_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	template <typename T> sei0210_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+	sei0210_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> sei0210_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
 		: sei0210_device(mconfig, tag, owner, clock)
 	{
 		set_info(gfxinfo);
@@ -33,7 +33,7 @@ public:
 	void draw_sprites(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle cliprect, u16* spriteram, u16 size);
 
 protected:
-	sei0210_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	sei0210_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -58,8 +58,8 @@ private:
 class sei0211_device : public sei0210_device
 {
 public:
-	sei0211_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	template <typename T> sei0211_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+	sei0211_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	template <typename T> sei0211_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
 		: sei0211_device(mconfig, tag, owner, clock)
 	{
 		set_info(gfxinfo);

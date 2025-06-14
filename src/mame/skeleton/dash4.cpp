@@ -68,7 +68,7 @@ INPUT_PORTS_END
 
 void dash4_state::dash4(machine_config &config)
 {
-	SH7604(config, m_maincpu, 11'059'000); // Actually an Hitachi SH-2 HD6417604F28
+	SH7604(config, m_maincpu, XTAL::u(11'059'000)); // Actually an Hitachi SH-2 HD6417604F28
 }
 
 

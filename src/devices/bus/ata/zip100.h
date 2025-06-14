@@ -11,7 +11,7 @@
 class zip100_ide_device : public device_t, public device_ata_interface
 {
 public:
-	zip100_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	zip100_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::DISK; }
 

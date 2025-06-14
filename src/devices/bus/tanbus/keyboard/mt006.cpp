@@ -75,7 +75,7 @@ ioport_constructor microtan_kbd_mt006::device_input_ports() const
 //  microtan_kbd_mt006 - constructor
 //-------------------------------------------------
 
-microtan_kbd_mt006::microtan_kbd_mt006(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+microtan_kbd_mt006::microtan_kbd_mt006(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MICROTAN_KBD_MT006, tag, owner, clock)
 	, device_microtan_kbd_interface(mconfig, *this)
 	, m_keypad(*this, "KPAD%u", 0U)

@@ -26,7 +26,7 @@
 
 DEFINE_DEVICE_TYPE(GT155, gt155_device, "gt155", "Casio GT155")
 
-gt155_device::gt155_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gt155_device::gt155_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, GT155, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, device_rom_interface(mconfig, *this)

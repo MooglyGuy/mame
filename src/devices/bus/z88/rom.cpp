@@ -26,10 +26,10 @@ class z88_32k_rom_device : public device_t,
 {
 public:
 	// construction/destruction
-	z88_32k_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	z88_32k_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	z88_32k_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	z88_32k_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -73,7 +73,7 @@ class z88_128k_rom_device : public z88_32k_rom_device
 {
 public:
 	// construction/destruction
-	z88_128k_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	z88_128k_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// z88cart_interface implementation
@@ -86,7 +86,7 @@ class z88_256k_rom_device : public z88_32k_rom_device
 {
 public:
 	// construction/destruction
-	z88_256k_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	z88_256k_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// z88cart_interface implementation

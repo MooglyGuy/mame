@@ -813,7 +813,7 @@ void rfslotsmcs48_state::ajofrin(machine_config &config)
 	// video layout
 	// config.set_default_layout(layout_ajofrin);
 
-	MC1408(config, "dac", 0).add_route(ALL_OUTPUTS, "mono", 2.0);
+	MC1408(config, "dac").add_route(ALL_OUTPUTS, "mono", 2.0);
 }
 
 

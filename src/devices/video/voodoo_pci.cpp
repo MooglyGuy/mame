@@ -284,7 +284,7 @@ void voodoo_pci_device::vga_w(offs_t offset, u32 data, u32 mem_mask)
 
 // x86 cards, same with additional BIOS ROM
 
-voodoo_banshee_x86_pci_device::voodoo_banshee_x86_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+voodoo_banshee_x86_pci_device::voodoo_banshee_x86_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: voodoo_banshee_pci_device(mconfig, VOODOO_BANSHEE_X86_PCI, tag, owner, clock)
 	, m_vga_rom(*this, "vga_rom")
 {

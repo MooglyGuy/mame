@@ -29,7 +29,7 @@ class epson_rx80_device :  public device_t, public device_centronics_peripheral_
 {
 public:
 	// construction/destruction
-	epson_rx80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	epson_rx80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 
@@ -102,7 +102,7 @@ void epson_rx80_device::epson_rx80_mem(address_map &map)
 
 void epson_rx80_device::device_add_mconfig(machine_config &config)
 {
-	upd7810_device &upd(UPD7810(config, m_maincpu, 11000000)); // 11 Mhz
+	upd7810_device &upd(UPD7810(config, m_maincpu, XTAL::u(11000000))); // 11 Mhz
 	upd.set_addrmap(AS_PROGRAM, &epson_rx80_device::epson_rx80_mem);
 
 }
@@ -130,7 +130,7 @@ ioport_constructor epson_rx80_device::device_input_ports() const
 //  epson_rx80_device - constructor
 //-------------------------------------------------
 
-epson_rx80_device::epson_rx80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+epson_rx80_device::epson_rx80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, EPSON_RX80, tag, owner, clock),
 	device_centronics_peripheral_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu")

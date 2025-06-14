@@ -70,7 +70,7 @@ public:
 	inline uint16_t get_ram_addr(uint32_t addr) { return m_mainram[addr]; }
 
 protected:
-	sunplus_gcm394_base_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, uint32_t clock, address_map_constructor internal);
+	sunplus_gcm394_base_device(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock, address_map_constructor internal);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

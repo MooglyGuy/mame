@@ -24,7 +24,7 @@ class idpartner_gdp_device :
 {
 public:
 	// construction/destruction
-	idpartner_gdp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	idpartner_gdp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -65,7 +65,7 @@ private:
 };
 
 
-idpartner_gdp_device::idpartner_gdp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+idpartner_gdp_device::idpartner_gdp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IDPARTNER_GDP, tag, owner, clock)
 	, bus::idpartner::device_exp_card_interface(mconfig, *this)
 	, m_gdc(*this, "gdc")

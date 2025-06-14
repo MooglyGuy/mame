@@ -396,7 +396,7 @@ void mm2_state::mm2(machine_config &config)
 	X2212(config, m_novram);
 
 	SPEAKER(config, "mono").front_center();
-	SPEAKER_SOUND(config, m_speaker, 0).add_route(ALL_OUTPUTS, "mono", 1.00);
+	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 1.00);
 
 	// CRTC186
 	screen_device &screen(SCREEN(config, SCREEN_TAG, SCREEN_TYPE_RASTER));
@@ -415,9 +415,9 @@ void mm2_state::mm2(machine_config &config)
 	m_vpac->int_callback().set(FUNC(mm2_state::vpac_int_w));
 	m_vpac->set_screen(SCREEN_TAG);
 
-	CRT9212(config, m_drb0, 0);
+	CRT9212(config, m_drb0);
 
-	CRT9212(config, m_drb1, 0);
+	CRT9212(config, m_drb1);
 
 	I8251(config, m_sio, 16_MHz_XTAL/4);
 	m_sio->rxrdy_handler().set(FUNC(mm2_state::sio_rxrdy_w));

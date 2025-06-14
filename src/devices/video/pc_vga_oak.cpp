@@ -15,7 +15,7 @@
 
 DEFINE_DEVICE_TYPE(OTI111,     oak_oti111_vga_device,  "oti111_vga",  "Oak Technologies Spitfire 64111 i/f")
 
-oak_oti111_vga_device::oak_oti111_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+oak_oti111_vga_device::oak_oti111_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, OTI111, tag, owner, clock)
 	, m_xga(*this, "xga")
 {
@@ -25,7 +25,7 @@ oak_oti111_vga_device::oak_oti111_vga_device(const machine_config &mconfig, cons
 
 void oak_oti111_vga_device::device_add_mconfig(machine_config &config)
 {
-	XGA_COPRO(config, m_xga, 0);
+	XGA_COPRO(config, m_xga);
 	m_xga->mem_read_callback().set(FUNC(oak_oti111_vga_device::mem_linear_r));
 	m_xga->mem_write_callback().set(FUNC(oak_oti111_vga_device::mem_linear_w));
 	m_xga->set_type(xga_copro_device::TYPE::OTI111);

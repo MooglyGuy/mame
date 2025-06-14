@@ -17,7 +17,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(IOX_HLE, iox_hle_device, "iox_hle", "Seta IOX HLE")
 
-iox_hle_device::iox_hle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+iox_hle_device::iox_hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IOX_HLE, tag, owner, clock)
 	, m_p1_key{{*this, 0xff}, {*this, 0xff}, {*this, 0xff}, {*this, 0xff}}
 	, m_p2_key{{*this, 0xff}, {*this, 0xff}, {*this, 0xff}, {*this, 0xff}}

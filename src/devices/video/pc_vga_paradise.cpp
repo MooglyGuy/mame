@@ -52,13 +52,13 @@ DEFINE_DEVICE_TYPE(WD90C31,  wd90c31_vga_device,   "wd90c31_vga",  "Western Digi
 DEFINE_DEVICE_TYPE(WD90C33,  wd90c33_vga_device,   "wd90c33_vga",  "Western Digital WD90C33 VGA i/f")
 
 
-pvga1a_vga_device::pvga1a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pvga1a_vga_device::pvga1a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, type, tag, owner, clock)
 {
 	m_gc_space_config = address_space_config("gc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(pvga1a_vga_device::gc_map), this));
 }
 
-pvga1a_vga_device::pvga1a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pvga1a_vga_device::pvga1a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pvga1a_vga_device(mconfig, PVGA1A, tag, owner, clock)
 {
 }
@@ -299,7 +299,7 @@ void pvga1a_vga_device::ext_gc_unlock_w(offs_t offset, u8 data)
  *
  *************************************/
 
-wd90c00_vga_device::wd90c00_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+wd90c00_vga_device::wd90c00_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pvga1a_vga_device(mconfig, type, tag, owner, clock)
 	, m_cnf15_read_cb(*this, 1)
 	, m_cnf14_read_cb(*this, 1)
@@ -309,7 +309,7 @@ wd90c00_vga_device::wd90c00_vga_device(const machine_config &mconfig, device_typ
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(wd90c00_vga_device::crtc_map), this));
 }
 
-wd90c00_vga_device::wd90c00_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd90c00_vga_device::wd90c00_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c00_vga_device(mconfig, WD90C00, tag, owner, clock)
 {
 }
@@ -544,14 +544,14 @@ void wd90c00_vga_device::misc_control_1_w(offs_t offset, u8 data)
  *
  *************************************/
 
-wd90c11a_vga_device::wd90c11a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+wd90c11a_vga_device::wd90c11a_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c00_vga_device(mconfig, type, tag, owner, clock)
 	, m_ext_seq_view(*this, "ext_seq_view")
 {
 	m_seq_space_config = address_space_config("sequencer_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(wd90c11a_vga_device::sequencer_map), this));
 }
 
-wd90c11a_vga_device::wd90c11a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd90c11a_vga_device::wd90c11a_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c11a_vga_device(mconfig, WD90C11A, tag, owner, clock)
 {
 }
@@ -649,14 +649,14 @@ void wd90c11a_vga_device::sys_if_control_w(offs_t offset, u8 data)
  *
  *************************************/
 
-wd90c30_vga_device::wd90c30_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+wd90c30_vga_device::wd90c30_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c11a_vga_device(mconfig, type, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(wd90c30_vga_device::crtc_map), this));
 	m_seq_space_config = address_space_config("sequencer_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(wd90c30_vga_device::sequencer_map), this));
 }
 
-wd90c30_vga_device::wd90c30_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd90c30_vga_device::wd90c30_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c30_vga_device(mconfig, WD90C30, tag, owner, clock)
 {
 }
@@ -737,12 +737,12 @@ u16 wd90c30_vga_device::line_compare_mask()
  *
  *************************************/
 
-wd90c31_vga_device::wd90c31_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+wd90c31_vga_device::wd90c31_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c30_vga_device(mconfig, type, tag, owner, clock)
 {
 }
 
-wd90c31_vga_device::wd90c31_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd90c31_vga_device::wd90c31_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c31_vga_device(mconfig, WD90C31, tag, owner, clock)
 {
 }
@@ -800,12 +800,12 @@ void wd90c31_vga_device::ext_io_map(address_map &map)
  *
  *************************************/
 
-wd90c33_vga_device::wd90c33_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+wd90c33_vga_device::wd90c33_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c31_vga_device(mconfig, type, tag, owner, clock)
 {
 }
 
-wd90c33_vga_device::wd90c33_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd90c33_vga_device::wd90c33_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c33_vga_device(mconfig, WD90C33, tag, owner, clock)
 {
 }

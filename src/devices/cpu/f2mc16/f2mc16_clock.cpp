@@ -60,7 +60,7 @@ struct WDTC { enum : uint8_t
 
 DEFINE_DEVICE_TYPE(F2MC16_CLOCK_GENERATOR, f2mc16_clock_generator_device, "f2mc16_clock_generator", "F2MC16 Clock Generator")
 
-f2mc16_clock_generator_device::f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t tbtc_vector) :
+f2mc16_clock_generator_device::f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t tbtc_vector) :
 	f2mc16_clock_generator_device(mconfig, tag, owner, clock)
 {
 	m_cpu = downcast<f2mc16_device *>(owner);
@@ -68,7 +68,7 @@ f2mc16_clock_generator_device::f2mc16_clock_generator_device(const machine_confi
 	m_tbtc_vector = tbtc_vector;
 }
 
-f2mc16_clock_generator_device::f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_clock_generator_device::f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_CLOCK_GENERATOR, tag, owner, clock),
 	m_cpu(nullptr),
 	m_intc(*this, finder_base::DUMMY_TAG),
@@ -111,9 +111,9 @@ void f2mc16_clock_generator_device::device_start()
 void f2mc16_clock_generator_device::device_clock_changed()
 {
 	if (machine().scheduler().currently_executing())
-		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_clock_generator_device::update_mainclock_hz), this), m_cpu->unscaled_clock());
+		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_clock_generator_device::update_mainclock_hz), this), m_cpu->unscaled_clock().value());
 	else
-		update_mainclock_hz(m_cpu->unscaled_clock());
+		update_mainclock_hz(m_cpu->unscaled_clock().value());
 }
 
 void f2mc16_clock_generator_device::device_reset()

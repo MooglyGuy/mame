@@ -23,7 +23,7 @@
 
 DEFINE_DEVICE_TYPE(SH7014_SCI, sh7014_sci_device, "sh7014sci", "SH7014 SCI Controller")
 
-sh7014_sci_device::sh7014_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_sci_device::sh7014_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_SCI, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, m_intc(*this, finder_base::DUMMY_TAG)

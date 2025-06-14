@@ -43,7 +43,7 @@ megadrive_io_port_device_base::megadrive_io_port_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_serial_interface(mconfig, *this),
 	m_in_callback(*this),
@@ -140,7 +140,7 @@ void megadrive_io_port_device_base::device_reset()
 
 	receive_register_reset();
 	transmit_register_reset();
-	set_rate(4800);
+	set_rate(XTAL::u(4800));
 
 	if (!m_out_callback.isnull())
 		m_out_callback(0x7f, 0x00);
@@ -236,19 +236,19 @@ inline bool megadrive_io_port_device_base::set_s_ctrl(u8 data)
 
 	if (changed & 0xc0)
 	{
-		int rate;
+		XTAL rate;
 		switch (data & 0xc0)
 		{
 		default: // shut up stupid compilers
-		case 0x00: rate = 4800; break;
-		case 0x40: rate = 2400; break;
-		case 0x80: rate = 1200; break;
-		case 0xc0: rate = 300; break;
+		case 0x00: rate = XTAL::u(4800); break;
+		case 0x40: rate = XTAL::u(2400); break;
+		case 0x80: rate = XTAL::u(1200); break;
+		case 0xc0: rate = XTAL::u(300); break;
 		}
 		LOG(
 				"%s: serial data rate = %u bits/second\n",
 				machine().describe_context(),
-				rate);
+				rate.value());
 		set_rate(rate);
 	}
 
@@ -309,7 +309,7 @@ megadrive_io_port_device::megadrive_io_port_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	megadrive_io_port_device_base(mconfig, MEGADRIVE_IO_PORT, tag, owner, clock)
 {
 }
@@ -412,7 +412,7 @@ gamegear_io_port_device::gamegear_io_port_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	megadrive_io_port_device_base(mconfig, GAMEGEAR_IO_PORT, tag, owner, clock),
 	m_pc6int(0)
 {

@@ -201,7 +201,7 @@ public:
 	bool input_adaptive() const { return m_input_adaptive; }
 	bool output_adaptive() const { return m_output_adaptive; }
 	bool synchronous() const { return m_synchronous; }
-	bool is_active() const { return m_sample_rate != 0; }
+	bool is_active() const { return m_sample_rate.value() != 0; }
 
 	// input and output getters
 	u32 input_count() const  { return m_input_count; }
@@ -316,7 +316,7 @@ private:
 	u64 get_current_sample_index() const;
 	void do_update();
 
-	bool frequency_is_solved() const { return (!(m_input_adaptive || m_output_adaptive)) || m_sample_rate != 0; }
+	bool frequency_is_solved() const { return (!(m_input_adaptive || m_output_adaptive)) || m_sample_rate.value() != 0; }
 	bool try_solving_frequency();
 	void register_state();
 	void add_dependants(std::vector<sound_stream *> &deps);

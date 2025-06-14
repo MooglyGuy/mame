@@ -43,10 +43,10 @@
 class mn1400_cpu_device : public mn1400_base_device
 {
 public:
-	mn1400_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mn1400_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	mn1400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
+	mn1400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
 
 	// device_disasm_interface overrides
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -129,14 +129,14 @@ protected:
 class mn1400_reduced_cpu_device : public mn1400_cpu_device
 {
 public:
-	mn1400_reduced_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mn1400_reduced_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class mn1405_cpu_device : public mn1400_cpu_device
 {
 public:
-	mn1405_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mn1405_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

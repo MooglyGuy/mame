@@ -11,7 +11,7 @@
 
 DEFINE_DEVICE_TYPE(NN71003F, nn71003f_device, "nn71003f", "NN71003F mpeg audio chip")
 
-nn71003f_device::nn71003f_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+nn71003f_device::nn71003f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NN71003F, tag, owner, clock),
 	  device_sound_interface(mconfig, *this),
 	  m_miso(*this)

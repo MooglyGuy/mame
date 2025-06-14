@@ -15,7 +15,7 @@ class nand_device : public device_t, public device_nvram_interface
 {
 public:
 	// construction/destruction
-	nand_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	nand_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_nvram_interface implementation
 	virtual void nvram_default() override;
@@ -54,7 +54,7 @@ protected:
 		SM_PM_C  // accessing spare field
 	};
 
-	nand_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	nand_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -103,55 +103,55 @@ protected:
 class samsung_k9f5608u0d_device : public nand_device
 {
 public:
-	samsung_k9f5608u0d_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f5608u0d_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9f5608u0dj_device : public nand_device
 {
 public:
-	samsung_k9f5608u0dj_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f5608u0dj_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9f5608u0b_device : public nand_device
 {
 public:
-	samsung_k9f5608u0b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f5608u0b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9f2808u0b_device : public nand_device
 {
 public:
-	samsung_k9f2808u0b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f2808u0b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9f1g08u0b_device : public nand_device
 {
 public:
-	samsung_k9f1g08u0b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f1g08u0b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9f1g08u0m_device : public nand_device
 {
 public:
-	samsung_k9f1g08u0m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f1g08u0m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9lag08u0m_device : public nand_device
 {
 public:
-	samsung_k9lag08u0m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9lag08u0m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class samsung_k9f2g08u0m_device : public nand_device
 {
 public:
-	samsung_k9f2g08u0m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	samsung_k9f2g08u0m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class toshiba_tc58256aft_device : public nand_device
 {
 public:
-	toshiba_tc58256aft_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	toshiba_tc58256aft_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 // device type definition

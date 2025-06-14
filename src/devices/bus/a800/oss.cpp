@@ -142,7 +142,7 @@ inline void a800_rom_oss091m_device::bank_config_access(offs_t offset)
 
  -------------------------------------------------*/
 
-a800_rom_oss043m_device::a800_rom_oss043m_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_oss043m_device::a800_rom_oss043m_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_bankdev(*this, "bankdev")
 	, m_bank_base1(0)
@@ -150,7 +150,7 @@ a800_rom_oss043m_device::a800_rom_oss043m_device(const machine_config &mconfig, 
 {
 }
 
-a800_rom_oss043m_device::a800_rom_oss043m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_oss043m_device::a800_rom_oss043m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_oss043m_device(mconfig, A800_ROM_OSS43, tag, owner, clock)
 {
 }
@@ -242,7 +242,7 @@ void a800_rom_oss043m_device::rom_bank_w(offs_t offset, u8 data)
 
  -------------------------------------------------*/
 
-a800_rom_oss034m_device::a800_rom_oss034m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_oss034m_device::a800_rom_oss034m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_oss043m_device(mconfig, A800_ROM_OSS34, tag, owner, clock)
 {
 }

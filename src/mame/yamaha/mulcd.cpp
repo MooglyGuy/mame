@@ -79,7 +79,7 @@ void mulcd_device::render_w(int state)
 
 void mulcd_device::device_add_mconfig(machine_config &config)
 {
-	HD44780(config, m_lcd, 270'000); // HD44780B04; 91K surface-mount resistor connected to OSC
+	HD44780(config, m_lcd, XTAL::u(270'000)); // HD44780B04; 91K surface-mount resistor connected to OSC
 	m_lcd->set_lcd_size(4, 20);
 
 	auto &screen = SCREEN(config, "screen", SCREEN_TYPE_SVG);

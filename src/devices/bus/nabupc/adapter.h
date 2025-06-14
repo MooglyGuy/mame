@@ -32,7 +32,7 @@ class network_adapter
 {
 public:
 	// constructor/destructor
-	network_adapter(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	network_adapter(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_image_interface implementation
 	virtual bool is_readable()  const noexcept override { return true; }

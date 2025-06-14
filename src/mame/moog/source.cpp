@@ -871,7 +871,7 @@ void source_state::source(machine_config &config)
 	config.set_default_layout(layout_moog_source);
 
 
-	NETLIST_CPU(config, "source_nl", netlist::config::DEFAULT_CLOCK()).set_source(NETLIST_NAME(moogsource));
+	NETLIST_CPU(config, "source_nl", XTAL::u(netlist::config::DEFAULT_CLOCK())).set_source(NETLIST_NAME(moogsource));
 
 	NETLIST_ANALOG_INPUT(config, "source_nl:cntr_range_0", "R201.DIAL");
 	NETLIST_ANALOG_INPUT(config, m_contour_rate[FILTER_CONTOUR], "FLT_CNTR_RATE.IN");

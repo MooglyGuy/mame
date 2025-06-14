@@ -199,7 +199,7 @@ enum
 	CHAR_AT_UDF = 7
 };
 
-bfm_gu96x8m_k657c2_device::bfm_gu96x8m_k657c2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bfm_gu96x8m_k657c2_device::bfm_gu96x8m_k657c2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BFM_GU96X8M_K657C2, tag, owner, clock)
 	, m_vfd_background(*this,"vfdbackground0")
 	, m_dotmatrix(*this, "vfddotmatrix%u", 0U)

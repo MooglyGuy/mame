@@ -71,7 +71,7 @@ DECLARE_DEVICE_TYPE(TOSHIBA_XM6402B_CDROM, toshiba_xm6402b_cdrom_device)
 class toshiba_xm6402b_cdrom_device : public atapi_cdrom_device
 {
 public:
-	toshiba_xm6402b_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	toshiba_xm6402b_cdrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: atapi_cdrom_device(mconfig, TOSHIBA_XM6402B_CDROM, tag, owner, clock)
 	{
 	}
@@ -95,7 +95,7 @@ DEFINE_DEVICE_TYPE(TOSHIBA_XM6402B_CDROM, toshiba_xm6402b_cdrom_device, "toshiba
 DEFINE_DEVICE_TYPE(NAMCOS12_CDXA, namcos12_cdxa_device, "namcos12_cdxa", "Namco System 12 CDXA PCB")
 
 
-namcos12_cdxa_device::namcos12_cdxa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namcos12_cdxa_device::namcos12_cdxa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NAMCOS12_CDXA, tag, owner, clock)
 	, m_maincpu(*this, "cdxa_cpu")
 	, m_cram(*this, "cram")
@@ -176,10 +176,10 @@ void namcos12_cdxa_device::device_add_mconfig(machine_config &config)
 	m_mb87078->gain_changed().set(FUNC(namcos12_cdxa_device::mb87078_gain_changed));
 
 	// fudge the input clock for clockgen slightly so the sample rate becomes an even 37800hz instead of 37806hz, otherwise audio has a slight crackle
-	ICD2061A(config, m_icd2061a, 14'742'890);
+	ICD2061A(config, m_icd2061a, XTAL::u(14'742'890));
 	m_icd2061a->vclkout_changed().set([this] (uint32_t clock) {
 		m_maincpu->sci_set_external_clock_period<0>(attotime::from_hz(clock * 16 / 448));
-		m_lc78836m->set_clock(clock / 2);
+		m_lc78836m->set_clock(XTAL::u(clock) / 2);
 	});
 
 	m_maincpu->sci_set_send_full_data_transmit_on_sync_hack<0>(true);

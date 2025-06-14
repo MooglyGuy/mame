@@ -313,7 +313,7 @@ void gew_pcm_device::lfo_compute_step(lfo_t &lfo, uint32_t lfo_frequency, uint32
 
 /* MAME access functions */
 
-gew_pcm_device::gew_pcm_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock,
+gew_pcm_device::gew_pcm_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock,
 		uint32_t voices, uint32_t clock_divider) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
@@ -340,9 +340,9 @@ gew_pcm_device::gew_pcm_device(const machine_config &mconfig, device_type type, 
 
 void gew_pcm_device::device_start()
 {
-	m_rate = (float)clock() / m_clock_divider;
+	m_rate = clock().dvalue() / m_clock_divider;
 
-	m_stream = stream_alloc(0, 2, m_rate);
+	m_stream = stream_alloc(0, 2, clock() / m_clock_divider);
 
 	// Volume + pan table
 	m_left_pan_table = make_unique_clear<int32_t[]>(0x800);
@@ -493,8 +493,8 @@ void gew_pcm_device::device_reset()
 
 void gew_pcm_device::device_clock_changed()
 {
-	m_rate = (float)clock() / m_clock_divider;
-	m_stream->set_sample_rate(m_rate);
+	m_rate = clock().dvalue() / m_clock_divider;
+	m_stream->set_sample_rate(clock() / m_clock_divider);
 
 	for (int32_t i = 0; i < 0x400; ++i)
 	{

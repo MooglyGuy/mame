@@ -958,7 +958,7 @@ spu_device::spu_device(const machine_config &mconfig, const char *tag, device_t 
 
 void spu_device::device_start()
 {
-	spu_base_frequency_hz = clock() / 768.0f;
+	spu_base_frequency_hz = clock().value() / 768.0f;
 	generate_linear_rate_table();
 	generate_pos_exp_rate_table();
 	generate_neg_exp_rate_table();

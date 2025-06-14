@@ -21,7 +21,7 @@ public:
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 
 protected:
-	gew_pcm_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock,
+	gew_pcm_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock,
 		uint32_t voices, uint32_t clock_divider);
 
 	virtual void device_start() override ATTR_COLD;

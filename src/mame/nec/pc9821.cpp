@@ -816,12 +816,12 @@ void pc9821_state::pc9821(machine_config &config)
 	UPD7220A(config.replace(), m_hgdc[1], 21.0526_MHz_XTAL / 8, "screen");
 	config_video(config);
 
-	PC98_119_KBD(config.replace(), m_keyb, 0);
+	PC98_119_KBD(config.replace(), m_keyb);
 	m_keyb->rxd_callback().set("sio_kbd", FUNC(i8251_device::write_rxd));
 
 //  m_hgdc[1]->set_display_pixels(FUNC(pc9821_state::pegc_display_pixels));
 
-	PC98_SDIP(config, "sdip", 0);
+	PC98_SDIP(config, "sdip");
 }
 
 void pc9821_mate_a_state::pc9821as(machine_config &config)

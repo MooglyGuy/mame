@@ -1174,7 +1174,7 @@ INPUT_PORTS_END
 void racetime_state::racetime(machine_config &config)
 {
 	// basic machine hardware
-	TMS1070(config, m_maincpu, 350000); // approximation - RC osc. R=47K, C=47pF
+	TMS1070(config, m_maincpu, XTAL::u(350000)); // approximation - RC osc. R=47K, C=47pF
 	m_maincpu->read_k().set(FUNC(racetime_state::read_k));
 	m_maincpu->write_r().set(FUNC(racetime_state::write_r));
 	m_maincpu->write_o().set(FUNC(racetime_state::write_o));
@@ -1450,7 +1450,7 @@ INPUT_PORTS_END
 void uboat_state::uboat(machine_config &config)
 {
 	// basic machine hardware
-	TMS1475(config, m_maincpu, 425000); // approximation - RC osc. R=43K, C=47pF
+	TMS1475(config, m_maincpu, XTAL::u(425000)); // approximation - RC osc. R=43K, C=47pF
 	m_maincpu->read_k().set(FUNC(uboat_state::read_k));
 	m_maincpu->write_r().set(FUNC(uboat_state::write_r));
 	m_maincpu->write_o().set(FUNC(uboat_state::write_o));
@@ -3549,7 +3549,7 @@ INPUT_PORTS_END
 void litelrn_state::litelrn(machine_config &config)
 {
 	// basic machine hardware
-	TMS1000(config, m_maincpu, 325000); // approximation - RC osc. R=33K, C=100pF
+	TMS1000(config, m_maincpu, XTAL::u(325000)); // approximation - RC osc. R=33K, C=100pF
 	m_maincpu->read_k().set(FUNC(litelrn_state::read_k));
 	m_maincpu->write_o().set(FUNC(litelrn_state::write_o));
 	m_maincpu->write_r().set(FUNC(litelrn_state::write_r));
@@ -7585,7 +7585,7 @@ INPUT_PORTS_END
 void skywriter_state::skywriter(machine_config &config)
 {
 	// basic machine hardware
-	TMS1100(config, m_maincpu, 475000); // approximation - RC osc. R=27K, C=100pF
+	TMS1100(config, m_maincpu, XTAL::u(475000)); // approximation - RC osc. R=27K, C=100pF
 	m_maincpu->read_k().set(FUNC(skywriter_state::read_k));
 	m_maincpu->write_r().set(FUNC(skywriter_state::write_r));
 	m_maincpu->write_o().set(FUNC(skywriter_state::write_o));
@@ -7701,7 +7701,7 @@ INPUT_PORTS_END
 void starwlb_state::starwlb(machine_config &config)
 {
 	// basic machine hardware
-	TMS1000(config, m_maincpu, 350000); // approximation - RC osc. R=33K, C=100pF
+	TMS1000(config, m_maincpu, XTAL::u(350000)); // approximation - RC osc. R=33K, C=100pF
 	m_maincpu->read_k().set(FUNC(starwlb_state::read_k));
 	m_maincpu->write_r().set(FUNC(starwlb_state::write_r));
 	m_maincpu->write_o().set(FUNC(starwlb_state::write_o));
@@ -8136,7 +8136,7 @@ INPUT_PORTS_END
 void mega10k_state::mega10k(machine_config &config)
 {
 	// basic machine hardware
-	TMS1000(config, m_maincpu, 375000); // approximation - RC osc. R=33K, C=100pF
+	TMS1000(config, m_maincpu, XTAL::u(375000)); // approximation - RC osc. R=33K, C=100pF
 	m_maincpu->read_k().set(FUNC(mega10k_state::read_k));
 	m_maincpu->write_r().set(FUNC(mega10k_state::write_r));
 	m_maincpu->write_o().set(FUNC(mega10k_state::write_o));
@@ -8432,7 +8432,7 @@ INPUT_PORTS_END
 void strobe_state::strobe(machine_config &config)
 {
 	// basic machine hardware
-	TMS1100(config, m_maincpu, 500000); // approximation - RC osc. R=39K, C=47pF
+	TMS1100(config, m_maincpu, XTAL::u(500000)); // approximation - RC osc. R=39K, C=47pF
 	m_maincpu->read_k().set(FUNC(strobe_state::read_k));
 	m_maincpu->write_r().set(FUNC(strobe_state::write_r));
 	m_maincpu->write_o().set(FUNC(strobe_state::write_o));
@@ -9270,7 +9270,7 @@ void bship_state::bship(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	NETLIST_SOUND(config, "sound_nl", 48000).set_source(NETLIST_NAME(bship)).add_route(ALL_OUTPUTS, "mono", 0.125);
+	NETLIST_SOUND(config, "sound_nl", XTAL::u(48000)).set_source(NETLIST_NAME(bship)).add_route(ALL_OUTPUTS, "mono", 0.125);
 	NETLIST_STREAM_OUTPUT(config, "sound_nl:cout0", 0, "SPK1.1").set_mult_offset(1.0, 0.0);
 
 	NETLIST_LOGIC_INPUT(config, "sound_nl:o0", "O0.IN", 0);
@@ -12177,7 +12177,7 @@ public:
 
 	void vclock3(machine_config &config);
 
-	DECLARE_INPUT_CHANGED_MEMBER(switch_hz) { m_ac_power->set_clock(newval ? 50 : 60); }
+	DECLARE_INPUT_CHANGED_MEMBER(switch_hz) { m_ac_power->set_clock(newval ? XTAL::u(50) : XTAL::u(60)); }
 
 private:
 	required_device<tms5110_device> m_tms5100;
@@ -12308,12 +12308,12 @@ INPUT_PORTS_END
 void vclock3_state::vclock3(machine_config &config)
 {
 	// basic machine hardware
-	TMS1100(config, m_maincpu, 375000); // approximation - RC osc. R=47K, C=47pF
+	TMS1100(config, m_maincpu, XTAL::u(375000)); // approximation - RC osc. R=47K, C=47pF
 	m_maincpu->read_k().set(FUNC(vclock3_state::read_k));
 	m_maincpu->write_r().set(FUNC(vclock3_state::write_r));
 	m_maincpu->write_o().set(FUNC(vclock3_state::write_o));
 
-	CLOCK(config, m_ac_power, 60); // from mains power
+	CLOCK(config, m_ac_power, XTAL::u(60)); // from mains power
 
 	// video hardware
 	PWM_DISPLAY(config, m_display).set_size(4, 9);
@@ -12324,7 +12324,7 @@ void vclock3_state::vclock3(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	TMS5110A(config, m_tms5100, 640000); // approximation - RC osc. R=47K, C=47pF
+	TMS5110A(config, m_tms5100, XTAL::u(640000)); // approximation - RC osc. R=47K, C=47pF
 	m_tms5100->m0().set(m_tms6100, FUNC(tms6100_device::m0_w));
 	m_tms5100->m1().set(m_tms6100, FUNC(tms6100_device::m1_w));
 	m_tms5100->addr().set(m_tms6100, FUNC(tms6100_device::add_w));
@@ -12332,7 +12332,7 @@ void vclock3_state::vclock3(machine_config &config)
 	m_tms5100->romclk().set(m_tms6100, FUNC(tms6100_device::clk_w));
 	m_tms5100->add_route(ALL_OUTPUTS, "mono", 0.25);
 
-	TMS6100(config, m_tms6100, 640000/4);
+	TMS6100(config, m_tms6100, XTAL::u(640000)/4);
 
 	SPEAKER_SOUND(config, m_speaker);
 	m_speaker->add_route(ALL_OUTPUTS, "mono", 0.25);
@@ -12541,7 +12541,7 @@ INPUT_PORTS_END
 void wtalker_state::wtalker(machine_config &config)
 {
 	// basic machine hardware
-	TMS1100(config, m_maincpu, 550000); // approximation - RC osc. R=36K, C=33pF
+	TMS1100(config, m_maincpu, XTAL::u(550000)); // approximation - RC osc. R=36K, C=33pF
 	m_maincpu->read_k().set(FUNC(wtalker_state::read_k));
 	m_maincpu->write_r().set(FUNC(wtalker_state::write_r));
 	m_maincpu->write_o().set(FUNC(wtalker_state::write_o));
@@ -12555,7 +12555,7 @@ void wtalker_state::wtalker(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	TMS5110A(config, m_tms5100, 640000); // approximation - trimpot
+	TMS5110A(config, m_tms5100, XTAL::u(640000)); // approximation - trimpot
 	m_tms5100->m0().set(m_tms6100, FUNC(tms6100_device::m0_w));
 	m_tms5100->m1().set(m_tms6100, FUNC(tms6100_device::m1_w));
 	m_tms5100->addr().set(m_tms6100, FUNC(tms6100_device::add_w));
@@ -12563,7 +12563,7 @@ void wtalker_state::wtalker(machine_config &config)
 	m_tms5100->romclk().set(m_tms6100, FUNC(tms6100_device::clk_w));
 	m_tms5100->add_route(ALL_OUTPUTS, "mono", 0.25);
 
-	TMS6100(config, m_tms6100, 640000/4);
+	TMS6100(config, m_tms6100, XTAL::u(640000)/4);
 }
 
 // roms
@@ -13313,7 +13313,7 @@ INPUT_PORTS_END
 void ti25502_state::ti25502(machine_config &config)
 {
 	// basic machine hardware
-	TMS1070(config, m_maincpu, 350000); // approximation - RC osc. R=43K, C=68pF
+	TMS1070(config, m_maincpu, XTAL::u(350000)); // approximation - RC osc. R=43K, C=68pF
 	m_maincpu->read_k().set(FUNC(ti25502_state::read_k));
 	m_maincpu->write_o().set(FUNC(ti25502_state::write_o));
 	m_maincpu->write_r().set(FUNC(ti25502_state::write_r));
@@ -13742,7 +13742,7 @@ INPUT_PORTS_END
 void ti5200_state::ti5200(machine_config &config)
 {
 	// basic machine hardware
-	TMS1270(config, m_maincpu, 350000); // approximation - RC osc. R=43K, C=68pF
+	TMS1270(config, m_maincpu, XTAL::u(350000)); // approximation - RC osc. R=43K, C=68pF
 	m_maincpu->read_k().set(FUNC(ti5200_state::read_k));
 	m_maincpu->write_o().set(FUNC(ti5200_state::write_o));
 	m_maincpu->write_r().set(FUNC(ti5200_state::write_r));
@@ -15996,7 +15996,7 @@ INPUT_PORTS_END
 void fingbowl_state::fingbowl(machine_config &config)
 {
 	// basic machine hardware
-	TMS1100(config, m_maincpu, 250000); // approximation - RC osc. R=68K, C=47pF
+	TMS1100(config, m_maincpu, XTAL::u(250000)); // approximation - RC osc. R=68K, C=47pF
 	m_maincpu->read_k().set(FUNC(fingbowl_state::read_k));
 	m_maincpu->write_r().set(FUNC(fingbowl_state::write_r));
 	m_maincpu->write_o().set(FUNC(fingbowl_state::write_o));
@@ -16276,7 +16276,7 @@ INPUT_PORTS_END
 void tmvolleyb_state::tmvolleyb(machine_config &config)
 {
 	// basic machine hardware
-	TMS1000(config, m_maincpu, 325000); // approximation - RC osc. R=47K, C=47pF
+	TMS1000(config, m_maincpu, XTAL::u(325000)); // approximation - RC osc. R=47K, C=47pF
 	m_maincpu->read_k().set(FUNC(tmvolleyb_state::read_k));
 	m_maincpu->write_r().set(FUNC(tmvolleyb_state::write_r));
 	m_maincpu->write_o().set(FUNC(tmvolleyb_state::write_o));

@@ -59,7 +59,7 @@ INPUT_PORTS_END
 
 void clie_db_state::t650c(machine_config &config)
 {
-	MC68EZ328(config, m_maincpu, 66'000'000); // unknown clock, 66 MHz according to flyer
+	MC68EZ328(config, m_maincpu, XTAL::u(66'000'000)); // unknown clock, 66 MHz according to flyer
 	m_maincpu->set_addrmap(AS_PROGRAM, &clie_db_state::program_map);
 
 	screen_device&screen(SCREEN(config, "screen", SCREEN_TYPE_LCD));

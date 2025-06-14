@@ -65,7 +65,7 @@ public:
 	virtual uint8_t btn() override { return m_btn->read(); }
 
 protected:
-	pc_basic_joy_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	pc_basic_joy_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override { }
 

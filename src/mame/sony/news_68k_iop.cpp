@@ -375,9 +375,9 @@ namespace
 
 	void news_iop_state::min_w(uint8_t data)
 	{
-		constexpr int HD_RATE = 500000;
-		constexpr int DD_RATE = 250000; // TODO: Test DD rate when image is available
-		const int rate = (data > 0) ? DD_RATE : HD_RATE; // 0 = HD, 1 = DD
+		constexpr XTAL HD_RATE = XTAL::u(500000);
+		constexpr XTAL DD_RATE = XTAL::u(250000); // TODO: Test DD rate when image is available
+		const XTAL rate = (data > 0) ? DD_RATE : HD_RATE; // 0 = HD, 1 = DD
 
 		LOG("Write MIN = 0x%x, set rate to %s (%s)\n", data, rate == HD_RATE ? "HD" : "DD", machine().describe_context());
 		m_fdc->set_rate(rate);
@@ -949,7 +949,7 @@ namespace
 		M68020FPU(config, m_cpu, 16.67_MHz_XTAL);
 		m_cpu->set_addrmap(AS_PROGRAM, &news_iop_state::cpu_map);
 
-		NEWS_020_MMU(config, m_mmu, 0);
+		NEWS_020_MMU(config, m_mmu);
 		m_mmu->set_addrmap(AS_PROGRAM, &news_iop_state::mmu_map);
 		m_mmu->set_bus_error_callback(FUNC(news_iop_state::cpu_bus_error));
 
@@ -959,7 +959,7 @@ namespace
 		m_ram->set_default_value(0);
 
 		// NEC uPD8253 programmable interval timer
-		PIT8253(config, m_interval_timer, 0);
+		PIT8253(config, m_interval_timer);
 		constexpr XTAL PIT_INPUT_FREQUENCY = XTAL(2'000'000); // Assume same as 1960 for now
 		m_interval_timer->set_clk<0>(PIT_INPUT_FREQUENCY);
 		m_interval_timer->set_clk<1>(PIT_INPUT_FREQUENCY);
@@ -1001,7 +1001,7 @@ namespace
 							 { COMBINE_DATA(&m_net_ram[(offset >> 1) & 0x1fff]); });
 
 		// uPD7265 FDC (Compatible with 765A except it should use Sony/ECMA format by default?)
-		UPD765A(config, m_fdc, 4'000'000); // TODO: confirm clock rate
+		UPD765A(config, m_fdc, XTAL::u(4'000'000)); // TODO: confirm clock rate
 		m_fdc->intrq_wr_callback().set(FUNC(news_iop_state::iop_irq_w<FDCIRQ>));
 		m_fdc->drq_wr_callback().set(FUNC(news_iop_state::iop_irq_w<FDCDRQ>));
 		FLOPPY_CONNECTOR(config, "fdc:0", "35hd", FLOPPY_35_HD, true, floppy_image_device::default_pc_floppy_formats).enable_sound(false);

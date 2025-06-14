@@ -58,7 +58,7 @@ INPUT_PORTS_END
 void cubiecca80_state::cubiecca80(machine_config &config)
 {
 	// Basic machine hardware
-	ARM9(config, m_maincpu, 200'000'000); // Actually an Allwinner A80 2 GHz
+	ARM9(config, m_maincpu, XTAL::u(200'000'000)); // Actually an Allwinner A80 2 GHz
 
 	// Video hardware
 	//SCREEN(...)

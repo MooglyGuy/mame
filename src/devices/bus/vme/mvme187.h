@@ -22,7 +22,7 @@ class vme_mvme187_card_device
 	, public device_vme_card_interface
 {
 public:
-	vme_mvme187_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	vme_mvme187_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

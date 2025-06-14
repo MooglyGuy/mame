@@ -63,7 +63,7 @@ class coleco_expansion_device :
 public:
 	// construction/destruction
 	coleco_expansion_device(machine_config const &mconfig, char const *tag, device_t *owner, const char *dflt) :
-		coleco_expansion_device(mconfig, tag, owner, uint32_t(0))
+		coleco_expansion_device(mconfig, tag, owner)
 	{
 		option_reset();
 		coleco_expansion_cards(*this);
@@ -71,7 +71,7 @@ public:
 		set_fixed(false);
 	}
 
-	coleco_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	coleco_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~coleco_expansion_device();
 
 	template <typename T> void set_program_space(T &&tag, int spacenum) { m_program.set_tag(std::forward<T>(tag), spacenum); }

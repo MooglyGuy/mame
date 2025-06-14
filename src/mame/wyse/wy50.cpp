@@ -346,7 +346,7 @@ void wy50_state::wy50(machine_config &config)
 
 	SPEAKER(config, "speaker").front_center();
 	// Star Micronics QMB06 PZT Buzzer (2048Hz peak) + LC filter, output frequency is approximated here
-	BEEP(config, m_beep, 1000).add_route(ALL_OUTPUTS, "speaker", 0.10);
+	BEEP(config, m_beep, XTAL::u(1000)).add_route(ALL_OUTPUTS, "speaker", 0.10);
 }
 
 ROM_START(wy50)

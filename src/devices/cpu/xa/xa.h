@@ -47,13 +47,13 @@ enum {
 class xa_cpu : public cpu_device
 {
 public:
-	xa_cpu(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	xa_cpu(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <unsigned N> auto port_in_cb() { return m_port_in_cb[N].bind(); }
 	template <unsigned N> auto port_out_cb() { return m_port_out_cb[N].bind(); }
 
 protected:
-	xa_cpu(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, uint32_t clock, address_map_constructor prg_map, address_map_constructor dat_map);
+	xa_cpu(const machine_config& mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock, address_map_constructor prg_map, address_map_constructor dat_map);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -953,7 +953,7 @@ private:
 class mx10exa_cpu_device : public xa_cpu
 {
 public:
-	mx10exa_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mx10exa_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	void mx10exa_internal_map(address_map &map) ATTR_COLD;

@@ -27,7 +27,7 @@ const u8 mn1252_device::OUTPUT_DIGITS[0x40] =
 	0x7f, 0x6f, 0x01, 0x36, 0x5f, 0x7b, 0x74, 0x62
 };
 
-mn1252_device::mn1252_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mn1252_device::mn1252_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MN1252, tag, owner, clock)
 {
 }

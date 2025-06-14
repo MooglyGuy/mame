@@ -35,7 +35,7 @@ void isa16_svga_tvga9000_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(trident_vga_device::screen_update));
 
-	TVGA9000_VGA(config, m_vga, 0);
+	TVGA9000_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(512 * 1024); // 0x80000
 }
@@ -45,7 +45,7 @@ const tiny_rom_entry *isa16_svga_tvga9000_device::device_rom_region() const
 	return ROM_NAME( tvga9000 );
 }
 
-isa16_svga_tvga9000_device::isa16_svga_tvga9000_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_svga_tvga9000_device::isa16_svga_tvga9000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_SVGA_TVGA9000, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_vga(*this, "vga")

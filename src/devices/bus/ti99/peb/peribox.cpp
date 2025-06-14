@@ -569,7 +569,7 @@ void peribox_ev_device::device_add_mconfig(machine_config &config)
     A variant of the box used for the TI-99/4A with EVPC, not inserted
 *****************************************************************************/
 
-peribox_ev1_device::peribox_ev1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+peribox_ev1_device::peribox_ev1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: peribox_device(mconfig, TI99_PERIBOX_EV1, tag, owner, clock)
 {
 	m_address_prefix = 0x70000;

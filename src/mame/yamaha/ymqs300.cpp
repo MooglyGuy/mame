@@ -217,7 +217,7 @@ void qs300_state::qs300(machine_config &config)
 	m_swp00->add_route(0, "speaker", 1.0, 0);
 	m_swp00->add_route(1, "speaker", 1.0, 1);
 
-	T6963C(config, m_lcdc, 270000);
+	T6963C(config, m_lcdc, XTAL::u(270000));
 	m_lcdc->set_addrmap(0, &qs300_state::lcdmap);
 	m_lcdc->set_fs(2);
 	m_lcdc->set_md(0x13);

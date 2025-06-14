@@ -173,7 +173,7 @@ INPUT_PORTS_END
 void y416xl_state::y416xl(machine_config &config)
 {
 	// basic machine hardware
-	HD6301Y0(config, m_maincpu, 8'000'000); // approximation, no XTAL
+	HD6301Y0(config, m_maincpu, XTAL::u(8'000'000)); // approximation, no XTAL
 	m_maincpu->nvram_enable_backup(true);
 	m_maincpu->standby_cb().set(m_maincpu, FUNC(hd6301y0_cpu_device::nvram_set_battery));
 	m_maincpu->standby_cb().append([this](int state) { if (state) m_display->clear(); });

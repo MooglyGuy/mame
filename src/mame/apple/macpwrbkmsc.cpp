@@ -803,7 +803,7 @@ void macpbmsc_state::macpd210(machine_config &config)
 	m_msc->cb2_callback().set(m_pmu, FUNC(m68hc05pge_device::spi_miso_w));
 	m_msc->vbl_callback().set(FUNC(macpbmsc_state::vbl_w));
 
-	APPLE_DFAC(config, m_dfac, 22257);
+	APPLE_DFAC(config, m_dfac, XTAL::u(22257));
 	m_dfac->add_route(0, "speaker", 1.0, 0);
 	m_dfac->add_route(1, "speaker", 1.0, 1);
 
@@ -840,7 +840,7 @@ void macpbmsc_state::macpd210(machine_config &config)
 	SCC85C30(config, m_scc, 31.3344_MHz_XTAL / 4);
 	m_scc->out_int_callback().set(m_msc, FUNC(msc_device::scc_irq_w));
 
-	DS2401(config, m_battserial, 0); // actually DS2400, but 2400/2401 are compatible
+	DS2401(config, m_battserial); // actually DS2400, but 2400/2401 are compatible
 
 	SPEAKER(config, "speaker", 2).front();
 

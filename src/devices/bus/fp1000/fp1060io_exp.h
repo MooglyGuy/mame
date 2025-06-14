@@ -16,14 +16,14 @@ public:
 	// construction/destruction
 	template <typename T>
 	fp1060io_exp_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: fp1060io_exp_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: fp1060io_exp_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	fp1060io_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fp1060io_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~fp1060io_exp_slot_device();
 
 	device_fp1060io_exp_interface *m_dev;
@@ -71,7 +71,7 @@ class fp1060io_exp_device : public device_t, public device_fp1060io_exp_interfac
 {
 public:
 	// construction/destruction
-	fp1060io_exp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	fp1060io_exp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 
 protected:

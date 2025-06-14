@@ -10,7 +10,7 @@
 class tc9223_device : public device_t
 {
 public:
-	tc9223_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	tc9223_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void stb_w(int state);
 	void dat_w(int state);

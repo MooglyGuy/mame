@@ -46,7 +46,7 @@ class bk_kmd_device : public device_t,
 {
 public:
 	// construction/destruction
-	bk_kmd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bk_kmd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -69,7 +69,7 @@ private:
 //  bk_kmd_device - constructor
 //-------------------------------------------------
 
-bk_kmd_device::bk_kmd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bk_kmd_device::bk_kmd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BK_KMD, tag, owner, clock)
 	, device_qbus_card_interface(mconfig, *this)
 	, m_fdc(*this, "fdc")

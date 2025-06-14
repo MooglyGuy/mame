@@ -203,15 +203,15 @@ INPUT_PORTS_END
 
 void sys16_state::sys16(machine_config &config)
 {
-	NS32016(config, m_cpu, 6'000'000); // NS32016D-10
+	NS32016(config, m_cpu, XTAL::u(6'000'000)); // NS32016D-10
 	m_cpu->set_addrmap(0, &sys16_state::cpu_map<0>);
 	m_cpu->set_addrmap(4, &sys16_state::cpu_map<4>);
 	m_cpu->set_addrmap(6, &sys16_state::cpu_map<6>);
 
-	NS32081(config, m_fpu, 6'000'000); // NS32081D-10
+	NS32081(config, m_fpu, XTAL::u(6'000'000)); // NS32081D-10
 	m_cpu->set_fpu(m_fpu);
 
-	NS32082(config, m_mmu, 6'000'000); // NS32082D-10
+	NS32082(config, m_mmu, XTAL::u(6'000'000)); // NS32082D-10
 	m_cpu->set_mmu(m_mmu);
 
 	NS32202(config, m_icu, 18.432_MHz_XTAL / 10); // NS32202-10
@@ -233,7 +233,7 @@ void sys16_state::sys16(machine_config &config)
 	m_console->rxd_handler().set(m_pci, FUNC(scn2651_device::rxd_w));
 	m_pci->txd_handler().set(m_console, FUNC(rs232_port_device::write_txd));
 
-	I8291A(config, m_gtl, 6'000'000);
+	I8291A(config, m_gtl, XTAL::u(6'000'000));
 	m_gtl->int_write().set(m_icu, FUNC(ns32202_device::ir_w<6>));
 
 	// TODO: serial controller board

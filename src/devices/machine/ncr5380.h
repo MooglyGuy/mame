@@ -182,7 +182,7 @@ public:
 class dp8490_device : public ncr5380_device
 {
 public:
-	dp8490_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	dp8490_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(NCR5380, ncr5380_device)

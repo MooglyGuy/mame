@@ -3076,7 +3076,7 @@ void model2c_state::topskatr(machine_config &config)
 	io.an_port_callback<0>().set_ioport("CURVING");
 	io.an_port_callback<1>().set_ioport("SLIDE");
 
-	DSB2(config, m_dsb2, 0);
+	DSB2(config, m_dsb2);
 	m_dsb2->add_route(0, "speaker", 1.0, 0);
 	m_dsb2->add_route(1, "speaker", 1.0, 1);
 

@@ -19,8 +19,7 @@ class hp98x6_optrom_device : public device_t,
 {
 public:
 	// construction/destruction
-	hp98x6_optrom_device(machine_config const &mconfig, char const *tag, device_t *owner);
-	hp98x6_optrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hp98x6_optrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~hp98x6_optrom_device();
 
 	void install_handlers(address_space *space_r);

@@ -55,7 +55,7 @@ class heath_tlb_device : public device_t,
 						 public device_heath_tlb_card_interface
 {
 public:
-	heath_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// 8250 UART
 	virtual void serial_in_w(int state) override;
@@ -71,7 +71,7 @@ public:
 	void break_key_w(int state);
 
 protected:
-	heath_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock = 0);
+	heath_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -152,7 +152,7 @@ protected:
 class heath_super19_tlb_device : public heath_tlb_device
 {
 public:
-	heath_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -165,7 +165,7 @@ protected:
 class heath_superset_tlb_device : public heath_tlb_device
 {
 public:
-	heath_superset_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_superset_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -196,7 +196,7 @@ protected:
 class heath_watz_tlb_device : public heath_tlb_device
 {
 public:
-	heath_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -209,7 +209,7 @@ protected:
 class heath_ultra_tlb_device : public heath_tlb_device
 {
 public:
-	heath_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -230,7 +230,7 @@ protected:
 class heath_gp19_tlb_device : public heath_tlb_device
 {
 public:
-	heath_gp19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_gp19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
@@ -260,7 +260,7 @@ protected:
 class heath_imaginator_tlb_device : public heath_tlb_device
 {
 public:
-	heath_imaginator_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_imaginator_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -309,13 +309,13 @@ protected:
 class heath_igc_tlb_device : public heath_tlb_device
 {
 public:
-	heath_igc_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_igc_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void sigma_w(u8 offset, u8 data) override;
 	virtual u8 sigma_r(u8 offset) override;
 
 protected:
-	heath_igc_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock = 0);
+	heath_igc_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -363,7 +363,7 @@ private:
 class heath_igc_super19_tlb_device : public heath_igc_tlb_device
 {
 public:
-	heath_igc_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_igc_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -376,7 +376,7 @@ protected:
 class heath_igc_ultra_tlb_device : public heath_igc_tlb_device
 {
 public:
-	heath_igc_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_igc_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -397,7 +397,7 @@ protected:
 class heath_igc_watz_tlb_device : public heath_igc_tlb_device
 {
 public:
-	heath_igc_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_igc_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -429,7 +429,7 @@ public:
 
 	template <typename T>
 	heath_tlb_connector(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt, bool fixed = false) :
-		 heath_tlb_connector(mconfig, tag, owner, 0)
+		 heath_tlb_connector(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -437,7 +437,7 @@ public:
 		set_fixed(fixed);
 	}
 
-	heath_tlb_connector(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_tlb_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~heath_tlb_connector();
 
 	// computer interface

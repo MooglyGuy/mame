@@ -15,7 +15,7 @@
 class dafb_base : public device_t
 {
 public:
-	dafb_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	dafb_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~dafb_base() = default;
 
 	void map(address_map &map) ATTR_COLD;
@@ -105,7 +105,7 @@ private:
 class dafb_device: public dafb_base
 {
 public:
-	dafb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	dafb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename... T> void set_maincpu_tag(T &&... args) { m_maincpu.set_tag(std::forward<T>(args)...); }
 
@@ -120,7 +120,7 @@ public:
 	template <int bus> void turboscsi_dma_w(offs_t offset, u16 data, u16 mem_mask);
 
 protected:
-	dafb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	dafb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -132,7 +132,7 @@ private:
 class dafb_q950_device : public dafb_device
 {
 public:
-	dafb_q950_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	dafb_q950_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -148,7 +148,7 @@ private:
 class dafb_memc_device: public dafb_base
 {
 public:
-	dafb_memc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	dafb_memc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -168,7 +168,7 @@ private:
 class dafb_memcjr_device: public dafb_base
 {
 public:
-	dafb_memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	dafb_memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

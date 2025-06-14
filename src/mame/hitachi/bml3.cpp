@@ -299,7 +299,7 @@ void bml3_state::remote_w(u8 data)
 void bml3_state::baud_sel_w(u8 data)
 {
 	m_baud_sel = BIT(data, 0);
-	m_acia_clock->set_unscaled_clock(m_baud_sel ? 19'200 : 9'600);
+	m_acia_clock->set_unscaled_clock(m_baud_sel ? XTAL::u(19'200) : XTAL::u(9'600));
 }
 
 u8 bml3_state::baud_sel_r()
@@ -868,12 +868,12 @@ void bml3_state::bml3(machine_config &config)
 	pia6821_device &pia(PIA6821(config, "pia"));
 	pia.writepa_handler().set(FUNC(bml3_state::piaA_w));
 
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set([this] (bool state) { m_cassbit = state; });
 	m_acia->rts_handler().set(FUNC(bml3_state::acia_rts_w));
 	m_acia->irq_handler().set(FUNC(bml3_state::acia_irq_w));
 
-	CLOCK(config, m_acia_clock, 9'600); // 600 baud x 16(divider) = 9600
+	CLOCK(config, m_acia_clock, XTAL::u(9'600)); // 600 baud x 16(divider) = 9600
 	m_acia_clock->signal_handler().set(m_acia, FUNC(acia6850_device::write_txc));
 	m_acia_clock->signal_handler().append(m_acia, FUNC(acia6850_device::write_rxc));
 

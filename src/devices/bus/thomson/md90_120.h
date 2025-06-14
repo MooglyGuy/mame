@@ -10,7 +10,7 @@
 class md90_120_device : public device_t, public thomson_extension_interface
 {
 public:
-	md90_120_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	md90_120_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::COMMS; }
 

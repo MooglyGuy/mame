@@ -12,7 +12,7 @@ class specnext_copper_device : public device_t
 {
 
 public:
-	specnext_copper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	specnext_copper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto out_nextreg_cb() { return m_out_nextreg_cb.bind(); }
 	template <typename... T> void set_in_until_pos_cb(T &&... args) { return m_in_until_pos_cb.set(std::forward<T>(args)...); }

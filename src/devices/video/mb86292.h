@@ -12,7 +12,7 @@ class mb86292_device : public device_t,
 					   public device_memory_interface
 {
 public:
-	mb86292_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mb86292_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::GRAPHICS; }
 
@@ -25,7 +25,7 @@ public:
 	virtual void vregs_map(address_map &map) ATTR_COLD;
 
 protected:
-	mb86292_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	mb86292_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

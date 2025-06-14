@@ -322,7 +322,7 @@ void sgi_mc_device::update_count()
 {
 	const uint32_t divide = (m_rpss_divider & 0xff) + 1;
 	const uint32_t increment = (m_rpss_divider >> 8) & 0xff;
-	const uint32_t freq = clock() / divide;
+	const uint32_t freq = clock().value() / divide;
 	const attotime elapsed = machine().scheduler().time() - m_last_update_time;
 	/* Quantise elapsed to the clock frequency */
 	const auto ticks = elapsed.as_ticks(freq);

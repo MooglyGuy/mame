@@ -93,7 +93,7 @@ DEVICE_IMAGE_LOAD_MEMBER(cassvisn_state::cart_load)
 
 void cassvisn_state::cassvisn(machine_config &config)
 {
-	UPD777(config, m_maincpu, 2'000'000); // frequency? UPD774 / UPD778 in some carts?
+	UPD777(config, m_maincpu, XTAL::u(2'000'000)); // frequency? UPD774 / UPD778 in some carts?
 	m_maincpu->in_cb().set(FUNC(cassvisn_state::input_r));
 
 	GENERIC_CARTSLOT(config, m_cart, generic_plain_slot, "cassvisn_cart");

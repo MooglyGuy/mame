@@ -52,7 +52,7 @@
 class vocalizer_uart_device : public device_t, public device_serial_interface
 {
 public:
-	vocalizer_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	vocalizer_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto tx_cb() { return m_tx_cb.bind(); }
 	auto tx_irq_cb() { return m_tx_irq_cb.bind(); }
@@ -76,7 +76,7 @@ protected:
 
 DEFINE_DEVICE_TYPE(VOCALIZER_UART, vocalizer_uart_device, "vocalizer_uart", "Vocalizer 1000 UART")
 
-vocalizer_uart_device::vocalizer_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock):
+vocalizer_uart_device::vocalizer_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, VOCALIZER_UART, tag, owner, clock),
 	device_serial_interface(mconfig, *this),
 	m_tx_cb(*this),
@@ -88,7 +88,7 @@ vocalizer_uart_device::vocalizer_uart_device(const machine_config &mconfig, cons
 void vocalizer_uart_device::device_reset()
 {
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(31250);
+	set_rate(XTAL::u(31250));
 	m_tx_irq_cb(0);
 	m_rx_irq_cb(0);
 }
@@ -518,7 +518,7 @@ void vocalizer_state::vocalizer(machine_config &config)
 
 	PALETTE(config, "palette", FUNC(vocalizer_state::vocalizer_palette), 3);
 
-	HD44780(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+	HD44780(config, m_lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	m_lcdc->set_lcd_size(2, 8);
 	m_lcdc->set_pixel_update_cb(FUNC(vocalizer_state::lcd_pixel_update));
 

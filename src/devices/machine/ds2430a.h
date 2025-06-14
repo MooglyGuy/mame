@@ -37,7 +37,7 @@ protected:
 		DONE
 	};
 
-	ds1wire_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	ds1wire_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// Dallas 1-Wire CRC algorithm (use with std::accumulate)
 	static u8 ds1wire_crc(u8 crc, u8 data) noexcept
@@ -99,10 +99,10 @@ class ds2430a_device : public ds1wire_device, public device_nvram_interface
 {
 public:
 	// device type constructor
-	ds2430a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	ds2430a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	ds2430a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	ds2430a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -135,7 +135,7 @@ class ds1971_device : public ds2430a_device
 {
 public:
 	// device type constructor
-	ds1971_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	ds1971_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 // device type declarations

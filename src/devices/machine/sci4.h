@@ -11,7 +11,7 @@
 class sci4_device : public device_t
 {
 public:
-	sci4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 8000000);
+	sci4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(8000000));
 
 	// sci port numbers are 0..2 and 30..33
 	template<int Sci> void rx_w(int state) { do_rx_w(Sci, state); }

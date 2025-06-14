@@ -27,7 +27,7 @@
 
 DEFINE_DEVICE_TYPE(I82371EB_ACPI, i82371eb_acpi_device, "i82371eb_acpi", "Intel 82371EB PIIX4E Power Management and ACPI")
 
-i82371eb_acpi_device::i82371eb_acpi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82371eb_acpi_device::i82371eb_acpi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, I82371EB_ACPI, tag, owner, clock)
 	, m_acpi(*this, "acpi")
 	, m_smbus(*this, "smbus")

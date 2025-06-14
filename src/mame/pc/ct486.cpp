@@ -202,8 +202,8 @@ void ct486_state::ast6000(machine_config &config)
 	// 1 ISA slot only, with ISA bridge x3
 	// CL-GD5428 on-board
 	// Chips & Technologies F82C721 Super I/O
-	ISA16_SLOT(config, "board5", 0, "isabus", pc_isa16_cards, "clgd542x", true);
-	ISA16_SLOT(config.replace(), "isa1", 0, "isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "board5", "isabus", pc_isa16_cards, "clgd542x", true);
+	ISA16_SLOT(config.replace(), "isa1", "isabus", pc_isa16_cards, nullptr, false);
 }
 
 void ct486_state::ast611(machine_config &config)
@@ -220,11 +220,11 @@ void ct486_state::ast611(machine_config &config)
 	// 1 ISA slot only, with ISA bridge x3
 	// CL-GD5428 on-board
 	// SMC/SMSC FDC37C653** Super I/O
-	ISA16_SLOT(config, "board5", 0, "isabus", pc_isa16_cards, "clgd542x", true);
+	ISA16_SLOT(config, "board5", "isabus", pc_isa16_cards, "clgd542x", true);
 	// TODO: Creative CT2504 / Vibra 16S on-board
 //  ISA16_SLOT(config, "board6", 0, "isabus", pc_isa16_cards, "vibra16s", true);
 
-	ISA16_SLOT(config.replace(), "isa1", 0, "isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config.replace(), "isa1", "isabus", pc_isa16_cards, nullptr, false);
 }
 
 

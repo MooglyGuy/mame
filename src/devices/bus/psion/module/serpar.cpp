@@ -20,7 +20,7 @@ namespace {
 class psion_serial_parallel_device : public device_t, public device_psion_module_interface
 {
 public:
-	psion_serial_parallel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	psion_serial_parallel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, PSION_SERIAL_PARALLEL, tag, owner, clock)
 		, device_psion_module_interface(mconfig, *this)
 		, m_asic5(*this, "asic5")
@@ -51,7 +51,7 @@ private:
 
 void psion_serial_parallel_device::device_add_mconfig(machine_config &config)
 {
-	PSION_ASIC5(config, m_asic5, 1'536'000).set_mode(psion_asic5_device::PERIPHERAL_MODE); // TODO: clock derived from host
+	PSION_ASIC5(config, m_asic5, XTAL::u(1'536'000)).set_mode(psion_asic5_device::PERIPHERAL_MODE); // TODO: clock derived from host
 	m_asic5->set_info_byte(0x03); // RS232 + Parallel
 	m_asic5->readpa_handler().set("cent_status_in", FUNC(input_buffer_device::read));
 	m_asic5->writepb_handler().set("cent_data_out", FUNC(output_latch_device::write));

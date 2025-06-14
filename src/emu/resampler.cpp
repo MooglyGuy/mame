@@ -155,12 +155,12 @@ audio_resampler_hq::audio_resampler_hq(const XTAL &fs, const XTAL &ft, float lat
 	m_fs = fs.value();
 
 	// Compute the multiplier for fs and ft to reach the common frequency
-	u32 gcd = compute_gcd(fs, ft);
-	m_ftm = fs / gcd;
-	m_fsm = ft / gcd;
+	u32 gcd = compute_gcd(m_fs, m_ft);
+	m_ftm = m_fs / gcd;
+	m_fsm = m_ft / gcd;
 
 	// Compute the per-phase filter length to limit the latency to 5ms and capping it
-	m_order_per_lane = u32(fs * latency * 2);
+	m_order_per_lane = u32(m_fs * latency * 2);
 	if(m_order_per_lane > max_order_per_lane)
 		m_order_per_lane = max_order_per_lane;
 
@@ -183,14 +183,14 @@ audio_resampler_hq::audio_resampler_hq(const XTAL &fs, const XTAL &ft, float lat
 		m_coefficients[i].resize(m_order_per_lane, 0.0);
 
 	// Select the filter cutoff.  Keep it in audible range.
-	double cutoff = std::min(fs/2.0, ft/2.0);
+	double cutoff = std::min(m_fs/2.0, m_ft/2.0);
 	if(cutoff > 20000)
 		cutoff = 20000;
 
 	// Compute the filter and send the coefficients to the appropriate phase
 	auto set_filter = [this](u32 i, float v) { m_coefficients[i % m_phases][i / m_phases] = v; };
 
-	double wc = 2 * M_PI * cutoff / (double(fs) * m_fsm / (1 << m_phase_shift));
+	double wc = 2 * M_PI * cutoff / (fs.dvalue() * m_fsm / (1 << m_phase_shift));
 	double a = wc / M_PI;
 	for(u32 i = 1; i != hlen; i++) {
 		double win = cos(i*M_PI/hlen/2);
@@ -406,8 +406,8 @@ audio_resampler_lofi::audio_resampler_lofi(const XTAL &fs, const XTAL &ft)
 	m_fs = fs.value();
 	m_ft = ft.value();
 
-	m_source_divide = fs <= ft ? 1 : 1+fs/ft;
-	m_step = u64(fs) * 0x1000000 / ft / m_source_divide;
+	m_source_divide = m_fs <= m_ft ? 1 : 1+m_fs/m_ft;
+	m_step = u64(m_fs) * 0x1000000 / m_ft / m_source_divide;
 }
 
 

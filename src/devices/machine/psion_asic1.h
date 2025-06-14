@@ -24,7 +24,7 @@ class psion_asic1_device : public device_t,
 {
 public:
 	// construction/destruction
-	psion_asic1_device(const machine_config &mconfig, const char* tag, device_t* owner, uint32_t clock);
+	psion_asic1_device(const machine_config &mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 	void set_laptop_mode(bool laptop) { m_laptop_mode = laptop; }
 

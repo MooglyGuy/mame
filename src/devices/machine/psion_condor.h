@@ -23,7 +23,7 @@
 class psion_condor_device : public device_t, public device_serial_interface
 {
 public:
-	psion_condor_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_condor_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type unemulated_features() { return feature::COMMS; }
 

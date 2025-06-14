@@ -19,7 +19,7 @@
 class hp9871_device : public device_t, public device_hp98032_gpio_interface
 {
 public:
-	hp9871_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hp9871_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~hp9871_device();
 
 	// hp98032_gpio_card_device overrides

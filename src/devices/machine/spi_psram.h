@@ -12,7 +12,7 @@
 class spi_ram_device : public device_t
 {
 public:
-	spi_ram_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0U);
+	spi_ram_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~spi_ram_device();
 
 	void set_size(u32 size) { m_size = size; }
@@ -26,7 +26,7 @@ public:
 protected:
 	enum command : u8;
 
-	spi_ram_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	spi_ram_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_validity_check(validity_checker &valid) const override ATTR_COLD;
 	virtual void device_resolve_objects() override ATTR_COLD;
@@ -67,7 +67,7 @@ private:
 class spi_psram_device : public spi_ram_device
 {
 public:
-	spi_psram_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0U);
+	spi_psram_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~spi_psram_device();
 
 protected:

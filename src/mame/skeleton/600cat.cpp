@@ -123,7 +123,7 @@ INPUT_PORTS_END
 
 void _600cat_state::_600cat(machine_config &config)
 {
-	HD6303R(config, m_maincpu, 4'000'000);
+	HD6303R(config, m_maincpu, XTAL::u(4'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &_600cat_state::mem_map);
 	m_maincpu->out_p1_cb().set(FUNC(_600cat_state::p1_w));
 	m_maincpu->out_p2_cb().set(FUNC(_600cat_state::p2_w));
@@ -142,7 +142,7 @@ void _600cat_state::_600cat(machine_config &config)
 
 	PALETTE(config, m_palette, FUNC(_600cat_state::lcd_palette), 3);
 
-	HD44780(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+	HD44780(config, m_lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	m_lcdc->set_lcd_size(4, 20);
 	m_lcdc->set_pixel_update_cb(FUNC(_600cat_state::lcd_pixel_update));
 

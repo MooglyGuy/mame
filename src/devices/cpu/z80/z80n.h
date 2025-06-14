@@ -11,7 +11,7 @@ class z80n_device : public z80_device
 {
 public:
 	// construction/destruction
-	z80n_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	z80n_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto in_nextreg_cb() { return m_in_nextreg_cb.bind(); }
 	auto out_nextreg_cb() { return m_out_nextreg_cb.bind(); }

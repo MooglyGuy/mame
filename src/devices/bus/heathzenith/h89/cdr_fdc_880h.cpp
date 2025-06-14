@@ -47,7 +47,7 @@ namespace {
 class cdr_fdc_880h_device : public device_t, public device_h89bus_right_card_interface
 {
 public:
-	cdr_fdc_880h_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	cdr_fdc_880h_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void write(u8 select_lines, u8 offset, u8 data) override;
 	virtual u8 read(u8 select_lines, u8 offset) override;
@@ -95,8 +95,8 @@ private:
 };
 
 
-cdr_fdc_880h_device::cdr_fdc_880h_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, H89BUS_CDR_FDC_880H, tag, owner, 0),
+cdr_fdc_880h_device::cdr_fdc_880h_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, H89BUS_CDR_FDC_880H, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_fdc(*this, "cdr_fdc_880h"),
 	m_floppies(*this, "cdr_fdc_880h:%u", 0U)

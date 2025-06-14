@@ -46,7 +46,7 @@ DEFINE_DEVICE_TYPE(SGI_KBD, sgi_kbd_device, "sgi_kbd", "SGI Keyboard")
  *
  */
 
-sgi_kbd_port_device::sgi_kbd_port_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock)
+sgi_kbd_port_device::sgi_kbd_port_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_KBD_PORT, tag, owner, clock)
 	, device_single_card_slot_interface<device_sgi_kbd_port_interface>(mconfig, *this)
 	, m_rxd_handler(*this)
@@ -84,7 +84,7 @@ device_sgi_kbd_port_interface::~device_sgi_kbd_port_interface()
 {
 }
 
-sgi_kbd_device::sgi_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock)
+sgi_kbd_device::sgi_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_KBD, tag, owner, clock)
 	, device_sgi_kbd_port_interface(mconfig, *this)
 	, m_mcu(*this, "mcu")
@@ -126,7 +126,7 @@ void sgi_kbd_device::device_add_mconfig(machine_config &config)
 	speaker_device &speaker(SPEAKER(config, "speaker"));
 	speaker.front_center();
 
-	beep_device &beeper(BEEP(config, "beeper", 480));
+	beep_device &beeper(BEEP(config, "beeper", XTAL::u(480)));
 	beeper.add_route(ALL_OUTPUTS, speaker, 0.25);
 
 	I8031(config, m_mcu, 11.0592_MHz_XTAL);

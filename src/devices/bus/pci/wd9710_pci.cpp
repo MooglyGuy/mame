@@ -27,7 +27,7 @@ DEFINE_DEVICE_TYPE(WD9710_PCI, wd9710_pci_device,   "wd9710_pci",   "Western Dig
 //DEFINE_DEVICE_TYPE(WD9712_PCI, wd9712_pci_device,   "wd9712_pci",   "Western Digital WD9712-??")
 
 
-wd9710_pci_device::wd9710_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+wd9710_pci_device::wd9710_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_svga(*this, "svga")
 	, m_vga_rom(*this, "vga_rom")
@@ -35,7 +35,7 @@ wd9710_pci_device::wd9710_pci_device(const machine_config &mconfig, device_type 
 	set_ids(0x101c9710, 0x00, 0x030000, 0x101c9710);
 }
 
-wd9710_pci_device::wd9710_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd9710_pci_device::wd9710_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd9710_pci_device(mconfig, WD9710_PCI, tag, owner, clock)
 {
 }
@@ -60,7 +60,7 @@ void wd9710_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_screen_update("svga", FUNC(wd90c33_vga_device::screen_update));
 
 	// TODO: bump to specific WD9710 VGA core
-	WD90C33(config, m_svga, 0);
+	WD90C33(config, m_svga);
 	m_svga->set_screen("screen");
 	// 2MB, 4MB
 	m_svga->set_vram_size(4*1024*1024);

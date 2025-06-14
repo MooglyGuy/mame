@@ -471,14 +471,14 @@ TIMER_DEVICE_CALLBACK_MEMBER(igs_m027xa_state::interrupt)
 
 void igs_m027xa_state::base(machine_config &config)
 {
-	IGS027A(config, m_maincpu, 22'000'000); // Crazy Bugs has a 22MHz crystal, what about the others?
+	IGS027A(config, m_maincpu, XTAL::u(22'000'000)); // Crazy Bugs has a 22MHz crystal, what about the others?
 	m_maincpu->set_addrmap(AS_PROGRAM, &igs_m027xa_state::main_map);
 	m_maincpu->in_port().set(FUNC(igs_m027xa_state::gpio_r));
 	m_maincpu->out_port().set(FUNC(igs_m027xa_state::io_select_w<1>));
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	IGS_XA_SUBCPU(config, m_xa, 10'000'000); // MX10EXAQC (Philips 80C51 XA) unknown frequency
+	IGS_XA_SUBCPU(config, m_xa, XTAL::u(10'000'000)); // MX10EXAQC (Philips 80C51 XA) unknown frequency
 	m_xa->irq().set(FUNC(igs_m027xa_state::xa_irq));
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
@@ -499,7 +499,7 @@ void igs_m027xa_state::base(machine_config &config)
 	m_ppi->out_pb_callback().set(FUNC(igs_m027xa_state::output_w));
 	m_ppi->out_pc_callback().set(FUNC(igs_m027xa_state::lamps_w));
 
-	IGS017_IGS031(config, m_igs017_igs031, 0);
+	IGS017_IGS031(config, m_igs017_igs031);
 	m_igs017_igs031->set_text_reverse_bits(true);
 	m_igs017_igs031->in_pa_callback().set(NAME((&igs_m027xa_state::dsw_r<1, 0>)));
 	m_igs017_igs031->in_pb_callback().set_ioport("TEST0");
@@ -509,7 +509,7 @@ void igs_m027xa_state::base(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	OKIM6295(config, m_oki, 1000000, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5);
+	OKIM6295(config, m_oki, XTAL::u(1000000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 
 void igs_m027xa_state::base_xor(machine_config &config)

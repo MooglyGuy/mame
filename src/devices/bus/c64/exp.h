@@ -86,8 +86,8 @@ public:
 	void nmi_w(int state) { m_write_nmi(state); }
 	void dma_w(int state) { m_write_dma(state); }
 	void reset_w(int state) { m_write_reset(state); }
-	int phi2() { return clock(); }
-	int dotclock() { return phi2() * 8; }
+	XTAL phi2() { return clock(); }
+	XTAL dotclock() { return phi2() * 8; }
 	int hiram() { return m_hiram; }
 	int loram() { return m_loram; }
 

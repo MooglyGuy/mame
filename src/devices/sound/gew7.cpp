@@ -6,7 +6,7 @@
 
 DEFINE_DEVICE_TYPE(GEW7_PCM, gew7_pcm_device, "gew7_pcm", "Yamaha GEW7 PCM")
 
-gew7_pcm_device::gew7_pcm_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock) :
+gew7_pcm_device::gew7_pcm_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock) :
 	gew_pcm_device(mconfig, GEW7_PCM, tag, owner, clock, 12, 72)
 {
 }

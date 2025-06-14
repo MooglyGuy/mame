@@ -23,7 +23,7 @@
 
 DEFINE_DEVICE_TYPE(CP2024, cp2024_device, "cp2024", "Conner Peripherals CP-2024 hard disk")
 
-cp2024_device::cp2024_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+cp2024_device::cp2024_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CP2024, tag, owner, clock)
 	, device_ata_interface(mconfig, *this)
 {
@@ -86,7 +86,7 @@ void cp2024_device::mcu_map(address_map &map)
 
 void cp2024_device::device_add_mconfig(machine_config &config)
 {
-	mc68hc11a1_device &mcu(MC68HC11A1(config, "mcu", 10'000'000)); // clock unknown
+	mc68hc11a1_device &mcu(MC68HC11A1(config, "mcu", XTAL::u(10'000'000))); // clock unknown
 	mcu.set_addrmap(AS_PROGRAM, &cp2024_device::mcu_map);
 }
 

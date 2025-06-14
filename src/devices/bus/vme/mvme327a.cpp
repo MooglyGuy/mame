@@ -22,7 +22,7 @@
 
 DEFINE_DEVICE_TYPE(VME_MVME327A, vme_mvme327a_device, "mvme327a", "Motorola MVME327A")
 
-vme_mvme327a_device::vme_mvme327a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_mvme327a_device::vme_mvme327a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_MVME327A, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -76,12 +76,12 @@ void vme_mvme327a_device::device_add_mconfig(machine_config &config)
 	m_cpu->set_addrmap(AS_PROGRAM, &vme_mvme327a_device::cpu_mem);
 	m_cpu->set_addrmap(m68000_base_device::AS_CPU_SPACE, &vme_mvme327a_device::cpu_int);
 
-	MC68153(config, m_bim, 0);
-	PIT68230(config, m_pit, 0);
+	MC68153(config, m_bim);
+	PIT68230(config, m_pit);
 
-	WD37C65C(config, m_fdc, 0);
+	WD37C65C(config, m_fdc);
 
-	NSCSI_BUS(config, "scsi", 0);
+	NSCSI_BUS(config, "scsi");
 	NSCSI_CONNECTOR(config, "scsi:0", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:1", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:2", scsi_devices, nullptr, false);
@@ -94,7 +94,7 @@ void vme_mvme327a_device::device_add_mconfig(machine_config &config)
 			{
 				wd33c9x_base_device &wd33c93(downcast<wd33c9x_base_device &>(*device));
 
-				wd33c93.set_clock(10000000);
+				wd33c93.set_clock(XTAL::u(10000000));
 				//wd33c93.irq_cb().set(*this, ...);
 				//wd33c93.drq_cb().set(*this, ...);
 			});

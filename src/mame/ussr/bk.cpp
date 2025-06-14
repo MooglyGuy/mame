@@ -74,12 +74,12 @@ void bk_state::bk0010(machine_config &config)
 	m_maincpu->set_daisy_config(daisy_chain);
 	m_maincpu->out_reset().set(FUNC(bk_state::reset_w));
 
-	QBUS(config, m_qbus, 0);
+	QBUS(config, m_qbus);
 	m_qbus->set_space(m_maincpu, AS_PROGRAM);
 	m_qbus->birq4().set_inputline(m_maincpu, t11_device::VEC_LINE);
 	QBUS_SLOT(config, "qbus" ":1", qbus_cards, nullptr);
 
-	K1801VP014(config, m_kbd, 0);
+	K1801VP014(config, m_kbd);
 	m_kbd->virq_wr_callback().set_inputline(m_maincpu, t11_device::VEC_LINE);
 	m_kbd->keydown_wr_callback().set(
 			[this] (int state)
@@ -103,7 +103,7 @@ void bk_state::bk0010(machine_config &config)
 	PALETTE(config, "palette", palette_device::MONOCHROME);
 
 	SPEAKER(config, "mono").front_center();
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "mono", 0.25);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "mono", 0.25);
 
 	CASSETTE(config, m_cassette);
 	m_cassette->set_default_state(CASSETTE_PLAY | CASSETTE_SPEAKER_ENABLED | CASSETTE_MOTOR_DISABLED);

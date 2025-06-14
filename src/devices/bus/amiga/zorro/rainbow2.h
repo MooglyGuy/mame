@@ -25,10 +25,10 @@ namespace bus::amiga::zorro {
 class rainbow2_device : public device_t, public device_zorro2_card_interface, public amiga_autoconfig
 {
 public:
-	rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, device_type type, uint16_t manufacturer);
+	rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, device_type type, uint16_t manufacturer);
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -56,7 +56,7 @@ private:
 class framemaster_device : public rainbow2_device
 {
 public:
-	framemaster_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	framemaster_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 } // namespace bus::amiga::zorro

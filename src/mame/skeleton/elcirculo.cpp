@@ -118,7 +118,7 @@ INPUT_PORTS_END
 
 void elcirculo_state::elcirculo(machine_config &config)
 {
-	M6504(config, m_maincpu, 1'000'000); // R6504P, internal clock
+	M6504(config, m_maincpu, XTAL::u(1'000'000)); // R6504P, internal clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &elcirculo_state::program_map);
 	m_maincpu->set_periodic_int(FUNC(elcirculo_state::irq_gen), attotime::from_hz(60)); // TODO: source of this
 

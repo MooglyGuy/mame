@@ -802,13 +802,9 @@ void pc2000_state::pc2000(machine_config &config)
 void pc2000_state::pc2000eur(machine_config &config)
 {
 	pc2000gen(config);
-<<<<<<< HEAD
 
-	SED1278(config, m_lcdc, 270'000); // TODO: clock not measured, datasheet typical clock used
+	SED1278(config, m_lcdc, XTAL::u(270'000)); // TODO: clock not measured, datasheet typical clock used
 	m_lcdc->set_default_bios_tag("0b");
-=======
-	SED1278_0B(config, m_lcdc);
->>>>>>> 45d4cd52a81 (full xtal conversion)
 	m_lcdc->set_lcd_size(2, 20);
 }
 

@@ -63,7 +63,7 @@ public:
 	void irq_out(int state);
 
 protected:
-	msx_slot_cartridge_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	msx_slot_cartridge_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_resolve_objects() override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;

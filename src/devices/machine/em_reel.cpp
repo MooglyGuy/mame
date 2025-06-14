@@ -17,7 +17,7 @@ ALLOW_SAVE_TYPE(em_reel_device::reel_state);
 
 DEFINE_DEVICE_TYPE(EM_REEL, em_reel_device, "em_reel", "Electromechanical Reel")
 
-em_reel_device::em_reel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+em_reel_device::em_reel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, EM_REEL, tag, owner, clock),
 	m_reel_out(*this, tag),
 	m_state_cb(*this)

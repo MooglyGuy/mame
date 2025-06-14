@@ -24,7 +24,7 @@ public:
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 
 	// construction/destruction
-	gt155_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	gt155_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void write(offs_t offset, u8 data);
 	u8 read(offs_t offset);

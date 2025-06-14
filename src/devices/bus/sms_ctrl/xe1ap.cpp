@@ -54,7 +54,7 @@ INPUT_PORTS_END
 class sms_xe1ap_device : public device_t, public device_sms_control_interface
 {
 public:
-	sms_xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) ATTR_COLD;
+	sms_xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) ATTR_COLD;
 
 	virtual u8 in_r() override { return m_xe1->out_r(); }
 	virtual void out_w(u8 data, u8 mem_mask) override { m_xe1->req_w(BIT(data, 6)); }
@@ -75,7 +75,7 @@ private:
 
 
 
-sms_xe1ap_device::sms_xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_xe1ap_device::sms_xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_XE1AP, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_xe1(*this, "xe1"),

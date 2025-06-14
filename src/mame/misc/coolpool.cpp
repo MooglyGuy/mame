@@ -965,7 +965,7 @@ void amerdart_state::amerdart(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	MP1210(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	MP1210(config, "dac").add_route(ALL_OUTPUTS, "speaker", 1.0);
 }
 
 

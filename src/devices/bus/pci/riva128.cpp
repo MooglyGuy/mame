@@ -31,7 +31,7 @@ References:
 DEFINE_DEVICE_TYPE(RIVA128,   riva128_device,   "riva128",   "SGS-Thompson/nVidia Riva 128 (NV3)")
 DEFINE_DEVICE_TYPE(RIVA128ZX, riva128zx_device, "riva128zx", "SGS-Thompson/nVidia Riva 128 ZX (NV3T)")
 
-riva128_device::riva128_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+riva128_device::riva128_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_svga(*this, "svga")
 	, m_vga_rom(*this, "vga_rom")
@@ -43,7 +43,7 @@ riva128_device::riva128_device(const machine_config &mconfig, device_type type, 
 	set_ids_agp(0x12d20018, 0x00, 0x10921092);
 }
 
-riva128_device::riva128_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+riva128_device::riva128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: riva128_device(mconfig, RIVA128, tag, owner, clock)
 {
 }
@@ -69,7 +69,7 @@ void riva128_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_svga, FUNC(nvidia_nv3_vga_device::screen_update));
 
-	NVIDIA_NV3_VGA(config, m_svga, 0);
+	NVIDIA_NV3_VGA(config, m_svga);
 	m_svga->set_screen("screen");
 	// FIXME: shared RAM
 	// reports as 4MB in AIDA16
@@ -225,7 +225,7 @@ void riva128_device::map_extra(uint64_t memory_window_start, uint64_t memory_win
  *
  *******************************************/
 
-riva128zx_device::riva128zx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+riva128zx_device::riva128zx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: riva128_device(mconfig, RIVA128ZX, tag, owner, clock)
 {
 	// $54-$57 in ROM for subvendor ID (if FBA[1] config is 1)

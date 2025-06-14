@@ -83,7 +83,7 @@ void nubus_laserview_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_screen_update(FUNC(nubus_laserview_device::screen_update));
-	m_screen->set_raw(99108000/2, 1008, 0, 832, 622, 0, 600);
+	m_screen->set_raw(XTAL::u(99108000)/2, 1008, 0, 832, 622, 0, 600);
 	m_screen->set_palette("palette");
 	m_screen->screen_vblank().set(FUNC(nubus_laserview_device::vbl_w));
 

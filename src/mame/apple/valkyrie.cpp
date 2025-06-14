@@ -48,7 +48,7 @@ void valkyrie_device::map(address_map &map)
 	map(0xf9000000, 0xf90fffff).rw(FUNC(valkyrie_device::vram_r), FUNC(valkyrie_device::vram_w));
 }
 
-valkyrie_device::valkyrie_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+valkyrie_device::valkyrie_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, VALKYRIE, tag, owner, clock),
 	i2c_hle_interface(mconfig, *this, 0x28),
 	m_vram_size(0x100000),
@@ -112,7 +112,7 @@ void valkyrie_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	// dot clock, htotal, hstart, hend, vtotal, vstart, vend
-	m_screen->set_raw(31334400, 896, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(31334400), 896, 0, 640, 525, 0, 480);
 	m_screen->set_screen_update(FUNC(valkyrie_device::screen_update));
 
 	PALETTE(config, m_palette).set_entries(256);

@@ -34,7 +34,7 @@ const u8 sh_intc_device::pribit[0x100] = {
 	29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29,
 };
 
-sh_intc_device::sh_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_intc_device::sh_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_INTC, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG)
 {

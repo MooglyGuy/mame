@@ -2417,7 +2417,7 @@ TIMER_CALLBACK_MEMBER(mc68ez328_device::pwm_tick)
 
 void mc68ez328_device::update_pwm_period(bool high_cycle)
 {
-	const u32 frequency = (m_pwmc & PWMC_CLK_SRC) ? 32768 : clock();
+	const u32 frequency = (m_pwmc & PWMC_CLK_SRC) ? 32768 : clock().value();
 	const u32 prescale = ((m_pwmc & PWMC_PRESCALE) >> PWMC_PRESCALE_SHIFT) + 1;
 	const u32 divisor = 2 << (m_pwmc & PWMC_CLKSEL);
 	const u32 period_reg = (u32)std::min(m_pwmp + 1u, 0xffu);
@@ -2589,7 +2589,7 @@ u8 mc68ez328_device::pwmcnt_r() // 0x505
 	u8 data = 0;
 	if (m_pwmc & PWMC_EN)
 	{
-		const u32 frequency = (m_pwmc & PWMC_CLK_SRC) ? 32768 : clock();
+		const u32 frequency = (m_pwmc & PWMC_CLK_SRC) ? 32768 : clock().value();
 		const u32 prescale = (m_pwmc & PWMC_PRESCALE) >> PWMC_PRESCALE_SHIFT;
 		const u32 divisor = 2 << (m_pwmc & PWMC_CLKSEL);
 		const u8 period = std::min(m_pwmp + 1u, 0xffu);
@@ -2645,11 +2645,11 @@ u32 mc68328_base_device::get_timer_frequency()
 	switch (regs.tctl & TCTL_CLKSOURCE)
 	{
 		case TCTL_CLKSOURCE_SYSCLK:
-			frequency = clock();
+			frequency = clock().value();
 			break;
 
 		case TCTL_CLKSOURCE_SYSCLK16:
-			frequency = clock() / 16;
+			frequency = clock().value() / 16;
 			break;
 
 		case TCTL_CLKSOURCE_32KHZ4:

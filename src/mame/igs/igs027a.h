@@ -11,7 +11,7 @@
 class igs027a_cpu_device : public arm7_cpu_device
 {
 public:
-	igs027a_cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	igs027a_cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 	virtual ~igs027a_cpu_device();
 
 	static constexpr feature_type imperfect_features() { return feature::TIMING; }

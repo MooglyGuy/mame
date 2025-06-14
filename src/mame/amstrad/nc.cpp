@@ -853,12 +853,12 @@ void nc_state::nc_sound_update(int channel)
 	bool on = ((period & (1 << 15)) == 0);
 
 	/* calculate frequency from period */
-	uint32_t frequency = (int)(1000000.0f / ((float)((period & 0x07fff) << 1) * 1.6276f));
+	const int frequency = (int)(1000000.f / (((period & 0x07fff) << 1) * 1.6276f));
 
 	/* set state */
 	beeper_device->set_state(on);
 	/* set frequency */
-	beeper_device->set_frequency(frequency);
+	beeper_device->set_clock(frequency);
 }
 
 void nc_state::nc_sound_w(offs_t offset, uint8_t data)
@@ -1401,7 +1401,7 @@ void nc200_state::nc200(machine_config &config)
 	m_uart->rxrdy_handler().set(FUNC(nc200_state::uart_rxrdy_w));
 
 	// floppy
-	UPD765A(config, m_fdc, 4'000'000, true, true);
+	UPD765A(config, m_fdc, XTAL::u(4'000'000), true, true);
 	m_fdc->intrq_wr_callback().set(FUNC(nc200_state::fdc_int_w));
 
 	FLOPPY_CONNECTOR(config, "fdc:0", "fdd", FLOPPY_35_DD, true, floppy_image_device::default_pc_floppy_formats);

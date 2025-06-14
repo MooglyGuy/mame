@@ -45,7 +45,7 @@ DEFINE_DEVICE_TYPE(UKNC_KMD, uknc_kmd_device, "uknc_kmd", "UKNC floppy")
 //  uknc_kmd_device - constructor
 //-------------------------------------------------
 
-uknc_kmd_device::uknc_kmd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+uknc_kmd_device::uknc_kmd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UKNC_KMD, tag, owner, clock)
 	, device_qbus_card_interface(mconfig, *this)
 	, m_fdc(*this, "fdc")

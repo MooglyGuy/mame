@@ -364,7 +364,7 @@ void senterpc_state::senterpc(machine_config &config)
 	m_maincpu->out_p2_cb().append(FUNC(senterpc_state::lcd_w));
 
 	// video hardware
-	LC7580(config, m_lcd, 0);
+	LC7580(config, m_lcd);
 	m_lcd->write_segs().set(FUNC(senterpc_state::lcd_output_w));
 
 	config.set_default_layout(layout_cxg_senterprisec);

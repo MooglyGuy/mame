@@ -17,10 +17,10 @@ class nscsi_tape_device : public nscsi_full_device
 {
 public:
 	// construction
-	nscsi_tape_device(const machine_config &config, const char *tag, device_t *owner, u32 clock = 0);
+	nscsi_tape_device(const machine_config &config, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	nscsi_tape_device(const machine_config &config, device_type type, const char *tag, device_t *owner, u32 clock);
+	nscsi_tape_device(const machine_config &config, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

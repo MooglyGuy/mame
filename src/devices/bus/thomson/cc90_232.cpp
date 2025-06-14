@@ -31,7 +31,7 @@ DEFINE_DEVICE_TYPE(CC90_232, cc90_232_device, "cc90_232", "Thomson CC 90-232 Com
 //  cc90_232_device - constructor
 //-------------------------------------------------
 
-cc90_232_device::cc90_232_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+cc90_232_device::cc90_232_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CC90_232, tag, owner, clock),
 	thomson_extension_interface(mconfig, *this),
 	m_pia_io(*this, "pia"),

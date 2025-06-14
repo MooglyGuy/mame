@@ -414,7 +414,7 @@ public:
 class hmcs46_cpu_device : public hmcs40_cpu_device
 {
 protected:
-	hmcs46_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity);
+	hmcs46_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity);
 
 	// overrides
 	virtual u8 read_r(u8 index) override;
@@ -424,20 +424,20 @@ protected:
 class hd44840_device : public hmcs46_cpu_device
 {
 public:
-	hd44840_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44840_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44848_device : public hmcs46_cpu_device
 {
 public:
-	hd44848_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44848_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs47_cpu_device : public hmcs40_cpu_device
 {
 protected:
-	hmcs47_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u16 polarity);
+	hmcs47_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u16 polarity);
 
 	// overrides
 	virtual u8 read_r(u8 index) override;
@@ -446,19 +446,19 @@ protected:
 class hd38870_device : public hmcs47_cpu_device
 {
 public:
-	hd38870_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd38870_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44860_device : public hmcs47_cpu_device
 {
 public:
-	hd44860_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44860_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd44868_device : public hmcs47_cpu_device
 {
 public:
-	hd44868_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd44868_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

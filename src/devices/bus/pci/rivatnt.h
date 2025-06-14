@@ -14,10 +14,10 @@
 class rivatnt_device : public riva128_device
 {
 public:
-	rivatnt_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rivatnt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	rivatnt_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	rivatnt_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -26,10 +26,10 @@ protected:
 class rivatnt2_device : public rivatnt_device
 {
 public:
-	rivatnt2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rivatnt2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	rivatnt2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	rivatnt2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -38,7 +38,7 @@ protected:
 class rivatnt2_ultra_device : public rivatnt2_device
 {
 public:
-	rivatnt2_ultra_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rivatnt2_ultra_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -47,7 +47,7 @@ protected:
 class vanta_device : public rivatnt2_device
 {
 public:
-	vanta_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vanta_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -56,7 +56,7 @@ protected:
 class rivatnt2_model64_device : public rivatnt2_device
 {
 public:
-	rivatnt2_model64_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rivatnt2_model64_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

@@ -438,7 +438,7 @@ void taitoo_state::taitoo(machine_config &config)
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
 	for (auto &opto : m_opto)
-		TAITOIO_OPTO(config, opto, 0);
+		TAITOIO_OPTO(config, opto);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_refresh_hz(60);

@@ -14,7 +14,7 @@ public:
 	template <int P> auto out_port_callback() { return m_out_port_callback[P].bind(); }
 
 protected:
-	subsino_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	subsino_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -39,7 +39,7 @@ class ss9602_device : public subsino_io_device
 {
 public:
 	// device type constructor
-	ss9602_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	ss9602_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// CPU read/write handlers
 	u8 read(offs_t offset);
@@ -50,7 +50,7 @@ class ss9802_device : public subsino_io_device
 {
 public:
 	// device type constructor
-	ss9802_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	ss9802_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// CPU read/write handlers
 	u8 read(offs_t offset);

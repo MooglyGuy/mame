@@ -17,7 +17,7 @@ namespace {
 class smuc_device : public device_t, public device_zxbus_card_interface
 {
 public:
-	smuc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	smuc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, ZXBUS_SMUC, tag, owner, clock)
 		, device_zxbus_card_interface(mconfig, *this)
 		, m_rtc(*this, "rtc")

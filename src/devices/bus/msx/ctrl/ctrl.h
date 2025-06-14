@@ -48,7 +48,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	msx_general_purpose_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	msx_general_purpose_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// computer interface
 	//

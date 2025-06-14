@@ -66,7 +66,7 @@ class tmp94c241_device : public tlcs900h_device
 
 public:
 	// device type constructor
-	tmp94c241_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tmp94c241_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	auto port0_read()  { return m_port_read[PORT_0].bind(); }

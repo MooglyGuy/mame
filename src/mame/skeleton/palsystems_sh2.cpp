@@ -185,7 +185,7 @@ GFXDECODE_END
 
 void palsystems_sh2_state::palsystems_sh2(machine_config &config)
 {
-	SH7042(config, m_maincpu, 12'000'000); // TODO: wrong, actually SH7044. Also wrong clock.
+	SH7042(config, m_maincpu, XTAL::u(12'000'000)); // TODO: wrong, actually SH7044. Also wrong clock.
 	m_maincpu->set_addrmap(AS_PROGRAM, &palsystems_sh2_state::program_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER)); // TODO
@@ -201,7 +201,7 @@ void palsystems_sh2_state::palsystems_sh2(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, "oki", 12'000'000 / 12, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0); // pin 7 and clock not verified
+	OKIM6295(config, "oki", XTAL::u(12'000'000) / 12, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0); // pin 7 and clock not verified
 }
 
 

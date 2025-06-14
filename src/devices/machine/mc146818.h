@@ -188,7 +188,7 @@ public:
 class ds1397_device : public mc146818_device
 {
 public:
-	ds1397_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ds1397_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

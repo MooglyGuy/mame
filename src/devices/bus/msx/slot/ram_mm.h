@@ -10,7 +10,7 @@
 class msx_slot_ram_mm_device : public device_t, public msx_internal_slot_interface
 {
 public:
-	msx_slot_ram_mm_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_ram_mm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	msx_slot_ram_mm_device &set_total_size(u32 total_size) { m_total_size = total_size; return *this; }
 	msx_slot_ram_mm_device &set_unused_bits(u8 unused_bits) { m_unused_bits = unused_bits; return *this; }

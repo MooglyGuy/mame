@@ -11,7 +11,7 @@
 class toshiba_xm3301_device : public atapi_cdrom_device
 {
 public:
-	toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::DISK; }
 

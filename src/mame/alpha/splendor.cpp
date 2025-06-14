@@ -651,7 +651,7 @@ void splendor_state::splndrbt(machine_config &config)
 
 	AD_59MC07(config, "sound_board");
 
-	ALPHA_8201(config, m_alpha_8201, 4000000/8); // 8303 or 8304 (same device!)
+	ALPHA_8201(config, m_alpha_8201, XTAL::u(4000000)/8); // 8303 or 8304 (same device!)
 	config.set_perfect_quantum("alpha_8201:mcu");
 
 	// video hardware

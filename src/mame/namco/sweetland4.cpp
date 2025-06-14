@@ -132,11 +132,11 @@ void sweetland4_state::sweetland4(machine_config &config)
 	H83007(config, m_maincpu, 14.7456_MHz_XTAL);
 	m_maincpu->set_addrmap(AS_PROGRAM, &sweetland4_state::program_map);
 
-	RTC72423(config, "rtc", 32'768); // no evident XTAL on PCB
+	RTC72423(config, "rtc", XTAL::u(32'768)); // no evident XTAL on PCB
 
 	SPEAKER(config, "speaker", 2).front();
 
-	okim9810_device &oki(OKIM9810(config, "oki", 4'096'000)); // no evident XTAL on PCB
+	okim9810_device &oki(OKIM9810(config, "oki", XTAL::u(4'096'000))); // no evident XTAL on PCB
 	oki.add_route(0, "speaker", 1.00, 0);
 	oki.add_route(1, "speaker", 1.00, 1);
 }

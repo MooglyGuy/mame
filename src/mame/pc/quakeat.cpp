@@ -162,37 +162,37 @@ void quakeat_state::winbond_superio_config(device_t *device)
 void quakeat_state::ga6la7(machine_config &config)
 {
 	// TODO: Socket 370 Celeron with 366-566 MHz
-	PENTIUM2(config, m_maincpu, 90'000'000);
+	PENTIUM2(config, m_maincpu, XTAL::u(90'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &quakeat_state::ga6la7_map);
 	m_maincpu->set_addrmap(AS_IO, &quakeat_state::ga6la7_io);
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	m_maincpu->smiact().set("pci:00.0", FUNC(i82443bx_host_device::smi_act_w));
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// 16MB - 384MB of supported EDO RAM
-	I82443LX_HOST(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
-	I82443LX_BRIDGE(config, "pci:01.0", 0 ); //"pci:01.0:00.0");
+	I82443LX_HOST(config, "pci:00.0", "maincpu", 256*1024*1024);
+	I82443LX_BRIDGE(config, "pci:01.0"); //"pci:01.0:00.0");
 	//I82443LX_AGP   (config, "pci:01.0:00.0");
 
-	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", 0, "maincpu"));
+	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", "maincpu"));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	i82371eb_ide_device &ide(I82371EB_IDE(config, "pci:07.1", 0, "maincpu"));
+	i82371eb_ide_device &ide(I82371EB_IDE(config, "pci:07.1", "maincpu"));
 	ide.irq_pri().set("pci:07.0", FUNC(i82371eb_isa_device::pc_irq14_w));
 	ide.irq_sec().set("pci:07.0", FUNC(i82371eb_isa_device::pc_mirq0_w));
 
-	I82371EB_USB (config, "pci:07.2", 0);
-	I82371EB_ACPI(config, "pci:07.3", 0);
-	LPC_ACPI     (config, "pci:07.3:acpi", 0);
-	SMBUS        (config, "pci:07.3:smbus", 0);
+	I82371EB_USB (config, "pci:07.2");
+	I82371EB_ACPI(config, "pci:07.3");
+	LPC_ACPI     (config, "pci:07.3:acpi");
+	SMBUS        (config, "pci:07.3:smbus");
 
-	ISA16_SLOT(config, "board4", 0, "pci:07.0:isabus", isa_internal_devices, "w83977tf", true).set_option_machine_config("w83977tf", winbond_superio_config);
-	ISA16_SLOT(config, "isa1", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa2", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa3", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "board4", "pci:07.0:isabus", isa_internal_devices, "w83977tf", true).set_option_machine_config("w83977tf", winbond_superio_config);
+	ISA16_SLOT(config, "isa1", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa2", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa3", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
 
-	VOODOO_BANSHEE_X86_PCI(config, m_voodoo, 0, m_maincpu, "screen"); // "pci:0d.0" J4D2
+	VOODOO_BANSHEE_X86_PCI(config, m_voodoo, m_maincpu, "screen"); // "pci:0d.0" J4D2
 	m_voodoo->set_fbmem(8);
 	m_voodoo->set_status_cycles(1000);
 //  subdevice<generic_voodoo_device>(PCI_AGP_ID":voodoo")->vblank_callback().set("pci:07.0", FUNC(i82371eb_isa_device::pc_irq5_w));

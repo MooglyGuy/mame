@@ -12,7 +12,7 @@
 
 DEFINE_DEVICE_TYPE(WAVEBLASTER_CONNECTOR, waveblaster_connector, "waveblaster_connector", "Waveblaster extension connector")
 
-waveblaster_connector::waveblaster_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+waveblaster_connector::waveblaster_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, WAVEBLASTER_CONNECTOR, tag, owner, clock),
 	device_single_card_slot_interface<device_waveblaster_interface>(mconfig, *this),
 	device_mixer_interface(mconfig, *this),

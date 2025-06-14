@@ -20,7 +20,7 @@
 DEFINE_DEVICE_TYPE(TDL12, tdl12_device, "tdl12", "TDL-12 SCSI Host Adapter")
 
 
-tdl12_device::tdl12_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tdl12_device::tdl12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TDL12, tag, owner, clock)
 	, device_qbus_card_interface(mconfig, *this)
 	, m_tdcpu(*this, "tdcpu")

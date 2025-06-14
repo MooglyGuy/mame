@@ -23,7 +23,7 @@ class sb16_ct2720_device : public device_t
 {
 public:
 	// construction/destruction
-	sb16_ct2720_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sb16_ct2720_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::SOUND | feature::MICROPHONE; }
 

@@ -34,14 +34,14 @@ public:
 		AS_STACK = AS_OPCODES + 1
 	};
 
-	t6a84_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	t6a84_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint32_t code_address(uint16_t address);
 	uint32_t data_address(uint16_t address);
 	uint32_t stack_address(uint16_t address);
 
 protected:
-	t6a84_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor io_map);
+	t6a84_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor io_map);
 
 	// device-level overrides
 	virtual void device_start() override;

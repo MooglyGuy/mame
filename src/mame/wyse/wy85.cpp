@@ -375,7 +375,7 @@ void wy85_state::wy85(machine_config &config)
 	m_duart->irq_cb().set_inputline(m_maincpu, MCS51_INT1_LINE);
 
 	SPEAKER(config, "speaker").front_center();
-	BEEP(config, m_beeper, 1000).add_route(ALL_OUTPUTS, "speaker", 0.10); // FIXME: not accurate; actually uses same circuit as WY-50 with 74LS14 Schmitt triggers and discrete components
+	BEEP(config, m_beeper, XTAL::u(1000)).add_route(ALL_OUTPUTS, "speaker", 0.10); // FIXME: not accurate; actually uses same circuit as WY-50 with 74LS14 Schmitt triggers and discrete components
 
 	RS232_PORT(config, m_comm, default_rs232_devices, nullptr); // RS423 port, also RS232 compatible
 	m_comm->rxd_handler().set(m_duart, FUNC(scn2681_device::rx_a_w));

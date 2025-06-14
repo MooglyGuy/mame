@@ -14,7 +14,7 @@
 class icd2061a_device : public device_t
 {
 public:
-	icd2061a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	icd2061a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto vclkout_changed() { return m_vclkout_changed_cb.bind(); }
 	auto mclkout_changed() { return m_mclkout_changed_cb.bind(); }

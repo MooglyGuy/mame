@@ -18,7 +18,7 @@ DEFINE_DEVICE_TYPE(COLECOVISION_ACTIVISION, colecovision_activision_cartridge_de
 DEFINE_DEVICE_TYPE(COLECOVISION_ACTIVISION_256B, colecovision_activision_256b_cartridge_device, "coleco_activision_256b", "ColecoVision Activision Cartridge (256B EEPROM)")
 DEFINE_DEVICE_TYPE(COLECOVISION_ACTIVISION_32K, colecovision_activision_32k_cartridge_device, "coleco_activision_32k", "ColecoVision Activision Cartridge (32K EEPROM)")
 
-colecovision_activision_cartridge_device::colecovision_activision_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+colecovision_activision_cartridge_device::colecovision_activision_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, COLECOVISION_ACTIVISION, tag, owner, clock),
 	device_colecovision_cartridge_interface(mconfig, *this),
 	m_eeprom(*this, "eeprom"),
@@ -26,7 +26,7 @@ colecovision_activision_cartridge_device::colecovision_activision_cartridge_devi
 {
 }
 
-colecovision_activision_cartridge_device::colecovision_activision_cartridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+colecovision_activision_cartridge_device::colecovision_activision_cartridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_colecovision_cartridge_interface(mconfig, *this),
 	m_eeprom(*this, "eeprom"),
@@ -34,12 +34,12 @@ colecovision_activision_cartridge_device::colecovision_activision_cartridge_devi
 {
 }
 
-colecovision_activision_256b_cartridge_device::colecovision_activision_256b_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+colecovision_activision_256b_cartridge_device::colecovision_activision_256b_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	colecovision_activision_cartridge_device(mconfig, COLECOVISION_ACTIVISION_256B, tag, owner, clock)
 {
 }
 
-colecovision_activision_32k_cartridge_device::colecovision_activision_32k_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+colecovision_activision_32k_cartridge_device::colecovision_activision_32k_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	colecovision_activision_cartridge_device(mconfig, COLECOVISION_ACTIVISION_32K, tag, owner, clock)
 {
 }
@@ -51,12 +51,12 @@ colecovision_activision_32k_cartridge_device::colecovision_activision_32k_cartri
 
 void colecovision_activision_256b_cartridge_device::device_add_mconfig(machine_config &config)
 {
-	I2C_24C02(config, m_eeprom, 0);
+	I2C_24C02(config, m_eeprom);
 }
 
 void colecovision_activision_32k_cartridge_device::device_add_mconfig(machine_config &config)
 {
-	I2C_24C256(config, m_eeprom, 0);
+	I2C_24C256(config, m_eeprom);
 }
 
 

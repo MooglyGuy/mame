@@ -12,7 +12,7 @@
 
 DEFINE_DEVICE_TYPE(LC82310, lc82310_device, "lc82310", "Sanyo LC82310 MP3 Decoder")
 
-lc82310_device::lc82310_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+lc82310_device::lc82310_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, LC82310, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 {
@@ -20,7 +20,7 @@ lc82310_device::lc82310_device(const machine_config &mconfig, const char *tag, d
 
 void lc82310_device::device_start()
 {
-	stream = stream_alloc(0, 2, 44100);
+	stream = stream_alloc(0, 2, XTAL::u(44100));
 	mp3dec = std::make_unique<mp3_audio>(reinterpret_cast<const uint8_t *>(&mp3data[0]));
 
 	save_item(NAME(mp3data));
@@ -255,7 +255,7 @@ void lc82310_device::fill_buffer()
 	std::copy(mp3data.begin() + pos, mp3data.end(), mp3data.begin());
 	m_mp3data_count -= pos;
 
-	stream->set_sample_rate(frame_sample_rate);
+	stream->set_sample_rate(XTAL::u(frame_sample_rate));
 }
 
 void lc82310_device::append_buffer(sound_stream &stream, int &pos, int scount)

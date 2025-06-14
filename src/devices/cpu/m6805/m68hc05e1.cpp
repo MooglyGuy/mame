@@ -19,7 +19,7 @@ constexpr int M68HC05EX_INT_IRQ = M6805_IRQ_LINE;
 constexpr int M68HC05EX_INT_TIMER = M68HC05EX_INT_IRQ + 1;
 constexpr int M68HC05EX_INT_CPI = M68HC05EX_INT_IRQ + 2;
 
-m68hc05ex_device::m68hc05ex_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrbits, address_map_constructor internal_map) :
+m68hc05ex_device::m68hc05ex_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrbits, address_map_constructor internal_map) :
 	m6805_base_device(mconfig, tag, owner, clock, type, {s_hc_s_ops, s_hc_cycles, 13, 0x00ff, 0x00c0, 0xfffc}),
 	m_program_config("program", ENDIANNESS_BIG, 8, addrbits, 0, internal_map),
 	m_read_p(*this, 0),
@@ -241,13 +241,13 @@ void m68hc05e1_device::m68hc05e1_map(address_map &map)
 	map(0x0f00, 0x1fff).rom().region(DEVICE_SELF, 0);
 }
 
-m68hc05e1_device::m68hc05e1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+m68hc05e1_device::m68hc05e1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	m68hc05ex_device(mconfig, M68HC05E1, tag, owner, clock, 13, address_map_constructor(FUNC(m68hc05e1_device::m68hc05e1_map), this)),
 	m_internal_ram(*this, "internal_ram")
 {
 }
 
-m68hc05e1_device::m68hc05e1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrbits, address_map_constructor internal_map) :
+m68hc05e1_device::m68hc05e1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrbits, address_map_constructor internal_map) :
 	m68hc05ex_device(mconfig, type, tag, owner, clock, 13, internal_map),
 	m_internal_ram(*this, "internal_ram")
 {
@@ -277,7 +277,7 @@ void m68hc05e5_device::m68hc05e5_map(address_map &map)
 	map(0x0b00, 0x1fff).rom().region(DEVICE_SELF, 0);
 }
 
-m68hc05e5_device::m68hc05e5_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+m68hc05e5_device::m68hc05e5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	m68hc05e1_device(mconfig, M68HC05E5, tag, owner, clock, 13, address_map_constructor(FUNC(m68hc05e5_device::m68hc05e5_map), this)),
 	m_internal_ram(*this, "internal_ram")
 {

@@ -113,7 +113,7 @@ enum specify_dtlh_mask : u8
 
 DEFINE_DEVICE_TYPE(UPD7261, upd7261_device, "upd7261", "NEC uPD7261 Hard-Disk Controller")
 
-upd7261_device::upd7261_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+upd7261_device::upd7261_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UPD7261, tag, owner, clock)
 	, m_drive(*this, "%u", 0)
 	, m_dreq(*this)

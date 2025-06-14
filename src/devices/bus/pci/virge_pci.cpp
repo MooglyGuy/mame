@@ -12,12 +12,12 @@ DEFINE_DEVICE_TYPE(VIRGEVX_PCI, virgevx_pci_device, "virgevx_pci", "S3 86C988 Vi
 DEFINE_DEVICE_TYPE(VIRGEDX_PCI, virgedx_pci_device, "virgedx_pci", "S3 86C375 ViRGE/DX")
 //VIRGEGX_PCI, /DX with SGRAM/SDRAM support
 
-virge_pci_device::virge_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+virge_pci_device::virge_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: virge_pci_device(mconfig, VIRGE_PCI, tag, owner, clock)
 {
 }
 
-virge_pci_device::virge_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+virge_pci_device::virge_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock),
 	m_vga(*this, "vga"),
 	m_bios(*this, "bios"),
@@ -25,12 +25,12 @@ virge_pci_device::virge_pci_device(const machine_config &mconfig, device_type ty
 {
 }
 
-virgevx_pci_device::virgevx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+virgevx_pci_device::virgevx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: virge_pci_device(mconfig, VIRGEVX_PCI, tag, owner, clock)
 {
 }
 
-virgedx_pci_device::virgedx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+virgedx_pci_device::virgedx_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: virge_pci_device(mconfig, VIRGEDX_PCI, tag, owner, clock)
 {
 }
@@ -262,7 +262,7 @@ void virge_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3virge_vga_device::screen_update));
 
-	S3VIRGE(config, m_vga, 0);
+	S3VIRGE(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(0x400000);
 	m_vga->linear_config_changed().set(FUNC(virge_pci_device::linear_config_changed_w));
@@ -274,7 +274,7 @@ void virgevx_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3virge_vga_device::screen_update));
 
-	S3VIRGEVX(config, m_vga, 0);
+	S3VIRGEVX(config, m_vga);
 	m_vga->set_screen("screen");
 	// 2MB, 4MB and 8MB, EDO RAM
 	m_vga->set_vram_size(0x400000);
@@ -287,7 +287,7 @@ void virgedx_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3virge_vga_device::screen_update));
 
-	S3VIRGEDX(config, m_vga, 0);
+	S3VIRGEDX(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(0x400000);
 	m_vga->linear_config_changed().set(FUNC(virgedx_pci_device::linear_config_changed_w));

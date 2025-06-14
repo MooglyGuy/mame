@@ -52,7 +52,7 @@ enum exr_mask : u8
 	EXR_ACLO = 0x08, // AC line voltage low
 };
 
-vme_enp10_card_device::vme_enp10_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_enp10_card_device::vme_enp10_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_ENP10, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")

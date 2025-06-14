@@ -39,7 +39,7 @@ DEFINE_DEVICE_TYPE(ISA16_WD90C31A_ZS, isa16_wd90c31a_zs_device, "wd90c31a_zs", "
 // TODO: Also VL-Bus
 DEFINE_DEVICE_TYPE(ISA16_WD90C33_ZZ,  isa16_wd90c33_zz_device,  "wd90c33_zz",  "Western Digital WD90C33-ZZ Graphics Card")
 
-isa16_pvga1a_device::isa16_pvga1a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_pvga1a_device::isa16_pvga1a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_PVGA1A, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -86,7 +86,7 @@ void isa16_pvga1a_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(pvga1a_vga_device::screen_update));
 
-	PVGA1A(config, m_vga, 0);
+	PVGA1A(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(0x100000);
 }
@@ -123,7 +123,7 @@ void isa16_pvga1a_device::remap(int space_id, offs_t start, offs_t end)
  *
  *****************/
 
-isa16_pvga1a_jk_device::isa16_pvga1a_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_pvga1a_jk_device::isa16_pvga1a_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_PVGA1A_JK, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -176,7 +176,7 @@ void isa16_pvga1a_jk_device::device_add_mconfig(machine_config &config)
 	screen.set_screen_update("vga", FUNC(pvga1a_vga_device::screen_update));
 
 	// TODO: is there any real difference between PVGA1A and PVGA1A-JK VGA controller wise?
-	PVGA1A(config, m_vga, 0);
+	PVGA1A(config, m_vga);
 	m_vga->set_screen("screen");
 	// 256kB to 1MB
 	m_vga->set_vram_size(0x100000);
@@ -203,7 +203,7 @@ void isa16_pvga1a_jk_device::device_start()
  *
  *****************/
 
-isa8_wd90c90_jk_device::isa8_wd90c90_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa8_wd90c90_jk_device::isa8_wd90c90_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA8_WD90C90_JK, tag, owner, clock),
 	device_isa8_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -228,7 +228,7 @@ void isa8_wd90c90_jk_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(pvga1a_vga_device::screen_update));
 
-	PVGA1A(config, m_vga, 0);
+	PVGA1A(config, m_vga);
 	m_vga->set_screen("screen");
 	// 256kB to 1MB
 	m_vga->set_vram_size(0x100000);
@@ -255,7 +255,7 @@ void isa8_wd90c90_jk_device::device_start()
  *
  *****************/
 
-isa16_wd90c00_jk_device::isa16_wd90c00_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c00_jk_device::isa16_wd90c00_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C00_JK, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -286,7 +286,7 @@ void isa16_wd90c00_jk_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c00_vga_device::screen_update));
 
-	WD90C00(config, m_vga, 0);
+	WD90C00(config, m_vga);
 	m_vga->set_screen("screen");
 	// 256kB, 512kB, 1MB
 	m_vga->set_vram_size(0x100000);
@@ -313,7 +313,7 @@ void isa16_wd90c00_jk_device::device_start()
  *
  *****************/
 
-isa16_wd90c11_lr_device::isa16_wd90c11_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c11_lr_device::isa16_wd90c11_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C11_LR, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -338,7 +338,7 @@ void isa16_wd90c11_lr_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c11a_vga_device::screen_update));
 
-	WD90C11A(config, m_vga, 0);
+	WD90C11A(config, m_vga);
 	m_vga->set_screen("screen");
 	// 512KB (+ option for 1MB? Verify with interlace)
 	m_vga->set_vram_size(0x100000);
@@ -365,7 +365,7 @@ void isa16_wd90c11_lr_device::device_start()
  *
  *****************/
 
-isa16_wd90c30_lr_device::isa16_wd90c30_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c30_lr_device::isa16_wd90c30_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C30_LR, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -397,7 +397,7 @@ void isa16_wd90c30_lr_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c30_vga_device::screen_update));
 
-	WD90C30(config, m_vga, 0);
+	WD90C30(config, m_vga);
 	m_vga->set_screen("screen");
 	// 512KB, 1MB
 	m_vga->set_vram_size(0x100000);
@@ -424,7 +424,7 @@ void isa16_wd90c30_lr_device::device_start()
  *
  *****************/
 
-isa16_wd90c31_lr_device::isa16_wd90c31_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c31_lr_device::isa16_wd90c31_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C31_LR, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -449,7 +449,7 @@ void isa16_wd90c31_lr_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c30_vga_device::screen_update));
 
-	WD90C31(config, m_vga, 0);
+	WD90C31(config, m_vga);
 	m_vga->set_screen("screen");
 	// 512KB, 1MB
 	m_vga->set_vram_size(0x100000);
@@ -492,7 +492,7 @@ void isa16_wd90c31_lr_device::remap(int space_id, offs_t start, offs_t end)
  *
  *****************/
 
-isa16_wd90c31a_lr_device::isa16_wd90c31a_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c31a_lr_device::isa16_wd90c31a_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C31A_LR, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -520,7 +520,7 @@ void isa16_wd90c31a_lr_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c00_vga_device::screen_update));
 
-	WD90C31(config, m_vga, 0); // WD90C31A
+	WD90C31(config, m_vga); // WD90C31A
 	m_vga->set_screen("screen");
 	// 512KB, 1MB
 	m_vga->set_vram_size(0x100000);
@@ -548,7 +548,7 @@ void isa16_wd90c31a_lr_device::device_start()
  *
  *****************/
 
-isa16_wd90c31a_zs_device::isa16_wd90c31a_zs_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c31a_zs_device::isa16_wd90c31a_zs_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C31A_ZS, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -572,7 +572,7 @@ void isa16_wd90c31a_zs_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c00_vga_device::screen_update));
 
-	WD90C31(config, m_vga, 0); // WD90C31A
+	WD90C31(config, m_vga); // WD90C31A
 	m_vga->set_screen("screen");
 	// 512KB, 1MB
 	m_vga->set_vram_size(0x100000);
@@ -600,7 +600,7 @@ void isa16_wd90c31a_zs_device::device_start()
  *
  *****************/
 
-isa16_wd90c33_zz_device::isa16_wd90c33_zz_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa16_wd90c33_zz_device::isa16_wd90c33_zz_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA16_WD90C33_ZZ, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	m_vga(*this, "vga")
@@ -625,7 +625,7 @@ void isa16_wd90c33_zz_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update("vga", FUNC(wd90c33_vga_device::screen_update));
 
-	WD90C33(config, m_vga, 0);
+	WD90C33(config, m_vga);
 	m_vga->set_screen("screen");
 	// 1MB, 2MB
 	m_vga->set_vram_size(0x100000);

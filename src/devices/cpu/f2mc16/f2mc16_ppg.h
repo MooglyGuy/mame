@@ -18,8 +18,8 @@ class f2mc16_ppg_device :
 	public device_t
 {
 public:
-	f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t vector0, uint8_t vector1);
-	f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t vector0, uint8_t vector1);
+	f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<unsigned N> auto output() { return m_output_cb[N].bind(); }
 

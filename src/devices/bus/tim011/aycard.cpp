@@ -33,7 +33,7 @@ class tim011_aycard_device :
 {
 public:
 	// construction/destruction
-	tim011_aycard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tim011_aycard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -49,7 +49,7 @@ private:
 };
 
 
-tim011_aycard_device::tim011_aycard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tim011_aycard_device::tim011_aycard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TIM011_AYCARD, tag, owner, clock)
 	, bus::tim011::device_exp_interface(mconfig, *this)
 	, m_psg(*this, "ay8912")

@@ -36,8 +36,8 @@
 #endif
 
 
-h89bus_z37_device::h89bus_z37_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, H89BUS_Z37, tag, owner, 0),
+h89bus_z37_device::h89bus_z37_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, H89BUS_Z37, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_fdc(*this, "z37_fdc"),
 	m_floppies(*this, "z37_fdc:%u", 0U),

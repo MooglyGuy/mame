@@ -44,13 +44,13 @@ class mpf_epb_device : public device_t, public device_mpf1_exp_interface
 public:
 	static constexpr feature_type unemulated_features() { return feature::ROM; }
 
-	mpf_epb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_epb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: mpf_epb_device(mconfig, MPF_EPB, tag, owner, clock)
 	{
 	}
 
 protected:
-	mpf_epb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	mpf_epb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, type, tag, owner, clock)
 		, device_mpf1_exp_interface(mconfig, *this)
 		, m_rom(*this, "rom")
@@ -96,7 +96,7 @@ protected:
 class mpf_epb_ibp_device : public mpf_epb_device
 {
 public:
-	mpf_epb_ibp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_epb_ibp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: mpf_epb_device(mconfig, MPF_EPB_IBP, tag, owner, clock)
 	{
 	}

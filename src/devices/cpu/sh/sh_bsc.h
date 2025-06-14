@@ -15,7 +15,7 @@
 
 class sh_bsc_device : public device_t {
 public:
-	sh_bsc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_bsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u16 bcr1_r();
 	void bcr1_w(offs_t, u16 data, u16 mem_mask);

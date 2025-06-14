@@ -57,7 +57,7 @@ class mpf1_exp_device : public device_t, public device_single_card_slot_interfac
 public:
 	// construction/destruction
 	template <typename T>
-	mpf1_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&opts, const char *dflt)
+	mpf1_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&opts, const char *dflt)
 		: mpf1_exp_device(mconfig, tag, owner, clock)
 	{
 		option_reset();
@@ -66,7 +66,7 @@ public:
 		set_fixed(false);
 	}
 
-	mpf1_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mpf1_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_program_space(T &&tag, int spacenum) { m_program.set_tag(std::forward<T>(tag), spacenum); }
 	template <typename T> void set_io_space(T &&tag, int spacenum) { m_io.set_tag(std::forward<T>(tag), spacenum); }

@@ -53,7 +53,7 @@ mm5740_device::mm5740_device(const machine_config &mconfig, const char *tag, dev
 {
 }
 
-u32 mm5740_device::calc_effective_clock_key_debounce(u32 capacitance)
+XTAL mm5740_device::calc_effective_clock_key_debounce(u32 capacitance)
 {
 	// calculate key debounce based on capacitance in pF
 	u32 key_debounce_msec = capacitance / 125;
@@ -62,7 +62,7 @@ u32 mm5740_device::calc_effective_clock_key_debounce(u32 capacitance)
 		key_debounce_msec = 1;
 	}
 
-	return 1000 / key_debounce_msec;
+	return XTAL::u(1000) / key_debounce_msec;
 }
 
 //-------------------------------------------------

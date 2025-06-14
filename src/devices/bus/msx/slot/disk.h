@@ -62,7 +62,7 @@ protected:
 	static constexpr bool DS = true;
 	static constexpr bool SS = false;
 
-	msx_slot_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int nr_drives);
+	msx_slot_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 
 	static void floppy_formats(format_registration &fr);
 	virtual void device_start() override ATTR_COLD;
@@ -88,7 +88,7 @@ protected:
 	static constexpr bool FORCE_READY = true;
 	static constexpr bool NO_FORCE_READY = false;
 
-	msx_slot_wd_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int nr_drives);
+	msx_slot_wd_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 
 	virtual void device_start() override ATTR_COLD;
 	template <typename FDCType> void add_mconfig(machine_config &config, FDCType &&type, bool force_ready, bool double_sided);
@@ -105,7 +105,7 @@ private:
 class msx_slot_tc8566_disk_device : public msx_slot_disk_device
 {
 protected:
-	msx_slot_tc8566_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int nr_drives);
+	msx_slot_tc8566_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 
 	void add_mconfig(machine_config &config);
 	void dor_w(u8 data);
@@ -120,7 +120,7 @@ public:
 	virtual void use_motor_for_led() override { set_control_led_bit(7); }
 
 protected:
-	msx_slot_disk1_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int nr_drives);
+	msx_slot_disk1_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
 	virtual void device_post_load() override;
@@ -139,7 +139,7 @@ private:
 class msx_slot_disk1_fd1793_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_fd1793_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_fd1793_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -148,7 +148,7 @@ protected:
 class msx_slot_disk1_mb8877_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -157,7 +157,7 @@ protected:
 class msx_slot_disk1_wd2793_n_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_wd2793_n_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_wd2793_n_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -166,7 +166,7 @@ protected:
 class msx_slot_disk1_wd2793_n_2_drives_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_wd2793_n_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_wd2793_n_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -175,7 +175,7 @@ protected:
 class msx_slot_disk1_wd2793_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -184,7 +184,7 @@ protected:
 class msx_slot_disk1_wd2793_0_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_wd2793_0_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_wd2793_0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -193,7 +193,7 @@ protected:
 class msx_slot_disk1_wd2793_ss_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_wd2793_ss_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_wd2793_ss_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -202,7 +202,7 @@ protected:
 class msx_slot_disk1_wd2793_2_drives_device : public msx_slot_disk1_base_device
 {
 public:
-	msx_slot_disk1_wd2793_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk1_wd2793_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -215,7 +215,7 @@ public:
 	virtual void use_motor_for_led() override { set_control_led_bit(3); }
 
 protected:
-	msx_slot_disk2_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int nr_drives);
+	msx_slot_disk2_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
 	virtual void device_post_load() override;
@@ -230,7 +230,7 @@ private:
 class msx_slot_disk2_fd1793_ss_device : public msx_slot_disk2_base_device
 {
 public:
-	msx_slot_disk2_fd1793_ss_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk2_fd1793_ss_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -239,7 +239,7 @@ protected:
 class msx_slot_disk2_mb8877_device : public msx_slot_disk2_base_device
 {
 public:
-	msx_slot_disk2_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk2_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -248,7 +248,7 @@ protected:
 class msx_slot_disk2_mb8877_ss_device : public msx_slot_disk2_base_device
 {
 public:
-	msx_slot_disk2_mb8877_ss_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk2_mb8877_ss_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -257,7 +257,7 @@ protected:
 class msx_slot_disk2_mb8877_2_drives_device : public msx_slot_disk2_base_device
 {
 public:
-	msx_slot_disk2_mb8877_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk2_mb8877_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -266,7 +266,7 @@ protected:
 class msx_slot_disk2_wd2793_device : public msx_slot_disk2_base_device
 {
 public:
-	msx_slot_disk2_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk2_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -275,7 +275,7 @@ protected:
 class msx_slot_disk2_wd2793_2_drives_device : public msx_slot_disk2_base_device
 {
 public:
-	msx_slot_disk2_wd2793_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk2_wd2793_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -286,10 +286,10 @@ protected:
 class msx_slot_disk3_tc8566_device : public msx_slot_tc8566_disk_device
 {
 public:
-	msx_slot_disk3_tc8566_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk3_tc8566_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	msx_slot_disk3_tc8566_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int nr_drives);
+	msx_slot_disk3_tc8566_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
 };
@@ -298,7 +298,7 @@ protected:
 class msx_slot_disk3_tc8566_2_drives_device : public msx_slot_disk3_tc8566_device
 {
 public:
-	msx_slot_disk3_tc8566_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk3_tc8566_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -308,7 +308,7 @@ protected:
 class msx_slot_disk4_tc8566_device : public msx_slot_tc8566_disk_device
 {
 public:
-	msx_slot_disk4_tc8566_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk4_tc8566_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -329,7 +329,7 @@ private:
 class msx_slot_disk5_wd2793_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk5_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk5_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -348,7 +348,7 @@ private:
 class msx_slot_disk6_wd2793_n_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk6_wd2793_n_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk6_wd2793_n_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -377,7 +377,7 @@ private:
 class msx_slot_disk7_mb8877_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk7_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk7_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -398,10 +398,10 @@ private:
 class msx_slot_disk8_mb8877_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk8_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk8_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	msx_slot_disk8_mb8877_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int nr_drives);
+	msx_slot_disk8_mb8877_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -418,7 +418,7 @@ private:
 class msx_slot_disk8_wd2793_2_drives_device : public msx_slot_disk8_mb8877_device
 {
 public:
-	msx_slot_disk8_wd2793_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk8_wd2793_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -428,7 +428,7 @@ protected:
 class msx_slot_disk9_wd2793_n_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk9_wd2793_n_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk9_wd2793_n_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -447,10 +447,10 @@ private:
 class msx_slot_disk10_mb8877_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk10_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk10_mb8877_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	msx_slot_disk10_mb8877_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int nr_drives);
+	msx_slot_disk10_mb8877_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int nr_drives);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -467,7 +467,7 @@ private:
 class msx_slot_disk10_mb8877_2_drives_device : public msx_slot_disk10_mb8877_device
 {
 public:
-	msx_slot_disk10_mb8877_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk10_mb8877_2_drives_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -477,7 +477,7 @@ protected:
 class msx_slot_disk11_wd2793_device : public msx_slot_wd_disk_device
 {
 public:
-	msx_slot_disk11_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_disk11_wd2793_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

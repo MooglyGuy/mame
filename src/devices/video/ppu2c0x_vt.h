@@ -149,7 +149,7 @@ public:
 
 class ppu_vt3xx_device : public ppu_vt03_device {
 public:
-	ppu_vt3xx_device(const machine_config& mconfig, const char* tag, device_t* owner, u32 clock);
+	ppu_vt3xx_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock);
 
 	u8 extvidreg_201c_r(offs_t offset);
 	u8 extvidreg_201d_r(offs_t offset);

@@ -83,13 +83,13 @@ void psr260_state::palette_init(palette_device& palette)
 
 void psr260_state::psr260(machine_config &config)
 {
-	GEW12(config, m_maincpu, 8'000'000); // see TODO
+	GEW12(config, m_maincpu, XTAL::u(8'000'000)); // see TODO
 	m_maincpu->port_out_cb<5>().set(FUNC(psr260_state::lcd_w));
 
 	// TODO: MIDI in/out
 
 	// LCD
-	KS0066(config, m_lcdc, 270'000); // OSC = 91K resistor, TODO: actually KS0066U-10B
+	KS0066(config, m_lcdc, XTAL::u(270'000)); // OSC = 91K resistor, TODO: actually KS0066U-10B
 	m_lcdc->set_lcd_size(2, 8);
 	m_lcdc->set_pixel_update_cb(FUNC(psr260_state::lcd_update));
 

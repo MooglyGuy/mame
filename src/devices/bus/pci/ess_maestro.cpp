@@ -36,14 +36,14 @@ DEFINE_DEVICE_TYPE(ES1946_SOLO1E, es1946_solo1e_device,   "es1946_solo1e",   "ES
 // ES1978 Maestro-2E
 
 
-es1946_solo1e_device::es1946_solo1e_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+es1946_solo1e_device::es1946_solo1e_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 {
 	// TODO: subvendor from EEPROM
 	set_ids(0x125d1969, 0x01, 0x040100, 0x125d1969);
 }
 
-es1946_solo1e_device::es1946_solo1e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+es1946_solo1e_device::es1946_solo1e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: es1946_solo1e_device(mconfig, ES1946_SOLO1E, tag, owner, clock)
 {
 }

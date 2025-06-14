@@ -33,7 +33,7 @@ INPUT_PORTS_END
 //-------------------------------------------------
 //  cqgmem_device - constructor
 //-------------------------------------------------
-cqgmem_device::cqgmem_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+cqgmem_device::cqgmem_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, EPSON_QX_OPTION_CQGMEM, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	device_memory_interface(mconfig, *this),

@@ -62,7 +62,7 @@ class dmagic_f018_device : public device_t
 {
 public:
 	// construction/destruction
-	dmagic_f018_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dmagic_f018_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <class T> void set_space(T &&tag, int spacenum) { m_space.set_tag(std::forward<T>(tag), spacenum); }
 
@@ -105,7 +105,7 @@ ALLOW_SAVE_TYPE(dmagic_f018_device::dma_state_t)
 // CSG 390957-01
 DEFINE_DEVICE_TYPE(DMAGIC_F018, dmagic_f018_device, "dmagic_f018", "DMAgic F018 Gate Array")
 
-dmagic_f018_device::dmagic_f018_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dmagic_f018_device::dmagic_f018_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DMAGIC_F018, tag, owner, clock)
 	, m_space(*this, finder_base::DUMMY_TAG, -1)
 {

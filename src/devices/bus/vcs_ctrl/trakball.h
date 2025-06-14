@@ -23,7 +23,7 @@ class atari_trakball_device : public device_t,
 {
 public:
 	// construction/destruction
-	atari_trakball_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	atari_trakball_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	DECLARE_INPUT_CHANGED_MEMBER( trakball_moved );
 
 protected:

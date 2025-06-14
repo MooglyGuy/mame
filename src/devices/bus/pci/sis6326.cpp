@@ -24,7 +24,7 @@ DEFINE_DEVICE_TYPE(SIS6326_AGP, sis6326_agp_device,   "sis6326_agp",   "SiS 6326
 
 
 
-sis6326_agp_device::sis6326_agp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+sis6326_agp_device::sis6326_agp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_vga(*this, "vga")
 	, m_vga_rom(*this, "vga_rom")
@@ -32,7 +32,7 @@ sis6326_agp_device::sis6326_agp_device(const machine_config &mconfig, device_typ
 	set_ids(0x10396326, 0xa0, 0x030000, 0x10396326);
 }
 
-sis6326_agp_device::sis6326_agp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sis6326_agp_device::sis6326_agp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sis6326_agp_device(mconfig, SIS6326_AGP, tag, owner, clock)
 {
 }
@@ -68,7 +68,7 @@ void sis6326_agp_device::device_add_mconfig(machine_config &config)
 	screen.set_screen_update(m_vga, FUNC(sis6236_vga_device::screen_update));
 
 	// TODO: barely similar, to be changed.
-	SIS6236_VGA(config, m_vga, 0);
+	SIS6236_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 4MB, max 8MB
 	m_vga->set_vram_size(4*1024*1024);

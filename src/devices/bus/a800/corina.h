@@ -12,8 +12,8 @@
 class a800_rom_corina_device : public a800_rom_device
 {
 public:
-	a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
@@ -40,7 +40,7 @@ class a800_rom_corina_sram_device : public a800_rom_corina_device
 {
 public:
 	// construction/destruction
-	a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 
 protected:

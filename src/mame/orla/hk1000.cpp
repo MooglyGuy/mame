@@ -70,21 +70,21 @@ INPUT_PORTS_END
 
 void hk1000_state::hk1000(machine_config &config)
 {
-	UPD7810(config, m_maincpu, 12'000'000);
+	UPD7810(config, m_maincpu, XTAL::u(12'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &hk1000_state::main_map);
 
 	I8255(config, "ppi");
 
-	TMS7002(config, m_soundcpu, 4'000'000);
+	TMS7002(config, m_soundcpu, XTAL::u(4'000'000));
 	m_soundcpu->set_addrmap(AS_PROGRAM, &hk1000_state::sound_map);
 
-	M6502(config, m_slotcpu, 2'000'000);
+	M6502(config, m_slotcpu, XTAL::u(2'000'000));
 	m_slotcpu->set_addrmap(AS_PROGRAM, &hk1000_state::slot_map);
 
 	acia6850_device &acia(ACIA6850(config, "acia"));
 	acia.irq_handler().set_inputline(m_slotcpu, INPUT_LINE_NMI);
 
-	YM3812(config, "ymsnd", 4'000'000);
+	YM3812(config, "ymsnd", XTAL::u(4'000'000));
 }
 
 

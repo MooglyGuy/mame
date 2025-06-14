@@ -19,7 +19,7 @@ DEFINE_DEVICE_TYPE(CASLOOPY_ROM_STD,     casloopy_rom_device,    "casloopy_rom",
 DEFINE_DEVICE_TYPE(CASLOOPY_ROM_ADPCM,   casloopy_adpcm_device,  "casloopy_adpcm",  "Casio Loopy ADPCM Cart")
 
 
-casloopy_rom_device::casloopy_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+casloopy_rom_device::casloopy_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock), device_casloopy_cart_interface(mconfig, *this)
 	, m_rom_base(nullptr)
 	, m_nvram_base(nullptr)
@@ -28,12 +28,12 @@ casloopy_rom_device::casloopy_rom_device(const machine_config &mconfig, device_t
 {
 }
 
-casloopy_rom_device::casloopy_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+casloopy_rom_device::casloopy_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: casloopy_rom_device(mconfig, CASLOOPY_ROM_STD, tag, owner, clock)
 {
 }
 
-casloopy_adpcm_device::casloopy_adpcm_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+casloopy_adpcm_device::casloopy_adpcm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: casloopy_rom_device(mconfig, CASLOOPY_ROM_ADPCM, tag, owner, clock)
 {
 }

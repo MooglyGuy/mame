@@ -13,7 +13,7 @@ class sgi_int2_device
 	: public device_t
 {
 public:
-	sgi_int2_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock);
+	sgi_int2_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	template <unsigned N> auto write_led() { return m_led[N].bind(); }
 	auto write_poweroff() { return m_poweroff.bind(); }

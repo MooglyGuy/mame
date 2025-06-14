@@ -854,7 +854,7 @@ protected:
 class m0110j_device : public keyboard_base
 {
 public:
-	m0110j_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+	m0110j_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 		: keyboard_base(mconfig, MACKBD_M0110J, tag, owner, clock)
 	{
 	}

@@ -22,7 +22,7 @@ DEFINE_DEVICE_TYPE(OKIM6588, okim6588_device, "okim6588", "OKI MSM6588 ADPCM Rec
 //  constructor
 //-------------------------------------------------
 
-okim6588_device::okim6588_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+okim6588_device::okim6588_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, OKIM6588, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
 	m_write_mon(*this),

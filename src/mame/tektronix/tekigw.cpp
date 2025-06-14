@@ -958,7 +958,7 @@ void tek4132_state::tek4132(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi:4", scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi:5", scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi:6", scsi_devices, nullptr);
-	NSCSI_CONNECTOR(config, "scsi:7").option_set("ncr5385", NCR5385).clock(10'000'000).machine_config(
+	NSCSI_CONNECTOR(config, "scsi:7").option_set("ncr5385", NCR5385).clock(XTAL::u(10'000'000)).machine_config(
 		[this](device_t *device)
 		{
 			ncr5385_device &adapter = downcast<ncr5385_device &>(*device);

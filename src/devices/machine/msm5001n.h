@@ -16,7 +16,7 @@
 class msm5001n_device : public device_t, public device_rtc_interface, public device_nvram_interface
 {
 public:
-	msm5001n_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msm5001n_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	auto write_segs() { return m_write_segs.bind(); } // COM in offset, SEG pins in data

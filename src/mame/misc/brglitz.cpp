@@ -134,7 +134,7 @@ INPUT_PORTS_END
 void brglitz_state::brglitz(machine_config &config)
 {
 	// Main CPU
-	PIC17C43(config, m_maincpu, 16'000'000/2); // PIC17C43-8, 16 MHz resonator
+	PIC17C43(config, m_maincpu, XTAL::u(16'000'000)/2); // PIC17C43-8, 16 MHz resonator
 
 	I2C_24C04(config, m_eeprom);
 

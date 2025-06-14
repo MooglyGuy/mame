@@ -45,7 +45,7 @@ enum mode_mask : unsigned
 
 DEFINE_DEVICE_TYPE(SUN1MMU, sun1mmu_device, "sun1mmu", "Sun-1 MMU")
 
-sun1mmu_device::sun1mmu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sun1mmu_device::sun1mmu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SUN1MMU, tag, owner, clock)
 	, m_space{
 		{*this, finder_base::DUMMY_TAG, 0},

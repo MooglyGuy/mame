@@ -21,7 +21,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(UMC6650, umc6650_device, "umc6650", "UMC UM6650 lockout chip")
 
-umc6650_device::umc6650_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+umc6650_device::umc6650_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UMC6650, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_romkey(*this, "romkey")

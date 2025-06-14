@@ -13,7 +13,7 @@ class mg1_kbd_device
 public:
 	auto out_data() { return m_data_cb.bind(); }
 
-	mg1_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	mg1_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

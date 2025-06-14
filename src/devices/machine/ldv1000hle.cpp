@@ -39,7 +39,7 @@ DEFINE_DEVICE_TYPE(PIONEER_LDV1000HLE, pioneer_ldv1000hle_device, "ldv1000hle", 
 //  pioneer_ldv1000hle_device - constructor
 //-------------------------------------------------
 
-pioneer_ldv1000hle_device::pioneer_ldv1000hle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+pioneer_ldv1000hle_device::pioneer_ldv1000hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: parallel_laserdisc_device(mconfig, PIONEER_LDV1000HLE, tag, owner, clock)
 	, m_vbi_fetch(nullptr)
 	, m_stop_timer(nullptr)

@@ -21,7 +21,7 @@
 
 DEFINE_DEVICE_TYPE(UPD931, upd931_device, "upd931", "NEC uPD931")
 
-upd931_device::upd931_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+upd931_device::upd931_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UPD931, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)

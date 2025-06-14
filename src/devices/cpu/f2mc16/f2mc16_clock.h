@@ -18,8 +18,8 @@ class f2mc16_clock_generator_device :
 	public device_t
 {
 public:
-	f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t m_tbtc_vector);
-	f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t m_tbtc_vector);
+	f2mc16_clock_generator_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto timebase_hz() { return m_timebase_hz_cb.bind(); }
 

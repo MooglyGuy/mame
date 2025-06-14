@@ -169,13 +169,13 @@ protected:
 class sega_315_5096_device : public sega_315_5006_device
 {
 public:
-	sega_315_5096_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t);
+	sega_315_5096_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class sega_315_5111_device : public sega_315_5006_device
 {
 public:
-	sega_315_5111_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t);
+	sega_315_5111_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class sega_315_5015_device : public segacrpt_z80_device

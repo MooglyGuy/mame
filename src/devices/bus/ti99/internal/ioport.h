@@ -60,8 +60,8 @@ class ioport_device : public device_t, public device_single_card_slot_interface<
 
 public:
 	template <typename U>
-	ioport_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, U &&opts, const char *dflt)
-		: ioport_device(mconfig, tag, owner, clock)
+	ioport_device(const machine_config &mconfig, const char *tag, device_t *owner, U &&opts, const char *dflt)
+		: ioport_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -69,7 +69,7 @@ public:
 		set_fixed(false);
 	}
 
-	ioport_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	ioport_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// Methods called from the console
 	void readz(offs_t offset, uint8_t *value);

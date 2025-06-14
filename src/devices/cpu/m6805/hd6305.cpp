@@ -19,7 +19,7 @@ hd6305_device::hd6305_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		uint32_t clock,
+		const XTAL &clock,
 		device_type const type,
 		configuration_params const &params,
 		address_map_constructor internal_map) :
@@ -284,7 +284,7 @@ void hd6305_device::sci_ctrl_w(u8 data)
 			BIT(data, 7) ? "data_out" : "gpio",
 			BIT(data, 6) ? "data_in" : "gpio",
 			BIT(data, 5) == 0 ? "gpio" : BIT(data, 4) ? "clock_in" : "clock_out",
-			clock()/(1 << (BIT(data, 0, 4) + 3)));
+			clock().value()/(1 << (BIT(data, 0, 4) + 3)));
 }
 
 u8 hd6305_device::sci_ssr_r()
@@ -373,7 +373,7 @@ void hd6305_device::interrupt_vector()
  * HD6305V0 section
  ****************************************************************************/
 
-hd6305v0_device::hd6305v0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hd6305v0_device::hd6305v0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd6305_device(
 			mconfig,
 			tag,
@@ -410,7 +410,7 @@ void hd6305v0_device::internal_map(address_map &map)
  * HD6305Y0 section
  ****************************************************************************/
 
-hd6305y0_device::hd6305y0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hd6305y0_device::hd6305y0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd6305_device(
 			mconfig,
 			tag,
@@ -458,7 +458,7 @@ void hd6305y0_device::device_reset()
  * HD6305Y2 section
  ****************************************************************************/
 
-hd6305y2_device::hd6305y2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hd6305y2_device::hd6305y2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd6305_device(
 			mconfig,
 			tag,
@@ -494,7 +494,7 @@ void hd6305y2_device::internal_map(address_map &map)
  * HD63705Z0 section
  ****************************************************************************/
 
-hd63705z0_device::hd63705z0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hd63705z0_device::hd63705z0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd6305_device(
 			mconfig,
 			tag,

@@ -9,7 +9,7 @@
 DEFINE_DEVICE_TYPE(ZOOMER_RTC, zoomer_rtc_device, "zoomer_rtc", "Zoomer Real Time Clock")
 
 //**************************************************************************
-zoomer_rtc_device::zoomer_rtc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+zoomer_rtc_device::zoomer_rtc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ZOOMER_RTC, tag, owner, clock)
 	, device_rtc_interface(mconfig, *this)
 	, device_nvram_interface(mconfig, *this)

@@ -25,7 +25,7 @@ class mos8563_device : public mc6845_device,
 						public device_palette_interface
 {
 public:
-	mos8563_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mos8563_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void address_w(uint8_t data);
 	uint8_t status_r();
@@ -38,7 +38,7 @@ public:
 	MC6845_UPDATE_ROW( vdc_update_row );
 
 protected:
-	mos8563_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	mos8563_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -93,7 +93,7 @@ protected:
 class mos8568_device : public mos8563_device
 {
 public:
-	mos8568_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mos8568_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

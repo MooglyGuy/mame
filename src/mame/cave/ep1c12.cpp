@@ -30,7 +30,7 @@ static constexpr int EP1C_CLIP_OPERATION_SIZE_BYTES = 2;
 // from the VRAM borders or other buffers in all games.
 static constexpr int EP1C_CLIP_MARGIN = 32;
 
-ep1c12_device::ep1c12_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ep1c12_device::ep1c12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, EP1C12, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, m_ram16(nullptr), m_gfx_size(0), m_bitmaps(nullptr), m_use_ram(nullptr)

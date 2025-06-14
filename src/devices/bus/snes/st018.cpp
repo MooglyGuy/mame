@@ -25,7 +25,7 @@ inline uint32_t get_prg(uint8_t *CPU, uint32_t addr)
 DEFINE_DEVICE_TYPE(SNS_LOROM_ST018, sns_rom_st018_device, "sns_rom_st018", "SNES Cart (LoROM) + Seta ST018")
 
 
-sns_rom_st018_device::sns_rom_st018_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sns_rom_st018_device::sns_rom_st018_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sns_rom_device(mconfig, SNS_LOROM_ST018, tag, owner, clock)
 	, m_copro(*this, "copro")
 	, m_cpu2copro(*this, "cpu2copro")
@@ -105,7 +105,7 @@ void sns_rom_st018_device::copro_map(address_map &map)
 
 void sns_rom_st018_device::device_add_mconfig(machine_config &config)
 {
-	ARM7(config, m_copro, 21440000); // TODO: ARMv3
+	ARM7(config, m_copro, XTAL::u(21440000)); // TODO: ARMv3
 	m_copro->set_addrmap(AS_PROGRAM, &sns_rom_st018_device::copro_map);
 
 	GENERIC_LATCH_8(config, m_cpu2copro);

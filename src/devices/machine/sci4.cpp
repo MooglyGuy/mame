@@ -6,7 +6,7 @@
 #include "emu.h"
 #include "sci4.h"
 
-sci4_device::sci4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sci4_device::sci4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SCI4, tag, owner, clock),
 	m_tx(*this),
 	m_irq(*this)
@@ -123,7 +123,7 @@ void sci4_device::data_w(offs_t slot, u8 data)
 	if(m_datamode[slot] == 0x80) {
 		m_div[slot] = data;
 		if(data)
-			logerror("channel %d baud rate %dHz\n", slot, clock()/16/data);
+			logerror("channel %d baud rate %dHz\n", slot, clock().value()/16/data);
 		else
 			logerror("channel %d off\n");
 	} else if(m_datamode[slot] & 2)

@@ -159,7 +159,7 @@ class ks0066_device : public hd44780_device
 {
 public:
 	// construction/destruction
-	ks0066_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ks0066_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static auto parent_rom_device_type() { return &HD44780; }
 

@@ -53,7 +53,7 @@ static GFXDECODE_START( gfx_sprites )
 	GFXDECODE_DEVICE_RAM( "pattern_ram", 0, gfx_16x16x4_r, 0, 16 )
 GFXDECODE_END
 
-specnext_sprites_device::specnext_sprites_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_sprites_device::specnext_sprites_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SPECNEXT_SPRITES, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this, gfx_sprites)
 	, m_sprite_pattern_ram(*this, "pattern_ram", 64 * 256, ENDIANNESS_LITTLE)

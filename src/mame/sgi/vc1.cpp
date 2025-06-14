@@ -17,7 +17,7 @@
 
 DEFINE_DEVICE_TYPE(SGI_VC1, sgi_vc1_device, "sgi_vc1", "SGI VC1")
 
-sgi_vc1_device::sgi_vc1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_vc1_device::sgi_vc1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_VC1, tag, owner, clock)
 {
 }

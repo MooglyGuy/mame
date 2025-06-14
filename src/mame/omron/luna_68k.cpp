@@ -275,8 +275,8 @@ void luna_68k_state::luna(machine_config &config)
 	M68000(config, m_ioc_cpu, 10_MHz_XTAL);
 	m_ioc_cpu->set_addrmap(AS_PROGRAM, &luna_68k_state::ioc_cpu_map);
 
-	HD63450(config, m_ioc_dma[0], 20'000'000 / 2, "ioc");
-	HD63450(config, m_ioc_dma[1], 20'000'000 / 2, "ioc");
+	HD63450(config, m_ioc_dma[0], XTAL::u(20'000'000) / 2, "ioc");
+	HD63450(config, m_ioc_dma[1], XTAL::u(20'000'000) / 2, "ioc");
 
 	// internal SCSI
 	NSCSI_BUS(config, "scsi0");
@@ -292,7 +292,7 @@ void luna_68k_state::luna(machine_config &config)
 		{
 			mb89352_device &spc = downcast<mb89352_device &>(*device);
 
-			spc.set_clock(10'000'000);
+			spc.set_clock(XTAL::u(10'000'000));
 			//spc.out_irq_callback().set(spc_irq, FUNC(input_merger_any_high_device::in_w<0>));
 		});
 
@@ -310,20 +310,20 @@ void luna_68k_state::luna(machine_config &config)
 		{
 			mb89352_device &spc = downcast<mb89352_device &>(*device);
 
-			spc.set_clock(10'000'000);
+			spc.set_clock(XTAL::u(10'000'000));
 			//spc.out_irq_callback().set(spc_irq, FUNC(input_merger_any_high_device::in_w<1>));
 		});
 
-	MB8877(config, m_ioc_fdc, 0);
+	MB8877(config, m_ioc_fdc);
 	SCC8530(config, m_ioc_scc, 4.9152_MHz_XTAL); // AM8530H-6PC
-	m_ioc_scc->configure_channels(4'915'200, 4'915'200, 4'915'200, 4'915'200);
-	Z8536(config, m_ioc_cio, 10'000'000);
+	m_ioc_scc->configure_channels(XTAL::u(4'915'200), XTAL::u(4'915'200), XTAL::u(4'915'200), XTAL::u(4'915'200));
+	Z8536(config, m_ioc_cio, XTAL::u(10'000'000));
 
 	// GPU
-	M68020FPU(config, m_gpu_cpu, 33'340'000 / 2);
+	M68020FPU(config, m_gpu_cpu, XTAL::u(33'340'000) / 2);
 	m_gpu_cpu->set_addrmap(AS_PROGRAM, &luna_68k_state::gpu_cpu_map);
 
-	BT458(config, m_gpu_dac, 108'000'000);
+	BT458(config, m_gpu_dac, XTAL::u(108'000'000));
 
 	MC68901(config, m_gpu_mfp, 3.6864_MHz_XTAL);
 	m_gpu_mfp->set_timer_clock(3.6864_MHz_XTAL);

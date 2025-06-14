@@ -25,7 +25,7 @@
 
 DEFINE_DEVICE_TYPE(TEK_MSU_FDC, tek_msu_fdc_device, "tek_msu_fdc", "Tektronix 4404 Mass Storage Unit Floppy Drive Controller")
 
-tek_msu_fdc_device::tek_msu_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tek_msu_fdc_device::tek_msu_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: nscsi_device(mconfig, TEK_MSU_FDC, tag, owner, clock)
 	, nscsi_slot_card_interface(mconfig, *this, DEVICE_SELF)
 	, m_cpu(*this, "cpu")

@@ -83,7 +83,7 @@ DEFINE_DEVICE_TYPE(HD40A4240, hd40a4240_device, "hd40a4240", "Hitachi HD40A4240"
 //  constructor
 //-------------------------------------------------
 
-hmcs400_cpu_device::hmcs400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size) :
+hmcs400_cpu_device::hmcs400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size) :
 	cpu_device(mconfig, type, tag, owner, clock),
 	device_nvram_interface(mconfig, *this),
 	m_program_config("program", ENDIANNESS_LITTLE, 16, 14, -1, address_map_constructor(FUNC(hmcs400_cpu_device::program_map), this)),
@@ -108,127 +108,127 @@ hmcs400_cpu_device::hmcs400_cpu_device(const machine_config &mconfig, device_typ
 hmcs400_cpu_device::~hmcs400_cpu_device() { }
 
 
-hmcs402_cpu_device::hmcs402_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+hmcs402_cpu_device::hmcs402_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs400_cpu_device(mconfig, type, tag, owner, clock, 0x800, 96)
 { }
 
-hd614022_device::hd614022_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614022_device::hd614022_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs402_cpu_device(mconfig, HD614022, tag, owner, clock)
 { }
-hd614023_device::hd614023_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614023_device::hd614023_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs402_cpu_device(mconfig, HD614023, tag, owner, clock)
 { }
-hd614025_device::hd614025_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614025_device::hd614025_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs402_cpu_device(mconfig, HD614025, tag, owner, clock)
 { }
-hd614026_device::hd614026_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614026_device::hd614026_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs402_cpu_device(mconfig, HD614026, tag, owner, clock)
 { }
-hd614028_device::hd614028_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614028_device::hd614028_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs402_cpu_device(mconfig, HD614028, tag, owner, clock)
 { }
-hd614029_device::hd614029_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614029_device::hd614029_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs402_cpu_device(mconfig, HD614029, tag, owner, clock)
 { }
 
 
-hmcs404_cpu_device::hmcs404_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+hmcs404_cpu_device::hmcs404_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs400_cpu_device(mconfig, type, tag, owner, clock, 0x1000, 192)
 { }
 
-hd614042_device::hd614042_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614042_device::hd614042_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs404_cpu_device(mconfig, HD614042, tag, owner, clock)
 { }
-hd614043_device::hd614043_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614043_device::hd614043_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs404_cpu_device(mconfig, HD614043, tag, owner, clock)
 { }
-hd614045_device::hd614045_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614045_device::hd614045_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs404_cpu_device(mconfig, HD614045, tag, owner, clock)
 { }
-hd614046_device::hd614046_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614046_device::hd614046_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs404_cpu_device(mconfig, HD614046, tag, owner, clock)
 { }
-hd614048_device::hd614048_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614048_device::hd614048_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs404_cpu_device(mconfig, HD614048, tag, owner, clock)
 { }
-hd614049_device::hd614049_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614049_device::hd614049_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs404_cpu_device(mconfig, HD614049, tag, owner, clock)
 { }
 
 
-hmcs408_cpu_device::hmcs408_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+hmcs408_cpu_device::hmcs408_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs400_cpu_device(mconfig, type, tag, owner, clock, 0x2000, 448)
 {
 	m_has_div = true;
 }
 
-hd614080_device::hd614080_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614080_device::hd614080_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs408_cpu_device(mconfig, HD614080, tag, owner, clock)
 { }
-hd614081_device::hd614081_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614081_device::hd614081_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs408_cpu_device(mconfig, HD614081, tag, owner, clock)
 { }
-hd614085_device::hd614085_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614085_device::hd614085_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs408_cpu_device(mconfig, HD614085, tag, owner, clock)
 { }
-hd614086_device::hd614086_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614086_device::hd614086_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs408_cpu_device(mconfig, HD614086, tag, owner, clock)
 { }
-hd614088_device::hd614088_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614088_device::hd614088_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs408_cpu_device(mconfig, HD614088, tag, owner, clock)
 { }
-hd614089_device::hd614089_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614089_device::hd614089_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs408_cpu_device(mconfig, HD614089, tag, owner, clock)
 { }
 
 
-hmcs41x_cpu_device::hmcs41x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size) :
+hmcs41x_cpu_device::hmcs41x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size) :
 	hmcs400_cpu_device(mconfig, type, tag, owner, clock, rom_size, ram_size)
 {
 	m_has_div = true;
 }
 
-hmcs412_cpu_device::hmcs412_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+hmcs412_cpu_device::hmcs412_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs41x_cpu_device(mconfig, type, tag, owner, clock, 0x800, 96)
 { }
 
-hd614120_device::hd614120_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614120_device::hd614120_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs412_cpu_device(mconfig, HD614120, tag, owner, clock)
 { }
-hd614125_device::hd614125_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614125_device::hd614125_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs412_cpu_device(mconfig, HD614125, tag, owner, clock)
 { }
-hd614128_device::hd614128_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614128_device::hd614128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs412_cpu_device(mconfig, HD614128, tag, owner, clock)
 { }
 
 
-hmcs414_cpu_device::hmcs414_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+hmcs414_cpu_device::hmcs414_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs41x_cpu_device(mconfig, type, tag, owner, clock, 0x1000, 96)
 { }
 
-hd614140_device::hd614140_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614140_device::hd614140_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs414_cpu_device(mconfig, HD614140, tag, owner, clock)
 { }
-hd614145_device::hd614145_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614145_device::hd614145_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs414_cpu_device(mconfig, HD614145, tag, owner, clock)
 { }
-hd614148_device::hd614148_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd614148_device::hd614148_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs414_cpu_device(mconfig, HD614148, tag, owner, clock)
 { }
 
 
-hmcs424_cpu_device::hmcs424_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+hmcs424_cpu_device::hmcs424_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs41x_cpu_device(mconfig, type, tag, owner, clock, 0x1000, 192)
 { }
 
-hd404240_device::hd404240_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd404240_device::hd404240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs424_cpu_device(mconfig, HD404240, tag, owner, clock)
 { }
-hd40l4240_device::hd40l4240_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd40l4240_device::hd40l4240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs424_cpu_device(mconfig, HD40L4240, tag, owner, clock)
 { }
-hd40a4240_device::hd40a4240_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+hd40a4240_device::hd40a4240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hmcs424_cpu_device(mconfig, HD40A4240, tag, owner, clock)
 { }
 

@@ -15,7 +15,7 @@ single CCTL register that covers RD5 and bank.
 DEFINE_DEVICE_TYPE(A800_ROM_ATRAX, a800_rom_atrax_device, "a800_atrax", "Atari 8-bit Atrax 128KB cart")
 
 
-a800_rom_atrax_device::a800_rom_atrax_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_atrax_device::a800_rom_atrax_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, A800_ROM_ATRAX, tag, owner, clock)
 	, m_bank(0)
 {

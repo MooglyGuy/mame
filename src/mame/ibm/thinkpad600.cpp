@@ -160,33 +160,33 @@ void thinkpad600_state::thinkpad600_base(machine_config &config)
 
 void thinkpad600_state::thinkpad600e(machine_config &config)
 {
-	PENTIUM2(config, m_maincpu, 366'000'000); // Intel Pentium II 366 Mobile MMC-2 (PMG36602002AA)
+	PENTIUM2(config, m_maincpu, XTAL::u(366'000'000)); // Intel Pentium II 366 Mobile MMC-2 (PMG36602002AA)
 	m_maincpu->set_addrmap(AS_PROGRAM, &thinkpad600_state::main_map);
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	m_maincpu->smiact().set("pci:00.0", FUNC(i82443bx_host_device::smi_act_w));
 
 	// TODO: PCI config space guessed from a Fujitsu Lifebook, confirm me for ThinkPad
-	PCI_ROOT(config, "pci", 0);
-	I82443BX_HOST(config, "pci:00.0", 0, "maincpu", 64*1024*1024);
-	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", 0, m_maincpu));
+	PCI_ROOT(config, "pci");
+	I82443BX_HOST(config, "pci:00.0", "maincpu", 64*1024*1024);
+	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", m_maincpu));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	i82371eb_ide_device &ide(I82371EB_IDE(config, "pci:07.1", 0, m_maincpu));
+	i82371eb_ide_device &ide(I82371EB_IDE(config, "pci:07.1", m_maincpu));
 	ide.irq_pri().set("pci:07.0", FUNC(i82371eb_isa_device::pc_irq14_w));
 	ide.irq_sec().set("pci:07.0", FUNC(i82371eb_isa_device::pc_mirq0_w));
 
-	I82371EB_USB (config, "pci:07.2", 0);
-	I82371EB_ACPI(config, "pci:07.3", 0);
-	LPC_ACPI     (config, "pci:07.3:acpi", 0);
-	SMBUS        (config, "pci:07.3:smbus", 0);
+	I82371EB_USB (config, "pci:07.2");
+	I82371EB_ACPI(config, "pci:07.3");
+	LPC_ACPI     (config, "pci:07.3:acpi");
+	SMBUS        (config, "pci:07.3:smbus");
 
 //  TODO: modem at "pci:10.0"
 //  TODO: cardbus at "pci:12.0"
 //  TODO: NeoMagic at "pci:14.0" / "pci:14.1" (video & AC'97 integrated sound, likely requires BIOS)
 
 //  TODO: motherboard Super I/O resource here
-	ISA16_SLOT(config, "board4", 0, "pci:07.0:isabus", isa_internal_devices, "pc97338", true).set_option_machine_config("pc97338", superio_config);
+	ISA16_SLOT(config, "board4", "pci:07.0:isabus", isa_internal_devices, "pc97338", true).set_option_machine_config("pc97338", superio_config);
 
 	rs232_port_device &serport0(RS232_PORT(config, "serport0", isa_com, nullptr));
 	serport0.rxd_handler().set("board4:pc97338", FUNC(pc97338_device::rxd1_w));
@@ -207,11 +207,11 @@ void thinkpad600_state::thinkpad600e(machine_config &config)
 
 void thinkpad600_state::thinkpad600(machine_config &config)
 {
-	PENTIUM2(config, m_maincpu, 300'000'000); // Intel Pentium II 300 Mobile MMC-1 (PMD30005002AA)
+	PENTIUM2(config, m_maincpu, XTAL::u(300'000'000)); // Intel Pentium II 300 Mobile MMC-1 (PMD30005002AA)
 	m_maincpu->set_disable();
 
 	// TODO: fill me, uses earlier PIIX4 AB
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 
 	thinkpad600_base(config);
 }

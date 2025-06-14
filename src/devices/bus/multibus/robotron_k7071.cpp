@@ -27,7 +27,7 @@ enum kgs_st : u8
 
 DEFINE_DEVICE_TYPE(ROBOTRON_K7071, robotron_k7071_device, "robotron_k7071", "Robotron K7071 ABS")
 
-robotron_k7071_device::robotron_k7071_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+robotron_k7071_device::robotron_k7071_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ROBOTRON_K7071, tag, owner, clock)
 	, device_multibus_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")

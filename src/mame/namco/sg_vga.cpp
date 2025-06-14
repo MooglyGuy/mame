@@ -262,7 +262,7 @@ void sg_vga_state::sg_vga(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	x1_010_device &x1snd(X1_010(config, "x1snd", 16'000'000)); // clock unknown
+	x1_010_device &x1snd(X1_010(config, "x1snd", XTAL::u(16'000'000))); // clock unknown
 	x1snd.add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 

@@ -18,13 +18,13 @@
 class sigmasoft_parallel_port : public device_t, public device_h89bus_left_card_interface
 {
 public:
-	sigmasoft_parallel_port(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sigmasoft_parallel_port(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual u8 read(u8 select_lines, u16 offset) override;
 	virtual void write(u8 select_lines, u16 offset, u8 data) override;
 
 protected:
-	sigmasoft_parallel_port(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	sigmasoft_parallel_port(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -49,7 +49,7 @@ private:
 class sigmasoft_parallel_port_igc : public sigmasoft_parallel_port
 {
 public:
-	sigmasoft_parallel_port_igc(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sigmasoft_parallel_port_igc(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_tlbc(T &&tag) { m_tlbc.set_tag(std::forward<T>(tag)); }
 

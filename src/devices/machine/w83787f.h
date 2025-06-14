@@ -15,7 +15,7 @@ class w83787f_device : public device_t,
 					   public device_memory_interface
 {
 public:
-	w83787f_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	w83787f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	~w83787f_device() {}
 
 	void remap(int space_id, offs_t start, offs_t end) override;

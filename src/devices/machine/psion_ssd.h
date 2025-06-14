@@ -23,7 +23,7 @@ class psion_ssd_device : public device_t, public device_memcard_image_interface
 {
 public:
 	// construction/destruction
-	psion_ssd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_ssd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~psion_ssd_device();
 
 	// callbacks

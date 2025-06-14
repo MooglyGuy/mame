@@ -28,7 +28,7 @@ class hdd_device : public device_t, public bus::nabupc::device_option_expansion_
 {
 public:
 	// construction/destruction
-	hdd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hdd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_option_expansion_interface implementation
 	virtual uint8_t read(offs_t offset) override;
@@ -46,7 +46,7 @@ private:
 //-------------------------------------------------
 //  hdd_device - constructor
 //-------------------------------------------------
-hdd_device::hdd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hdd_device::hdd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NABUPC_OPTION_HDD, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	m_hdd(*this, "hdd")
@@ -58,9 +58,9 @@ hdd_device::hdd_device(const machine_config &mconfig, const char *tag, device_t 
 //-------------------------------------------------
 void hdd_device::device_add_mconfig(machine_config &config)
 {
-	WD1000(config, m_hdd, 0);
+	WD1000(config, m_hdd);
 
-	HARDDISK(config, "hdd:0", 0);
+	HARDDISK(config, "hdd:0");
 }
 
 //-------------------------------------------------

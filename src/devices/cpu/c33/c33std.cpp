@@ -21,7 +21,7 @@ c33std_cpu_device_base::c33std_cpu_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock,
+		const XTAL &clock,
 		address_map_constructor internal_map) :
 	cpu_device(mconfig, type, tag, owner, clock),
 	m_memory_config("memory", ENDIANNESS_LITTLE, 16, 28, 0, internal_map),

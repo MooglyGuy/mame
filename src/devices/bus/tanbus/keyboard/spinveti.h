@@ -22,7 +22,7 @@ class microtan_kbd_spinveti : public device_t, public device_microtan_kbd_interf
 {
 public:
 	// construction/destruction
-	microtan_kbd_spinveti(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	microtan_kbd_spinveti(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	DECLARE_INPUT_CHANGED_MEMBER(trigger_reset);
 

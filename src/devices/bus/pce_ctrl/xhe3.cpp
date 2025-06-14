@@ -25,7 +25,7 @@ INPUT_PORTS_END
 class pce_xhe3_device : public device_t, public device_pce_control_port_interface
 {
 public:
-	pce_xhe3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	pce_xhe3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 peripheral_r() override;
 	virtual void sel_w(int state) override;
@@ -44,7 +44,7 @@ private:
 };
 
 
-pce_xhe3_device::pce_xhe3_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+pce_xhe3_device::pce_xhe3_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PCE_XHE3, tag, owner, clock),
 	device_pce_control_port_interface(mconfig, *this),
 	m_port(*this, "joy"),

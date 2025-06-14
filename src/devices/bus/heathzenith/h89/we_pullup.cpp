@@ -24,15 +24,15 @@ namespace {
 class h89bus_we_pullup_device : public device_t, public device_h89bus_right_card_interface
 {
 public:
-	h89bus_we_pullup_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h89bus_we_pullup_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
 };
 
-h89bus_we_pullup_device::h89bus_we_pullup_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, H89BUS_WE_PULLUP, tag, owner, 0),
+h89bus_we_pullup_device::h89bus_we_pullup_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, H89BUS_WE_PULLUP, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this)
 {
 }

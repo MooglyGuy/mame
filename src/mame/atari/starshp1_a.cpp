@@ -9,7 +9,7 @@
 
 #include "starshp1_a.h"
 
-#define STARSHP1_PIXEL_CLOCK       (12096000)
+#define STARSHP1_PIXEL_CLOCK       XTAL::u(12096000)
 #define STARSHP1_HTOTAL            (0x300)
 
 /* voltage out for each 1/256 step of MC1408 circuit */

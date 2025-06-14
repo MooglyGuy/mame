@@ -26,7 +26,7 @@
 
 DEFINE_DEVICE_TYPE(APPLE_PSEUDOVIA, pseudovia_device, "pseudovia", "Apple pseudo-VIA")
 
-pseudovia_device::pseudovia_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pseudovia_device::pseudovia_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, APPLE_PSEUDOVIA, tag, owner, clock),
 	m_write_irq(*this),
 	m_in_a_handler(*this, 0),

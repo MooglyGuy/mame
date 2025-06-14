@@ -63,7 +63,7 @@ namespace bus::ti99::peb {
 
 /****************************************************************************/
 
-ti_speechsyn_adapter_device::ti_speechsyn_adapter_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ti_speechsyn_adapter_device::ti_speechsyn_adapter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, TI99_SPEECHADAPTER, tag, owner, clock),
 	device_ti99_peribox_card_interface(mconfig, *this),
 	m_port(*this, PORT),
@@ -138,7 +138,7 @@ void ti_speechsyn_adapter_options(device_slot_interface &device)
 
 void ti_speechsyn_adapter_device::device_add_mconfig(machine_config& config)
 {
-	TI99_IOPORT(config, m_port, 0, ti_speechsyn_adapter_options, "speechsyn");
+	TI99_IOPORT(config, m_port, ti_speechsyn_adapter_options, "speechsyn");
 	m_port->ready_cb().set(FUNC(ti_speechsyn_adapter_device::ready));
 }
 

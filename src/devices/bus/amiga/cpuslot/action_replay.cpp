@@ -40,7 +40,7 @@ DEFINE_DEVICE_TYPE(AMIGA_CPUSLOT_ACTION_REPLAY_MK3, bus::amiga::cpuslot::action_
 
 namespace bus::amiga::cpuslot {
 
-action_replay_device_base::action_replay_device_base(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, uint32_t clock) :
+action_replay_device_base::action_replay_device_base(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_amiga_cpuslot_interface(mconfig, *this),
 	m_rom(*this, "rom"),
@@ -48,22 +48,22 @@ action_replay_device_base::action_replay_device_base(const machine_config &mconf
 {
 }
 
-action_replay_mk1_device::action_replay_mk1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+action_replay_mk1_device::action_replay_mk1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	action_replay_device_base(mconfig, AMIGA_CPUSLOT_ACTION_REPLAY_MK1, 0x4000, tag, owner, clock)
 {
 }
 
-action_replay_mk2_device::action_replay_mk2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+action_replay_mk2_device::action_replay_mk2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	action_replay_device_base(mconfig, AMIGA_CPUSLOT_ACTION_REPLAY_MK2, 0x10000, tag, owner, clock)
 {
 }
 
-action_replay_mk2_device::action_replay_mk2_device(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, uint32_t clock) :
+action_replay_mk2_device::action_replay_mk2_device(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, const XTAL &clock) :
 	action_replay_device_base(mconfig, type, ram_size, tag, owner, clock)
 {
 }
 
-action_replay_mk3_device::action_replay_mk3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+action_replay_mk3_device::action_replay_mk3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	action_replay_mk2_device(mconfig, AMIGA_CPUSLOT_ACTION_REPLAY_MK3, 0x10000, tag, owner, clock)
 {
 }

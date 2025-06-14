@@ -111,7 +111,7 @@ void rvoice_state::rvoicepc(machine_config &config)
 	acia.rts_handler().set("rs232", FUNC(rs232_port_device::write_rts));
 
 	// HACK: some signal needs to be connected to Tin
-	CLOCK(config, "testclock", 60).signal_handler().set_inputline(m_maincpu, M6801_TIN_LINE);
+	CLOCK(config, "testclock", XTAL::u(60)).signal_handler().set_inputline(m_maincpu, M6801_TIN_LINE);
 
 	/* video hardware */
 

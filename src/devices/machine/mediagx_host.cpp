@@ -20,7 +20,7 @@ MediaGX host implementation (northbridge)
 
 DEFINE_DEVICE_TYPE(MEDIAGX_HOST, mediagx_host_device, "mediagx_host", "MediaGX X-Bus Host PCI")
 
-mediagx_host_device::mediagx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mediagx_host_device::mediagx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_host_device(mconfig, MEDIAGX_HOST, tag, owner, clock)
 	, m_host_cpu(*this, finder_base::DUMMY_TAG)
 	, m_vga(*this, "vga")
@@ -142,7 +142,7 @@ void mediagx_host_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(mediagx_vga_device::screen_update));
 
-	MEDIAGX_VGA(config, m_vga, 0);
+	MEDIAGX_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(4*1024*1024);
 }

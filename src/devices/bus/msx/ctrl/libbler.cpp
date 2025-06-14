@@ -43,7 +43,7 @@ INPUT_PORTS_END
 class xpd_1lr_device : public device_t, public device_msx_general_purpose_port_interface
 {
 public:
-	xpd_1lr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	xpd_1lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 read() override { return m_pad[m_pin8]->read() | m_buttons->read(); }
 	virtual void pin_8_w(int state) override { m_pin8 = state ? 1 : 0; }
@@ -59,7 +59,7 @@ private:
 };
 
 
-xpd_1lr_device::xpd_1lr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+xpd_1lr_device::xpd_1lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_LIBBLERPAD, tag, owner, clock)
 	, device_msx_general_purpose_port_interface(mconfig, *this)
 	, m_pad(*this, "PAD%u", 1U)

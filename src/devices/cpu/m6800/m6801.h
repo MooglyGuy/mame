@@ -206,7 +206,7 @@ protected:
 class m6801u4_cpu_device : public m6801_cpu_device
 {
 public:
-	m6801u4_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m6801u4_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -241,7 +241,7 @@ private:
 class hd6801v0_cpu_device : public m6801_cpu_device
 {
 public:
-	hd6801v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd6801v0_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
@@ -271,21 +271,21 @@ protected:
 class mc68120_device : public m6801_cpu_device
 {
 public:
-	mc68120_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mc68120_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// dual-ported RAM access
 	u8 dpram_r(offs_t offset);
 	void dpram_w(offs_t offset, u8 data);
 
 protected:
-	mc68120_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor internal);
+	mc68120_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor internal);
 };
 
 
 class mc68121_device : public mc68120_device
 {
 public:
-	mc68121_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	mc68121_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

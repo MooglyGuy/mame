@@ -440,7 +440,7 @@ pc80s31k_device::pc80s31k_device(const machine_config &mconfig, device_type type
 	: pc80s31_device(mconfig, type, tag, owner, clock)
 {}
 
-pc80s31k_device::pc80s31k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc80s31k_device::pc80s31k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc80s31k_device(mconfig, PC80S31K, tag, owner, clock)
 {
 }
@@ -489,7 +489,7 @@ void pc80s31k_device::fdc_io(address_map &map)
 //
 //**************************************************************************
 
-pc88va2_fd_if_device::pc88va2_fd_if_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc88va2_fd_if_device::pc88va2_fd_if_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc80s31k_device(mconfig, PC88VA2_FD_IF, tag, owner, clock)
 	, m_write_irq(*this)
 	, m_write_drq(*this)
@@ -638,7 +638,7 @@ void pc88va2_fd_if_device::host_drive_rate_w(u8 data)
 	//m_fdd[1]->get_device()->ds_w(!BIT(data, 4));
 
 	// TODO: is this correct? sounds more like a controller clock change, while TD1/TD0 should do the rate change
-	m_fdc->set_rate(clk ? 500000 : 250000);
+	m_fdc->set_rate(clk ? XTAL::u(500000) : XTAL::u(250000));
 }
 
 /*

@@ -128,7 +128,7 @@ void belatra_state::belatra(machine_config &config)
 
 	SCREEN(config, "screen", SCREEN_TYPE_RASTER);
 
-	ARM_VIDC20(config, m_vidc, 24'000'000); // chip type and clock guessed
+	ARM_VIDC20(config, m_vidc, XTAL::u(24'000'000)); // chip type and clock guessed
 	m_vidc->set_screen("screen");
 	m_vidc->vblank().set(m_iomd, FUNC(arm_iomd_device::vblank_irq));
 	m_vidc->sound_drq().set(m_iomd, FUNC(arm_iomd_device::sound_drq));

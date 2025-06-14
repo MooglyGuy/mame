@@ -1312,7 +1312,7 @@ void namcos10_state::i2c_update()
 
 void namcos10_state::namcos10_exio(machine_config &config)
 {
-	namcos10_exio_device &exio(NAMCOS10_EXIO(config, m_exio, 0));
+	namcos10_exio_device &exio(NAMCOS10_EXIO(config, m_exio));
 
 	exio.analog_callback().set([this] (offs_t offset) {
 		return m_exio_analog[offset].read_safe(0);
@@ -1380,7 +1380,7 @@ void namcos10_state::namcos10_mgexio(machine_config &config)
 
 	// TODO: puzzball wants to see IRQ 2 triggering. Where from MGEXIO does that come? Probably a port
 
-	namcos10_mgexio_device &mgexio(NAMCOS10_MGEXIO(config, m_exio, 0));
+	namcos10_mgexio_device &mgexio(NAMCOS10_MGEXIO(config, m_exio));
 
 	HOPPER(config, m_mgexio_hopper[0], attotime::from_msec(100));
 	HOPPER(config, m_mgexio_hopper[1], attotime::from_msec(100));
@@ -1866,7 +1866,7 @@ void namcos10_memn_state::memn_driver_init()
 void namcos10_memn_state::namcos10_nand_k9f2808u0b(machine_config &config, int nand_count)
 {
 	for (int i = 0; i < nand_count; i++) {
-		SAMSUNG_K9F2808U0B(config, m_nand[i], 0);
+		SAMSUNG_K9F2808U0B(config, m_nand[i]);
 		m_nand[i]->rnb_wr_callback().set([this, i] (int state) { m_nand_rnb_state[i] = state != 1; });
 	}
 }
@@ -1874,7 +1874,7 @@ void namcos10_memn_state::namcos10_nand_k9f2808u0b(machine_config &config, int n
 void namcos10_memn_state::namcos10_nand_k9f5608u0d(machine_config &config, int nand_count)
 {
 	for (int i = 0; i < nand_count; i++) {
-		SAMSUNG_K9F5608U0D(config, m_nand[i], 0);
+		SAMSUNG_K9F5608U0D(config, m_nand[i]);
 		m_nand[i]->rnb_wr_callback().set([this, i] (int state) { m_nand_rnb_state[i] = state != 1; });
 	}
 }
@@ -1901,7 +1901,7 @@ void namcos10_memn_state::ns10_chocovdr(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xc, 0xe, 0xf, 0x9, 0x8, 0xa, 0xb, 0x4, 0x7, 0x6, 0x5, 0x0, 0x3, 0x2, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x00005239351ec1daULL, 0x0000000000008090ULL, 0x0000000048264808ULL, 0x0000000000004820ULL,
 			0x0000000000000500ULL, 0x0000000058ff5a54ULL, 0x00000000d8220208ULL, 0x00005239351e91d3ULL,
@@ -1929,7 +1929,7 @@ void namcos10_memn_state::ns10_gahaha(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xe, 0xc, 0xf, 0xa, 0x8, 0xb, 0x9, 0x6, 0x7, 0x4, 0x5, 0x0, 0x3, 0x2, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000010a08200ULL, 0x00000000001b0204ULL, 0x00004ba503024016ULL, 0x0000000000000004ULL,
 			0x0000000000000240ULL, 0x0000000088080180ULL, 0x000011821ce50066ULL, 0x000000000a204200ULL,
@@ -1956,7 +1956,7 @@ void namcos10_memn_state::ns10_gahaha2(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0xa, 0x9, 0x8, 0xb, 0x4, 0x5, 0x6, 0x7, 0x0, 0x1, 0x3, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000080064001ULL, 0x000000000a000104ULL, 0x0000018220912000ULL, 0x0000000001822010ULL,
 			0x00000000000001a0ULL, 0x00000481a4220004ULL, 0x0000a11490041269ULL, 0x0000000000000810ULL,
@@ -1983,7 +1983,7 @@ void namcos10_memn_state::ns10_gamshara(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xc, 0xf, 0xe, 0x8, 0x9, 0xb, 0xa, 0x5, 0x7, 0x4, 0x6, 0x0, 0x1, 0x2, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000028ULL, 0x0000cae83f389fd9ULL, 0x0000000000001000ULL, 0x0000000042823402ULL,
 			0x0000cae8736a0592ULL, 0x0000cae8736a8596ULL, 0x000000008b4095b9ULL, 0x0000000000002100ULL,
@@ -2022,7 +2022,7 @@ void namcos10_memn_state::ns10_gjspace(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0x8, 0xa, 0x6, 0x5, 0x7, 0xe, 0x4, 0xf, 0xd, 0x9, 0x1, 0x0, 0x2, 0xb, 0xc, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000240ULL, 0x0000d617eb0f1ab1ULL, 0x00000000451111c0ULL, 0x00000000013b1f44ULL,
 			0x0000aab0b356abceULL, 0x00007ca76b89602aULL, 0x0000000000001800ULL, 0x00000000031d1303ULL,
@@ -2061,7 +2061,7 @@ void namcos10_memn_state::ns10_keroro(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xf, 0xc, 0xd, 0xa, 0x8, 0xb, 0x9, 0x4, 0x5, 0x7, 0x6, 0x2, 0x1, 0x0, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000024ULL, 0x0000000000000884ULL, 0x00000000000e0a00ULL, 0x0000000000000040ULL,
 			0x000000000a002100ULL, 0x0000000000002011ULL, 0x0000000000004010ULL, 0x0000050006000000ULL,
@@ -2095,7 +2095,7 @@ void namcos10_memn_state::ns10_knpuzzle(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xf, 0xc, 0xd, 0xa, 0x8, 0xb, 0x9, 0x4, 0x5, 0x6, 0x7, 0x1, 0x3, 0x0, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x00000000c0a4208cULL, 0x00000000204100a8ULL, 0x000000000c0306a0ULL, 0x000000000819e944ULL,
 			0x0000000000001400ULL, 0x0000000000000061ULL, 0x000000000141401cULL, 0x0000000000000020ULL,
@@ -2122,7 +2122,7 @@ void namcos10_memn_state::ns10_konotako(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xf, 0xc, 0xd, 0x8, 0x9, 0xb, 0xa, 0x5, 0x4, 0x7, 0x6, 0x0, 0x1, 0x3, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x000000000000004cULL, 0x00000000d39e3d3dULL, 0x0000000000001110ULL, 0x0000000000002200ULL,
 			0x000000003680c008ULL, 0x0000000000000281ULL, 0x0000000000005002ULL, 0x00002a7371895a47ULL,
@@ -2150,7 +2150,7 @@ void namcos10_memn_state::ns10_medalnt(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xf, 0xc, 0xe, 0x8, 0x9, 0xa, 0xb, 0x5, 0x4, 0x6, 0x7, 0x2, 0x3, 0x0, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000080601000ULL, 0x0000000000006020ULL, 0x0000000000004840ULL, 0x0000000000000201ULL,
 			0x0000000000020004ULL, 0x0000000000000081ULL, 0x0000000000009001ULL, 0x0000000001041810ULL,
@@ -2178,7 +2178,7 @@ void namcos10_memn_state::ns10_medalnt2(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xf, 0xc, 0xe, 0xa, 0x8, 0xb, 0x9, 0x4, 0x7, 0x6, 0x5, 0x1, 0x3, 0x0, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000202ULL, 0x0000242000120110ULL, 0x0000000001624608ULL, 0x0000000000001820ULL,
 			0x000000000000c040ULL, 0x0000000000000184ULL, 0x0000000007900002ULL, 0x0000000000005008ULL,
@@ -2205,7 +2205,7 @@ void namcos10_memn_state::ns10_mrdrilrg(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0xa, 0x9, 0x8, 0xb, 0x4, 0x5, 0x6, 0x7, 0x0, 0x1, 0x3, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000115c68620401ULL, 0x0000008102802094ULL, 0x00000081a65270a8ULL, 0x0000000000810010ULL,
 			0x00004c2c080f3059ULL, 0x00000081470a9500ULL, 0x000000816a123009ULL, 0x00000081a2b23038ULL,
@@ -2240,7 +2240,7 @@ void namcos10_memn_state::ns10_nflclsfb(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xd, 0xc, 0xf, 0x9, 0xb, 0x8, 0xa, 0x4, 0x5, 0x6, 0x7, 0x0, 0x3, 0x2, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x000034886e281880ULL, 0x0000000012c5e7baULL, 0x0000000000000200ULL, 0x000000002900002aULL,
 			0x00000000000004c0ULL, 0x0000000012c5e6baULL, 0x00000000e0df8bbbULL, 0x000000002011532aULL,
@@ -2268,7 +2268,7 @@ void namcos10_memn_state::ns10_pacmball(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xf, 0xc, 0xe, 0x8, 0xb, 0xa, 0x9, 0x4, 0x5, 0x7, 0x6, 0x0, 0x3, 0x2, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000008028ULL, 0x0000000000000400ULL, 0x00000000a9100004ULL, 0x0000000028004200ULL,
 			0x0000000000001002ULL, 0x0000000000001041ULL, 0x0000001a70008022ULL, 0x0000000081100022ULL,
@@ -2295,7 +2295,7 @@ void namcos10_memn_state::ns10_panikuru(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0x8, 0x9, 0xa, 0xb, 0x4, 0x7, 0x6, 0x5, 0x1, 0x0, 0x3, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000130ULL, 0x0000000018802004ULL, 0x0000b04a04781081ULL, 0x0000000006802000ULL,
 			0x0000000000000c02ULL, 0x0000000042040020ULL, 0x0000000000000003ULL, 0x0000b040c00c0940ULL,
@@ -2329,7 +2329,7 @@ void namcos10_memn_state::ns10_ptblank3(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xc, 0xf, 0xe, 0x8, 0x9, 0xb, 0xa, 0x5, 0x7, 0x4, 0x6, 0x1, 0x0, 0x2, 0x3); };
 
-	NS10_TYPE2_DECRYPTER_NONLINEAR(config, m_decrypter, 0, ns10_type2_decrypter_nonlinear_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER_NONLINEAR(config, m_decrypter, ns10_type2_decrypter_nonlinear_device::ns10_crypto_logic{
 		{
 			0x0000000057001200ULL,0x00000000000000a4ULL,0x0000000000000150ULL,0x0000000000008004ULL,
 			0x0000000057002204ULL,0x0000000009001000ULL,0x0000000000102000ULL,0x0000000064004888ULL,
@@ -2357,7 +2357,7 @@ void namcos10_memn_state::ns10_puzzball(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xc, 0xf, 0xe, 0xd, 0x8, 0x9, 0xa, 0xb, 0x4, 0x5, 0x7, 0x6, 0x1, 0x0, 0x2, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000288ULL, 0x0000000050420100ULL, 0x00000000000010a0ULL, 0x0000000004020015ULL,
 			0x0000000020400400ULL, 0x0000000004020010ULL, 0x000008a880054080ULL, 0x0000000000000140ULL,
@@ -2385,7 +2385,7 @@ void namcos10_memn_state::ns10_sekaikh(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xc, 0xe, 0xf, 0x9, 0xb, 0x8, 0xa, 0x6, 0x5, 0x4, 0x7, 0x2, 0x3, 0x0, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000510ULL, 0x0000000000004000ULL, 0x0000000000000406ULL, 0x0000000000000400ULL,
 			0x00000000c0410890ULL, 0x0000000041610800ULL, 0x0000000000002008ULL, 0x000000002051a000ULL,
@@ -2424,7 +2424,7 @@ void namcos10_memn_state::ns10_startrgn(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xd, 0xc, 0xf, 0x9, 0xb, 0x8, 0xa, 0x4, 0x5, 0x6, 0x7, 0x0, 0x3, 0x2, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x00003e4bfe92c6a9ULL, 0x000000000000010cULL, 0x00003e4b7bd6c4aaULL, 0x0000b1a904b8fab8ULL,
 			0x0000000000000080ULL, 0x0000000000008c00ULL, 0x0000b1a9b2f0b4cdULL, 0x000000006c100828ULL,
@@ -2452,7 +2452,7 @@ void namcos10_memn_state::ns10_sugorotic(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xd, 0xc, 0xe, 0xf, 0x9, 0xb, 0x8, 0xa, 0x4, 0x5, 0x6, 0x7, 0x0, 0x1, 0x2, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000061402200010ULL, 0x0000000000b2a150ULL, 0x0000000080280021ULL, 0x0000000000000880ULL,
 			0x0000061410010004ULL, 0x0000000000000800ULL, 0x0000000000000141ULL, 0x0000000041002000ULL,
@@ -2480,7 +2480,7 @@ void namcos10_memn_state::ns10_taiko2(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xc, 0xd, 0xe, 0xf, 0x9, 0x8, 0xb, 0xa, 0x6, 0x4, 0x7, 0x5, 0x2, 0x3, 0x0, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000004011401ULL, 0x000000008c208806ULL, 0x000000008c200406ULL, 0x0000004a08002208ULL,
 			0x0000000030800000ULL, 0x0000000000000540ULL, 0x000000002c01011eULL, 0x00000000ad4805c6ULL,
@@ -2508,7 +2508,7 @@ void namcos10_memn_state::ns10_taiko3(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0xa, 0x9, 0x8, 0xb, 0x4, 0x5, 0x6, 0x7, 0x0, 0x1, 0x3, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x00000000016d0400ULL, 0x000000001a002021ULL, 0x0000018884002000ULL, 0x00000000000040a0ULL,
 			0x000000003010800cULL, 0x0000020504100842ULL, 0x0000008818148104ULL, 0x0000000053220100ULL,
@@ -2539,7 +2539,7 @@ void namcos10_memn_state::ns10_taiko4(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xd, 0xc, 0xf, 0x9, 0x8, 0xb, 0xa, 0x5, 0x4, 0x6, 0x7, 0x2, 0x3, 0x0, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000042c82001ULL, 0x0000000000000200ULL, 0x000000000910405cULL, 0x0000000000000c00ULL,
 			0x000000000f401100ULL, 0x000000000910002aULL, 0x00006280110a0440ULL, 0x0000000040680044ULL,
@@ -2567,7 +2567,7 @@ void namcos10_memn_state::ns10_taiko5(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xf, 0xc, 0xd, 0xa, 0x8, 0xb, 0x9, 0x4, 0x5, 0x7, 0x6, 0x2, 0x1, 0x0, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000244ULL, 0x0000000098880004ULL, 0x0000000018021806ULL, 0x0000000000004810ULL,
 			0x000005800ac04002ULL, 0x0000000090044040ULL, 0x0000000098240025ULL, 0x0000000018022184ULL,
@@ -2600,7 +2600,7 @@ void namcos10_memn_state::ns10_taiko6(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0x9, 0xb, 0x8, 0xa, 0x5, 0x4, 0x7, 0x6, 0x2, 0x1, 0x0, 0x3); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x00000000000000a2ULL, 0x00000000000000c8ULL, 0x0000909054044a04ULL, 0x00009180101a2200ULL,
 			0x0000000050002840ULL, 0x0000000000004005ULL, 0x000000000e220900ULL, 0x0000000086000004ULL,
@@ -2628,7 +2628,7 @@ void namcos10_memn_state::ns10_taikort(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0x8, 0xb, 0xa, 0x9, 0x5, 0x7, 0x4, 0x6, 0x2, 0x3, 0x0, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000014020804ULL, 0x000000000000c080ULL, 0x0000000080140400ULL, 0x0000000030102218ULL,
 			0x0000704018840801ULL, 0x0000000000002210ULL, 0x00008c0102000080ULL, 0x0000000000846000ULL,
@@ -2943,7 +2943,7 @@ void namcos10_memp3_state::ns10_g13jnr(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xd, 0xc, 0xf, 0x9, 0xb, 0x8, 0xa, 0x6, 0x7, 0x4, 0x5, 0x1, 0x3, 0x0, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x00005600001c0582ULL, 0x0000000000004024ULL, 0x0000010212403000ULL, 0x0000000000008404ULL,
 			0x0000005121060021ULL, 0x0000010212402001ULL, 0x0000000001024000ULL, 0x0000000000000840ULL,
@@ -2970,7 +2970,7 @@ void namcos10_memp3_state::ns10_nicetsuk(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xc, 0xf, 0xe, 0xd, 0xa, 0x8, 0xb, 0x9, 0x5, 0x4, 0x6, 0x7, 0x2, 0x3, 0x0, 0x1); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000000000022ULL, 0x0000000000008082ULL, 0x0000808400d10000ULL, 0x0000000000000088ULL,
 			0x0000000000001040ULL, 0x0000000000001600ULL, 0x0000000714400404ULL, 0x0000000021c40800ULL,
@@ -2997,7 +2997,7 @@ void namcos10_memp3_state::ns10_squizchs(machine_config &config)
 
 	m_unscrambler = [] (uint16_t data) { return bitswap<16>(data, 0xe, 0xc, 0xf, 0xd, 0xa, 0x8, 0xb, 0x9, 0x6, 0x4, 0x7, 0x5, 0x0, 0x1, 0x3, 0x2); };
 
-	NS10_TYPE2_DECRYPTER(config, m_decrypter, 0, ns10_type2_decrypter_device::ns10_crypto_logic{
+	NS10_TYPE2_DECRYPTER(config, m_decrypter, ns10_type2_decrypter_device::ns10_crypto_logic{
 		{
 			0x0000000080203001ULL, 0x000000008e001402ULL, 0x0000000000000005ULL, 0x0000000002030840ULL,
 			0x0000000000008420ULL, 0x0000000000000088ULL, 0x000000001c020442ULL, 0x00000080c0a01041ULL,
@@ -3058,7 +3058,7 @@ void namcos10_memio_state::namcos10_memio_map(address_map &map)
 void namcos10_memio_state::namcos10_nand_tc58256aft(machine_config &config, int nand_count)
 {
 	for (int i = 0; i < nand_count; i++) {
-		TOSHIBA_TC58256AFT(config, m_nand[i], 0);
+		TOSHIBA_TC58256AFT(config, m_nand[i]);
 		m_nand[i]->rnb_wr_callback().set([this, i] (int state) { m_nand_rnb_state[i] = state != 1; });
 	}
 }

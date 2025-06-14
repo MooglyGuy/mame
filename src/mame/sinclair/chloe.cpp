@@ -942,7 +942,7 @@ void chloe_state::chloe(machine_config &config)
 	m_dma->out_iorq_callback().set([this](offs_t offset, u8 data) { m_io.write_byte(offset, data); });
 	*/
 
-	SPI_SDCARD(config, m_sdcard, 0);
+	SPI_SDCARD(config, m_sdcard);
 	m_sdcard->set_prefer_sdhc();
 	m_sdcard->spi_miso_callback().set(FUNC(chloe_state::spi_miso_w));
 
@@ -952,7 +952,7 @@ void chloe_state::chloe(machine_config &config)
 	m_screen->set_no_palette();
 
 	PALETTE(config, m_palette, FUNC(chloe_state::spectrum_palette), 256);
-	SCREEN_ULA_PLUS(config, m_ula, 0).set_raster_offset(SCR_256x192.left(), SCR_256x192.top()).set_palette(m_palette->device().tag(), 0x000, 0x000);
+	SCREEN_ULA_PLUS(config, m_ula).set_raster_offset(SCR_256x192.left(), SCR_256x192.top()).set_palette(m_palette->device().tag(), 0x000, 0x000);
 
 	SPEAKER(config, "speaker2", 2).front();
 
@@ -968,7 +968,7 @@ void chloe_state::chloe(machine_config &config)
 		.add_route(2, "speaker2", 0.25, 1)
 		.add_route(1, "speaker2", 0.50, 1);
 
-	DAC_8BIT_R2R(config, m_covox, 0)
+	DAC_8BIT_R2R(config, m_covox)
 		.add_route(ALL_OUTPUTS, "speaker2", 0.75, 0)
 		.add_route(ALL_OUTPUTS, "speaker2", 0.75, 1);
 

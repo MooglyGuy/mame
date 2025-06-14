@@ -15,7 +15,7 @@ Sega Digital Sound Board 2
 
 DEFINE_DEVICE_TYPE(DSB2, dsb2_device, "dsb2_device", "Sega 68k-based Digital Sound Board 2")
 
-dsb2_device::dsb2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+dsb2_device::dsb2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, DSB2, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
 	m_ourcpu(*this, "mpegcpu"),
@@ -55,14 +55,14 @@ void dsb2_device::dsb2_map(address_map &map)
 void dsb2_device::device_add_mconfig(machine_config &config)
 {
 	// TODO: unknown clocks
-	M68000(config, m_ourcpu, 8000000);
+	M68000(config, m_ourcpu, XTAL::u(8000000));
 	m_ourcpu->set_addrmap(AS_PROGRAM, &dsb2_device::dsb2_map);
 
-	I8251(config, m_uart, 4000000);
+	I8251(config, m_uart, XTAL::u(4000000));
 	m_uart->rxrdy_handler().set_inputline(m_ourcpu, INPUT_LINE_IRQ1);
 	m_uart->txd_handler().set(FUNC(dsb2_device::output_txd));
 
-	clock_device &uart_clock(CLOCK(config, "uart_clock", 500000)); // 16 times 31.25MHz (standard Sega/MIDI sound data rate)
+	clock_device &uart_clock(CLOCK(config, "uart_clock", XTAL::u(500000))); // 16 times 31.25MHz (standard Sega/MIDI sound data rate)
 	uart_clock.signal_handler().set("uart", FUNC(i8251_device::write_rxc));
 	uart_clock.signal_handler().append("uart", FUNC(i8251_device::write_txc));
 }
@@ -71,7 +71,7 @@ void dsb2_device::device_add_mconfig(machine_config &config)
 void dsb2_device::device_start()
 {
 	m_decoder.reset(new mpeg_audio(&m_mpeg_rom[0], mpeg_audio::L2, false, 0));
-	stream_alloc(0, 2, 32000);
+	stream_alloc(0, 2, XTAL::u(32000));
 
 	m_timer_1kHz = timer_alloc(FUNC(dsb2_device::timer_irq_cb), this);
 

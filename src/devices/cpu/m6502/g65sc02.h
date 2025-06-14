@@ -15,20 +15,20 @@
 
 class g65sc02_device : public w65c02_device {
 public:
-	g65sc02_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	g65sc02_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	g65sc02_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	g65sc02_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class g65sc12_device : public g65sc02_device {
 public:
-	g65sc12_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	g65sc12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class g65sc102_device : public g65sc02_device {
 public:
-	g65sc102_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	g65sc102_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual uint64_t execute_clocks_to_cycles(uint64_t clocks) const noexcept override { return (clocks + 4 - 1) / 4; }
@@ -37,7 +37,7 @@ protected:
 
 class g65sc112_device : public g65sc02_device {
 public:
-	g65sc112_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	g65sc112_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 enum {

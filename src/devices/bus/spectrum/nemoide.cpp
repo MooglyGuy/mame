@@ -15,7 +15,7 @@ namespace {
 class nemoide_device : public device_t, public device_zxbus_card_interface
 {
 public:
-	nemoide_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	nemoide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, ZXBUS_NEMOIDE, tag, owner, clock)
 		, device_zxbus_card_interface(mconfig, *this)
 		, m_ata(*this, "ata")

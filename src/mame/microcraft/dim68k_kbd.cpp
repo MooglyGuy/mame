@@ -30,7 +30,7 @@
 
 DEFINE_DEVICE_TYPE(DIM68K_KEYBOARD, dim68k_keyboard_device, "dim68k_kbd", "Dimension 68000 keyboard")
 
-dim68k_keyboard_device::dim68k_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+dim68k_keyboard_device::dim68k_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DIM68K_KEYBOARD, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_eprom(*this, "eprom")
@@ -208,7 +208,7 @@ ioport_constructor dim68k_keyboard_device::device_input_ports() const
 
 void dim68k_keyboard_device::device_add_mconfig(machine_config &config)
 {
-	I8048(config, m_mcu, 4'752'000 /* 4.608_MHz_XTAL */); // NEC 20-08048-399 + 300-107 XTAL
+	I8048(config, m_mcu, XTAL::u(4'752'000) /* 4.608_MHz_XTAL */); // NEC 20-08048-399 + 300-107 XTAL
 	m_mcu->set_addrmap(AS_IO, &dim68k_keyboard_device::ext_map);
 	m_mcu->p1_in_cb().set(FUNC(dim68k_keyboard_device::p1_r));
 	m_mcu->p2_in_cb().set_constant(0xf7);

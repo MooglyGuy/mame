@@ -68,7 +68,7 @@ struct CDCR { enum : uint8_t
 
 DEFINE_DEVICE_TYPE(F2MC16_UART, f2mc16_uart_device, "f2mc16_uart", "F2MC16 UART")
 
-f2mc16_uart_device::f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t rx_vector, uint8_t tx_vector) :
+f2mc16_uart_device::f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t rx_vector, uint8_t tx_vector) :
 	f2mc16_uart_device(mconfig, tag, owner, clock)
 {
 	m_intc.set_tag(intc);
@@ -76,7 +76,7 @@ f2mc16_uart_device::f2mc16_uart_device(const machine_config &mconfig, const char
 	m_tx_vector = tx_vector;
 }
 
-f2mc16_uart_device::f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_uart_device::f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_UART, tag, owner, clock),
 	m_intc(*this, finder_base::DUMMY_TAG),
 	m_sck_cb(*this),
@@ -156,7 +156,7 @@ void f2mc16_uart_device::device_reset()
 
 void f2mc16_uart_device::device_clock_changed()
 {
-	m_peripheral_clock_hz = clock();
+	m_peripheral_clock_hz = clock().value();
 	update_serial();
 }
 

@@ -481,13 +481,13 @@ void macii_state::via_sync()
 	u64 cycle = m_maincpu->total_cycles();
 
 	// Get the number of the cycle the via is in at that time
-	u64 via_cycle = cycle * m_via1->clock() / m_maincpu->clock();
+	u64 via_cycle = cycle * m_via1->clock().value() / m_maincpu->clock().value();
 
 	// The access is going to start at via_cycle+1 and end at
 	// via_cycle+1.5, compute what that means in maincpu cycles (the
 	// +1 rounds up, since the clocks are too different to ever be
 	// synced).
-	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock() / (2 * m_via1->clock()) + 1;
+	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock().value() / (2 * m_via1->clock().value()) + 1;
 
 	// Finally adjust the main cpu icount as needed.
 	m_maincpu->adjust_icount(-int(main_cycle - cycle));
@@ -941,7 +941,7 @@ void macii_state::macii(machine_config &config)
 	applefdintf_device::add_35_nc(config, m_floppy[1]);
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(FUNC(macii_state::set_scc_interrupt));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
@@ -962,16 +962,16 @@ void macii_state::macii(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi:2", mac_scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi:3").option_set("cdrom", NSCSI_CDROM_APPLE).machine_config([](device_t *device)
 																							{
-			device->subdevice<cdda_device>("cdda")->add_route(0, "^^speaker", 1.0, 0);
-			device->subdevice<cdda_device>("cdda")->add_route(1, "^^speaker", 1.0, 1); });
+	device->subdevice<cdda_device>("cdda")->add_route(0, "^^speaker", 1.0, 0);
+	device->subdevice<cdda_device>("cdda")->add_route(1, "^^speaker", 1.0, 1); });
 	NSCSI_CONNECTOR(config, "scsi:4", mac_scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi:5", mac_scsi_devices, nullptr);
 	NSCSI_CONNECTOR(config, "scsi:6", mac_scsi_devices, "harddisk");
 	NSCSI_CONNECTOR(config, "scsi:7").option_set("ncr5380", NCR53C80).machine_config([this](device_t *device)
 																					 {
-		ncr53c80_device &adapter = downcast<ncr53c80_device &>(*device);
-		adapter.irq_handler().set(*this, FUNC(macii_state::scsi_irq));
-		adapter.drq_handler().set(m_scsihelp, FUNC(mac_scsi_helper_device::drq_w)); });
+	ncr53c80_device &adapter = downcast<ncr53c80_device &>(*device);
+	adapter.irq_handler().set(*this, FUNC(macii_state::scsi_irq));
+	adapter.drq_handler().set(m_scsihelp, FUNC(mac_scsi_helper_device::drq_w)); });
 
 	MAC_SCSI_HELPER(config, m_scsihelp);
 	m_scsihelp->scsi_read_callback().set(m_ncr5380, FUNC(ncr53c80_device::read));
@@ -984,7 +984,7 @@ void macii_state::macii(machine_config &config)
 	SOFTWARE_LIST(config, "hdd_list").set_original("mac_hdd").set_filter("MC68020");
 	SOFTWARE_LIST(config, "cd_list").set_original("mac_cdrom").set_filter("MC68020");
 
-	nubus_device &nubus(NUBUS(config, "nubus", 0));
+	nubus_device &nubus(NUBUS(config, "nubus"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.out_irq9_callback().set(FUNC(macii_state::nubus_irq_w<9>));
 	nubus.out_irqa_callback().set(FUNC(macii_state::nubus_irq_w<0xa>));
@@ -1118,7 +1118,7 @@ void macii_state::macse30(machine_config &config)
 	config.device_remove("nbb");
 	config.device_remove("nubus");
 
-	se30_pds_bus_device &se30bus(MACSE30_PDS_BUS(config, "pds", 0));
+	se30_pds_bus_device &se30bus(MACSE30_PDS_BUS(config, "pds"));
 	se30bus.set_space(m_maincpu, AS_PROGRAM);
 	se30bus.set_bus_mode(nubus_device::nubus_mode_t::SE30);
 	se30bus.set_screen_tag("screen");

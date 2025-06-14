@@ -139,7 +139,7 @@ static constexpr unsigned DMA_BURST_SIZE = 128U;
 #define DMA_TIMER_PERIOD attotime::from_hz(33'000'000 / 64)
 
 
-jaleco_vj_qtaro_device::jaleco_vj_qtaro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+jaleco_vj_qtaro_device::jaleco_vj_qtaro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, JALECO_VJ_QTARO, tag, owner, clock)
 {
 }
@@ -464,12 +464,12 @@ void jaleco_vj_king_qtaro_device::map(address_map &map)
 	map(0xb8, 0xbb).rw(FUNC(jaleco_vj_king_qtaro_device::int_fpga_r), FUNC(jaleco_vj_king_qtaro_device::int_fpga_w));
 }
 
-jaleco_vj_king_qtaro_device::jaleco_vj_king_qtaro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+jaleco_vj_king_qtaro_device::jaleco_vj_king_qtaro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	jaleco_vj_king_qtaro_device(mconfig, JALECO_VJ_KING_QTARO, tag, owner, clock)
 {
 }
 
-jaleco_vj_king_qtaro_device::jaleco_vj_king_qtaro_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+jaleco_vj_king_qtaro_device::jaleco_vj_king_qtaro_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	pci_device(mconfig, type, tag, owner, clock),
 	m_qtaro(*this, "qtaro%u", 1)
 {
@@ -521,7 +521,7 @@ void jaleco_vj_king_qtaro_device::device_reset()
 
 void jaleco_vj_king_qtaro_device::device_add_mconfig(machine_config &config)
 {
-	JALECO_VJ_QTARO(config, m_qtaro[0], 0);
-	JALECO_VJ_QTARO(config, m_qtaro[1], 0);
-	JALECO_VJ_QTARO(config, m_qtaro[2], 0);
+	JALECO_VJ_QTARO(config, m_qtaro[0]);
+	JALECO_VJ_QTARO(config, m_qtaro[1]);
+	JALECO_VJ_QTARO(config, m_qtaro[2]);
 }

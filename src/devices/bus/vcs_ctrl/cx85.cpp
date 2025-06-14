@@ -64,7 +64,7 @@ INPUT_PORTS_END
 //  atari_cx85_device - constructor
 //-------------------------------------------------
 
-atari_cx85_device::atari_cx85_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+atari_cx85_device::atari_cx85_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ATARI_CX85, tag, owner, clock)
 	, device_vcs_control_port_interface(mconfig, *this)
 	, m_encoder(*this, "encoder")
@@ -77,7 +77,7 @@ atari_cx85_device::atari_cx85_device(const machine_config &mconfig, const char *
 
 void atari_cx85_device::device_add_mconfig(machine_config &config)
 {
-	MM74C923(config, m_encoder, 0); // MCM74C923N
+	MM74C923(config, m_encoder); // MCM74C923N
 	m_encoder->set_cap_osc(CAP_U(.1));
 	m_encoder->set_cap_debounce(CAP_U(.47));
 	m_encoder->data_tri_callback().set_constant(0);

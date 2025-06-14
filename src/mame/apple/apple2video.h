@@ -80,7 +80,7 @@ public:
 	u8 get_iie_langsw() const { return m_iie_langsw; }
 
 protected:
-	a2_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	a2_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_reset() override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -137,7 +137,7 @@ private:
 class a2_video_device_composite : public a2_video_device
 {
 public:
-	a2_video_device_composite(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2_video_device_composite(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 };
@@ -146,7 +146,7 @@ protected:
 class a2_video_device_composite_rgb : public a2_video_device
 {
 public:
-	a2_video_device_composite_rgb(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2_video_device_composite_rgb(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 };

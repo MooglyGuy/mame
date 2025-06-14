@@ -12,12 +12,12 @@
 class sis6326_agp_device : public pci_card_device
 {
 public:
-	sis6326_agp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sis6326_agp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::GRAPHICS; }
 
 protected:
-	sis6326_agp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	sis6326_agp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

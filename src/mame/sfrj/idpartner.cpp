@@ -42,7 +42,7 @@
 class idpartner_floppy_daisy_device : public device_t, public device_z80daisy_interface
 {
 public:
-	idpartner_floppy_daisy_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	idpartner_floppy_daisy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~idpartner_floppy_daisy_device() {};
 
 	// callbacks
@@ -116,7 +116,7 @@ void idpartner_floppy_daisy_device::z80daisy_irq_reti()
 
 DEFINE_DEVICE_TYPE(IDPARTNER_FLOPPY_DAISY, idpartner_floppy_daisy_device, "idpartner_floppy_daisy", "Iskra Delta Partner floppy daisy chain device")
 
-idpartner_floppy_daisy_device::idpartner_floppy_daisy_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+idpartner_floppy_daisy_device::idpartner_floppy_daisy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IDPARTNER_FLOPPY_DAISY, tag, owner, clock)
 	, device_z80daisy_interface(mconfig, *this)
 	, m_int_handler(*this)
@@ -401,7 +401,7 @@ void idpartner_state::partner_base(machine_config &config)
 	m_pio->out_int_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 
 	// There is one bus connector J2, but cable goes to up to two devices
-	IDPARTNER_BUS(config, m_bus, 0);
+	IDPARTNER_BUS(config, m_bus);
 	m_bus->set_io_space(m_maincpu, AS_IO);
 	m_bus->int_handler().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 	m_bus->nmi_handler().set_inputline(m_maincpu, INPUT_LINE_NMI);

@@ -170,7 +170,7 @@ class isa16_oksan_rom_disk : public device_t, public device_isa16_card_interface
 {
 public:
 	// construction/destruction
-	isa16_oksan_rom_disk(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_oksan_rom_disk(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_rom_tag(T &&tag) { m_flash_rom.set_tag(std::forward<T>(tag)); }
 
@@ -194,7 +194,7 @@ private:
 
 DEFINE_DEVICE_TYPE(ISA16_OKSAN_ROM_DISK, isa16_oksan_rom_disk, "isa16_oksan_rom_disk", "ISA16 Oksan ROM DISK for MK-III")
 
-isa16_oksan_rom_disk::isa16_oksan_rom_disk(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_oksan_rom_disk::isa16_oksan_rom_disk(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_OKSAN_ROM_DISK, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_flash_rom(*this, finder_base::DUMMY_TAG)
@@ -302,10 +302,10 @@ class isa16_xtom3d_io_sound : public device_t, public device_isa16_card_interfac
 {
 public:
 	// construction/destruction
-	isa16_xtom3d_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_xtom3d_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	isa16_xtom3d_io_sound(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	isa16_xtom3d_io_sound(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -327,7 +327,7 @@ private:
 class isa16_pumpitup_io_sound : public isa16_xtom3d_io_sound
 {
 public:
-	isa16_pumpitup_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_pumpitup_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -337,12 +337,12 @@ DEFINE_DEVICE_TYPE(ISA16_XTOM3D_IO_SOUND, isa16_xtom3d_io_sound, "isa16_xtom3d_i
 DEFINE_DEVICE_TYPE(ISA16_PUMPITUP_IO_SOUND, isa16_pumpitup_io_sound, "isa16_pumpitup_io_sound", "ISA16 Pump It Up I/O & Sound board") // PIUIO MK1
 
 
-isa16_xtom3d_io_sound::isa16_xtom3d_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_xtom3d_io_sound::isa16_xtom3d_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: isa16_xtom3d_io_sound(mconfig, ISA16_XTOM3D_IO_SOUND, tag, owner, clock)
 {
 }
 
-isa16_xtom3d_io_sound::isa16_xtom3d_io_sound(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+isa16_xtom3d_io_sound::isa16_xtom3d_io_sound(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_ymz(*this, "ymz")
@@ -354,7 +354,7 @@ isa16_xtom3d_io_sound::isa16_xtom3d_io_sound(const machine_config &mconfig, devi
 {
 }
 
-isa16_pumpitup_io_sound::isa16_pumpitup_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_pumpitup_io_sound::isa16_pumpitup_io_sound(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: isa16_xtom3d_io_sound(mconfig, ISA16_PUMPITUP_IO_SOUND, tag, owner, clock)
 {
 }
@@ -530,7 +530,7 @@ class isa16_oksan_lpc : public device_t, public device_isa16_card_interface
 {
 public:
 	// construction/destruction
-	isa16_oksan_lpc(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_oksan_lpc(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	required_device<mc146818_device> m_rtc;
 	required_device<kbdc8042_device> m_kbdc;
@@ -548,7 +548,7 @@ private:
 
 DEFINE_DEVICE_TYPE(ISA16_OKSAN_LPC, isa16_oksan_lpc, "isa16_oksan_lpc", "ISA16 Oksan Virtual LPC")
 
-isa16_oksan_lpc::isa16_oksan_lpc(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_oksan_lpc::isa16_oksan_lpc(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_OKSAN_LPC, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_rtc(*this, "rtc")
@@ -562,7 +562,7 @@ void isa16_oksan_lpc::device_add_mconfig(machine_config &config)
 	//m_rtc->irq().set(m_pic8259_2, FUNC(pic8259_device::ir0_w));
 	m_rtc->set_century_index(0x32);
 
-	KBDC8042(config, m_kbdc, 0);
+	KBDC8042(config, m_kbdc);
 	m_kbdc->set_keyboard_type(kbdc8042_device::KBDC8042_STANDARD);
 	m_kbdc->system_reset_callback().set_inputline(":maincpu", INPUT_LINE_RESET);
 	m_kbdc->gate_a20_callback().set_inputline(":maincpu", INPUT_LINE_A20);
@@ -674,13 +674,13 @@ void xtom3d_state::xtom3d(machine_config &config)
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	m_maincpu->smiact().set("pci:00.0", FUNC(i82443bx_host_device::smi_act_w));
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// PCB has ZX marking but BIOS returns BX, shouldn't matter
-	I82443BX_HOST(config, "pci:00.0", 0, "maincpu", 64*1024*1024);
-	I82443BX_BRIDGE(config, "pci:01.0", 0 ); //"pci:01.0:00.0");
+	I82443BX_HOST(config, "pci:00.0", "maincpu", 64*1024*1024);
+	I82443BX_BRIDGE(config, "pci:01.0"); //"pci:01.0:00.0");
 	//I82443BX_AGP   (config, "pci:01.0:00.0");
 
-	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", 0, m_maincpu));
+	i82371eb_isa_device &isa(I82371EB_ISA(config, "pci:07.0", m_maincpu));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
@@ -693,19 +693,19 @@ void xtom3d_state::xtom3d(machine_config &config)
 
 	m_pci_ide->subdevice<bus_master_ide_controller_device>("ide2")->slot(0).set_default_option(nullptr);
 
-	I82371EB_USB (config, "pci:07.2", 0);
-	I82371EB_ACPI(config, "pci:07.3", 0);
-	LPC_ACPI     (config, "pci:07.3:acpi", 0);
-	SMBUS        (config, "pci:07.3:smbus", 0);
+	I82371EB_USB (config, "pci:07.2");
+	I82371EB_ACPI(config, "pci:07.3");
+	LPC_ACPI     (config, "pci:07.3:acpi");
+	SMBUS        (config, "pci:07.3:smbus");
 
-	ISA16_SLOT(config, "board1", 0, "pci:07.0:isabus", xtom3d_isa_cards, "oksan_romdisk", true).set_option_machine_config("oksan_romdisk", romdisk_config);
-	ISA16_SLOT(config, "board2", 0, "pci:07.0:isabus", xtom3d_isa_cards, "oksan_lpc", true);
-	ISA16_SLOT(config, "isa1", 0, "pci:07.0:isabus", xtom3d_isa_cards, "xtom3d_io_sound", true);
-	ISA16_SLOT(config, "isa2", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "board1", "pci:07.0:isabus", xtom3d_isa_cards, "oksan_romdisk", true).set_option_machine_config("oksan_romdisk", romdisk_config);
+	ISA16_SLOT(config, "board2", "pci:07.0:isabus", xtom3d_isa_cards, "oksan_lpc", true);
+	ISA16_SLOT(config, "isa1", "pci:07.0:isabus", xtom3d_isa_cards, "xtom3d_io_sound", true);
+	ISA16_SLOT(config, "isa2", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
 
 	// Expansion slots, mapping SVGA for debugging
 #if ENABLE_VOODOO
-	VOODOO_BANSHEE_X86_PCI(config, m_voodoo, 0, m_maincpu, "screen"); // "pci:0d.0" J4D2
+	VOODOO_BANSHEE_X86_PCI(config, m_voodoo, m_maincpu, "screen"); // "pci:0d.0" J4D2
 	m_voodoo->set_fbmem(8);
 	// NOTE: pumpit1 touches this a lot
 	m_voodoo->set_status_cycles(1000);

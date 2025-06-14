@@ -326,14 +326,14 @@ void freedom200_state::freedom200(machine_config &config)
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_color(rgb_t::green());
-	m_screen->set_raw(16000000, 768, 0, 640, 321, 0, 300); // clock unverified
+	m_screen->set_raw(XTAL::u(16000000), 768, 0, 640, 321, 0, 300); // clock unverified
 	m_screen->set_screen_update(m_avdc, FUNC(scn2674_device::screen_update));
 
 	PALETTE(config, m_palette, palette_device::MONOCHROME_HIGHLIGHT);
 
 	GFXDECODE(config, "gfxdecode", m_palette, chars);
 
-	SCN2674(config, m_avdc, 16000000 / 8); // clock unverified
+	SCN2674(config, m_avdc, XTAL::u(16000000) / 8); // clock unverified
 	m_avdc->intr_callback().set(FUNC(freedom200_state::avdc_intr_w));
 	m_avdc->set_screen(m_screen);
 	m_avdc->set_character_width(8); // unverified
@@ -341,7 +341,7 @@ void freedom200_state::freedom200(machine_config &config)
 	m_avdc->set_addrmap(1, &freedom200_state::attr_map);
 	m_avdc->set_display_callback(FUNC(freedom200_state::draw_character));
 
-	pit8253_device &pit(PIT8253(config, "pit", 0));
+	pit8253_device &pit(PIT8253(config, "pit"));
 	pit.set_clk<0>(18.432_MHz_XTAL / 10);
 	pit.set_clk<1>(18.432_MHz_XTAL / 10);
 	pit.set_clk<2>(18.432_MHz_XTAL / 10);
@@ -352,19 +352,19 @@ void freedom200_state::freedom200(machine_config &config)
 	pit.out_handler<2>().set(m_usart[0], FUNC(i8251_device::write_txc));
 	pit.out_handler<2>().append(m_usart[0], FUNC(i8251_device::write_rxc));
 
-	I8251(config, m_usart[0], 0); // unknown clock
+	I8251(config, m_usart[0], XTAL()); // unknown clock
 	m_usart[0]->rxrdy_handler().set("irq", FUNC(input_merger_device::in_w<0>));
 	m_usart[0]->txrdy_handler().set("irq", FUNC(input_merger_device::in_w<1>));
 	m_usart[0]->txd_handler().set("mainport", FUNC(rs232_port_device::write_txd));
 	m_usart[0]->rts_handler().set("mainport", FUNC(rs232_port_device::write_rts));
 
-	I8251(config, m_usart[1], 0); // unknown clock
+	I8251(config, m_usart[1], XTAL()); // unknown clock
 	m_usart[1]->rxrdy_handler().set("irq", FUNC(input_merger_device::in_w<2>));
 	m_usart[1]->txrdy_handler().set("irq", FUNC(input_merger_device::in_w<3>));
 	m_usart[1]->txd_handler().set("auxport", FUNC(rs232_port_device::write_txd));
 	m_usart[1]->rts_handler().set("auxport", FUNC(rs232_port_device::write_rts));
 
-	I8251(config, m_usart[2], 0); // unknown clock
+	I8251(config, m_usart[2], XTAL()); // unknown clock
 	m_usart[2]->rxrdy_handler().set("irq", FUNC(input_merger_device::in_w<4>));
 	m_usart[2]->txd_handler().set("kbd", FUNC(freedom220_kbd_device::rxd_w));
 

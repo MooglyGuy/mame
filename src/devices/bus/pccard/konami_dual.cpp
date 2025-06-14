@@ -54,7 +54,7 @@
 #include "konami_dual.h"
 #include "linflash.h"
 
-konami_dual_pccard_device::konami_dual_pccard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+konami_dual_pccard_device::konami_dual_pccard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, KONAMI_DUAL_PCCARD, tag, owner, clock),
 	device_pccard_interface(mconfig, *this),
 	m_slot(*this, "slot%u", 3U)

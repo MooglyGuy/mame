@@ -143,7 +143,7 @@ void tanbus_tugcombo6116_device::device_add_mconfig(machine_config &config)
 //  tanbus_tugcombo_device - constructor
 //-------------------------------------------------
 
-tanbus_tugcombo_device::tanbus_tugcombo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo_device::tanbus_tugcombo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_tanbus_interface(mconfig, *this)
@@ -155,48 +155,48 @@ tanbus_tugcombo_device::tanbus_tugcombo_device(const machine_config &mconfig, de
 }
 
 
-tanbus_tugcombo2716_device::tanbus_tugcombo2716_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo2716_device::tanbus_tugcombo2716_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo_device(mconfig, type, tag, owner, clock)
 	, m_rom(*this, "rom%u", 0)
 {
 	m_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 8, 16, 0, address_map_constructor(FUNC(tanbus_tugcombo2716_device::mem_map), this));
 }
 
-tanbus_tugcombo2716_device::tanbus_tugcombo2716_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo2716_device::tanbus_tugcombo2716_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo2716_device(mconfig, TANBUS_TUGCOMBO2716, tag, owner, clock)
 {
 }
 
-tanbus_tugesc2716_device::tanbus_tugesc2716_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugesc2716_device::tanbus_tugesc2716_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo2716_device(mconfig, TANBUS_TUGESC2716, tag, owner, clock)
 {
 }
 
 
-tanbus_tugcombo2732_device::tanbus_tugcombo2732_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo2732_device::tanbus_tugcombo2732_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo_device(mconfig, type, tag, owner, clock)
 	, m_rom(*this, "rom%u", 0)
 {
 	m_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 8, 16, 0, address_map_constructor(FUNC(tanbus_tugcombo2732_device::mem_map), this));
 }
 
-tanbus_tugcombo2732_device::tanbus_tugcombo2732_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo2732_device::tanbus_tugcombo2732_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo2732_device(mconfig, TANBUS_TUGCOMBO2732, tag, owner, clock)
 {
 }
 
-tanbus_tugesc2732_device::tanbus_tugesc2732_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugesc2732_device::tanbus_tugesc2732_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo2732_device(mconfig, TANBUS_TUGESC2732, tag, owner, clock)
 {
 }
 
 
-tanbus_tugcombo6116_device::tanbus_tugcombo6116_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo6116_device::tanbus_tugcombo6116_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo_device(mconfig, type, tag, owner, clock)
 {
 }
 
-tanbus_tugcombo6116_device::tanbus_tugcombo6116_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_tugcombo6116_device::tanbus_tugcombo6116_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tanbus_tugcombo6116_device(mconfig, TANBUS_TUGCOMBO6116, tag, owner, clock)
 {
 	m_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 8, 16, 0, address_map_constructor(FUNC(tanbus_tugcombo6116_device::mem_map), this));

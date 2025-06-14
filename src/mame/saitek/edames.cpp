@@ -119,7 +119,7 @@ void edames_state::init_board(u8 data)
 INPUT_CHANGED_MEMBER(edames_state::change_cpu_freq)
 {
 	// 6MHz and 10MHz versions don't exist, but the software supports it
-	static const u32 freq[4] = { 6'000'000, 8'000'000, 10'000'000, 12'000'000 };
+	static const XTAL freq[4] = { XTAL::u(6'000'000), XTAL::u(8'000'000), XTAL::u(10'000'000), XTAL::u(12'000'000) };
 	m_maincpu->set_unscaled_clock(freq[~newval & 3]);
 }
 
@@ -255,7 +255,7 @@ INPUT_PORTS_END
 void edames_state::edames(machine_config &config)
 {
 	// basic machine hardware
-	HD6301Y0(config, m_maincpu, 8'000'000); // approximation, no XTAL
+	HD6301Y0(config, m_maincpu, XTAL::u(8'000'000)); // approximation, no XTAL
 	m_maincpu->nvram_enable_backup(true);
 	m_maincpu->standby_cb().set(m_maincpu, FUNC(hd6301y0_cpu_device::nvram_set_battery));
 	m_maincpu->standby_cb().append([this](int state) { if (state) m_display->clear(); });

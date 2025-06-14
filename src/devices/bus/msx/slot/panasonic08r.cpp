@@ -14,7 +14,7 @@
 DEFINE_DEVICE_TYPE(MSX_SLOT_PANASONIC08R, msx_slot_panasonic08r_device, "msx_slot_panasonic08r", "MSX Internal Panasonic08r")
 
 
-msx_slot_panasonic08r_device::msx_slot_panasonic08r_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_panasonic08r_device::msx_slot_panasonic08r_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_SLOT_PANASONIC08R, tag, owner, clock)
 	, msx_internal_slot_interface(mconfig, *this)
 	, m_sram_size(0)

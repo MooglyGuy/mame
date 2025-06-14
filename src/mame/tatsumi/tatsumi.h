@@ -55,8 +55,8 @@ protected:
 	required_memory_region m_mainregion;
 	required_memory_region m_subregion;
 
-	static constexpr int CLOCK_1 = 16'000'000;
-	static constexpr int CLOCK_2 = 50'000'000;
+	static constexpr XTAL CLOCK_1 = XTAL::u(16'000'000);
+	static constexpr XTAL CLOCK_2 = XTAL::u(50'000'000);
 
 	INTERRUPT_GEN_MEMBER(v30_interrupt);
 	TILE_GET_INFO_MEMBER(get_text_tile_info);

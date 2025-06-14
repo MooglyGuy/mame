@@ -4139,7 +4139,7 @@ void segas16b_state::aceattacb_fd1094(machine_config &config)
 void segas16b_state::hwchamp(machine_config &config)
 {
 	system16b(config);
-	MSM6253(config, m_adc, 0);
+	MSM6253(config, m_adc);
 	m_adc->set_input_tag<0>("MONITOR");
 	// TODO: order of these two flipped when returning a status of 0xf0 instead of open bus in r 0x30?
 	m_adc->set_input_tag<1>("RIGHT");
@@ -4149,7 +4149,7 @@ void segas16b_state::hwchamp(machine_config &config)
 void segas16b_state::hwchamp_fd1094(machine_config &config)
 {
 	system16b_fd1094(config);
-	MSM6253(config, m_adc, 0);
+	MSM6253(config, m_adc);
 	m_adc->set_input_tag<0>("MONITOR");
 	// TODO: order of these two flipped when returning a status of 0xf0 instead of open bus in r 0x30?
 	m_adc->set_input_tag<1>("RIGHT");

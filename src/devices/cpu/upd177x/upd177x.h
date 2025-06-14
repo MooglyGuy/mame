@@ -33,7 +33,7 @@ class upd177x_cpu_device : public cpu_device
 						, public device_sound_interface
 {
 public:
-	upd177x_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	upd177x_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	auto pb_out_cb() { return m_pb_out_cb.bind(); }
@@ -43,7 +43,7 @@ public:
 	void pb_w(u8 data) { m_pb = data; }
 
 protected:
-	upd177x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	upd177x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -115,7 +115,7 @@ private:
 class upd1771c_cpu_device : public upd177x_cpu_device
 {
 public:
-	upd1771c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	upd1771c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

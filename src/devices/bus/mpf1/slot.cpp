@@ -34,7 +34,7 @@ DEFINE_DEVICE_TYPE(MPF1_EXP, mpf1_exp_device, "mpf_exp", "Micro-Professor Expans
 //  mpf1_exp_device - constructor
 //-------------------------------------------------
 
-mpf1_exp_device::mpf1_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mpf1_exp_device::mpf1_exp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MPF1_EXP, tag, owner, clock)
 	, device_single_card_slot_interface<device_mpf1_exp_interface>(mconfig, *this)
 	, m_program(*this, finder_base::DUMMY_TAG, -1)

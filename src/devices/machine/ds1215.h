@@ -19,7 +19,7 @@ public:
 	bool ceo_r() { return !m_ceo_state; }
 
 protected:
-	ds1215_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	ds1215_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -55,7 +55,7 @@ private:
 class ds1215_device : public ds1215_device_base
 {
 public:
-	ds1215_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 32'768);
+	ds1215_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL(32'768));
 	~ds1215_device() {}
 
 	u8 read();
@@ -65,7 +65,7 @@ public:
 class ds1216e_device : public ds1215_device_base
 {
 public:
-	ds1216e_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 32'768);
+	ds1216e_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL(32'768));
 	~ds1216e_device() {}
 
 	u8 read(offs_t offset);

@@ -15,7 +15,7 @@
 
 DEFINE_DEVICE_TYPE(NAMCO_C77, namco_c77_device, "namco_c77", "Namco C77")
 
-namco_c77_device::namco_c77_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint32_t start) :
+namco_c77_device::namco_c77_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint32_t start) :
 	h8_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(namco_c77_device::map), this)),
 	m_intc(*this, "intc"),
 	m_port1(*this, "port1"),
@@ -34,7 +34,7 @@ namco_c77_device::namco_c77_device(const machine_config &mconfig, device_type ty
 {
 }
 
-namco_c77_device::namco_c77_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namco_c77_device::namco_c77_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	namco_c77_device(mconfig, NAMCO_C77, tag, owner, clock, 0xf780)
 {
 }

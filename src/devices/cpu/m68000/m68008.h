@@ -31,7 +31,7 @@ public:
 
 protected:
 	// Typed constructor
-	m68008_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	m68008_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	using handler8 = void (m68008_device::*)();
 

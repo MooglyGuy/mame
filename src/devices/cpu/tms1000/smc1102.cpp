@@ -34,16 +34,16 @@ DEFINE_DEVICE_TYPE(SMC1102, smc1102_cpu_device, "smc1102", "Suwa Seikosha SMC110
 DEFINE_DEVICE_TYPE(SMC1112, smc1112_cpu_device, "smc1112", "Suwa Seikosha SMC1112") // low power version
 
 
-smc1102_cpu_device::smc1102_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u8 o_pins, u8 r_pins, u8 pc_bits, u8 byte_bits, u8 x_bits, u8 stack_levels, int rom_width, address_map_constructor rom_map, int ram_width, address_map_constructor ram_map) :
+smc1102_cpu_device::smc1102_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u8 o_pins, u8 r_pins, u8 pc_bits, u8 byte_bits, u8 x_bits, u8 stack_levels, int rom_width, address_map_constructor rom_map, int ram_width, address_map_constructor ram_map) :
 	tms1100_cpu_device(mconfig, type, tag, owner, clock, o_pins, r_pins, pc_bits, byte_bits, x_bits, stack_levels, rom_width, rom_map, ram_width, ram_map),
 	m_write_segs(*this)
 { }
 
-smc1102_cpu_device::smc1102_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+smc1102_cpu_device::smc1102_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	smc1102_cpu_device(mconfig, SMC1102, tag, owner, clock, 0 /* o pins */, 8 /* r pins */, 6 /* pc bits */, 8 /* byte width */, 3 /* x width */, 4 /* stack levels */, 11 /* rom width */, address_map_constructor(FUNC(smc1102_cpu_device::rom_11bit), this), 7 /* ram width */, address_map_constructor(FUNC(smc1102_cpu_device::ram_7bit), this))
 { }
 
-smc1112_cpu_device::smc1112_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+smc1112_cpu_device::smc1112_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	smc1102_cpu_device(mconfig, SMC1112, tag, owner, clock, 0, 8, 6, 8, 3, 4, 11, address_map_constructor(FUNC(smc1112_cpu_device::rom_11bit), this), 7, address_map_constructor(FUNC(smc1112_cpu_device::ram_7bit), this))
 { }
 

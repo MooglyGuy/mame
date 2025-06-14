@@ -64,7 +64,7 @@ public:
 		set_fixed(false);
 	}
 
-	psion_module_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_module_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callbacks
 	auto intr_cb() { return m_intr_cb.bind(); }

@@ -142,7 +142,7 @@ void qncrash_state::qncrash(machine_config &config)
 	m_maincpu->out_p3_callback().set([this] (u8 data) { logerror("%s: p3 out %02X\n", machine().describe_context(), data); });
 	m_maincpu->out_p4_callback().set([this] (u8 data) { logerror("%s: p4 out %02X\n", machine().describe_context(), data); });
 
-	tmpz84c015_device &dotcpu(TMPZ84C015(config, "dotcpu", 24'000'000 / 2)); // unknown D24OP8I XTAL, but TMPZ84C015BF-12 is rated for max 12 MHz, so guessed
+	tmpz84c015_device &dotcpu(TMPZ84C015(config, "dotcpu", XTAL::u(24'000'000) / 2)); // unknown D24OP8I XTAL, but TMPZ84C015BF-12 is rated for max 12 MHz, so guessed
 	dotcpu.set_addrmap(AS_PROGRAM, &qncrash_state::dot_program_map);
 	dotcpu.set_addrmap(AS_IO, &qncrash_state::dot_io_map);
 
@@ -162,7 +162,7 @@ void qncrash_state::qncrash(machine_config &config)
 	SPEAKER(config, "gun_speaker").front_center();
 	SPEAKER(config, "target_speaker").front_center();
 
-	okim9810_device &oki(OKIM9810(config, "oki", 4'096'000)); // no evident XTAL on PCB
+	okim9810_device &oki(OKIM9810(config, "oki", XTAL::u(4'096'000))); // no evident XTAL on PCB
 	// TODO: May need to be swapped. The announcer should come from gun_speaker
 	oki.add_route(0, "gun_speaker", 1.00);
 	oki.add_route(1, "target_speaker", 1.00);

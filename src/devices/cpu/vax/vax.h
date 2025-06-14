@@ -21,7 +21,7 @@ public:
 
 protected:
 	// construction/destruction
-	vax_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrwidth);
+	vax_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrwidth);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -53,21 +53,21 @@ class kd32a_device : public vax_cpu_device
 {
 public:
 	// construction/destruction
-	kd32a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	kd32a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class dc333_device : public vax_cpu_device
 {
 public:
 	// construction/destruction
-	dc333_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dc333_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class dc341_device : public vax_cpu_device
 {
 public:
 	// construction/destruction
-	dc341_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	dc341_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_reset() override ATTR_COLD;

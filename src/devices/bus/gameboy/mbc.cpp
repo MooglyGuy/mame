@@ -436,7 +436,7 @@ class mbc5_scrambled_device_base : public mbc5_logo_spoof_device_base
 protected:
 	using unscramble_function = u8 (*)(u8);
 
-	mbc5_scrambled_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+	mbc5_scrambled_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_logo_spoof_device_base(mconfig, type, tag, owner, clock),
 		m_unscramble_data(nullptr),
 		m_unscramble_bank(nullptr),
@@ -819,7 +819,7 @@ private:
 class bbd_device : public mbc5_scrambled_device_base
 {
 public:
-	bbd_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	bbd_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_scrambled_device_base(mconfig, GB_ROM_BBD, tag, owner, clock)
 	{
 	}
@@ -875,7 +875,7 @@ protected:
 class dshggb81_device : public mbc5_scrambled_device_base
 {
 public:
-	dshggb81_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+	dshggb81_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		mbc5_scrambled_device_base(mconfig, GB_ROM_DSHGGB81, tag, owner, clock)
 	{
 	}

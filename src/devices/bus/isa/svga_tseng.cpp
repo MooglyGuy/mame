@@ -129,7 +129,7 @@ void isa16_svga_et4k_device::io_isa_map(address_map &map)
  * Same as regular ET4000AX with extra font I/Os
  */
 
-isa16_svga_et4k_kasan16_device::isa16_svga_et4k_kasan16_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_svga_et4k_kasan16_device::isa16_svga_et4k_kasan16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: isa16_svga_et4k_device(mconfig, ISA16_SVGA_ET4K_KASAN16, tag, owner, clock)
 	, m_hangul_rom(*this, "hangul")
 {
@@ -153,7 +153,7 @@ const tiny_rom_entry *isa16_svga_et4k_kasan16_device::device_rom_region() const
  * ET4000/w32i
  */
 
-isa16_svga_et4k_w32i_device::isa16_svga_et4k_w32i_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_svga_et4k_w32i_device::isa16_svga_et4k_w32i_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_SVGA_ET4K_W32I, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_vga(*this, "vga")
@@ -178,7 +178,7 @@ void isa16_svga_et4k_w32i_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.175_MHz_XTAL, 800, 0, 640, 524, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(et4kw32i_vga_device::screen_update));
 
-	ET4KW32I_VGA(config, m_vga, 0);
+	ET4KW32I_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 1MB default, 4MB max
 	m_vga->set_vram_size(1*1024*1024);

@@ -29,7 +29,7 @@
 #include "screen.h"
 
 
-#define NEOGEO_MASTER_CLOCK                     (24000000)
+#define NEOGEO_MASTER_CLOCK                     XTAL::u(24000000)
 #define NEOGEO_MAIN_CPU_CLOCK                   (NEOGEO_MASTER_CLOCK / 2)
 #define NEOGEO_AUDIO_CPU_CLOCK                  (NEOGEO_MASTER_CLOCK / 6)
 #define NEOGEO_YM2610_CLOCK                     (NEOGEO_MASTER_CLOCK / 3)

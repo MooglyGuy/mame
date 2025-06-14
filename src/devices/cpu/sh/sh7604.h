@@ -22,7 +22,7 @@ public:
 	typedef device_delegate<int (uint32_t src, uint32_t dst, uint32_t data, int size)> dma_fifo_data_available_delegate;
 	typedef device_delegate<void (uint32_t data)> ftcsr_read_delegate;
 
-	sh7604_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7604_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_is_slave(int slave) { m_is_slave = slave; }
 
@@ -35,7 +35,7 @@ public:
 	void sh2_notify_dma_data_available();
 
 protected:
-	sh7604_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int cpu_type, address_map_constructor internal_map, int addrlines);
+	sh7604_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int cpu_type, address_map_constructor internal_map, int addrlines);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

@@ -30,7 +30,7 @@ public:
 	static constexpr feature_type unemulated_features() { return feature::ROM; }
 
 protected:
-	arc_rom_aka05_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	arc_rom_aka05_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t overrides
 	virtual void device_start() override ATTR_COLD;
@@ -60,7 +60,7 @@ class arc_rom_r225_device : public arc_rom_aka05_device
 {
 public:
 	// construction/destruction
-	arc_rom_r225_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	arc_rom_r225_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -149,12 +149,12 @@ arc_rom_aka05_device::arc_rom_aka05_device(const machine_config &mconfig, device
 {
 }
 
-arc_rom_aka05_device::arc_rom_aka05_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_rom_aka05_device::arc_rom_aka05_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arc_rom_aka05_device(mconfig, ARC_ROM_AKA05, tag, owner, clock)
 {
 }
 
-arc_rom_r225_device::arc_rom_r225_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_rom_r225_device::arc_rom_r225_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arc_rom_aka05_device(mconfig, ARC_ROM_R225, tag, owner, clock)
 {
 }

@@ -20,7 +20,7 @@ protected:
 	static const handlerm s_handlers_dpm[];
 	static const handlerm s_handlers_ipm[];
 
-	m68000_mcu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	m68000_mcu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void execute_run() override;
 	void recompute_bcount(uint64_t event_time);

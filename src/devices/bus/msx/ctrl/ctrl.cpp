@@ -31,7 +31,7 @@ device_msx_general_purpose_port_interface::device_msx_general_purpose_port_inter
 }
 
 
-msx_general_purpose_port_device::msx_general_purpose_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_general_purpose_port_device::msx_general_purpose_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_GENERAL_PURPOSE_PORT, tag, owner, clock)
 	, device_single_card_slot_interface<device_msx_general_purpose_port_interface>(mconfig, *this)
 	, m_device(nullptr)

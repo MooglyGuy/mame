@@ -89,7 +89,7 @@ DECLARE_DEVICE_TYPE(MN3204P, mn3204p_device)
 class mn3207_device : public bbd_device_base
 {
 public:
-	mn3207_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mn3207_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(MN3207, mn3207_device)

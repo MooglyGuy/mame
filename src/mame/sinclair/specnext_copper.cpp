@@ -26,7 +26,7 @@ Refs:
 DEFINE_DEVICE_TYPE(SPECNEXT_COPPER, specnext_copper_device, "specnext_copper", "Spectrum Next Copper")
 
 
-specnext_copper_device::specnext_copper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_copper_device::specnext_copper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SPECNEXT_COPPER, tag, owner, clock)
 	, m_timer(nullptr)
 	, m_frame_timer(nullptr)

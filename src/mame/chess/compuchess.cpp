@@ -438,15 +438,9 @@ void cmpchess_state::mk1(machine_config &config)
 {
 	cmpchess(config);
 
-<<<<<<< HEAD
 	// basic machine hardware
-	m_maincpu->set_clock(2'250'000); // see notes
-	subdevice<f3853_device>("smi")->set_clock(2'250'000);
-=======
-	/* basic machine hardware */
-	m_maincpu->set_clock(XTAL::u(2250000)); // see notes
-	subdevice<f3853_device>("smi")->set_clock(XTAL::u(2250000));
->>>>>>> 45d4cd52a81 (full xtal conversion)
+	m_maincpu->set_clock(XTAL::u(2'250'000)); // see notes
+	subdevice<f3853_device>("smi")->set_clock(XTAL::u(2'250'000));
 
 	config.set_default_layout(layout_novag_mk1);
 }
@@ -455,21 +449,12 @@ void cmpchess_state::cncchess(machine_config &config)
 {
 	cmpchess2(config);
 
-<<<<<<< HEAD
 	// basic machine hardware
-	m_maincpu->set_clock(2'000'000); // LC circuit, measured 2MHz
+	m_maincpu->set_clock(XTAL::u(2'000'000)); // LC circuit, measured 2MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &cmpchess_state::cncchess_map);
 	m_maincpu->set_addrmap(AS_IO, &cmpchess_state::cncchess_io);
 
-	subdevice<f3853_device>("smi")->set_clock(2'000'000);
-=======
-	/* basic machine hardware */
-	m_maincpu->set_clock(XTAL::u(2000000)); // LC circuit, measured 2MHz
-	m_maincpu->set_addrmap(AS_PROGRAM, &cmpchess_state::cncchess_map);
-	m_maincpu->set_addrmap(AS_IO, &cmpchess_state::cncchess_io);
-
-	subdevice<f3853_device>("smi")->set_clock(XTAL::u(2000000));
->>>>>>> 45d4cd52a81 (full xtal conversion)
+	subdevice<f3853_device>("smi")->set_clock(XTAL::u(2'000'000));
 
 	config.set_default_layout(layout_conic_cchess);
 

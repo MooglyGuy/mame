@@ -14,7 +14,7 @@
 
 class st_mmu_device : public device_t {
 public:
-	st_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	st_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_ram(T &&tag) { m_ram.set_tag(std::forward<T>(tag)); }
 	template <typename T> void set_cpu(T &&tag) { m_cpu.set_tag(std::forward<T>(tag)); }

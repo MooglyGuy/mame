@@ -73,7 +73,7 @@ DEFINE_DEVICE_TYPE(PDA600_COPRO_HLE, pda600_copro_device, "pda600_copro", "PDA60
 //  pda600_copro_device - constructor
 //-------------------------------------------------
 
-pda600_copro_device::pda600_copro_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+pda600_copro_device::pda600_copro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PDA600_COPRO_HLE, tag, owner, clock)
 	, device_buffered_serial_interface(mconfig, *this)
 	, m_tx_cb(*this)

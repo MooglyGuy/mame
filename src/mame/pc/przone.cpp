@@ -49,7 +49,7 @@ class isa16_przone_jamma_if : public device_t, public device_isa16_card_interfac
 {
 public:
 	// construction/destruction
-	isa16_przone_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_przone_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 
 protected:
@@ -75,7 +75,7 @@ private:
 
 DEFINE_DEVICE_TYPE(ISA16_PRZONE_JAMMA_IF, isa16_przone_jamma_if, "przone_jamma_if", "ISA16 Prize Zone custom JAMMA I/F")
 
-isa16_przone_jamma_if::isa16_przone_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_przone_jamma_if::isa16_przone_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_PRZONE_JAMMA_IF, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_iocard(*this, "IOCARD")
@@ -249,21 +249,21 @@ void przone_state::smc_superio_config(device_t *device)
 void przone_state::przone(machine_config &config)
 {
 	// Socket 7 CPU, lowered to PCI clock for ViRGE being really the bottleneck here.
-	pentium_device &maincpu(PENTIUM(config, "maincpu", 33'333'333));
+	pentium_device &maincpu(PENTIUM(config, "maincpu", XTAL::u(33'333'333)));
 	maincpu.set_addrmap(AS_PROGRAM, &przone_state::main_map);
 	maincpu.set_addrmap(AS_IO, &przone_state::main_io);
 	maincpu.set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	maincpu.smiact().set("pci:00.0", FUNC(i82439hx_host_device::smi_act_w));
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// 256MB on vidpro1's board, may ship with less RAM
-	I82439HX(config, "pci:00.0", 0, "maincpu", 256*1024*1024);
+	I82439HX(config, "pci:00.0", "maincpu", 256*1024*1024);
 
-	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", 0, "maincpu"));
+	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", "maincpu"));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	i82371sb_ide_device &ide(I82371SB_IDE(config, "pci:07.1", 0, "maincpu"));
+	i82371sb_ide_device &ide(I82371SB_IDE(config, "pci:07.1", "maincpu"));
 	ide.irq_pri().set("pci:07.0", FUNC(i82371sb_isa_device::pc_irq14_w));
 	ide.irq_sec().set("pci:07.0", FUNC(i82371sb_isa_device::pc_mirq0_w));
 	ide.subdevice<bus_master_ide_controller_device>("ide1")->slot(0).set_default_option("cdrom");
@@ -276,11 +276,11 @@ void przone_state::przone(machine_config &config)
 	// TODO: has a stroke with virgevx
 	PCI_SLOT(config, "pci:4", pci_cards, 18, 3, 0, 1, 2, "virge");
 
-	ISA16_SLOT(config, "board4", 0, "pci:07.0:isabus", isa_internal_devices, "fdc37c93x", true).set_option_machine_config("fdc37c93x", smc_superio_config);
-	ISA16_SLOT(config, "isa1", 0, "pci:07.0:isabus", przone_isa16_cards, "przone_jamma_if", true);
+	ISA16_SLOT(config, "board4", "pci:07.0:isabus", isa_internal_devices, "fdc37c93x", true).set_option_machine_config("fdc37c93x", smc_superio_config);
+	ISA16_SLOT(config, "isa1", "pci:07.0:isabus", przone_isa16_cards, "przone_jamma_if", true);
 	// TODO: one slot for vibra16
-	ISA16_SLOT(config, "isa2", 0, "pci:07.0:isabus", pc_isa16_cards, "sblaster_16", false);
-	ISA16_SLOT(config, "isa3", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa2", "pci:07.0:isabus", pc_isa16_cards, "sblaster_16", false);
+	ISA16_SLOT(config, "isa3", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
 
 	rs232_port_device& serport0(RS232_PORT(config, "serport0", isa_com, nullptr));
 	serport0.rxd_handler().set("board4:fdc37c93x", FUNC(fdc37c93x_device::rxd1_w));

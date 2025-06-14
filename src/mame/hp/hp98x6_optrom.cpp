@@ -35,12 +35,7 @@ DEFINE_DEVICE_TYPE(HP98X6_OPTROM, hp98x6_optrom_device, "hp98x6_optrom", "HP98x6
 // +--------------------+
 // |hp98x6_optrom_device|
 // +--------------------+
-hp98x6_optrom_device::hp98x6_optrom_device(machine_config const &mconfig, char const *tag, device_t *owner)
-	: hp98x6_optrom_device(mconfig, tag, owner, (uint32_t)0)
-{
-}
-
-hp98x6_optrom_device::hp98x6_optrom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hp98x6_optrom_device::hp98x6_optrom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, HP98X6_OPTROM, tag, owner, clock)
 	, device_rom_image_interface(mconfig, *this)
 	, m_space_r(nullptr)

@@ -74,10 +74,10 @@ void pluto6_state::machine_start()
 
 void pluto6_state::pluto6(machine_config &config)
 {
-	MCF5206E(config, m_maincpu, 40'000'000);
+	MCF5206E(config, m_maincpu, XTAL::u(40'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &pluto6_state::program_map);
 
-	MCF5206E_PERIPHERAL(config, "maincpu_onboard", 0, m_maincpu);
+	MCF5206E_PERIPHERAL(config, "maincpu_onboard", m_maincpu);
 
 	SPEAKER(config, "speaker", 2).front();
 }

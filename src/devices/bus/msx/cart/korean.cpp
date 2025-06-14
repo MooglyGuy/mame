@@ -9,7 +9,7 @@ namespace {
 class msx_cart_korean_25in1_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_korean_25in1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_korean_25in1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KOREAN_25IN1, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -84,7 +84,7 @@ void msx_cart_korean_25in1_device::bank_w(u8 data)
 class msx_cart_korean_80in1_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_korean_80in1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_korean_80in1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KOREAN_80IN1, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -155,7 +155,7 @@ void msx_cart_korean_80in1_device::bank_w(offs_t offset, u8 data)
 class msx_cart_korean_90in1_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_korean_90in1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_korean_90in1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KOREAN_90IN1, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -245,7 +245,7 @@ void msx_cart_korean_90in1_device::banking(u8 data)
 class msx_cart_korean_126in1_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_korean_126in1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_korean_126in1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KOREAN_126IN1, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank%u", 0U)
@@ -313,7 +313,7 @@ void msx_cart_korean_126in1_device::bank_w(offs_t offset, uint8_t data)
 class msx_cart_korean_hydlide2_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_korean_hydlide2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_korean_hydlide2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_KOREAN_HYDLIDE2, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank")

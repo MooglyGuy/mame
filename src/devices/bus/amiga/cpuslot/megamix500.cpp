@@ -26,7 +26,7 @@ DEFINE_DEVICE_TYPE(AMIGA_CPUSLOT_MEGAMIX500, bus::amiga::cpuslot::megamix500_dev
 
 namespace bus::amiga::cpuslot {
 
-megamix500_device::megamix500_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+megamix500_device::megamix500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_CPUSLOT_MEGAMIX500, tag, owner, clock),
 	device_amiga_cpuslot_interface(mconfig, *this),
 	m_config(*this, "config"),

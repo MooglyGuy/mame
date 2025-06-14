@@ -32,13 +32,13 @@ DEFINE_DEVICE_TYPE(RTL8029AS_PCI, rtl8029as_pci_device,   "rtl8029as_pci",   "Re
 
 
 
-rtl8029as_pci_device::rtl8029as_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+rtl8029as_pci_device::rtl8029as_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 {
 	set_ids(0x10ec8029, 0x00, 0x020000, 0x10ec8029);
 }
 
-rtl8029as_pci_device::rtl8029as_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+rtl8029as_pci_device::rtl8029as_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rtl8029as_pci_device(mconfig, RTL8029AS_PCI, tag, owner, clock)
 {
 }

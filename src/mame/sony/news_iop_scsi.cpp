@@ -46,7 +46,7 @@ ALLOW_SAVE_TYPE(news_iop_scsi_helper_device::mode);
 // TODO: adjustments to the below for NEWS?
 static constexpr u8 BAD_BYTE = 0xbb;
 
-news_iop_scsi_helper_device::news_iop_scsi_helper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+news_iop_scsi_helper_device::news_iop_scsi_helper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NEWS_IOP_SCSI_HELPER, tag, owner, clock),
 	m_scsi_read_callback(*this, BAD_BYTE),
 	m_scsi_write_callback(*this),

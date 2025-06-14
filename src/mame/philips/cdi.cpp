@@ -200,7 +200,7 @@ void quizard_state::machine_start()
 	m_boot_timer = timer_alloc(FUNC(quizard_state::boot_press_tick), this);
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(9600);
+	set_rate(XTAL::u(9600));
 }
 
 void quizard_state::machine_reset()

@@ -25,7 +25,7 @@ void bandit_host_device::config_map(address_map &map)
 	pci_host_device::config_map(map);
 }
 
-bandit_host_device::bandit_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+bandit_host_device::bandit_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_host_device(mconfig, type, tag, owner, clock)
 	, m_last_config_address(0xffffffff)
 	, m_mem_config("memory_space", ENDIANNESS_LITTLE, 32, 32)
@@ -36,13 +36,13 @@ bandit_host_device::bandit_host_device(const machine_config &mconfig, device_typ
 	set_ids_host(0x106b0001, 0x00, 0x00000000);
 }
 
-bandit_host_device::bandit_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+bandit_host_device::bandit_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
    : bandit_host_device(mconfig, BANDIT, tag, owner, clock)
 {
 
 }
 
-aspen_host_device::aspen_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+aspen_host_device::aspen_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bandit_host_device(mconfig, ASPEN, tag, owner, clock)
 {
 }

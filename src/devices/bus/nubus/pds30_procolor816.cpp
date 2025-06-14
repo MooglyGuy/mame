@@ -310,7 +310,7 @@ class pds30_procolor8_device : public nubus_procolor816_device
 {
 public:
 	// construction/destruction
-	pds30_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	pds30_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -326,7 +326,7 @@ const tiny_rom_entry *pds30_procolor8_device::device_rom_region() const
 	return ROM_NAME(procolor8_pds);
 }
 
-pds30_procolor8_device::pds30_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+pds30_procolor8_device::pds30_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_procolor816_device(mconfig, PDS030_PROCOLOR8, tag, owner, clock)
 {
 	m_has_15bpp = false;
@@ -336,7 +336,7 @@ class nubus_procolor8_device : public nubus_procolor816_device
 {
 public:
 	// construction/destruction
-	nubus_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -352,7 +352,7 @@ const tiny_rom_entry *nubus_procolor8_device::device_rom_region() const
 	return ROM_NAME(procolor8_nb);
 }
 
-nubus_procolor8_device::nubus_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_procolor8_device::nubus_procolor8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_procolor816_device(mconfig, NUBUS_PROCOLOR8, tag, owner, clock)
 {
 	m_has_15bpp = false;

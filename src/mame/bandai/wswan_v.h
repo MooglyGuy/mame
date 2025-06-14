@@ -43,7 +43,7 @@ public:
 	static const u16 WSWAN_Y_PIXELS = (18*8);
 
 protected:
-	wswan_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int vdp_type);
+	wswan_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int vdp_type);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -144,7 +144,7 @@ protected:
 class wswan_color_video_device : public wswan_video_device
 {
 public:
-	wswan_color_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wswan_color_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

@@ -233,7 +233,7 @@ static unsigned const SCSI_RST_HOLD   = 25'000;
 
 DEFINE_DEVICE_TYPE(DC7061, dc7061_device, "dc7061", "DEC DC7061 SII")
 
-dc7061_device::dc7061_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+dc7061_device::dc7061_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: nscsi_device(mconfig, DC7061, tag, owner, clock)
 	, nscsi_slot_card_interface(mconfig, *this, DEVICE_SELF)
 	, m_sys_int(*this)

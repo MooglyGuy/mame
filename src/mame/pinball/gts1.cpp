@@ -443,7 +443,7 @@ void gts1_state::gts1_solenoid_w(offs_t offset, u8 data)
 	case  2:  // tens chime
 		if (m_p1_sound)
 		{
-			m_p1_sound->set_clock(XTAL::u(593));
+			m_p1_sound->set_clock(593);
 			m_p1_sound->set_state(data);
 		}
 		else
@@ -456,7 +456,7 @@ void gts1_state::gts1_solenoid_w(offs_t offset, u8 data)
 	case  3:  // hundreds chime
 		if (m_p1_sound)
 		{
-			m_p1_sound->set_clock(XTAL::u(265));
+			m_p1_sound->set_clock(265);
 			m_p1_sound->set_state(data);
 		}
 		else
@@ -469,7 +469,7 @@ void gts1_state::gts1_solenoid_w(offs_t offset, u8 data)
 	case  4:  // thousands chime
 		if (m_p1_sound)
 		{
-			m_p1_sound->set_clock(XTAL::u(153));
+			m_p1_sound->set_clock(153);
 			m_p1_sound->set_state(data);
 		}
 		else

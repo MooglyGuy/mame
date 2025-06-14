@@ -13,7 +13,7 @@
 class i82371eb_acpi_device : public pci_device
 {
 public:
-	i82371eb_acpi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82371eb_acpi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

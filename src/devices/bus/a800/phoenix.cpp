@@ -33,12 +33,12 @@ DEFINE_DEVICE_TYPE(A800_ROM_PHOENIX,       a800_rom_phoenix_device,       "a800_
 DEFINE_DEVICE_TYPE(A800_ROM_BLIZZARD_16KB, a800_rom_blizzard_16kb_device, "a800_blizzard",      "Atari 8-bit Blizzard 16KB ROM cart")
 DEFINE_DEVICE_TYPE(A800_ROM_PHOENIX_AST2K, a800_rom_phoenix_ast2k_device, "a800_phoenix_ast2k", "Atari 8-bit Phoenix AST2K 2-in-1 cart")
 
-a800_rom_phoenix_device::a800_rom_phoenix_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_phoenix_device::a800_rom_phoenix_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 {
 }
 
-a800_rom_phoenix_device::a800_rom_phoenix_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_phoenix_device::a800_rom_phoenix_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_phoenix_device(mconfig, A800_ROM_PHOENIX, tag, owner, clock)
 {
 }
@@ -84,7 +84,7 @@ void a800_rom_phoenix_device::cctl_map(address_map &map)
 
  -------------------------------------------------*/
 
-a800_rom_blizzard_16kb_device::a800_rom_blizzard_16kb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_blizzard_16kb_device::a800_rom_blizzard_16kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_phoenix_device(mconfig, A800_ROM_BLIZZARD_16KB, tag, owner, clock)
 {
 }
@@ -119,7 +119,7 @@ void a800_rom_blizzard_16kb_device::disable_rom_w(offs_t offset, u8 data)
 
  -------------------------------------------------*/
 
-a800_rom_phoenix_ast2k_device::a800_rom_phoenix_ast2k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_phoenix_ast2k_device::a800_rom_phoenix_ast2k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_phoenix_device(mconfig, A800_ROM_PHOENIX_AST2K, tag, owner, clock)
 	, m_dsw(*this, "DSW")
 	, m_rom_select(0)

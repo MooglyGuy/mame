@@ -122,7 +122,7 @@ bbc_palmo2_device::bbc_palmo2_device(const machine_config &mconfig, const char *
 {
 }
 
-bbc_trilogy_device::bbc_trilogy_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_trilogy_device::bbc_trilogy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bbc_pal_device(mconfig, BBC_TRILOGY, tag, owner, clock)
 {
 }

@@ -1152,7 +1152,7 @@ public:
 		SCREEN(config, "screen", SCREEN_TYPE_RASTER).screen_vblank().set(FUNC(namcos12_state::namcos12_sub_irq));
 
 		/* basic machine hardware */
-		H83002(config, m_sub, 16934400); // frequency based on research (superctr)
+		H83002(config, m_sub, XTAL::u(16934400)); // frequency based on research (superctr)
 		m_sub->set_addrmap(AS_PROGRAM, &namcos12_state::sub_program_map);
 		m_sub->read_port6().set(FUNC(namcos12_state::sub_port6_r));
 		m_sub->read_port7().set_ioport("DSW");
@@ -1183,17 +1183,17 @@ public:
 		m_sub->write_sci_clk<1>().set(m_rtc, FUNC(rtc4543_device::clk_w)).invert();
 		m_sub->write_sci_clk<1>().append(m_settings, FUNC(namco_settings_device::clk_w));
 
-		NAMCO_SETTINGS(config, m_settings, 0);
+		NAMCO_SETTINGS(config, m_settings);
 
 		RTC4543(config, m_rtc, XTAL(32'768));
 		m_rtc->data_cb().set(m_sub, FUNC(h8_device::sci_rx_w<1>));
 
-		AT28C16(config, "at28c16", 0);
+		AT28C16(config, "at28c16");
 
 		/* sound hardware */
 		SPEAKER(config, "speaker", 2).front();
 
-		c352_device &c352(C352(config, "c352", 25401600, 288));
+		c352_device &c352(C352(config, "c352", XTAL::u(25401600), 288));
 		c352.add_route(0, "speaker", 1.00, 0);
 		c352.add_route(1, "speaker", 1.00, 1);
 		//c352.add_route(2, "speaker", 1.00); // Second DAC not present.

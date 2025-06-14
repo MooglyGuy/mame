@@ -251,7 +251,7 @@ void ax145_state::machine_reset()
 
 void ax145_state::ax145(machine_config &config) {
 	// basic machine hardware
-	HD64180RP(config, m_maincpu, 12'000'000 / 2);
+	HD64180RP(config, m_maincpu, XTAL::u(12'000'000) / 2);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ax145_state::map_program);
 	m_maincpu->set_addrmap(AS_IO, &ax145_state::map_io);
 
@@ -269,7 +269,7 @@ void ax145_state::ax145(machine_config &config) {
 
 	PALETTE(config, "palette", FUNC(ax145_state::palette), 2);
 
-	HD44780(config, m_lcdc, 270'000); // TODO: Wrong device type, should be HD44780-B02 custom character set mask; clock not measured, datasheet typical clock used
+	HD44780(config, m_lcdc, XTAL::u(270'000)); // TODO: Wrong device type, should be HD44780-B02 custom character set mask; clock not measured, datasheet typical clock used
 	m_lcdc->set_lcd_size(2, 40);
 }
 

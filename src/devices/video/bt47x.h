@@ -95,7 +95,7 @@ public:
 class bt473_device : public bt47x_device_base
 {
 public:
-	bt473_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt473_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 class bt475_device : public bt475_device_base
@@ -128,7 +128,7 @@ public:
 class bt479_device : public bt47x_device_base
 {
 public:
-	bt479_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt479_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 	virtual u8 read(offs_t offset) override;

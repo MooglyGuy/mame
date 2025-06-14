@@ -9,7 +9,7 @@
 
 DEFINE_DEVICE_TYPE(PLG1X0_CONNECTOR, plg1x0_connector, "plg1x0_connector", "PLG1x0 extension connector")
 
-plg1x0_connector::plg1x0_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+plg1x0_connector::plg1x0_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PLG1X0_CONNECTOR, tag, owner, clock),
 	device_single_card_slot_interface<device_plg1x0_interface>(mconfig, *this),
 	device_mixer_interface(mconfig, *this),

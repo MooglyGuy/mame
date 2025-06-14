@@ -72,7 +72,7 @@ fdc37c93x_device::fdc37c93x_device(const machine_config &mconfig, device_type ty
 		dreq_mapping[n] = -1;
 }
 
-fdc37c93x_device::fdc37c93x_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+fdc37c93x_device::fdc37c93x_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fdc37c93x_device(mconfig, FDC37C93X, tag, owner, clock)
 {
 	m_device_id = 0x02;
@@ -998,7 +998,7 @@ void fdc37c93x_device::device_reset()
 DEFINE_DEVICE_TYPE(FDC37M707, fdc37m707_device, "fdc37m707", "SMSC FDC37M707 Super I/O")
 
 
-fdc37m707_device::fdc37m707_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+fdc37m707_device::fdc37m707_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fdc37c93x_device(mconfig, FDC37M707, tag, owner, clock)
 {
 	m_device_id = 0x42;

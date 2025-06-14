@@ -454,7 +454,7 @@ void apache3_state::apache3(machine_config &config)
 	config.set_maximum_quantum(attotime::from_hz(6000));
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
-	m58990_device &adc(M58990(config, "adc", 1000000)); // unknown clock
+	m58990_device &adc(M58990(config, "adc", XTAL::u(1000000))); // unknown clock
 	adc.in_callback<0>().set_ioport("STICK_X");
 	adc.in_callback<1>().set_ioport("STICK_Y");
 	adc.in_callback<2>().set_constant(0); // VSP1
@@ -470,7 +470,7 @@ void apache3_state::apache3(machine_config &config)
 	screen.set_raw(apache3_state::CLOCK_2 / 8, 400, 0, 320, 272, 0, 240); // TODO: Hook up CRTC
 	screen.set_screen_update(FUNC(apache3_state::screen_update));
 
-	TZB215_SPRITES(config, m_sprites, 0, 0x800);
+	TZB215_SPRITES(config, m_sprites, 0x800);
 	m_sprites->set_sprite_palette_base(0);
 	m_sprites->set_palette("sprites:palette_clut");
 	m_sprites->set_basepalette(m_palette);

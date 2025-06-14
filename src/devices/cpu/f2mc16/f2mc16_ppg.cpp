@@ -34,7 +34,7 @@ struct PPGC { enum : uint8_t
 
 DEFINE_DEVICE_TYPE(F2MC16_PPG, f2mc16_ppg_device, "f2mc16_ppg", "F2MC16 Programmable Pulse Generator")
 
-f2mc16_ppg_device::f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t ppg0_vector, uint8_t ppg1_vector) :
+f2mc16_ppg_device::f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t ppg0_vector, uint8_t ppg1_vector) :
 	f2mc16_ppg_device(mconfig, tag, owner, clock)
 {
 	m_cpu = downcast<f2mc16_device *>(owner);
@@ -43,7 +43,7 @@ f2mc16_ppg_device::f2mc16_ppg_device(const machine_config &mconfig, const char *
 	m_vector[1] = ppg1_vector;
 }
 
-f2mc16_ppg_device::f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_ppg_device::f2mc16_ppg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_PPG, tag, owner, clock),
 	m_cpu(nullptr),
 	m_intc(*this, finder_base::DUMMY_TAG),
@@ -90,9 +90,9 @@ void f2mc16_ppg_device::device_start()
 void f2mc16_ppg_device::device_clock_changed()
 {
 	if (machine().scheduler().currently_executing())
-		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_ppg_device::update_peripheral_clock), this), clock());
+		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_ppg_device::update_peripheral_clock), this), clock().value());
 	else
-		update_peripheral_clock(clock());
+		update_peripheral_clock(clock().value());
 }
 
 void f2mc16_ppg_device::device_reset()

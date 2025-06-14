@@ -160,7 +160,7 @@ class nt7502_device : public sed1560_device
 {
 public:
 	// construction/destruction
-	nt7502_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nt7502_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void control_write(uint8_t data) override;
 

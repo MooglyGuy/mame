@@ -123,7 +123,7 @@ void rmMQ2_device::device_add_mconfig(machine_config &config)
 //  c1551_device - constructor
 //-------------------------------------------------
 
-rmMQ2_device::rmMQ2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+rmMQ2_device::rmMQ2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, RM_MQ2, tag, owner, clock),
 	device_rs232_port_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),

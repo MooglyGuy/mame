@@ -72,7 +72,7 @@ enum reg4_mask : u8
 	REG4_OSC = 0x20, // disable oscillator
 };
 
-ds1215_device_base::ds1215_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+ds1215_device_base::ds1215_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 	, device_rtc_interface(mconfig, *this)
@@ -85,12 +85,12 @@ ds1215_device_base::ds1215_device_base(machine_config const &mconfig, device_typ
 {
 }
 
-ds1215_device::ds1215_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ds1215_device::ds1215_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ds1215_device_base(mconfig, DS1215, tag, owner, clock)
 {
 }
 
-ds1216e_device::ds1216e_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+ds1216e_device::ds1216e_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ds1215_device_base(mconfig, DS1216E, tag, owner, clock)
 {
 }

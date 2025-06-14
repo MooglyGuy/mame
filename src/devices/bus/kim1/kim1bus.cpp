@@ -27,12 +27,12 @@ template class device_finder<device_kim1bus_card_interface, true>;
 //-------------------------------------------------
 //  kim1bus_slot_device - constructor
 //-------------------------------------------------
-kim1bus_slot_device::kim1bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+kim1bus_slot_device::kim1bus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: kim1bus_slot_device(mconfig, KIM1BUS_SLOT, tag, owner, clock)
 {
 }
 
-kim1bus_slot_device::kim1bus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+kim1bus_slot_device::kim1bus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_single_card_slot_interface<device_kim1bus_card_interface>(mconfig, *this)
 	, m_kim1bus(*this, finder_base::DUMMY_TAG)
@@ -69,12 +69,12 @@ DEFINE_DEVICE_TYPE(KIM1BUS, kim1bus_device, "kim1bus", "KIM-1 Bus")
 //  kim1bus_device - constructor
 //-------------------------------------------------
 
-kim1bus_device::kim1bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+kim1bus_device::kim1bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: kim1bus_device(mconfig, KIM1BUS, tag, owner, clock)
 {
 }
 
-kim1bus_device::kim1bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+kim1bus_device::kim1bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_space(*this, finder_base::DUMMY_TAG, -1)
 	, m_out_irq_cb(*this)

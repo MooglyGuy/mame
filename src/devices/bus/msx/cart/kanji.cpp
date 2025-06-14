@@ -22,14 +22,14 @@ namespace {
 class msx_cart_kanji_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_kanji_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_kanji_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_kanji_device(mconfig, MSX_CART_KANJI, tag, owner, clock)
 	{ }
 
 	virtual std::error_condition initialize_cartridge(std::string &message) override;
 
 protected:
-	msx_cart_kanji_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	msx_cart_kanji_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -45,7 +45,7 @@ protected:
 	u32 m_kanji_address;
 };
 
-msx_cart_kanji_device::msx_cart_kanji_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+msx_cart_kanji_device::msx_cart_kanji_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, msx_cart_interface(mconfig, *this)
 	, m_kanji_mask(0)
@@ -126,7 +126,7 @@ void msx_cart_kanji_device::kanji_w(offs_t offset, u8 data)
 class msx_cart_msxwrite_device : public msx_cart_kanji_device
 {
 public:
-	msx_cart_msxwrite_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msxwrite_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_kanji_device(mconfig, MSX_CART_MSXWRITE, tag, owner, clock)
 		, m_rombank(*this, "rombank%u", 0U)
 		, m_kanji_switch(*this, "KANJI")

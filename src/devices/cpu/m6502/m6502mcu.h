@@ -19,7 +19,7 @@
 template <typename Base>
 class m6502_mcu_device_base : public Base {
 protected:
-	m6502_mcu_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	m6502_mcu_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void internal_update() { internal_update(this->total_cycles()); }
 	virtual void internal_update(uint64_t current_time) = 0;

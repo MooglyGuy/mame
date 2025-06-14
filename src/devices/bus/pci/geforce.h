@@ -15,13 +15,13 @@
 class geforce256_device : public rivatnt2_device
 {
 public:
-	geforce256_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	geforce256_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// ELSA protection
 	static constexpr feature_type unemulated_features() { return feature::PROTECTION; }
 
 protected:
-	geforce256_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	geforce256_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -30,7 +30,7 @@ protected:
 class geforce256_ddr_device : public geforce256_device
 {
 public:
-	geforce256_ddr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	geforce256_ddr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -39,7 +39,7 @@ protected:
 class quadro_device : public geforce256_device
 {
 public:
-	quadro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	quadro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// ELSA protection
 	static constexpr feature_type unemulated_features() { return feature::PROTECTION; }

@@ -39,7 +39,7 @@ protected:
 		cpu21s
 	};
 
-	vme_sys68k_cpu20_card_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, fc_board_t board_id);
+	vme_sys68k_cpu20_card_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, fc_board_t board_id);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -89,10 +89,10 @@ private:
 class vme_sys68k_cpu20_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu20_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu20_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu20_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu20_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu20)
 	{ }
 
@@ -103,10 +103,10 @@ protected:
 class vme_sys68k_cpu21s_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu21s_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu21s_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu21s_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu21s_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu21s)
 	{ }
 
@@ -117,10 +117,10 @@ protected:
 class vme_sys68k_cpu21_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu21_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu21_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu21_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu21_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu21)
 	{ }
 
@@ -131,10 +131,10 @@ protected:
 class vme_sys68k_cpu21a_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu21a_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu21a_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu21a_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu21a_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu21a)
 	{ }
 
@@ -145,10 +145,10 @@ protected:
 class vme_sys68k_cpu21ya_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu21ya_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu21ya_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu21ya_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu21ya_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu21ya)
 	{ }
 
@@ -159,10 +159,10 @@ protected:
 class vme_sys68k_cpu21b_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu21b_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu21b_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu21b_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu21b_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu21b)
 	{ }
 
@@ -173,10 +173,10 @@ protected:
 class vme_sys68k_cpu21yb_card_device : public vme_sys68k_cpu20_card_device_base
 {
 public :
-	vme_sys68k_cpu21yb_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vme_sys68k_cpu21yb_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vme_sys68k_cpu21yb_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	vme_sys68k_cpu21yb_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: vme_sys68k_cpu20_card_device_base(mconfig, type, tag, owner, clock, cpu21yb)
 	{ }
 

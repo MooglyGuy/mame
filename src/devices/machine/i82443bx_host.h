@@ -13,16 +13,16 @@ class i82443bx_host_device : public i82439hx_host_device
 {
 public:
 	template <typename T>
-	i82443bx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&cpu_tag, int ram_size)
-		: i82443bx_host_device(mconfig, tag, owner, clock)
+	i82443bx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, int ram_size)
+		: i82443bx_host_device(mconfig, tag, owner)
 	{
 		set_cpu_tag(std::forward<T>(cpu_tag));
 		set_ram_size(ram_size);
 	}
-	i82443bx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82443bx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	i82443bx_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	i82443bx_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void config_map(address_map &map) override ATTR_COLD;
 
@@ -49,20 +49,20 @@ class i82443lx_host_device : public i82443bx_host_device
 {
 public:
 	template <typename T>
-	i82443lx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&cpu_tag, int ram_size)
-		: i82443lx_host_device(mconfig, tag, owner, clock)
+	i82443lx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, int ram_size)
+		: i82443lx_host_device(mconfig, tag, owner)
 	{
 		set_cpu_tag(std::forward<T>(cpu_tag));
 		set_ram_size(ram_size);
 	}
-	i82443lx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82443lx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class i82443bx_bridge_device : public pci_bridge_device
 {
 public:
 	/*template <typename T> sis630_bridge_device(
-	    const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock,
+	    const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
 	    T &&gui_tag
 	) : sis630_bridge_device(mconfig, tag, owner, clock)
 	{
@@ -72,10 +72,10 @@ public:
 	    //m_vga.set_tag(std::forward<T>(gui_tag));
 	}*/
 
-	i82443bx_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82443bx_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	i82443bx_bridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	i82443bx_bridge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -92,7 +92,7 @@ private:
 class i82443lx_bridge_device : public i82443bx_bridge_device
 {
 public:
-	i82443lx_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	i82443lx_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(I82443BX_HOST, i82443bx_host_device)

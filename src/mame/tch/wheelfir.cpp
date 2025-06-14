@@ -820,8 +820,8 @@ void wheelfir_state::wheelfir(machine_config &config)
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();
-	DAC_10BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
-	DAC_10BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
+	DAC_10BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 1.0, 0); // unknown DAC
+	DAC_10BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 1.0, 1); // unknown DAC
 }
 
 

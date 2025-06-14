@@ -14,7 +14,7 @@
 
 DEFINE_DEVICE_TYPE(UPD933, upd933_device, "upd933", "NEC uPD933")
 
-upd933_device::upd933_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+upd933_device::upd933_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, UPD933, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_irq_cb(*this)

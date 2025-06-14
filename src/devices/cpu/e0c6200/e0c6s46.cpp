@@ -92,7 +92,7 @@ void e0c6s46_device::device_start()
 	e0c6200_cpu_device::device_start();
 
 	// misc init
-	m_osc1 = clock();
+	m_osc1 = clock().value();
 	if (m_osc3 == 0)
 		m_osc3 = m_osc1;
 
@@ -425,7 +425,7 @@ TIMER_CALLBACK_MEMBER(e0c6s46_device::core_256_cb)
 TIMER_CALLBACK_MEMBER(e0c6s46_device::osc_change)
 {
 	// set MCU instruction clock on CLKCHG change
-	set_clock((m_osc & 8) ? m_osc3 : m_osc1);
+	set_clock((m_osc & 8) ? XTAL::u(m_osc3) : XTAL::u(m_osc1));
 }
 
 

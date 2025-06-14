@@ -15,7 +15,7 @@
 class valkyrie_device : public device_t, public i2c_hle_interface
 {
 public:
-	valkyrie_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	valkyrie_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~valkyrie_device() = default;
 
 	void map(address_map &map) ATTR_COLD;

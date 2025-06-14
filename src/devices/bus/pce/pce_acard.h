@@ -16,14 +16,14 @@ class pce_acard_duo_device : public device_t,
 {
 public:
 	// construction/destruction
-	pce_acard_duo_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pce_acard_duo_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual void install_memory_handlers(address_space &space) override;
 
 protected:
 	// construction/destruction
-	pce_acard_duo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pce_acard_duo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -90,7 +90,7 @@ class pce_acard_pro_device : public pce_acard_duo_device
 {
 public:
 	// construction/destruction
-	pce_acard_pro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pce_acard_pro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// reading and writing
 	virtual void install_memory_handlers(address_space &space) override;

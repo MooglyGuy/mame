@@ -10,7 +10,7 @@
 
 DEFINE_DEVICE_TYPE(KONPPC_JVS_HOST, konppc_jvs_host_device, "konppc_jvs_host", "Konami JVS Host (PowerPC Common)")
 
-konppc_jvs_host_device::konppc_jvs_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+konppc_jvs_host_device::konppc_jvs_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: jvs_host(mconfig, KONPPC_JVS_HOST, tag, owner, clock),
 	output_cb(*this)
 {

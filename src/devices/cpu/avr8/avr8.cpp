@@ -792,7 +792,7 @@ avr8_base_device::avr8_base_device(const machine_config &mconfig, const char *ta
 }
 
 template <int NumTimers>
-avr8_device<NumTimers>::avr8_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, const device_type type, uint32_t addr_mask, address_map_constructor internal_map)
+avr8_device<NumTimers>::avr8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, const device_type type, uint32_t addr_mask, address_map_constructor internal_map)
 	: avr8_base_device(mconfig, tag, owner, clock, type, addr_mask, internal_map)
 	, m_gpio_out_cb(*this)
 	, m_gpio_in_cb(*this, 0)

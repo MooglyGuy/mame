@@ -15,7 +15,7 @@
 class isa16_piu10 : public device_t, public device_isa16_card_interface
 {
 public:
-	isa16_piu10(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_piu10(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename... T> void add_route(T &&... args) { m_dac3350a.lookup()->add_route(std::forward<T>(args)...); }
 

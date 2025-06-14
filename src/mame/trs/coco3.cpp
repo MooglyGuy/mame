@@ -297,8 +297,8 @@ void coco3_state::coco3(machine_config &config)
 	rs232.dcd_handler().set(m_pia_1, FUNC(pia6821_device::ca1_w));
 	rs232.set_option_device_input_defaults("rs_printer", DEVICE_INPUT_DEFAULTS_NAME(rs_printer));
 
-	COCO_VHD(config, m_vhd_0, XTAL(), m_maincpu);
-	COCO_VHD(config, m_vhd_1, XTAL(), m_maincpu);
+	COCO_VHD(config, m_vhd_0, m_maincpu);
+	COCO_VHD(config, m_vhd_1, m_maincpu);
 
 	// video hardware
 	GIME_NTSC(config, m_gime, XTAL(28'636'363), MAINCPU_TAG, RAM_TAG, m_cococart, MAINCPU_TAG);

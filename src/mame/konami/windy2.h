@@ -18,7 +18,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(coin_inserted);
 
 protected:
-	windy2_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, uint32_t clock, uint8_t player_count, uint8_t switch_count);
+	windy2_device(const machine_config &mconfig, const device_type type, const char *tag, device_t *owner, uint8_t player_count, uint8_t switch_count);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -47,11 +47,11 @@ private:
 class windy2_2l6b_device : public windy2_device
 {
 public:
-	windy2_2l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	windy2_2l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
-	windy2_2l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&jvs_host_tag)
-		: windy2_2l6b_device(mconfig, tag, owner, clock)
+	windy2_2l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&jvs_host_tag)
+		: windy2_2l6b_device(mconfig, tag, owner)
 	{
 		host.set_tag(std::forward<T>(jvs_host_tag));
 	}
@@ -64,11 +64,11 @@ public:
 class windy2_quiz_device : public windy2_device
 {
 public:
-	windy2_quiz_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	windy2_quiz_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
-	windy2_quiz_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&jvs_host_tag)
-		: windy2_quiz_device(mconfig, tag, owner, clock)
+	windy2_quiz_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&jvs_host_tag)
+		: windy2_quiz_device(mconfig, tag, owner)
 	{
 		host.set_tag(std::forward<T>(jvs_host_tag));
 	}
@@ -81,11 +81,11 @@ public:
 class windy2_2l8b_device : public windy2_device
 {
 public:
-	windy2_2l8b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	windy2_2l8b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
-	windy2_2l8b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&jvs_host_tag)
-		: windy2_2l8b_device(mconfig, tag, owner, clock)
+	windy2_2l8b_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&jvs_host_tag)
+		: windy2_2l8b_device(mconfig, tag, owner)
 	{
 		host.set_tag(std::forward<T>(jvs_host_tag));
 	}
@@ -98,11 +98,11 @@ public:
 class windy2_1l6b_device : public windy2_device
 {
 public:
-	windy2_1l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	windy2_1l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
-	windy2_1l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&jvs_host_tag)
-		: windy2_1l6b_device(mconfig, tag, owner, clock)
+	windy2_1l6b_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&jvs_host_tag)
+		: windy2_1l6b_device(mconfig, tag, owner)
 	{
 		host.set_tag(std::forward<T>(jvs_host_tag));
 	}
@@ -115,11 +115,11 @@ public:
 class windy2_2l12b_device : public windy2_device
 {
 public:
-	windy2_2l12b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	windy2_2l12b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
-	windy2_2l12b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&jvs_host_tag)
-		: windy2_2l12b_device(mconfig, tag, owner, clock)
+	windy2_2l12b_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&jvs_host_tag)
+		: windy2_2l12b_device(mconfig, tag, owner)
 	{
 		host.set_tag(std::forward<T>(jvs_host_tag));
 	}

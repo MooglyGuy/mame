@@ -30,7 +30,7 @@ public:
 	static constexpr int PGE_PWMB0 = 2;
 	static constexpr int PGE_PWMB1 = 3;
 
-	m68hc05pge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m68hc05pge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_tbX() { return m_read_tbX.bind(); }       // trackball X
 	auto read_tbY() { return m_read_tbY.bind(); }       // trackball Y
@@ -49,7 +49,7 @@ public:
 
 protected:
 	// construction/destruction
-	m68hc05pge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrbits, address_map_constructor internal_map);
+	m68hc05pge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrbits, address_map_constructor internal_map);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

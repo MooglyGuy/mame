@@ -25,7 +25,7 @@
 
 DEFINE_DEVICE_TYPE(VME_TP880V, vme_tp880v_card_device, "tp880v", "Tadpole Technology TP880V")
 
-vme_tp880v_card_device::vme_tp880v_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_tp880v_card_device::vme_tp880v_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_TP880V, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -87,25 +87,25 @@ void vme_tp880v_card_device::device_add_mconfig(machine_config &config)
 	MC88200(config, m_mmu[0], 40_MHz_XTAL / 2, 0x7e).set_mbus(m_cpu, AS_PROGRAM);
 	MC88200(config, m_mmu[1], 40_MHz_XTAL / 2, 0x7f).set_mbus(m_cpu, AS_PROGRAM);
 
-	M68000(config, m_ios, 10'000'000);
+	M68000(config, m_ios, XTAL::u(10'000'000));
 	m_ios->set_addrmap(AS_PROGRAM, &vme_tp880v_card_device::ios_mem);
 
-	Z8036(config, m_cio[0], 4'000'000); // Z0803606VSC
+	Z8036(config, m_cio[0], XTAL::u(4'000'000)); // Z0803606VSC
 	m_cio[0]->irq_wr_cb().set_inputline(m_ios, INPUT_LINE_IRQ4); // ?
-	Z8036(config, m_cio[1], 4'000'000); // Z0803606VSC
+	Z8036(config, m_cio[1], XTAL::u(4'000'000)); // Z0803606VSC
 	m_cio[0]->irq_wr_cb().set_inputline(m_ios, INPUT_LINE_IRQ1); // ?
 
 	// TODO: MC68440 is function and pin compatible with MC68450/HD63450, but
 	// has only two DMA channels instead of four.
-	HD63450(config, m_dma, 10'000'000); // MC68440FN10
+	HD63450(config, m_dma, XTAL::u(10'000'000)); // MC68440FN10
 	m_dma->set_cpu_tag(m_ios);
 	m_dma->irq_callback().set_inputline(m_ios, INPUT_LINE_IRQ3);
 	m_dma->dma_read<0>().set(m_scsi, FUNC(ncr53c90_device::dma_r));
 	m_dma->dma_write<0>().set(m_scsi, FUNC(ncr53c90_device::dma_w));
 
-	M48T02(config, m_rtc, 0); // MK40T02B-25
+	M48T02(config, m_rtc); // MK40T02B-25
 
-	NSCSI_BUS(config, "scsi", 0);
+	NSCSI_BUS(config, "scsi");
 	NSCSI_CONNECTOR(config, "scsi:0", scsi_devices, "harddisk", false);
 	NSCSI_CONNECTOR(config, "scsi:1", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:2", scsi_devices, "tape", false);
@@ -118,7 +118,7 @@ void vme_tp880v_card_device::device_add_mconfig(machine_config &config)
 		{
 			ncr53c90_device &ncr53c90(downcast<ncr53c90_device &>(*device));
 
-			ncr53c90.set_clock(10'000'000);
+			ncr53c90.set_clock(XTAL::u(10'000'000));
 			ncr53c90.irq_handler_cb().set_inputline(m_ios, INPUT_LINE_IRQ2);
 			ncr53c90.drq_handler_cb().set(m_dma, FUNC(hd63450_device::drq0_w));
 		});

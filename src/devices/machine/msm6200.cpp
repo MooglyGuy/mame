@@ -10,7 +10,7 @@
 DEFINE_DEVICE_TYPE(MSM6200, msm6200_device, "msm6200", "OKI MSM6200 keyboard controller")
 
 /**************************************************************************/
-msm6200_device::msm6200_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+msm6200_device::msm6200_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MSM6200, tag, owner, clock),
 	m_keys(*this, "KI%u", 1u),
 	m_velocity(*this, "VELOCITY"),

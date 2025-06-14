@@ -35,7 +35,7 @@ public:
 	sega_sk1100_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	sega_sk1100_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	sega_sk1100_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -66,7 +66,7 @@ class sega_sk1100e_device : public sega_sk1100_device
 {
 public:
 	// construction/destruction
-	sega_sk1100e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sega_sk1100e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides

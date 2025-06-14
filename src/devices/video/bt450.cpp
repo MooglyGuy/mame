@@ -21,7 +21,7 @@
 
 DEFINE_DEVICE_TYPE(BT450, bt450_device, "bt450", "Brooktree Bt450 16x12 Color RAMDAC")
 
-bt450_device::bt450_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+bt450_device::bt450_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BT450, tag, owner, clock)
 	, device_palette_interface(mconfig, *this)
 	, m_address(0)

@@ -373,12 +373,12 @@ void sprachmg_state::sprachmg(machine_config &config)
 	m_pio[1]->out_pa_callback().set(FUNC(sprachmg_state::display_data_w));
 	m_pio[1]->out_pb_callback().set(FUNC(sprachmg_state::display_column_w));
 
-	Z80PIO(config, m_pio[2], 0);
+	Z80PIO(config, m_pio[2], XTAL());
 	m_pio[2]->out_int_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 	m_pio[2]->out_pa_callback().set([this](uint8_t data) { m_dac->write(data); });
 	m_pio[2]->out_pb_callback().set(FUNC(sprachmg_state::sys_w));
 
-	Z80PIO(config, m_pio[3], 0);
+	Z80PIO(config, m_pio[3], XTAL());
 	m_pio[3]->out_int_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 	// port a: tape
 	// port b: tape, dac gain
@@ -396,7 +396,7 @@ void sprachmg_state::sprachmg(machine_config &config)
 
 	SPEAKER(config, "speaker").front_center();
 
-	AD7520(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 1.0);
+	AD7520(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 1.0);
 
 	GENERIC_CARTSLOT(config, m_speech_module, generic_plain_slot, "sprachmg");
 	m_speech_module->set_device_load(FUNC(sprachmg_state::module_load));

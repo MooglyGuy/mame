@@ -21,7 +21,7 @@ class z_89_11_device : public device_t, public device_h89bus_right_card_interfac
 {
 public:
 
-	z_89_11_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = XTAL(1'843'200).value());
+	z_89_11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL(1'843'200));
 
 	virtual void write(u8 select_lines, u8 offset, u8 data) override;
 	virtual u8 read(u8 select_lines, u8 offset) override;
@@ -69,7 +69,7 @@ protected:
 };
 
 
-z_89_11_device::z_89_11_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+z_89_11_device::z_89_11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, H89BUS_Z_89_11, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_lp(*this, "lp"),
@@ -235,7 +235,7 @@ void z_89_11_device::device_reset()
 void z_89_11_device::device_add_mconfig(machine_config &config)
 {
 	// Parallel 0xD0-0xD7 (320 - 327 octal)
-	I8255(config, m_lp, m_clock);
+	I8255(config, m_lp, clock());
 
 	// AUX DCE 0xE0-0xE7 (340 - 347 octal)
 	//

@@ -215,7 +215,7 @@ DECLARE_DEVICE_TYPE(MACSE30_PDS_BUS, se30_pds_bus_device);
 class se30_pds_bus_device: public nubus_device
 {
 public:
-	se30_pds_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	se30_pds_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: nubus_device(mconfig, MACSE30_PDS_BUS, tag, owner, clock),
 		m_internal_screen(*this, finder_base::DUMMY_TAG)
 	{

@@ -1979,7 +1979,7 @@ void neogeo_base_state::neogeo_stereo(machine_config &config)
 
 void neogeo_base_state::neogeo_memcard(machine_config &config)
 {
-	NG_MEMCARD(config, m_memcard, 0);
+	NG_MEMCARD(config, m_memcard);
 
 	m_systemlatch->q_out_cb<2>().set(m_memcard, FUNC(ng_memcard_device::lock1_w));
 	m_systemlatch->q_out_cb<3>().set(m_memcard, FUNC(ng_memcard_device::unlock2_w));

@@ -137,7 +137,7 @@ protected:
 
 	TIMER_CALLBACK_MEMBER(bbd_tick);
 	void bbd_setup_next_tick();
-	
+
 	emu_timer *m_bbd_timer;
 
 	u16 m_key_select;
@@ -313,7 +313,7 @@ void ct8000_state::driver_start()
 
 void ct8000_state::driver_reset()
 {
-	bbd_setup_next_tick();	
+	bbd_setup_next_tick();
 }
 
 //**************************************************************************
@@ -637,8 +637,8 @@ void ct8000_state::update_clocks()
 	}
 
 	LOGMASKED(LOG_VCO, "VCO #1 %.3f MHz, #2 %.3f MHz\n",
-		clock_scale[0] * m_maincpu->unscaled_clock() / 1'000'000,
-		clock_scale[1] * m_maincpu->unscaled_clock() / 1'000'000);
+		(m_maincpu->unscaled_clock() * clock_scale[0] / 1'000'000).dvalue(),
+		(m_maincpu->unscaled_clock() * clock_scale[1] / 1'000'000).dvalue());
 }
 
 //**************************************************************************

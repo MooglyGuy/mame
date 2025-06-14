@@ -23,7 +23,7 @@ namespace bus::amiga::zorro {
 class picasso2p_device : public device_t, public device_memory_interface, public device_zorro2_card_interface, public amiga_autoconfig
 {
 public:
-	picasso2p_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	picasso2p_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

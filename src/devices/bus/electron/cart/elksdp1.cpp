@@ -25,7 +25,7 @@ class electron_elksdp1_device : public device_t, public device_electron_cart_int
 {
 public:
 	// construction/destruction
-	electron_elksdp1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	electron_elksdp1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -60,12 +60,8 @@ private:
 
 void electron_elksdp1_device::device_add_mconfig(machine_config &config)
 {
-<<<<<<< HEAD
-	SPI_SDCARD(config, m_sdcard, 0);
-	m_sdcard->set_prefer_sdhc();
-=======
 	SPI_SDCARD(config, m_sdcard);
->>>>>>> 45d4cd52a81 (full xtal conversion)
+	m_sdcard->set_prefer_sdhc();
 	m_sdcard->spi_miso_callback().set([this](int state) { m_in_bit = state; });
 }
 

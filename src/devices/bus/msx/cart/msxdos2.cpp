@@ -26,7 +26,7 @@ namespace {
 class msx_cart_msxdos2_base_device : public device_t, public msx_cart_interface
 {
 protected:
-	msx_cart_msxdos2_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msxdos2_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, type, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_rombank(*this, "rombank")
@@ -92,7 +92,7 @@ void msx_cart_msxdos2_base_device::bank_w(u8 data)
 class msx_cart_msxdos2j_device : public msx_cart_msxdos2_base_device
 {
 public:
-	msx_cart_msxdos2j_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msxdos2j_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_msxdos2_base_device(mconfig, MSX_CART_MSXDOS2J, tag, owner, clock)
 		, m_rambank(*this, "rambank%u", 0)
 		, m_view_page{ {*this, "view_page0"}, {*this, "view_page1"}, {*this, "view_page2"}, {*this, "view_page3"} }
@@ -201,7 +201,7 @@ void msx_cart_msxdos2j_device::mm_bank_w(u8 data)
 class msx_cart_msxdos2e_device : public msx_cart_msxdos2_base_device
 {
 public:
-	msx_cart_msxdos2e_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msxdos2e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_msxdos2_base_device(mconfig, MSX_CART_MSXDOS2E, tag, owner, clock)
 	{ }
 

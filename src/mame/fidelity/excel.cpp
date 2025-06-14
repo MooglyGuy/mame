@@ -513,7 +513,7 @@ void excel_state::fexcelv(machine_config &config)
 	config.set_default_layout(layout_fidel_exv);
 
 	// sound hardware
-	S14001A(config, m_speech, 25000); // R/C circuit, around 25khz
+	S14001A(config, m_speech, XTAL::u(25000)); // R/C circuit, around 25khz
 	m_speech->add_route(ALL_OUTPUTS, "speaker", 0.75);
 }
 

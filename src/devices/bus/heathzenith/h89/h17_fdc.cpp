@@ -46,7 +46,7 @@ namespace {
 class heath_h17_fdc_device : public device_t, public device_h89bus_right_card_interface
 {
 public:
-	heath_h17_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_h17_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto floppy_ram_wp_cb() { return m_floppy_ram_wp.bind(); }
 
@@ -105,8 +105,8 @@ protected:
 };
 
 
-heath_h17_fdc_device::heath_h17_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, H89BUS_H_17_FDC, tag, owner, 0),
+heath_h17_fdc_device::heath_h17_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, H89BUS_H_17_FDC, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_floppy_ram_wp(*this),
 	m_s2350(*this, "s2350"),
@@ -350,7 +350,7 @@ void heath_h17_fdc_device::floppy_formats(format_registration &fr)
 
 void heath_h17_fdc_device::device_add_mconfig(machine_config &config)
 {
-	S2350(config, m_s2350, 0);
+	S2350(config, m_s2350);
 	m_s2350->sync_character_received_cb().set(FUNC(heath_h17_fdc_device::sync_character_received));
 
 	for (int i = 0; i < MAX_FLOPPY_DRIVES; i++)

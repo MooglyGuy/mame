@@ -15,7 +15,7 @@
 
 class gew12_device : public m6502_mcu_device_base<w65c02_device>, public device_mixer_interface {
 public:
-	gew12_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	gew12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template<offs_t Num> auto port_in_cb() { return m_in_cb[Num].bind(); }
 	template<offs_t Num> auto port_out_cb() { return m_out_cb[Num].bind(); }

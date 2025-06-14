@@ -52,7 +52,7 @@ DECLARE_DEVICE_TYPE(MSX_SLOT_YAMAHA_EXPANSION, msx_slot_yamaha_expansion_device)
 class msx_slot_yamaha_expansion_device : public msx_slot_cartridge_base_device
 {
 public:
-	msx_slot_yamaha_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_yamaha_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const char *image_interface() const noexcept override { return "msx_yamaha_60pin"; }
 	virtual const char *image_type_name() const noexcept override { return "cartridge60pin"; }

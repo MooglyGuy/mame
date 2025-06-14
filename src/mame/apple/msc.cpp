@@ -17,8 +17,8 @@
 #include "emu.h"
 #include "msc.h"
 
-static constexpr u32 C7M  = 7833600;
-static constexpr u32 C15M = (C7M * 2);
+static constexpr XTAL C7M  = XTAL::u(7833600);
+static constexpr XTAL C15M = (C7M * 2);
 
 [[maybe_unused]] static constexpr u8 SOUND_POWER = 0; // 0 = DFAC power off, 1 = DFAC power on
 static constexpr u8 SOUND_BUSY      = 6;    // 1 = ASC FIFO accessed since last read of this register
@@ -68,12 +68,12 @@ void msc_device::device_add_mconfig(machine_config &config)
 	m_asc->irqf_callback().set(m_pseudovia, FUNC(pseudovia_device::asc_irq_w));
 }
 
-mscvia_device::mscvia_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mscvia_device::mscvia_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: via6522_device(mconfig, MSC_VIA, tag, owner, clock)
 {
 }
 
-msc_device::msc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+msc_device::msc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MSC, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
 	write_pb4(*this),
@@ -106,7 +106,7 @@ msc_device::msc_device(const machine_config &mconfig, const char *tag, device_t 
 
 void msc_device::device_start()
 {
-	m_stream = stream_alloc(8, 2, 22257, STREAM_SYNCHRONOUS);
+	m_stream = stream_alloc(8, 2, XTAL::u(22257), STREAM_SYNCHRONOUS);
 
 	m_6015_timer = timer_alloc(FUNC(msc_device::msc_6015_tick), this);
 	m_6015_timer->adjust(attotime::never);
@@ -185,7 +185,7 @@ u32 msc_device::rom_switch_r(offs_t offset)
 
 void msc_device::set_cpu_clock(XTAL clock)
 {
-	m_cpu_clock = clock.value();
+	m_cpu_clock = clock;
 }
 
 void msc_device::power_cycle_w(u32 data)
@@ -492,13 +492,13 @@ void msc_device::via_sync()
 	u64 cycle = m_maincpu->total_cycles();
 
 	// Get the number of the cycle the via is in at that time
-	u64 via_cycle = cycle * m_via1->clock() / m_maincpu->clock();
+	u64 via_cycle = cycle * m_via1->clock().value() / m_maincpu->clock().value();
 
 	// The access is going to start at via_cycle+1 and end at
 	// via_cycle+1.5, compute what that means in maincpu cycles (the
 	// +1 rounds up, since the clocks are too different to ever be
 	// synced).
-	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock() / (2 * m_via1->clock()) + 1;
+	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock().value() / (2 * m_via1->clock().value()) + 1;
 
 	// Finally adjust the main cpu icount as needed.
 	m_maincpu->adjust_icount(-int(main_cycle - cycle));

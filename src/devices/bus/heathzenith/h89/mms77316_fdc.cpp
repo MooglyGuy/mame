@@ -41,8 +41,8 @@
 #endif
 
 
-mms77316_fdc_device::mms77316_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, H89BUS_MMS77316, tag, owner, 0),
+mms77316_fdc_device::mms77316_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, H89BUS_MMS77316, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_fdc(*this, "mms_fdc"),
 	m_floppies(*this, "mms_fdc:%u", 0U),

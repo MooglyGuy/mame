@@ -9,7 +9,7 @@
 class pseudovia_device :  public device_t
 {
 public:
-	pseudovia_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pseudovia_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// interface routines
 	auto readpa_handler() { return m_in_a_handler.bind(); }

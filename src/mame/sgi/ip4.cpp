@@ -73,7 +73,7 @@
 
 DEFINE_DEVICE_TYPE(SGI_IP4, sgi_ip4_device, "sgi_ip4", "SGI IP4")
 
-sgi_ip4_device::sgi_ip4_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_ip4_device::sgi_ip4_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_IP4, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -232,7 +232,7 @@ void sgi_ip4_device::device_add_mconfig(machine_config &config)
 		{
 			wd33c9x_base_device &wd33c93(downcast<wd33c9x_base_device &>(*device));
 
-			wd33c93.set_clock(10'000'000);
+			wd33c93.set_clock(XTAL::u(10'000'000));
 			wd33c93.irq_cb().set(*this, FUNC(sgi_ip4_device::lio_irq<LIO_SCSI>)).invert();
 			wd33c93.drq_cb().set(*this, FUNC(sgi_ip4_device::scsi_drq));
 		});

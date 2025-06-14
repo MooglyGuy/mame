@@ -45,7 +45,7 @@ device_psion_honda_interface::device_psion_honda_interface(const machine_config 
 //  psion_honda_slot_device - constructor
 //-------------------------------------------------
 
-psion_honda_slot_device::psion_honda_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_honda_slot_device::psion_honda_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_HONDA_SLOT, tag, owner, clock)
 	, device_single_card_slot_interface<device_psion_honda_interface>(mconfig, *this)
 	, m_rxd_handler(*this)

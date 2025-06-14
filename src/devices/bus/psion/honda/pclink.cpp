@@ -17,7 +17,7 @@ namespace {
 class psion_pclink_device : public device_t, public device_psion_honda_interface
 {
 public:
-	psion_pclink_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	psion_pclink_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, PSION_PCLINK, tag, owner, clock)
 		, device_psion_honda_interface(mconfig, *this)
 		, m_rs232(*this, "rs232")

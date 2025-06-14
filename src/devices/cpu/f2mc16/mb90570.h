@@ -17,7 +17,7 @@ class mb90570_device :
 	public f2mc16_device
 {
 public:
-	mb90570_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mb90570_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto &adc() const { if (m_adc) return *m_adc; return *subdevice<f2mc16_adc_device>(m_adc.finder_tag()); }
 	template<unsigned N> typename std::enable_if<N < 13, f2mc16_port_device>::type &port() const { if (m_port[N]) return *m_port[N]; return *subdevice<f2mc16_port_device>(m_port[N].finder_tag()); }
@@ -25,7 +25,7 @@ public:
 	template<unsigned N> typename std::enable_if<N < 2, f2mc16_uart_device>::type &uart() const { if (m_uart[N]) return *m_uart[N]; return *subdevice<f2mc16_uart_device>(m_uart[N].finder_tag()); }
 
 protected:
-	mb90570_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint16_t internal_ram_end);
+	mb90570_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint16_t internal_ram_end);
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -47,7 +47,7 @@ protected:
 class mb90f574_device : public mb90570_device
 {
 public:
-	mb90f574_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mb90f574_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(MB90F574, mb90f574_device)

@@ -23,7 +23,7 @@ DEFINE_DEVICE_TYPE(AMIGA_A2058, bus::amiga::zorro::a2058_device, "amiga_a2058", 
 
 namespace bus::amiga::zorro {
 
-a2058_device::a2058_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2058_device::a2058_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_A2058, tag, owner, clock),
 	device_zorro2_card_interface(mconfig, *this),
 	m_config(*this, "config"),

@@ -6154,7 +6154,7 @@ void gorgon_state::gorgon(machine_config &config)
 	// Timer at 115200*16 for the jvs serial clock
 	m_subcpu->sci_set_external_clock_period(0, attotime::from_hz(JVSCLOCK/8));
 
-	NAMCO_SETTINGS(config, m_settings, 0);
+	NAMCO_SETTINGS(config, m_settings);
 
 	RTC4543(config, m_rtc, XTAL(32'768));
 	m_rtc->data_cb().set(m_subcpu, FUNC(h8_device::sci_rx_w<1>));
@@ -6230,7 +6230,7 @@ void namcos23_state::s23(machine_config &config)
 	// Timer at 115200*16 for the jvs serial clock
 	m_subcpu->sci_set_external_clock_period(0, attotime::from_hz(JVSCLOCK/8));
 
-	NAMCO_SETTINGS(config, m_settings, 0);
+	NAMCO_SETTINGS(config, m_settings);
 
 	RTC4543(config, m_rtc, XTAL(32'768));
 	m_rtc->data_cb().set(m_subcpu, FUNC(h8_device::sci_rx_w<1>));
@@ -6342,10 +6342,10 @@ void namcoss23_gmen_state::gmen(machine_config &config)
 	SH7604(config, m_sh2, XTAL(28'700'000));
 	m_sh2->set_addrmap(AS_PROGRAM, &namcoss23_gmen_state::sh2_map);
 
-	VPX3220A(config, m_vpx, 0);
+	VPX3220A(config, m_vpx);
 	m_vpx->sda_callback().set(FUNC(namcoss23_gmen_state::vpx_i2c_sdao_w));
 
-	MD8412B(config, m_firewire, 0);
+	MD8412B(config, m_firewire);
 }
 
 void namcoss23_gmen_state::gunwars(machine_config &config)
@@ -6377,11 +6377,11 @@ void crszone_state::crszone(machine_config &config)
 	m_jvs->set_default_option("namco_csz1");
 
 	/* debug hardware */
-	ACIA6850(config, m_acia, 0);
+	ACIA6850(config, m_acia);
 	m_acia->txd_handler().set("rs232", FUNC(rs232_port_device::write_txd));
 	m_acia->irq_handler().set(FUNC(crszone_state::acia_irq_w));
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 1'843'200));
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(1'843'200)));
 	acia_clock.signal_handler().set("acia", FUNC(acia6850_device::write_txc));
 	acia_clock.signal_handler().append("acia", FUNC(acia6850_device::write_rxc));
 

@@ -708,7 +708,7 @@ void roundup5_state::roundup5(machine_config &config)
 	screen.set_raw(roundup5_state::CLOCK_2 / 8, 400, 0, 320, 272, 0, 240); // TODO: Hook up CRTC
 	screen.set_screen_update(FUNC(roundup5_state::screen_update));
 
-	TZB315_SPRITES(config, m_sprites, 0, 0x800); // confirmed TZB315, even if it has the smaller CLUT like Apache 3 / TZB215
+	TZB315_SPRITES(config, m_sprites, 0x800); // confirmed TZB315, even if it has the smaller CLUT like Apache 3 / TZB215
 	m_sprites->set_sprite_palette_base(512);
 	m_sprites->set_palette("sprites:palette_clut");
 	m_sprites->set_basepalette(m_palette);

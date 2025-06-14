@@ -41,7 +41,7 @@ struct DIRR { enum : uint16_t
 
 DEFINE_DEVICE_TYPE(F2MC16_INTC, f2mc16_intc_device, "f2mc16_intc", "F2MC16 INTC")
 
-f2mc16_intc_device::f2mc16_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_intc_device::f2mc16_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_INTC, tag, owner, clock),
 	m_cpu(nullptr),
 	m_i2osclr_cb(*this),

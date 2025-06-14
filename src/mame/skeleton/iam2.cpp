@@ -161,7 +161,7 @@ GFXDECODE_END
 
 void iam2_state::zhonggmj(machine_config &config)
 {
-	ARM7(config, m_maincpu, 24'000'000); // TODO: unidentified CPU arch and clock not verified
+	ARM7(config, m_maincpu, XTAL::u(24'000'000)); // TODO: unidentified CPU arch and clock not verified
 	m_maincpu->set_addrmap(AS_PROGRAM, &iam2_state::program_map);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER)); // TODO
@@ -178,7 +178,7 @@ void iam2_state::zhonggmj(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, "oki", 24'000'000 / 24, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0); // pin 7 and clock not verified
+	OKIM6295(config, "oki", XTAL::u(24'000'000) / 24, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 1.0); // pin 7 and clock not verified
 }
 
 void iam2_state::szjl(machine_config &config)

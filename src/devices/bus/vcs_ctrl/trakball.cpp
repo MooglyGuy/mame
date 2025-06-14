@@ -55,7 +55,7 @@ INPUT_PORTS_END
 //  atari_trakball_device - constructor
 //-------------------------------------------------
 
-atari_trakball_device::atari_trakball_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+atari_trakball_device::atari_trakball_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ATARI_TRAKBALL, tag, owner, clock)
 	, device_vcs_control_port_interface(mconfig, *this)
 	, m_trakballb(*this, TRAKBALL_BUTTON_TAG)

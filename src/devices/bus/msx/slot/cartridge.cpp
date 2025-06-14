@@ -5,7 +5,7 @@
 #include "hashfile.h"
 
 
-msx_slot_cartridge_base_device::msx_slot_cartridge_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+msx_slot_cartridge_base_device::msx_slot_cartridge_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_cartrom_image_interface(mconfig, *this)
 	, device_slot_interface(mconfig, *this)

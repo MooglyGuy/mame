@@ -41,7 +41,7 @@ class mpf_ssb_device : public device_t, public device_mpf1_exp_interface
 public:
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 
-	mpf_ssb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_ssb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MPF_SSB, tag, owner, clock)
 		, device_mpf1_exp_interface(mconfig, *this)
 		, m_rom_u5(*this, "u5")
@@ -56,7 +56,7 @@ protected:
 	{
 		SPEAKER(config, "mono").front_center();
 
-		TMS5200(config, m_vsp, 640000);
+		TMS5200(config, m_vsp, XTAL::u(640000));
 		m_vsp->ready_cb().set(DEVICE_SELF_OWNER, FUNC(mpf1_exp_device::wait_w));
 		m_vsp->add_route(ALL_OUTPUTS, "mono", 0.5);
 

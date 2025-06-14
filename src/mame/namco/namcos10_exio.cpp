@@ -10,12 +10,12 @@ DEFINE_DEVICE_TYPE(NAMCOS10_EXIO_BASE, namcos10_exio_base_device, "namcos10_exio
 DEFINE_DEVICE_TYPE(NAMCOS10_MGEXIO,    namcos10_mgexio_device,    "namcos10_mgexio", "Namco System 10 MGEXIO")
 
 // EXIO(G) has the bare minimum: CPLD, audio output jacks, gun I/O, and a card edge connector for additional I/O
-namcos10_exio_base_device::namcos10_exio_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint8_t ident_code) :
+namcos10_exio_base_device::namcos10_exio_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint8_t ident_code) :
 	device_t(mconfig, type, tag, owner, clock), m_ident_code(ident_code)
 {
 }
 
-namcos10_exio_base_device::namcos10_exio_base_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namcos10_exio_base_device::namcos10_exio_base_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	namcos10_exio_base_device(mconfig, NAMCOS10_EXIO_BASE, tag, owner, clock, 0x32)
 {
 }
@@ -26,7 +26,7 @@ void namcos10_exio_base_device::device_start()
 
 ////////////////////////////////////
 
-namcos10_exio_device::namcos10_exio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namcos10_exio_device::namcos10_exio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	namcos10_exio_base_device(mconfig, NAMCOS10_EXIO, tag, owner, clock, 0x30),
 	m_maincpu(*this, "exio_mcu"),
 	m_ram(*this, "exio_ram"),
@@ -165,7 +165,7 @@ uint8_t namcos10_exio_device::port_read(offs_t offset)
 
 ////////////////////////////////////
 
-namcos10_mgexio_device::namcos10_mgexio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namcos10_mgexio_device::namcos10_mgexio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	namcos10_exio_base_device(mconfig, NAMCOS10_MGEXIO, tag, owner, clock, 0x33),
 	m_maincpu(*this, "exio_mcu"),
 	m_ram(*this, "exio_ram"),

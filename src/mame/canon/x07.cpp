@@ -1193,7 +1193,7 @@ void x07_state::x07_io_w(offs_t offset, uint8_t data)
 		if((data & 0x0e) == 0x0e)
 		{
 			uint16_t div = (m_regs_w[2] | m_regs_w[3] << 8) & 0x0fff;
-			m_beep->set_frequency((div == 0) ? 0 : 192000 / div);
+			m_beep->set_clock((div == 0) ? 0 : 192000 / div);
 			m_beep->set_state(1);
 
 			m_beep_stop->adjust(attotime::from_msec(m_ram->pointer()[0x450] * 0x20));

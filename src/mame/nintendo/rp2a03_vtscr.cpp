@@ -17,7 +17,7 @@
 
 DEFINE_DEVICE_TYPE(RP2A03_VTSCR, rp2a03_vtscr, "rp2a03_vtscr", "RP2A03 with VTxx scrambling")
 
-rp2a03_vtscr::rp2a03_vtscr(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+rp2a03_vtscr::rp2a03_vtscr(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	rp2a03_core_device(mconfig, RP2A03_VTSCR, tag, owner, clock)
 {
 }

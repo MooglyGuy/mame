@@ -650,7 +650,7 @@ void bzone_state::dsrtwars(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	ay8910_device &aysnd(AY8910(config, "aysnd", 1'000'000)); // unknown clock
+	ay8910_device &aysnd(AY8910(config, "aysnd", XTAL::u(1'000'000))); // unknown clock
 	aysnd.add_route(ALL_OUTPUTS, "mono", 0.85);
 	aysnd.port_a_read_callback().set_ioport("IN3");
 }

@@ -16,7 +16,7 @@ DEFINE_DEVICE_TYPE(MSM66573, msm66573_device, "msm66573", "Oki MSM66573")
 ALLOW_SAVE_TYPE(msm665xx_device::inst_state)
 
 
-msm665xx_device::msm665xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor mem_map, address_map_constructor data_map)
+msm665xx_device::msm665xx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor mem_map, address_map_constructor data_map)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_LITTLE, 8, 20, 0, mem_map)
 	, m_data_config("data", ENDIANNESS_LITTLE, 16, 20, 0, data_map)
@@ -54,7 +54,7 @@ std::unique_ptr<util::disasm_interface> msm665xx_device::create_disassembler()
 }
 
 
-msm66573_device::msm66573_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msm66573_device::msm66573_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msm665xx_device(mconfig, MSM66573, tag, owner, clock,
 						address_map_constructor(), // TODO: 64KB internal ROM (optional)
 						address_map_constructor(FUNC(msm66573_device::data_map), this))

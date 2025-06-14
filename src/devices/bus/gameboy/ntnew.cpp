@@ -36,7 +36,7 @@ namespace {
 class ntnew_device : public mbc_ram_device_base<mbc_8k_device_base>
 {
 public:
-	ntnew_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ntnew_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 
@@ -59,7 +59,7 @@ ntnew_device::ntnew_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc_ram_device_base<mbc_8k_device_base>(mconfig, GB_ROM_NTNEW, tag, owner, clock),
 	m_view_ram(*this, "ram"),
 	m_bank_8k(0U)

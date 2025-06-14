@@ -20,7 +20,7 @@
 class tvochken_card_device : public device_t, public device_image_interface
 {
 public:
-	tvochken_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	tvochken_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~tvochken_card_device();
 
 	// device_image_interface implementation

@@ -17,7 +17,7 @@ This cartridge allows Bee Cards (a predecessor of HuCards) to be used on an MSX 
 DEFINE_DEVICE_TYPE(MSX_CART_BEEPACK, msx_cart_beepack_device, "msx_cart_beepack", "Hudson Soft BP-0001 Bee Pack card reader")
 
 
-msx_cart_beepack_device::msx_cart_beepack_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_cart_beepack_device::msx_cart_beepack_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_CART_BEEPACK, tag, owner, clock)
 	, device_cartrom_image_interface(mconfig, *this)
 	, device_single_card_slot_interface<bee_card_interface>(mconfig, *this)

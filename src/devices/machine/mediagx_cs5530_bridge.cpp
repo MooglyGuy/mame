@@ -22,7 +22,7 @@
 
 DEFINE_DEVICE_TYPE(MEDIAGX_CS5530_BRIDGE, mediagx_cs5530_bridge_device, "mediagx_cs5530_bridge", "MediaGX CS5530 Bridge")
 
-mediagx_cs5530_bridge_device::mediagx_cs5530_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mediagx_cs5530_bridge_device::mediagx_cs5530_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, MEDIAGX_CS5530_BRIDGE, tag, owner, clock)
 //  , m_smi_callback(*this)
 //  , m_nmi_callback(*this)
@@ -102,7 +102,7 @@ void mediagx_cs5530_bridge_device::device_add_mconfig(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 0.50);
 
-	ISA16(config, m_isabus, 0);
+	ISA16(config, m_isabus);
 	m_isabus->irq3_callback().set(FUNC(mediagx_cs5530_bridge_device::pc_irq3_w));
 	m_isabus->irq4_callback().set(FUNC(mediagx_cs5530_bridge_device::pc_irq4_w));
 	m_isabus->irq5_callback().set(FUNC(mediagx_cs5530_bridge_device::pc_irq5_w));

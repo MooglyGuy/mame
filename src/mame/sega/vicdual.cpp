@@ -3566,7 +3566,7 @@ void nsub_state::nsub(machine_config &config)
 	S97269PB(config, m_s97269pb);
 
 	// audio hardware
-	S97271P(config, m_s97271p, 0);
+	S97271P(config, m_s97271p);
 }
 
 void nsub_state::nsubc(machine_config &config)

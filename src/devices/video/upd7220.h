@@ -63,7 +63,7 @@ public:
 	upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T>
-	upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&screen_tag)
+	upd7220_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&screen_tag)
 		: upd7220_device(mconfig, tag, owner, clock)
 	{
 		set_screen(std::forward<T>(screen_tag));
@@ -91,7 +91,7 @@ public:
 	uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 
 protected:
-	upd7220_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	upd7220_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t overrides
 	virtual void device_start() override ATTR_COLD;
@@ -230,10 +230,10 @@ class upd7220a_device : public upd7220_device
 {
 public:
 	// construction/destruction
-	upd7220a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	upd7220a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T>
-	upd7220a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&screen_tag)
+	upd7220a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&screen_tag)
 		: upd7220a_device(mconfig, tag, owner, clock)
 	{
 		set_screen(std::forward<T>(screen_tag));

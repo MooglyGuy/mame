@@ -32,7 +32,7 @@ class hp9133_device : public device_t,
 {
 public:
 	// construction/destruction
-	hp9133_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hp9133_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -170,7 +170,7 @@ private:
 	uint8_t m_hdc_cmd;
 };
 
-hp9133_device::hp9133_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hp9133_device::hp9133_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t{mconfig, HP9133, tag, owner, clock},
 	device_ieee488_interface{mconfig, *this},
 	m_cpu{*this, "cpu"},

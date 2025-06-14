@@ -27,7 +27,7 @@
 // device type definitions
 DEFINE_DEVICE_TYPE(XTENSA, xtensa_device, "xtensa", "Tensilica Xtensa core")
 
-xtensa_device::xtensa_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+xtensa_device::xtensa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, XTENSA, tag, owner, clock)
 	, m_space_config("program", ENDIANNESS_LITTLE, 32, 32, 0)
 	, m_extregs_config("extregs", ENDIANNESS_LITTLE, 32, 8, -2, address_map_constructor(FUNC(xtensa_device::ext_regs), this))

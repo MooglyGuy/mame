@@ -236,7 +236,7 @@ void jaleco_vj_isa16_sound_device::comm_w(offs_t offset, uint16_t data, uint16_t
 	m_comm = data;
 }
 
-jaleco_vj_isa16_sound_device::jaleco_vj_isa16_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+jaleco_vj_isa16_sound_device::jaleco_vj_isa16_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, JALECO_VJ_ISA16_SOUND, tag, owner, clock),
 	device_isa16_card_interface(mconfig, *this),
 	device_mixer_interface(mconfig, *this),

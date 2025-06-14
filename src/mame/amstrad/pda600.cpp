@@ -560,7 +560,7 @@ void pda600_state::pda600(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 1633).add_route(ALL_OUTPUTS, "mono", 0.80);    // TODO: replace with TCM5089
+	BEEP(config, m_beep, XTAL::u(1633)).add_route(ALL_OUTPUTS, "mono", 0.80);    // TODO: replace with TCM5089
 
 	// software lists
 	SOFTWARE_LIST(config, "card_list").set_original("pda600");

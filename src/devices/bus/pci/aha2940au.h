@@ -13,12 +13,12 @@
 class aha2940au_scsi_device : public pci_card_device
 {
 public:
-	aha2940au_scsi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	aha2940au_scsi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::MEDIA; }
 
 protected:
-	aha2940au_scsi_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	aha2940au_scsi_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

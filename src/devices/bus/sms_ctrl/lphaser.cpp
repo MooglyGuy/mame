@@ -37,7 +37,7 @@ class sms_light_phaser_device : public device_t, public device_sms_control_inter
 {
 public:
 	// construction/destruction
-	sms_light_phaser_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sms_light_phaser_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	DECLARE_INPUT_CHANGED_MEMBER(position_changed) { sensor_check(0); }
 

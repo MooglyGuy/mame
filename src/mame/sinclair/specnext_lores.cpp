@@ -20,7 +20,7 @@
 
 #include "screen.h"
 
-specnext_lores_device::specnext_lores_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_lores_device::specnext_lores_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SPECNEXT_LORES, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 {

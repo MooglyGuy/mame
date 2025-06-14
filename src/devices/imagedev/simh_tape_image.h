@@ -18,7 +18,7 @@ class simh_tape_image_device : public microtape_image_device
 {
 public:
 	// construction
-	simh_tape_image_device(const machine_config &config, const char *tag, device_t *owner, u32 clock = 0);
+	simh_tape_image_device(const machine_config &config, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_image_interface implementation
 	virtual const char *image_interface() const noexcept override { return m_interface; }
@@ -35,7 +35,7 @@ public:
 
 protected:
 	// construction
-	simh_tape_image_device(const machine_config &config, device_type type, const char *tag, device_t *owner, u32 clock);
+	simh_tape_image_device(const machine_config &config, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_config_complete() override;

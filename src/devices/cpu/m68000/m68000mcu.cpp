@@ -4,7 +4,7 @@
 #include "emu.h"
 #include "m68000mcu.h"
 
-m68000_mcu_device::m68000_mcu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+m68000_mcu_device::m68000_mcu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	m68000_device(mconfig, type, tag, owner, clock)
 {
 	m_disable_interrupt_callback = true;

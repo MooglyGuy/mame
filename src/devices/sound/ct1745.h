@@ -9,7 +9,7 @@
 class ct1745_mixer_device : public device_t, public device_memory_interface, public device_mixer_interface
 {
 public:
-	ct1745_mixer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ct1745_mixer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// reg $82, depends on DSP + irq stuff coming from host
 	auto irq_status_cb() { return m_irq_status_cb.bind(); }

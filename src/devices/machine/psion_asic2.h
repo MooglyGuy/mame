@@ -22,7 +22,7 @@ class psion_asic2_device : public device_t
 {
 public:
 	// construction/destruction
-	psion_asic2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	psion_asic2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// callbacks
 	auto int_cb() { return m_int_cb.bind(); }

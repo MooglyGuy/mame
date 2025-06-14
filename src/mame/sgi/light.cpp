@@ -63,7 +63,7 @@ void sgi_lg1_device::device_add_mconfig(machine_config &config)
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	// TODO: video timing from VC1
-	m_screen->set_raw(1024 * 768 * 60, 1024, 0, 1024, 768, 0, 768);
+	m_screen->set_raw(XTAL::u(62914560), 1024, 0, 1024, 768, 0, 768);
 	m_screen->set_screen_update(FUNC(sgi_lg1_device::screen_update));
 }
 

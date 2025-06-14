@@ -11,10 +11,10 @@
 class vt6306_device : public pci_card_device
 {
 public:
-	vt6306_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vt6306_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	vt6306_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	vt6306_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

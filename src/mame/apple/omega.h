@@ -8,7 +8,7 @@
 class omega_device : public device_t
 {
 public:
-	omega_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	omega_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto pclock_changed() { return m_write_pclock.bind(); }
 

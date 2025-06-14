@@ -16,7 +16,7 @@ DECLARE_DEVICE_TYPE(MKS3, mks3_device)
 class mks3_device : public device_t
 {
 public:
-	mks3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mks3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void ic_w(int state);
 	void req_w(int state);

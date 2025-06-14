@@ -10,7 +10,7 @@
 
 class ds2416_device : public ymp21_device {
 public:
-	ds2416_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ds2416_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

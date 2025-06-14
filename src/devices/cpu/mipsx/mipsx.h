@@ -9,7 +9,7 @@
 class mipsx_cpu_device : public cpu_device
 {
 public:
-	mipsx_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mipsx_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

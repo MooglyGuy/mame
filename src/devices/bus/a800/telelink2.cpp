@@ -19,7 +19,7 @@ TODO:
 DEFINE_DEVICE_TYPE(A800_ROM_TELELINK2, a800_rom_telelink2_device, "a800_tlink2",   "Atari 8-bit Telelink II cart")
 
 
-a800_rom_telelink2_device::a800_rom_telelink2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_telelink2_device::a800_rom_telelink2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, A800_ROM_TELELINK2, tag, owner, clock)
 	, m_nvram(*this, "nvram")
 {

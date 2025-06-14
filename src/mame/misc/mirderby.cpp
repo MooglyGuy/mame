@@ -633,11 +633,11 @@ void mirderby_state::machine_reset()
 void mirderby_state::mirderby(machine_config &config)
 {
 	/* basic machine hardware */
-	MC6809E(config, m_maincpu, 16000000/8);  /* MBL68B09E 2 Mhz */
+	MC6809E(config, m_maincpu, XTAL::u(16000000)/8);  /* MBL68B09E 2 Mhz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &mirderby_state::main_map);
 //  m_maincpu->set_vblank_int("screen", FUNC(mirderby_state::homedata_irq));
 
-	MC6809E(config, m_subcpu, 16000000/8); /* MBL68B09E 2 Mhz */
+	MC6809E(config, m_subcpu, XTAL::u(16000000)/8); /* MBL68B09E 2 Mhz */
 	m_subcpu->set_addrmap(AS_PROGRAM, &mirderby_state::sub_map);
 //  m_subcpu->set_vblank_int("screen", FUNC(mirderby_state::homedata_irq));
 
@@ -654,7 +654,7 @@ void mirderby_state::mirderby(machine_config &config)
 	m_coin_ppi->out_pb_callback().set(m_coinlatch, FUNC(generic_latch_8_device::write));
 	m_coin_ppi->in_pc_callback().set_ioport("SUB_COIN1");
 
-	PIT8253(config, m_coin_pit, 0);
+	PIT8253(config, m_coin_pit);
 	m_coin_pit->set_clk<0>(XTAL(16'000'000) / 8);
 	m_coin_pit->out_handler<0>().set_inputline(m_x70coincpu, INPUT_LINE_NMI);
 //  m_coin_pit->set_clk<1>(XTAL(16'000'000) / 8);
@@ -678,7 +678,7 @@ void mirderby_state::mirderby(machine_config &config)
 
 	SPEAKER(config, "speaker").front_center();
 
-	YM2203(config, m_ymsnd, 2'000'000);
+	YM2203(config, m_ymsnd, XTAL::u(2'000'000));
 	m_ymsnd->port_a_read_callback().set_ioport("DSW1");
 	m_ymsnd->port_b_read_callback().set_ioport("DSW2");
 	m_ymsnd->add_route(0, "speaker", 0.25);

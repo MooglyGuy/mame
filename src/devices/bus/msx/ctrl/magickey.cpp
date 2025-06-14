@@ -23,7 +23,7 @@ namespace {
 class msx_magickey_device : public device_t, public device_msx_general_purpose_port_interface
 {
 public:
-	msx_magickey_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_magickey_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 read() override { return m_pin8_state ? 0xff : 0xfc; }
 	virtual void pin_8_w(int state) override { m_pin8_state = state; }
@@ -36,7 +36,7 @@ private:
 };
 
 
-msx_magickey_device::msx_magickey_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_magickey_device::msx_magickey_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_MAGICKEY, tag, owner, clock)
 	, device_msx_general_purpose_port_interface(mconfig, *this)
 {

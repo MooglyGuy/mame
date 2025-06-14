@@ -56,7 +56,7 @@ namespace {
 class a2bus_vistaa800_device : public device_t, public device_a2bus_card_interface
 {
 public:
-	a2bus_vistaa800_device(machine_config const &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_vistaa800_device(machine_config const &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_a2bus_card_interface implementation
 	virtual uint8_t read_c0nx(uint8_t offset) override;
@@ -108,7 +108,7 @@ ROM_START(vistaa800)
 ROM_END
 
 
-a2bus_vistaa800_device::a2bus_vistaa800_device(machine_config const &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_vistaa800_device::a2bus_vistaa800_device(machine_config const &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, A2BUS_VISTAA800, tag, owner, clock),
 	device_a2bus_card_interface(mconfig, *this),
 	m_fdc(*this, "fdc"),
@@ -131,7 +131,7 @@ const tiny_rom_entry *a2bus_vistaa800_device::device_rom_region() const
 
 void a2bus_vistaa800_device::device_add_mconfig(machine_config &config)
 {
-	FD1797(config, m_fdc, 2'000'000);
+	FD1797(config, m_fdc, XTAL::u(2'000'000));
 	FLOPPY_CONNECTOR(config, m_floppy0, vistaa800_floppies, "8dsdd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);
 	FLOPPY_CONNECTOR(config, m_floppy1, vistaa800_floppies, "8dsdd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);
 	FLOPPY_CONNECTOR(config, m_floppy2, vistaa800_floppies, "8dsdd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);

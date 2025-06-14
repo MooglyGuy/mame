@@ -279,7 +279,7 @@ void psr150_state::pss31(machine_config &config)
 
 void psr150_state::psr75(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_in_cb<0>().set_ioport("PA");
 	m_maincpu->port_out_cb<0>().set_ioport("PA");
 	m_maincpu->port_out_cb<1>().set_ioport("PB");
@@ -301,7 +301,7 @@ void psr150_state::psr75(machine_config &config)
 
 void psr150_state::pss11(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_out_cb<0>().set_ioport("PA");
 	m_maincpu->port_in_cb<1>().set_ioport("PB");
 	m_maincpu->port_in_cb<2>().set_ioport("PC");
@@ -322,7 +322,7 @@ void psr150_state::pss11(machine_config &config)
 
 void psr150_state::dd9(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_out_cb<0>().set_ioport("PA");
 	m_maincpu->port_out_cb<1>().set(FUNC(psr150_state::digit_w<0>));
 	m_maincpu->port_out_cb<2>().set(FUNC(psr150_state::digit_w<1>));
@@ -339,7 +339,7 @@ void psr150_state::dd9(machine_config &config)
 
 void psr150_state::psr180_base(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_out_cb<0>().set_ioport("PA");
 	m_maincpu->port_in_cb<1>().set_ioport("PB");
 	m_maincpu->port_out_cb<1>().set_ioport("PB");
@@ -385,7 +385,7 @@ void psr150_state::psr76(machine_config &config)
 
 void psr150_state::pss12(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_in_cb<0>().set_ioport("PA");
 	m_maincpu->port_out_cb<1>().set_ioport("PB");
 	m_maincpu->port_in_cb<2>().set_ioport("PC");
@@ -404,7 +404,7 @@ void psr150_state::pss12(machine_config &config)
 
 void psr150_state::pss6(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_out_cb<1>().set_ioport("PB");
 	m_maincpu->port_out_cb<2>().set(FUNC(psr150_state::port_pullup_w<2>));
 	m_maincpu->port_in_cb<5>().set_ioport("PF");
@@ -420,14 +420,14 @@ void psr150_state::pss6(machine_config &config)
 
 void psr150_state::psr190_base(machine_config &config)
 {
-	GEW7(config, m_maincpu, 8'000'000);
+	GEW7(config, m_maincpu, XTAL::u(8'000'000));
 	m_maincpu->port_out_cb<0>().set_ioport("PA");
 	m_maincpu->port_in_cb<1>().set_ioport("PB");
 	m_maincpu->port_out_cb<1>().set_ioport("PB");
 	m_maincpu->port_in_cb<2>().set_ioport("PC_R");
 	m_maincpu->port_out_cb<2>().set_ioport("PC_W");
 
-	KS0066(config, m_lcdc, 270'000); // OSC = 91K resistor, TODO: actually KS0076B-00
+	KS0066(config, m_lcdc, XTAL::u(270'000)); // OSC = 91K resistor, TODO: actually KS0076B-00
 	m_lcdc->set_lcd_size(2, 8);
 
 	screen_device& screen(SCREEN(config, "screen", SCREEN_TYPE_SVG));

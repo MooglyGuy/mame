@@ -15,7 +15,7 @@
 // device type definitions
 DEFINE_DEVICE_TYPE(ST90R50, st90r50_device, "st90r50", "SGS-Thomson ST90R50")
 
-st9_device::st9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor regmap)
+st9_device::st9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor regmap)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_BIG, 8, 16, 0)
 	, m_data_config("data", ENDIANNESS_BIG, 8, 16, 0)
@@ -32,7 +32,7 @@ st9_device::st9_device(const machine_config &mconfig, device_type type, const ch
 {
 }
 
-st90r50_device::st90r50_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+st90r50_device::st90r50_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: st9_device(mconfig, ST90R50, tag, owner, clock, address_map_constructor(FUNC(st90r50_device::register_map), this))
 {
 }

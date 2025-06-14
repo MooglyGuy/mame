@@ -77,7 +77,7 @@ namespace {
 class msx_cart_msx_audio_hxmu900_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_msx_audio_hxmu900_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msx_audio_hxmu900_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_MSX_AUDIO_HXMU900, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_y8950(*this, "y8950")
@@ -149,7 +149,7 @@ const tiny_rom_entry *msx_cart_msx_audio_hxmu900_device::device_rom_region() con
 class msx_cart_msx_audio_nms1205_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_msx_audio_nms1205_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msx_audio_nms1205_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_MSX_AUDIO_NMS1205, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_y8950(*this, "y8950")
@@ -189,7 +189,7 @@ void msx_cart_msx_audio_nms1205_device::device_add_mconfig(machine_config &confi
 	MSX_AUDIO_KBDC_PORT(config, "kbdc", msx_audio_keyboards, nullptr);
 
 	// There is a 2 MHz crystal on the PCB, the 6850 TX and RX clocks are derived from it
-	ACIA6850(config, m_acia6850, 0);
+	ACIA6850(config, m_acia6850);
 	m_acia6850->txd_handler().set("mdout", FUNC(midi_port_device::write_txd));
 
 	MIDI_PORT(config, "mdin", midiin_slot, "midiin").rxd_handler().set(FUNC(msx_cart_msx_audio_nms1205_device::midi_in));
@@ -260,7 +260,7 @@ std::error_condition msx_cart_msx_audio_nms1205_device::initialize_cartridge(std
 class msx_cart_msx_audio_fsca1_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_msx_audio_fsca1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_msx_audio_fsca1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_MSX_AUDIO_FSCA1, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_y8950(*this, "y8950")

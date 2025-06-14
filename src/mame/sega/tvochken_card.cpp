@@ -31,7 +31,7 @@ tvochken_card_device::tvochken_card_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock)
+		const XTAL &clock)
 	: device_t(mconfig, TVOCHKEN_CARD, tag, owner, clock)
 	, device_image_interface(mconfig, *this)
 	, m_barcode(0)

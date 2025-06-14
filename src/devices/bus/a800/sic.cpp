@@ -18,7 +18,7 @@ DEFINE_DEVICE_TYPE(A800_SIC_128KB, a800_sic_128kb_device, "a800_siccart_128kb", 
 DEFINE_DEVICE_TYPE(A800_SIC_256KB, a800_sic_256kb_device, "a800_siccart_256kb", "Atari 8-bit SIC! 256KB flash ROM cart")
 DEFINE_DEVICE_TYPE(A800_SIC_512KB, a800_sic_512kb_device, "a800_siccart_512kb", "Atari 8-bit SIC! 512KB flash ROM cart")
 
-a800_sic_128kb_device::a800_sic_128kb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_sic_128kb_device::a800_sic_128kb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_flash(*this, "flash")
 	, m_bank(0)
@@ -26,7 +26,7 @@ a800_sic_128kb_device::a800_sic_128kb_device(const machine_config &mconfig, devi
 {
 }
 
-a800_sic_128kb_device::a800_sic_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_sic_128kb_device::a800_sic_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_sic_128kb_device(mconfig, A800_SIC_128KB, tag, owner, clock)
 {
 }
@@ -93,7 +93,7 @@ void a800_sic_128kb_device::cctl_map(address_map &map)
 
 // 256/512KB variants
 
-a800_sic_256kb_device::a800_sic_256kb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_sic_256kb_device::a800_sic_256kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_sic_128kb_device(mconfig, A800_SIC_256KB, tag, owner, clock)
 {
 }
@@ -103,7 +103,7 @@ void a800_sic_256kb_device::device_add_mconfig(machine_config &config)
 	AMD_29LV200T(config, m_flash);
 }
 
-a800_sic_512kb_device::a800_sic_512kb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_sic_512kb_device::a800_sic_512kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_sic_128kb_device(mconfig, A800_SIC_512KB, tag, owner, clock)
 {
 }

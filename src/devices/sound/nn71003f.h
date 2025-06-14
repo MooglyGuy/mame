@@ -13,7 +13,7 @@
 class nn71003f_device : public device_t, public device_sound_interface
 {
 public:
-	nn71003f_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nn71003f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// Serial audio interface
 	void frm_w(int state);

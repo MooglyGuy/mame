@@ -166,7 +166,7 @@ void quadra605_state::macqd605(machine_config &config)
 	m_primetime->set_scsi_tag("scsi:7:ncr53c96");
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(m_primetime, FUNC(primetime_device::scc_irq_w));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
@@ -223,7 +223,7 @@ void quadra605_state::macqd605(machine_config &config)
 	m_primetime->pb5_callback().set(m_cuda, FUNC(cuda_device::set_tip));
 	m_primetime->write_cb2().set(m_cuda, FUNC(cuda_device::set_via_data));
 
-	nubus_device &nubus(NUBUS(config, "pds", 0));
+	nubus_device &nubus(NUBUS(config, "pds"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.set_bus_mode(nubus_device::nubus_mode_t::QUADRA_DAFB);
 	nubus.out_irqe_callback().set(m_primetime, FUNC(primetime_device::via2_irq_w<0x20>));

@@ -39,7 +39,7 @@ constexpr auto DOT_CLOCK = 16_MHz_XTAL;
 class msx_cart_video80_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_video80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	msx_cart_video80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_VIDEO80, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_palette(*this, "palette")

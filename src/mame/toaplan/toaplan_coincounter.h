@@ -9,7 +9,7 @@
 class toaplan_coincounter_device : public device_t
 {
 public:
-	toaplan_coincounter_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	toaplan_coincounter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void coin_w(u8 data);
 

@@ -16,7 +16,7 @@ class mpu4_oki_sampled_sound : public device_t, public device_mixer_interface
 {
 public:
 	// construction/destruction
-	mpu4_oki_sampled_sound(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mpu4_oki_sampled_sound(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto cb2_handler() { return m_cb2_handler.bind(); }
 

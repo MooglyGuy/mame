@@ -175,7 +175,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	h89bus_left_slot_device(const machine_config &mconfig, T &&tag, device_t *owner, const char *sltag, U &&opts, const char *dflt)
-		: h89bus_left_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: h89bus_left_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -183,7 +183,7 @@ public:
 		set_h89bus_slot(std::forward<T>(sltag), tag);
 	}
 
-	h89bus_left_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	h89bus_left_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// inline configuration
 	template <typename T>
@@ -194,7 +194,7 @@ public:
 	}
 
 protected:
-	h89bus_left_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	h89bus_left_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_resolve_objects() override ATTR_COLD;
@@ -214,7 +214,7 @@ public:
 	// construction/destruction
 	template <typename T, typename U>
 	h89bus_right_slot_device(const machine_config &mconfig, T &&tag, device_t *owner, const char *sltag, U &&opts, const char *dflt)
-		: h89bus_right_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: h89bus_right_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -222,7 +222,7 @@ public:
 		set_h89bus_slot(std::forward<T>(sltag), tag);
 	}
 
-	h89bus_right_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	h89bus_right_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// inline configuration
 	template <typename T>
@@ -238,7 +238,7 @@ public:
 	}
 
 protected:
-	h89bus_right_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	h89bus_right_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_resolve_objects() override ATTR_COLD;
@@ -283,7 +283,7 @@ public:
 	static constexpr u8 H89_FLPY        = 0x80;
 
 	// construction/destruction
-	h89bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	h89bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	~h89bus_device();
 
 	void set_io0(int state);
@@ -311,7 +311,7 @@ public:
 	auto out_gpp_callback() { return m_out_gpp_cb.bind(); }
 
 protected:
-	h89bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	h89bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

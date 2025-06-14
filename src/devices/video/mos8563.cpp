@@ -71,7 +71,7 @@ void mos8563_device::mos8563_videoram_map(address_map &map)
 //  mos8563_device - constructor
 //-------------------------------------------------
 
-mos8563_device::mos8563_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+mos8563_device::mos8563_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: mc6845_device(mconfig, type, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_palette_interface(mconfig, *this)
@@ -80,7 +80,7 @@ mos8563_device::mos8563_device(const machine_config &mconfig, device_type type, 
 	m_clk_scale = 8;
 }
 
-mos8563_device::mos8563_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mos8563_device::mos8563_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mos8563_device(mconfig, MOS8563, tag, owner, clock)
 {
 }
@@ -90,7 +90,7 @@ mos8563_device::mos8563_device(const machine_config &mconfig, const char *tag, d
 //  mos8568_device - constructor
 //-------------------------------------------------
 
-mos8568_device::mos8568_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mos8568_device::mos8568_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mos8563_device(mconfig, MOS8568, tag, owner, clock)
 {
 }

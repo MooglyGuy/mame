@@ -32,10 +32,9 @@
 class sis950_lpc_device : public pci_device
 {
 public:
-	template <typename T, typename U> sis950_lpc_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
-		T &&cpu_tag, U &&flash_tag
-	) : sis950_lpc_device(mconfig, tag, owner, clock)
+	template <typename T, typename U>
+	sis950_lpc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&cpu_tag, U &&flash_tag)
+		: sis950_lpc_device(mconfig, tag, owner, clock)
 	{
 		// Revision 0 -> A0
 		set_ids(0x10390008, 0x00, 0x060100, 0x00);

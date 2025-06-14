@@ -73,7 +73,7 @@ void c64_nl10_interface_device::mem_map(address_map &map)
 
 void c64_nl10_interface_device::device_add_mconfig(machine_config &config)
 {
-	hd6303y_cpu_device &bufcpu(HD6303Y(config, "bufcpu", 8'000'000));
+	hd6303y_cpu_device &bufcpu(HD6303Y(config, "bufcpu", XTAL::u(8'000'000)));
 	bufcpu.set_addrmap(AS_PROGRAM, &c64_nl10_interface_device::mem_map);
 }
 

@@ -1180,7 +1180,7 @@ void spacefev_state::spacefev(machine_config &config)
 	TIMER(config, "rst2").configure_scanline(FUNC(spacefev_state::rst2_tick), "screen", 240, 256);
 
 	/* sound hardware */
-	SPACEFEV_SOUND(config, m_sound, u32(0));
+	SPACEFEV_SOUND(config, m_sound);
 }
 
 void sheriff_state::sheriff(machine_config &config)
@@ -1204,7 +1204,7 @@ void sheriff_state::sheriff(machine_config &config)
 	TIMER(config, "rst2").configure_scanline(FUNC(sheriff_state::rst2_tick), "screen", 240, 256);
 
 	/* sound hardware */
-	SHERIFF_SOUND(config, m_sound, u32(0));
+	SHERIFF_SOUND(config, m_sound);
 }
 
 void sheriff_state::westgun2(machine_config &config)
@@ -1238,7 +1238,7 @@ void helifire_state::helifire(machine_config &config)
 	TIMER(config, "rst2").configure_scanline(FUNC(helifire_state::rst2_tick), "screen", 240, 256);
 
 	/* sound hardware */
-	HELIFIRE_SOUND(config, m_sound, u32(0));
+	HELIFIRE_SOUND(config, m_sound);
 }
 
 

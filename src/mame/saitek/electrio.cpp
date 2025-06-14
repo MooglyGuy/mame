@@ -338,7 +338,7 @@ INPUT_PORTS_END
 void electrio_state::pchess(machine_config &config)
 {
 	// basic machine hardware
-	HD44868(config, m_maincpu, 600'000); // approximation
+	HD44868(config, m_maincpu, XTAL::u(600'000)); // approximation
 	m_maincpu->write_r<0>().set(FUNC(electrio_state::input_w<0>));
 	m_maincpu->write_r<1>().set(FUNC(electrio_state::input_w<1>));
 	m_maincpu->read_r<2>().set(FUNC(electrio_state::input1_r<0>));

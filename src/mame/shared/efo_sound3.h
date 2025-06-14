@@ -14,7 +14,7 @@ class efo_sound3_device : public device_t
 {
 public:
 	// construction/destruction
-	efo_sound3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	efo_sound3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void input_w(u8 data);
 	void clock_w(int state);

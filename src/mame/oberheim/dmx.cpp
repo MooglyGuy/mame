@@ -175,7 +175,7 @@ class dmx_voice_card_device : public device_t, public device_sound_interface
 {
 public:
 	dmx_voice_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const dmx_voice_card_config &config, required_memory_region *sample_rom) ATTR_COLD;
-	dmx_voice_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) ATTR_COLD;
+	dmx_voice_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) ATTR_COLD;
 
 	void trigger(bool tr0, bool tr1);
 	void set_pitch_adj(s32 t1_percent);  // Valid values: 0-100.
@@ -227,7 +227,7 @@ private:
 DEFINE_DEVICE_TYPE(DMX_VOICE_CARD, dmx_voice_card_device, "dmx_voice_card", "DMX Voice Card");
 
 dmx_voice_card_device::dmx_voice_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const dmx_voice_card_config &config, required_memory_region *sample_rom)
-	: device_t(mconfig, DMX_VOICE_CARD, tag, owner, 0)
+	: device_t(mconfig, DMX_VOICE_CARD, tag, owner)
 	, device_sound_interface(mconfig, *this)
 	, m_timer(*this, "555_u5")
 	, m_dac(*this, "dac_u8")
@@ -240,7 +240,7 @@ dmx_voice_card_device::dmx_voice_card_device(const machine_config &mconfig, cons
 	init_gain_and_decay_variations();
 }
 
-dmx_voice_card_device::dmx_voice_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dmx_voice_card_device::dmx_voice_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DMX_VOICE_CARD, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_timer(*this, "555_u5")
@@ -294,7 +294,7 @@ void dmx_voice_card_device::device_add_mconfig(machine_config &config)
 	static constexpr const double SK_R4 = RES_R(0.001);
 
 	TIMER(config, m_timer).configure_generic(FUNC(dmx_voice_card_device::clock_callback));
-	DAC76(config, m_dac, 0U).configure_voltage_output(RES_K(2.4), RES_K(2.4));  // R16, R11 on voice card.
+	DAC76(config, m_dac).configure_voltage_output(RES_K(2.4), RES_K(2.4));  // R16, R11 on voice card.
 
 	if (has_decay())
 	{
@@ -1326,10 +1326,10 @@ void dmx_state::dmx(machine_config &config)
 	TIMER(config, m_metronome_timer).configure_generic(
 		FUNC(dmx_state::metronome_timer_tick));
 
-	DL1414T(config, m_digit_device[0], 0U).update().set(FUNC(dmx_state::display_output_w<0>));
-	DL1414T(config, m_digit_device[1], 0U).update().set(FUNC(dmx_state::display_output_w<1>));
-	DL1414T(config, m_digit_device[2], 0U).update().set(FUNC(dmx_state::display_output_w<2>));
-	DL1414T(config, m_digit_device[3], 0U).update().set(FUNC(dmx_state::display_output_w<3>));
+	DL1414T(config, m_digit_device[0]).update().set(FUNC(dmx_state::display_output_w<0>));
+	DL1414T(config, m_digit_device[1]).update().set(FUNC(dmx_state::display_output_w<1>));
+	DL1414T(config, m_digit_device[2]).update().set(FUNC(dmx_state::display_output_w<2>));
+	DL1414T(config, m_digit_device[3]).update().set(FUNC(dmx_state::display_output_w<3>));
 
 	config.set_default_layout(layout_oberheim_dmx);
 

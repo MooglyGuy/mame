@@ -57,7 +57,7 @@ DEFINE_DEVICE_TYPE(ZR36057_PCI, zr36057_device,   "zr36057",   "Zoran ZR36057-ba
 //DEFINE_DEVICE_TYPE(ZR36067_PCI, zr36067_device,   "zr36067",   "Zoran ZR36067-based AV Controller")
 
 
-zr36057_device::zr36057_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+zr36057_device::zr36057_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_guest(*this, "guest")
 	, m_decoder(*this, "decoder")
@@ -75,7 +75,7 @@ zr36057_device::zr36057_device(const machine_config &mconfig, device_type type, 
 	set_ids(0x11de6057, 0x02, 0x040000, 0x10317efe);
 }
 
-zr36057_device::zr36057_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+zr36057_device::zr36057_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: zr36057_device(mconfig, ZR36057_PCI, tag, owner, clock)
 {
 }

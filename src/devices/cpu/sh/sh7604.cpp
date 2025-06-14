@@ -31,7 +31,7 @@ static constexpr int wdtclk_tab[8] = { 1, 6, 7, 8, 9, 10, 12, 13 };
 DEFINE_DEVICE_TYPE(SH7604,  sh7604_device,  "sh2_7604",  "Hitachi SH-2 (SH7604)")
 
 
-sh7604_device::sh7604_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7604_device::sh7604_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sh2_device(mconfig, SH7604, tag, owner, clock, CPU_TYPE_SH2, address_map_constructor(FUNC(sh7604_device::sh7604_map), this), 32, 0xc7ffffff)
 	, m_test_irq(0), m_internal_irq_vector(0)
 	, m_smr(0), m_brr(0), m_scr(0), m_tdr(0), m_ssr(0)

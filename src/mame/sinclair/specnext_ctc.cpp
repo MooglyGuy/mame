@@ -12,7 +12,7 @@
 DEFINE_DEVICE_TYPE(SPECNEXT_CTC, specnext_ctc_device, "specnext_ctc", "Spectrum Next CTC")
 
 
-specnext_ctc_device::specnext_ctc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_ctc_device::specnext_ctc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: z80ctc_device(mconfig, SPECNEXT_CTC, tag, owner, clock)
 {
 }

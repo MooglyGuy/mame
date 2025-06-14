@@ -26,7 +26,7 @@
 
 DEFINE_DEVICE_TYPE(ALTOS2_KEYBOARD, altos2_keyboard_device, "altos2_kbd", "Altos II Keyboard")
 
-altos2_keyboard_device::altos2_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+altos2_keyboard_device::altos2_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ALTOS2_KEYBOARD, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_keys(*this, "KEYS%u", 0U)

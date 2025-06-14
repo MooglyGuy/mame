@@ -45,7 +45,7 @@ void djmemc_device::device_add_mconfig(machine_config &config)
 //  djmemc_device - constructor
 //-------------------------------------------------
 
-djmemc_device::djmemc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+djmemc_device::djmemc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_video(*this, "video"),
 	m_maincpu(*this, finder_base::DUMMY_TAG),
@@ -55,12 +55,12 @@ djmemc_device::djmemc_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-djmemc_device::djmemc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+djmemc_device::djmemc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	djmemc_device(mconfig, DJMEMC, tag, owner, clock)
 {
 }
 
-memcjr_device::memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+memcjr_device::memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	djmemc_device(mconfig, MEMCJR, tag, owner, clock),
 	m_dafb_holding(0)
 {

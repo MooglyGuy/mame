@@ -36,7 +36,7 @@ INPUT_PORTS_END
 class fm_towns_6b_device : public device_t, public device_msx_general_purpose_port_interface
 {
 public:
-	fm_towns_6b_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	fm_towns_6b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 read() override;
 	virtual void pin_8_w(int state) override { m_pin8 = state; }
@@ -52,7 +52,7 @@ private:
 };
 
 
-fm_towns_6b_device::fm_towns_6b_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+fm_towns_6b_device::fm_towns_6b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_TOWNS6B, tag, owner, clock)
 	, device_msx_general_purpose_port_interface(mconfig, *this)
 	, m_pad(*this, "PAD")

@@ -29,7 +29,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *parent,
-			const XTAL &clock) :
+			const XTAL &clock = XTAL()) :
 		n8080_sound_device_base(mconfig, type, tag, parent, clock),
 		m_dac(*this, "dac"),
 		m_sn(*this, "snsnd")
@@ -93,7 +93,7 @@ void n8080_csg_sound_device_base<Monostables>::device_add_mconfig(machine_config
 
 	SPEAKER(config, "speaker").front_center();
 
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.15);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.15);
 
 	SN76477(config, m_sn);
 	m_sn->set_attack_params(CAP_U(1.0), RES_K(20));
@@ -158,7 +158,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *parent,
-			const XTAL &clock) :
+			const XTAL &clock = XTAL()) :
 		n8080_csg_sound_device_base<3>(mconfig, SPACEFEV_SOUND, tag, parent, clock)
 	{
 	}
@@ -246,7 +246,7 @@ public:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *parent,
-			const XTAL &clock) :
+			const XTAL &clock = XTAL()) :
 		n8080_csg_sound_device_base<2>(mconfig, SHERIFF_SOUND, tag, parent, clock)
 	{
 	}
@@ -304,7 +304,7 @@ public:
 	helifire_sound_device(machine_config const &mconfig,
 			char const *tag,
 			device_t *parent,
-			const XTAL &clock) :
+			const XTAL &clock = XTAL()) :
 		n8080_sound_device_base(mconfig, HELIFIRE_SOUND, tag, parent, clock),
 		m_dac(*this, "dac"),
 		m_dac_volume(1.0),
@@ -373,7 +373,7 @@ void helifire_sound_device::device_add_mconfig(machine_config &config)
 
 	SPEAKER(config, "speaker").front_center();
 
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.15); // unknown DAC
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.15); // unknown DAC
 }
 
 void helifire_sound_device::device_start()

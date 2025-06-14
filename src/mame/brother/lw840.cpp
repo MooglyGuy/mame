@@ -85,7 +85,7 @@ Emulation Status:
 class gm82c765b_device : public upd765_family_device
 {
 public:
-	gm82c765b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	gm82c765b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map& map) override ATTR_COLD
 	{
@@ -98,7 +98,7 @@ public:
 
 DEFINE_DEVICE_TYPE(GM82C765B, gm82c765b_device, "gm82c765b", "GoldStar GM82C765B FDC") // also sold with Hynix branding
 
-gm82c765b_device::gm82c765b_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+gm82c765b_device::gm82c765b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	upd765_family_device(mconfig, GM82C765B, tag, owner, clock)
 {
 	ready_polled = true;
@@ -227,7 +227,7 @@ uint32_t lw840_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap,
 void lw840_state::machine_start()
 {
 	screen->set_visible_area(0, 640 - 1, 0, 400 - 1);
-	fdc->set_rate(500'000);
+	fdc->set_rate(XTAL::u(500'000));
 
 	// patches here
 	auto rom8 = util::big_endian_cast<uint8_t>(rom.target());
@@ -340,7 +340,7 @@ static void lw840_floppies(device_slot_interface &device)
 void lw840_state::lw840(machine_config &config)
 {
 	// basic machine hardware
-	H83003(config, maincpu, 14'745'600);
+	H83003(config, maincpu, XTAL::u(14'745'600));
 	maincpu->set_addrmap(AS_PROGRAM, &lw840_state::map_program);
 	maincpu->read_port7().set(FUNC(lw840_state::port7_r));
 	maincpu->tend0().set("fdc", FUNC(gm82c765b_device::tc_line_w));
@@ -356,14 +356,14 @@ void lw840_state::lw840(machine_config &config)
 	screen->set_size(640, 400);
 
 	// floppy
-	GM82C765B(config, fdc, 0);
+	GM82C765B(config, fdc);
 	fdc->intrq_wr_callback().set(FUNC(lw840_state::fdc_interrupt));
 	fdc->drq_wr_callback().set(FUNC(lw840_state::fdc_drq));
 	FLOPPY_CONNECTOR(config, "fdc:0", lw840_floppies, "35hd", lw840_state::floppy_formats);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, "beeper", 4'000).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
+	BEEP(config, "beeper", XTAL::u(4'000)).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
 }
 
 ROM_START( lw840 )

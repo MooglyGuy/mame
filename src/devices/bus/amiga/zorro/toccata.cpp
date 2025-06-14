@@ -44,7 +44,7 @@ DEFINE_DEVICE_TYPE(AMIGA_TOCCATA, bus::amiga::zorro::toccata_device, "amiga_tocc
 
 namespace bus::amiga::zorro {
 
-toccata_device::toccata_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+toccata_device::toccata_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_TOCCATA, tag, owner, clock),
 	device_zorro2_card_interface(mconfig, *this),
 	m_ad1848(*this, "ad1848"),
@@ -72,7 +72,7 @@ void toccata_device::mmio_map(address_map &map)
 
 void toccata_device::device_add_mconfig(machine_config &config)
 {
-	AD1848(config, m_ad1848, 0);
+	AD1848(config, m_ad1848);
 	m_ad1848->drq().set(FUNC(toccata_device::drq_w));
 
 	IDT7202(config, m_fifo[0]);

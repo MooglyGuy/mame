@@ -40,7 +40,7 @@ ioport_constructor isa8_hpblp_device::device_input_ports() const
 }
 
 
-isa8_hpblp_device::isa8_hpblp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa8_hpblp_device::isa8_hpblp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, HPBLP, tag, owner, clock),
 	device_isa8_card_interface(mconfig, *this),
 	m_maincpu(*this, BLP_TAG),
@@ -71,7 +71,7 @@ void isa8_hpblp_device::device_add_mconfig(machine_config &config)
 	m_tms9914->dio_write_cb().set(IEEE488_TAG, FUNC(ieee488_device::host_dio_w));
 	m_tms9914->int_write_cb().set(FUNC(isa8_hpblp_device::gpib_irq));
 
-	IEEE488(config, m_ieee488, 0);
+	IEEE488(config, m_ieee488);
 	m_ieee488->eoi_callback().set(m_tms9914, FUNC(tms9914_device::eoi_w));
 	m_ieee488->dav_callback().set(m_tms9914, FUNC(tms9914_device::dav_w));
 	m_ieee488->nrfd_callback().set(m_tms9914, FUNC(tms9914_device::nrfd_w));
@@ -81,11 +81,11 @@ void isa8_hpblp_device::device_add_mconfig(machine_config &config)
 	m_ieee488->atn_callback().set(m_tms9914, FUNC(tms9914_device::atn_w));
 	m_ieee488->ren_callback().set(m_tms9914, FUNC(tms9914_device::ren_w));
 
-	ieee488_slot_device &slot0(IEEE488_SLOT(config, "ieee0", 0));
+	ieee488_slot_device &slot0(IEEE488_SLOT(config, "ieee0"));
 	hp_ieee488_devices(slot0);
 	slot0.set_default_option("hp9122c");
 
-	bus::hp_dio::dio16_device &dio16(DIO16(config, "diobus", 0));
+	bus::hp_dio::dio16_device &dio16(DIO16(config, "diobus"));
 	dio16.set_program_space(m_maincpu, AS_PROGRAM);
 	m_maincpu->reset_cb().set(dio16, FUNC(bus::hp_dio::dio16_device::reset_in));
 
@@ -97,8 +97,8 @@ void isa8_hpblp_device::device_add_mconfig(machine_config &config)
 	dio16.irq6_out_cb().set_inputline(m_maincpu, M68K_IRQ_6);
 	dio16.irq7_out_cb().set_inputline(m_maincpu, M68K_IRQ_7);
 
-	DIO32_SLOT(config, "sl0", 0, "diobus", dio16_cards, nullptr, false);
-	DIO32_SLOT(config, "sl1", 0, "diobus", dio16_cards, nullptr, false);
+	DIO32_SLOT(config, "sl0", "diobus", dio16_cards, nullptr, false);
+	DIO32_SLOT(config, "sl1", "diobus", dio16_cards, nullptr, false);
 }
 
 offs_t isa8_hpblp_device::get_bus_address(offs_t offset, uint16_t mem_mask)

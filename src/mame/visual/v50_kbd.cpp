@@ -29,8 +29,8 @@
 
 DEFINE_DEVICE_TYPE(V50_KBD, v50_kbd_device, "v50_kbd", "Visual 50 Keyboard")
 
-v50_kbd_device::v50_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
-	device_t(mconfig, V50_KBD, tag, owner, 0U),
+v50_kbd_device::v50_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
+	device_t(mconfig, V50_KBD, tag, owner, clock),
 	m_mcu(*this, "mcu"),
 	m_buzzer(*this, "buzzer"),
 	m_keys(*this, "row_%x", 0U),
@@ -70,7 +70,7 @@ void v50_kbd_device::device_add_mconfig(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	BEEP(config, m_buzzer, 786); // unknown frequency
+	BEEP(config, m_buzzer, XTAL::u(786)); // unknown frequency
 	m_buzzer->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 

@@ -526,10 +526,10 @@ void scorpion_state::scorpion(machine_config &config)
 
 	config.device_remove("exp");
 
-	zxbus_device &zxbus(ZXBUS(config, "zxbus", 0));
+	zxbus_device &zxbus(ZXBUS(config, "zxbus"));
 	zxbus.set_iospace("maincpu", AS_IO);
-	ZXBUS_SLOT(config, "zxbus:1", 0, "zxbus", zxbus_gmx_cards, nullptr);
-	ZXBUS_SLOT(config, "zxbus:2", 0, "zxbus", zxbus_gmx_cards, nullptr);
+	ZXBUS_SLOT(config, "zxbus:1", "zxbus", zxbus_gmx_cards, nullptr);
+	ZXBUS_SLOT(config, "zxbus:2", "zxbus", zxbus_gmx_cards, nullptr);
 }
 
 void scorpion_state::profi(machine_config &config)

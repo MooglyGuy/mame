@@ -9,7 +9,7 @@
 class logimus_midipak_device : public device_t, public thomson_extension_interface
 {
 public:
-	logimus_midipak_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	logimus_midipak_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void rom_map(address_map &map) override ATTR_COLD;
 	virtual void io_map(address_map &map) override ATTR_COLD;

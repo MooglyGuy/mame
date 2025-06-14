@@ -881,8 +881,8 @@ void cabal_state::cabal(machine_config &config)
 	ymsnd.irq_handler().set(m_seibu_sound, FUNC(seibu_sound_device::fm_irqhandler));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.80);
 
-	SEIBU_ADPCM(config, m_adpcm[0], XTAL(12'000'000) /32 / 48, m_msm[0]);
-	SEIBU_ADPCM(config, m_adpcm[1], XTAL(12'000'000) /32 / 48, m_msm[1]);
+	SEIBU_ADPCM(config, m_adpcm[0], XTAL(12'000'000) / 32 / 48, m_msm[0]);
+	SEIBU_ADPCM(config, m_adpcm[1], XTAL(12'000'000) / 32 / 48, m_msm[1]);
 
 	MSM5205(config, m_msm[0], XTAL(12'000'000) / 32); // verified on PCB
 	m_msm[0]->vck_callback().set(m_adpcm[0], FUNC(seibu_adpcm_device::msm_int));

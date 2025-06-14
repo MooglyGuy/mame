@@ -32,7 +32,7 @@ DEFINE_DEVICE_TYPE(WSWAN_VIDEO, wswan_video_device, "wswan_video", "Bandai Wonde
 DEFINE_DEVICE_TYPE(WSWAN_COLOR_VIDEO, wswan_color_video_device, "wscolor_video", "Bandai WonderSwan Color VDP")
 
 
-wswan_video_device::wswan_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int vdp_type)
+wswan_video_device::wswan_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int vdp_type)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, device_palette_interface(mconfig, *this)

@@ -33,7 +33,7 @@ class pioneer_ldv1000hle_device : public parallel_laserdisc_device
 {
 public:
 	// construction/destruction
-	pioneer_ldv1000hle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	pioneer_ldv1000hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void data_w(u8 data) override;
 	virtual u8 data_r() override;

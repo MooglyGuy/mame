@@ -53,7 +53,7 @@ class k053247_device : public device_t,
 public:
 	using sprite_delegate = device_delegate<void (int *code, int *color, int *priority_mask)>;
 
-	k053247_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	k053247_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// configuration
 	template <typename... T> void set_sprite_callback(T &&... args) { m_k053247_cb.set(std::forward<T>(args)...); }
@@ -455,7 +455,7 @@ static auto &K053246 = K053247;
 class k055673_device : public k053247_device
 {
 public:
-	k055673_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	k055673_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	~k055673_device() { }
 
 protected:

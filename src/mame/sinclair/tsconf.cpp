@@ -277,14 +277,14 @@ void tsconf_state::tsconf(machine_config &config)
 
 	m_maincpu->set_vblank_int("screen", FUNC(tsconf_state::tsconf_vblank_interrupt));
 
-	SPI_SDCARD(config, m_sdcard, 0);
+	SPI_SDCARD(config, m_sdcard);
 	m_sdcard->set_prefer_sdhc();
 	m_sdcard->spi_miso_callback().set(FUNC(tsconf_state::tsconf_spi_miso_w));
 
-	zxbus_device &zxbus(ZXBUS(config, "zxbus", 0));
+	zxbus_device &zxbus(ZXBUS(config, "zxbus"));
 	zxbus.set_iospace("maincpu", AS_IO);
-	ZXBUS_SLOT(config, "zxbus1", 0, "zxbus", zxbus_cards, nullptr);
-	//ZXBUS_SLOT(config, "zxbus2", 0, "zxbus", zxbus_cards, nullptr);
+	ZXBUS_SLOT(config, "zxbus1", "zxbus", zxbus_cards, nullptr);
+	//ZXBUS_SLOT(config, "zxbus2", "zxbus", zxbus_cards, nullptr);
 
 	m_ram->set_default_size("4096K");
 
@@ -313,7 +313,7 @@ void tsconf_state::tsconf(machine_config &config)
 		.add_route(1, "speakers", 0.25, 1)
 		.add_route(2, "speakers", 0.50, 1);
 
-	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "mono", 0.75);
+	DAC_8BIT_R2R(config, m_dac).add_route(ALL_OUTPUTS, "mono", 0.75);
 
 	PALETTE(config, "palette", palette_device::BLACK, 256);
 	m_screen->set_raw(14_MHz_XTAL / 2, 448, with_hblank(0), 448, 320, with_vblank(0), 320);

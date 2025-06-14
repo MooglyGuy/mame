@@ -46,7 +46,7 @@ DEFINE_DEVICE_TYPE(ISA8_IBM_SPEECH, isa8_ibm_speech_device, "isa_ibm_speech", "I
 //  constructor
 //-------------------------------------------------
 
-isa8_ibm_speech_device::isa8_ibm_speech_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+isa8_ibm_speech_device::isa8_ibm_speech_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ISA8_IBM_SPEECH, tag, owner, clock),
 	device_isa8_card_interface(mconfig, *this),
 	m_lpc(*this, "lpc"),
@@ -124,7 +124,7 @@ void isa8_ibm_speech_device::device_add_mconfig(machine_config &config)
 	// breakout box
 	SPEAKER(config, m_speaker);
 
-	PIT8254(config, m_pit, 0);
+	PIT8254(config, m_pit);
 	// Channel 0: CVSD CLOCK.
 	//            Rising edge goes to the MC3418's clock pin.
 	//            Rising edge inverted goes to the shift register clock.
@@ -147,12 +147,12 @@ void isa8_ibm_speech_device::device_add_mconfig(machine_config &config)
 	// The 5220 has no direct-access speech ROM.
 	// All data is transferred from the host PC via the 8255.
 	// The preset vocabulary is in the option ROM.
-	TMS5220(config, m_lpc, 640000); // TODO: Confirm TMS clock
+	TMS5220(config, m_lpc, XTAL::u(640000)); // TODO: Confirm TMS clock
 	m_lpc->add_route(ALL_OUTPUTS, m_speaker, 1.0);
 	m_lpc->irq_cb().set(FUNC(isa8_ibm_speech_device::lpc_interrupt_w));
 
 	// MC3418 CVSD
-	MC3418(config, m_cvsd, 0);
+	MC3418(config, m_cvsd);
 	m_cvsd->add_route(ALL_OUTPUTS, m_speaker, 1.0);
 
 	// PIT CH2

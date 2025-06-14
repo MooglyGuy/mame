@@ -96,13 +96,13 @@ void beep_device::set_state(int state)
 //  setting new frequency starts from beginning
 //-------------------------------------------------
 
-void beep_device::set_frequency(const u32 freq)
+void beep_device::set_clock(const u32 freq)
 {
 	if (m_frequency == freq)
 		return;
 
 	m_stream->update();
-	m_frequency = frequency;
+	m_frequency = freq;
 
 	// restart wave from beginning
 	m_incr = 0;

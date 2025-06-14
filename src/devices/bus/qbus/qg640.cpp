@@ -15,7 +15,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(MATROX_QG640, qg640_device, "qg640", "Matrox QG-640 Color Display Processor Card")
 
-qg640_device::qg640_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+qg640_device::qg640_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MATROX_QG640, tag, owner, clock)
 	, device_qbus_card_interface(mconfig, *this)
 	, m_qgcpu(*this, "qgcpu")
@@ -89,8 +89,8 @@ void qg640_device::device_add_mconfig(machine_config &config)
 	m_acrtc->set_screen("screen");
 	m_acrtc->set_addrmap(0, &qg640_device::videoram_map);
 
-	BT471(config, m_clut[0], 0); // IMSG170P-35
-	BT471(config, m_clut[1], 0); // IMSG170P-35
+	BT471(config, m_clut[0]); // IMSG170P-35
+	BT471(config, m_clut[1]); // IMSG170P-35
 }
 
 ROM_START(qg640)

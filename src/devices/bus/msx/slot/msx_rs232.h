@@ -19,7 +19,7 @@ public:
 	auto irq_handler() { return m_irq_handler.bind(); }
 
 protected:
-	msx_slot_rs232_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -54,7 +54,7 @@ protected:
 class msx_slot_rs232_device : public msx_slot_rs232_base_device
 {
 public:
-	msx_slot_rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -67,7 +67,7 @@ protected:
 class msx_slot_rs232_mitsubishi_device : public msx_slot_rs232_base_device
 {
 public:
-	msx_slot_rs232_mitsubishi_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_mitsubishi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -83,7 +83,7 @@ protected:
 class msx_slot_rs232_sony_device : public msx_slot_rs232_base_device
 {
 public:
-	msx_slot_rs232_sony_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_sony_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -102,7 +102,7 @@ protected:
 class msx_slot_rs232_svi738_device : public msx_slot_rs232_base_device
 {
 public:
-	msx_slot_rs232_svi738_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_svi738_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -115,7 +115,7 @@ protected:
 class msx_slot_rs232_toshiba_device : public msx_slot_rs232_base_device
 {
 public:
-	msx_slot_rs232_toshiba_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_toshiba_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -131,7 +131,7 @@ protected:
 class msx_slot_rs232_toshiba_hx3x_device : public msx_slot_rs232_base_device
 {
 public:
-	msx_slot_rs232_toshiba_hx3x_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_rs232_toshiba_hx3x_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	static constexpr size_t SRAM_SIZE = 0x800;

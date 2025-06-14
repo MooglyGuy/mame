@@ -771,7 +771,7 @@ void fp1100_state::fp1100(machine_config &config)
 	m_crtc->out_hsync_callback().set(FUNC(fp1100_state::hsync_cb));
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, "beeper", 950) // guess
+	BEEP(config, "beeper", XTAL::u(950)) // guess
 		.add_route(ALL_OUTPUTS, "mono", 0.50); // inside the keyboard
 
 	INPUT_MERGER_ANY_HIGH(config, m_irqs_int[0]).output_handler().set(FUNC(fp1100_state::int_w<0>));

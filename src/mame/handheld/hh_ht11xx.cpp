@@ -179,7 +179,7 @@ INPUT_PORTS_END
 
 void hh_ht1190_state::brke23p2(machine_config &config)
 {
-	HT1190(config, m_maincpu, 1000000/8); // frequency?
+	HT1190(config, m_maincpu, XTAL::u(1000000)/8); // frequency?
 	m_maincpu->segment_out_cb().set(FUNC(hh_ht1190_state::segment_w));
 
 	m_maincpu->ps_in_cb().set_ioport(m_in[0]);
@@ -241,7 +241,7 @@ INPUT_PORTS_END
 
 void hh_ht1130_state::ga888(machine_config &config)
 {
-	HT1130(config, m_maincpu, 1000000/8); // frequency?
+	HT1130(config, m_maincpu, XTAL::u(1000000)/8); // frequency?
 	m_maincpu->segment_out_cb().set(FUNC(hh_ht1130_state::segment_w));
 
 	m_maincpu->ps_in_cb().set_ioport(m_in[0]);

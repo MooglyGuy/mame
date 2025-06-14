@@ -25,7 +25,7 @@ class cqgmem_device : public device_t, public device_option_expansion_interface,
 {
 public:
 	// construction/destruction
-	cqgmem_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cqgmem_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

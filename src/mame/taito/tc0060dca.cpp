@@ -14,7 +14,7 @@
 
 DEFINE_DEVICE_TYPE(TC0060DCA, tc0060dca_device, "tc0060dca", "Taito TC0060DCA volume control")
 
-tc0060dca_device::tc0060dca_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+tc0060dca_device::tc0060dca_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, TC0060DCA, tag, owner, clock),
 	device_sound_interface(mconfig, *this),
 	m_stream(nullptr)
@@ -35,7 +35,7 @@ void tc0060dca_device::volume2_w(u8 data)
 
 void tc0060dca_device::device_start()
 {
-	m_stream = stream_alloc(2, 2, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(2, 2, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 
 	for (int x = 0; x < 256; x++)
 		m_atten_table[x] = 1.0 / (1.0 + exp(-10 * ((x / 256.0) - 0.6)));

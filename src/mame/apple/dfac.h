@@ -8,7 +8,7 @@
 class dfac_device : public device_t, public device_sound_interface
 {
 public:
-	dfac_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dfac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// DFAC uses a serial 3-wire interface where a single control byte is shifted in, and it ignores
 	// writes with the gate is not at the right level.  This allowed it to be used on the Egret's I2C bus

@@ -576,7 +576,7 @@ void by133_state::u11_ca2_w(int state)
 void by133_state::u7_cb2_w(int state)
 {
 	// red led
-	m_beep->set_clock(XTAL::u(950));
+	m_beep->set_clock(950);
 	m_beep->set_state(state);
 	m_sound_int_handler(state);
 }

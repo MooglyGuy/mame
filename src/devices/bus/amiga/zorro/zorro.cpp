@@ -116,12 +116,12 @@ void zorro2_bus_device::busrst_w(int state)
 
 DEFINE_DEVICE_TYPE(ZORRO2_SLOT, zorro2_slot_device, "zorro2_slot", "Zorro-II slot")
 
-zorro2_slot_device::zorro2_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+zorro2_slot_device::zorro2_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	zorro2_slot_device(mconfig, ZORRO2_SLOT, tag, owner, clock)
 {
 }
 
-zorro2_slot_device::zorro2_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+zorro2_slot_device::zorro2_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_single_card_slot_interface(mconfig, *this)
 {

@@ -16,7 +16,7 @@ DECLARE_DEVICE_TYPE(MU5LCD, mu5lcd_device)
 class mu5lcd_device : public device_t
 {
 public:
-	mu5lcd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mu5lcd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u8 dr_r() { return m_lcd->dr_r(); }
 	u8 status_r() { return m_lcd->status_r(); }

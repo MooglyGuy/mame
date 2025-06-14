@@ -4514,7 +4514,7 @@ void dynax_state::qyjdzjp(machine_config &config)
 	m_screen->set_palette(m_palette);
 	m_screen->screen_vblank().set(m_maincpu, FUNC(tmpz84c015_device::trg0)).invert();
 
-	DYNAX_BLITTER_REV2(config, m_blitter, 0);
+	DYNAX_BLITTER_REV2(config, m_blitter);
 	m_blitter->vram_out_cb().set(FUNC(dynax_state::hnoridur_blit_pixel_w));
 	m_blitter->scrollx_cb().set(FUNC(dynax_state::dynax_blit_scrollx_w));
 	m_blitter->scrolly_cb().set(FUNC(dynax_state::dynax_blit_scrolly_w));
@@ -4661,7 +4661,7 @@ void dynax_state::ougonhai(machine_config &config)
 {
 	tenkai(config);
 
-	tmp90840_device &tmp(TMP90840(config.replace(), m_maincpu, 21472700 / 2));
+	tmp90840_device &tmp(TMP90840(config.replace(), m_maincpu, XTAL::u(21472700) / 2));
 	tmp.set_addrmap(AS_PROGRAM, &dynax_state::ougonhai_map);
 	tmp.port_read<3>().set(FUNC(dynax_state::tenkai_p3_r));
 	tmp.port_write<3>().set(FUNC(dynax_state::tenkai_p3_w));

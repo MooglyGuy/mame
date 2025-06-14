@@ -27,7 +27,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(SB16_CT2720, sb16_ct2720_device, "sb16_ct2720", "Creative Sound Blaster 16 CT-2720")
 
-sb16_ct2720_device::sb16_ct2720_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sb16_ct2720_device::sb16_ct2720_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SB16_CT2720, tag, owner, clock)
 	, m_bus(*this, DEVICE_SELF_OWNER)
 	, m_opl3(*this, "opl3")
@@ -58,8 +58,8 @@ void sb16_ct2720_device::device_add_mconfig(machine_config &config)
 //  MIDI_PORT(config, "mdin", midiin_slot, "midiin").rxd_handler().set(FUNC(sb_device::midi_rx_w));
 //  MIDI_PORT(config, "mdout", midiout_slot, "midiout");
 
-	DAC_16BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, m_mixer, 0.5, 0); // unknown DAC
-	DAC_16BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, m_mixer, 0.5, 1); // unknown DAC
+	DAC_16BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, m_mixer, 0.5, 0); // unknown DAC
+	DAC_16BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, m_mixer, 0.5, 1); // unknown DAC
 
 	YMF262(config, m_opl3, XTAL(14'318'181));
 	m_opl3->add_route(0, m_mixer, 1.00, 0);

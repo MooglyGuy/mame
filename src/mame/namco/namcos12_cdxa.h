@@ -21,7 +21,7 @@
 class namcos12_cdxa_device : public device_t
 {
 public:
-	namcos12_cdxa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	namcos12_cdxa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename... T> void add_route(T &&... args) { m_lc78836m.lookup()->add_route(std::forward<T>(args)...); }
 

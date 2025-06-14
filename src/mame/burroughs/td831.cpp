@@ -100,7 +100,7 @@ void td831_state::machine_reset()
 
 void td831_state::td831(machine_config &config)
 {
-	M6800(config, m_maincpu, 1000000); // unknown clock
+	M6800(config, m_maincpu, XTAL::u(1000000)); // unknown clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &td831_state::mem_map);
 }
 

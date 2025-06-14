@@ -930,7 +930,7 @@ void output_devices(std::ostream &out, emu_options &lookup_options, device_type_
 										device_t *dev;
 										{
 											machine_config::token const tok(config.begin_configuration(config.root_device()));
-											dev = config.device_add("_tmp", *type, 0);
+											dev = config.device_add("_tmp", *type, XTAL());
 										}
 
 										// notify this device and all its subdevices that they are now configured

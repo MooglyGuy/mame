@@ -151,10 +151,10 @@ void grfd2301_state::grfd2301(machine_config &config)
 
 	/* video hardware */
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_raw(15874560, 848, 0, 640, 312, 0, 288); // parameters guessed
+	screen.set_raw(XTAL::u(15874560), 848, 0, 640, 312, 0, 288); // parameters guessed
 	screen.set_screen_update(m_crtc, FUNC(i8275_device::screen_update));
 
-	I8275(config, m_crtc, 15874560 / 8); // type and clock unknown
+	I8275(config, m_crtc, XTAL::u(15874560) / 8); // type and clock unknown
 	m_crtc->set_screen("screen");
 	m_crtc->set_character_width(8); // also guessed
 	m_crtc->drq_wr_callback().set(FUNC(grfd2301_state::drq_w));

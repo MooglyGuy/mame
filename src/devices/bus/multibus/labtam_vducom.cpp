@@ -50,12 +50,12 @@ labtam_vducom_device_base::labtam_vducom_device_base(machine_config const &mconf
 {
 }
 
-labtam_8086cpu_device::labtam_8086cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+labtam_8086cpu_device::labtam_8086cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: labtam_vducom_device_base(mconfig, LABTAM_8086CPU, tag, owner, clock)
 {
 }
 
-labtam_vducom_device::labtam_vducom_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+labtam_vducom_device::labtam_vducom_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: labtam_vducom_device_base(mconfig, LABTAM_VDUCOM, tag, owner, clock)
 	, m_crtc(*this, "crtc")
 	, m_palette(*this, "palette")

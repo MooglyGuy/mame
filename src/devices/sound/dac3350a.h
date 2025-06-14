@@ -8,7 +8,7 @@
 class dac3350a_device : public device_t, public device_sound_interface
 {
 public:
-	dac3350a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	dac3350a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void i2c_scl_w(int line);
 	void i2c_sda_w(int line);

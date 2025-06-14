@@ -36,12 +36,12 @@ INPUT_PORTS_END
 class fm_towns_pad_device : public device_t, public device_msx_general_purpose_port_interface
 {
 public:
-	fm_towns_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	fm_towns_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 read() override;
 
 protected:
-	fm_towns_pad_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	fm_towns_pad_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override { }
 	virtual ioport_constructor device_input_ports() const override { return INPUT_PORTS_NAME(fm_towns_pad); }
@@ -51,12 +51,12 @@ private:
 };
 
 
-fm_towns_pad_device::fm_towns_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+fm_towns_pad_device::fm_towns_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fm_towns_pad_device(mconfig, MSX_TOWNSPAD, tag, owner, clock)
 {
 }
 
-fm_towns_pad_device::fm_towns_pad_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+fm_towns_pad_device::fm_towns_pad_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_msx_general_purpose_port_interface(mconfig, *this)
 	, m_pad(*this, "PAD")
@@ -77,14 +77,14 @@ u8 fm_towns_pad_device::read()
 class marty_pad_device : public fm_towns_pad_device
 {
 public:
-	marty_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	marty_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override { return INPUT_PORTS_NAME(marty_pad); }
 };
 
 
-marty_pad_device::marty_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+marty_pad_device::marty_pad_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fm_towns_pad_device(mconfig, MSX_MARTYPAD, tag, owner, clock)
 {
 }

@@ -17,7 +17,7 @@
 
 
 template <typename Base>
-m6502_mcu_device_base<Base>::m6502_mcu_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+m6502_mcu_device_base<Base>::m6502_mcu_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	Base(mconfig, type, tag, owner, clock)
 {
 }

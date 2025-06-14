@@ -1242,7 +1242,7 @@ void interflip8035_state::interflip(machine_config &config)
 	// sound stuff
 	SPEAKER(config, "mono").front_center();
 
-	MC1408(config, "dac", 0).add_route(ALL_OUTPUTS, "mono", 2.0);
+	MC1408(config, "dac").add_route(ALL_OUTPUTS, "mono", 2.0);
 
 	SAMPLES(config, m_samples);
 	m_samples->set_channels(2);

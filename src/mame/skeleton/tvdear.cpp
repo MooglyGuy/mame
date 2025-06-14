@@ -194,14 +194,14 @@ DEVICE_IMAGE_LOAD_MEMBER(tvdear_state::cart_load)
 
 void tvdear_state::tvdear(machine_config &config)
 {
-	V25(config, m_maincpu, 16000000); // NEC D70320DGJ-8; XTAL marked 16AKSS5HT
+	V25(config, m_maincpu, XTAL::u(16000000)); // NEC D70320DGJ-8; XTAL marked 16AKSS5HT
 	m_maincpu->set_addrmap(AS_PROGRAM, &tvdear_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &tvdear_state::io_map);
 	m_maincpu->p0_in_cb().set(FUNC(tvdear_state::p0_r));
 	m_maincpu->p0_out_cb().set(FUNC(tvdear_state::p0_w));
 	m_maincpu->pt_in_cb().set(FUNC(tvdear_state::pt_r));
 
-	//MB90076(config, "tvvc", 14318181); // XTAL marked 14AKSS5JT
+	//MB90076(config, "tvvc", XTAL::u(14318181)); // XTAL marked 14AKSS5JT
 
 	GENERIC_CARTSLOT(config, m_cart, generic_linear_slot, "tvdear_cart");
 	m_cart->set_device_load(FUNC(tvdear_state::cart_load));

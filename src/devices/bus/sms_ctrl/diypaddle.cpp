@@ -52,7 +52,7 @@ INPUT_PORTS_END
 class sms_diy_paddle_device : public device_t, public device_sms_control_interface
 {
 public:
-	sms_diy_paddle_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_diy_paddle_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 in_r() override;
 	virtual void out_w(u8 data, u8 mem_mask) override;
@@ -88,7 +88,7 @@ private:
 };
 
 
-sms_diy_paddle_device::sms_diy_paddle_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_diy_paddle_device::sms_diy_paddle_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_DIY_PADDLE, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_mcu(*this, "u1"),
@@ -125,7 +125,7 @@ void sms_diy_paddle_device::out_w(u8 data, u8 mem_mask)
 
 void sms_diy_paddle_device::device_add_mconfig(machine_config &config)
 {
-	ATMEGA168(config, m_mcu, 8'000'000); // internally-generated clock
+	ATMEGA168(config, m_mcu, XTAL::u(8'000'000)); // internally-generated clock
 	m_mcu->set_addrmap(AS_PROGRAM, &sms_diy_paddle_device::program_map);
 	m_mcu->set_addrmap(AS_DATA, &sms_diy_paddle_device::data_map);
 	m_mcu->set_eeprom_tag("eeprom");

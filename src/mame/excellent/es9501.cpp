@@ -154,7 +154,7 @@ void es9501_state::es9501(machine_config &config)
 
 	EEPROM_93C56_16BIT(config, "eeprom");
 
-	WATCHDOG_TIMER(config, "watchdog", 0);
+	WATCHDOG_TIMER(config, "watchdog");
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER); // TODO: everything
 	m_screen->set_refresh_hz(60);

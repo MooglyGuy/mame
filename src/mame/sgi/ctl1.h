@@ -10,7 +10,7 @@ class sgi_ctl1_device
 	: public device_t
 {
 public:
-	sgi_ctl1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	sgi_ctl1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_bus(T &&tag, int spacenum) { m_bus.set_tag(std::forward<T>(tag), spacenum); }
 

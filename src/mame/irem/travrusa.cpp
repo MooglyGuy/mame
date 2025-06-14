@@ -728,7 +728,7 @@ void travrusa_state::shtrider(machine_config &config)
 	travrusa(config);
 
 	// basic machine hardware
-	m_maincpu->set_clock(6'000'000); // 6MHz like Knuckle Joe?
+	m_maincpu->set_clock(XTAL::u(6'000'000)); // 6MHz like Knuckle Joe?
 
 	// video hardware
 	m_gfxdecode->set_info(gfx_shtrider);

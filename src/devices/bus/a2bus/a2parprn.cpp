@@ -23,7 +23,7 @@ public:
 	virtual bool take_c800() override { return false; }
 
 protected:
-	a2bus_parprn_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	a2bus_parprn_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual tiny_rom_entry const *device_rom_region() const override ATTR_COLD;
@@ -58,7 +58,7 @@ private:
 class a2bus_4dparprn_device : public a2bus_parprn_device
 {
 public:
-	a2bus_4dparprn_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	a2bus_4dparprn_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -144,13 +144,13 @@ a2bus_parprn_device::a2bus_parprn_device(machine_config const &mconfig, device_t
 }
 
 
-a2bus_parprn_device::a2bus_parprn_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+a2bus_parprn_device::a2bus_parprn_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	a2bus_parprn_device(mconfig, A2BUS_PARPRN, tag, owner, clock)
 {
 }
 
 
-a2bus_4dparprn_device::a2bus_4dparprn_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+a2bus_4dparprn_device::a2bus_4dparprn_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	a2bus_parprn_device(mconfig, A2BUS_4DPARPRN, tag, owner, clock)
 {
 }

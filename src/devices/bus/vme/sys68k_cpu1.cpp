@@ -130,7 +130,7 @@
 
 DEFINE_DEVICE_TYPE(VME_SYS68K_CPU1, vme_sys68k_cpu1_card_device, "sys68k_cpu1", "Force Computers SYS68K/CPU-1")
 
-vme_sys68k_cpu1_card_device::vme_sys68k_cpu1_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu1_card_device::vme_sys68k_cpu1_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_SYS68K_CPU1, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu(*this, "maincpu")

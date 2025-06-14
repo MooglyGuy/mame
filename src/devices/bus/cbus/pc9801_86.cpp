@@ -51,7 +51,7 @@ DEFINE_DEVICE_TYPE(PC9801_86, pc9801_86_device, "pc9801_86", "NEC PC-9801-86")
 DEFINE_DEVICE_TYPE(PC9801_SPEAKBOARD, pc9801_speakboard_device, "pc9801_spb", "NEC PC-9801 SpeakBoard")
 DEFINE_DEVICE_TYPE(OTOMICHAN_KAI, otomichan_kai_device, "pc98_otomichan_kai", "MAD Factory Otomi-chan Kai") // 音美(おとみ)ちゃん改
 
-pc9801_86_device::pc9801_86_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pc9801_86_device::pc9801_86_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_bus(*this, DEVICE_SELF_OWNER)
 	, m_opna(*this, "opna")
@@ -63,7 +63,7 @@ pc9801_86_device::pc9801_86_device(const machine_config &mconfig, device_type ty
 {
 }
 
-pc9801_86_device::pc9801_86_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc9801_86_device::pc9801_86_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc9801_86_device(mconfig, PC9801_86, tag, owner, clock)
 {
 
@@ -187,42 +187,14 @@ ioport_constructor pc9801_86_device::device_input_ports() const
 	return INPUT_PORTS_NAME( pc9801_86 );
 }
 
-<<<<<<< HEAD
 // only for derived designs?
 void pc9801_86_device::opna_map(address_map &map)
-=======
-//**************************************************************************
-//  LIVE DEVICE
-//**************************************************************************
-
-//-------------------------------------------------
-//  pc9801_86_device - constructor
-//-------------------------------------------------
-
-pc9801_86_device::pc9801_86_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
-	: pc9801_snd_device(mconfig, type, tag, owner, clock)
-	, m_bus(*this, DEVICE_SELF_OWNER)
-	, m_opna(*this, "opna")
-	, m_ldac(*this, "ldac")
-	, m_rdac(*this, "rdac")
-	, m_queue(QUEUE_SIZE)
->>>>>>> 45d4cd52a81 (full xtal conversion)
 {
 	// TODO: confirm it really is ROMless
 	// TODO: confirm size
 	map(0x000000, 0x1fffff).ram();
 }
 
-<<<<<<< HEAD
-=======
-pc9801_86_device::pc9801_86_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: pc9801_86_device(mconfig, PC9801_86, tag, owner, clock)
-{
-
-}
-
-
->>>>>>> 45d4cd52a81 (full xtal conversion)
 //-------------------------------------------------
 //  device_validity_check - perform validity checks
 //  on this device
@@ -616,13 +588,7 @@ void pc9801_speakboard_device::opna_slave_w(offs_t offset, u8 data)
 //
 //**************************************************************************
 
-<<<<<<< HEAD
-otomichan_kai_device::otomichan_kai_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
-=======
-DEFINE_DEVICE_TYPE(OTOMICHAN_KAI, otomichan_kai_device, "pc98_otomichan_kai", "MAD Factory Otomi-chan Kai") // 音美(おとみ)ちゃん改
-
 otomichan_kai_device::otomichan_kai_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
->>>>>>> 45d4cd52a81 (full xtal conversion)
 	: pc9801_86_device(mconfig, OTOMICHAN_KAI, tag, owner, clock)
 	, m_opn2c(*this, "opn2c")
 {

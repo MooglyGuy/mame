@@ -19,7 +19,7 @@
 
 DEFINE_DEVICE_TYPE(HMB20, hmb20_device, "hmb20", "HAL HMB-20")
 
-hmb20_device::hmb20_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hmb20_device::hmb20_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc8801_exp_device(mconfig, HMB20, tag, owner, clock)
 	, m_opm(*this, "opm")
 {

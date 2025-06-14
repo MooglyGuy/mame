@@ -23,7 +23,7 @@ public:
 	void zoom_draw(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect, int xoffset, int yoffset, u8 priority, u8 priority_mask = 0xff);
 
 protected:
-	tc0280grd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int xmultiply);
+	tc0280grd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int xmultiply);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -50,7 +50,7 @@ private:
 class tc0430grw_device : public tc0280grd_device
 {
 public:
-	tc0430grw_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tc0430grw_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(TC0280GRD, tc0280grd_device)

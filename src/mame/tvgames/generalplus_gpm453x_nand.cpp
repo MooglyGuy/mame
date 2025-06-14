@@ -82,7 +82,7 @@ INPUT_PORTS_END
 
 void generalplus_gpm453x_game_state::gpm453x(machine_config &config)
 {
-	ARM9(config, m_maincpu, 240'000'000); // unknown core / frequency, but ARM based
+	ARM9(config, m_maincpu, XTAL::u(240'000'000)); // unknown core / frequency, but ARM based
 	m_maincpu->set_addrmap(AS_PROGRAM, &generalplus_gpm453x_game_state::arm_map);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);

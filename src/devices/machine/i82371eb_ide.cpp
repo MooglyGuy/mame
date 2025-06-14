@@ -27,7 +27,7 @@
 
 DEFINE_DEVICE_TYPE(I82371EB_IDE, i82371eb_ide_device, "i82371eb_ide", "Intel 82371EB PIIX4E PCI to ISA southbridge")
 
-i82371eb_ide_device::i82371eb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82371eb_ide_device::i82371eb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: i82371sb_ide_device(mconfig, I82371EB_IDE, tag, owner, clock)
 {
 	// 0x010180 - Mass storage device, IDE controller, bus master capable

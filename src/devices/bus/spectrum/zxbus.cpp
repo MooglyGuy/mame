@@ -11,12 +11,12 @@
 
 DEFINE_DEVICE_TYPE(ZXBUS_SLOT, zxbus_slot_device, "zxbus_slot", "ZXBUS slot")
 
-zxbus_slot_device::zxbus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+zxbus_slot_device::zxbus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: zxbus_slot_device(mconfig, ZXBUS_SLOT, tag, owner, clock)
 {
 }
 
-zxbus_slot_device::zxbus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+zxbus_slot_device::zxbus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_single_card_slot_interface<device_zxbus_card_interface>(mconfig, *this)
 	, m_zxbus_bus(*this, finder_base::DUMMY_TAG)
@@ -33,12 +33,12 @@ void zxbus_slot_device::device_start()
 
 DEFINE_DEVICE_TYPE(ZXBUS, zxbus_device, "zxbus", "ZXBUS bus")
 
-zxbus_device::zxbus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+zxbus_device::zxbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: zxbus_device(mconfig, ZXBUS, tag, owner, clock)
 {
 }
 
-zxbus_device::zxbus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+zxbus_device::zxbus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_iospace(*this, finder_base::DUMMY_TAG, -1)
 	, m_shadow_io_view(nullptr)

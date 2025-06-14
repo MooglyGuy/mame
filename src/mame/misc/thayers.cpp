@@ -684,7 +684,7 @@ void thayers_state::thayers(machine_config &config)
 	m_player->add_route(0, "speaker", 1.0, 0);
 	m_player->add_route(1, "speaker", 1.0, 1);
 
-	SSI263HLE(config, m_ssi, 860000);
+	SSI263HLE(config, m_ssi, XTAL::u(860000));
 	m_ssi->ar_callback().set(FUNC(thayers_state::ssi_data_request_w));
 	m_ssi->add_route(0, "speaker", 1.0, 0);
 	m_ssi->add_route(1, "speaker", 1.0, 0);

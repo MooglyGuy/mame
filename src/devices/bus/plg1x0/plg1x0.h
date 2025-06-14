@@ -37,7 +37,7 @@ class plg1x0_connector: public device_t, public device_single_card_slot_interfac
 public:
 	template <typename T>
 	plg1x0_connector(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: plg1x0_connector(mconfig, tag, owner, (uint32_t)0)
+		: plg1x0_connector(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -45,7 +45,7 @@ public:
 		set_fixed(false);
 	}
 
-	plg1x0_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	plg1x0_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void midi_rx(int state);
 	auto midi_tx() { return m_midi_tx.bind(); }

@@ -43,12 +43,12 @@ class heath_intr_cntrl : public device_t,
 						 public device_heath_intr_interface
 {
 public:
-	heath_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void set_irq_level(u8 level, int state) override;
 
 protected:
-	heath_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock = 0);
+	heath_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual u8 get_instruction() override;
 	virtual void update_intr_line();
@@ -70,7 +70,7 @@ public:
 	virtual void set_irq(int state) override;
 
 protected:
-	ss_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock = 0);
+	ss_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -86,7 +86,7 @@ protected:
 class z37_intr_cntrl : public ss_intr_cntrl
 {
 public:
-	z37_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	z37_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void block_interrupts(u8 data) override;
 
@@ -107,7 +107,7 @@ protected:
 class mms_intr_cntrl : public ss_intr_cntrl
 {
 public:
-	mms_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	mms_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual u8 get_instruction() override;
@@ -129,7 +129,7 @@ public:
 
 	template <typename T>
 	heath_intr_socket(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt, bool fixed = false) :
-		heath_intr_socket(mconfig, tag, owner, 0)
+		heath_intr_socket(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -137,7 +137,7 @@ public:
 		set_fixed(fixed);
 	}
 
-	heath_intr_socket(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	heath_intr_socket(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~heath_intr_socket();
 
 	auto irq_line_cb() { return m_irq_line.bind(); }

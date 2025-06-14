@@ -617,7 +617,7 @@ void igs_m036_state::igs_m036(machine_config &config)
 	PALETTE(config, "palette").set_entries(0x200);
 
 	SPEAKER(config, "speaker").front_center();
-	OKIM6295(config, "oki", 1'000'000, okim6295_device::PIN7_LOW).add_route(ALL_OUTPUTS, "speaker", 1.0); // clock and pin 7 not verified
+	OKIM6295(config, "oki", XTAL::u(1'000'000), okim6295_device::PIN7_LOW).add_route(ALL_OUTPUTS, "speaker", 1.0); // clock and pin 7 not verified
 }
 
 

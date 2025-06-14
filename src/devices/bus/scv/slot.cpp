@@ -55,7 +55,7 @@ void device_scv_cart_interface::savestate_ram()
 //  LIVE DEVICE
 //**************************************************************************
 
-scv_cart_slot_device::scv_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+scv_cart_slot_device::scv_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SCV_CART_SLOT, tag, owner, clock),
 	device_cartrom_image_interface(mconfig, *this),
 	device_single_card_slot_interface<device_scv_cart_interface>(mconfig, *this),

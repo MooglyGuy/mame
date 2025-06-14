@@ -14,7 +14,7 @@ class stt_sa1_device : public device_t,
 public:
 	static constexpr feature_type imperfect_features() { return feature::SOUND; } // unemulated and/or unverified effects and envelopes
 
-	stt_sa1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	stt_sa1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void enable_w(uint16_t data);
 

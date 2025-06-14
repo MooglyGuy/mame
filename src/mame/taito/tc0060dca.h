@@ -8,7 +8,7 @@
 class tc0060dca_device : public device_t, public device_sound_interface
 {
 public:
-	tc0060dca_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	tc0060dca_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void volume1_w(u8 data);
 	void volume2_w(u8 data);

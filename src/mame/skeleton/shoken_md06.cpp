@@ -138,7 +138,7 @@ void shoken_md06_state::petitlot(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &shoken_md06_state::program_map);
 	m_maincpu->set_addrmap(AS_IO, &shoken_md06_state::io_map);
 
-	RTC62423(config, "rtc", 0);
+	RTC62423(config, "rtc");
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();

@@ -65,7 +65,7 @@ void device_casloopy_cart_interface::battery_save(const void *buffer, int length
 //-------------------------------------------------
 //  casloopy_cart_slot_device - constructor
 //-------------------------------------------------
-casloopy_cart_slot_device::casloopy_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+casloopy_cart_slot_device::casloopy_cart_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CASLOOPY_CART_SLOT, tag, owner, clock),
 	device_cartrom_image_interface(mconfig, *this),
 	device_single_card_slot_interface<device_casloopy_cart_interface>(mconfig, *this),

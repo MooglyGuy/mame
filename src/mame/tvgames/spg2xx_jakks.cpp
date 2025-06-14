@@ -400,7 +400,7 @@ void jakks_state::jakks_mpaco(machine_config &config)
 void jakks_state::jakks_mpac(machine_config &config)
 {
 	jakks_mpaco(config);
-	I2C_24C04(config, m_i2cmem, 0);
+	I2C_24C04(config, m_i2cmem);
 	m_maincpu->adc_in<0>().set_ioport("DIALX");
 }
 

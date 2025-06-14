@@ -437,7 +437,7 @@ tc8521_device::tc8521_device(const machine_config &mconfig, const char *tag, dev
 //  lh5045_device - constructor
 //-------------------------------------------------
 
-lh5045_device::lh5045_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+lh5045_device::lh5045_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: rp5c01_device(mconfig, LH5045, tag, owner, clock)
 {
 }

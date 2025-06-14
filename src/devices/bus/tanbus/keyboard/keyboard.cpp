@@ -41,7 +41,7 @@ device_microtan_kbd_interface::device_microtan_kbd_interface(const machine_confi
 //  microtan_kbd_slot_device - constructor
 //-------------------------------------------------
 
-microtan_kbd_slot_device::microtan_kbd_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+microtan_kbd_slot_device::microtan_kbd_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MICROTAN_KBD_SLOT, tag, owner, clock)
 	, device_single_card_slot_interface<device_microtan_kbd_interface>(mconfig, *this)
 	, m_kbd(nullptr)

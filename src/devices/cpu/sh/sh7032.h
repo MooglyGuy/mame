@@ -13,7 +13,7 @@
 class sh7032_device : public sh2_device
 {
 public:
-	sh7032_device(const machine_config &mconfig, const char *_tag, device_t *_owner, uint32_t _clock);
+	sh7032_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

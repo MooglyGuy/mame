@@ -6342,14 +6342,14 @@ void model3_state::add_cpu_166mhz(machine_config &config)
 
 void model3_state::dsb2_config(machine_config &config)
 {
-	DSB2(config, m_dsb2, 0);
+	DSB2(config, m_dsb2);
 	m_dsb2->add_route(0, "speaker", 1.0, 0);
 	m_dsb2->add_route(1, "speaker", 1.0, 1);
 
-	I8251(config, m_uart, 8000000); // uPD71051
+	I8251(config, m_uart, XTAL::u(8000000)); // uPD71051
 	m_uart->txd_handler().set(m_dsb2, FUNC(dsb2_device::write_txd));
 
-	clock_device &uart_clock(CLOCK(config, "uart_clock", 500000)); // 16 times 31.25MHz (standard Sega/MIDI sound data rate)
+	clock_device &uart_clock(CLOCK(config, "uart_clock", XTAL::u(500000))); // 16 times 31.25MHz (standard Sega/MIDI sound data rate)
 	uart_clock.signal_handler().set(m_uart, FUNC(i8251_device::write_txc));
 	uart_clock.signal_handler().append(m_uart, FUNC(i8251_device::write_rxc));
 }

@@ -79,7 +79,7 @@ void f108_device::device_add_mconfig(machine_config &config)
 	SOFTWARE_LIST(config, "cd_list").set_original("mac_cdrom").set_filter("MC68040");
 
 	SCC85C30(config, m_scc, 31.3344_MHz_XTAL/4);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(FUNC(f108_device::scc_irq_w));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
@@ -99,7 +99,7 @@ void f108_device::device_add_mconfig(machine_config &config)
 //  f108_device - constructor
 //-------------------------------------------------
 
-f108_device::f108_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f108_device::f108_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F108, tag, owner, clock),
 	m_maincpu(*this, finder_base::DUMMY_TAG),
 	m_primetimeii(*this, finder_base::DUMMY_TAG),

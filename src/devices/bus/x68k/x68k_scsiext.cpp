@@ -56,7 +56,7 @@ void x68k_scsiext_device::device_add_mconfig(machine_config &config)
 		{
 			mb89352_device &spc = downcast<mb89352_device &>(*device);
 
-			spc.set_clock(10'000'000 / 2); // 10MHz clock from bus
+			spc.set_clock(XTAL::u(10'000'000) / 2); // 10MHz clock from bus
 			spc.out_irq_callback().set(*this, FUNC(x68k_scsiext_device::irq_w));
 			spc.out_dreq_callback().set(*this, FUNC(x68k_scsiext_device::drq_w));
 		});

@@ -26,7 +26,7 @@ class rs232_device : public device_t, public bus::nabupc::device_option_expansio
 {
 public:
 	// construction/destruction
-	rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_option_expansion_interface implementation
 	virtual uint8_t read(offs_t offset) override;
@@ -47,7 +47,7 @@ private:
 //-------------------------------------------------
 //  rs232_device - constructor
 //-------------------------------------------------
-rs232_device::rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+rs232_device::rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NABUPC_OPTION_RS232, tag, owner, clock),
 	device_option_expansion_interface(mconfig, *this),
 	m_i8251(*this, "i8251"),

@@ -28,7 +28,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(CONCEPT_KEYBOARD, concept_keyboard_device, "concept_kbd", "Corvus Concept Keyboard")
 
-concept_keyboard_device::concept_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+concept_keyboard_device::concept_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CONCEPT_KEYBOARD, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_keys(*this, "KEYS%X", 0U)

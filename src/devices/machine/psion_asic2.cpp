@@ -27,7 +27,7 @@ DEFINE_DEVICE_TYPE(PSION_ASIC2, psion_asic2_device, "psion_asic2", "Psion ASIC2"
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_asic2_device::psion_asic2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_asic2_device::psion_asic2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_ASIC2, tag, owner, clock)
 	, m_int_cb(*this)
 	, m_nmi_cb(*this)

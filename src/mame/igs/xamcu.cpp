@@ -19,7 +19,7 @@ igs_xa_mcu_device_base::igs_xa_mcu_device_base(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_mcu(*this, "mcu"),
 	m_irq_cb(*this),
@@ -150,7 +150,7 @@ igs_xa_mcu_ics_sound_device::igs_xa_mcu_ics_sound_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	igs_xa_mcu_device_base(mconfig, IGS_XA_ICS_SOUND, tag, owner, clock),
 	m_ics(*this, "ics"),
 	m_response{ 0, 0 }
@@ -248,7 +248,7 @@ igs_xa_mcu_subcpu_device::igs_xa_mcu_subcpu_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	igs_xa_mcu_device_base(mconfig, IGS_XA_SUBCPU, tag, owner, clock),
 	m_response(0)
 {

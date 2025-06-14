@@ -26,7 +26,7 @@ DEFINE_DEVICE_TYPE(LC7582, lc7582_device, "lc7582", "Sanyo LC7582 LCD Driver")
 //  constructor
 //-------------------------------------------------
 
-lc7580_device::lc7580_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+lc7580_device::lc7580_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nvram_interface(mconfig, *this),
 	m_write_segs(*this)
@@ -35,11 +35,11 @@ lc7580_device::lc7580_device(const machine_config &mconfig, device_type type, co
 	nvram_enable_backup(false);
 }
 
-lc7580_device::lc7580_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+lc7580_device::lc7580_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	lc7580_device(mconfig, LC7580, tag, owner, clock)
 { }
 
-lc7582_device::lc7582_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+lc7582_device::lc7582_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	lc7580_device(mconfig, LC7582, tag, owner, clock)
 { }
 

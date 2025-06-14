@@ -93,42 +93,42 @@ bt45x_device_base::bt45x_device_base(const machine_config &mconfig, device_type 
 }
 
 bt45x_rgb_device_base::bt45x_rgb_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const u32 palette_colors, const u32 overlay_colors)
-	: bt45x_device_base(mconfig, type, tag, owner, XTAL(), palette_colors, overlay_colors)
+	: bt45x_device_base(mconfig, type, tag, owner, palette_colors, overlay_colors)
 	, device_palette_interface(mconfig, *this)
 {
 }
 
 bt45x_mono_device_base::bt45x_mono_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const u32 palette_colors, const u32 overlay_colors)
-	: bt45x_device_base(mconfig, type, tag, owner, XTAL(), palette_colors, overlay_colors)
+	: bt45x_device_base(mconfig, type, tag, owner, palette_colors, overlay_colors)
 {
 }
 
 bt451_device::bt451_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: bt45x_rgb_device_base(mconfig, BT451, tag, owner, XTAL(), 256, 4)
+	: bt45x_rgb_device_base(mconfig, BT451, tag, owner, 256, 4)
 {
 }
 
 bt453_device::bt453_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: bt45x_rgb_device_base(mconfig, BT453, tag, owner, clock, 256, 4)
+	: bt45x_rgb_device_base(mconfig, BT453, tag, owner, 256, 4)
 {
 }
 
 bt454_device::bt454_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: bt45x_rgb_device_base(mconfig, BT454, tag, owner, clock, 16, 1)
+	: bt45x_rgb_device_base(mconfig, BT454, tag, owner, 16, 1)
 {
 }
 
 bt455_device::bt455_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: bt45x_mono_device_base(mconfig, BT455, tag, owner, clock, 16, 1)
+	: bt45x_mono_device_base(mconfig, BT455, tag, owner, 16, 1)
 {
 }
 bt457_device::bt457_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
-	: bt45x_mono_device_base(mconfig, BT457, tag, owner, clock, 256, 4)
+	: bt45x_mono_device_base(mconfig, BT457, tag, owner, 256, 4)
 {
 }
 
 bt458_device::bt458_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
-	: bt45x_rgb_device_base(mconfig, type, tag, owner, clock, 256, 4)
+	: bt45x_rgb_device_base(mconfig, type, tag, owner, 256, 4)
 {
 }
 

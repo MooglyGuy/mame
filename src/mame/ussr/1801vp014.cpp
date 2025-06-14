@@ -163,7 +163,7 @@ INPUT_CHANGED_MEMBER(k1801vp014_device::stop_button)
 //  k1801vp014_device - constructor
 //-------------------------------------------------
 
-k1801vp014_device::k1801vp014_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+k1801vp014_device::k1801vp014_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, K1801VP014, tag, owner, clock)
 	, device_matrix_keyboard_interface(mconfig, *this, "LINE0", "LINE1", "LINE2", "LINE3", "LINE4", "LINE5", "LINE6", "LINE7", "LINE8", "LINE9", "LINE10", "LINE11")
 	, device_z80daisy_interface(mconfig, *this)

@@ -143,7 +143,7 @@ class isa16_calchase_jamma_if : public device_t, public device_isa16_card_interf
 {
 public:
 	// construction/destruction
-	isa16_calchase_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_calchase_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 
 	ioport_value heartbeat_r();
@@ -172,7 +172,7 @@ private:
 
 DEFINE_DEVICE_TYPE(ISA16_CALCHASE_JAMMA_IF, isa16_calchase_jamma_if, "calchase_jamma_if", "ISA16 AUSCOM System 1 custom JAMMA I/F")
 
-isa16_calchase_jamma_if::isa16_calchase_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_calchase_jamma_if::isa16_calchase_jamma_if(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_CALCHASE_JAMMA_IF, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_iocard(*this, "IOCARD%u", 1U)
@@ -184,8 +184,8 @@ void isa16_calchase_jamma_if::device_add_mconfig(machine_config &config)
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0); // DS1220Y
 
 	SPEAKER(config, "speaker", 2).front();
-	DAC_12BIT_R2R(config, "ldac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
-	DAC_12BIT_R2R(config, "rdac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
+	DAC_12BIT_R2R(config, "ldac").add_route(ALL_OUTPUTS, "speaker", 0.25, 0); // unknown DAC
+	DAC_12BIT_R2R(config, "rdac").add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // unknown DAC
 }
 
 void isa16_calchase_jamma_if::device_start()
@@ -684,12 +684,12 @@ void calchase_state::calchase(machine_config &config)
 	pcibus.set_device(7, FUNC(calchase_state::intel82371ab_pci_r), FUNC(calchase_state::intel82371ab_pci_w));
 
 	// FIXME: determine ISA bus clock
-	isa16_device &isa(ISA16(config, "isa", 0));
+	isa16_device &isa(ISA16(config, "isa"));
 	isa.set_memspace("maincpu", AS_PROGRAM);
 	isa.set_iospace("maincpu", AS_IO);
-	ISA16_SLOT(config, "isa1", 0, "isa", calchase_isa16_cards, "calchase_jamma_if", true);
+	ISA16_SLOT(config, "isa1", "isa", calchase_isa16_cards, "calchase_jamma_if", true);
 	// TODO: temp, to be converted to PCI slot
-	ISA16_SLOT(config, "isa2", 0, "isa", calchase_isa16_cards, "tgui9680", true);
+	ISA16_SLOT(config, "isa2", "isa", calchase_isa16_cards, "tgui9680", true);
 
 	ds12885_device &rtc(DS12885(config.replace(), "rtc"));
 	rtc.irq().set("pic8259_2", FUNC(pic8259_device::ir0_w));

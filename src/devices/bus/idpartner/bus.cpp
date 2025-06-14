@@ -28,7 +28,7 @@ device_exp_card_interface::device_exp_card_interface(const machine_config &mconf
     SLOT DEVICE
 ***********************************************************************/
 
-bus_connector_device::bus_connector_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bus_connector_device::bus_connector_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IDPARTNER_BUS_CONNECTOR, tag, owner, clock)
 	, device_single_card_slot_interface<device_exp_card_interface>(mconfig, *this)
 	, m_bus(*this, finder_base::DUMMY_TAG)
@@ -54,7 +54,7 @@ void bus_connector_device::device_start()
     BUS DEVICE
 ***********************************************************************/
 
-bus_device::bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bus_device::bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IDPARTNER_BUS, tag, owner, clock)
 	, m_io(*this, finder_base::DUMMY_TAG, -1)
 	, m_int_handler(*this)

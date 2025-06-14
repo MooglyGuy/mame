@@ -19,7 +19,7 @@
 
 DEFINE_DEVICE_TYPE(DIMM_SPD, dimm_spd_device, "dimm_spd", "DIMM Serial Presence Detect")
 
-dimm_spd_device::dimm_spd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+dimm_spd_device::dimm_spd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, DIMM_SPD, tag, owner, clock),
 	i2c_hle_interface(mconfig, *this, 0)    // address will be overridden by set_address as before
 {

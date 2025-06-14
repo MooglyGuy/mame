@@ -13,13 +13,13 @@
 class riva128_device : public pci_card_device
 {
 public:
-	riva128_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	riva128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void legacy_memory_map(address_map &map) ATTR_COLD;
 	void legacy_io_map(address_map &map) ATTR_COLD;
 
 protected:
-	riva128_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	riva128_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -53,7 +53,7 @@ private:
 class riva128zx_device : public riva128_device
 {
 public:
-	riva128zx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	riva128zx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

@@ -7,7 +7,7 @@
 DEFINE_DEVICE_TYPE(PC_MAGNUM6_PAD, pc_joy_magnum6_device, "magnum6_pad", "Interact Magnum 6 Game Controller")
 
 
-pc_joy_magnum6_device::pc_joy_magnum6_device(const machine_config& mconfig, const char* tag, device_t* owner, uint32_t clock)
+pc_joy_magnum6_device::pc_joy_magnum6_device(const machine_config& mconfig, const char* tag, device_t* owner, const XTAL &clock)
 	: pc_basic_joy_device(mconfig, PC_MAGNUM6_PAD, tag, owner, clock)
 {
 }

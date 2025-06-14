@@ -126,7 +126,7 @@ void sonora_device::device_start()
 {
 	m_vram = std::make_unique<u32[]>(0x100000 / sizeof(u32));
 
-	m_stream = stream_alloc(8, 2, 22257, STREAM_SYNCHRONOUS);
+	m_stream = stream_alloc(8, 2, XTAL::u(22257), STREAM_SYNCHRONOUS);
 
 	m_6015_timer = timer_alloc(FUNC(sonora_device::mac_6015_tick), this);
 	m_6015_timer->adjust(attotime::never);

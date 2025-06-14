@@ -569,7 +569,7 @@ INPUT_PORTS_END
 void sfxphasor_state::sfxphasor(machine_config &config)
 {
 	// basic machine hardware
-	PIC1655(config, m_maincpu, 950000); // approximation - RC osc. R=10K+VR, C=47pF
+	PIC1655(config, m_maincpu, XTAL::u(950000)); // approximation - RC osc. R=10K+VR, C=47pF
 	m_maincpu->read_a().set_ioport("IN.4");
 	m_maincpu->write_b().set(FUNC(sfxphasor_state::write_b));
 	m_maincpu->write_c().set(FUNC(sfxphasor_state::write_c));
@@ -579,7 +579,7 @@ void sfxphasor_state::sfxphasor(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	NETLIST_SOUND(config, "sound_nl", 48000).set_source(NETLIST_NAME(sfxphasor)).add_route(ALL_OUTPUTS, "mono", 0.25);
+	NETLIST_SOUND(config, "sound_nl", XTAL::u(48000)).set_source(NETLIST_NAME(sfxphasor)).add_route(ALL_OUTPUTS, "mono", 0.25);
 	NETLIST_STREAM_OUTPUT(config, "sound_nl:cout0", 0, "SPK1.1").set_mult_offset(1.0, 0.0);
 
 	NETLIST_LOGIC_INPUT(config, "sound_nl:p10", "P10.IN", 0);
@@ -1805,7 +1805,7 @@ void ttfball_state::ttfball(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 0.25);
 
-	auto &gate(CLOCK(config, "gate", 3500)); // approximation
+	auto &gate(CLOCK(config, "gate", XTAL::u(3500))); // approximation
 	gate.signal_handler().set("merge", FUNC(input_merger_all_high_device::in_w<0>));
 	m_maincpu->write_c().append("merge", FUNC(input_merger_all_high_device::in_w<1>)).bit(6);
 
@@ -1897,7 +1897,7 @@ void ttfballa_state::ttfballa(machine_config &config)
 {
 	ttfball(config);
 
-	m_maincpu->set_clock(500000); // approximation - RC osc. 33K, C=68pF
+	m_maincpu->set_clock(XTAL::u(500000)); // approximation - RC osc. 33K, C=68pF
 	m_display->set_bri_levels(0.002, 0.02);
 
 	// no volume gate

@@ -11,7 +11,7 @@
 
 DEFINE_DEVICE_TYPE(VASTAR_VIDEO_DEVICE, vastar_video_device, "vastar_viddev", "Orca Vastar Video Device")
 
-vastar_video_device::vastar_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vastar_video_device::vastar_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VASTAR_VIDEO_DEVICE, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this, nullptr, "palette")
 	, device_video_interface(mconfig, *this)

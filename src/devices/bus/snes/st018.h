@@ -16,7 +16,7 @@ class sns_rom_st018_device : public sns_rom_device
 {
 public:
 	// construction/destruction
-	sns_rom_st018_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sns_rom_st018_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

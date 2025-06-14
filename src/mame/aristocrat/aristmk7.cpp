@@ -198,11 +198,11 @@ INPUT_PORTS_END
 
 void aristmk7_state::aristmk7(machine_config &config)
 {
-	PENTIUM3(config, m_maincpu, 266'000'000 * 7); /* Celeron-M 440, 533 MHz FSB, 1.86 GHz, actual equation TBD */
+	PENTIUM3(config, m_maincpu, XTAL::u(266'000'000) * 7); /* Celeron-M 440, 533 MHz FSB, 1.86 GHz, actual equation TBD */
 	m_maincpu->set_addrmap(AS_PROGRAM, &aristmk7_state::aristmk7_map);
 	m_maincpu->set_addrmap(AS_IO, &aristmk7_state::aristmk7_io);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

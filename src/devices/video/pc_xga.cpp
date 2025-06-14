@@ -10,7 +10,7 @@
 
 DEFINE_DEVICE_TYPE(XGA_COPRO,  xga_copro_device,  "xga_copro",  "IBM XGA Coprocessor")
 
-xga_copro_device::xga_copro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+xga_copro_device::xga_copro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, XGA_COPRO, tag, owner, clock)
 	, m_var(TYPE::XGA)
 	, m_mem_read_cb(*this, 0)

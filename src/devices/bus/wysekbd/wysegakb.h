@@ -24,7 +24,7 @@ class wyse_gate_array_keyboard_device : public device_t, public wyse_keyboard_in
 {
 protected:
 	// construction/destruction
-	wyse_gate_array_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	wyse_gate_array_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -52,7 +52,7 @@ class wy85_keyboard_device : public wyse_gate_array_keyboard_device
 {
 public:
 	// device type constructor
-	wy85_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wy85_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -65,7 +65,7 @@ class wy30_keyboard_device : public wyse_gate_array_keyboard_device
 {
 public:
 	// device type constructor
-	wy30_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wy30_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -78,7 +78,7 @@ class wy60_ascii_keyboard_device : public wyse_gate_array_keyboard_device
 {
 public:
 	// device type constructor
-	wy60_ascii_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wy60_ascii_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -91,10 +91,10 @@ class wyse_at_keyboard_device : public wyse_gate_array_keyboard_device
 {
 public:
 	// device type constructor
-	wyse_at_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wyse_at_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	wyse_at_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	wyse_at_keyboard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_resolve_objects() override ATTR_COLD;
 
@@ -115,7 +115,7 @@ class wyse_316x_keyboard_device : public wyse_gate_array_keyboard_device
 {
 public:
 	// device type constructor
-	wyse_316x_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wyse_316x_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -131,7 +131,7 @@ class wyse_pce_keyboard_device : public wyse_at_keyboard_device
 {
 public:
 	// device type constructor
-	wyse_pce_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wyse_pce_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -144,7 +144,7 @@ class wyse_pceint_keyboard_device : public wyse_at_keyboard_device
 {
 public:
 	// device type constructor
-	wyse_pceint_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0U);
+	wyse_pceint_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;

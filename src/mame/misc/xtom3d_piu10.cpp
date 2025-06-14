@@ -40,7 +40,7 @@
 
 DEFINE_DEVICE_TYPE(ISA16_PIU10, isa16_piu10, "isa16_piu10", "ISA16 PIU10 for MK-III")
 
-isa16_piu10::isa16_piu10(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+isa16_piu10::isa16_piu10(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ISA16_PIU10, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, m_cat702(*this, "cat702")
@@ -77,7 +77,7 @@ void isa16_piu10::device_add_mconfig(machine_config &config)
 {
 	MACRONIX_29F1610MC_16BIT(config, m_flash);
 
-	CAT702_PIU(config, m_cat702, 0);
+	CAT702_PIU(config, m_cat702);
 	m_cat702->dataout_handler().set([this] (u16 data) { m_cat702_data = data & 1; });
 
 	DAC3350A(config, m_dac3350a);

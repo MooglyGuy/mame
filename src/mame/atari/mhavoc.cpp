@@ -977,15 +977,15 @@ INPUT_PORTS_END
  *
  *************************************/
 
-static constexpr int MHAVOC_CLOCK = 10'000'000;
-static constexpr int MHAVOC_CLOCK_5M = MHAVOC_CLOCK / 2;
-static constexpr int MHAVOC_CLOCK_2_5M = MHAVOC_CLOCK / 4;
-static constexpr int MHAVOC_CLOCK_1_25M = MHAVOC_CLOCK / 8;
-static constexpr int MHAVOC_CLOCK_625K = MHAVOC_CLOCK / 16;
+static constexpr XTAL MHAVOC_CLOCK = XTAL::u(10'000'000);
+static constexpr XTAL MHAVOC_CLOCK_5M = MHAVOC_CLOCK / 2;
+static constexpr XTAL MHAVOC_CLOCK_2_5M = MHAVOC_CLOCK / 4;
+static constexpr XTAL MHAVOC_CLOCK_1_25M = MHAVOC_CLOCK / 8;
+static constexpr XTAL MHAVOC_CLOCK_625K = MHAVOC_CLOCK / 16;
 
-static constexpr int MHAVOC_CLOCK_156K = MHAVOC_CLOCK_625K / 4;
-static constexpr int MHAVOC_CLOCK_5K = MHAVOC_CLOCK_625K / 16 / 8;
-static constexpr int MHAVOC_CLOCK_2_4K = MHAVOC_CLOCK_625K / 16 / 16;
+static constexpr XTAL MHAVOC_CLOCK_156K = MHAVOC_CLOCK_625K / 4;
+static constexpr XTAL MHAVOC_CLOCK_5K = MHAVOC_CLOCK_625K / 16 / 8;
+static constexpr XTAL MHAVOC_CLOCK_2_4K = MHAVOC_CLOCK_625K / 16 / 16;
 
 void alphaone_state::alphaone(machine_config &config)
 {

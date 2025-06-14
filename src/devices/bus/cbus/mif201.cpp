@@ -19,7 +19,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(MIF201, mif201_device, "mif201", "Micro Musician VA MIF-201 MIDI Interface")
 
-mif201_device::mif201_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mif201_device::mif201_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MIF201, tag, owner, clock)
 	, m_bus(*this, DEVICE_SELF_OWNER)
 	, m_uart(*this, "uart%u", 1U)
@@ -36,11 +36,11 @@ mif201_device::mif201_device(const machine_config &mconfig, const char *tag, dev
 void mif201_device::device_add_mconfig(machine_config &config)
 {
 	// TODO: unknown clocks
-	I8251(config, m_uart[0], 1021800);
+	I8251(config, m_uart[0], XTAL::u(1021800));
 
-	I8251(config, m_uart[1], 1021800);
+	I8251(config, m_uart[1], XTAL::u(1021800));
 
-	PIT8253(config, m_pit, 1021800);
+	PIT8253(config, m_pit, XTAL::u(1021800));
 }
 
 void mif201_device::device_start()

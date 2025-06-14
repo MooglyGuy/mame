@@ -42,7 +42,7 @@ DEFINE_DEVICE_TYPE(AMIGA_A2091, bus::amiga::zorro::a2091_device, "amiga_a2091", 
 
 namespace bus::amiga::zorro {
 
-a2091_device::a2091_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2091_device::a2091_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_A2091, tag, owner, clock),
 	device_zorro2_card_interface(mconfig, *this),
 	m_irq(*this, "irq"),
@@ -175,7 +175,7 @@ void a2091_device::device_add_mconfig(machine_config &config)
 	INPUT_MERGER_ANY_HIGH(config, m_irq);
 	m_irq->output_handler().set(m_dmac, FUNC(amiga_dmac_device::intx_w));
 
-	NSCSI_BUS(config, "scsi", 0);
+	NSCSI_BUS(config, "scsi");
 	NSCSI_CONNECTOR(config, "scsi:0", default_scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:1", default_scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:3", default_scsi_devices, nullptr, false);
@@ -184,7 +184,7 @@ void a2091_device::device_add_mconfig(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi:6", default_scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:7").option_set("wdc", WD33C93A).machine_config([this] (device_t *device) { wd33c93_config(device); });
 
-	XT_HDC(config, m_xt, 0);
+	XT_HDC(config, m_xt);
 	m_xt->irq_handler().set(m_irq, FUNC(input_merger_any_high_device::in_w<1>));
 	m_xt->drq_handler().set(m_dmac, FUNC(amiga_dmac_device::xdreq_w));
 

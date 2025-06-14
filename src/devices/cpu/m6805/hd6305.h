@@ -34,7 +34,7 @@ protected:
 			machine_config const &mconfig,
 			char const *tag,
 			device_t *owner,
-			uint32_t clock,
+			const XTAL &clock,
 			device_type const type,
 			configuration_params const &params,
 			address_map_constructor internal_map);
@@ -108,7 +108,7 @@ class hd6305v0_device : public hd6305_device
 {
 public:
 	// construction/destruction
-	hd6305v0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd6305v0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_porta()  { return m_read_port [0].bind(); }
 	auto write_porta() { return m_write_port[0].bind(); }
@@ -129,7 +129,7 @@ class hd6305y0_device : public hd6305_device
 {
 public:
 	// construction/destruction
-	hd6305y0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd6305y0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_porta()  { return m_read_port [0].bind(); }
 	auto write_porta() { return m_write_port[0].bind(); }
@@ -159,7 +159,7 @@ class hd6305y2_device : public hd6305_device
 {
 public:
 	// construction/destruction
-	hd6305y2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd6305y2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto read_porta()  { return m_read_port [0].bind(); }
 	auto write_porta() { return m_write_port[0].bind(); }
@@ -179,7 +179,7 @@ class hd63705z0_device : public hd6305_device
 {
 public:
 	// construction/destruction
-	hd63705z0_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	hd63705z0_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void execute_set_input(int inputnum, int state) override;

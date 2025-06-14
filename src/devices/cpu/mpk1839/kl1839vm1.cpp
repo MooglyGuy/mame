@@ -50,7 +50,7 @@
 DEFINE_DEVICE_TYPE(KL1839VM1, kl1839vm1_device, "kl1839vm1", "KL1839VM1")
 
 
-kl1839vm1_device::kl1839vm1_device(const machine_config &mconfig,  const char *tag, device_t *owner, u32 clock)
+kl1839vm1_device::kl1839vm1_device(const machine_config &mconfig,  const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, KL1839VM1, tag, owner, clock)
 	, m_microcode_config("microcode", ENDIANNESS_BIG, 32, 14, -2)
 	, m_sysram_config("sysram", ENDIANNESS_BIG, 8, 24, 0)

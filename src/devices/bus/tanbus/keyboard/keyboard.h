@@ -26,7 +26,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	microtan_kbd_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&slot_options, const char *default_option)
-		: microtan_kbd_slot_device(mconfig, tag, owner, 0)
+		: microtan_kbd_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		slot_options(*this);
@@ -34,7 +34,7 @@ public:
 		set_fixed(false);
 	}
 
-	microtan_kbd_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	microtan_kbd_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callbacks
 	auto strobe_handler() { return m_strobe_handler.bind(); }

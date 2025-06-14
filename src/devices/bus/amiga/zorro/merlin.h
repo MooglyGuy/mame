@@ -24,7 +24,7 @@ namespace bus::amiga::zorro {
 class merlin_device : public device_t, public device_zorro2_card_interface, public amiga_autoconfig
 {
 public:
-	merlin_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	merlin_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

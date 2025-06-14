@@ -11,8 +11,8 @@
 class opti_82c861_device : public pci_card_device
 {
 public:
-	opti_82c861_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	opti_82c861_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	opti_82c861_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	opti_82c861_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void mem_map(address_map &map) ATTR_COLD;
 

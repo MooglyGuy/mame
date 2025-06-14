@@ -771,7 +771,7 @@ INPUT_PORTS_END
 void lw30_state::lw30(machine_config &config)
 {
 	// basic machine hardware
-	HD64180RP(config, maincpu, 12'000'000 / 2);
+	HD64180RP(config, maincpu, XTAL::u(12'000'000) / 2);
 	maincpu->set_addrmap(AS_PROGRAM, &lw30_state::map_program);
 	maincpu->set_addrmap(AS_IO, &lw30_state::map_io);
 
@@ -788,7 +788,7 @@ void lw30_state::lw30(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, beeper, 4'000).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
+	BEEP(config, beeper, XTAL::u(4'000)).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
 
 	// timers
 	TIMER(config, "timer_1khz").configure_periodic(FUNC(lw30_state::int1_timer_callback), attotime::from_hz(1000));

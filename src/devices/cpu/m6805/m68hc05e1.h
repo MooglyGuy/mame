@@ -21,7 +21,7 @@ public:
 
 protected:
 	// construction/destruction
-	m68hc05ex_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrbits, address_map_constructor internal_map);
+	m68hc05ex_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrbits, address_map_constructor internal_map);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -64,13 +64,13 @@ protected:
 class m68hc05e1_device : public m68hc05ex_device
 {
 public:
-	m68hc05e1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m68hc05e1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u8 read_internal_ram(offs_t offset);
 	void write_internal_ram(offs_t offset, u8 data);
 
 protected:
-	m68hc05e1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrbits, address_map_constructor internal_map);
+	m68hc05e1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrbits, address_map_constructor internal_map);
 
 	required_shared_ptr<u8> m_internal_ram;
 
@@ -81,7 +81,7 @@ private:
 class m68hc05e5_device : public m68hc05e1_device
 {
 public:
-	m68hc05e5_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m68hc05e5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u8 read_internal_ram(offs_t offset);
 	void write_internal_ram(offs_t offset, u8 data);

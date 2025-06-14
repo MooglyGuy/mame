@@ -10,7 +10,7 @@
 class tmp68301_device : public m68000_mcu_device
 {
 public:
-	tmp68301_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tmp68301_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_serial_external_clock(u32 hz) { m_serial_external_clock = hz; }
 	auto parallel_r_cb() { return m_parallel_r_cb.bind(); }
@@ -27,7 +27,7 @@ public:
 	void timer_in_w(int state);
 
 protected:
-	tmp68301_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	tmp68301_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	devcb_read16  m_parallel_r_cb;
 	devcb_write16 m_parallel_w_cb;
@@ -307,7 +307,7 @@ protected:
 class tmp68303_device : public tmp68301_device
 {
 public:
-	tmp68303_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tmp68303_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	virtual u8 base_timer_irq() const noexcept override { return 3; }

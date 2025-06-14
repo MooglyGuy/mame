@@ -12,7 +12,7 @@
 
 DEFINE_DEVICE_TYPE(PROMOTION_VGA,  promotion_vga_device,  "promotion_vga",  "Alliance ProMotion VGA i/f")
 
-promotion_vga_device::promotion_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+promotion_vga_device::promotion_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, PROMOTION_VGA, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(promotion_vga_device::crtc_map), this));

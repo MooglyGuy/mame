@@ -24,7 +24,7 @@ class altos2_keyboard_device : public device_t
 {
 public:
 	// device type constructor
-	altos2_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	altos2_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callback configuration
 	auto txd_callback() { return m_txd_callback.bind(); }

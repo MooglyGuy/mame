@@ -293,17 +293,17 @@ void gs761_state::gs761(machine_config &config)
 
 	PALETTE(config, "palette").set_format(palette_device::xBGR_888, 8192).enable_shadows();
 
-	K056832(config, m_k056832, 0);
+	K056832(config, m_k056832);
 	m_k056832->set_tile_callback(FUNC(gs761_state::tile_callback));
 	m_k056832->set_config(K056832_BPP_4dj, 1, 0);
 	m_k056832->set_palette(m_palette);
 
-	K055673(config, m_k055673, 0);
+	K055673(config, m_k055673);
 	m_k055673->set_sprite_callback(FUNC(gs761_state::sprite_callback));
 	m_k055673->set_config(K055673_LAYOUT_PS, -48 + 1, -23);
 	m_k055673->set_palette(m_palette);
 
-	K055555(config, m_k055555, 0);
+	K055555(config, m_k055555);
 
 	/* sound hardware */
 	SPEAKER(config, "speaker", 2).front();

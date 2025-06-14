@@ -26,7 +26,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(NEON250,   neon250_device,   "neon250",   "VideoLogic PowerVR Neon 250 (PMX1)")
 
-neon250_device::neon250_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+neon250_device::neon250_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_svga(*this, "svga")
 	, m_vga_rom(*this, "vga_rom")
@@ -35,7 +35,7 @@ neon250_device::neon250_device(const machine_config &mconfig, device_type type, 
 	set_ids_agp(0x10330067, 0x02, 0x10100120);
 }
 
-neon250_device::neon250_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+neon250_device::neon250_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: neon250_device(mconfig, NEON250, tag, owner, clock)
 {
 }
@@ -62,7 +62,7 @@ void neon250_device::device_add_mconfig(machine_config &config)
 	screen.set_screen_update(m_svga, FUNC(vga_device::screen_update));
 
 	// TODO: PVR "VGA Emulator"
-	VGA(config, m_svga, 0);
+	VGA(config, m_svga);
 	m_svga->set_screen("screen");
 	m_svga->set_vram_size(32*1024*1024);
 }

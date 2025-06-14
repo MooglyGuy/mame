@@ -141,8 +141,8 @@ DECLARE_DEVICE_TYPE(SEI80BU, sei80bu_device)
 class seibu_adpcm_device : public device_t
 {
 public:
-	template <typename T> seibu_adpcm_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&msm5205_tag)
-		: seibu_adpcm_device(mconfig, tag, owner, XTAL())
+	template <typename T> seibu_adpcm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&msm5205_tag)
+		: seibu_adpcm_device(mconfig, tag, owner, clock)
 	{
 		m_msm.set_tag(std::forward<T>(msm5205_tag));
 	}

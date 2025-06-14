@@ -94,7 +94,7 @@ protected:
 	{
 		set_position(0, x, y, z);
 	}
-	sound_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 channels); // Collides with clock, but not important
+	sound_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 channels);
 };
 
 class speaker_device : public sound_io_device
@@ -105,6 +105,8 @@ public:
 		: sound_io_device(mconfig, SPEAKER, tag, owner, x, y, z) {}
 	speaker_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 channels = 1)
 		: sound_io_device(mconfig, SPEAKER, tag, owner, channels) {}
+	speaker_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+		: sound_io_device(mconfig, SPEAKER, tag, owner, 0U) {}
 
 	virtual ~speaker_device();
 
@@ -126,6 +128,8 @@ public:
 		: sound_io_device(mconfig, MICROPHONE, tag, owner, x, y, z) {}
 	microphone_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 channels = 1)
 		: sound_io_device(mconfig, MICROPHONE, tag, owner, channels) {}
+	microphone_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+		: sound_io_device(mconfig, MICROPHONE, tag, owner, 0U) {}
 
 	virtual ~microphone_device();
 

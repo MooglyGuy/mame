@@ -30,7 +30,7 @@
 class va_rc_eg_device : public device_t, public device_sound_interface
 {
 public:
-	va_rc_eg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) ATTR_COLD;
+	va_rc_eg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) ATTR_COLD;
 
 	// These setters can be used during both: configuration and normal operation.
 	// `r` and `c` must be > 0. To instantly set the capacitor's voltage to

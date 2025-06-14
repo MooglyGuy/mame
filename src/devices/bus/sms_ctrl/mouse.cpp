@@ -50,13 +50,13 @@ INPUT_PORTS_END
 class sms_megamouse_device : public device_t, public device_sms_control_interface
 {
 public:
-	sms_megamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_megamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 in_r() override { return m_out; }
 	virtual void out_w(u8 data, u8 mem_mask) override;
 
 protected:
-	sms_megamouse_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	sms_megamouse_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual ioport_constructor device_input_ports() const override { return INPUT_PORTS_NAME(sms_megamouse); }
 	virtual void device_start() override ATTR_COLD;
@@ -78,13 +78,13 @@ private:
 };
 
 
-sms_megamouse_device::sms_megamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_megamouse_device::sms_megamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	sms_megamouse_device(mconfig, SMS_MEGAMOUSE, tag, owner, clock)
 {
 }
 
 
-sms_megamouse_device::sms_megamouse_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+sms_megamouse_device::sms_megamouse_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_buttons(*this, "BUTTONS"),
@@ -244,14 +244,14 @@ TIMER_CALLBACK_MEMBER(sms_megamouse_device::next_step)
 class sms_segamouse_device : public sms_megamouse_device
 {
 public:
-	sms_segamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_segamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override { return INPUT_PORTS_NAME(sms_segamouse); }
 };
 
 
-sms_segamouse_device::sms_segamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_segamouse_device::sms_segamouse_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	sms_megamouse_device(mconfig, SMS_SEGAMOUSE, tag, owner, clock)
 {
 }

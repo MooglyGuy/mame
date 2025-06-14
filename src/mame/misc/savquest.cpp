@@ -873,7 +873,7 @@ void savquest_state::savquest(machine_config &config)
 	screen.set_raw(25.1748_MHz_XTAL, 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3trio64_vga_device::screen_update));
 
-	s3trio64_vga_device &vga(S3_TRIO64_VGA(config, "vga", 0));
+	s3trio64_vga_device &vga(S3_TRIO64_VGA(config, "vga"));
 	vga.set_screen("screen");
 	vga.set_vram_size(0x100000);
 

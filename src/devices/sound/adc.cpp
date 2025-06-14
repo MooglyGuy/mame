@@ -7,7 +7,7 @@
 #include "adc.h"
 
 
-zn449_device::zn449_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+zn449_device::zn449_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ZN449, tag, owner, clock),
 	  device_sound_interface(mconfig, *this),
 	  m_stream(nullptr),
@@ -24,7 +24,7 @@ u8 zn449_device::read()
 void zn449_device::device_start()
 {
 	save_item(NAME(m_current_value));
-	m_stream = stream_alloc(1, 0, SAMPLE_RATE_INPUT_ADAPTIVE);
+	m_stream = stream_alloc(1, 0, XTAL(), SAMPLE_RATE_INPUT_ADAPTIVE);
 }
 
 void zn449_device::sound_stream_update(sound_stream &stream)
@@ -37,7 +37,7 @@ DEFINE_DEVICE_TYPE(ZN449, zn449_device, "zn449", "ZN449 ADC")
 
 
 
-adc10_device::adc10_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+adc10_device::adc10_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ADC10, tag, owner, clock),
 	  device_sound_interface(mconfig, *this),
 	  m_stream(nullptr),
@@ -54,7 +54,7 @@ u16 adc10_device::read()
 void adc10_device::device_start()
 {
 	save_item(NAME(m_current_value));
-	m_stream = stream_alloc(1, 0, SAMPLE_RATE_INPUT_ADAPTIVE);
+	m_stream = stream_alloc(1, 0, XTAL(), SAMPLE_RATE_INPUT_ADAPTIVE);
 }
 
 void adc10_device::sound_stream_update(sound_stream &stream)

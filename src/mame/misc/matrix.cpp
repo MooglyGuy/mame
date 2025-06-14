@@ -86,7 +86,7 @@ void matrix_state::matrix(machine_config &config)
 	m_rtc->set_epoch(1980);
 	m_rtc->irq().set("pci:12.0", FUNC(mediagx_cs5530_bridge_device::pc_irq8n_w));
 
-	KBDC8042(config, m_kbdc, 0);
+	KBDC8042(config, m_kbdc);
 	// TODO: PS/2 mouse
 	m_kbdc->set_keyboard_type(kbdc8042_device::KBDC8042_STANDARD);
 	m_kbdc->system_reset_callback().set_inputline(":maincpu", INPUT_LINE_RESET);
@@ -97,15 +97,15 @@ void matrix_state::matrix(machine_config &config)
 	at_keyboard_device &at_keyb(AT_KEYB(config, "at_keyboard", pc_keyboard_device::KEYBOARD_TYPE::AT, 1));
 	at_keyb.keypress().set(m_kbdc, FUNC(kbdc8042_device::keyboard_w));
 
-	PCI_ROOT(config, "pci", 0);
-	MEDIAGX_HOST(config, "pci:00.0", 0, "maincpu", 128*1024*1024);
+	PCI_ROOT(config, "pci");
+	MEDIAGX_HOST(config, "pci:00.0", "maincpu", 128*1024*1024);
 	// TODO: no clue about the ID used for this, definitely tested
 	// Tries to initialize MediaGX F4 -> ISA -> PCI
 	// May actually be a ZFMicro PCI Bridge (0x10780400)?
-	PCI_BRIDGE(config, "pci:01.0", 0, 0x10780000, 0);
+	PCI_BRIDGE(config, "pci:01.0", 0x10780000, 0);
 
 	// "pci:12.0" or "pci:10.0" depending on pin H26 (readable in bridge thru PCI index $44)
-	mediagx_cs5530_bridge_device &isa(MEDIAGX_CS5530_BRIDGE(config, "pci:12.0", 0, "maincpu", "pci:12.2"));
+	mediagx_cs5530_bridge_device &isa(MEDIAGX_CS5530_BRIDGE(config, "pci:12.0", "maincpu", "pci:12.2"));
 	isa.set_kbdc_tag("kbdc");
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	//isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
@@ -115,18 +115,18 @@ void matrix_state::matrix(machine_config &config)
 
 	// "pci:12.1" SMI & ACPI
 
-	mediagx_cs5530_ide_device &ide(MEDIAGX_CS5530_IDE(config, "pci:12.2", 0, "maincpu"));
+	mediagx_cs5530_ide_device &ide(MEDIAGX_CS5530_IDE(config, "pci:12.2", "maincpu"));
 	ide.irq_pri().set("pci:12.0", FUNC(mediagx_cs5530_bridge_device::pc_irq14_w));
 	ide.irq_sec().set("pci:12.0", FUNC(mediagx_cs5530_bridge_device::pc_irq15_w));
 
 	// "pci:12.3" XpressAUDIO
-	MEDIAGX_CS5530_VIDEO(config, "pci:12.4", 0);
+	MEDIAGX_CS5530_VIDEO(config, "pci:12.4");
 
-	ZFMICRO_USB(config, "pci:13.0", 0);
+	ZFMICRO_USB(config, "pci:13.0");
 
 	// 2 PCI slots, 2 ISA slots
-	ISA16_SLOT(config, "isa1", 0, "pci:12.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa2", 0, "pci:12.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa1", "pci:12.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa2", "pci:12.0:isabus", pc_isa16_cards, nullptr, false);
 }
 
 

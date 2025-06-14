@@ -17,7 +17,7 @@ class upd931_device : public device_t, public device_sound_interface, public dev
 public:
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 
-	upd931_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	upd931_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto &set_master(bool master) { m_master = master; return *this; }
 
@@ -143,7 +143,7 @@ private:
 	u8 m_reverb;
 
 	u32 m_flags;
-	u32 m_last_clock;
+	XTAL m_last_clock;
 
 	std::array<voice_t, 8> m_voice;
 };

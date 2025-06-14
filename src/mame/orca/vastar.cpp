@@ -494,7 +494,7 @@ void vastar_state::vastar(machine_config &config)
 	screen.set_size(32*8, 32*8);
 	screen.set_visarea(0*8, 32*8-1, 2*8, 30*8-1);
 
-	VASTAR_VIDEO_DEVICE(config, m_vasvid, 0);
+	VASTAR_VIDEO_DEVICE(config, m_vasvid);
 	m_vasvid->set_screen("screen");
 	m_vasvid->set_bg_bases(0x800, 0x000, 0xc00);
 	m_vasvid->set_fg_bases(0x800, 0x400, 0x000);

@@ -26,7 +26,7 @@ class bbc_quinkey_intf_device : public device_t, public device_bbc_analogue_inte
 {
 public:
 	// construction/destruction
-	bbc_quinkey_intf_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_quinkey_intf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t overrides
@@ -60,7 +60,7 @@ public:
 		set_fixed(false);
 	}
 
-	bbc_quinkey_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock = 0);
+	bbc_quinkey_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callbacks
 	uint8_t read();
@@ -93,7 +93,7 @@ class bbc_quinkey_device : public device_t, public device_bbc_quinkey_interface
 {
 public:
 	// construction/destruction
-	bbc_quinkey_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_quinkey_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t overrides

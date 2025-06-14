@@ -12,8 +12,8 @@
 class a800_maxflash_128kb_device : public a800_rom_device
 {
 public:
-	a800_maxflash_128kb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	a800_maxflash_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	a800_maxflash_128kb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	a800_maxflash_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
@@ -39,7 +39,7 @@ private:
 class a800_maxflash_1mb_device : public a800_maxflash_128kb_device
 {
 public:
-	a800_maxflash_1mb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	a800_maxflash_1mb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
 

@@ -5083,7 +5083,7 @@ void tdragon_prot_state::tdragon_prot(machine_config &config)
 {
 	tdragon(config);
 
-	TMP91640(config, m_protcpu, 4000000); // Toshiba TMP91640 marked as NMK-110, with 16Kbyte internal ROM, 512bytes internal RAM
+	TMP91640(config, m_protcpu, XTAL::u(4000000)); // Toshiba TMP91640 marked as NMK-110, with 16Kbyte internal ROM, 512bytes internal RAM
 	m_protcpu->set_addrmap(AS_PROGRAM, &tdragon_prot_state::tdragon_prot_map);
 	m_protcpu->port_write<6>().set(FUNC(tdragon_prot_state::mcu_port6_w));
 	m_protcpu->port_read<5>().set(FUNC(tdragon_prot_state::mcu_port5_r));
@@ -5238,7 +5238,7 @@ void tdragon_prot_state::hachamf_prot(machine_config &config)
 {
 	hachamf(config);
 
-	TMP91640(config, m_protcpu, 4000000); // Toshiba TMP91640 marked as NMK-113, with 16Kbyte internal ROM, 512bytes internal RAM
+	TMP91640(config, m_protcpu, XTAL::u(4000000)); // Toshiba TMP91640 marked as NMK-113, with 16Kbyte internal ROM, 512bytes internal RAM
 	m_protcpu->set_addrmap(AS_PROGRAM, &tdragon_prot_state::tdragon_prot_map);
 	m_protcpu->port_write<6>().set(FUNC(tdragon_prot_state::mcu_port6_w));
 	m_protcpu->port_read<5>().set(FUNC(tdragon_prot_state::mcu_port5_r));
@@ -5657,11 +5657,11 @@ void macross_prot_state::base_nmk214_215(machine_config &config)
 	m_protcpu->port_write<3>().set(FUNC(macross_prot_state::mcu_port3_to_214_w));
 	m_protcpu->port_write<7>().set(FUNC(macross_prot_state::mcu_port7_to_214_w));
 
-	NMK214(config, m_nmk214[0], 0); // Descrambling device for sprite GFX data
+	NMK214(config, m_nmk214[0]); // Descrambling device for sprite GFX data
 	m_nmk214[0]->set_mode(0);
 	m_nmk214[0]->set_input_address_bitswap(nmk214_sprites_address_bitswap);
 
-	NMK214(config, m_nmk214[1], 0); // Descrambling device for BG GFX data
+	NMK214(config, m_nmk214[1]); // Descrambling device for BG GFX data
 	m_nmk214[1]->set_mode(1);
 	m_nmk214[1]->set_input_address_bitswap(nmk214_bg_address_bitswap);
 }
@@ -5727,7 +5727,7 @@ void nmk16_state::powerins(machine_config &config)
 	OKIM6295(config, m_oki[1], XTAL(16'000'000) / 4, okim6295_device::PIN7_LOW); // verified on PCB
 	m_oki[1]->add_route(ALL_OUTPUTS, "mono", 0.15);
 
-	nmk112_device &nmk112(NMK112(config, "nmk112", 0));
+	nmk112_device &nmk112(NMK112(config, "nmk112"));
 	nmk112.set_rom0_tag("oki1");
 	nmk112.set_rom1_tag("oki2");
 }
@@ -5762,7 +5762,7 @@ void nmk16_state::powerinsa(machine_config &config)
 
 	GENERIC_LATCH_8(config, m_soundlatch);
 
-	OKIM6295(config, m_oki[0], 990'000, okim6295_device::PIN7_LOW); // pin7 not verified
+	OKIM6295(config, m_oki[0], XTAL::u(990'000), okim6295_device::PIN7_LOW); // pin7 not verified
 	m_oki[0]->set_addrmap(0, &nmk16_state::powerinsa_oki_map);
 	m_oki[0]->add_route(ALL_OUTPUTS, "mono", 0.15);
 }
@@ -5808,7 +5808,7 @@ void nmk16_state::powerinsb(machine_config &config)
 	OKIM6295(config, m_oki[1], XTAL(16'000'000) / 4, okim6295_device::PIN7_LOW);
 	m_oki[1]->add_route(ALL_OUTPUTS, "mono", 0.15);
 
-	nmk112_device &nmk112(NMK112(config, "nmk112", 0));
+	nmk112_device &nmk112(NMK112(config, "nmk112"));
 	nmk112.set_rom0_tag("oki1");
 	nmk112.set_rom1_tag("oki2");
 

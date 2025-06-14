@@ -16,7 +16,7 @@ class tek_msu_fdc_device
 	, public nscsi_slot_card_interface
 {
 public:
-	tek_msu_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	tek_msu_fdc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

@@ -40,7 +40,7 @@ DEFINE_DEVICE_TYPE(MB86292, mb86292_device, "mb86292", "Fujitsu MB86292 \"Orchid
 // set_ids(0x10cf202b, <rev>, 0x038000, <subvendor>);
 
 
-mb86292_device::mb86292_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock)
+mb86292_device::mb86292_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_video_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)
@@ -51,7 +51,7 @@ mb86292_device::mb86292_device(machine_config const &mconfig, device_type type, 
 	m_draw_io_space_config = address_space_config("draw_regs", ENDIANNESS_LITTLE, 32, 16, 0, address_map_constructor(FUNC(mb86292_device::draw_io_map), this));
 }
 
-mb86292_device::mb86292_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+mb86292_device::mb86292_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: mb86292_device(mconfig, MB86292, tag, owner, clock)
 {
 }

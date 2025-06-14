@@ -17,7 +17,7 @@
 
 DEFINE_DEVICE_TYPE(CF61909, cf61909_device, "cf61909", "Texas Instruments CF61909 (DEVO)")
 
-cf61909_device::cf61909_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+cf61909_device::cf61909_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, CF61909, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, device_rom_interface(mconfig, *this)

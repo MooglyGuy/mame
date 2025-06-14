@@ -1892,17 +1892,17 @@ void sprinter_state::sprinter(machine_config &config)
 	ATA_INTERFACE(config, m_ata[0]).options(sprinter_ata_devices, "hdd", "hdd", false);
 	ATA_INTERFACE(config, m_ata[1]).options(sprinter_ata_devices, "hdd", "hdd", false);
 
-	BETA_DISK(config, m_beta, 0);
+	BETA_DISK(config, m_beta);
 
 	ISA8(config, m_isa[0], X_SP / 5);
 	m_isa[0]->set_custom_spaces();
-	zxbus_device &zxbus(ZXBUS(config, "zxbus", 0));
+	zxbus_device &zxbus(ZXBUS(config, "zxbus"));
 	zxbus.set_iospace(m_isa[0], isa8_device::AS_ISA_IO);
-	ZXBUS_SLOT(config, "zxbus2isa", 0, "zxbus", zxbus_cards, nullptr);
+	ZXBUS_SLOT(config, "zxbus2isa", "zxbus", zxbus_cards, nullptr);
 
 	ISA8(config, m_isa[1], X_SP / 5);
 	m_isa[1]->set_custom_spaces();
-	ISA8_SLOT(config, "isa8", 0, m_isa[1], pc_isa8_cards, nullptr, false);
+	ISA8_SLOT(config, "isa8", m_isa[1], pc_isa8_cards, nullptr, false);
 
 	m_screen->set_raw(X_SP / 3, SPRINT_WIDTH, SPRINT_HEIGHT, { 0, SPRINT_XVIS - 1, 0, SPRINT_YVIS - 1 });
 	m_screen->set_screen_update(FUNC(sprinter_state::screen_update));
@@ -1940,8 +1940,8 @@ void sprinter_state::sprinter(machine_config &config)
 	ay8910.add_route(1, "speakers", 0.25, 1);
 	ay8910.add_route(2, "speakers", 0.50, 1);
 
-	DAC_16BIT_R2R(config, m_ldac, 0).add_route(ALL_OUTPUTS, "speakers", 0.5, 0);
-	DAC_16BIT_R2R(config, m_rdac, 0).add_route(ALL_OUTPUTS, "speakers", 0.5, 1);
+	DAC_16BIT_R2R(config, m_ldac).add_route(ALL_OUTPUTS, "speakers", 0.5, 0);
+	DAC_16BIT_R2R(config, m_rdac).add_route(ALL_OUTPUTS, "speakers", 0.5, 1);
 
 	subdevice<gfxdecode_device>("gfxdecode")->set_info(gfx_sprinter);
 }

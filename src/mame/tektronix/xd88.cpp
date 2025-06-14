@@ -70,13 +70,13 @@ void xd88_state::cpu_map(address_map &map)
 
 void xd88_state::xd88_01(machine_config &config)
 {
-	MC88100(config, m_cpu, 20'000'000);
+	MC88100(config, m_cpu, XTAL::u(20'000'000));
 	m_cpu->set_addrmap(AS_PROGRAM, &xd88_state::cpu_map);
 	m_cpu->set_cmmu_code([this](u32 const address) -> mc88200_device & { return *m_cmmu[4]; });
 	m_cpu->set_cmmu_data([this](u32 const address) -> mc88200_device & { return *m_cmmu[0]; });
 
 	for (unsigned i = 0; i < std::size(m_cmmu); i++)
-		MC88200(config, m_cmmu[i], 20'000'000, i).set_mbus(m_cpu, AS_PROGRAM);
+		MC88200(config, m_cmmu[i], XTAL::u(20'000'000), i).set_mbus(m_cpu, AS_PROGRAM);
 }
 
 ROM_START(xd88_01)

@@ -13,7 +13,7 @@ class scsidma_device :  public device_t
 {
 public:
 	// construction/destruction
-	scsidma_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	scsidma_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename... T> void set_maincpu_tag(T &&... args) { m_maincpu.set_tag(std::forward<T>(args)...); }
 

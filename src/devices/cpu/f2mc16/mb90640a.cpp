@@ -6,7 +6,7 @@
 
 DEFINE_DEVICE_TYPE(MB90641A, mb90641a_device, "mb90641a", "Fujitsu MB90641A")
 
-mb90640a_device::mb90640a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+mb90640a_device::mb90640a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	f2mc16_device(mconfig, type, tag, owner, clock),
 	m_program_config("program", ENDIANNESS_LITTLE, 16, 24, 0, address_map_constructor(FUNC(mb90640a_device::internal_map), this)),
 	m_clock_generator(*this, "clock_generator"),
@@ -18,7 +18,7 @@ mb90640a_device::mb90640a_device(const machine_config &mconfig, device_type type
 {
 }
 
-mb90641a_device::mb90641a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mb90641a_device::mb90641a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mb90640a_device(mconfig, MB90641A, tag, owner, clock)
 {
 }

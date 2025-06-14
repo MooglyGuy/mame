@@ -76,7 +76,7 @@ take effect immediately. VSYNC is not signalled in any way.
 DEFINE_DEVICE_TYPE(ELECTRON_ULA, electron_ula_device, "electron_ula", "Acorn Electron ULA")
 
 
-electron_ula_device::electron_ula_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+electron_ula_device::electron_ula_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ELECTRON_ULA, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, device_palette_interface(mconfig, *this)
@@ -121,7 +121,7 @@ void electron_ula_device::device_start()
 	m_scanline_timer->adjust(screen().time_until_pos(0), 0, screen().scan_period());
 
 	// large stream buffer to favour emu/sound.cpp re-sample quality
-	m_sound_stream = stream_alloc(0, 1, 48000 * 32);
+	m_sound_stream = stream_alloc(0, 1, XTAL::u(48000) * 32);
 	m_sound_enable = false;
 	m_sound_freq = 300;
 	m_sound_incr = 0;
@@ -230,7 +230,7 @@ void electron_ula_device::sound_stream_update(sound_stream &stream)
 		m_sound_incr -= m_sound_freq;
 		while (m_sound_incr < 0)
 		{
-			m_sound_incr += stream.sample_rate() / 2;
+			m_sound_incr += stream.sample_rate().value() / 2;
 			m_sound_signal = -m_sound_signal;
 		}
 
@@ -488,7 +488,7 @@ void electron_ula_device::io_w(offs_t offset, uint8_t data)
 			break;
 
 		case 0x06: // Counter divider
-			set_sound_frequency((clock() / 16) / (32 * (data + 1)));
+			set_sound_frequency(((clock() / 16) / (32 * (data + 1))).value());
 			break;
 
 		case 0x07: // Miscellaneous control

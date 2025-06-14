@@ -217,10 +217,10 @@ static void scsi_devices(device_slot_interface &device)
 
 void ip12_state::ip12(machine_config &config)
 {
-	SGI_PIC1(config, m_pic, 0);
+	SGI_PIC1(config, m_pic);
 	m_pic->set_bus(m_cpu, AS_PROGRAM);
 
-	SGI_HPC1(config, m_hpc, 0);
+	SGI_HPC1(config, m_hpc);
 	m_hpc->set_addrmap(0, &ip12_state::pbus_map);
 	m_hpc->set_gio(m_cpu, AS_PROGRAM);
 	m_hpc->set_enet(m_eth);
@@ -255,7 +255,7 @@ void ip12_state::ip12(machine_config &config)
 
 	DP8572A(config, m_rtc, 32.768_kHz_XTAL).set_use_utc(true);
 
-	NSCSI_BUS(config, "scsi", 0);
+	NSCSI_BUS(config, "scsi");
 	NSCSI_CONNECTOR(config, "scsi:0").option_set("wd33c93a", WD33C93A).machine_config(
 		[this](device_t *device)
 		{
@@ -273,7 +273,7 @@ void ip12_state::ip12(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi:6", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:7", scsi_devices, nullptr, false);
 
-	SEEQ8003(config, m_eth, 0);
+	SEEQ8003(config, m_eth);
 	m_eth->out_int_cb().set(m_hpc, FUNC(hpc1_device::write_int));
 	m_eth->out_rxrdy_cb().set(m_hpc, FUNC(hpc1_device::write_drq<1>));
 	m_hpc->dma_r_cb<1>().set(m_eth, FUNC(seeq8003_device::fifo_r));
@@ -287,12 +287,12 @@ void ip12_state::ip12(machine_config &config)
 
 	// duart 0: keyboard/mouse ports
 	SCC85C30(config, m_scc[0], 10_MHz_XTAL);
-	m_scc[0]->configure_channels(3'686'400, 0, 3'686'400, 0);
+	m_scc[0]->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 	m_scc[0]->out_int_callback().set(scc_irq, FUNC(input_merger_any_high_device::in_w<0>));
 
 	sgi_kbd_port_device &kbd_port(SGI_KBD_PORT(config, "keyboard_port"));
 	kbd_port.option_set("keyboard", SGI_KBD);
-	rs232_port_device &mouse_port(RS232_PORT(config, "mouse_port", 0));
+	rs232_port_device &mouse_port(RS232_PORT(config, "mouse_port"));
 	mouse_port.option_set("mouse", SGI_HLE_SERIAL_MOUSE);
 	m_scc[0]->out_txda_callback().set(kbd_port, FUNC(sgi_kbd_port_device::write_txd));
 	kbd_port.rxd_handler().set(m_scc[0], FUNC(scc85c30_device::rxa_w));
@@ -300,7 +300,7 @@ void ip12_state::ip12(machine_config &config)
 
 	// duart 1: serial ports
 	SCC85C30(config, m_scc[1], 10_MHz_XTAL);
-	m_scc[1]->configure_channels(3'686'400, 0, 3'686'400, 0);
+	m_scc[1]->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 	m_scc[1]->out_int_callback().set(scc_irq, FUNC(input_merger_any_high_device::in_w<1>));
 
 	rs232_port_device &rs232a(RS232_PORT(config, "rs232a", default_rs232_devices, nullptr));
@@ -320,7 +320,7 @@ void ip12_state::ip12(machine_config &config)
 
 	// duart 2: "Apple" RS-422 serial ports (4D/PI only)
 	SCC85C30(config, m_scc[2], 10_MHz_XTAL); // Z8513010VSC ESCC
-	m_scc[2]->configure_channels(3'686'400, 0, 3'686'400, 0);
+	m_scc[2]->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 	m_scc[2]->out_int_callback().set(scc_irq, FUNC(input_merger_any_high_device::in_w<1>));
 
 	DSP56001(config, m_dsp, 20_MHz_XTAL);

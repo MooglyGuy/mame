@@ -25,7 +25,7 @@ void msx_yamaha_60pin(device_slot_interface &device, bool is_in_subslot)
 DEFINE_DEVICE_TYPE(MSX_SLOT_YAMAHA_EXPANSION, msx_slot_yamaha_expansion_device, "msx_slot_yamaha_expansion", "MSX Yamaha Expansion slot")
 
 
-msx_slot_yamaha_expansion_device::msx_slot_yamaha_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_yamaha_expansion_device::msx_slot_yamaha_expansion_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_cartridge_base_device(mconfig, MSX_SLOT_YAMAHA_EXPANSION, tag, owner, clock)
 {
 }

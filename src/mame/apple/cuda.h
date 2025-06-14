@@ -103,7 +103,7 @@ private:
 class cuda_lite_device : public cuda_device
 {
 public:
-	cuda_lite_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	cuda_lite_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 
 protected:

@@ -36,7 +36,7 @@
 DEFINE_DEVICE_TYPE(LC78836M, lc78836m_device, "lc78836m", "Sanyo LC78836M Digital Audio 16-bit D/A Converter")
 
 
-lc78836m_device::lc78836m_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+lc78836m_device::lc78836m_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, LC78836M, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
@@ -66,7 +66,7 @@ void lc78836m_device::device_start()
 	save_item(NAME(m_sample_ch2));
 	save_item(NAME(m_att));
 
-	m_stream = stream_alloc(2, 2, m_clock);
+	m_stream = stream_alloc(2, 2, clock());
 }
 
 void lc78836m_device::device_reset()
@@ -198,9 +198,9 @@ void lc78836m_device::update_clock()
 	else if (m_cksl1 == 1 && m_cksl2 == 1)
 		m_clock_fs = 512;
 
-	const uint32_t new_sample_rate = m_clock / m_clock_fs;
+	const XTAL new_sample_rate = clock() / m_clock_fs;
 	if (m_stream != nullptr && new_sample_rate != m_stream->sample_rate()) {
-		LOG("sample rate changed to %d\n", new_sample_rate);
+		LOG("sample rate changed to %d\n", new_sample_rate.value());
 		m_stream->set_sample_rate(new_sample_rate);
 	}
 }

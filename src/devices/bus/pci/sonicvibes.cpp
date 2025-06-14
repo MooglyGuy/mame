@@ -45,7 +45,7 @@ DEFINE_DEVICE_TYPE(SONICVIBES, sonicvibes_device,   "sonicvibes",   "S3 Sonic Vi
 
 
 
-sonicvibes_device::sonicvibes_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+sonicvibes_device::sonicvibes_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_opl3(*this, "opl3")
 	, m_joy(*this, "pc_joy")
@@ -55,7 +55,7 @@ sonicvibes_device::sonicvibes_device(const machine_config &mconfig, device_type 
 }
 
 // FIXME: subvendor cards eventually need subclassing, relies on above
-sonicvibes_device::sonicvibes_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sonicvibes_device::sonicvibes_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sonicvibes_device(mconfig, SONICVIBES, tag, owner, clock)
 {
 }

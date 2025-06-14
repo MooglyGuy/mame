@@ -17,7 +17,7 @@ class sh7042_device;
 
 class sh_intc_device : public device_t {
 public:
-	sh_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T> sh_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu) :
 		sh_intc_device(mconfig, tag, owner)
 	{

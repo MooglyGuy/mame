@@ -13,7 +13,7 @@
 DEFINE_DEVICE_TYPE(MSX_SLOT_MSX_WRITE, msx_slot_msx_write_device, "msx_slot_msx_write", "MSX Internal MSX-Write")
 
 
-msx_slot_msx_write_device::msx_slot_msx_write_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_msx_write_device::msx_slot_msx_write_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_SLOT_MSX_WRITE, tag, owner, clock)
 	, msx_internal_slot_interface(mconfig, *this)
 	, m_rom_region(*this, finder_base::DUMMY_TAG)

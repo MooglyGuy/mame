@@ -17,7 +17,7 @@ class lc82310_device : public device_t,
 					   public device_sound_interface
 {
 public:
-	lc82310_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	lc82310_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void zcsctl_w(int state);
 	void ckctl_w(int state);

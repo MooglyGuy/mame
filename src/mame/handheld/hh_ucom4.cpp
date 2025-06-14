@@ -1059,7 +1059,7 @@ INPUT_PORTS_END
 void bgunf_state::bgunf(machine_config &config)
 {
 	// basic machine hardware
-	NEC_D553(config, m_maincpu, 400000); // approximation
+	NEC_D553(config, m_maincpu, XTAL::u(400000)); // approximation
 	m_maincpu->read_a().set(FUNC(bgunf_state::input_r));
 	m_maincpu->read_b().set_ioport("IN.2");
 	m_maincpu->write_c().set(FUNC(bgunf_state::plate_w));

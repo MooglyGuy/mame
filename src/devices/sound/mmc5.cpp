@@ -29,7 +29,7 @@
 
 DEFINE_DEVICE_TYPE(MMC5_SOUND,  mmc5_sound_device,  "mmc5_sound",  "Nintendo MMC5 (sound)")
 
-mmc5_sound_device::mmc5_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mmc5_sound_device::mmc5_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MMC5_SOUND, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_samps_per_sync(0)
@@ -60,7 +60,7 @@ void mmc5_sound_device::calculate_rates()
 		m_sync_times1[i] = m_samps_per_sync * (i + 1);
 	}
 
-	int const rate = clock() / 4;
+	XTAL const rate = clock() / 4;
 
 	if (m_stream != nullptr)
 		m_stream->set_sample_rate(rate);

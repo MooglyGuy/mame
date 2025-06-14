@@ -431,7 +431,7 @@ u32 macpb030_state::jaws_r(offs_t offset, u32 mem_mask)
 			break;
 
 		case 0x34: // Get CPU clock
-			if (m_maincpu->clock() == 25'000'000)
+			if (m_maincpu->clock().value() == 25'000'000)
 			{
 				return 1<<24;
 			}
@@ -480,11 +480,11 @@ u32 macpb030_state::niagra_r(offs_t offset, u32 mem_mask)
 			return 0xff000000;
 
 		case 0x36: // CPU speed register
-			if (m_maincpu->clock() == 25'000'000)
+			if (m_maincpu->clock().value() == 25'000'000)
 			{
 				return 2<<24;
 			}
-			else if (m_maincpu->clock() == 33'000'000)
+			else if (m_maincpu->clock().value() == 33'000'000)
 			{
 				return 3<<24;
 			}
@@ -1404,7 +1404,7 @@ void macpb030_state::macpb165c(machine_config &config)
 	m_screen->set_screen_update(FUNC(macpb030_state::screen_update_vga));
 	m_screen->set_no_palette();
 
-	WD90C26(config, m_vga, 0);
+	WD90C26(config, m_vga);
 	m_vga->set_screen(m_screen);
 	// 512KB
 	m_vga->set_vram_size(0x80000);

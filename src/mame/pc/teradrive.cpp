@@ -118,10 +118,10 @@ void teradrive_state::teradrive(machine_config &config)
 	at_softlists(config);
 
 	// FIXME: determine ISA bus clock
-	ISA16_SLOT(config, "isa1", 0, "mb:isabus", pc_isa16_cards, "vga", true);
-	ISA16_SLOT(config, "isa2", 0, "mb:isabus", pc_isa16_cards, "fdc", false);
-	ISA16_SLOT(config, "isa3", 0, "mb:isabus", pc_isa16_cards, "ide", false);
-	ISA16_SLOT(config, "isa4", 0, "mb:isabus", pc_isa16_cards, "comat", false);
+	ISA16_SLOT(config, "isa1", "mb:isabus", pc_isa16_cards, "vga", true);
+	ISA16_SLOT(config, "isa2", "mb:isabus", pc_isa16_cards, "fdc", false);
+	ISA16_SLOT(config, "isa3", "mb:isabus", pc_isa16_cards, "ide", false);
+	ISA16_SLOT(config, "isa4", "mb:isabus", pc_isa16_cards, "comat", false);
 
 	pc_kbdc_device &kbd(PC_KBDC(config, "kbd", pc_at_keyboards, STR_KBD_IBM_PC_AT_84));
 	kbd.out_clock_cb().set(m_mb, FUNC(at_mb_device::kbd_clk_w));

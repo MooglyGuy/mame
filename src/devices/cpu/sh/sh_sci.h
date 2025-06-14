@@ -19,9 +19,9 @@ class sh_intc_device;
 
 class sh_sci_device : public device_t {
 public:
-	sh_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	sh_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> sh_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, int id, T &&cpu, U &&intc, int eri, int rxi, int txi, int tei)
-		: sh_sci_device(mconfig, tag, owner, 0)
+		: sh_sci_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));

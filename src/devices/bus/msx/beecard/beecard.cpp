@@ -21,7 +21,7 @@ class bee_card_nomapper_device : public device_t
 								, public bee_card_interface
 {
 public:
-	bee_card_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	bee_card_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -32,7 +32,7 @@ protected:
 };
 
 
-bee_card_nomapper_device::bee_card_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+bee_card_nomapper_device::bee_card_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BEE_CARD_NOMAPPER, tag, owner, clock)
 	, bee_card_interface(mconfig, *this)
 {

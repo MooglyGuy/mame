@@ -42,7 +42,7 @@ INPUT_PORTS_END
 class sms_md6button_device : public device_t, public device_sms_control_interface
 {
 public:
-	sms_md6button_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sms_md6button_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 in_r() override;
 	virtual void out_w(u8 data, u8 mem_mask) override;
@@ -65,7 +65,7 @@ private:
 };
 
 
-sms_md6button_device::sms_md6button_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+sms_md6button_device::sms_md6button_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SMS_MD6BUTTON, tag, owner, clock),
 	device_sms_control_interface(mconfig, *this),
 	m_pad(*this, "PAD"),

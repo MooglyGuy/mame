@@ -169,7 +169,7 @@
 
 DEFINE_DEVICE_TYPE(VME_MZR8105, vme_mzr8105_card_device, "mzr8105", "Mizar VME8105")
 
-vme_mzr8105_card_device::vme_mzr8105_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_mzr8105_card_device::vme_mzr8105_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_MZR8105, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu (*this, "maincpu")

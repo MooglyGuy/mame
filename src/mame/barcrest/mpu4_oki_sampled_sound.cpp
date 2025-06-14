@@ -20,7 +20,7 @@ I've separated the channels here, to tie back at the game level
 
 DEFINE_DEVICE_TYPE(MPU4_OKI_SAMPLED_SOUND, mpu4_oki_sampled_sound, "mpu4okisnd", "Barcrest Sampled Sound Program Card")
 
-mpu4_oki_sampled_sound::mpu4_oki_sampled_sound(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mpu4_oki_sampled_sound::mpu4_oki_sampled_sound(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MPU4_OKI_SAMPLED_SOUND, tag, owner, clock),
 	device_mixer_interface(mconfig, *this),
 	m_cb2_handler(*this),
@@ -73,12 +73,12 @@ void mpu4_oki_sampled_sound::ic3_write(offs_t offset, uint8_t data)
 		m_t3l = data;
 	}
 
-	float const num = float(clock()) / ((m_t3l + 1) * (m_t3h + 1));
-	float const denom = std::ceil(float(m_t3h * (m_t3l + 1) + 1) / (2 * (m_t1 + 1))); //need to round up, this gives same precision as chip
+	double const num = clock().dvalue() / ((m_t3l + 1) * (m_t3h + 1));
+	double const denom = std::ceil(double(m_t3h * (m_t3l + 1) + 1) / (2 * (m_t1 + 1))); //need to round up, this gives same precision as chip
 
-	int const freq = int(num * denom);
+	XTAL const freq = XTAL::u(u32(num * denom));
 
-	if (freq)
+	if (freq.value())
 	{
 		m_msm6376->set_unscaled_clock(freq);
 	}
@@ -175,7 +175,7 @@ void mpu4_oki_sampled_sound::pia_gb_cb2_w(int state)
 void mpu4_oki_sampled_sound::device_add_mconfig(machine_config &config)
 {
 	PTM6840(config, m_ptm_ic3ss, clock());
-	m_ptm_ic3ss->set_external_clocks(0, 0, 0);
+	m_ptm_ic3ss->set_external_clocks(XTAL(), XTAL(), XTAL());
 	m_ptm_ic3ss->o1_callback().set("ptm_ic3ss", FUNC(ptm6840_device::set_c2));
 	m_ptm_ic3ss->o2_callback().set("ptm_ic3ss", FUNC(ptm6840_device::set_c1));
 	m_ptm_ic3ss->o3_callback().set("ptm_ic3ss", FUNC(ptm6840_device::set_g1));
@@ -187,7 +187,7 @@ void mpu4_oki_sampled_sound::device_add_mconfig(machine_config &config)
 	m_pia_ic4ss->ca2_handler().set(FUNC(mpu4_oki_sampled_sound::pia_gb_ca2_w));
 	m_pia_ic4ss->cb2_handler().set(FUNC(mpu4_oki_sampled_sound::pia_gb_cb2_w));
 
-	OKIM6376(config, m_msm6376, 128000);     //Adjusted by IC3, default to 16KHz sample. Can also be 85430 at 10.5KHz and 64000 at 8KHz
+	OKIM6376(config, m_msm6376, XTAL::u(128000));     //Adjusted by IC3, default to 16KHz sample. Can also be 85430 at 10.5KHz and 64000 at 8KHz
 	m_msm6376->add_route(0, *this, 1.0);
 	m_msm6376->add_route(1, *this, 1.0);
 }

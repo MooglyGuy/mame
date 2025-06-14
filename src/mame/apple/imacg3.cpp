@@ -151,14 +151,14 @@ void imac_state::write_sense(u16 data)
 
 void imac_state::imac(machine_config &config)
 {
-	PPC750(config, m_maincpu, 66000000);    // actually 233 MHz
+	PPC750(config, m_maincpu, XTAL::u(66000000));    // actually 233 MHz
 	m_maincpu->ppcdrc_set_options(PPCDRC_COMPATIBLE_OPTIONS);
 	m_maincpu->set_addrmap(AS_PROGRAM, &imac_state::imac_map);
 
-	PCI_ROOT(config, "pci", 0);
-	MPC106(config, m_mpc106, 0, mpc106_host_device::MAP_TYPE_B, "maincpu", "bootrom");
+	PCI_ROOT(config, "pci");
+	MPC106(config, m_mpc106, XTAL(), mpc106_host_device::MAP_TYPE_B, "maincpu", "bootrom");
 
-	paddington_device &paddington(PADDINGTON(config, "pci:10.0", 0));
+	paddington_device &paddington(PADDINGTON(config, "pci:10.0"));
 	paddington.set_maincpu_tag("maincpu");
 	paddington.irq_callback().set(FUNC(imac_state::irq_w));
 
@@ -169,7 +169,7 @@ void imac_state::imac(machine_config &config)
 
 	I2C_24C01(config, m_edid);
 
-	OPTI_82C861(config, "pci:14.0", 0);
+	OPTI_82C861(config, "pci:14.0");
 
 	MACADB(config, m_macadb, 15.6672_MHz_XTAL);
 

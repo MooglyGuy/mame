@@ -21,7 +21,7 @@ class electron_fbjoy_device
 	, public device_electron_expansion_interface
 {
 public:
-	electron_fbjoy_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	electron_fbjoy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, ELECTRON_FBJOY, tag, owner, clock)
 		, device_electron_expansion_interface(mconfig, *this)
 		, m_joy(*this, "joy")

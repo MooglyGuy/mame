@@ -20,12 +20,12 @@ DEFINE_DEVICE_TYPE(DVDROM, dvdrom_image_device, "dvdrom_image", "CD/DVD-ROM Imag
 //  cdrom_image_device - constructor
 //-------------------------------------------------
 
-cdrom_image_device::cdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+cdrom_image_device::cdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: cdrom_image_device(mconfig, CDROM, tag, owner, clock)
 {
 }
 
-cdrom_image_device::cdrom_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool dvd_compat, bool gd_compat)
+cdrom_image_device::cdrom_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool dvd_compat, bool gd_compat)
 	: device_t(mconfig, type,  tag, owner, clock),
 	  device_image_interface(mconfig, *this),
 	  m_gd_compat(gd_compat),

@@ -71,12 +71,12 @@ Known games with LED data
 #include "cyberlead.h"
 #include "cyberlead.lh"
 
-namco_cyberlead_device::namco_cyberlead_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namco_cyberlead_device::namco_cyberlead_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	namco_cyberlead_device(mconfig, NAMCO_CYBERLEAD, tag, owner, clock)
 {
 }
 
-namco_cyberlead_device::namco_cyberlead_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+namco_cyberlead_device::namco_cyberlead_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_jvs_interface(mconfig, *this),
 	m_iocpu(*this, "iocpu"),
@@ -289,7 +289,7 @@ uint8_t namco_cyberlead_device::iocpu_port_7_r()
 }
 
 
-namco_cyberlead_led_device::namco_cyberlead_led_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+namco_cyberlead_led_device::namco_cyberlead_led_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NAMCO_CYBERLEAD_LED, tag, owner, clock),
 	device_rs232_port_interface(mconfig, *this),
 	m_ledcpu(*this, "ledcpu"),
@@ -466,7 +466,7 @@ class namco_cyberleada_device :
 	public namco_cyberlead_device
 {
 public:
-	namco_cyberleada_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0)
+	namco_cyberleada_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL())
 		: namco_cyberlead_device(mconfig, NAMCO_CYBERLEADA, tag, owner, clock)
 	{
 	}

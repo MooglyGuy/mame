@@ -15,7 +15,7 @@ class stcart_connector: public device_t, public device_single_card_slot_interfac
 public:
 	template <typename T>
 	stcart_connector(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: stcart_connector(mconfig, tag, owner, (uint32_t)0)
+		: stcart_connector(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -23,7 +23,7 @@ public:
 		set_fixed(false);
 	}
 
-	stcart_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	stcart_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_space_installer &space);
 

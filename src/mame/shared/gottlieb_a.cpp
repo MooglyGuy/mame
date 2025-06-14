@@ -54,7 +54,7 @@ gottlieb_sound_p2_device::gottlieb_sound_p2_device(const machine_config &mconfig
 {
 }
 
-gottlieb_sound_p2_device::gottlieb_sound_p2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_p2_device::gottlieb_sound_p2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_mixer_interface(mconfig, *this)
 	, m_cpu(*this, "audiocpu")
@@ -388,7 +388,6 @@ gottlieb_sound_speech_r1_device::gottlieb_sound_speech_r1_device(const machine_c
 gottlieb_sound_speech_r1_device::gottlieb_sound_speech_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_r1_device(mconfig, type, tag, owner, clock)
 	, m_votrax(*this, "votrax")
-	, m_speech_clock(0)
 {
 }
 
@@ -497,7 +496,7 @@ void gottlieb_sound_speech_r1_device::device_start()
 //  constructor
 //-------------------------------------------------
 
-gottlieb_sound_speech_r1a_device::gottlieb_sound_speech_r1a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+gottlieb_sound_speech_r1a_device::gottlieb_sound_speech_r1a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: gottlieb_sound_speech_r1_device(mconfig, GOTTLIEB_SOUND_SPEECH_REV1A, tag, owner, clock)
 {
 }

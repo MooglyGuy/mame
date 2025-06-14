@@ -19,7 +19,7 @@ class kim1bus_k1016_device:
 {
 public:
 	// construction/destruction
-	kim1bus_k1016_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	kim1bus_k1016_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -28,7 +28,7 @@ private:
 	std::unique_ptr<u8[]> m_ram;
 };
 
-kim1bus_k1016_device::kim1bus_k1016_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+kim1bus_k1016_device::kim1bus_k1016_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, KIM1BUS_K1016, tag, owner, clock)
 	, device_kim1bus_card_interface(mconfig, *this)
 {

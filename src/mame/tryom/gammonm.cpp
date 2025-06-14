@@ -165,7 +165,7 @@ INPUT_PORTS_END
 void gammonm_state::gammonm2(machine_config &config)
 {
 	// basic machine hardware
-	M6800(config, m_maincpu, 850000); // measured
+	M6800(config, m_maincpu, XTAL::u(850000)); // measured
 	m_maincpu->set_addrmap(AS_PROGRAM, &gammonm_state::main_map);
 
 	const attotime nmi_period = attotime::from_hz(262); // measured

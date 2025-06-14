@@ -45,7 +45,7 @@ protected:
 	virtual void device_start() override ATTR_COLD;
 
 	// construction/destruction
-	pce_cdsys3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pce_cdsys3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// helper classes
 	pce_scdsys_shared m_scdsys;
@@ -60,7 +60,7 @@ class pce_cdsys3j_device : public pce_cdsys3_device
 {
 public:
 	// construction/destruction
-	pce_cdsys3j_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pce_cdsys3j_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 // ======================> pce_cdsys3u_device
@@ -69,7 +69,7 @@ class pce_cdsys3u_device : public pce_cdsys3_device
 {
 public:
 	// construction/destruction
-	pce_cdsys3u_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pce_cdsys3u_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

@@ -248,7 +248,7 @@ void igs_68k_023vid_state::xypmd(machine_config &config)
 
 	PALETTE(config, "palette").set_format(palette_device::xRGB_555, 0x1200 / 2);
 
-	IGS023_VIDEO(config, m_video, 0);
+	IGS023_VIDEO(config, m_video);
 	m_video->set_palette("palette");
 	m_video->read_spriteram_callback().set([this](offs_t offset) { return m_mainram[offset]; });
 

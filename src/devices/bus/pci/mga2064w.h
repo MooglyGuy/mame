@@ -12,7 +12,7 @@
 
 class mga2064w_device : public pci_card_device, public device_memory_interface {
 public:
-	mga2064w_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mga2064w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void legacy_memory_map(address_map &map) ATTR_COLD;
 	void legacy_io_map(address_map &map) ATTR_COLD;

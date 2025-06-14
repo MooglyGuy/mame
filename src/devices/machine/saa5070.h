@@ -49,11 +49,11 @@
 class saa5070_uart_device : public device_t, public device_serial_interface
 {
 public:
-	saa5070_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	saa5070_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto txd_handler() { return m_txd_handler.bind(); }
 
-	void set_baud_rate(int rxbaud, int txbaud, int parity);
+	void set_baud_rate(const XTAL &rxbaud, const XTAL &txbaud, int parity);
 	uint8_t status() { return m_status; }
 
 	void tx_byte(uint8_t data);
@@ -88,7 +88,7 @@ private:
 class saa5070_device : public device_t
 {
 public:
-	saa5070_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	saa5070_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// port handlers
 	auto readpa_handler() { return m_in_a_handler.bind(); }

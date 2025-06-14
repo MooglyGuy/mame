@@ -14,7 +14,7 @@
 class ht1130_device : public cpu_device
 {
 public:
-	ht1130_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	ht1130_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	enum {
 		HT1130_PC,
@@ -39,7 +39,7 @@ public:
 	auto segment_out_cb() { return m_segment_out.bind(); }
 
 protected:
-	ht1130_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor data);
+	ht1130_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor data);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -127,7 +127,7 @@ protected:
 class ht1190_device : public ht1130_device
 {
 public:
-	ht1190_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	ht1190_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

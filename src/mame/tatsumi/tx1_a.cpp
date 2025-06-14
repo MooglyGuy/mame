@@ -366,9 +366,6 @@ static inline void update_engine(int eng[4])
 
 void tx1_sound_device::sound_stream_update(sound_stream &stream)
 {
-	uint32_t step_0, step_1, step_2;
-	double /*gain_0, gain_1,*/ gain_2, gain_3;
-
 	/* 8253 outputs for the player/opponent engine sounds. */
 	const uint32_t step_0 = XTAL(m_pit8253.counts[0].val ? (TX1_PIT_CLOCK / m_pit8253.counts[0].val * m_freq_to_step) : XTAL::u(0)).value();
 	const uint32_t step_1 = XTAL(m_pit8253.counts[1].val ? (TX1_PIT_CLOCK / m_pit8253.counts[1].val * m_freq_to_step) : XTAL::u(0)).value();
@@ -624,7 +621,7 @@ buggyboy_sound_device::buggyboy_sound_device(const machine_config &mconfig, devi
 {
 }
 
-buggyboyjr_sound_device::buggyboyjr_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+buggyboyjr_sound_device::buggyboyjr_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	buggyboy_sound_device(mconfig, BUGGYBOYJR_SOUND, tag, owner, clock)
 {
 }
@@ -761,10 +758,6 @@ void buggyboy_sound_device::sound_stream_update(sound_stream &stream)
 {
 	/* This is admittedly a bit of a hack job... */
 
-	uint32_t step_0, step_1;
-	int n1_en, n2_en;
-	double gain0, gain1_l, gain1_r;
-
 	/* 8253 outputs for the player/opponent buggy engine sounds. */
 	uint32_t step_0 = (m_pit8253.counts[0].val ? (BUGGYBOY_PIT_CLOCK / m_pit8253.counts[0].val * m_freq_to_step) : XTAL::u(0)).value();
 	uint32_t step_1 = (m_pit8253.counts[1].val ? (BUGGYBOY_PIT_CLOCK / m_pit8253.counts[1].val * m_freq_to_step) : XTAL::u(0)).value();
@@ -785,7 +778,7 @@ void buggyboy_sound_device::sound_stream_update(sound_stream &stream)
 		pit1 = m_eng_voltages[(m_step1 >> 24) & 0xf];
 
 		/* Calculate the tyre screech noise source */
-		for (int i = 0; i < BUGGYBOY_NOISE_CLOCK / machine().sample_rate(); ++i)
+		for (int i = 0; i < (int)(BUGGYBOY_NOISE_CLOCK.dvalue() / machine().sample_rate().dvalue()); ++i)
 		{
 			/* CD4006 is a 4-4-1-4-4-1 shift register */
 			int p13 = BIT(m_noise_lfsra, 3);

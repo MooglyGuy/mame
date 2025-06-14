@@ -41,7 +41,7 @@
 
 DEFINE_DEVICE_TYPE(VME_MVME328, vme_mvme328_device, "mvme328", "Motorola MVME328")
 
-vme_mvme328_device::vme_mvme328_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_mvme328_device::vme_mvme328_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_MVME328, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -178,7 +178,7 @@ void vme_mvme328_device::device_add_mconfig(machine_config &config)
 		{
 			mb87030_device &mb87030(downcast<mb87030_device &>(*device));
 
-			mb87030.set_clock(8'000'000);
+			mb87030.set_clock(XTAL::u(8'000'000));
 			mb87030.out_irq_callback().set(
 				[this](int state)
 				{
@@ -204,7 +204,7 @@ void vme_mvme328_device::device_add_mconfig(machine_config &config)
 		{
 			mb87030_device &mb87030(downcast<mb87030_device &>(*device));
 
-			mb87030.set_clock(8'000'000);
+			mb87030.set_clock(XTAL::u(8'000'000));
 			mb87030.out_irq_callback().set(
 				[this](int state)
 				{

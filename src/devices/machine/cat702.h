@@ -20,7 +20,7 @@ public:
 	void write_datain(int state);
 
 protected:
-	cat702_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	cat702_device_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -45,7 +45,7 @@ private:
 class cat702_device : public cat702_device_base
 {
 public:
-	cat702_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	cat702_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void write_select(int state);
 	void write_clock(int state);
@@ -54,7 +54,7 @@ public:
 class cat702_piu_device : public cat702_device_base
 {
 public:
-	cat702_piu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	cat702_piu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void write_select(int state);
 	void write_clock(int state);

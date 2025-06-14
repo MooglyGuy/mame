@@ -666,7 +666,7 @@ void coinmvga_state::coinmvga(machine_config &config)
 
 	I2C_24C04(config, "eeprom");
 
-	MSM6242(config, "rtc", 32768);
+	MSM6242(config, "rtc", XTAL::u(32768));
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));

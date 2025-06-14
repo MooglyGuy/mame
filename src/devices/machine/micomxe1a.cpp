@@ -156,7 +156,7 @@ micom_xe_1a_device::micom_xe_1a_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock):
+		const XTAL &clock):
 	device_t(mconfig, MICOM_XE_1A, tag, owner, clock),
 	m_buttons_callback(*this, 0xffff),
 	m_analog_callback(*this, 0x00),

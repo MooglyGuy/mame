@@ -231,10 +231,10 @@ void msm5232_device::init_tables()
 	// highest possible frequency is chipclock/13/16 (pitch data=0x57)
 	// at 2MHz : 2000000/13/16 = 9615 Hz
 
-	m_UpdateStep = int(double(1 << STEP_SH) * double(m_rate) / double(m_chip_clock));
+	m_UpdateStep = int(double(1 << STEP_SH) * m_rate / m_chip_clock.dvalue());
 	//logerror("clock=%i Hz rate=%i Hz, UpdateStep=%i\n", m_chip_clock, m_rate, m_UpdateStep);
 
-	double const scale = m_chip_clock.dvalue() / double(m_rate);
+	double const scale = m_chip_clock.dvalue() / m_rate;
 	m_noise_step = ((1 << STEP_SH) / 128.0) * scale; // step of the rng reg in 16.16 format
 	//logerror("noise step=%8x\n", m_noise_step);
 

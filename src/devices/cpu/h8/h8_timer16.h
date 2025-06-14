@@ -129,9 +129,9 @@ protected:
 
 class h8325_timer16_channel_device : public h8_timer16_channel_device {
 public:
-	h8325_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8325_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	template<typename T, typename U> h8325_timer16_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu, U &&intc, int irq_base)
-		: h8325_timer16_channel_device(mconfig, tag, owner, 0)
+		: h8325_timer16_channel_device(mconfig, tag, owner)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));
 		m_intc.set_tag(std::forward<U>(intc));

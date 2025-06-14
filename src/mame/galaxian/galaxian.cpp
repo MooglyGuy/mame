@@ -7858,7 +7858,7 @@ void galaxian_state::bongog(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &galaxian_state::bongog_map);
 
 	// sound hardware
-	BONGO_SOUND(config, "cust", 0);
+	BONGO_SOUND(config, "cust");
 }
 
 void bmxstunts_state::bmxstunts(machine_config &config)

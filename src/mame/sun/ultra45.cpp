@@ -38,7 +38,7 @@ INPUT_PORTS_END
 
 void ultra45_state::ultra45(machine_config &config)
 {
-	SPARCV8(config, m_maincpu, 20'000'000); // Actually a 1.6GHz UltraSPARC IIIi CPU with 1 MB integrated Level2 cache
+	SPARCV8(config, m_maincpu, XTAL::u(20'000'000)); // Actually a 1.6GHz UltraSPARC IIIi CPU with 1 MB integrated Level2 cache
 	//SPARCV8(config, m_maincpu, 20'000'000); // Actually a 1.6GHz UltraSPARC IIIi CPU with 1 MB integrated Level2 cache (optional 2nd CPU)
 }
 

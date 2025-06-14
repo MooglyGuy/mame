@@ -42,7 +42,7 @@ INPUT_PORTS_END
 
 void xm200_state::xm200(machine_config &config)
 {
-	ST90R50(config, m_maincpu, 11'000'000); // type and clock guessed
+	ST90R50(config, m_maincpu, XTAL::u(11'000'000)); // type and clock guessed
 	m_maincpu->set_addrmap(AS_PROGRAM, &xm200_state::mem_map);
 }
 

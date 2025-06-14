@@ -12,10 +12,9 @@
 class sis5513_ide_device : public pci_device
 {
 public:
-	template <typename T> sis5513_ide_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
-		T &&host_tag, uint32_t bmspace = AS_PROGRAM
-	) : sis5513_ide_device(mconfig, tag, owner, clock)
+	template <typename T>
+	sis5513_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&host_tag, uint32_t bmspace = AS_PROGRAM)
+		: sis5513_ide_device(mconfig, tag, owner)
 	{
 		// IDE controller with 0xd0 as programming i/f "ATA Host Adapters standard"
 		// pclass bits 1-3 are actually 1 when controller is in native mode
@@ -23,7 +22,7 @@ public:
 		set_ids(0x10395513, 0xd0, 0x010180, 0x00);
 		m_bus_master_space.set_tag(host_tag, bmspace);
 	}
-	sis5513_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sis5513_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto irq_pri() { return m_irq_pri_callback.bind(); }
 	auto irq_sec() { return m_irq_sec_callback.bind(); }

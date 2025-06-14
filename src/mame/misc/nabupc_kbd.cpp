@@ -224,7 +224,7 @@ DEFINE_DEVICE_TYPE(NABUPC_KEYBOARD, nabupc_keyboard_device, "nabupc_keyboard", "
 //  nabupc_keyboard_device - constructor
 //-------------------------------------------------
 
-nabupc_keyboard_device::nabupc_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock)
+nabupc_keyboard_device::nabupc_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NABUPC_KEYBOARD, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_adc(*this, "adc")

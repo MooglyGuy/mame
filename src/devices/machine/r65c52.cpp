@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(R65C52, r65c52_device, "r65c52", "Rockwell 65C52 DACIA")
 
-r65c52_device::r65c52_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+r65c52_device::r65c52_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, R65C52, tag, owner, clock),
 	m_internal_clock1(*this, "clock1"),
 	m_internal_clock2(*this, "clock2"),
@@ -77,8 +77,8 @@ const int r65c52_device::internal_divider[16] =
 
 void r65c52_device::device_add_mconfig(machine_config &config)
 {
-	CLOCK(config, m_internal_clock1, 0);
-	CLOCK(config, m_internal_clock2, 0);
+	CLOCK(config, m_internal_clock1, XTAL());
+	CLOCK(config, m_internal_clock2, XTAL());
 	m_internal_clock1->signal_handler().set(FUNC(r65c52_device::internal_clock1));
 	m_internal_clock2->signal_handler().set(FUNC(r65c52_device::internal_clock2));
 }
@@ -268,7 +268,7 @@ void r65c52_device::update_divider(int idx)
 	// bits 0-3
 	double scale = internal_divider[(m_control[idx] >> 0) & 0xf];
 
-	if (m_xtal != 0)
+	if (m_xtal.value() != 0)
 	{
 		m_divide[idx] = 16;
 		if (!m_dtr[idx] || m_rx_state[idx] != STATE_START)
@@ -280,7 +280,7 @@ void r65c52_device::update_divider(int idx)
 			scale = 0;
 		}
 
-		LOG("R65C52: %x  CLOCK %d SCALE %f \n", idx + 1, m_xtal * scale, scale);
+		LOG("R65C52: %x  CLOCK %d SCALE %f \n", idx + 1, m_xtal.value() * scale, scale);
 	}
 	else
 	{
@@ -510,7 +510,7 @@ void r65c52_device::aux_compare_1_w(u8 data)
 	}
 }
 
-void r65c52_device::set_xtal(u32 xtal)
+void r65c52_device::set_xtal(const XTAL &xtal)
 {
 	m_xtal = xtal;
 

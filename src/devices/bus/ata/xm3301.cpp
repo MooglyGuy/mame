@@ -14,7 +14,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(XM3301, toshiba_xm3301_device, "xm3301", "Toshiba XM-3301 CD-ROM Drive")
 
-toshiba_xm3301_device::toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+toshiba_xm3301_device::toshiba_xm3301_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: atapi_cdrom_device(mconfig, XM3301, tag, owner, clock)
 {
 }

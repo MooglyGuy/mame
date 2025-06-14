@@ -232,7 +232,7 @@ INPUT_CHANGED_MEMBER(gk2000_state::gk2000a_change_cpu_freq)
 	int mhz = xm[(count_leading_zeros_32(bitswap<8>(newval,0,1,2,3,4,5,6,7)) - 24) % 9];
 
 	if (mhz > 0)
-		m_maincpu->set_unscaled_clock(mhz * 1'000'000);
+		m_maincpu->set_unscaled_clock(XTAL::u(1'000'000) * mhz);
 }
 
 INPUT_CHANGED_MEMBER(gk2000_state::centurion_change_cpu_freq)

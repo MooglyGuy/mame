@@ -26,7 +26,7 @@ namespace bus::amiga::cpuslot {
 class a590_device : public device_t, public device_amiga_cpuslot_interface
 {
 public:
-	a590_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a590_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;

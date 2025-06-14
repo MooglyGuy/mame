@@ -21,8 +21,8 @@ public:
 	void update_cluts();
 
 protected:
-	tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
-	tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 clut_size);
+	tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clut_size);
 
 private:
 
@@ -66,15 +66,15 @@ private:
 class tzb215_device : public tzbx15_device
 {
 public:
-	tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u32 clut_size);
-	tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clut_size);
+	tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class tzb315_device : public tzbx15_device
 {
 public:
-	tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u32 clut_size);
-	tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clut_size);
+	tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(TZB215_SPRITES, tzb215_device)

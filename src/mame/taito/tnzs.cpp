@@ -2386,7 +2386,7 @@ void kageki_state::kageki(machine_config &config)
 	ymsnd.add_route(2, "speaker", 0.15);
 	ymsnd.add_route(3, "speaker", 0.35);
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.5); // HA17408P R2R DAC, TODO: check levels
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.5); // HA17408P R2R DAC, TODO: check levels
 }
 
 void tnzsb_state::tnzsb(machine_config &config)

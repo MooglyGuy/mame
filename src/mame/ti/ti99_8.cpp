@@ -724,7 +724,7 @@ void ti99_8_state::ti99_8(machine_config& config)
 	SOFTWARE_LIST(config, "cart_list_ti99").set_original("ti99_cart");
 
 	// I/O port
-	TI99_IOPORT(config, m_ioport, XTAL(), ti99_ioport_options_plain, nullptr);
+	TI99_IOPORT(config, m_ioport, ti99_ioport_options_plain, nullptr);
 	m_ioport->extint_cb().set(FUNC(ti99_8_state::extint));
 	m_ioport->ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::pbox_ready));
 
@@ -745,7 +745,7 @@ void ti99_8_state::ti99_8(machine_config& config)
 	vsp.ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::speech_ready));
 	vsp.add_route(ALL_OUTPUTS, "speech_out", 0.50);
 
-	TMS6100(config, TI998_SPEECHROM_REG, 0);
+	TMS6100(config, TI998_SPEECHROM_REG);
 	vsp.m0_cb().set(TI998_SPEECHROM_REG, FUNC(tms6100_device::m0_w));
 	vsp.m1_cb().set(TI998_SPEECHROM_REG, FUNC(tms6100_device::m1_w));
 	vsp.addr_cb().set(TI998_SPEECHROM_REG, FUNC(tms6100_device::add_w));
@@ -785,7 +785,7 @@ void ti99_8_state::ti99_8(machine_config& config)
 	TMC0430(config, TI998_GLIB32_TAG, TI998_GROMLIB3_REG, 0x4000, 2).ready_cb().set(TI998_MAINBOARD_TAG, FUNC(mainboard8_device::p3_grom_ready));
 
 	// Joystick port
-	TI99_JOYPORT(config, m_joyport, XTAL(), ti99_joyport_options_mouse, "twinjoy");
+	TI99_JOYPORT(config, m_joyport, ti99_joyport_options_mouse, "twinjoy");
 }
 
 /*

@@ -44,12 +44,12 @@
 
 DEFINE_DEVICE_TYPE(H89BUS_LEFT_SLOT, h89bus_left_slot_device, "h89bus_lslot", "H-89 left (memory) slot")
 
-h89bus_left_slot_device::h89bus_left_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+h89bus_left_slot_device::h89bus_left_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h89bus_left_slot_device(mconfig, H89BUS_LEFT_SLOT, tag, owner, clock)
 {
 }
 
-h89bus_left_slot_device::h89bus_left_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+h89bus_left_slot_device::h89bus_left_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_single_card_slot_interface(mconfig, *this),
 	m_h89bus(*this, finder_base::DUMMY_TAG),
@@ -74,12 +74,12 @@ void h89bus_left_slot_device::device_resolve_objects()
 
 DEFINE_DEVICE_TYPE(H89BUS_RIGHT_SLOT, h89bus_right_slot_device, "h89bus_rslot", "H-89 right (I/O) slot")
 
-h89bus_right_slot_device::h89bus_right_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+h89bus_right_slot_device::h89bus_right_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h89bus_right_slot_device(mconfig, H89BUS_RIGHT_SLOT, tag, owner, clock)
 {
 }
 
-h89bus_right_slot_device::h89bus_right_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+h89bus_right_slot_device::h89bus_right_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_single_card_slot_interface(mconfig, *this),
 	m_h89bus(*this, finder_base::DUMMY_TAG),
@@ -137,12 +137,12 @@ ROM_END
 //  h89bus_device - constructor
 //-------------------------------------------------
 
-h89bus_device::h89bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+h89bus_device::h89bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h89bus_device(mconfig, H89BUS, tag, owner, clock)
 {
 }
 
-h89bus_device::h89bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+h89bus_device::h89bus_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_program_space(*this, finder_base::DUMMY_TAG, -1),
 	m_io_space(*this, finder_base::DUMMY_TAG, -1),

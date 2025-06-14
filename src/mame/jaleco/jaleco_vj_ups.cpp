@@ -13,7 +13,7 @@ namespace {
 class jaleco_vj_ups_device : public device_t, public device_rs232_port_interface
 {
 public:
-	jaleco_vj_ups_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	jaleco_vj_ups_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -21,7 +21,7 @@ protected:
 };
 
 
-jaleco_vj_ups_device::jaleco_vj_ups_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+jaleco_vj_ups_device::jaleco_vj_ups_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, JALECO_VJ_UPS, tag, owner, clock)
 	, device_rs232_port_interface(mconfig, *this)
 {

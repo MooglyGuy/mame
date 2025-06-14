@@ -82,7 +82,7 @@ void cleartone_state::cleartone(machine_config &config)
 
 	SPEAKER(config, "mono").front_center(); // TODO: possibly some discrete sound effects, too?
 
-	DIGITALKER(config, m_digitalker, 4'000'000); // XTAL isn't readable on PCB picture
+	DIGITALKER(config, m_digitalker, XTAL::u(4'000'000)); // XTAL isn't readable on PCB picture
 	m_digitalker->add_route(ALL_OUTPUTS, "mono", 0.16);
 }
 

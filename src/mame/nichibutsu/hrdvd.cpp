@@ -55,7 +55,7 @@
 class hrdvd_ata_controller_device : public abstract_ata_interface_device
 {
 public:
-	hrdvd_ata_controller_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	hrdvd_ata_controller_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint16_t dma_read();
 	void dma_write(uint16_t data);
@@ -201,7 +201,7 @@ void hrdvd_state::hrdvd_mux_w(uint16_t data)
 	m_mux_data = (~data & 0x1f);
 }
 
-hrdvd_ata_controller_device::hrdvd_ata_controller_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+hrdvd_ata_controller_device::hrdvd_ata_controller_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	abstract_ata_interface_device(mconfig, HRDVD_ATA_CONTROLLER_DEVICE, tag, owner, clock)
 {
 }
@@ -513,7 +513,7 @@ void hrdvd_state::hrdvd(machine_config &config)
 	ZR36110(config, m_mpeg, 27_MHz_XTAL/2);
 	m_mpeg->drq_w().set(FUNC(hrdvd_state::mpeg_dreq_w));
 
-	NN71003F(config, m_mpega, 0);
+	NN71003F(config, m_mpega);
 	m_mpega->add_route(0, m_speaker, 1.0, 0);
 	m_mpega->add_route(1, m_speaker, 1.0, 1);
 	m_mpeg->sp2_frm_w().set(m_mpega, FUNC(nn71003f_device::frm_w));

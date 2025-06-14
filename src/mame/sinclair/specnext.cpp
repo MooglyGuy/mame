@@ -3462,16 +3462,16 @@ void specnext_state::tbblue(machine_config &config)
 
 	I2C_24C01(config, m_i2cmem).set_address(0xd0); // RTC + DEFAULT_ALL_0; confitm size
 
-	SPI_SDCARD(config, m_sdcard, 0);
+	SPI_SDCARD(config, m_sdcard);
 	m_sdcard->set_prefer_sdhc();
 	m_sdcard->spi_miso_callback().set(FUNC(specnext_state::spi_miso_w));
 
 	SPEAKER(config, "speakers", 2).front();
 
-	DAC_8BIT_R2R(config, m_dac[0], 0).add_route(ALL_OUTPUTS, "speakers", 0.75, 0);
-	DAC_8BIT_R2R(config, m_dac[1], 0).add_route(ALL_OUTPUTS, "speakers", 0.75, 0);
-	DAC_8BIT_R2R(config, m_dac[2], 0).add_route(ALL_OUTPUTS, "speakers", 0.75, 1);
-	DAC_8BIT_R2R(config, m_dac[3], 0).add_route(ALL_OUTPUTS, "speakers", 0.75, 1);
+	DAC_8BIT_R2R(config, m_dac[0]).add_route(ALL_OUTPUTS, "speakers", 0.75, 0);
+	DAC_8BIT_R2R(config, m_dac[1]).add_route(ALL_OUTPUTS, "speakers", 0.75, 0);
+	DAC_8BIT_R2R(config, m_dac[2]).add_route(ALL_OUTPUTS, "speakers", 0.75, 1);
+	DAC_8BIT_R2R(config, m_dac[3]).add_route(ALL_OUTPUTS, "speakers", 0.75, 1);
 
 	config.device_remove("ay8912");
 	for (auto i = 0; i < 3; ++i)
@@ -3483,12 +3483,12 @@ void specnext_state::tbblue(machine_config &config)
 			.add_route(2, "speakers", 0.50, 1);
 	}
 
-	SPECNEXT_MULTIFACE(config, m_mf, 0);
-	SPECNEXT_DIVMMC(config, m_divmmc, 0);
+	SPECNEXT_MULTIFACE(config, m_mf);
+	SPECNEXT_DIVMMC(config, m_divmmc);
 
-	zxbus_device &zxbus(ZXBUS(config, "zxbus", 0));
+	zxbus_device &zxbus(ZXBUS(config, "zxbus"));
 	zxbus.set_iospace("maincpu", AS_IO);
-	ZXBUS_SLOT(config, "zxbus:1", 0, "zxbus", zxbus_cards, nullptr);
+	ZXBUS_SLOT(config, "zxbus:1", "zxbus", zxbus_cards, nullptr);
 
 	const rectangle scr_full = { SCR_320x256.left() - 16, SCR_320x256.right() + 16, SCR_320x256.top() - 8, SCR_320x256.bottom() + 8 };
 	m_screen->set_raw(28_MHz_XTAL / 2, CYCLES_HORIZ, CYCLES_VERT, scr_full);
@@ -3500,11 +3500,11 @@ void specnext_state::tbblue(machine_config &config)
 
 	const u16 left = SCR_256x192.left();
 	const u16 top = SCR_256x192.top();
-	SCREEN_ULA_NEXT (config, m_ula,     0).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x000, 0x100);
-	SPECNEXT_LORES  (config, m_lores,   0).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x000, 0x100);
-	SPECNEXT_TILES  (config, m_tiles,   0).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x200, 0x300);
-	SPECNEXT_LAYER2 (config, m_layer2,  0).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x400, 0x500);
-	SPECNEXT_SPRITES(config, m_sprites, 0).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x600, 0x700);
+	SCREEN_ULA_NEXT (config, m_ula    ).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x000, 0x100);
+	SPECNEXT_LORES  (config, m_lores  ).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x000, 0x100);
+	SPECNEXT_TILES  (config, m_tiles  ).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x200, 0x300);
+	SPECNEXT_LAYER2 (config, m_layer2 ).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x400, 0x500);
+	SPECNEXT_SPRITES(config, m_sprites).set_raster_offset(left, top).set_palette(m_palette->device().tag(), 0x600, 0x700);
 
 	SPECNEXT_COPPER(config, m_copper, 28_MHz_XTAL);
 	m_copper->out_nextreg_cb().set(FUNC(specnext_state::reg_w));

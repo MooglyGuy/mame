@@ -48,7 +48,7 @@ protected:
 
 DEFINE_DEVICE_TYPE(F1_DAISY, f1_daisy_device, "f1_daisy", "F1 daisy chain abstraction")
 
-f1_daisy_device::f1_daisy_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+f1_daisy_device::f1_daisy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, F1_DAISY, tag, owner, clock)
 	, z80_daisy_chain_interface(mconfig, *this)
 {

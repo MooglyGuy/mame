@@ -31,7 +31,7 @@ enum kgs_st : u8
 
 DEFINE_DEVICE_TYPE(ROBOTRON_K7070, robotron_k7070_device, "robotron_k7070", "Robotron K7070 KGS")
 
-robotron_k7070_device::robotron_k7070_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+robotron_k7070_device::robotron_k7070_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ROBOTRON_K7070, tag, owner, clock)
 	, device_multibus_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -151,10 +151,10 @@ void robotron_k7070_device::device_add_mconfig(machine_config &config)
 
 	Z80CTC(config, m_ctc, 16_MHz_XTAL / 3);
 	m_ctc->intr_callback().set_inputline(m_cpu, INPUT_LINE_IRQ0);
-	m_ctc->set_clk<0>(1230750);
-	m_ctc->set_clk<1>(1230750);
-	m_ctc->set_clk<2>(1230750);
-	m_ctc->set_clk<3>(1230750);
+	m_ctc->set_clk<0>(XTAL::u(1230750));
+	m_ctc->set_clk<1>(XTAL::u(1230750));
+	m_ctc->set_clk<2>(XTAL::u(1230750));
+	m_ctc->set_clk<3>(XTAL::u(1230750));
 	m_ctc->zc_callback<0>().set(m_sio, FUNC(z80sio_device::rxca_w));
 	m_ctc->zc_callback<0>().append(m_sio, FUNC(z80sio_device::txca_w));
 	m_ctc->zc_callback<1>().set(m_sio, FUNC(z80sio_device::rxtxcb_w));

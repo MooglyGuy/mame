@@ -26,7 +26,7 @@ DEFINE_DEVICE_TYPE(MSM5001N, msm5001n_device, "msm5001n", "OKI MSM5001N LCD Watc
 //  constructor
 //-------------------------------------------------
 
-msm5001n_device::msm5001n_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+msm5001n_device::msm5001n_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MSM5001N, tag, owner, clock),
 	device_rtc_interface(mconfig, *this),
 	device_nvram_interface(mconfig, *this),
@@ -95,7 +95,7 @@ void msm5001n_device::device_clock_changed()
 	m_timer->adjust(period, 0, period);
 
 	// clear LCD if clock stopped
-	if (clock() == 0)
+	if (clock().value() == 0)
 		write_lcd(nullptr, false);
 }
 

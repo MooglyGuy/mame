@@ -22,7 +22,7 @@ DEFINE_DEVICE_TYPE(H8S2318, h8s2318_device, "h8s2318", "Hitachi H8S/2318")
 DEFINE_DEVICE_TYPE(H8S2319, h8s2319_device, "h8s2319", "Hitachi H8S/2319")
 
 
-h8s2319_device::h8s2319_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor map_delegate, u32 rom_size, u32 ram_size) :
+h8s2319_device::h8s2319_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor map_delegate, u32 rom_size, u32 ram_size) :
 	h8s2000_device(mconfig, type, tag, owner, clock, map_delegate),
 	m_intc(*this, "intc"),
 	m_adc(*this, "adc"),
@@ -40,52 +40,52 @@ h8s2319_device::h8s2319_device(const machine_config &mconfig, device_type type, 
 {
 }
 
-h8s2319_device::h8s2319_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size) :
+h8s2319_device::h8s2319_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size) :
 	h8s2319_device(mconfig, type, tag, owner, clock, address_map_constructor(FUNC(h8s2319_device::map), this), rom_size, ram_size)
 {
 }
 
-h8s2319_device::h8s2319_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2319_device::h8s2319_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2319, tag, owner, clock, 0x80000, 0x2000)
 {
 }
 
-h8s2310_device::h8s2310_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2310_device::h8s2310_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2310, tag, owner, clock, 0, 0x800)
 {
 }
 
-h8s2311_device::h8s2311_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2311_device::h8s2311_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2311, tag, owner, clock, 0x8000, 0x800)
 {
 }
 
-h8s2312_device::h8s2312_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2312_device::h8s2312_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2312, tag, owner, clock, 0, 0x2000)
 {
 }
 
-h8s2313_device::h8s2313_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2313_device::h8s2313_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2313, tag, owner, clock, 0x10000, 0x800)
 {
 }
 
-h8s2315_device::h8s2315_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2315_device::h8s2315_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2315, tag, owner, clock, 0x60000, 0x2000)
 {
 }
 
-h8s2316_device::h8s2316_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2316_device::h8s2316_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2316, tag, owner, clock, 0x10000, 0x2000)
 {
 }
 
-h8s2317_device::h8s2317_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2317_device::h8s2317_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2317, tag, owner, clock, 0x20000, 0x2000)
 {
 }
 
-h8s2318_device::h8s2318_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+h8s2318_device::h8s2318_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	h8s2319_device(mconfig, H8S2318, tag, owner, clock, 0x40000, 0x2000)
 {
 }

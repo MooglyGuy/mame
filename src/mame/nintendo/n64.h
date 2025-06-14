@@ -92,7 +92,7 @@ private:
 
 public:
 	// construction/destruction
-	n64_periphs(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	n64_periphs(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint32_t is64_r(offs_t offset);
 	void is64_w(offs_t offset, uint32_t data);

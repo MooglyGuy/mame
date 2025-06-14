@@ -62,7 +62,7 @@ DEFINE_DEVICE_TYPE(SH_SCI, sh_sci_device, "sh_sci", "SH Serial Communications In
 
 const char *const sh_sci_device::state_names[] = { "idle", "start", "bit", "parity", "stop", "last-tick" };
 
-sh_sci_device::sh_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_sci_device::sh_sci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_SCI, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG),
@@ -256,25 +256,25 @@ void sh_sci_device::clock_update()
 		std::string new_message;
 		switch(m_clock_mode) {
 		case INTERNAL_ASYNC:
-			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps\n", int(m_cpu->clock() / m_divider), int(m_cpu->clock() / (m_divider*16)));
+			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps\n", int(m_cpu->clock().value() / m_divider), int(m_cpu->clock().value() / (m_divider*16)));
 			break;
 		case INTERNAL_ASYNC_OUT:
-			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps, output\n", int(m_cpu->clock() / m_divider), int(m_cpu->clock() / (m_divider*16)));
+			new_message = util::string_format("clock internal at %d Hz, async, bitrate %d bps, output\n", int(m_cpu->clock().value() / m_divider), int(m_cpu->clock().value() / (m_divider*16)));
 			break;
 		case EXTERNAL_ASYNC:
 			new_message = "clock external, async\n";
 			break;
 		case EXTERNAL_RATE_ASYNC:
-			new_message = util::string_format("clock external at %d Hz, async, bitrate %d bps\n", int(m_cpu->clock()*m_internal_to_external_ratio), int(m_cpu->clock()*m_internal_to_external_ratio/16));
+			new_message = util::string_format("clock external at %d Hz, async, bitrate %d bps\n", int(m_cpu->clock().value()*m_internal_to_external_ratio), int(m_cpu->clock().value()*m_internal_to_external_ratio/16));
 			break;
 		case INTERNAL_SYNC_OUT:
-			new_message = util::string_format("clock internal at %d Hz, sync, output\n", int(m_cpu->clock() / (m_divider*2)));
+			new_message = util::string_format("clock internal at %d Hz, sync, output\n", int(m_cpu->clock().value() / (m_divider*2)));
 			break;
 		case EXTERNAL_SYNC:
 			new_message = "clock external, sync\n";
 			break;
 		case EXTERNAL_RATE_SYNC:
-			new_message = util::string_format("clock external at %d Hz, sync\n", int(m_cpu->clock()*m_internal_to_external_ratio));
+			new_message = util::string_format("clock external at %d Hz, sync\n", int(m_cpu->clock().value()*m_internal_to_external_ratio));
 			break;
 		}
 		if(new_message != m_last_clock_message) {
@@ -290,7 +290,7 @@ void sh_sci_device::device_start()
 		m_internal_to_external_ratio = 0;
 		m_external_to_internal_ratio = 0;
 	} else {
-		m_external_to_internal_ratio = (m_external_clock_period*m_cpu->clock()).as_double();
+		m_external_to_internal_ratio = (m_external_clock_period * m_cpu->clock().dvalue()).as_double();
 		m_internal_to_external_ratio = 1/m_external_to_internal_ratio;
 	}
 

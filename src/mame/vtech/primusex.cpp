@@ -308,7 +308,7 @@ INTERRUPT_GEN_MEMBER(primusex_state::periodic_int)
 
 void primusex_state::primusex(machine_config &config)
 {
-	Z80(config, m_maincpu, 4'000'000);
+	Z80(config, m_maincpu, XTAL::u(4'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &primusex_state::primusex_mem);
 	m_maincpu->set_addrmap(AS_IO, &primusex_state::primusex_io);
 	m_maincpu->set_periodic_int(FUNC(primusex_state::periodic_int), attotime::from_hz(50));

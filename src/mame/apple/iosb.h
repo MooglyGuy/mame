@@ -22,7 +22,7 @@ class iosb_base :  public device_t
 {
 public:
 	// construction/destruction
-	iosb_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	iosb_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// interface routines
 	auto write_adb_st() { return m_adb_st.bind(); } // ADB state
@@ -130,7 +130,7 @@ class iosb_device : public iosb_base
 {
 public:
 	// construction/destruction
-	iosb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	iosb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -147,8 +147,8 @@ class primetime_device : public iosb_base
 {
 public:
 	// construction/destruction
-	primetime_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
-	primetime_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	primetime_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	primetime_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto pb4_callback() { return write_pb4.bind(); }
 	auto pb5_callback() { return write_pb5.bind(); }
@@ -168,7 +168,7 @@ class primetimeii_device : public primetime_device
 {
 public:
 	// construction/destruction
-	primetimeii_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	primetimeii_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 

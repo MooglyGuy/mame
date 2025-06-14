@@ -428,7 +428,7 @@ static void lw350_floppies(device_slot_interface& device) {
 
 void lw350_state::lw350(machine_config &config) {
 	// basic machine hardware
-	HD64180RP(config, maincpu, 16'000'000 / 2);
+	HD64180RP(config, maincpu, XTAL::u(16'000'000) / 2);
 	maincpu->set_addrmap(AS_PROGRAM, &lw350_state::map_program);
 	maincpu->set_addrmap(AS_IO, &lw350_state::map_io);
 	maincpu->tend0_wr_callback().set([this] (int state) { fdc->tc_w((fdc_drq && state) ? 1 : 0); });
@@ -453,7 +453,7 @@ void lw350_state::lw350(machine_config &config) {
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, "beeper", 4'000).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
+	BEEP(config, "beeper", XTAL::u(4'000)).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -559,7 +559,7 @@ Dictionary ROM probably not correctly mapped
 
 ***************************************************************************/
 
-constexpr int MDA_CLOCK = 16'257'000;
+static constexpr XTAL MDA_CLOCK = XTAL::u(16'257'000);
 
 class lw450_state : public driver_device
 {
@@ -856,7 +856,7 @@ GFXDECODE_END
 
 void lw450_state::lw450(machine_config &config) {
 	// basic machine hardware
-	Z80180(config, maincpu, 12'000'000 / 2);
+	Z80180(config, maincpu, XTAL::u(12'000'000) / 2);
 	maincpu->set_addrmap(AS_PROGRAM, &lw450_state::map_program);
 	maincpu->set_addrmap(AS_IO, &lw450_state::map_io);
 	maincpu->tend0_wr_callback().set(fdc, FUNC(hd63266f_device::tc_line_w));
@@ -889,7 +889,7 @@ void lw450_state::lw450(machine_config &config) {
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, "beeper", 4'000).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
+	BEEP(config, "beeper", XTAL::u(4'000)).add_route(ALL_OUTPUTS, "mono", 1.0); // 4.0 kHz
 }
 
 /***************************************************************************

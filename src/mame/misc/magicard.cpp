@@ -1103,7 +1103,7 @@ void hotslots_state::magicle(machine_config &config)
 {
 	hotslots_base(config);
 
-	pic16f84_device &pic(PIC16F84(config, "pic16f84", 4000000));
+	pic16f84_device &pic(PIC16F84(config, "pic16f84", XTAL::u(4000000)));
 	pic.set_config(0x3ffa); // No protect - No Watchdog - HS Clock
 	pic.read_b().set(FUNC(hotslots_state::pic_portb_r));
 	pic.write_b().set(FUNC(hotslots_state::pic_portb_w));

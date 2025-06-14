@@ -36,7 +36,7 @@ DEFINE_DEVICE_TYPE(SCREAMER, screamer_device, "screamer", "Screamer audio I/O")
 //  awacs_macrisc_device - constructor
 //-------------------------------------------------
 
-awacs_macrisc_device::awacs_macrisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+awacs_macrisc_device::awacs_macrisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_output_cb(*this, 0)
@@ -45,12 +45,12 @@ awacs_macrisc_device::awacs_macrisc_device(const machine_config &mconfig, device
 {
 }
 
-awacs_macrisc_device::awacs_macrisc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+awacs_macrisc_device::awacs_macrisc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: awacs_macrisc_device(mconfig, AWACS_MACRISC, tag, owner, clock)
  {
  }
 
- screamer_device::screamer_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ screamer_device::screamer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	 : awacs_macrisc_device(mconfig, SCREAMER, tag, owner, clock)
  {
  }
@@ -145,7 +145,7 @@ void awacs_macrisc_device::write_macrisc(offs_t offset, uint32_t data)
 	{
 		case 0: // Audio Control
 			m_stream->set_sample_rate(clock() / rates[(data >> 8) & 7]);
-			LOG("%s: sample rate to %d Hz\n", tag(), clock() / rates[(data >> 8) & 7]);
+			LOG("%s: sample rate to %d Hz\n", tag(), clock().value() / rates[(data >> 8) & 7]);
 			break;
 
 		case 4: // Audio CODEC Control

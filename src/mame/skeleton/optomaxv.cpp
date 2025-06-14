@@ -377,9 +377,9 @@ void optomaxv_state::optomaxv(machine_config &config)
 
 	M68000(config, m_maincpu, 32_MHz_XTAL / 2); // Signetics SCN68000
 
-	ACIA6850(config, m_acia_1, 0); // Hitachi HD46850P
-	ACIA6850(config, m_acia_2, 0); // Hitachi HD46850P
-	ACIA6850(config, m_acia_3, 0); // Hitachi HD46850P
+	ACIA6850(config, m_acia_1); // Hitachi HD46850P
+	ACIA6850(config, m_acia_2); // Hitachi HD46850P
+	ACIA6850(config, m_acia_3); // Hitachi HD46850P
 
 	MC14411(config, m_brg, 32_MHz_XTAL / 10); // Motorola MC14411P
 

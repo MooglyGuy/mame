@@ -8,7 +8,7 @@
 
 DEFINE_DEVICE_TYPE(STCART_CONNECTOR, stcart_connector, "stcart_connector", "Atari ST cartridge connector")
 
-stcart_connector::stcart_connector(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+stcart_connector::stcart_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
     device_t(mconfig, STCART_CONNECTOR, tag, owner, clock),
     device_single_card_slot_interface<device_stcart_interface>(mconfig, *this)
 {

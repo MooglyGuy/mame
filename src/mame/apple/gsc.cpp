@@ -33,7 +33,7 @@ void gsc_device::map(address_map &map)
 	map(0x10000000, 0x1001ffff).rw(FUNC(gsc_device::vram_r), FUNC(gsc_device::vram_w)).mirror(0x0ffe0000);
 }
 
-gsc_device::gsc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+gsc_device::gsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, GSC, tag, owner, clock),
 	m_screen(*this, "screen"),
 	m_palette(*this, "palette")
@@ -54,7 +54,7 @@ void gsc_device::device_reset()
 {
 	if (m_gsc_panel_id == 4)
 	{
-		m_screen->set_raw(25175000, 800, 0, 640, 525, 0, 480);
+		m_screen->set_raw(XTAL::u(25175000), 800, 0, 640, 525, 0, 480);
 	}
 }
 
@@ -62,7 +62,7 @@ void gsc_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	// these parameters are not real; we know the refresh rate is ~60.15 Hz and that's it
-	m_screen->set_raw(21604953, 800, 0, 640, 449, 0, 400);
+	m_screen->set_raw(XTAL::u(21604953), 800, 0, 640, 449, 0, 400);
 
 	m_screen->set_palette(m_palette);
 	m_screen->set_screen_update(FUNC(gsc_device::screen_update_gsc));

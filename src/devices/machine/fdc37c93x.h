@@ -99,7 +99,7 @@ public:
 	static void floppy_formats(format_registration &fr);
 
 protected:
-	fdc37c93x_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	fdc37c93x_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -200,7 +200,7 @@ private:
 class fdc37m707_device : public fdc37c93x_device
 {
 public:
-	fdc37m707_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fdc37m707_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	~fdc37m707_device() {}
 };
 

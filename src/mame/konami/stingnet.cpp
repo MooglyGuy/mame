@@ -46,7 +46,7 @@ DECLARE_DEVICE_TYPE(STINGNET_ATAPI_CDROM, stingnet_cdr)
 class stingnet_cdr : public atapi_cdrom_device
 {
 public:
-	stingnet_cdr(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	stingnet_cdr(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: atapi_cdrom_device(mconfig, STINGNET_ATAPI_CDROM, tag, owner, clock)
 	{
 	}
@@ -313,7 +313,7 @@ void stingnet_devices(device_slot_interface &device)
 void stingnet_state::stingnet(machine_config &config)
 {
 	// basic machine hardware
-	PPC403GA(config, m_maincpu, 33'000'000);        // TODO: unknown clocks, but 403GA is rated for 25 or 33 MHz
+	PPC403GA(config, m_maincpu, XTAL::u(33'000'000));        // TODO: unknown clocks, but 403GA is rated for 25 or 33 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &stingnet_state::main_map);
 
 	ATA_INTERFACE(config, m_ata).options(stingnet_devices, "cdrom", nullptr, true);
@@ -324,7 +324,7 @@ void stingnet_state::stingnet(machine_config &config)
 
 	FUJITSU_29F016A(config, m_sndflash);
 
-	RTC62423(config, m_rtc, 0);
+	RTC62423(config, m_rtc, XTAL());
 
 	// video hardware
 	PALETTE(config, "palette", palette_device::RGB_555);
@@ -337,16 +337,16 @@ void stingnet_state::stingnet(machine_config &config)
 	screen.set_palette("palette");
 	screen.screen_vblank().set(m_gcu, FUNC(k057714_device::vblank_w));
 
-	K057714(config, m_gcu, 0).set_screen("screen");
+	K057714(config, m_gcu).set_screen("screen");
 	m_gcu->irq_callback().set(FUNC(stingnet_state::gcu_interrupt));
 
-	PC16552D(config, m_duart, 0);
+	PC16552D(config, m_duart);
 	NS16550(config, "duart:chan0", XTAL(19'660'800));
 	NS16550(config, "duart:chan1", XTAL(19'660'800));
 
 	SPEAKER(config, "speaker", 2).front();
 
-	ymz280b_device &ymz(YMZ280B(config, m_ymz, 16934400));
+	ymz280b_device &ymz(YMZ280B(config, m_ymz, XTAL::u(16934400)));
 	ymz.set_addrmap(0, &stingnet_state::ymz280b_map);
 	ymz.add_route(1, "speaker", 1.0, 0);
 	ymz.add_route(0, "speaker", 1.0, 1);

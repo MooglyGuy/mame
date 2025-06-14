@@ -181,7 +181,7 @@ DEVICE_IMAGE_LOAD_MEMBER(iqunlim_state::cart_load)
 void iqunlim_state::iqunlim(machine_config &config)
 {
 	// Basic machine hardware
-	MC68EZ328(config, m_maincpu, 32768*506);
+	MC68EZ328(config, m_maincpu, XTAL::u(32768)*506);
 	m_maincpu->set_addrmap(AS_PROGRAM, &iqunlim_state::mem_map);
 
 	m_maincpu->out_flm().set(m_lcdctrl, FUNC(mc68328_lcd_device::flm_w));
@@ -199,7 +199,7 @@ void iqunlim_state::iqunlim(machine_config &config)
 	m_screen->set_visarea(0, 480 - 1, 0, 260 - 1);
 	m_screen->set_screen_update(FUNC(iqunlim_state::screen_update));
 
-	MC68328_LCD(config, m_lcdctrl, 0);
+	MC68328_LCD(config, m_lcdctrl);
 
 	GENERIC_CARTSLOT(config, m_cart, generic_plain_slot, "iqunlim_cart");
 	m_cart->set_width(GENERIC_ROM16_WIDTH);

@@ -54,7 +54,7 @@ public:
 		set_fixed(false);
 	}
 
-	psion_honda_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_honda_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callbacks
 	auto rxd_handler() { return m_rxd_handler.bind(); }

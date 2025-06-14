@@ -2049,7 +2049,7 @@ void konamigx_state::sexyparoebl(machine_config &config)
 	/* video hardware */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_video_attributes(VIDEO_UPDATE_AFTER_VBLANK);
-	m_screen->set_raw(8000000, 384+24+64+40, 0, 383, 224+16+8+16, 0, 223);
+	m_screen->set_raw(XTAL::u(8000000), 384+24+64+40, 0, 383, 224+16+8+16, 0, 223);
 
 	//m_screen->set_vblank_time(ATTOSECONDS_IN_USEC(600));
 	// TODO: WTF, without these most games crashes? Some legacy call in video code???
@@ -2061,18 +2061,18 @@ void konamigx_state::sexyparoebl(machine_config &config)
 	m_palette->enable_shadows();
 	m_palette->enable_hilights();
 
-	K056832(config, m_k056832, 0);
+	K056832(config, m_k056832);
 	m_k056832->set_tile_callback(FUNC(konamigx_state::alpha_tile_callback));
 	m_k056832->set_config(K056832_BPP_5, 0, 0);
 	m_k056832->set_palette(m_palette);
 
-	K055555(config, m_k055555, 0);
+	K055555(config, m_k055555);
 
-	K054338(config, m_k054338, 0, m_k055555);
+	K054338(config, m_k054338, m_k055555);
 	m_k054338->set_screen(m_screen);
 	m_k054338->set_alpha_invert(1);
 
-	K055673(config, m_k055673, 0);
+	K055673(config, m_k055673);
 	m_k055673->set_sprite_callback(FUNC(konamigx_state::type2_sprite_callback));
 	m_k055673->set_config(K055673_LAYOUT_GX, -42, -23);
 	m_k055673->set_screen(m_screen);
@@ -2083,8 +2083,8 @@ void konamigx_state::sexyparoebl(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, "oki1", 1056000, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5); // clock and pin 7 not verified
-	OKIM6295(config, "oki2", 1056000, okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5); // clock and pin 7 not verified
+	OKIM6295(config, "oki1", XTAL::u(1056000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5); // clock and pin 7 not verified
+	OKIM6295(config, "oki2", XTAL::u(1056000), okim6295_device::PIN7_HIGH).add_route(ALL_OUTPUTS, "mono", 0.5); // clock and pin 7 not verified
 }
 
 

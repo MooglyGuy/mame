@@ -187,7 +187,7 @@ ROM_START( mks3 )
 	ROM_LOAD( "xr951a0.ic1", 0x0000, 0x1000, CRC(01c80e83) SHA1(fee3628ac49556a60a597ee6ea71fb48646c6229) )
 ROM_END
 
-mks3_device::mks3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mks3_device::mks3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MKS3, tag, owner, clock),
 	m_cpu(*this, "cpu"),
 	m_port_a(*this, "A%d", 1U),

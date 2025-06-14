@@ -41,7 +41,7 @@ INPUT_PORTS_END
 
 void hp7596a_state::hp7596a(machine_config &config)
 {
-	M68000(config, m_maincpu, 9'980'000); // SCN68000CAN64
+	M68000(config, m_maincpu, XTAL::u(9'980'000)); // SCN68000CAN64
 	m_maincpu->set_addrmap(AS_PROGRAM, &hp7596a_state::main_map);
 
 	//EEPROM_2804(config, "eeprom"); // X2804AP-45

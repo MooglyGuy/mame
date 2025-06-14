@@ -23,7 +23,7 @@ DEFINE_DEVICE_TYPE(A800_ROM_BBSB,      a800_rom_bbsb_device,      "a800_bbsb",  
 DEFINE_DEVICE_TYPE(A5200_ROM_BBSB,     a5200_rom_bbsb_device,     "a5200_bbsb",    "Atari 5200 ROM Bounty Bob Strikes Back cart")
 
 
-a800_rom_bbsb_device::a800_rom_bbsb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_bbsb_device::a800_rom_bbsb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, A800_ROM_BBSB, tag, owner, clock)
 {
 }
@@ -83,7 +83,7 @@ void a800_rom_bbsb_device::bank_w(offs_t offset, uint8_t data)
 
  -------------------------------------------------*/
 
-a5200_rom_bbsb_device::a5200_rom_bbsb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a5200_rom_bbsb_device::a5200_rom_bbsb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a5200_rom_device(mconfig, A5200_ROM_BBSB, tag, owner, clock)
 {
 }

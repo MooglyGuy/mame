@@ -2616,7 +2616,7 @@ void gms_2layers_state::rbspm(machine_config &config)
 	rbmk(config);
 	m_maincpu->set_addrmap(AS_PROGRAM, &gms_2layers_state::rbspm_mem);
 
-	PIC16F84(config, "pic", 4'000'000).set_disable(); // TODO: hook up, verify clock
+	PIC16F84(config, "pic", XTAL::u(4'000'000)).set_disable(); // TODO: hook up, verify clock
 }
 
 void gms_2layers_state::ssanguoj(machine_config &config)

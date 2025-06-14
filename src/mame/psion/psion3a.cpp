@@ -33,7 +33,7 @@
 class psion3a_codec_device : public device_t, public device_sound_interface
 {
 public:
-	psion3a_codec_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion3a_codec_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void pcm_in(uint8_t data);
 
@@ -48,7 +48,7 @@ private:
 
 DEFINE_DEVICE_TYPE(PSION_S3A_CODEC, psion3a_codec_device, "psion3a_codec", "Series 3a A-law Codec")
 
-psion3a_codec_device::psion3a_codec_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion3a_codec_device::psion3a_codec_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_S3A_CODEC, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
@@ -58,7 +58,7 @@ psion3a_codec_device::psion3a_codec_device(const machine_config &mconfig, const 
 
 void psion3a_codec_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, 8000);
+	m_stream = stream_alloc(0, 1, XTAL::u(8000));
 }
 
 void psion3a_codec_device::sound_stream_update(sound_stream &stream)
@@ -563,7 +563,7 @@ void psion3c_state::psion3c(machine_config &config)
 	PSION_S3A_CODEC(config, m_codec).add_route(ALL_OUTPUTS, "mono", 1.00); // TODO: M7702-03
 	m_asic9->pcm_out().set(m_codec, FUNC(psion3a_codec_device::pcm_in));
 
-	PSION_CONDOR(config, m_condor, 3'686'400); // FIXME: unknown clock source
+	PSION_CONDOR(config, m_condor, XTAL::u(3'686'400)); // FIXME: unknown clock source
 	m_condor->txd_handler().set(m_honda, FUNC(psion_honda_slot_device::write_txd));
 	m_condor->rts_handler().set(m_honda, FUNC(psion_honda_slot_device::write_rts));
 	m_condor->dtr_handler().set(m_honda, FUNC(psion_honda_slot_device::write_dtr));

@@ -32,10 +32,10 @@ namespace {
 class bbc_tube_a500_device : public device_t, public device_bbc_tube_interface
 {
 public:
-	bbc_tube_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	bbc_tube_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	bbc_tube_a500_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	bbc_tube_a500_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t overrides
 	virtual void device_start() override { }
@@ -68,7 +68,7 @@ private:
 class bbc_tube_a500d_device : public bbc_tube_a500_device
 {
 public:
-	bbc_tube_a500d_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_tube_a500d_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -216,12 +216,12 @@ bbc_tube_a500_device::bbc_tube_a500_device(const machine_config &mconfig, device
 {
 }
 
-bbc_tube_a500_device::bbc_tube_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_tube_a500_device::bbc_tube_a500_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bbc_tube_a500_device(mconfig, BBC_TUBE_A500, tag, owner, clock)
 {
 }
 
-bbc_tube_a500d_device::bbc_tube_a500d_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_tube_a500d_device::bbc_tube_a500d_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bbc_tube_a500_device(mconfig, BBC_TUBE_A500D, tag, owner, clock)
 {
 }

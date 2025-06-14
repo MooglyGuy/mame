@@ -41,7 +41,7 @@ namespace {
 class sega_adapter_device : public device_t, public device_msx_general_purpose_port_interface
 {
 public:
-	sega_adapter_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	sega_adapter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u8 read() override;
 	virtual void pin_6_w(int state) override;
@@ -60,7 +60,7 @@ private:
 };
 
 
-sega_adapter_device::sega_adapter_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+sega_adapter_device::sega_adapter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_SEGACTRL, tag, owner, clock)
 	, device_msx_general_purpose_port_interface(mconfig, *this)
 	, m_port(*this, "ctrl")

@@ -2934,7 +2934,7 @@ void subsino2_state::tbonusal(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &subsino2_state::tbonusal_map);
 	subdevice<ss9602_device>("io")->out_port_callback<9>().set_nop();
 
-	YM3812(config, "ymsnd", 3'000'000).add_route(ALL_OUTPUTS, "mono", 0.80); // ? chip and clock unknown
+	YM3812(config, "ymsnd", XTAL::u(3'000'000)).add_route(ALL_OUTPUTS, "mono", 0.80); // ? chip and clock unknown
 }
 
 /***************************************************************************

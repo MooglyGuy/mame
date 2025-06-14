@@ -23,12 +23,12 @@ enum
 
 DEFINE_DEVICE_TYPE(MACH8,      mach8_device,      "mach8",      "Mach8")
 
-mach8_device::mach8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+mach8_device::mach8_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: ibm8514a_device(mconfig, type, tag, owner, clock)
 {
 }
 
-mach8_device::mach8_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mach8_device::mach8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: mach8_device(mconfig, MACH8, tag, owner, clock)
 {
 }

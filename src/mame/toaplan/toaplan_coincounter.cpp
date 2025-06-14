@@ -6,7 +6,7 @@
 
 DEFINE_DEVICE_TYPE(TOAPLAN_COINCOUNTER, toaplan_coincounter_device, "toaplan_coincounter", "Toaplan Coin Counter")
 
-toaplan_coincounter_device::toaplan_coincounter_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+toaplan_coincounter_device::toaplan_coincounter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TOAPLAN_COINCOUNTER, tag, owner, clock)
 {
 }

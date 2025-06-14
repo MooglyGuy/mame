@@ -15,7 +15,7 @@
 class sh7014_bsc_device : public device_t
 {
 public:
-	sh7014_bsc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	sh7014_bsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_map &map) ATTR_COLD;
 

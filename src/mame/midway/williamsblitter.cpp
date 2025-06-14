@@ -27,7 +27,7 @@
 DEFINE_DEVICE_TYPE(WILLIAMS_BLITTER_SC1, williams_blitter_sc1_device, "williams_blitter_sc1_device", "Williams Blitter (SC1)")
 DEFINE_DEVICE_TYPE(WILLIAMS_BLITTER_SC2, williams_blitter_sc2_device, "williams_blitter_sc2_device", "Williams Blitter (SC2)")
 
-williams_blitter_device::williams_blitter_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+williams_blitter_device::williams_blitter_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_vram(*this, finder_base::DUMMY_TAG),
@@ -35,12 +35,12 @@ williams_blitter_device::williams_blitter_device(machine_config const &mconfig, 
 {
 }
 
-williams_blitter_sc1_device::williams_blitter_sc1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+williams_blitter_sc1_device::williams_blitter_sc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	williams_blitter_device(mconfig, WILLIAMS_BLITTER_SC1, tag, owner, clock)
 {
 }
 
-williams_blitter_sc2_device::williams_blitter_sc2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+williams_blitter_sc2_device::williams_blitter_sc2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	williams_blitter_device(mconfig, WILLIAMS_BLITTER_SC2, tag, owner, clock)
 {
 }

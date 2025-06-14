@@ -472,17 +472,17 @@ upd78c10_device::upd78c10_device(const machine_config &mconfig, const char *tag,
 {
 }
 
-upd7811_device::upd7811_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+upd7811_device::upd7811_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd7810_device(mconfig, UPD7811, tag, owner, clock, address_map_constructor(FUNC(upd7811_device::upd_internal_4096_rom_256_ram_map), this))
 {
 }
 
-upd78c11_device::upd78c11_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+upd78c11_device::upd78c11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd78c10_device(mconfig, UPD78C11, tag, owner, clock, address_map_constructor(FUNC(upd78c11_device::upd_internal_4096_rom_256_ram_map), this))
 {
 }
 
-upd78c14_device::upd78c14_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+upd78c14_device::upd78c14_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd78c10_device(mconfig, UPD78C14, tag, owner, clock, address_map_constructor(FUNC(upd78c14_device::upd_internal_16k_rom_256_ram_map), this))
 {
 }

@@ -14,7 +14,7 @@
 class mn1252_device : public device_t
 {
 public:
-	mn1252_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	mn1252_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u16 output(offs_t digit) const;
 

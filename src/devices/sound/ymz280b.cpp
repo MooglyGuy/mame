@@ -547,7 +547,7 @@ void ymz280b_device::device_start()
 	compute_tables();
 
 	/* initialize the rest of the structure */
-	m_master_clock = clock().dvalue() / 384;
+	m_master_clock = clock() / 384;
 
 	for (int i = 0; i < 8; i++)
 	{

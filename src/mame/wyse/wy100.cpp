@@ -200,7 +200,7 @@ INPUT_PORTS_END
 class wy100_loopback_device : public device_t, public device_rs232_port_interface
 {
 public:
-	wy100_loopback_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	wy100_loopback_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -210,7 +210,7 @@ protected:
 
 DEFINE_DEVICE_TYPE_PRIVATE(WY100_LOOPBACK, device_rs232_port_interface, wy100_loopback_device, "wy100_loopback", "WY-100 Printer Loopback (3 to 20)")
 
-wy100_loopback_device::wy100_loopback_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wy100_loopback_device::wy100_loopback_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WY100_LOOPBACK, tag, owner, clock)
 	, device_rs232_port_interface(mconfig, *this)
 {

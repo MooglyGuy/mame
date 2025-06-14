@@ -11,7 +11,7 @@ class pc88va_sgp_device :
 	public device_memory_interface
 {
 public:
-	pc88va_sgp_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	pc88va_sgp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename... T> pc88va_sgp_device& set_map(T &&... args) { set_addrmap(AS_DATA, std::forward<T>(args)...); return *this; }
 

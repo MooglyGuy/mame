@@ -78,7 +78,7 @@ class device_zorro2_card_interface;
 class zorro2_bus_device : public device_t, public device_memory_interface
 {
 public:
-	zorro2_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	zorro2_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto eint1_handler() { return m_eint1_handler.bind(); }
 	auto eint4_handler() { return m_eint4_handler.bind(); }
@@ -151,7 +151,7 @@ public:
 
 	template <typename T>
 	zorro2_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt) :
-		zorro2_slot_device(mconfig, tag, owner, 0)
+		zorro2_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);

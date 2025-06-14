@@ -43,7 +43,7 @@
 class r65c52_device : public device_t
 {
 public:
-	r65c52_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	r65c52_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto irq1_handler() { return m_irq_handler[0].bind(); }
 	auto irq2_handler() { return m_irq_handler[1].bind(); }
@@ -74,8 +74,7 @@ public:
 	void _write_dsr(int idx, int state);
 	void _write_dcd(int idx, int state);
 
-	void set_xtal(u32 clock);
-	void set_xtal(const XTAL &clock) { set_xtal(clock.value()); }
+	void set_xtal(const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -215,7 +214,7 @@ private:
 	u8 m_rts[2];
 	u8 m_dtr[2];
 
-	u32 m_xtal;
+	XTAL m_xtal;
 	u8 m_divide[2];
 	u8 m_cts[2];
 	u8 m_dsr[2];

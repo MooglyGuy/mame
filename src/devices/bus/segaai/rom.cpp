@@ -17,14 +17,14 @@ class segaai_rom_128_device : public device_t,
 								public segaai_card_interface
 {
 public:
-	segaai_rom_128_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	segaai_rom_128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: segaai_rom_128_device(mconfig, SEGAAI_ROM_128, tag, owner, clock)
 	{ }
 
 	virtual void install_memory_handlers(address_space *space) override;
 
 protected:
-	segaai_rom_128_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+	segaai_rom_128_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, type, tag, owner, clock)
 		, segaai_card_interface(mconfig, *this)
 	{ }
@@ -42,7 +42,7 @@ void segaai_rom_128_device::install_memory_handlers(address_space *space)
 class segaai_rom_256_device : public segaai_rom_128_device
 {
 public:
-	segaai_rom_256_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	segaai_rom_256_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: segaai_rom_128_device(mconfig, SEGAAI_ROM_256, tag, owner, clock)
 		, m_rom_bank(*this, "rombank%u", 0U)
 	{ }

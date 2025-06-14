@@ -14,7 +14,7 @@ namespace {
 class omniwave_device : public device_t, public device_waveblaster_interface
 {
 public:
-	omniwave_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	omniwave_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~omniwave_device();
 
 	virtual void midi_rx(int state) override;
@@ -28,7 +28,7 @@ private:
 	required_device<ks0164_device> m_ks0164;
 };
 
-omniwave_device::omniwave_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+omniwave_device::omniwave_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, OMNIWAVE, tag, owner, clock),
 	device_waveblaster_interface(mconfig, *this),
 	m_ks0164(*this, "ks0164")

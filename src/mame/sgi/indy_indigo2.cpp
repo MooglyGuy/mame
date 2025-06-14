@@ -309,7 +309,7 @@ DEVICE_INPUT_DEFAULTS_END
 
 void ip24_state::ip24_base(machine_config &config, const XTAL &system_clock)
 {
-	SGI_MC(config, m_mem_ctrl, m_maincpu, m_eeprom, system_clock);
+	SGI_MC(config, m_mem_ctrl, system_clock, m_maincpu, m_eeprom);
 	m_mem_ctrl->int_dma_done_cb().set(m_ioc2, FUNC(ioc2_device::mc_dma_done_w));
 	m_mem_ctrl->eisa_present().set_constant(1);
 
@@ -389,8 +389,8 @@ void ip24_state::indy_5015(machine_config &config)
 {
 	constexpr XTAL system_clock = XTAL::u(50'000'000);
 	ip24(config, system_clock);
-	R5000BE(config, m_maincpu, 3 * system_clock);
-	m_maincpu->set_system_clock(system_clock);
+	R5000BE(config, m_maincpu, system_clock * 3);
+	m_maincpu->set_system_clock(system_clock.value());
 	m_maincpu->set_icache_size(0x8000);
 	m_maincpu->set_dcache_size(0x8000);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ip24_state::ip24_map);
@@ -401,7 +401,7 @@ void ip24_state::indy_4613(machine_config &config)
 	constexpr XTAL system_clock = XTAL::u(66'666'666);
 	ip24(config, system_clock);
 	R4600BE(config, m_maincpu, system_clock * 2);
-	m_maincpu->set_system_clock(system_clock);
+	m_maincpu->set_system_clock(system_clock.value());
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ip24_state::ip24_map);
@@ -412,7 +412,7 @@ void ip24_state::indy_4610(machine_config &config)
 	constexpr XTAL system_clock = XTAL::u(50'000'000);
 	ip24(config, system_clock);
 	R4600BE(config, m_maincpu, system_clock * 2);
-	m_maincpu->set_system_clock(system_clock);
+	m_maincpu->set_system_clock(system_clock.value());
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ip24_state::ip24_map);
@@ -429,7 +429,7 @@ void ip22_state::indigo2_4415(machine_config &config)
 {
 	constexpr XTAL system_clock = XTAL::u(50'000'000);
 	R4400BE(config, m_maincpu, system_clock * 3);
-	m_maincpu->set_system_clock(system_clock);
+	m_maincpu->set_system_clock(system_clock.value());
 	m_maincpu->set_icache_size(0x4000);
 	m_maincpu->set_dcache_size(0x4000);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ip22_state::ip22_map);

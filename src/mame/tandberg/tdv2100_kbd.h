@@ -16,7 +16,7 @@
 class tandberg_tdv2100_keyboard_device : public device_t
 {
 public:
-	tandberg_tdv2100_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	tandberg_tdv2100_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto write_kstr_callback() { return m_write_kstr_cb.bind(); }
 	auto write_cleark_callback() { return m_write_cleark_cb.bind(); }

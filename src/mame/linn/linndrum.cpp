@@ -185,7 +185,7 @@ enum mixer_channels
 class linndrum_audio_device : public device_t
 {
 public:
-	linndrum_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0) ATTR_COLD;
+	linndrum_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) ATTR_COLD;
 
 	void mux_drum_w(int voice, u8 data, bool is_strobe = true);
 	void snare_w(u8 data);  // Snare and sidestick.
@@ -349,7 +349,7 @@ private:
 
 DEFINE_DEVICE_TYPE(LINNDRUM_AUDIO, linndrum_audio_device, "linndrum_audio_device", "LinnDrum audio circuits");
 
-linndrum_audio_device::linndrum_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+linndrum_audio_device::linndrum_audio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, LINNDRUM_AUDIO, tag, owner, clock)
 	, m_mux_tuning_trimmer(*this, ":pot_mux_tuning")
 	, m_hat_decay_pot(*this, ":pot_hihat_decay")
@@ -567,7 +567,7 @@ void linndrum_audio_device::device_add_mconfig(machine_config &config)
 	// instead.
 	for (int voice = 0; voice < NUM_MUX_VOICES; ++voice)
 	{
-		DAC76(config, m_mux_dac[voice], 0);  // AM6070 (U88).
+		DAC76(config, m_mux_dac[voice]);  // AM6070 (U88).
 		m_mux_dac[voice]->configure_voltage_output(R_DAC_I2V, R_DAC_I2V);  // R58, R59.
 		m_mux_dac[voice]->set_fixed_iref(MUX_DAC_IREF);
 		FILTER_VOLUME(config, m_mux_volume[voice]);  // CD4053 (U90), R60, R62 (see mux_drum_w()).
@@ -583,7 +583,7 @@ void linndrum_audio_device::device_add_mconfig(machine_config &config)
 	// *** Snare / sidestick section.
 
 	TIMER(config, m_snare_timer).configure_generic(FUNC(linndrum_audio_device::snare_timer_tick));  // 74LS627 (U80A).
-	DAC76(config, m_snare_dac, 0);  // AM6070 (U92)
+	DAC76(config, m_snare_dac);  // AM6070 (U92)
 	m_snare_dac->configure_voltage_output(R_DAC_I2V, R_DAC_I2V);  // R127, R126.
 
 	// The DAC's current outputs are processed by a current-to-voltage converter
@@ -607,7 +607,7 @@ void linndrum_audio_device::device_add_mconfig(machine_config &config)
 	// *** Tom / conga section.
 
 	TIMER(config, m_tom_timer).configure_generic(FUNC(linndrum_audio_device::tom_timer_tick));  // 74LS627 (U77B).
-	DAC76(config, m_tom_dac, 0);  // AM6070 (U82).
+	DAC76(config, m_tom_dac);  // AM6070 (U82).
 	// Schematic is missing the second resistor, but that's almost certainly an error.
 	// It is also missing component designations.
 	m_tom_dac->configure_voltage_output(R_DAC_I2V, R_DAC_I2V);

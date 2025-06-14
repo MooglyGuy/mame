@@ -9,12 +9,12 @@
 class bfm_gu96x8m_k657c2_device : public device_t
 {
 public:
-	bfm_gu96x8m_k657c2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, uint8_t port_val)
+	bfm_gu96x8m_k657c2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, uint8_t port_val)
 		: bfm_gu96x8m_k657c2_device(mconfig, tag, owner, clock)
 	{
 	}
 
-	bfm_gu96x8m_k657c2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bfm_gu96x8m_k657c2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void write_char(int data);
 	virtual void update_display();

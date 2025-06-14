@@ -277,7 +277,7 @@ void ibm5100_state::cpu_iod_map(address_map &map)
 
 void ibm5100_state::common(machine_config &config)
 {
-	PALM(config, m_cpu, 15'091'200);
+	PALM(config, m_cpu, XTAL::u(15'091'200));
 	m_cpu->set_addrmap(palm_device::AS_PGM, &ibm5100_state::cpu_pgm_map);
 	m_cpu->set_addrmap(palm_device::AS_RWS, &ibm5100_state::cpu_rws_map);
 	m_cpu->set_addrmap(palm_device::AS_IOC, &ibm5100_state::cpu_ioc_map);
@@ -291,7 +291,7 @@ void ibm5100_state::common(machine_config &config)
 	 * pixels of each character cell line and every other scan line are blank.
 	 */
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(15'091'200, 64*10+15, 0, 64*10, 16*12*2, 0, 16*12*2);
+	m_screen->set_raw(XTAL::u(15'091'200), 64*10+15, 0, 64*10, 16*12*2, 0, 16*12*2);
 	m_screen->set_screen_update(FUNC(ibm5100_state::screen_update));
 }
 
@@ -337,7 +337,7 @@ void ibm5110_state::ibm5110(machine_config &config)
 		});
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_alarm, 3'885); // FIXME: frequency
+	BEEP(config, m_alarm, XTAL::u(3'885)); // FIXME: frequency
 	m_alarm->add_route(ALL_OUTPUTS, "mono", 0.25);
 
 	// gfxdecode is only used to show the font data in the tile viewer

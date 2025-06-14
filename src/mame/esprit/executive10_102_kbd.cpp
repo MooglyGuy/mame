@@ -33,8 +33,8 @@
 
 DEFINE_DEVICE_TYPE(EXECUTIVE10_102_KBD, executive10_102_kbd_device, "executive10_102_kbd", "Executive 10/102 Keyboard")
 
-executive10_102_kbd_device::executive10_102_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
-	device_t(mconfig, EXECUTIVE10_102_KBD, tag, owner, 0U),
+executive10_102_kbd_device::executive10_102_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
+	device_t(mconfig, EXECUTIVE10_102_KBD, tag, owner, XTAL()),
 	m_mcu(*this, "mcu"),
 	m_buzzer(*this, "buzzer"),
 	m_shift(*this, "shift"),
@@ -76,7 +76,7 @@ void executive10_102_kbd_device::device_add_mconfig(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	BEEP(config, m_buzzer, 786); // unknown frequency
+	BEEP(config, m_buzzer, XTAL::u(786)); // unknown frequency
 	m_buzzer->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 

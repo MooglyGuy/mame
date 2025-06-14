@@ -24,7 +24,7 @@ class a2bus_romcard_device:
 	public device_a2bus_card_interface
 {
 public:
-	a2bus_romcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_romcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void bus_reset() override;
@@ -52,7 +52,7 @@ private:
 class a2bus_romcardfp_device: public a2bus_romcard_device
 {
 public:
-	a2bus_romcardfp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_romcardfp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -63,7 +63,7 @@ protected:
 class a2bus_romcardint_device: public a2bus_romcard_device
 {
 public:
-	a2bus_romcardint_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_romcardint_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -74,7 +74,7 @@ protected:
 class a2bus_romcarduser_device: public a2bus_romcard_device, public device_image_interface
 {
 public:
-	a2bus_romcarduser_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a2bus_romcarduser_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_image_interface overrides
 	virtual std::pair<std::error_condition, std::string> call_load() override;
@@ -125,7 +125,7 @@ INPUT_PORTS_END
 //  LIVE DEVICE
 //**************************************************************************
 
-a2bus_romcard_device::a2bus_romcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_romcard_device::a2bus_romcard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_a2bus_card_interface(mconfig, *this),
 	m_rom(nullptr),
@@ -134,17 +134,17 @@ a2bus_romcard_device::a2bus_romcard_device(const machine_config &mconfig, device
 {
 }
 
-a2bus_romcardfp_device::a2bus_romcardfp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_romcardfp_device::a2bus_romcardfp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	a2bus_romcard_device(mconfig, A2BUS_ROMCARDFP, tag, owner, clock)
 {
 }
 
-a2bus_romcardint_device::a2bus_romcardint_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_romcardint_device::a2bus_romcardint_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	a2bus_romcard_device(mconfig, A2BUS_ROMCARDINT, tag, owner, clock)
 {
 }
 
-a2bus_romcarduser_device::a2bus_romcarduser_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+a2bus_romcarduser_device::a2bus_romcarduser_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	a2bus_romcard_device(mconfig, A2BUS_ROMCARDUSER, tag, owner, clock),
 	device_image_interface(mconfig, *this)
 {

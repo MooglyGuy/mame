@@ -545,10 +545,10 @@ class p80c562_device : public i80c51_device
 {
 public:
 	// construction/destruction
-	p80c562_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	p80c562_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	p80c562_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features = 0);
+	p80c562_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features = 0);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 };
@@ -557,7 +557,7 @@ class p80c552_device : public p80c562_device
 {
 public:
 	// construction/destruction
-	p80c552_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	p80c552_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
@@ -567,7 +567,7 @@ class p87c552_device : public p80c562_device
 {
 public:
 	// construction/destruction
-	p87c552_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	p87c552_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;

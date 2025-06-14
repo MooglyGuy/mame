@@ -44,14 +44,14 @@ namespace bus::ti99::internal {
 #define PORT1 "port1"
 #define PORT2 "port2"
 
-ioport_splitter_device::ioport_splitter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ioport_splitter_device::ioport_splitter_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	:   ioport_attached_device(mconfig, type, tag, owner, clock),
 		m_port1(*this, PORT1),
 		m_port2(*this, PORT2)
 {
 }
 
-ioport_splitter_device::ioport_splitter_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ioport_splitter_device::ioport_splitter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ioport_splitter_device(mconfig, TI99_IOSPLIT, tag, owner, clock)
 {
 }
@@ -178,8 +178,8 @@ void ioport_splitter_device::device_config_complete()
 
 void ioport_splitter_device::device_add_mconfig(machine_config &config)
 {
-	TI99_IOPORT(config, m_port1, 1, ti99_ioport_options_evpc1, nullptr);
-	TI99_IOPORT(config, m_port2, 2, ti99_ioport_options_evpc1, nullptr);
+	TI99_IOPORT(config, m_port1, ti99_ioport_options_evpc1, nullptr);
+	TI99_IOPORT(config, m_port2, ti99_ioport_options_evpc1, nullptr);
 
 	m_port1->extint_cb().set(FUNC(ioport_splitter_device::extint<1>));
 	m_port2->extint_cb().set(FUNC(ioport_splitter_device::extint<2>));

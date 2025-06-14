@@ -17,7 +17,7 @@ class f2mc16_intc_device :
 	public device_t
 {
 public:
-	f2mc16_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	f2mc16_intc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<unsigned N> auto i2osclr() { return m_i2osclr_cb[N - m_external_interrupt_vector].bind(); }
 

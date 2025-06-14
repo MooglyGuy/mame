@@ -18,10 +18,9 @@
 // device type definition
 DEFINE_DEVICE_TYPE(AP2010PCM, ap2010pcm_device, "ap2010pcm", "AP2010 PCM")
 
-ap2010pcm_device::ap2010pcm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ap2010pcm_device::ap2010pcm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, AP2010PCM, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
-	, m_sample_rate(0)
 	, m_fifo_size(0)
 	, m_fifo_head(0)
 	, m_fifo_tail(0)
@@ -35,7 +34,7 @@ void ap2010pcm_device::device_start()
 {
 	m_regs = make_unique_clear<uint32_t[]>(0x40/4);
 
-	m_sample_rate = 8000;
+	m_sample_rate = XTAL::u(8000);
 
 	std::fill(std::begin(m_fifo_data), std::end(m_fifo_data), 0);
 	std::fill(std::begin(m_fifo_fast_data), std::end(m_fifo_fast_data), 0);
@@ -134,7 +133,7 @@ void ap2010pcm_device::reg_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 	switch (offset) {
 		case 0x4/4:
 			if ((data & 0x78) == 0x78) {
-				m_sample_rate = 8000 * (1 + BIT(data, 1));
+				m_sample_rate = XTAL::u(8000) * (1 + BIT(data, 1));
 				m_stream->set_sample_rate(m_sample_rate);
 
 				// When a new stream starts, stop playback of previous stream
@@ -142,7 +141,7 @@ void ap2010pcm_device::reg_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 				m_fifo_head = 0;
 				m_fifo_tail = 0;
 
-				LOG("pcm stream start, rate = %d\n", m_sample_rate);
+				LOG("pcm stream start, rate = %d\n", m_sample_rate.value());
 			}
 			break;
 		case 0xc/4:

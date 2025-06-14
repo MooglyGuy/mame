@@ -170,7 +170,7 @@ void stmpc_state::machine_reset()
 
 void stmpc_state::stmpc(machine_config &config)
 {
-	I80186(config, m_maincpu, 8000000);
+	I80186(config, m_maincpu, XTAL::u(8000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &stmpc_state::mem_map);
 	m_maincpu->set_addrmap(AS_IO, &stmpc_state::io_map);
 
@@ -179,12 +179,12 @@ void stmpc_state::stmpc(machine_config &config)
 	GFXDECODE(config, "gfxdecode", "palette", chars);
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_LCD));
-	screen.set_raw(16000000, 1344, 0, 1280, 113, 0, 104);
+	screen.set_raw(XTAL::u(16000000), 1344, 0, 1280, 113, 0, 104);
 	screen.set_screen_update(m_avdc, FUNC(scn2674_device::screen_update));
 
-	CLOCK(config, "tmrin1", 20000).signal_handler().set(m_maincpu, FUNC(i80186_cpu_device::tmrin1_w)); // FIXME: figure out the actual source of this
+	CLOCK(config, "tmrin1", XTAL::u(20000)).signal_handler().set(m_maincpu, FUNC(i80186_cpu_device::tmrin1_w)); // FIXME: figure out the actual source of this
 
-	SCN2674(config, m_avdc, 16000000 / 8);
+	SCN2674(config, m_avdc, XTAL::u(16000000) / 8);
 	m_avdc->set_screen("screen");
 	m_avdc->set_character_width(8);
 	m_avdc->set_addrmap(0, &stmpc_state::char_map);

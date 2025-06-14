@@ -5,7 +5,7 @@
 
 DEFINE_DEVICE_TYPE(SWX00, swx00_device, "swx00", "Yamaha SWX00")
 
-swx00_device::swx00_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u8 mode) :
+swx00_device::swx00_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, u8 mode) :
 	h8s2000_device(mconfig, SWX00, tag, owner, clock, address_map_constructor(FUNC(swx00_device::map), this)),
 	device_mixer_interface(mconfig, *this),
 	m_intc(*this, "intc"),

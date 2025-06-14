@@ -324,7 +324,7 @@ void macvail_state::maclc3_base(machine_config &config)
 	m_sonora->add_route(0, m_dfac, 1.0, 0);
 	m_sonora->add_route(1, m_dfac, 1.0, 1);
 
-	nubus_device &nubus(NUBUS(config, "pds", 0));
+	nubus_device &nubus(NUBUS(config, "pds"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	// LC III style PDS cards have slot IRQs $C, $D, and $E connected
 	nubus.out_irqc_callback().set(m_sonora, FUNC(sonora_device::slot0_irq_w));

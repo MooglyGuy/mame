@@ -27,7 +27,7 @@ TODO:
 // device type definition
 DEFINE_DEVICE_TYPE(PC9801_26, pc9801_26_device, "pc9801_26", "NEC PC-9801-26/K")
 
-pc9801_26_device::pc9801_26_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc9801_26_device::pc9801_26_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PC9801_26, tag, owner, clock)
 	, m_bus(*this, DEVICE_SELF_OWNER)
 	, m_opn(*this, "opn")

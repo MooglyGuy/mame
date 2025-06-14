@@ -54,10 +54,10 @@ class nubus_m2video_device : public device_t,
 {
 public:
 	// construction/destruction
-	nubus_m2video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_m2video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	nubus_m2video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_m2video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;

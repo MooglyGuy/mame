@@ -33,7 +33,7 @@
 
 DEFINE_DEVICE_TYPE(EFO_SOUND3, efo_sound3_device, "efo_sound3", "EFO Sound-3 board")
 
-efo_sound3_device::efo_sound3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+efo_sound3_device::efo_sound3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, EFO_SOUND3, tag, owner, clock)
 	, m_inputlatch(*this, "inputlatch")
 	, m_intflatch(*this, "intflatch")
@@ -105,7 +105,7 @@ void efo_sound3_device::device_add_mconfig(machine_config &config)
 	m_intflatch->sr_cb().set(m_tms, FUNC(tms5220_device::wsq_w));
 	m_intflatch->sr_cb().append(FUNC(efo_sound3_device::intf_cs_w));
 
-	TMS5220(config, m_tms, 640000); // IC9 90503 "Sintetizador"
+	TMS5220(config, m_tms, XTAL::u(640000)); // IC9 90503 "Sintetizador"
 	m_tms->add_route(ALL_OUTPUTS, "mono", 1.0);
 	m_tms->irq_cb().set_inputline("soundcpu", COSMAC_INPUT_LINE_INT).invert();
 	m_tms->ready_cb().set_inputline("soundcpu", COSMAC_INPUT_LINE_EF1).invert();

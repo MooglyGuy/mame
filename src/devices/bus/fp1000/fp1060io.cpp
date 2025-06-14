@@ -10,7 +10,7 @@
 
 DEFINE_DEVICE_TYPE(FP1060IO, fp1060io_device, "fp1060io", "FP-1060I/O Expansion Box")
 
-fp1060io_device::fp1060io_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+fp1060io_device::fp1060io_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fp1000_exp_device(mconfig, FP1060IO, tag, owner, clock)
 	, m_subslot(*this, "%u", 0U)
 	, m_irqs_int(*this, { "irqs_inta", "irqs_intb", "irqs_intc", "irqs_intd"})

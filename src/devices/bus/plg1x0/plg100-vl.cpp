@@ -18,7 +18,7 @@ namespace {
 class plg100_vl_device : public device_t, public device_plg1x0_interface
 {
 public:
-	plg100_vl_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	plg100_vl_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~plg100_vl_device();
 
 	virtual void midi_rx(int state) override;
@@ -36,7 +36,7 @@ private:
 	void map(address_map &map) ATTR_COLD;
 };
 
-plg100_vl_device::plg100_vl_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+plg100_vl_device::plg100_vl_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PLG100_VL, tag, owner, clock),
 	device_plg1x0_interface(mconfig, *this),
 	m_cpu(*this, "cpu"),

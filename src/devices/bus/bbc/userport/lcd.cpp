@@ -37,7 +37,7 @@ void bbc_lcd_device::device_add_mconfig(machine_config &config)
 
 	PALETTE(config, "palette", FUNC(bbc_lcd_device::lcd_palette), 3);
 
-	HD44780(config, m_lcdc, 122'427); // This uses a standard Hitachi LM044L
+	HD44780(config, m_lcdc, XTAL::u(122'427)); // This uses a standard Hitachi LM044L
 	// LCD module, which uses an HD44780A00 clocked using its internal
 	// oscillator, using a "204" (200KOhm) Rf resistor. At 5V this should
 	// oscillate at around 1 / (2 * PI * resistance * 6.5pF) Hz.

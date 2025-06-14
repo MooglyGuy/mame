@@ -9,7 +9,7 @@
 
 DEFINE_DEVICE_TYPE(EVOLUTION_CPU, evo_cpu_device, "evo_cpu", "Evolution CPU")
 
-evo_cpu_device::evo_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+evo_cpu_device::evo_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, EVOLUTION_CPU, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_LITTLE, 16, 24, -1)
 	, m_pc(0)

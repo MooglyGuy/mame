@@ -13,7 +13,7 @@ class ns32081_device_base
 	, public ns32000_fpu_interface
 {
 protected:
-	ns32081_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	ns32081_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -91,7 +91,7 @@ class ns32381_device
 	, public ns32000_fast_slave_interface
 {
 public:
-	ns32381_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	ns32381_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	// ns32000_slave_interface implementation
 	virtual void state_add(device_state_interface &parent, int &index) override;

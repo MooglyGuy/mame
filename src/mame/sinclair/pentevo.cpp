@@ -784,9 +784,9 @@ void pentevo_state::pentevo(machine_config &config)
 
 	AT_KEYB(config, m_keyboard, pc_keyboard_device::KEYBOARD_TYPE::AT, 3);
 
-	zxbus_device &zxbus(ZXBUS(config, "zxbus", 0));
+	zxbus_device &zxbus(ZXBUS(config, "zxbus"));
 	zxbus.set_iospace("maincpu", AS_IO);
-	ZXBUS_SLOT(config, "zxbus1", 0, "zxbus", zxbus_cards, nullptr);
+	ZXBUS_SLOT(config, "zxbus1", "zxbus", zxbus_cards, nullptr);
 }
 
 

@@ -13,7 +13,7 @@
 
 DEFINE_DEVICE_TYPE(SH_BSC, sh_bsc_device, "sh_bsc", "SH Bus State Controller")
 
-sh_bsc_device::sh_bsc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_bsc_device::sh_bsc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_BSC, tag, owner, clock)
 {
 }

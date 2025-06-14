@@ -390,7 +390,7 @@ void sc6_state::gambitv(machine_config &config)
 
 	// sound hardware
 	config.device_remove("dac");
-	S14001A(config, m_speech, 25000); // R/C circuit, around 25khz
+	S14001A(config, m_speech, XTAL::u(25000)); // R/C circuit, around 25khz
 	m_speech->add_route(ALL_OUTPUTS, "speaker", 0.75);
 }
 

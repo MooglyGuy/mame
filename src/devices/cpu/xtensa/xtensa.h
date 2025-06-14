@@ -10,7 +10,7 @@
 class xtensa_device : public cpu_device
 {
 public:
-	xtensa_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	xtensa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	enum {
 		AS_EXTREGS = AS_OPCODES + 1,

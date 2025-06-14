@@ -36,7 +36,7 @@ class mpf_tva_ip_device : public device_t, public device_mpf1_exp_interface
 public:
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
-	mpf_tva_ip_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_tva_ip_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MPF_TVA_IP, tag, owner, clock)
 		, device_mpf1_exp_interface(mconfig, *this)
 		, m_rom(*this, "rom")
@@ -54,7 +54,7 @@ protected:
 		screen.set_screen_update("ef9367", FUNC(ef9365_device::screen_update));
 		PALETTE(config, "palette", palette_device::MONOCHROME);
 
-		EF9365(config, m_gdp, 1750000); // EF9367
+		EF9365(config, m_gdp, XTAL::u(1750000)); // EF9367
 		m_gdp->set_screen("screen");
 		m_gdp->set_palette_tag("palette");
 		m_gdp->set_nb_bitplanes(1);

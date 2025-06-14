@@ -15,7 +15,7 @@
 class cf61909_device : public device_t, public device_sound_interface, public device_rom_interface<18>
 {
 public:
-	cf61909_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	cf61909_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u8 read(offs_t offset);
 	void write(offs_t offset, u8 data);

@@ -97,19 +97,19 @@ void sn74s262_device::device_start()
 //  sn74s262_device - constructor
 //-------------------------------------------------
 
-sn74s262_device::sn74s262_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+sn74s262_device::sn74s262_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_gfx_interface(mconfig, *this, gfxinfo),
 	m_char_rom(*this, "chargen")
 {
 }
 
-sn74s262_device::sn74s262_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sn74s262_device::sn74s262_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sn74s262_device(mconfig, SN74S262, tag, owner, clock)
 {
 }
 
-sn74s263_device::sn74s263_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sn74s263_device::sn74s263_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sn74s262_device(mconfig, SN74S263, tag, owner, clock)
 {
 }

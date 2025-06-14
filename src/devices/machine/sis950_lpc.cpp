@@ -193,7 +193,7 @@ void sis950_lpc_device::device_add_mconfig(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 0.50);
 
-	ISA16(config, m_isabus, 0);
+	ISA16(config, m_isabus);
 	m_isabus->irq3_callback().set(FUNC(sis950_lpc_device::pc_irq3_w));
 	m_isabus->irq4_callback().set(FUNC(sis950_lpc_device::pc_irq4_w));
 	m_isabus->irq6_callback().set(FUNC(sis950_lpc_device::pc_irq6_w));

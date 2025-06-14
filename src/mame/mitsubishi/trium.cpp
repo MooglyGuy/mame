@@ -57,7 +57,7 @@ INPUT_PORTS_END
 
 void trium_state::trium(machine_config &config)
 {
-	ARM7(config, m_maincpu, 50'000'000); // unknown type and clock
+	ARM7(config, m_maincpu, XTAL::u(50'000'000)); // unknown type and clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &trium_state::mem_map);
 }
 

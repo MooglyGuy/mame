@@ -12,7 +12,7 @@
 
 DEFINE_DEVICE_TYPE(F2MC16_PORT, f2mc16_port_device, "f2mc16_port", "F2MC16 Port")
 
-f2mc16_port_device::f2mc16_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_port_device::f2mc16_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_PORT, tag, owner, clock),
 	m_cpu(nullptr),
 	m_defval(0),

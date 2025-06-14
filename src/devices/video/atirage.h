@@ -12,7 +12,7 @@
 class atirage_device : public pci_device
 {
 public:
-	atirage_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	atirage_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void mem_map(address_map &map) ATTR_COLD;
 	void io_map(address_map &map) ATTR_COLD;
@@ -64,7 +64,7 @@ private:
 class atirageii_device : public atirage_device
 {
 public:
-	atirageii_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atirageii_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -73,7 +73,7 @@ protected:
 class atirageiic_device : public atirage_device
 {
 public:
-	atirageiic_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atirageiic_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -82,7 +82,7 @@ protected:
 class atirageiidvd_device : public atirage_device
 {
 public:
-	atirageiidvd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atirageiidvd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -103,7 +103,7 @@ private:
 class atiragepro_device : public atirage_device
 {
 public:
-	atiragepro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	atiragepro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

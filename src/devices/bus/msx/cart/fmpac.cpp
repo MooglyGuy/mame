@@ -20,7 +20,7 @@ namespace {
 class msx_cart_fmpac_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_fmpac_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_fmpac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_FMPAC, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_ym2413(*this, "ym2413")

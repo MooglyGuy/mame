@@ -6,19 +6,19 @@
 
 DEFINE_DEVICE_TYPE(MB90610A, mb90610a_device, "mb90610a", "Fujitsu MB90610A") // "Evaluation device" with extra RAM
 
-mb90610a_device::mb90610a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mb90610a_device::mb90610a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mb90610a_device(mconfig, MB90610A, tag, owner, clock, 0x10ff)
 {
 }
 
 DEFINE_DEVICE_TYPE(MB90611A, mb90611a_device, "mb90611a", "Fujitsu MB90611A") // Production version
 
-mb90611a_device::mb90611a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mb90611a_device::mb90611a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mb90610a_device(mconfig, MB90611A, tag, owner, clock, 0x04ff)
 {
 }
 
-mb90610a_device::mb90610a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint16_t internal_ram_end) :
+mb90610a_device::mb90610a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint16_t internal_ram_end) :
 	f2mc16_device(mconfig, type, tag, owner, clock),
 	m_program_config("program", ENDIANNESS_LITTLE, 16, 24, 0, address_map_constructor(FUNC(mb90610a_device::internal_map), this)),
 	m_internal_ram_end(internal_ram_end),

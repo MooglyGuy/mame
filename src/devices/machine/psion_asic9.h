@@ -25,7 +25,7 @@ class psion_asic9_device : public device_t,
 	public device_video_interface
 {
 public:
-	psion_asic9_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	psion_asic9_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T, typename U> void set_ram_rom(T &&ram_tag, U &&rom_tag) { m_ram.set_tag(std::forward<T>(ram_tag)); m_rom.set_tag(std::forward<U>(rom_tag)); }
 
@@ -60,7 +60,7 @@ public:
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
 protected:
-	psion_asic9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	psion_asic9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -170,7 +170,7 @@ class psion_asic9mx_device : public psion_asic9_device
 {
 public:
 	// construction/destruction
-	psion_asic9mx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	psion_asic9mx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual uint32_t ram_device_size(uint8_t device_type) override;

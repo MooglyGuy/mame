@@ -362,22 +362,22 @@ class tms32020_device : public tms3202x_device
 {
 public:
 	// construction/destruction
-	tms32020_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tms32020_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class tms32025_device : public tms3202x_device
 {
 public:
 	// construction/destruction
-	tms32025_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tms32025_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	void set_mp_mc(bool state) { m_mp_mc = state; }
 
 protected:
 	// construction/destruction
-	tms32025_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	tms32025_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor prgmap, address_map_constructor datamap);
+	tms32025_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	tms32025_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor prgmap, address_map_constructor datamap);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

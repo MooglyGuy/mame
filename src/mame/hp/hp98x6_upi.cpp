@@ -198,7 +198,7 @@ constexpr uint8_t TOD_3_ONE_DAY = 0x83;
 constexpr unsigned BEEP_SCALING = 15 * 64 * 64;
 constexpr uint8_t PAUSE_SCANCODE = 0x38;    // Reset is Shift+Pause
 
-hp98x6_upi_device::hp98x6_upi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hp98x6_upi_device::hp98x6_upi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 : device_t(mconfig, HP98X6_UPI, tag, owner, clock)
 	, m_keys(*this, "KEY%u", 0)
 	, m_shift(*this, "KEY_SHIFT")
@@ -247,7 +247,7 @@ void hp98x6_upi_device::device_add_mconfig(machine_config &config)
 {
 	// Beep
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beep, 0).add_route(ALL_OUTPUTS, "mono", 1.00);
+	BEEP(config, m_beep, XTAL()).add_route(ALL_OUTPUTS, "mono", 1.00);
 
 	TIMER(config, m_10ms_timer).configure_periodic(FUNC(hp98x6_upi_device::ten_ms), clocks_to_attotime(CLOCKS_PER_10MS));
 	TIMER(config, m_delay_timer).configure_generic(FUNC(hp98x6_upi_device::delay));
@@ -545,7 +545,7 @@ void hp98x6_upi_device::update_fsm()
 			case RAM_POS_BEEP_FREQ:
 				// Start/stop beep
 				if (in_data != 0) {
-					m_beep->set_clock((clock() * in_data) / BEEP_SCALING);
+					m_beep->set_clock((clock().value() * in_data) / BEEP_SCALING);
 					m_beep->set_state(1);
 					BIT_SET(m_ram[RAM_POS_0_R2_FLAGS1], R2_FLAGS1_BEEP_BIT);
 				} else {

@@ -19,7 +19,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(GSX8800, gsx8800_device, "gsx8800", "HAL GSX-8800")
 
-gsx8800_device::gsx8800_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+gsx8800_device::gsx8800_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc8801_exp_device(mconfig, GSX8800, tag, owner, clock)
 	, m_psg(*this, "psg.%u", 0U)
 {

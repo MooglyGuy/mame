@@ -33,7 +33,7 @@ public:
 
 protected:
 	// construction/destruction
-	pccard_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pccard_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t overrides
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -72,7 +72,7 @@ protected:
 class pccard_mitsubishi_sram_device : public pccard_sram_device
 {
 protected:
-	pccard_mitsubishi_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pccard_mitsubishi_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_image_interface overrides
@@ -88,7 +88,7 @@ class pccard_mitsubishi_mf31m1_lycat01_device : public pccard_mitsubishi_sram_de
 {
 public:
 	// construction/destruction
-	pccard_mitsubishi_mf31m1_lycat01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	pccard_mitsubishi_mf31m1_lycat01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 private:
 	void memory_map(address_map &map) ATTR_COLD;
@@ -97,7 +97,7 @@ private:
 class pccard_centennial_sram_device : public pccard_sram_device
 {
 protected:
-	pccard_centennial_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pccard_centennial_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_image_interface overrides
@@ -115,7 +115,7 @@ class pccard_centennial_sl01m_15_11194_device : public pccard_centennial_sram_de
 {
 public:
 	// construction/destruction
-	pccard_centennial_sl01m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	pccard_centennial_sl01m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// device_t overrides
@@ -130,7 +130,7 @@ class pccard_centennial_sl02m_15_11194_device : public pccard_centennial_sram_de
 {
 public:
 	// construction/destruction
-	pccard_centennial_sl02m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	pccard_centennial_sl02m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// device_t overrides
@@ -145,7 +145,7 @@ class pccard_centennial_sl04m_15_11194_device : public pccard_centennial_sram_de
 {
 public:
 	// construction/destruction
-	pccard_centennial_sl04m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	pccard_centennial_sl04m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// device_t overrides

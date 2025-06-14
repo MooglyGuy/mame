@@ -22,7 +22,7 @@ TODO:
 DEFINE_DEVICE_TYPE(A800_ROM_CORINA,      a800_rom_corina_device,         "a800_corina",        "Atari 8-bit Corina 1MB flash ROM cart")
 DEFINE_DEVICE_TYPE(A800_ROM_CORINA_SRAM, a800_rom_corina_sram_device,    "a800_corina_sram",   "Atari 8-bit Corina 512KB flash ROM + 512KB RAM cart")
 
-a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, type, tag, owner, clock)
 	, m_nvram(*this, "nvram")
 	, m_view(*this, "corina_view")
@@ -30,7 +30,7 @@ a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, de
 {
 }
 
-a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_corina_device::a800_rom_corina_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_corina_device(mconfig, A800_ROM_CORINA, tag, owner, clock)
 {
 }
@@ -111,7 +111,7 @@ void a800_rom_corina_device::ctrl_w(offs_t offset, uint8_t data)
 
  -------------------------------------------------*/
 
-a800_rom_corina_sram_device::a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_corina_sram_device::a800_rom_corina_sram_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_corina_device(mconfig, A800_ROM_CORINA_SRAM, tag, owner, clock)
 {
 }

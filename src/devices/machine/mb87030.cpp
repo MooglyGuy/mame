@@ -25,12 +25,12 @@ mb87030_device::mb87030_device(const machine_config &mconfig, const char *tag, d
 {
 }
 
-mb89351_device::mb89351_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mb89351_device::mb89351_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mb87030_device(mconfig, MB89351, tag, owner, clock)
 {
 }
 
-mb89352_device::mb89352_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mb89352_device::mb89352_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mb87030_device(mconfig, MB89352, tag, owner, clock)
 {
 

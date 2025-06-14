@@ -352,7 +352,7 @@ void c1p_state::osi630_ctrl_w(uint8_t data)
 void c1p_state::osi630_sound_w(uint8_t data)
 {
 	if (data != 0)
-		m_beeper->set_frequency(49152 / data);
+		m_beeper->set_clock(49152 / data);
 }
 
 /* Disk Drive */
@@ -926,7 +926,7 @@ ROM_END
 TIMER_DEVICE_CALLBACK_MEMBER(c1p_state::beep_timer)
 {
 	m_beeper->set_state(0);
-	m_beeper->set_clock(XTAL::u(300));
+	m_beeper->set_clock(300);
 }
 
 void c1p_state::init_c1p()

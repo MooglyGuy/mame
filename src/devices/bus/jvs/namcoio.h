@@ -17,7 +17,7 @@ class namco_amc_device :
 	public device_rs232_port_interface
 {
 public:
-	namco_amc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	namco_amc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void clear_output(int state);
 	int unknown_output();

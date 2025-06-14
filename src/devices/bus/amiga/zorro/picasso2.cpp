@@ -35,7 +35,7 @@ DEFINE_DEVICE_TYPE(AMIGA_PICASSO2P, bus::amiga::zorro::picasso2p_device, "amiga_
 
 namespace bus::amiga::zorro {
 
-picasso2p_device::picasso2p_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+picasso2p_device::picasso2p_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_PICASSO2P, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	device_zorro2_card_interface(mconfig, *this),
@@ -74,7 +74,7 @@ void picasso2p_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(25.1748_MHz_XTAL, 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(cirrus_gd5428_vga_device::screen_update));
 
-	CIRRUS_GD5428_VGA(config, m_vga, 0);
+	CIRRUS_GD5428_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	m_vga->set_vram_size(0x200000);
 }

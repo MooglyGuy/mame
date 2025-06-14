@@ -27,7 +27,7 @@
 
 DEFINE_DEVICE_TYPE(I82371EB_USB, i82371eb_usb_device, "i82371eb_usb", "Intel 82371EB PIIX4E USB Host Controller")
 
-i82371eb_usb_device::i82371eb_usb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82371eb_usb_device::i82371eb_usb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, I82371EB_USB, tag, owner, clock)
 
 {

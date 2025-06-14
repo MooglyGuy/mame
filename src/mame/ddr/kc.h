@@ -158,8 +158,8 @@ protected:
 	DECLARE_QUICKLOAD_LOAD_MEMBER(quickload_cb);
 
 	void kc85_slots(machine_config &config) ATTR_COLD;
-	void kc85_base(machine_config &config, uint32_t clock) ATTR_COLD;
-	void kc85_2_3(machine_config &config, uint32_t clock) ATTR_COLD;
+	void kc85_base(machine_config &config, const XTAL &clock) ATTR_COLD;
+	void kc85_2_3(machine_config &config, const XTAL &clock) ATTR_COLD;
 
 	void kc85_2_mem(address_map &map) ATTR_COLD;
 	void kc85_2_io(address_map &map) ATTR_COLD;

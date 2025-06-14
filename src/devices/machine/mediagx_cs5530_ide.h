@@ -12,15 +12,14 @@
 class mediagx_cs5530_ide_device : public pci_device
 {
 public:
-	template <typename T> mediagx_cs5530_ide_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock,
-		T &&host_tag, uint32_t bmspace = AS_PROGRAM
-	) : mediagx_cs5530_ide_device(mconfig, tag, owner, clock)
+	template <typename T>
+	mediagx_cs5530_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&host_tag, uint32_t bmspace = AS_PROGRAM)
+		: mediagx_cs5530_ide_device(mconfig, tag, owner)
 	{
 		set_ids(0x10780102, 0x00, 0x010180, 0x00);
 		m_bus_master_space.set_tag(host_tag, bmspace);
 	}
-	mediagx_cs5530_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mediagx_cs5530_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto irq_pri() { return m_irq_pri_callback.bind(); }
 	auto irq_sec() { return m_irq_sec_callback.bind(); }

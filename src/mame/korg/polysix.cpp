@@ -17,7 +17,7 @@
 class polysix_sound_block : public device_t, public device_sound_interface
 {
 public:
-	polysix_sound_block(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	polysix_sound_block(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void set_pitch(int channel, u8 pitch);
 	void set_gates(u8 gates);
@@ -114,7 +114,7 @@ const std::array<float, 0x100> polysix_sound_block::pw_threshold = []() {
 	return thr;
 }();
 
-polysix_sound_block::polysix_sound_block(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+polysix_sound_block::polysix_sound_block(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, POLYSIX_SOUND_BLOCK, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 {
@@ -122,7 +122,7 @@ polysix_sound_block::polysix_sound_block(const machine_config &mconfig, const ch
 
 void polysix_sound_block::device_start()
 {
-	m_stream = stream_alloc(0, 1, 48000);
+	m_stream = stream_alloc(0, 1, XTAL::u(48000));
 
 	save_item(NAME(m_phase));
 	save_item(NAME(m_organ_eg));

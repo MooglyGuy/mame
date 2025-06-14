@@ -11,13 +11,13 @@
 class neon250_device : public pci_card_device
 {
 public:
-	neon250_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	neon250_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void legacy_memory_map(address_map &map) ATTR_COLD;
 	void legacy_io_map(address_map &map) ATTR_COLD;
 
 protected:
-	neon250_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	neon250_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

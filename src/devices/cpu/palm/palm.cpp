@@ -34,7 +34,7 @@ static u8 constexpr il_priority[] = { 0, 1, 2, 2, 3, 3, 3, 3 };
 
 DEFINE_DEVICE_TYPE(PALM, palm_device, "palm", "IBM PALM")
 
-palm_device::palm_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+palm_device::palm_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, PALM, tag, owner, clock)
 	, m_pgm_config("pgm", ENDIANNESS_BIG, 16, 16)
 	, m_rws_config("rws", ENDIANNESS_BIG, 16, 16)

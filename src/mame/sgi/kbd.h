@@ -19,14 +19,14 @@ class sgi_kbd_port_device
 public:
 	template <typename T>
 	sgi_kbd_port_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: sgi_kbd_port_device(mconfig, tag, owner, 0)
+		: sgi_kbd_port_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	sgi_kbd_port_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock = 0);
+	sgi_kbd_port_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~sgi_kbd_port_device();
 
 	auto rxd_handler() { return m_rxd_handler.bind(); }
@@ -62,7 +62,7 @@ class sgi_kbd_device
 	, public device_sgi_kbd_port_interface
 {
 public:
-	sgi_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock);
+	sgi_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual void write_txd(int state) override;
 

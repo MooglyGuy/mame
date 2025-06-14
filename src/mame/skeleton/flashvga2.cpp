@@ -85,7 +85,7 @@ void flashvga2_state::flashvga2(machine_config &config)
 
 	SCN2681(config, "uart", 3.6864_MHz_XTAL); // Philips SCC2692AC1A44
 
-	M48T02(config, "m48t18", 0); // ST M48T18-150PC1
+	M48T02(config, "m48t18"); // ST M48T18-150PC1
 
 	// Video hardware (probably wrong values)
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));

@@ -232,8 +232,8 @@ ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &m
 {
 }
 
-ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, ns10_crypto_logic &&logic)
-	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER, tag, owner, clock)
+ns10_type2_decrypter_device::ns10_type2_decrypter_device(const machine_config &mconfig, const char *tag, device_t *owner, ns10_crypto_logic &&logic)
+	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER, tag, owner)
 	, m_logic(std::move(logic))
 {
 	m_logic_initialized = true;
@@ -302,8 +302,8 @@ ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(con
 {
 }
 
-ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, ns10_crypto_logic &&logic)
-	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER_NONLINEAR, tag, owner, clock)
+ns10_type2_decrypter_nonlinear_device::ns10_type2_decrypter_nonlinear_device(const machine_config &mconfig, const char *tag, device_t *owner, ns10_crypto_logic &&logic)
+	: ns10_decrypter_device(mconfig, NS10_TYPE2_DECRYPTER_NONLINEAR, tag, owner)
 	, m_nonlinear_region(*this, "nonlinear_table")
 	, m_logic(std::move(logic))
 {

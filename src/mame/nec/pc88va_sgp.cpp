@@ -35,7 +35,7 @@ TODO:
 // device type definition
 DEFINE_DEVICE_TYPE(PC88VA_SGP, pc88va_sgp_device, "pc88va_sgp", "NEC PC-88VA Super Graphic Processor")
 
-pc88va_sgp_device::pc88va_sgp_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+pc88va_sgp_device::pc88va_sgp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PC88VA_SGP, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	m_data(nullptr)

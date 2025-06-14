@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(MC68000_SYSBUS, mc68000_sysbus_device, "mc68000_sysbus", "mc-68000 System Bus")
 
-mc68000_sysbus_device::mc68000_sysbus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mc68000_sysbus_device::mc68000_sysbus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MC68000_SYSBUS, tag, owner, clock),
 	m_irq1_cb(*this),
 	m_irq2_cb(*this),
@@ -97,12 +97,12 @@ void mc68000_sysbus_device::floppy_w(offs_t offset, uint16_t data, uint16_t mem_
 
 DEFINE_DEVICE_TYPE(MC68000_SYSBUS_SLOT, mc68000_sysbus_slot_device, "mc68000_sysbus_slot", "mc-68000 System Bus Slot")
 
-mc68000_sysbus_slot_device::mc68000_sysbus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mc68000_sysbus_slot_device::mc68000_sysbus_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mc68000_sysbus_slot_device(mconfig, MC68000_SYSBUS_SLOT, tag, owner, clock)
 {
 }
 
-mc68000_sysbus_slot_device::mc68000_sysbus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+mc68000_sysbus_slot_device::mc68000_sysbus_slot_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_single_card_slot_interface<device_mc68000_sysbus_card_interface>(mconfig, *this)
 {

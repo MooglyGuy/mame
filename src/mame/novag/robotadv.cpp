@@ -518,7 +518,7 @@ void robotadv_state::robotadv(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &robotadv_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &robotadv_state::io_map);
 
-	auto &irq_clock(CLOCK(config, "irq_clock", 1200)); // approximation, from 555 timer with VR
+	auto &irq_clock(CLOCK(config, "irq_clock", XTAL::u(1200))); // approximation, from 555 timer with VR
 	irq_clock.set_pulse_width(attotime::from_usec(10)); // guessed
 	irq_clock.signal_handler().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 

@@ -31,7 +31,7 @@
 DEFINE_DEVICE_TYPE(SEI0210, sei0210_device, "sei0210", "Seibu Kaihatsu SEI0210 Sprite generator")
 DEFINE_DEVICE_TYPE(SEI0211, sei0211_device, "sei0211", "Seibu Kaihatsu SEI0211 Sprite generator")
 
-sei0210_device::sei0210_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+sei0210_device::sei0210_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 	, m_pri_cb(*this)
@@ -42,12 +42,12 @@ sei0210_device::sei0210_device(const machine_config &mconfig, device_type type, 
 {
 }
 
-sei0210_device::sei0210_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+sei0210_device::sei0210_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sei0210_device(mconfig, SEI0210, tag, owner, clock)
 {
 }
 
-sei0211_device::sei0211_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+sei0211_device::sei0211_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sei0210_device(mconfig, SEI0211, tag, owner, clock)
 {
 }

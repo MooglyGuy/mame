@@ -29,12 +29,10 @@
 
 class sis85c496_host_device : public pci_host_device {
 public:
-	sis85c496_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sis85c496_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
-	template <typename T> sis85c496_host_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock,
-		T &&cpu_tag, int ram_size
-	) : sis85c496_host_device(mconfig, tag, owner, clock)
+	template <typename T> sis85c496_host_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, int ram_size)
+		: sis85c496_host_device(mconfig, tag, owner)
 	{
 		// Revision 3
 		set_ids(0x10390496, 0x03, 0x060000, 0x00);

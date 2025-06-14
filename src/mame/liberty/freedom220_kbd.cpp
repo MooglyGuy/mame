@@ -35,7 +35,7 @@
 
 DEFINE_DEVICE_TYPE(FREEDOM220_KBD, freedom220_kbd_device, "freedom220_kbd", "Liberty Freedom 220 keyboard")
 
-freedom220_kbd_device::freedom220_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+freedom220_kbd_device::freedom220_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, FREEDOM220_KBD, tag, owner, clock),
 	m_mcu(*this, "mcu"),
 	m_buzzer(*this, "buzzer"),
@@ -91,7 +91,7 @@ void freedom220_kbd_device::device_add_mconfig(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	BEEP(config, m_buzzer, 786); // unknown frequency
+	BEEP(config, m_buzzer, XTAL::u(786)); // unknown frequency
 	m_buzzer->add_route(ALL_OUTPUTS, "mono", 0.5);
 }
 

@@ -24,7 +24,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	midtunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag)
-		: midtunit_video_device(mconfig, tag, owner, XTAL())
+		: midtunit_video_device(mconfig, tag, owner)
 	{
 		m_palette.set_tag(std::forward<T>(palette_tag));
 	}
@@ -61,7 +61,7 @@ public:
 
 protected:
 	// construction/destruction
-	midtunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	midtunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -185,7 +185,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	midwunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag)
-		: midwunit_video_device(mconfig, tag, owner, XTAL())
+		: midwunit_video_device(mconfig, tag, owner)
 	{
 		m_palette.set_tag(std::forward<T>(palette_tag));
 	}
@@ -197,7 +197,7 @@ public:
 	uint16_t midwunit_control_r();
 
 protected:
-	midwunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	midwunit_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 #if DEBUG_MIDTUNIT_BLITTER
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -210,7 +210,7 @@ public:
 	// construction/destruction
 	template <typename T>
 	midxunit_video_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag)
-		: midwunit_video_device(mconfig, tag, owner, XTAL())
+		: midwunit_video_device(mconfig, tag, owner)
 	{
 		m_palette.set_tag(std::forward<T>(palette_tag));
 	}

@@ -465,7 +465,7 @@ void triton_state::triton1(machine_config &config)
 
 	config.set_default_layout(layout_triton);
 
-	KR2376_12(config, m_kr2376, 50000);
+	KR2376_12(config, m_kr2376, XTAL::u(50000));
 	m_kr2376->x<0>().set_ioport("X0");
 	m_kr2376->x<1>().set_ioport("X1");
 	m_kr2376->x<2>().set_ioport("X2");
@@ -495,7 +495,7 @@ void triton_state::triton1(machine_config &config)
 	m_cassette->add_route(ALL_OUTPUTS, "mono", 0.05);
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 800).add_route(ALL_OUTPUTS, "mono", 1.00);
+	BEEP(config, m_beeper, XTAL::u(800)).add_route(ALL_OUTPUTS, "mono", 1.00);
 
 	GENERIC_SOCKET(config, m_user1, generic_plain_slot, "triton_rom", "rom,bin");
 	GENERIC_SOCKET(config, m_user2, generic_plain_slot, "triton_rom", "rom,bin");

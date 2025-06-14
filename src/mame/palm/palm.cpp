@@ -617,7 +617,7 @@ void palm_state::palm_base(machine_config &config)
 	m_screen->set_visarea(0, 160 - 1, 0, 220 - 1);
 	m_screen->set_screen_update(FUNC(palm_state::screen_update));
 
-	MC68328_LCD(config, m_lcdctrl, 0);
+	MC68328_LCD(config, m_lcdctrl);
 
 	/* audio hardware */
 	SPEAKER(config, "speaker").front_center();
@@ -627,7 +627,7 @@ void palm_state::palm_base(machine_config &config)
 void palmiiic_state::palmiiic(machine_config &config)
 {
 	/* basic machine hardware */
-	MC68EZ328(config, m_maincpu, 32768*506);        /* 16.580608 MHz */
+	MC68EZ328(config, m_maincpu, XTAL::u(32768)*506);        /* 16.580608 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &palmiiic_state::mem_map);
 	m_maincpu->set_dasm_override(FUNC(palmiiic_state::dasm_override));
 
@@ -674,13 +674,13 @@ void palmiiic_state::palmiiic(machine_config &config)
 
 	/* audio hardware */
 	SPEAKER(config, "speaker").front_center();
-	DAC_1BIT(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25);
+	DAC_1BIT(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25);
 }
 
 void palmm100_state::palmm100(machine_config &config)
 {
 	/* basic machine hardware */
-	MC68EZ328(config, m_maincpu, 32768*506);        /* 16.580608 MHz */
+	MC68EZ328(config, m_maincpu, XTAL::u(32768)*506);        /* 16.580608 MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &palmm100_state::mem_map);
 	m_maincpu->set_dasm_override(FUNC(palmm100_state::dasm_override));
 
@@ -737,11 +737,11 @@ void palmm100_state::palmm100(machine_config &config)
 	m_screen->set_visarea(0, 160 - 1, 0, 220 - 1);
 	m_screen->set_screen_update(FUNC(palmm100_state::screen_update));
 
-	MC68328_LCD(config, m_lcdctrl, 0);
+	MC68328_LCD(config, m_lcdctrl);
 
 	/* audio hardware */
 	SPEAKER(config, "speaker").front_center();
-	DAC_1BIT(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25);
+	DAC_1BIT(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25);
 }
 
 void palm_state::pilot1k(machine_config &config)

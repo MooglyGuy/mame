@@ -13,12 +13,12 @@ class trs80_quickload_device : public snapshot_image_device
 public:
 	template <typename T>
 	trs80_quickload_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cputag, attotime delay = attotime::zero)
-		: trs80_quickload_device(mconfig, tag, owner, 0U)
+		: trs80_quickload_device(mconfig, tag, owner)
 	{
 		set_cpu(cputag);
 		set_delay(delay);
 	}
-	trs80_quickload_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0U);
+	trs80_quickload_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T> void set_cpu(T &&tag) { m_maincpu.set_tag(std::forward<T>(tag)); }
 

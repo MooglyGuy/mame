@@ -47,7 +47,7 @@ TODO:
 DEFINE_DEVICE_TYPE(PC98_KBD,     pc98_kbd_device,     "pc98_kbd",     "NEC PC-98 Keyboard")
 DEFINE_DEVICE_TYPE(PC98_119_KBD, pc98_119_kbd_device, "pc98_119_kbd", "NEC PC-9801-119 Keyboard")
 
-pc98_kbd_device::pc98_kbd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pc98_kbd_device::pc98_kbd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_buffered_serial_interface(mconfig, *this)
 	, device_matrix_keyboard_interface(mconfig, *this, "KEY0", "KEY1", "KEY2", "KEY3", "KEY4", "KEY5", "KEY6", "KEY7", "KEY8", "KEY9", "KEYA", "KEYB", "KEYC", "KEYD", "KEYE", "KEYF")
@@ -57,7 +57,7 @@ pc98_kbd_device::pc98_kbd_device(const machine_config &mconfig, device_type type
 {
 }
 
-pc98_kbd_device::pc98_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc98_kbd_device::pc98_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc98_kbd_device(mconfig, PC98_KBD, tag, owner, clock)
 {
 }
@@ -374,7 +374,7 @@ void pc98_kbd_device::input_rty(int state)
  * PC-9801-119 overrides
  */
 
- pc98_119_kbd_device::pc98_119_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ pc98_119_kbd_device::pc98_119_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pc98_kbd_device(mconfig, PC98_119_KBD, tag, owner, clock)
 {
 }

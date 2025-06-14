@@ -17,7 +17,7 @@ class rbv_device :  public device_t, public device_palette_interface
 {
 public:
 	// construction/destruction
-	rbv_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	rbv_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void map(address_map &map) ATTR_COLD;
 

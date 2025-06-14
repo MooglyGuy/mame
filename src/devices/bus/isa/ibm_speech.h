@@ -19,7 +19,7 @@ class isa8_ibm_speech_device :
 		public device_isa8_card_interface
 {
 public:
-	isa8_ibm_speech_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa8_ibm_speech_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t audio_control_latch_r();
 	void    audio_control_latch_w(uint8_t data);

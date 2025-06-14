@@ -731,7 +731,7 @@ void nwktr_state::nwktr_lan_b(machine_config &config)
 {
 	nwktr(config);
 
-	KONAMI_GN676B_LAN(config.replace(), m_gn676_lan, 0);
+	KONAMI_GN676B_LAN(config.replace(), m_gn676_lan);
 }
 
 /*****************************************************************************/

@@ -65,7 +65,7 @@ void psion_ssd_device::device_add_mconfig(machine_config &config)
 //  psion_ssd_device - constructor
 //-------------------------------------------------
 
-psion_ssd_device::psion_ssd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_ssd_device::psion_ssd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_SSD, tag, owner, clock)
 	, device_memcard_image_interface(mconfig, *this)
 	, m_region(*this, DEVICE_SELF)

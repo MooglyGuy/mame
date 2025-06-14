@@ -11,7 +11,7 @@
 class cirrus_gd5465_laguna3d_device :  public pci_card_device
 {
 public:
-	cirrus_gd5465_laguna3d_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	cirrus_gd5465_laguna3d_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void legacy_memory_map(address_map &map) ATTR_COLD;
 	void legacy_io_map(address_map &map) ATTR_COLD;

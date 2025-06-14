@@ -75,10 +75,10 @@ INPUT_PORTS_END
 
 void conliner_state::conliner(machine_config &config)
 {
-	PENTIUM(config, m_maincpu, 166'000'000); // Actually an AMD Athlon AXDA1800DLT3C
+	PENTIUM(config, m_maincpu, XTAL::u(166'000'000)); // Actually an AMD Athlon AXDA1800DLT3C
 	m_maincpu->set_addrmap(AS_PROGRAM, &conliner_state::mem_map);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

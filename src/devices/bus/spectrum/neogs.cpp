@@ -70,7 +70,7 @@ ROM_END
 class neogs_device : public device_t, public device_zxbus_card_interface
 {
 public:
-	neogs_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	neogs_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, ZXBUS_NEOGS, tag, owner, clock)
 		, device_zxbus_card_interface(mconfig, *this)
 		, m_maincpu(*this, "maincpu")
@@ -422,14 +422,14 @@ void neogs_device::device_add_mconfig(machine_config &config)
 	m_maincpu->set_periodic_int(FUNC(neogs_device::irq0_line_assert), attotime::from_hz(37.5_kHz_XTAL));
 	m_maincpu->irqack_cb().set_inputline(m_maincpu, INPUT_LINE_IRQ0, CLEAR_LINE);
 
-	SPI_SDCARD(config, m_sdcard, 0);
+	SPI_SDCARD(config, m_sdcard);
 	m_sdcard->set_prefer_sdhc();
 	m_sdcard->spi_miso_callback().set([this](int state) { m_spi_data_in_latch <<= 1; m_spi_data_in_latch |= state; });
 
 	SPEAKER(config, "speaker", 2).front();
 
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_dac[0], 0).add_route(ALL_OUTPUTS, "speaker", 0.75, 0); // TDA1543
-	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_dac[1], 0).add_route(ALL_OUTPUTS, "speaker", 0.75, 1);
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_dac[0]).add_route(ALL_OUTPUTS, "speaker", 0.75, 0); // TDA1543
+	DAC_16BIT_R2R_TWOS_COMPLEMENT(config, m_dac[1]).add_route(ALL_OUTPUTS, "speaker", 0.75, 1);
 }
 
 const tiny_rom_entry *neogs_device::device_rom_region() const

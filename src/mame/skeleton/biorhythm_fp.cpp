@@ -106,7 +106,7 @@ INPUT_PORTS_END
 
 void biorhythm_fp_state::biortmfp(machine_config &config)
 {
-	i4040_cpu_device &cpu(I4040(config, "maincpu", 750'000)); // clock unknown
+	i4040_cpu_device &cpu(I4040(config, "maincpu", XTAL::u(750'000))); // clock unknown
 	cpu.set_rom_map(&biorhythm_fp_state::rom_map);
 	cpu.set_ram_memory_map(&biorhythm_fp_state::memory_map);
 	cpu.set_ram_status_map(&biorhythm_fp_state::status_map);

@@ -19,7 +19,7 @@ DEFINE_DEVICE_TYPE(RF57_932, rf57_932_device, "rf57_932", "Thomson RF 57-932 RS-
 //  rf57_932_device - constructor
 //-------------------------------------------------
 
-rf57_932_device::rf57_932_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+rf57_932_device::rf57_932_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, RF57_932, tag, owner, clock)
 	, thomson_extension_interface(mconfig, *this)
 {

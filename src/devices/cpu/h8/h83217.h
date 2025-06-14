@@ -33,7 +33,7 @@
 
 class h83217_device : public h8_device {
 public:
-	h83217_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83217_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// I/O ports
 	auto read_port1()  { return m_read_port [PORT_1].bind(); }
@@ -61,7 +61,7 @@ public:
 	u8 mdcr_r();
 
 protected:
-	h83217_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size);
+	h83217_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size);
 
 	required_device<h8_intc_device> m_intc;
 	required_device_array<h8_port_device, 7> m_port;
@@ -93,22 +93,22 @@ protected:
 
 class h83216_device : public h83217_device {
 public:
-	h83216_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83216_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h83214_device : public h83217_device {
 public:
-	h83214_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83214_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h83212_device : public h83217_device {
 public:
-	h83212_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83212_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h83202_device : public h83217_device {
 public:
-	h83202_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83202_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(H83217, h83217_device)

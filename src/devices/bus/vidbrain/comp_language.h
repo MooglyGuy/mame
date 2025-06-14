@@ -25,7 +25,7 @@ class videobrain_comp_language_cartridge_device : public device_t, public device
 {
 public:
 	// construction/destruction
-	videobrain_comp_language_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	videobrain_comp_language_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

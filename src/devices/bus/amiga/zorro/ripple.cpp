@@ -33,7 +33,7 @@ DEFINE_DEVICE_TYPE(AMIGA_RIPPLE, bus::amiga::zorro::ripple_ide_device, "amiga_ri
 
 namespace bus::amiga::zorro {
 
-ripple_ide_device::ripple_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ripple_ide_device::ripple_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_RIPPLE, tag, owner, clock),
 	device_zorro2_card_interface(mconfig, *this),
 	m_ata_0(*this, "ata_0"),

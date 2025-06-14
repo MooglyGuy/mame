@@ -1146,7 +1146,7 @@ void psikyo_state::s1945n(machine_config &config)
 void psikyo_state::s1945bl(machine_config &config) /* Bootleg hardware based on the unprotected Japanese Strikers 1945 set */
 {
 	/* basic machine hardware */
-	M68EC020(config, m_maincpu, 16000000);
+	M68EC020(config, m_maincpu, XTAL::u(16000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &psikyo_state::s1945bl_bootleg_map);
 	m_maincpu->set_vblank_int("screen", FUNC(psikyo_state::irq1_line_hold));
 
@@ -1181,11 +1181,11 @@ void psikyo_state::tengaibl(machine_config &config)
 	m_maincpu->set_clock(28.636363_MHz_XTAL / 2 ); // divider not verified
 	m_maincpu->set_addrmap(AS_PROGRAM, &psikyo_state::tengaibl_bootleg_map);
 
-	okim6295_device &oki1(OKIM6295(config.replace(), "oki1", 1'000'000, okim6295_device::PIN7_LOW)); // clock and pin 7 not verified
+	okim6295_device &oki1(OKIM6295(config.replace(), "oki1", XTAL::u(1'000'000), okim6295_device::PIN7_LOW)); // clock and pin 7 not verified
 	oki1.add_route(ALL_OUTPUTS, "mono", 1.0);
 	oki1.set_addrmap(0, &psikyo_state::s1945bl_oki_map<0>);
 
-	okim6295_device &oki2(OKIM6295(config, "oki2", 1'000'000, okim6295_device::PIN7_LOW)); // clock and pin 7 not verified
+	okim6295_device &oki2(OKIM6295(config, "oki2", XTAL::u(1'000'000), okim6295_device::PIN7_LOW)); // clock and pin 7 not verified
 	oki2.add_route(ALL_OUTPUTS, "mono", 1.0);
 	oki2.set_addrmap(0, &psikyo_state::s1945bl_oki_map<1>);
 }

@@ -19,7 +19,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(MEDIAGX_CS5530_IDE, mediagx_cs5530_ide_device, "mediagx_cs5530_ide", "MediaGX CS5530 IDE Controller")
 
-mediagx_cs5530_ide_device::mediagx_cs5530_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mediagx_cs5530_ide_device::mediagx_cs5530_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, MEDIAGX_CS5530_IDE, tag, owner, clock)
 	, m_ide1(*this, "ide1")
 	, m_ide2(*this, "ide2")

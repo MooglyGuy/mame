@@ -327,7 +327,7 @@ void microbx2_state::microbx2(machine_config &config)
 	m_pia1->writepb_handler().set(FUNC(microbx2_state::pia1_pb_w));
 	m_pia1->cb2_handler().set("centronics", FUNC(centronics_device::write_strobe));
 
-	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard", 0));
+	generic_keyboard_device &keyboard(GENERIC_KEYBOARD(config, "keyboard"));
 	keyboard.set_keyboard_callback(FUNC(microbx2_state::kbd_w));
 
 	centronics_device &centronics(CENTRONICS(config, "centronics", centronics_devices, "printer"));
@@ -359,7 +359,7 @@ void microbx2_state::microbx2(machine_config &config)
 	//rs232b.cts_handler().set("deuce", FUNC(wd2123_device::write_cts_b));
 
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 1200).add_route(ALL_OUTPUTS, "mono", 0.50); // TODO: unknown frequency
+	BEEP(config, m_beeper, XTAL::u(1200)).add_route(ALL_OUTPUTS, "mono", 0.50); // TODO: unknown frequency
 
 	WD1770(config, m_fdc, 16_MHz_XTAL / 2);
 

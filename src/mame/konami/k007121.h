@@ -11,9 +11,9 @@
 class k007121_device : public device_t, public device_gfx_interface
 {
 public:
-	k007121_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
-	template<typename T> k007121_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: k007121_device(mconfig, tag, owner, clock)
+	k007121_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	template<typename T> k007121_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: k007121_device(mconfig, tag, owner)
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

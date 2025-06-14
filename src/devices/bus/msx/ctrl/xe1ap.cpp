@@ -53,7 +53,7 @@ INPUT_PORTS_END
 class xe1ap_device : public device_t, public device_msx_general_purpose_port_interface
 {
 public:
-	xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) ATTR_COLD;
+	xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) ATTR_COLD;
 
 	virtual u8 read() override { return m_xe1->out_r() | 0xc0; }
 	virtual void pin_8_w(int state) override { m_xe1->req_w(state); }
@@ -72,7 +72,7 @@ private:
 	required_ioport m_mode;
 };
 
-xe1ap_device::xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+xe1ap_device::xe1ap_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, MSX_XE1AP, tag, owner, clock),
 	device_msx_general_purpose_port_interface(mconfig, *this),
 	m_xe1(*this, "xe1"),

@@ -36,7 +36,7 @@ References:
 
 DEFINE_DEVICE_TYPE(ADAPTATOR_MULTITAP, adaptator_multitap_device, "adaptator_multitap", "The Adaptator 2x DE-9 Multitap")
 
-adaptator_multitap_device::adaptator_multitap_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+adaptator_multitap_device::adaptator_multitap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ADAPTATOR_MULTITAP, tag, owner, clock),
 	device_centronics_peripheral_interface(mconfig, *this),
 	m_joy(*this, "joy_p%u", 1U)

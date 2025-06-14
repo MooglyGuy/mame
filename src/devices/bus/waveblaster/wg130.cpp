@@ -16,7 +16,7 @@ namespace {
 class wg130_device : public device_t, public device_waveblaster_interface
 {
 public:
-	wg130_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	wg130_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~wg130_device();
 
 	virtual void midi_rx(int state) override;
@@ -50,7 +50,7 @@ INPUT_PORTS_START(wg130)
 	PORT_START("gt913:kbd:KI2")
 INPUT_PORTS_END
 
-wg130_device::wg130_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+wg130_device::wg130_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, WG130, tag, owner, clock),
 	device_waveblaster_interface(mconfig, *this),
 	m_gt913(*this, "gt913")

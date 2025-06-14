@@ -14,7 +14,7 @@
 
 DEFINE_DEVICE_TYPE(STT_SA1, stt_sa1_device, "stt_sa1", "ST-Techno STT-SA1 Sound")
 
-stt_sa1_device::stt_sa1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+stt_sa1_device::stt_sa1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, STT_SA1, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, device_rom_interface(mconfig, *this)

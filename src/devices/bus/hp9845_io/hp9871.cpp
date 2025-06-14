@@ -14,7 +14,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(HP9871, hp9871_device, "hp9871" , "HP9871 printer")
 
-hp9871_device::hp9871_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+hp9871_device::hp9871_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, HP9871, tag, owner, clock)
 	, device_hp98032_gpio_interface(mconfig, *this)
 	, m_printer(*this, "printer")
@@ -81,7 +81,7 @@ void hp9871_device::preset_w(int state)
 
 void hp9871_device::device_add_mconfig(machine_config &config)
 {
-	PRINTER(config, m_printer, 0);
+	PRINTER(config, m_printer);
 	m_printer->online_callback().set(FUNC(hp9871_device::printer_online));
 }
 

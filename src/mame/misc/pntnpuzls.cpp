@@ -251,7 +251,7 @@ void pntnpuzls_state::machine_reset()
 
 void pntnpuzls_state::pntnpuzls(machine_config &config)
 {
-	I80286(config, m_maincpu, 27'500'000 / 2); // clock / divider not verified
+	I80286(config, m_maincpu, XTAL::u(27'500'000) / 2); // clock / divider not verified
 	m_maincpu->set_addrmap(AS_PROGRAM, &pntnpuzls_state::program_map);
 	m_maincpu->set_addrmap(AS_IO, &pntnpuzls_state::io_map);
 	m_maincpu->set_irq_acknowledge_callback("pic", FUNC(pic8259_device::inta_cb));
@@ -269,20 +269,20 @@ void pntnpuzls_state::pntnpuzls(machine_config &config)
 	uart.out_tx_callback().set("microtouch", FUNC(microtouch_device::rx));
 	uart.out_int_callback().set("pic", FUNC(pic8259_device::ir4_w));
 
-	MICROTOUCH(config, "microtouch", 9600).stx().set("uart", FUNC(ins8250_uart_device::rx_w));
+	MICROTOUCH(config, "microtouch", XTAL::u(9600)).stx().set("uart", FUNC(ins8250_uart_device::rx_w));
 
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
 	// HTOTAL: 440  VTOTAL: 260  MAX_X: 319  MAX_Y: 199  HSYNC: 360-391  VSYNC: 224-239  Freq: 60.096154fps
-	screen.set_raw(27'500'000 / 32, 440, 0, 320, 260, 0, 200);
+	screen.set_raw(XTAL::u(27'500'000) / 32, 440, 0, 320, 260, 0, 200);
 	screen.set_screen_update(FUNC(pntnpuzls_state::screen_update));
 
 	PALETTE(config, "palette").set_entries(0x100);
 
 	// HM86171-80
-	RAMDAC(config, m_ramdac, 0, "palette");
+	RAMDAC(config, m_ramdac, "palette");
 	m_ramdac->set_addrmap(0, &pntnpuzls_state::ramdac_map);
 
-	mc6845_device &crtc(MC6845(config, "crtc", 27'500'000 / 32)); // clock / divider not verified
+	mc6845_device &crtc(MC6845(config, "crtc", XTAL::u(27'500'000) / 32)); // clock / divider not verified
 	crtc.set_char_width(8);
 	crtc.set_show_border_area(false);
 	crtc.set_screen("screen");

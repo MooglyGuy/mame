@@ -17,7 +17,7 @@
 class okim6588_device : public device_t, public device_sound_interface
 {
 public:
-	okim6588_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	okim6588_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	auto write_mon() { return m_write_mon.bind(); }

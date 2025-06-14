@@ -30,7 +30,7 @@ const tiny_rom_entry *st_kbd_device::device_rom_region() const
 	return ROM_NAME(st_kbd);
 }
 
-st_kbd_device::st_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+st_kbd_device::st_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ST_KBD, tag, owner, clock),
 	m_cpu(*this, "cpu"),
 	m_led(*this, "capslock_led"),

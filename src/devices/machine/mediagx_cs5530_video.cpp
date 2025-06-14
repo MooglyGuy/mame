@@ -19,7 +19,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(MEDIAGX_CS5530_VIDEO, mediagx_cs5530_video_device, "mediagx_cs5530_video", "MediaGX CS5530 Video Controller")
 
-mediagx_cs5530_video_device::mediagx_cs5530_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mediagx_cs5530_video_device::mediagx_cs5530_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, MEDIAGX_CS5530_VIDEO, tag, owner, clock)
 {
 	set_ids(0x10780104, 0x00, 0x030000, 0x00);

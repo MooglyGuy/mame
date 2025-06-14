@@ -17,7 +17,7 @@ Not to be confused with Starpath SuperCharger, which is for Atari VCS.
 // device type definition
 DEFINE_DEVICE_TYPE(A800_SUPER_CHARGER, a800_supercharger_device, "a800_supercharger", "Atari 8-bit SuperCharger 3D math unit cart")
 
-a800_supercharger_device::a800_supercharger_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a800_supercharger_device::a800_supercharger_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, A800_SUPER_CHARGER, tag, owner, clock)
 	, device_a800_cart_interface(mconfig, *this)
 	, m_status(0)

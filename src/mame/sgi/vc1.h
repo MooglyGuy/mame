@@ -10,7 +10,7 @@ class sgi_vc1_device
 	: public device_t
 {
 public:
-	sgi_vc1_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock);
+	sgi_vc1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	u8 read(offs_t offset);
 	void write(offs_t offset, u8 data);

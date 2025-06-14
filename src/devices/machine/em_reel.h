@@ -25,13 +25,13 @@ public:
 		REVERSE // Steps count down
 	};
 
-	em_reel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	em_reel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename T>
 	em_reel_device(
 			const machine_config &mconfig, const char *tag, device_t *owner,
 			uint16_t steps, T &&detents, attotime period, dir direction = dir::REVERSE) :
-		em_reel_device(mconfig, tag, owner, 0)
+		em_reel_device(mconfig, tag, owner)
 	{
 		set_max_pos(steps);
 		set_detents(std::forward<T>(detents));

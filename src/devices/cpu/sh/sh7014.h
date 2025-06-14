@@ -22,7 +22,7 @@
 class sh7014_device : public sh2_device
 {
 public:
-	sh7014_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7014_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template<int Sci> auto sci_tx_w() {
 		return m_sci[Sci].lookup()->write_sci_tx();

@@ -23,7 +23,7 @@ class f108_device :  public device_t
 {
 public:
 	// construction/destruction
-	f108_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	f108_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// interface routines
 	virtual void map(address_map &map) ATTR_COLD;

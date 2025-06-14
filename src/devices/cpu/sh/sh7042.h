@@ -21,7 +21,7 @@
 class sh7042_device : public sh2_device
 {
 public:
-	sh7042_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	sh7042_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template<int Port> auto read_adc() { return m_read_adc[Port].bind(); }
 	template<int Sci> void sci_rx_w(int state) {  m_sci[Sci]->do_rx_w(state); }
@@ -81,7 +81,7 @@ protected:
 
 	bool m_die_a;
 
-	sh7042_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	sh7042_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -166,19 +166,19 @@ private:
 class sh7042a_device : public sh7042_device
 {
 public:
-	sh7042a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	sh7042a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class sh7043_device : public sh7042_device
 {
 public:
-	sh7043_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	sh7043_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class sh7043a_device : public sh7042_device
 {
 public:
-	sh7043a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	sh7043a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

@@ -864,7 +864,7 @@ void namcos11_state::fambowl(machine_config &config)
 {
 	coh110(config);
 	m_maincpu->set_addrmap(AS_PROGRAM, &namcos11_state::rom8_map);
-	KEYCUS_C432(config, "keycus", 0);   // no keycus is actually present, but the driver isn't ready for that
+	KEYCUS_C432(config, "keycus");   // no keycus is actually present, but the driver isn't ready for that
 }
 
 void namcos11_state::starswep(machine_config &config)

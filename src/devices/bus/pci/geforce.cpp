@@ -20,12 +20,12 @@ DEFINE_DEVICE_TYPE(GEFORCE256_DDR, geforce256_ddr_device, "geforce256ddr", "nVid
 //DEFINE_DEVICE_TYPE(GEFORCE256_ULTRA, geforce256_ultra_device, "geforce256ultra", "nVidia GeForce 256 Ultra (NV10)")
 DEFINE_DEVICE_TYPE(QUADRO,         quadro_device,         "quadro",        "nVidia Quadro (NV10)")
 
-geforce256_device::geforce256_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+geforce256_device::geforce256_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: rivatnt2_device(mconfig, type, tag, owner, clock)
 {
 }
 
-geforce256_device::geforce256_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+geforce256_device::geforce256_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: geforce256_device(mconfig, GEFORCE256, tag, owner, clock)
 {
 	// 0x0100 GeForce 256 SDR
@@ -65,7 +65,7 @@ void geforce256_device::device_start()
 
 /********************************************/
 
-geforce256_ddr_device::geforce256_ddr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+geforce256_ddr_device::geforce256_ddr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: geforce256_device(mconfig, GEFORCE256_DDR, tag, owner, clock)
 {
 	// device ID 0x10de nVidia
@@ -91,7 +91,7 @@ const tiny_rom_entry *geforce256_ddr_device::device_rom_region() const
 
 /********************************************/
 
-quadro_device::quadro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+quadro_device::quadro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: geforce256_device(mconfig, QUADRO, tag, owner, clock)
 {
 	// device ID 0x10de nVidia

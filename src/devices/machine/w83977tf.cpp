@@ -29,7 +29,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(W83977TF, w83977tf_device, "w83977tf", "Winbond W83977TF Super I/O")
 
-w83977tf_device::w83977tf_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+w83977tf_device::w83977tf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, W83977TF, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)

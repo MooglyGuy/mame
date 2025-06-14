@@ -21,7 +21,7 @@ namespace {
 class st_replay_device : public device_t, public device_stcart_interface
 {
 public:
-	st_replay_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	st_replay_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~st_replay_device();
 
 	virtual void map(address_space_installer &space) override;
@@ -42,7 +42,7 @@ private:
 	u16 dac_w(offs_t data);
 };
 
-st_replay_device::st_replay_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+st_replay_device::st_replay_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ST_REPLAY, tag, owner, clock),
 	device_stcart_interface(mconfig, *this),
 	m_adc(*this, "adc"),

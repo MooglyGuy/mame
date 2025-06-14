@@ -19,7 +19,7 @@ class sed1375_device :  public device_t,
 {
 public:
 	// construction/destruction
-	sed1375_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sed1375_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void map(address_map &map) ATTR_COLD;
 

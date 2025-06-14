@@ -109,7 +109,7 @@ void x1_010_device::device_start()
 		m_env_offset[i] = 0;
 	}
 	/* Print some more debug info */
-	LOGMASKED(LOG_SOUND, "masterclock = %d rate = %d\n", clock().value(), clock.value() / 512);
+	LOGMASKED(LOG_SOUND, "masterclock = %d rate = %d\n", clock().value(), clock().value() / 512);
 
 	/* get stream channels */
 	m_stream = stream_alloc(0, 2, clock() / 512);

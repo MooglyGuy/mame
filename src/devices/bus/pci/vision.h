@@ -13,14 +13,14 @@
 class vision864_pci_device : public pci_card_device
 {
 public:
-	vision864_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vision864_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
 	void legacy_io_map(address_map &map) ATTR_COLD;
 
 protected:
-	vision864_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	vision864_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -41,10 +41,10 @@ private:
 class vision964_pci_device : public vision864_pci_device
 {
 public:
-	vision964_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vision964_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	vision964_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	vision964_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 
@@ -54,7 +54,7 @@ protected:
 class vision968_pci_device : public vision964_pci_device
 {
 public:
-	vision968_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vision968_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

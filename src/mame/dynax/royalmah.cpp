@@ -4009,7 +4009,7 @@ void royalmah_state::ippatsu(machine_config &config)
 {
 	royalmah(config);
 
-	m_maincpu->set_clock(8000000 / 2);   // 4 MHz ?
+	m_maincpu->set_clock(XTAL::u(8000000) / 2);   // 4 MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::ippatsu_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_state::ippatsu_iomap);
 }

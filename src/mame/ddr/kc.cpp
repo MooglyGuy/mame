@@ -155,7 +155,7 @@ void kc_state::kc85_slots(machine_config &config)
 	SOFTWARE_LIST(config, "cass_list").set_original("kc_cass");
 }
 
-void kc_state::kc85_base(machine_config &config, uint32_t clock)
+void kc_state::kc85_base(machine_config &config, const XTAL &clock)
 {
 	/* basic machine hardware */
 	Z80(config, m_maincpu, clock);
@@ -199,7 +199,7 @@ void kc_state::kc85_base(machine_config &config, uint32_t clock)
 	kc85_slots(config);
 }
 
-void kc_state::kc85_2_3(machine_config &config, uint32_t clock)
+void kc_state::kc85_2_3(machine_config &config, const XTAL &clock)
 {
 	kc85_base(config, KC85_2_CLOCK);
 

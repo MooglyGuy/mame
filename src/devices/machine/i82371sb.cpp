@@ -154,7 +154,7 @@ void i82371sb_isa_device::device_config_complete()
 	pci_device::device_config_complete();
 }
 
-i82371sb_isa_device::i82371sb_isa_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+i82371sb_isa_device::i82371sb_isa_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_device(mconfig, type, tag, owner, clock)
 	, m_smi_callback(*this)
 	, m_nmi_callback(*this)
@@ -1040,7 +1040,7 @@ i82371sb_ide_device::i82371sb_ide_device(const machine_config &mconfig, device_t
 {
 }
 
-i82371sb_ide_device::i82371sb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82371sb_ide_device::i82371sb_ide_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: i82371sb_ide_device(mconfig, I82371SB_IDE, tag, owner, clock)
 {
 	set_ids(0x80867010, 0, 0x010180, 0x00000000);

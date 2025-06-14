@@ -13,7 +13,7 @@ std::unique_ptr<util::disasm_interface> m68000msh_device::create_disassembler()
 }
 
 
-m68000msh_device::m68000msh_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m68000msh_device::m68000msh_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: m68000_musashi_device(mconfig, tag, owner, clock, M68000MUSASHI, 16, 24)
 {
 }

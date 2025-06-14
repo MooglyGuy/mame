@@ -64,7 +64,7 @@ INPUT_PORTS_END
 
 void gpm4530a_lexibook_state::gpm4530a_lexibook(machine_config &config)
 {
-	ARM9(config, m_maincpu, 192'000'000);
+	ARM9(config, m_maincpu, XTAL::u(192'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &gpm4530a_lexibook_state::arm_map);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
@@ -73,7 +73,7 @@ void gpm4530a_lexibook_state::gpm4530a_lexibook(machine_config &config)
 	m_screen->set_visarea(0, 320-1, 0, 240-1);
 	m_screen->set_screen_update(FUNC(gpm4530a_lexibook_state::screen_update_gpm4530a_lexibook));
 
-	SPI_SDCARD(config, m_sdcard, 0);
+	SPI_SDCARD(config, m_sdcard);
 	m_sdcard->set_prefer_sdhc();
 
 	SPEAKER(config, "speaker", 2).front();

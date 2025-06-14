@@ -34,14 +34,14 @@ DEFINE_DEVICE_TYPE(VISION968_PCI, vision968_pci_device,   "vision968",   "S3 86C
 
 
 
-vision864_pci_device::vision864_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+vision864_pci_device::vision864_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_vga(*this, "vga")
 	, m_bios(*this, "bios")
 {
 }
 
-vision864_pci_device::vision864_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vision864_pci_device::vision864_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vision864_pci_device(mconfig, VISION864_PCI, tag, owner, clock)
 {
 	// device IDs:
@@ -71,7 +71,7 @@ void vision864_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3vision864_vga_device::screen_update));
 
-	S3_VISION864_VGA(config, m_vga, 0);
+	S3_VISION864_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 1MB, option for 2MB
 	m_vga->set_vram_size(2*1024*1024);
@@ -137,12 +137,12 @@ void vision864_pci_device::map_extra(uint64_t memory_window_start, uint64_t memo
  *
  *****************/
 
-vision964_pci_device::vision964_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+vision964_pci_device::vision964_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: vision864_pci_device(mconfig, type, tag, owner, clock)
 {
 }
 
-vision964_pci_device::vision964_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vision964_pci_device::vision964_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vision964_pci_device(mconfig, VISION964_PCI, tag, owner, clock)
 {
 	// device IDs:
@@ -171,7 +171,7 @@ void vision964_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3vision964_vga_device::screen_update));
 
-	S3_VISION964_VGA(config, m_vga, 0);
+	S3_VISION964_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 2MB/4MB/8MB
 	m_vga->set_vram_size(4*1024*1024);
@@ -184,7 +184,7 @@ void vision964_pci_device::device_add_mconfig(machine_config &config)
  *
  *****************/
 
-vision968_pci_device::vision968_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+vision968_pci_device::vision968_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vision964_pci_device(mconfig, VISION968_PCI, tag, owner, clock)
 {
 	// device IDs:
@@ -221,7 +221,7 @@ void vision968_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update("vga", FUNC(s3vision968_vga_device::screen_update));
 
-	S3_VISION968_VGA(config, m_vga, 0);
+	S3_VISION968_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 2MB/4MB/8MB
 	m_vga->set_vram_size(4*1024*1024);

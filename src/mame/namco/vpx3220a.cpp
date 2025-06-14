@@ -77,7 +77,7 @@ enum vpx3220a_device::fpaddr_t : u16
 	TVSTNDRD = 0xf3
 };
 
-vpx3220a_device::vpx3220a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+vpx3220a_device::vpx3220a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VPX3220A, tag, owner, clock)
 	, i2c_hle_interface(mconfig, *this, 0x43)
 	, m_ifc(0)

@@ -176,7 +176,7 @@ namespace {
 
 // master clock for TMS5100, see snspell driver
 
-static constexpr u32 MASTER_CLOCK = 640'000;
+static constexpr XTAL MASTER_CLOCK = XTAL::u(640'000);
 
 
 // Speak & Spell Compact / common

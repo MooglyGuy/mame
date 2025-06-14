@@ -295,7 +295,7 @@ void siena_state::siena(machine_config &config)
 	RAM(config, m_ram).set_default_size("512K").set_extra_options("1M");
 	NVRAM(config, "nvram", nvram_device::DEFAULT_NONE);
 
-	PSION_CONDOR(config, m_condor, 3'686'400); // FIXME: unknown clock source
+	PSION_CONDOR(config, m_condor, XTAL::u(3'686'400)); // FIXME: unknown clock source
 	m_condor->txd_handler().set(m_honda, FUNC(psion_honda_slot_device::write_txd));
 	m_condor->rts_handler().set(m_honda, FUNC(psion_honda_slot_device::write_rts));
 	m_condor->dtr_handler().set(m_honda, FUNC(psion_honda_slot_device::write_dtr));

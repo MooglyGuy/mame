@@ -23,7 +23,7 @@ public:
 	template<unsigned N> typename std::enable_if<N < 2, f2mc16_uart_device>::type &uart() const { if (m_uart[N]) return *m_uart[N]; return *subdevice<f2mc16_uart_device>(m_uart[N].finder_tag()); }
 
 protected:
-	mb90640a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	mb90640a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -44,7 +44,7 @@ protected:
 class mb90641a_device : public mb90640a_device
 {
 public:
-	mb90641a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mb90641a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(MB90641A, mb90641a_device)

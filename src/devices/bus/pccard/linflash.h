@@ -20,7 +20,7 @@ public:
 	void update_wp(int state);
 
 protected:
-	linear_flash_pccard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor amap);
+	linear_flash_pccard_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor amap);
 
 	// device_t
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -39,7 +39,7 @@ class linear_flash_pccard_8bit_device :
 	public linear_flash_pccard_device
 {
 protected:
-	linear_flash_pccard_8bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	linear_flash_pccard_8bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void amap(address_map &map) ATTR_COLD;
 
@@ -52,7 +52,7 @@ class linear_flash_pccard_16bit_device :
 	public linear_flash_pccard_device
 {
 protected:
-	linear_flash_pccard_16bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	linear_flash_pccard_16bit_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void amap(address_map &map) ATTR_COLD;
 
@@ -64,7 +64,7 @@ class linear_flash_pccard_29f017a_device :
 	public linear_flash_pccard_8bit_device<N>
 {
 protected:
-	linear_flash_pccard_29f017a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	linear_flash_pccard_29f017a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -75,7 +75,7 @@ class linear_flash_pccard_lh28f016s_device :
 	public linear_flash_pccard_8bit_device<N>
 {
 protected:
-	linear_flash_pccard_lh28f016s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	linear_flash_pccard_lh28f016s_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -86,7 +86,7 @@ class linear_flash_pccard_28f640j5_device :
 	public linear_flash_pccard_16bit_device<N>
 {
 protected:
-	linear_flash_pccard_28f640j5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	linear_flash_pccard_28f640j5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -95,25 +95,25 @@ protected:
 class fujitsu_16mb_flash_card_device : public linear_flash_pccard_29f017a_device<4>
 {
 public:
-	fujitsu_16mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fujitsu_16mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class fujitsu_32mb_flash_card_device : public linear_flash_pccard_29f017a_device<8>
 {
 public:
-	fujitsu_32mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fujitsu_32mb_flash_card_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class id245p01_device : public linear_flash_pccard_lh28f016s_device<8>
 {
 public:
-	id245p01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	id245p01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class pm24276_device : public linear_flash_pccard_28f640j5_device<4>
 {
 public:
-	pm24276_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pm24276_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(FUJITSU_16MB_FLASH_CARD, fujitsu_16mb_flash_card_device)

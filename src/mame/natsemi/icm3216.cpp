@@ -288,7 +288,7 @@ void icm3216_state::icm3216(machine_config &config)
 	NS32202(config, m_icu, 18.432_MHz_XTAL / 10);
 	m_icu->out_int().set_inputline(m_cpu, INPUT_LINE_IRQ0).invert();
 
-	MM58274C(config, m_rtc, 0);
+	MM58274C(config, m_rtc);
 
 	// we are dte, therefore: tx,rx,rts,cts,dsr,dtr,dcd
 	// rts o
@@ -297,12 +297,12 @@ void icm3216_state::icm3216(machine_config &config)
 	// rlsd i
 	// dtr o
 
-	SCN2681(config, m_duart[0], 3'686'400); // SCN2681A
+	SCN2681(config, m_duart[0], XTAL::u(3'686'400)); // SCN2681A
 	m_duart[0]->irq_cb().set([this](int state) { logerror("irq %d\n", state); });
 	m_duart[0]->a_tx_cb().set(m_serial[0], FUNC(rs232_port_device::write_txd));
 	m_duart[0]->b_tx_cb().set(m_serial[1], FUNC(rs232_port_device::write_txd));
 
-	SCN2681(config, m_duart[1], 3'686'400); // SCN2681A
+	SCN2681(config, m_duart[1], XTAL::u(3'686'400)); // SCN2681A
 	m_duart[1]->irq_cb().set([this](int state) { logerror("irq %d\n", state); });
 	m_duart[1]->a_tx_cb().set(m_serial[2], FUNC(rs232_port_device::write_txd));
 	m_duart[1]->b_tx_cb().set(m_serial[3], FUNC(rs232_port_device::write_txd));
@@ -317,7 +317,7 @@ void icm3216_state::icm3216(machine_config &config)
 	m_serial[2]->rxd_handler().set(m_duart[1], FUNC(scn2681_device::rx_a_w));
 	m_serial[3]->rxd_handler().set(m_duart[1], FUNC(scn2681_device::rx_b_w));
 
-	Z80(config, m_iop, 4'000'000);
+	Z80(config, m_iop, XTAL::u(4'000'000));
 	m_iop->set_addrmap(AS_PROGRAM, &icm3216_state::iop_mem_map);
 	m_iop->set_addrmap(AS_IO, &icm3216_state::iop_pio_map);
 	m_iop->set_irq_acknowledge_callback(FUNC(icm3216_state::iop_ack));
@@ -335,7 +335,7 @@ void icm3216_state::icm3216(machine_config &config)
 		{
 			ncr5385_device &ncr5385(downcast<ncr5385_device &>(*device));
 
-			ncr5385.set_clock(10'000'000);
+			ncr5385.set_clock(XTAL::u(10'000'000));
 
 			ncr5385.irq().set(*this, FUNC(icm3216_state::iop_int<2>));
 			ncr5385.dreq().set_inputline(m_iop, INPUT_LINE_NMI);

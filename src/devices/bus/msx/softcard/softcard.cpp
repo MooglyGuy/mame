@@ -20,7 +20,7 @@ class softcard_nomapper_device : public device_t
 								, public softcard_interface
 {
 public:
-	softcard_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	softcard_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -31,7 +31,7 @@ protected:
 };
 
 
-softcard_nomapper_device::softcard_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+softcard_nomapper_device::softcard_nomapper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SOFTCARD_NOMAPPER, tag, owner, clock)
 	, softcard_interface(mconfig, *this)
 {

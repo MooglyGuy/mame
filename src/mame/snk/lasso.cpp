@@ -978,10 +978,10 @@ void lasso_state::chameleo(machine_config &config)
 	base(config);
 
 	// basic machine hardware
-	m_maincpu->set_clock(18'000'000/24);
+	m_maincpu->set_clock(XTAL::u(18'000'000)/24);
 	m_maincpu->set_addrmap(AS_PROGRAM, &lasso_state::chameleo_main_map);
 
-	m_audiocpu->set_clock(18'000'000/24);
+	m_audiocpu->set_clock(XTAL::u(18'000'000)/24);
 	m_audiocpu->set_addrmap(AS_PROGRAM, &lasso_state::chameleo_audio_map);
 
 	// video hardware
@@ -991,8 +991,8 @@ void lasso_state::chameleo(machine_config &config)
 	m_screen->set_screen_update(FUNC(lasso_state::screen_update_chameleo));
 
 	// sound hardware
-	m_sn[0]->set_clock(18'000'000/6); // correct
-	m_sn[1]->set_clock(18'000'000/6); // "
+	m_sn[0]->set_clock(XTAL::u(18'000'000)/6); // correct
+	m_sn[1]->set_clock(XTAL::u(18'000'000)/6); // "
 }
 
 void lasso_state::wwjgtin(machine_config &config)

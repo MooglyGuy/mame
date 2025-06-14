@@ -36,7 +36,7 @@ void mpc106_host_device::config_map(address_map &map)
 	map(0xa8, 0xab).rw(FUNC(mpc106_host_device::picr1_r), FUNC(mpc106_host_device::picr1_w));
 }
 
-mpc106_host_device::mpc106_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mpc106_host_device::mpc106_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_host_device(mconfig, MPC106, tag, owner, clock)
 	, m_mem_config("memory_space", ENDIANNESS_LITTLE, 32, 32)
 	, m_io_config("io_space", ENDIANNESS_LITTLE, 32, 32)

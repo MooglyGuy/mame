@@ -14,7 +14,7 @@ static constexpr int MOUSE_RATE_HZ = 600;
 
 DEFINE_DEVICE_TYPE(JUKU_MOUSE, juku_mouse_device, "juku_mouse", "Juku E510x mouse")
 
-juku_mouse_device::juku_mouse_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+juku_mouse_device::juku_mouse_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, JUKU_MOUSE, tag, owner, clock),
 	m_mouse_x(*this, "MOUSE_X"),
 	m_mouse_y(*this, "MOUSE_Y"),

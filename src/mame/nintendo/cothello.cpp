@@ -271,7 +271,7 @@ INPUT_PORTS_END
 void cothello_state::cothello(machine_config &config)
 {
 	// basic machine hardware
-	I8080A(config, m_maincpu, 750000); // wrong, see TODO
+	I8080A(config, m_maincpu, XTAL::u(750000)); // wrong, see TODO
 	m_maincpu->set_vblank_int("screen", FUNC(cothello_state::irq0_line_hold));
 	m_maincpu->set_addrmap(AS_PROGRAM, &cothello_state::main_map);
 
@@ -285,7 +285,7 @@ void cothello_state::cothello(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
-	BEEP(config, m_beeper, 0).add_route(ALL_OUTPUTS, "mono", 0.25);
+	BEEP(config, m_beeper, XTAL()).add_route(ALL_OUTPUTS, "mono", 0.25);
 }
 
 

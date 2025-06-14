@@ -750,7 +750,7 @@ public:
 class r4650_device : public mips3_device {
 public:
 	// construction/destruction
-	r4650_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, endianness_t endianness)
+	r4650_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, endianness_t endianness)
 		: mips3_device(mconfig, type, tag, owner, clock, MIPS3_TYPE_R4650, endianness, 32) // Should be 64 bits
 	{
 	}
@@ -931,13 +931,13 @@ class r5900le_device : public r5900_device {
 public:
 	// construction/destruction
 	template <typename T>
-	r5900le_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&vu0_tag)
+	r5900le_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&vu0_tag)
 		: r5900le_device(mconfig, tag, owner, clock)
 	{
 		m_vu0.set_tag(std::forward<T>(vu0_tag));
 	}
 
-	r5900le_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	r5900le_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: r5900_device(mconfig, R5900LE, tag, owner, clock, ENDIANNESS_LITTLE)
 	{
 	}
@@ -951,13 +951,13 @@ class r5900be_device : public r5900_device {
 public:
 	// construction/destruction
 	template <typename T>
-	r5900be_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&vu0_tag)
+	r5900be_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&vu0_tag)
 		: r5900be_device(mconfig, tag, owner, clock)
 	{
 		m_vu0.set_tag(std::forward<T>(vu0_tag));
 	}
 
-	r5900be_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	r5900be_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: r5900_device(mconfig, R5900BE, tag, owner, clock, ENDIANNESS_BIG)
 	{
 	}

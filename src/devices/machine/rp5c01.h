@@ -107,7 +107,7 @@ class lh5045_device : public rp5c01_device
 {
 public:
 	// construction/destruction
-	lh5045_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	lh5045_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	virtual TIMER_CALLBACK_MEMBER(advance_1hz_clock) override;

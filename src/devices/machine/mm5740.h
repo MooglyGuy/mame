@@ -91,7 +91,7 @@ public:
 
 	void repeat_line_w(int state);
 
-	static u32 calc_effective_clock_key_debounce(u32 capacitance);
+	static XTAL calc_effective_clock_key_debounce(u32 capacitance);
 
 protected:
 	// device-level overrides

@@ -232,7 +232,7 @@ sed1278_device::sed1278_device(const machine_config &mconfig, const char *tag, d
 {
 }
 
-ks0066_device::ks0066_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+ks0066_device::ks0066_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	hd44780_device(mconfig, KS0066, tag, owner, clock)
 {
 }
@@ -353,7 +353,7 @@ void hd44780_device::device_clock_changed()
 
 void hd44780_device::device_validity_check(validity_checker &valid) const
 {
-	if (clock() == 0)
+	if (clock().value() == 0)
 		osd_printf_error("LCDC clock cannot be zero!\n");
 }
 

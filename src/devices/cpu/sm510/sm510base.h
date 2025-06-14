@@ -36,30 +36,6 @@ enum
 class sm510_base_device : public cpu_device
 {
 public:
-<<<<<<< HEAD
-=======
-	// construction/destruction
-	sm510_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data) :
-		cpu_device(mconfig, type, tag, owner, clock),
-		m_program_config("program", ENDIANNESS_LITTLE, 8, prgwidth, 0, program),
-		m_data_config("data", ENDIANNESS_LITTLE, 8, datawidth, 0, data),
-		m_prgwidth(prgwidth),
-		m_datawidth(datawidth),
-		m_stack_levels(stack_levels),
-		m_r_mask_option(RMASK_DIRECT),
-		m_lcd_ram_a(*this, "lcd_ram_a"),
-		m_lcd_ram_b(*this, "lcd_ram_b"),
-		m_lcd_ram_c(*this, "lcd_ram_c"),
-		m_write_segs(*this),
-		m_melody_rom(*this, "melody"),
-		m_read_k(*this),
-		m_read_ba(*this),
-		m_read_b(*this),
-		m_write_s(*this),
-		m_write_r(*this)
-	{ }
-
->>>>>>> 45d4cd52a81 (full xtal conversion)
 	// For SM510, SM500, SM5A, R port output is selected with a mask option,
 	// either from the divider or direct contol. Documented options are:
 	// SM510/SM5A: direct control, 2(4096Hz meant for alarm sound)
@@ -91,7 +67,7 @@ public:
 
 protected:
 	// construction/destruction
-	sm510_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
+	sm510_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;

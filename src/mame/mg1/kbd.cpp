@@ -198,7 +198,7 @@ ROM_END
 
 } // anonymous namespace
 
-mg1_kbd_device::mg1_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+mg1_kbd_device::mg1_kbd_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MG1_KBD, tag, owner, clock)
 	, m_data_cb(*this)
 	, m_mcu(*this, "mcu")

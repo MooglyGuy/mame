@@ -13,7 +13,7 @@
 
 DEFINE_DEVICE_TYPE(SH7014, sh7014_device,  "sh7014",  "Hitachi SH-2 (SH7014)")
 
-sh7014_device::sh7014_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_device::sh7014_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sh2_device(mconfig, SH7014, tag, owner, clock, CPU_TYPE_SH2, address_map_constructor(FUNC(sh7014_device::sh7014_map), this), 32, 0xffffffff)
 	, m_sci(*this, "sci%u", 0u)
 	, m_bsc(*this, "bsc")

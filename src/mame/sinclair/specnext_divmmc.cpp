@@ -8,7 +8,7 @@
 #include "specnext_divmmc.h"
 
 
-specnext_divmmc_device::specnext_divmmc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_divmmc_device::specnext_divmmc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SPECNEXT_DIVMMC, tag, owner, clock)
 {
 }

@@ -56,7 +56,7 @@ cxd1180_device::cxd1180_device(machine_config const &mconfig, char const *tag, d
 {
 }
 
-dp8490_device::dp8490_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+dp8490_device::dp8490_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: ncr5380_device(mconfig, DP8490, tag, owner, clock, true)
 {
 }

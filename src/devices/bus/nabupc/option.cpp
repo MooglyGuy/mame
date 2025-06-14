@@ -24,7 +24,7 @@ namespace bus::nabupc {
 //-------------------------------------------------
 //  option_bus_slot_device - constructor
 //-------------------------------------------------
-option_slot_device::option_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+option_slot_device::option_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NABUPC_OPTION_BUS_SLOT, tag, owner, clock),
 	device_single_card_slot_interface<device_option_expansion_interface>(mconfig, *this),
 	m_bus(*this, finder_base::DUMMY_TAG),
@@ -72,7 +72,7 @@ void option_slot_device::int_w(int state) {  (*m_bus).set_int_line(state, m_slot
 //-------------------------------------------------
 //  option_bus_device - constructor
 //-------------------------------------------------
-option_bus_device::option_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+option_bus_device::option_bus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, NABUPC_OPTION_BUS, tag, owner, clock),
 	m_int_cb(*this)
 {

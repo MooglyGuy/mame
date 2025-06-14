@@ -12,7 +12,7 @@
 DEFINE_DEVICE_TYPE(SPECNEXT_MULTIFACE, specnext_multiface_device, "specnext_multiface", "Spectrum Next Multiface")
 
 
-specnext_multiface_device::specnext_multiface_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+specnext_multiface_device::specnext_multiface_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SPECNEXT_MULTIFACE, tag, owner, clock)
 {
 }

@@ -42,7 +42,7 @@ device_psion_module_interface::device_psion_module_interface(const machine_confi
 //  psion_module_slot_device - constructor
 //-------------------------------------------------
 
-psion_module_slot_device::psion_module_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_module_slot_device::psion_module_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_MODULE_SLOT, tag, owner, clock)
 	, device_single_card_slot_interface<device_psion_module_interface>(mconfig, *this)
 	, m_intr_cb(*this)

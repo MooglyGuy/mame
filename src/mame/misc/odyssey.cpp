@@ -170,23 +170,23 @@ void odyssey_state::odyssey(machine_config &config)
 	m_maincpu->set_irq_acknowledge_callback("pci:07.0:pic8259_master", FUNC(pic8259_device::inta_cb));
 	m_maincpu->smiact().set("pci:00.0", FUNC(i82439hx_host_device::smi_act_w));
 
-	PCI_ROOT(config, "pci", 0);
-	I82439HX(config, "pci:00.0", 0, m_maincpu, 64*1024*1024);
+	PCI_ROOT(config, "pci");
+	I82439HX(config, "pci:00.0", m_maincpu, 64*1024*1024);
 
 	// TODO: 82371FB
 	// accesses both mbirq regs, regular PIIX rather than PIIX3?
-	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", 0, "maincpu"));
+	i82371sb_isa_device &isa(I82371SB_ISA(config, "pci:07.0", "maincpu"));
 	isa.boot_state_hook().set([](u8 data) { /* printf("%02x\n", data); */ });
 	isa.smi().set_inputline("maincpu", INPUT_LINE_SMI);
 
-	i82371sb_ide_device &ide(I82371SB_IDE(config, "pci:07.1", 0, "maincpu"));
+	i82371sb_ide_device &ide(I82371SB_IDE(config, "pci:07.1", "maincpu"));
 	ide.irq_pri().set("pci:07.0", FUNC(i82371sb_isa_device::pc_irq14_w));
 	ide.irq_sec().set("pci:07.0", FUNC(i82371sb_isa_device::pc_mirq0_w));
 
 	// TODO: 82371FB USB at 07.2
 
 	// On-board S3 Vision 968
-	VISION968_PCI(config, "pci:08.0", 0);
+	VISION968_PCI(config, "pci:08.0");
 
 	// pci:0d.0 (J4E1) PCI expansion slot 1
 	//PCI_SLOT(config, "pci:1", pci_cards, 13, 0, 1, 2, 3, nullptr);
@@ -200,12 +200,12 @@ void odyssey_state::odyssey(machine_config &config)
 	// pci:10.0 (J4C1) PCI expansion slot 4
 	PCI_SLOT(config, "pci:4", pci_cards, 16, 0, 1, 2, 3, "ncr53c825");
 
-	ISA16_SLOT(config, "board4", 0, "pci:07.0:isabus", isa_internal_devices, "pc87306", true).set_option_machine_config("pc87306", national_superio_config);
-	ISA16_SLOT(config, "isa1", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa2", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa3", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa4", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
-	ISA16_SLOT(config, "isa5", 0, "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "board4", "pci:07.0:isabus", isa_internal_devices, "pc87306", true).set_option_machine_config("pc87306", national_superio_config);
+	ISA16_SLOT(config, "isa1", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa2", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa3", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa4", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
+	ISA16_SLOT(config, "isa5", "pci:07.0:isabus", pc_isa16_cards, nullptr, false);
 
 	rs232_port_device& serport0(RS232_PORT(config, "serport0", isa_com, nullptr));
 	serport0.rxd_handler().set("board4:pc87306", FUNC(pc87306_device::rxd1_w));

@@ -16,7 +16,7 @@
 class ap2010cpu_device : public arm7_cpu_device
 {
 public:
-	ap2010cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ap2010cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void add_hotspot(offs_t pc);
 

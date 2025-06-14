@@ -2301,7 +2301,7 @@ void pspikes_banked_sound_state::pspikes(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_pspikes);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_pspikes_spr);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_pspikes_spr);
 	m_spr[0]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile_callback));
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
@@ -2315,7 +2315,7 @@ void pspikes_banked_sound_state::pspikes(machine_config &config)
 	m_soundlatch->data_pending_callback().set(FUNC(pspikes_banked_sound_state::soundlatch_pending_w));
 	m_soundlatch->set_separate_acknowledge(true);
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 8000000));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(8000000)));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 1);
@@ -2326,11 +2326,11 @@ void pspikes_banked_sound_state::pspikes(machine_config &config)
 void spikes91_state::spikes91(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &spikes91_state::spikes91_map);
 	m_maincpu->set_vblank_int("screen", FUNC(spikes91_state::irq1_line_hold)); // all irq vectors are the same
 
-	Z80(config, m_audiocpu, 24000000/8); // ?
+	Z80(config, m_audiocpu, XTAL::u(24000000)/8); // ?
 	m_audiocpu->set_addrmap(AS_PROGRAM, &spikes91_state::spikes91_sound_map);
 
 	GENERIC_LATCH_8(config, m_soundlatch);
@@ -2348,11 +2348,11 @@ void spikes91_state::spikes91(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_spikes91);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
 	SPEAKER(config, "mono").front_center();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", 24000000/8));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL::u(24000000)/8));
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.50);
 
 	// TODO: OKI M5205
@@ -2361,7 +2361,7 @@ void spikes91_state::spikes91(machine_config &config)
 void pspikes_base_state::pspikesb(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &pspikes_base_state::pspikesb_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pspikes_base_state::irq1_line_hold)); // all irq vectors are the same
 
@@ -2377,14 +2377,14 @@ void pspikes_base_state::pspikesb(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_pspikesb);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_base_state,pspikes)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 1056000, okim6295_device::PIN7_LOW); // clock frequency & pin 7 not verified, pin high causes sound pitch to be too high
+	OKIM6295(config, m_oki, XTAL::u(1056000), okim6295_device::PIN7_LOW); // clock frequency & pin 7 not verified, pin high causes sound pitch to be too high
 	m_oki->set_addrmap(0, &pspikes_base_state::oki_map);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }
@@ -2419,10 +2419,10 @@ void pspikes_sound_cpu_state::kickball(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_pspikes);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_kickball_spr);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_kickball_spr);
 	m_spr[0]->set_tile_indirect_cb(FUNC(pspikes_sound_cpu_state::pspikes_tile_callback));
 
-	//VSYSTEM_GGA(config, "gga", 0); // still accessed as if it exists, in clone hardware?
+	//VSYSTEM_GGA(config, "gga"); // still accessed as if it exists, in clone hardware?
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_sound_cpu_state,pspikes)
 
@@ -2444,7 +2444,7 @@ void pspikes_sound_cpu_state::kickball(machine_config &config)
 void pspikes_base_state::pspikesc(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &pspikes_base_state::pspikesc_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pspikes_base_state::irq1_line_hold)); // all irq vectors are the same
 
@@ -2460,9 +2460,9 @@ void pspikes_base_state::pspikesc(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_pspikes);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_pspikes_spr);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_pspikes_spr);
 	m_spr[0]->set_tile_indirect_cb(FUNC(pspikes_base_state::pspikes_tile_callback));
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_base_state,pspikes)
@@ -2470,7 +2470,7 @@ void pspikes_base_state::pspikesc(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 1056000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki, XTAL::u(1056000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki->set_addrmap(0, &pspikes_base_state::oki_map);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }
@@ -2478,11 +2478,11 @@ void pspikes_base_state::pspikesc(machine_config &config)
 void pspikes_banked_sound_state::karatblz(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &pspikes_banked_sound_state::karatblz_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pspikes_banked_sound_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2); // 4 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); // 4 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &pspikes_banked_sound_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &pspikes_banked_sound_state::spinlbrk_sound_portmap); // IRQs are triggered by the YM2610
 
@@ -2500,10 +2500,10 @@ void pspikes_banked_sound_state::karatblz(machine_config &config)
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_turbofrc_spr1);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_turbofrc_spr1);
 	m_spr[0]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile_callback));
 
-	VSYSTEM_SPR2(config, m_spr[1], 0, m_palette, gfx_turbofrc_spr2);
+	VSYSTEM_SPR2(config, m_spr[1], m_palette, gfx_turbofrc_spr2);
 	m_spr[1]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile2_callback));
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_banked_sound_state,karatblz)
@@ -2526,11 +2526,11 @@ void pspikes_banked_sound_state::karatblz(machine_config &config)
 void karatblzbl_state::karatblzbl(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &karatblzbl_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(karatblzbl_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2); // 4 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); // 4 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &karatblzbl_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &karatblzbl_state::sound_portmap);
 
@@ -2546,13 +2546,13 @@ void karatblzbl_state::karatblzbl(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_turbofrc);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 1024);
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_turbofrc_spr1);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_turbofrc_spr1);
 	m_spr[0]->set_tile_indirect_cb(FUNC(karatblzbl_state::pspikes_tile_callback));
 
-	VSYSTEM_SPR2(config, m_spr[1], 0, m_palette, gfx_turbofrc_spr2);
+	VSYSTEM_SPR2(config, m_spr[1], m_palette, gfx_turbofrc_spr2);
 	m_spr[1]->set_tile_indirect_cb(FUNC(karatblzbl_state::pspikes_tile2_callback));
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
 	MCFG_VIDEO_START_OVERRIDE(karatblzbl_state,karatblz)
 
@@ -2596,10 +2596,10 @@ void pspikes_banked_sound_state::spinlbrk(machine_config &config)
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_turbofrc_spr1);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_turbofrc_spr1);
 	m_spr[0]->set_pritype(1);
 
-	VSYSTEM_SPR2(config, m_spr[1], 0, m_palette, gfx_turbofrc_spr2);
+	VSYSTEM_SPR2(config, m_spr[1], m_palette, gfx_turbofrc_spr2);
 	m_spr[1]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::spinbrk_tile_callback)); // rom lookup
 	m_spr[1]->set_pritype(1);
 
@@ -2645,10 +2645,10 @@ void pspikes_banked_sound_state::turbofrc(machine_config &config)
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_turbofrc_spr1);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_turbofrc_spr1);
 	m_spr[0]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile_callback));
 
-	VSYSTEM_SPR2(config, m_spr[1], 0, m_palette, gfx_turbofrc_spr2);
+	VSYSTEM_SPR2(config, m_spr[1], m_palette, gfx_turbofrc_spr2);
 	m_spr[1]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile2_callback));
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_banked_sound_state,turbofrc)
@@ -2671,11 +2671,11 @@ void pspikes_banked_sound_state::turbofrc(machine_config &config)
 void pspikes_banked_sound_state::aerofgtb(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &pspikes_banked_sound_state::aerofgtb_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pspikes_banked_sound_state::irq1_line_hold)); // all irq vectors are the same
 
-	Z80(config, m_audiocpu, 8000000/2); // 4 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); // 4 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &pspikes_banked_sound_state::sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &pspikes_banked_sound_state::pspikes_sound_portmap); // IRQs are triggered by the YM2610
 
@@ -2693,11 +2693,11 @@ void pspikes_banked_sound_state::aerofgtb(machine_config &config)
 
 	VSYSTEM_GGA(config, "gga", XTAL(14'318'181) / 2); // divider not verified
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_turbofrc_spr1);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_turbofrc_spr1);
 	m_spr[0]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile_callback));
 	m_spr[0]->set_offsets(3, -1);
 
-	VSYSTEM_SPR2(config, m_spr[1], 0, m_palette, gfx_turbofrc_spr2);
+	VSYSTEM_SPR2(config, m_spr[1], m_palette, gfx_turbofrc_spr2);
 	m_spr[1]->set_tile_indirect_cb(FUNC(pspikes_banked_sound_state::pspikes_tile2_callback));
 	m_spr[1]->set_offsets(3, -1);
 
@@ -2710,7 +2710,7 @@ void pspikes_banked_sound_state::aerofgtb(machine_config &config)
 	m_soundlatch->data_pending_callback().set(FUNC(pspikes_banked_sound_state::soundlatch_pending_w));
 	m_soundlatch->set_separate_acknowledge(true);
 
-	ym2610_device &ymsnd(YM2610(config, "ymsnd", 8000000));
+	ym2610_device &ymsnd(YM2610(config, "ymsnd", XTAL::u(8000000)));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(0, "speaker", 0.75, 0);
 	ymsnd.add_route(1, "speaker", 0.75, 1);
@@ -2721,11 +2721,11 @@ void pspikes_banked_sound_state::aerofgtb(machine_config &config)
 void pspikes_sound_cpu_state::aerfboot(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &pspikes_sound_cpu_state::aerfboot_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pspikes_sound_cpu_state::irq1_line_hold));
 
-	Z80(config, m_audiocpu, 8000000/2); // 4 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); // 4 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &pspikes_sound_cpu_state::aerfboot_sound_map);
 
 	// video hardware
@@ -2740,7 +2740,7 @@ void pspikes_sound_cpu_state::aerfboot(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_aerfboot);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 1024);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_sound_cpu_state,turbofrc)
 
@@ -2750,7 +2750,7 @@ void pspikes_sound_cpu_state::aerfboot(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	m_soundlatch->data_pending_callback().set_inputline(m_audiocpu, INPUT_LINE_NMI);
 
-	OKIM6295(config, m_oki, 1056000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki, XTAL::u(1056000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki->set_addrmap(0, &pspikes_sound_cpu_state::oki_map);
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }
@@ -2758,7 +2758,7 @@ void pspikes_sound_cpu_state::aerfboot(machine_config &config)
 void pspikes_base_state::aerfboo2(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &pspikes_base_state::aerfboo2_map);
 	m_maincpu->set_vblank_int("screen", FUNC(pspikes_base_state::irq2_line_hold));
 
@@ -2774,25 +2774,25 @@ void pspikes_base_state::aerfboo2(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_aerfboo2);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 1024);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
 	MCFG_VIDEO_START_OVERRIDE(pspikes_base_state,turbofrc)
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	OKIM6295(config, m_oki, 1056000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki, XTAL::u(1056000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki->add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 void wbbc97_state::wbbc97(machine_config &config)
 {
 	// basic machine hardware
-	M68000(config, m_maincpu, 20000000/2);   // 10 MHz (?)
+	M68000(config, m_maincpu, XTAL::u(20000000)/2);   // 10 MHz (?)
 	m_maincpu->set_addrmap(AS_PROGRAM, &wbbc97_state::main_map);
 	m_maincpu->set_vblank_int("screen", FUNC(wbbc97_state::irq1_line_hold)); // all irq vectors are the same
 
-	Z80(config, m_audiocpu, 8000000/2); // 4 MHz ???
+	Z80(config, m_audiocpu, XTAL::u(8000000)/2); // 4 MHz ???
 	m_audiocpu->set_addrmap(AS_PROGRAM, &wbbc97_state::sound_map); // IRQs are triggered by the YM3812
 
 	// video hardware
@@ -2806,9 +2806,9 @@ void wbbc97_state::wbbc97(machine_config &config)
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx_pspikes);
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 2048);
 
-	//VSYSTEM_GGA(config, "gga", 0);
+	//VSYSTEM_GGA(config, "gga");
 
-	VSYSTEM_SPR2(config, m_spr[0], 0, m_palette, gfx_pspikes_spr);
+	VSYSTEM_SPR2(config, m_spr[0], m_palette, gfx_pspikes_spr);
 	m_spr[0]->set_tile_indirect_cb(FUNC(wbbc97_state::pspikes_tile_callback));
 
 	// sound hardware
@@ -2817,11 +2817,11 @@ void wbbc97_state::wbbc97(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 	m_soundlatch->data_pending_callback().set_inputline(m_audiocpu, INPUT_LINE_NMI);
 
-	ym3812_device &ymsnd(YM3812(config, "ymsnd", 3579545));
+	ym3812_device &ymsnd(YM3812(config, "ymsnd", XTAL::u(3579545)));
 	ymsnd.irq_handler().set_inputline(m_audiocpu, 0);
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 1.0);
 
-	OKIM6295(config, m_oki, 1056000, okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
+	OKIM6295(config, m_oki, XTAL::u(1056000), okim6295_device::PIN7_HIGH); // clock frequency & pin 7 not verified
 	m_oki->add_route(ALL_OUTPUTS, "mono", 0.50);
 }
 

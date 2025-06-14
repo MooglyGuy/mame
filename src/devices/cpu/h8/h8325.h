@@ -33,7 +33,7 @@
 
 class h8325_device : public h8_device {
 public:
-	h8325_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8325_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// I/O ports
 	auto read_port1()  { return m_read_port [PORT_1].bind(); }
@@ -59,7 +59,7 @@ public:
 	u8 mdcr_r();
 
 protected:
-	h8325_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size);
+	h8325_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size);
 
 	virtual u64 execute_clocks_to_cycles(u64 clocks) const noexcept override { return (clocks + 2 - 1) / 2; }
 	virtual u64 execute_cycles_to_clocks(u64 cycles) const noexcept override { return (cycles * 2); }
@@ -93,27 +93,27 @@ protected:
 
 class h83256_device : public h8325_device {
 public:
-	h83256_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83256_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h83257_device : public h8325_device {
 public:
-	h83257_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h83257_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8324_device : public h8325_device {
 public:
-	h8324_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8324_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8323_device : public h8325_device {
 public:
-	h8323_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8323_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class h8322_device : public h8325_device {
 public:
-	h8322_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	h8322_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 DECLARE_DEVICE_TYPE(H83257, h83257_device)

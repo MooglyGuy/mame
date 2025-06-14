@@ -59,7 +59,7 @@ INPUT_PORTS_END
 
 void powerpack_state::powerpack(machine_config &config)
 {
-	I386(config, m_maincpu, 33'000'000); // Intel KU80386EX33
+	I386(config, m_maincpu, XTAL::u(33'000'000)); // Intel KU80386EX33
 }
 
 

@@ -29,7 +29,7 @@
 
 DEFINE_DEVICE_TYPE(VME_TP881V, vme_tp881v_card_device, "tp881v", "Tadpole Technology TP881V")
 
-vme_tp881v_card_device::vme_tp881v_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_tp881v_card_device::vme_tp881v_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_TP881V, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -94,7 +94,7 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 
 	// per-jp interrupt controllers
 	// 4MHz input clock, ct3 gives 100Hz clock, ct2 counts at 10kHz
-	Z8036(config, m_cio[0], 4'000'000); // Z0803606VSC
+	Z8036(config, m_cio[0], XTAL::u(4'000'000)); // Z0803606VSC
 	/*
 	 * port a bit mode ddr 0xff
 	 * bit  i/o  function
@@ -127,17 +127,17 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 	 */
 	m_cio[0]->irq_wr_cb().set_inputline(m_cpu, INPUT_LINE_IRQ0);
 
-	Z8036(config, m_cio[1], 4'000'000); // Z0803606VSC
-	Z8036(config, m_cio[2], 4'000'000); // Z0803606VSC
-	Z8036(config, m_cio[3], 4'000'000); // Z0803606VSC
-	Z8036(config, m_cio[4], 4'000'000); // Z0803606VSC
-	Z8036(config, m_cio[5], 4'000'000); // Z0803606VSC
-	Z8036(config, m_cio[6], 4'000'000); // Z0803606VSC
-	Z8036(config, m_cio[7], 4'000'000); // Z0803606VSC
+	Z8036(config, m_cio[1], XTAL::u(4'000'000)); // Z0803606VSC
+	Z8036(config, m_cio[2], XTAL::u(4'000'000)); // Z0803606VSC
+	Z8036(config, m_cio[3], XTAL::u(4'000'000)); // Z0803606VSC
+	Z8036(config, m_cio[4], XTAL::u(4'000'000)); // Z0803606VSC
+	Z8036(config, m_cio[5], XTAL::u(4'000'000)); // Z0803606VSC
+	Z8036(config, m_cio[6], XTAL::u(4'000'000)); // Z0803606VSC
+	Z8036(config, m_cio[7], XTAL::u(4'000'000)); // Z0803606VSC
 
-	M48T02(config, m_rtc, 0);
+	M48T02(config, m_rtc);
 
-	NSCSI_BUS(config, "scsi0", 0);
+	NSCSI_BUS(config, "scsi0");
 	NSCSI_CONNECTOR(config, "scsi0:0", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi0:1", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi0:2", scsi_devices, nullptr, false);
@@ -150,12 +150,12 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 		{
 			ncr53c90a_device &ncr53c90a(downcast<ncr53c90a_device &>(*device));
 
-			ncr53c90a.set_clock(20'000'000);
+			ncr53c90a.set_clock(XTAL::u(20'000'000));
 			ncr53c90a.irq_handler_cb().set(m_cio[0], FUNC(z8036_device::pa3_w));
 			//ncr53c90a.drq_cb().set(*this, ...);
 		});
 
-	NSCSI_BUS(config, "scsi1", 0);
+	NSCSI_BUS(config, "scsi1");
 	NSCSI_CONNECTOR(config, "scsi1:0", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi1:1", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi1:2", scsi_devices, nullptr, false);
@@ -168,12 +168,12 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 		{
 			ncr53c90a_device &ncr53c90a(downcast<ncr53c90a_device &>(*device));
 
-			ncr53c90a.set_clock(20'000'000);
+			ncr53c90a.set_clock(XTAL::u(20'000'000));
 			ncr53c90a.irq_handler_cb().set(m_cio[0], FUNC(z8036_device::pa4_w));
 			//ncr53c90a.drq_cb().set(*this, ...);
 		});
 
-	I82596_BE32(config, m_net, 20'000'000); // A82596DX-25
+	I82596_BE32(config, m_net, XTAL::u(20'000'000)); // A82596DX-25
 	m_net->out_irq_cb().set(m_cio[0], FUNC(z8036_device::pa1_w));
 	m_net->set_addrmap(0, &vme_tp881v_card_device::net_mem);
 
@@ -224,12 +224,12 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 
 	// TODO: MC68440 is function and pin compatible with MC68450/HD63450, but
 	// has only two DMA channels instead of four.
-	HD63450(config, m_scc_dma, 10'000'000); // MC68440FN10
+	HD63450(config, m_scc_dma, XTAL::u(10'000'000)); // MC68440FN10
 	m_scc_dma->set_cpu_tag(m_cpu);
 	m_scc_dma->irq_callback().set(m_cio[0], FUNC(z8036_device::pa2_w));
 
 	// VME control and status CIO
-	Z8036(config, m_vcs, 4'000'000); // Z0803606VSC
+	Z8036(config, m_vcs, XTAL::u(4'000'000)); // Z0803606VSC
 	/*
 	 * port a
 	 * bit  i/o  function
@@ -244,7 +244,7 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 	 */
 
 	// general control and status CIO 0
-	Z8036(config, m_gcs[0], 4'000'000); // Z0803606VSC
+	Z8036(config, m_gcs[0], XTAL::u(4'000'000)); // Z0803606VSC
 	/*
 	 * port a ddr 0x01
 	 * bit  i/o  function
@@ -278,7 +278,7 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 	// back panel has scsi0, scsi1, vme, net, sysfail, user,
 
 	 // general control and status CIO 1
-	Z8036(config, m_gcs[1], 4'000'000); // Z0803606VSC
+	Z8036(config, m_gcs[1], XTAL::u(4'000'000)); // Z0803606VSC
 	/*
 	 * port c ddr 0x1
 	 * bit  i/o  function
@@ -304,7 +304,7 @@ void vme_tp881v_card_device::device_add_mconfig(machine_config &config)
 		});
 	m_gcs[1]->pc_rd_cb().set(m_eeprom, FUNC(nmc9306_device::do_r));
 
-	NMC9306(config, m_eeprom, 0);
+	NMC9306(config, m_eeprom);
 }
 
 void vme_tp881v_card_device::cpu_mem(address_map &map)

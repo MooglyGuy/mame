@@ -25,7 +25,7 @@
 
 DEFINE_DEVICE_TYPE(MC88200, mc88200_device, "mc88200", "Motorola MC88200 Cache/Memory Management Unit")
 
-mc88200_device::mc88200_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, u8 id)
+mc88200_device::mc88200_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, u8 id)
 	: device_t(mconfig, MC88200, tag, owner, clock)
 	, m_mbus(*this, finder_base::DUMMY_TAG, -1, 32)
 	, m_id(u32(id) << 24)

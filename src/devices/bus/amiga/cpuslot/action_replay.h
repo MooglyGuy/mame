@@ -25,7 +25,7 @@ public:
 	virtual void freeze_w(int state) = 0;
 
 protected:
-	action_replay_device_base(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, uint32_t clock);
+	action_replay_device_base(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 
@@ -36,7 +36,7 @@ protected:
 class action_replay_mk1_device : public action_replay_device_base
 {
 public:
-	action_replay_mk1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	action_replay_mk1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -49,10 +49,10 @@ protected:
 class action_replay_mk2_device : public action_replay_device_base
 {
 public:
-	action_replay_mk2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	action_replay_mk2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	action_replay_mk2_device(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, uint32_t clock);
+	action_replay_mk2_device(const machine_config &mconfig, device_type type, size_t ram_size, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
@@ -90,7 +90,7 @@ private:
 class action_replay_mk3_device : public action_replay_mk2_device
 {
 public:
-	action_replay_mk3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	action_replay_mk3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;

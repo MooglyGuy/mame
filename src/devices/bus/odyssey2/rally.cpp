@@ -79,7 +79,7 @@ void o2_rally_device::cart_init()
 class o2_testpl_device : public o2_rally_device
 {
 public:
-	o2_testpl_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	o2_testpl_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;
@@ -90,7 +90,7 @@ private:
 	output_finder<2> m_digit_out;
 };
 
-o2_testpl_device::o2_testpl_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+o2_testpl_device::o2_testpl_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	o2_rally_device(mconfig, O2_ROM_TESTPL, tag, owner, clock),
 	m_digit_out(*this, "tc_digit%u", 0U)
 { }

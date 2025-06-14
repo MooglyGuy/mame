@@ -15,14 +15,14 @@ class ibm5100_keyboard_device
 public:
 	auto strobe() { return m_strobe.bind(); }
 
-	ibm5100_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	ibm5100_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	u8 read() { return m_scan; }
 	void typamatic_w(int state);
 	void lock_w(int state);
 
 protected:
-	ibm5100_keyboard_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock);
+	ibm5100_keyboard_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -50,7 +50,7 @@ class ibm5110_keyboard_device
 	: public ibm5100_keyboard_device
 {
 public:
-	ibm5110_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	ibm5110_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual u8 translate(u8 column, u8 row, u8 modifiers) const override;

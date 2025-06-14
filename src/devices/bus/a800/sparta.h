@@ -48,7 +48,7 @@ private:
 class a800_rom_spartados_128kb_device : public a800_rom_spartados_device
 {
 public:
-	a800_rom_spartados_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_spartados_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
 

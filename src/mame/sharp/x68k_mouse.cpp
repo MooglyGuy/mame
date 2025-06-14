@@ -21,7 +21,7 @@ enum status_mask : u8
 
 DEFINE_DEVICE_TYPE(X68K_MOUSE, x68k_mouse_device, "x68k_mouse", "Sharp X68000 Mouse")
 
-x68k_mouse_device::x68k_mouse_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+x68k_mouse_device::x68k_mouse_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: buffered_rs232_device<3>(mconfig, X68K_MOUSE, tag, owner, clock)
 	, m_buttons(*this, "BTN")
 	, m_x_axis(*this, "X")
@@ -38,7 +38,7 @@ void x68k_mouse_device::device_start()
 	save_item(NAME(m_y));
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_2);
-	set_tra_rate(4'800);
+	set_tra_rate(XTAL::u(4'800));
 
 	transmit_register_reset();
 

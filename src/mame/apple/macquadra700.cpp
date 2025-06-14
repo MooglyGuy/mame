@@ -738,7 +738,7 @@ void eclipse_state::via2_out_b_q900(u8 data)
 		applefdintf_device::add_35_nc(config, m_floppy[1]);
 
 		SCC8530(config, m_scc, C7M);
-		m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+		m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 		m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 		m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
 
@@ -807,7 +807,7 @@ void eclipse_state::via2_out_b_q900(u8 data)
 		m_easc->add_route(1, "speaker", 1.0, 1);
 
 		// DFAC is only for audio input on Q700/Q800
-		APPLE_DFAC(config, m_dfac, 22257);
+		APPLE_DFAC(config, m_dfac, XTAL::u(22257));
 
 		/* internal ram */
 		RAM(config, m_ram);

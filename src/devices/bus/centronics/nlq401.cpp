@@ -28,7 +28,7 @@ DEFINE_DEVICE_TYPE(NLQ401, nlq401_device, "nlq401", "Schneider NLQ 401 Matrix Pr
 //  nlq401_device - constructor
 //-------------------------------------------------
 
-nlq401_device::nlq401_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+nlq401_device::nlq401_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NLQ401, tag, owner, clock)
 	, device_centronics_peripheral_interface(mconfig, *this)
 	, m_inpexp(*this, "inpexp")

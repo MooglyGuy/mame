@@ -50,7 +50,7 @@ INPUT_PORTS_END
 
 void magibook_state::magibook(machine_config &config)
 {
-	ARM9(config, m_maincpu, 24'000'000); // GeneralPlus GP326813, unknown frequency
+	ARM9(config, m_maincpu, XTAL::u(24'000'000)); // GeneralPlus GP326813, unknown frequency
 
 	// Screenless
 

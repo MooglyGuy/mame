@@ -43,7 +43,7 @@ void csc_device::map(address_map & map)
 	map(0x10000000, 0x10ffffff).rw(FUNC(csc_device::vram_r), FUNC(csc_device::vram_w));
 }
 
-csc_device::csc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+csc_device::csc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, CSC, tag, owner, clock),
 	m_screen(*this, "screen"),
 	m_palette(*this, "palette"),
@@ -69,7 +69,7 @@ void csc_device::device_reset()
 {
 	if (m_csc_panel_id >= 4)
 	{
-		m_screen->set_raw(21604953, 800, 0, 640, 449, 0, 400);
+		m_screen->set_raw(XTAL::u(21604953), 800, 0, 640, 449, 0, 400);
 	}
 }
 
@@ -78,7 +78,7 @@ void csc_device::device_add_mconfig(machine_config &config)
 	PALETTE(config, m_palette).set_entries(256);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(25175000, 800, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(25175000), 800, 0, 640, 525, 0, 480);
 	m_screen->set_screen_update(FUNC(csc_device::screen_update_csc));
 	m_screen->screen_vblank().set(FUNC(csc_device::csc_irq_w));
 }

@@ -25,7 +25,7 @@ class keytronic_l2207_device : public device_t
 {
 public:
 	// device type constructor
-	keytronic_l2207_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	keytronic_l2207_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 

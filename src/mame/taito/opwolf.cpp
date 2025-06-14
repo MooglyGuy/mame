@@ -853,7 +853,7 @@ void opwolf_state::opwolf(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(600)); /* 10 CPU slices per frame - enough for the sound CPU to read all commands */
 
-	pc060ha_device &ciu(PC060HA(config, "ciu", 0));
+	pc060ha_device &ciu(PC060HA(config, "ciu"));
 	ciu.nmi_callback().set_inputline(m_audiocpu, INPUT_LINE_NMI);
 	ciu.reset_callback().set_inputline(m_audiocpu, INPUT_LINE_RESET);
 

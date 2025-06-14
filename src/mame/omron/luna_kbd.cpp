@@ -171,7 +171,7 @@ INPUT_PORTS_START(luna_keyboard)
 	PORT_BIT(0x8000, IP_ACTIVE_HIGH, IPT_KEYBOARD) PORT_CODE(KEYCODE_COMMA_PAD)                         PORT_CHAR(UCHAR_MAMEKEY(COMMA_PAD))
 INPUT_PORTS_END
 
-luna_keyboard_device::luna_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+luna_keyboard_device::luna_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, LUNA_KEYBOARD, tag, owner, clock)
 	, device_buffered_serial_interface(mconfig, *this)
 	, device_rs232_port_interface(mconfig, *this)
@@ -184,7 +184,7 @@ luna_keyboard_device::luna_keyboard_device(machine_config const &mconfig, char c
 void luna_keyboard_device::device_add_mconfig(machine_config &config)
 {
 	SPEAKER(config, "beeper").front_center();
-	BEEP(config, m_beep, 0).add_route(ALL_OUTPUTS, "beeper", 0.25);
+	BEEP(config, m_beep, XTAL()).add_route(ALL_OUTPUTS, "beeper", 0.25);
 }
 
 void luna_keyboard_device::device_start()

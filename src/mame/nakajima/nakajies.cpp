@@ -290,7 +290,7 @@ TODO:
 namespace {
 
 #define LOG     0
-#define X301    19660000
+#define X301    XTAL::u(19660000)
 
 
 class nakajies_state : public driver_device

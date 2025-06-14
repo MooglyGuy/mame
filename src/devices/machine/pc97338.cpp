@@ -23,7 +23,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(PC97338, pc97338_device, "pc97338", "National Semiconductor PC97338 Super I/O")
 
-pc97338_device::pc97338_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc97338_device::pc97338_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PC97338, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)

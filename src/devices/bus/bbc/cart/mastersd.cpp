@@ -27,10 +27,10 @@ class bbc_mastersd_device : public device_t, public device_bbc_cart_interface
 {
 public:
 	// construction/destruction
-	bbc_mastersd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_mastersd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	bbc_mastersd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	bbc_mastersd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -63,7 +63,7 @@ class bbc_mastersdr2_device : public bbc_mastersd_device
 {
 public:
 	// construction/destruction
-	bbc_mastersdr2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	bbc_mastersdr2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_bbc_cart_interface implementation
@@ -101,12 +101,12 @@ bbc_mastersd_device::bbc_mastersd_device(const machine_config &mconfig, device_t
 {
 }
 
-bbc_mastersd_device::bbc_mastersd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_mastersd_device::bbc_mastersd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bbc_mastersd_device(mconfig, BBC_MASTERSD, tag, owner, clock)
 {
 }
 
-bbc_mastersdr2_device::bbc_mastersdr2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_mastersdr2_device::bbc_mastersdr2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: bbc_mastersd_device(mconfig, BBC_MASTERSDR2, tag, owner, clock)
 {
 }

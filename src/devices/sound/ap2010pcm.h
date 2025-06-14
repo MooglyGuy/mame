@@ -20,7 +20,7 @@ class ap2010pcm_device : public device_t, public device_sound_interface
 public:
 	static constexpr feature_type imperfect_features() { return feature::SOUND; }
 
-	ap2010pcm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ap2010pcm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint32_t reg_r(offs_t offset);
 	void reg_w(offs_t offset, uint32_t data, uint32_t mem_mask = ~0);
@@ -45,7 +45,7 @@ private:
 
 	float m_volume;
 
-	uint32_t m_sample_rate;
+	XTAL m_sample_rate;
 
 	uint16_t m_fifo_data[FIFO_MAX_SIZE];
 	uint16_t m_fifo_size;

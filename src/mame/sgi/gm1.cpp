@@ -21,7 +21,7 @@
 
 DEFINE_DEVICE_TYPE(SGI_GM1, sgi_gm1_device, "sgi_gm1", "SGI GM1")
 
-sgi_gm1_device::sgi_gm1_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sgi_gm1_device::sgi_gm1_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SGI_GM1, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")

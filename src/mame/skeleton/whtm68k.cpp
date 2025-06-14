@@ -313,8 +313,8 @@ void whtm68k_state::yizhix(machine_config &config)
 	crtc.set_show_border_area(false);
 	crtc.set_char_width(8);
 
-	RAMDAC(config, "ramdac", 0, "palette").set_addrmap(0, &whtm68k_state::ramdac_map); // MU9C4870-80PC
-	RAMDAC(config, "ramdac2", 0, "palette2").set_addrmap(0, &whtm68k_state::ramdac2_map); // MU9C4870-80PC
+	RAMDAC(config, "ramdac", "palette").set_addrmap(0, &whtm68k_state::ramdac_map); // MU9C4870-80PC
+	RAMDAC(config, "ramdac2", "palette2").set_addrmap(0, &whtm68k_state::ramdac2_map); // MU9C4870-80PC
 
 	GFXDECODE(config, "gfxdecode", "palette", gfx_wht);
 	PALETTE(config, "palette").set_entries(0x100); // TODO

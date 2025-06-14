@@ -451,7 +451,7 @@ void ssfindo_state::machine_start()
 	save_item(NAME(m_flash_bank_select));
 
 	set_data_frame(1, 8, PARITY_NONE, STOP_BITS_1);
-	set_rate(31250);
+	set_rate(XTAL::u(31250));
 }
 
 void ssfindo_state::machine_reset()

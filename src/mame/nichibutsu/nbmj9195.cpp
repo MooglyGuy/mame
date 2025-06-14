@@ -1706,7 +1706,7 @@ void nbmj9195_state::nbmjtype1(machine_config &config)
 
 void nbmj9195_state::nbmjtype2(machine_config &config)
 {
-	TMPZ84C011(config, m_maincpu, 12000000/2); /* TMPZ84C011, 6.00 MHz */
+	TMPZ84C011(config, m_maincpu, XTAL::u(12000000)/2); /* TMPZ84C011, 6.00 MHz */
 	m_maincpu->set_daisy_config(daisy_chain_main);
 	m_maincpu->set_addrmap(AS_PROGRAM, &nbmj9195_state::sailorws_map);
 	m_maincpu->set_addrmap(AS_IO, &nbmj9195_state::sailorws_io_map);
@@ -1732,7 +1732,7 @@ void nbmj9195_state::nbmjtype2(machine_config &config)
 	MCFG_VIDEO_START_OVERRIDE(nbmj9195_state, nb22090)
 
 	// sound hardware
-	NICHISND(config, "nichisnd", 0);
+	NICHISND(config, "nichisnd");
 }
 
 void nbmj9195_state::mjuraden(machine_config &config)

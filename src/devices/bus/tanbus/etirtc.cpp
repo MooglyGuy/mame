@@ -37,7 +37,7 @@ void tanbus_etirtc_device::device_add_mconfig(machine_config &config)
 //  tanbus_etirtc_device - constructor
 //-------------------------------------------------
 
-tanbus_etirtc_device::tanbus_etirtc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tanbus_etirtc_device::tanbus_etirtc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TANBUS_ETIRTC, tag, owner, clock)
 	, device_tanbus_interface(mconfig, *this)
 	, m_rtc(*this, "rtc")

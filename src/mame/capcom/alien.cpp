@@ -408,7 +408,7 @@ void alien_state::alien(machine_config &config)
 	m_screen->set_raw(MASTER_CLOCK / 20, 608, 0, 480, 262, 0, 234);
 	m_screen->set_screen_update(FUNC(alien_state::screen_update));
 
-	MB86292(config, m_gpu, 0);
+	MB86292(config, m_gpu);
 	m_gpu->set_screen(m_screen);
 	m_gpu->set_vram(m_vram);
 	m_gpu->set_xint_cb().set(FUNC(alien_state::gpu_irq_w<0>));

@@ -17,8 +17,8 @@ class f2mc16_uart_device :
 	public device_t
 {
 public:
-	f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
-	f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t rx_vector, uint8_t tx_vector);
+	f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	f2mc16_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t rx_vector, uint8_t tx_vector);
 
 	auto sck() { return m_sck_cb.bind(); }
 	auto sck_hz() { return m_sck_hz_cb.bind(); }

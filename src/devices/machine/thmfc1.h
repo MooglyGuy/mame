@@ -11,7 +11,7 @@
 class thmfc1_device : public device_t
 {
 public:
-	thmfc1_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	thmfc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual ~thmfc1_device() = default;
 
 	void map(address_map &map) ATTR_COLD;

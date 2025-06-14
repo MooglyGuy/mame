@@ -11,7 +11,7 @@
 class ct8000_midi_device : public device_t, public device_serial_interface
 {
 public:
-	ct8000_midi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ct8000_midi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto &set_base_program(u8 base) { m_base_program = base; return *this; }
 

@@ -85,7 +85,7 @@ void ibm3477_state::machine_reset()
 void ibm3477_state::ibm3477(machine_config &config)
 {
 	// Basic machine hardware
-	I8088(config, m_maincpu, 59'818'500 / 10); // Unknown clock
+	I8088(config, m_maincpu, XTAL::u(59'818'500) / 10); // Unknown clock
 
 	// Video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));

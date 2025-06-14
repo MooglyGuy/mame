@@ -56,7 +56,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(audio_nmi);
 
 protected:
-	gottlieb_sound_p2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	gottlieb_sound_p2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -137,13 +137,13 @@ public:
 	gottlieb_sound_speech_r1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	gottlieb_sound_speech_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	gottlieb_sound_speech_r1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
 	virtual void device_start() override ATTR_COLD;
-	virtual void device_post_load() override { m_votrax->set_unscaled_clock(m_speech_clock); }
+	virtual void device_post_load() override { m_votrax->set_unscaled_clock(XTAL::u(m_speech_clock)); }
 
 	virtual void r1_map(address_map &map) override ATTR_COLD;
 
@@ -167,7 +167,7 @@ class gottlieb_sound_speech_r1a_device : public gottlieb_sound_speech_r1_device
 {
 public:
 	// construction/destruction
-	gottlieb_sound_speech_r1a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	gottlieb_sound_speech_r1a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// device-level overrides

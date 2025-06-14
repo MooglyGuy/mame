@@ -29,7 +29,7 @@ static INPUT_PORTS_START(msx_rs232_enable_switch)
 INPUT_PORTS_END
 
 
-msx_slot_rs232_base_device::msx_slot_rs232_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_base_device::msx_slot_rs232_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rom_device(mconfig, type, tag, owner, clock)
 	, m_i8251(*this, "i8251")
 	, m_i8253(*this, "i8253")
@@ -143,7 +143,7 @@ void msx_slot_rs232_base_device::txrdy_w(int state)
 
 
 
-msx_slot_rs232_device::msx_slot_rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_device::msx_slot_rs232_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rs232_base_device(mconfig, MSX_SLOT_RS232, tag, owner, clock)
 {
 }
@@ -190,7 +190,7 @@ void msx_slot_rs232_device::update_irq_state()
 
 
 
-msx_slot_rs232_mitsubishi_device::msx_slot_rs232_mitsubishi_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_mitsubishi_device::msx_slot_rs232_mitsubishi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rs232_base_device(mconfig, MSX_SLOT_RS232_MITSUBISHI, tag, owner, clock)
 	, m_switch_port(*this, "SWITCH")
 {
@@ -240,7 +240,7 @@ void msx_slot_rs232_mitsubishi_device::update_irq_state()
 
 
 
-msx_slot_rs232_sony_device::msx_slot_rs232_sony_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_sony_device::msx_slot_rs232_sony_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rs232_base_device(mconfig, MSX_SLOT_RS232_SONY, tag, owner, clock)
 	, m_switch_port(*this, "SWITCH")
 {
@@ -307,7 +307,7 @@ void msx_slot_rs232_sony_device::update_irq_state()
 
 
 
-msx_slot_rs232_svi738_device::msx_slot_rs232_svi738_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_svi738_device::msx_slot_rs232_svi738_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rs232_base_device(mconfig, MSX_SLOT_RS232_SVI738, tag, owner, clock)
 {
 }
@@ -350,7 +350,7 @@ void msx_slot_rs232_svi738_device::update_irq_state()
 
 
 
-msx_slot_rs232_toshiba_device::msx_slot_rs232_toshiba_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_toshiba_device::msx_slot_rs232_toshiba_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rs232_base_device(mconfig, MSX_SLOT_RS232_TOSHIBA, tag, owner, clock)
 	, m_switch_port(*this, "SWITCH")
 {
@@ -409,7 +409,7 @@ void msx_slot_rs232_toshiba_device::update_irq_state()
 
 
 
-msx_slot_rs232_toshiba_hx3x_device::msx_slot_rs232_toshiba_hx3x_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_rs232_toshiba_hx3x_device::msx_slot_rs232_toshiba_hx3x_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: msx_slot_rs232_base_device(mconfig, MSX_SLOT_RS232_TOSHIBA_HX3X, tag, owner, clock)
 	, m_switch_port(*this, "SWITCH")
 	, m_copy_port(*this, "COPY")

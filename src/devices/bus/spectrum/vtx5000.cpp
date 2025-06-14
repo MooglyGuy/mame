@@ -18,7 +18,7 @@ namespace {
 class spectrum_vtx5000_device : public device_t, public device_spectrum_expansion_interface
 {
 public:
-	spectrum_vtx5000_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	spectrum_vtx5000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, SPECTRUM_VTX5000, tag, owner, clock)
 		, device_spectrum_expansion_interface(mconfig, *this)
 		, m_exp(*this, "exp")

@@ -17,7 +17,7 @@ class isa8_hpblp_device :
 		public device_isa8_card_interface
 {
 public:
-	isa8_hpblp_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa8_hpblp_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;

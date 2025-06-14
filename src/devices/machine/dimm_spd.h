@@ -10,12 +10,7 @@ class dimm_spd_device :  public device_t, public i2c_hle_interface
 {
 public:
 	// construction/destruction
-	dimm_spd_device(const machine_config &mconfig, const char *tag, device_t *owner)
-		: dimm_spd_device(mconfig, tag, owner, (uint32_t)0)
-	{
-	}
-
-	dimm_spd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dimm_spd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	typedef enum
 	{

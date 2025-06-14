@@ -94,7 +94,7 @@ namespace {
 #define Y200    XTAL(2'457'600)
 #define Y700    XTAL(10'000'000)
 
-static const double DMASOUND_RATE[] = { Y2/640.0/8.0, Y2/640.0/4.0, Y2/640.0/2.0, Y2/640.0 };
+static const XTAL DMASOUND_RATE[] = { Y2/640.0/8.0, Y2/640.0/4.0, Y2/640.0/2.0, Y2/640.0 };
 
 class st_state : public driver_device
 {

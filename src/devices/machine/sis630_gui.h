@@ -12,7 +12,7 @@
 class sis630_gui_device : public pci_device
 {
 public:
-	sis630_gui_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sis630_gui_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void legacy_memory_map(address_map &map) ATTR_COLD;
 	void legacy_io_map(address_map &map) ATTR_COLD;
@@ -66,10 +66,9 @@ DECLARE_DEVICE_TYPE(SIS630_GUI, sis630_gui_device)
 class sis630_bridge_device : public pci_bridge_device
 {
 public:
-	template <typename T> sis630_bridge_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
-		T &&gui_tag
-	) : sis630_bridge_device(mconfig, tag, owner, clock)
+	template <typename T>
+	sis630_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&gui_tag)
+		: sis630_bridge_device(mconfig, tag, owner)
 	{
 		// either 0001 or 6001 as device ID
 		set_ids_bridge(0x10396001, 0x00);
@@ -77,7 +76,7 @@ public:
 		m_vga.set_tag(std::forward<T>(gui_tag));
 	}
 
-	sis630_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sis630_bridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

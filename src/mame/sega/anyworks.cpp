@@ -86,7 +86,7 @@ INPUT_PORTS_END
 
 void anyworks_state::unkanyw(machine_config &config)
 {
-	ARM9(config, m_maincpu, 14'318'100); // placeholder for unemulated SoC
+	ARM9(config, m_maincpu, XTAL::u(14'318'100)); // placeholder for unemulated SoC
 	m_maincpu->set_addrmap(AS_PROGRAM, &anyworks_state::program_map);
 
 	// all wrong

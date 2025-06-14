@@ -17,7 +17,7 @@ namespace {
 class plg150_ap_device : public device_t, public device_plg1x0_interface
 {
 public:
-	plg150_ap_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	plg150_ap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~plg150_ap_device();
 
 	virtual void midi_rx(int state) override;
@@ -34,7 +34,7 @@ private:
 	void map(address_map &map) ATTR_COLD;
 };
 
-plg150_ap_device::plg150_ap_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+plg150_ap_device::plg150_ap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, PLG150_AP, tag, owner, clock),
 	device_plg1x0_interface(mconfig, *this),
 	m_cpu(*this, "cpu")

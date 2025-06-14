@@ -13,7 +13,7 @@
 
 DEFINE_DEVICE_TYPE(NAMCO_CUS4XTMAP, namco_cus4xtmap_device, "namco_cus4xtmap", "Namco CUS42 + CUS43 (dual tilemaps)")
 
-namco_cus4xtmap_device::namco_cus4xtmap_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+namco_cus4xtmap_device::namco_cus4xtmap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NAMCO_CUS4XTMAP, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 	, m_tile_cb(*this)

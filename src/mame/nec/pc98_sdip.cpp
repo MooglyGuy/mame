@@ -28,7 +28,7 @@ To enter setup mode:
 
 DEFINE_DEVICE_TYPE(PC98_SDIP, pc98_sdip_device, "pc98_sdip", "NEC PC-98 SDIP device")
 
-pc98_sdip_device::pc98_sdip_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pc98_sdip_device::pc98_sdip_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PC98_SDIP, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 {

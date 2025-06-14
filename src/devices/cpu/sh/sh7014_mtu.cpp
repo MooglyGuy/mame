@@ -24,7 +24,7 @@
 DEFINE_DEVICE_TYPE(SH7014_MTU, sh7014_mtu_device, "sh7014mtu", "SH7014 Multifunction Timer Pulse Unit")
 DEFINE_DEVICE_TYPE(SH7014_MTU_CHANNEL, sh7014_mtu_channel_device, "sh7014mtuchan", "SH7014 Multifunction Timer Pulse Unit Channel")
 
-sh7014_mtu_device::sh7014_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_mtu_device::sh7014_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_MTU, tag, owner, clock)
 	, m_intc(*this, finder_base::DUMMY_TAG)
 	, m_chan(*this, "ch%u", 0u)
@@ -117,7 +117,7 @@ void sh7014_mtu_device::tsyr_w(uint8_t data)
 
 //////////////////
 
-sh7014_mtu_channel_device::sh7014_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7014_mtu_channel_device::sh7014_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SH7014_MTU_CHANNEL, tag, owner, clock)
 	, m_intc(*this, finder_base::DUMMY_TAG)
 	, m_timer(nullptr)

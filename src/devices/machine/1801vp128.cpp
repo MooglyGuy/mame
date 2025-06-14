@@ -89,7 +89,7 @@ inline k1801vp128_device::live_info::live_info()
 //  k1801vp128_device - constructor
 //-------------------------------------------------
 
-k1801vp128_device::k1801vp128_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+k1801vp128_device::k1801vp128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, K1801VP128, tag, owner, clock)
 	, m_connectors(*this, "%u", 0U)
 	, m_read_ds(*this, -1)

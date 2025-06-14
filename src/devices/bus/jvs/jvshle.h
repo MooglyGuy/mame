@@ -12,7 +12,7 @@ class jvs_hle_device :
 	public device_jvs_interface
 {
 protected:
-	jvs_hle_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	jvs_hle_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_t
 	virtual void device_start() override ATTR_COLD;

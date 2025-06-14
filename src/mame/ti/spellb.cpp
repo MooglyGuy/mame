@@ -429,14 +429,14 @@ INPUT_PORTS_END
 void spellb_state::rev1(machine_config &config)
 {
 	// basic machine hardware
-	TMS0270(config, m_maincpu, 320000); // approximation
+	TMS0270(config, m_maincpu, XTAL::u(320000)); // approximation
 	m_maincpu->read_k().set(FUNC(spellb_state::main_read_k));
 	m_maincpu->write_o().set(FUNC(spellb_state::main_write_o));
 	m_maincpu->write_r().set(FUNC(spellb_state::main_write_r));
 	m_maincpu->read_ctl().set(FUNC(spellb_state::rev1_ctl_r));
 	m_maincpu->write_ctl().set(FUNC(spellb_state::rev1_ctl_w));
 
-	TMS1980(config, m_subcpu, 320000); // approximation
+	TMS1980(config, m_subcpu, XTAL::u(320000)); // approximation
 	m_subcpu->read_k().set(FUNC(spellb_state::sub_read_k));
 	m_subcpu->write_o().set(FUNC(spellb_state::sub_write_o));
 	m_subcpu->write_r().set(FUNC(spellb_state::sub_write_r));
@@ -454,14 +454,14 @@ void spellb_state::rev1(machine_config &config)
 void spellb_state::rev2(machine_config &config)
 {
 	// basic machine hardware
-	TMS0270(config, m_maincpu, 320000); // approximation
+	TMS0270(config, m_maincpu, XTAL::u(320000)); // approximation
 	m_maincpu->read_k().set(FUNC(spellb_state::main_read_k));
 	m_maincpu->write_o().set(FUNC(spellb_state::rev2_write_o));
 	m_maincpu->write_r().set(FUNC(spellb_state::rev2_write_r));
 	m_maincpu->read_ctl().set(m_tms6100, FUNC(tms6100_device::data_r));
 	m_maincpu->write_ctl().set(m_tms6100, FUNC(tms6100_device::add_w));
 
-	TMS6100(config, m_tms6100, 320000);
+	TMS6100(config, m_tms6100, XTAL::u(320000));
 	m_tms6100->enable_4bit_mode(true);
 
 	// video hardware

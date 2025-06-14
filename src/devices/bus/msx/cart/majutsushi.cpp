@@ -13,7 +13,7 @@ namespace {
 class msx_cart_majutsushi_device : public device_t, public msx_cart_interface
 {
 public:
-	msx_cart_majutsushi_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	msx_cart_majutsushi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MSX_CART_MAJUTSUSHI, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_dac(*this, "dac")
@@ -37,7 +37,7 @@ private:
 
 void msx_cart_majutsushi_device::device_add_mconfig(machine_config &config)
 {
-	DAC_8BIT_R2R(config, m_dac, 0); // unknown DAC
+	DAC_8BIT_R2R(config, m_dac); // unknown DAC
 	if (parent_slot())
 		m_dac->add_route(ALL_OUTPUTS, soundin(), 0.15);
 }

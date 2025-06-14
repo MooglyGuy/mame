@@ -83,15 +83,6 @@ public:
 	sm5l_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32768));
 };
 
-<<<<<<< HEAD
-=======
-class kb1013vk12_device : public sm5a_device
-{
-public:
-	kb1013vk12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL::u(32768));
-};
-
->>>>>>> 45d4cd52a81 (full xtal conversion)
 
 DECLARE_DEVICE_TYPE(SM5A, sm5a_device)
 DECLARE_DEVICE_TYPE(SM5L, sm5l_device)

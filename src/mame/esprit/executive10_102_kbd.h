@@ -23,7 +23,7 @@ class executive10_102_kbd_device : public device_t
 {
 public:
 	// construction/destruction
-	executive10_102_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	executive10_102_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callbacks
 	auto txd_cb() { return m_txd_cb.bind(); }

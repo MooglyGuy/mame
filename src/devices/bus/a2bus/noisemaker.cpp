@@ -30,7 +30,7 @@ class a2bus_noisemaker_device : public device_t, public device_a2bus_card_interf
 {
 public:
 	// construction/destruction
-	a2bus_noisemaker_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	a2bus_noisemaker_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -47,7 +47,7 @@ private:
 	required_device<ay8910_device> m_psg;
 };
 
-a2bus_noisemaker_device::a2bus_noisemaker_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+a2bus_noisemaker_device::a2bus_noisemaker_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, A2BUS_NOISEMAKER, tag, owner, clock)
 	, device_a2bus_card_interface(mconfig, *this)
 	, m_psg(*this, "psg")
@@ -73,7 +73,7 @@ void a2bus_noisemaker_device::write_c0nx(u8 offset, u8 data)
 
 void a2bus_noisemaker_device::device_add_mconfig(machine_config &config)
 {
-	AY8910(config, m_psg, 1021800); // CLK tied to ϕ1 signal from bus pin 38
+	AY8910(config, m_psg, XTAL::u(1021800)); // CLK tied to ϕ1 signal from bus pin 38
 	m_psg->add_route(ALL_OUTPUTS, "speaker", 0.5);
 
 	SPEAKER(config, "speaker").front_center();

@@ -41,7 +41,7 @@ DEFINE_DEVICE_TYPE(AMIGA_FRAMEMASTER, bus::amiga::zorro::framemaster_device, "am
 
 namespace bus::amiga::zorro {
 
-rainbow2_device::rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, device_type type, uint16_t manufacturer) :
+rainbow2_device::rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, device_type type, uint16_t manufacturer) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_zorro2_card_interface(mconfig, *this),
 	m_screen(*this, "screen"),
@@ -50,12 +50,12 @@ rainbow2_device::rainbow2_device(const machine_config &mconfig, const char *tag,
 	m_manufacturer = manufacturer;
 }
 
-rainbow2_device::rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+rainbow2_device::rainbow2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	rainbow2_device(mconfig, tag, owner, clock, AMIGA_RAINBOW2, 2145)
 {
 }
 
-framemaster_device::framemaster_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+framemaster_device::framemaster_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	rainbow2_device(mconfig, tag, owner, clock, AMIGA_FRAMEMASTER, 2092)
 {
 }

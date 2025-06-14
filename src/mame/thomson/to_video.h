@@ -114,7 +114,7 @@ protected:
 		unsigned line;   /* line counter */
 	};
 
-	thomson_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	thomson_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_config_complete() override ATTR_COLD;
 	virtual ioport_constructor device_input_ports() const override ATTR_COLD;
@@ -210,7 +210,7 @@ protected:
 class to7_video_device : public thomson_video_device
 {
 public:
-	to7_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	to7_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -219,7 +219,7 @@ protected:
 class to770_video_device : public thomson_video_device
 {
 public:
-	to770_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	to770_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t gatearray_r(offs_t offset);
 	void gatearray_w(offs_t offset, uint8_t data);
@@ -231,7 +231,7 @@ protected:
 class to9_video_device : public thomson_video_device
 {
 public:
-	to9_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	to9_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint8_t gatearray_r(offs_t offset);
 	void gatearray_w(offs_t offset, uint8_t data);
@@ -239,7 +239,7 @@ public:
 	void border_color_w(uint8_t data);
 
 protected:
-	to9_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	to9_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_reset() override ATTR_COLD;
 
@@ -249,7 +249,7 @@ protected:
 class to8_video_device : public to9_video_device
 {
 public:
-	to8_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	to8_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename... T> void set_update_ram_bank_cb(T &&... args) { m_update_ram_bank_cb.set(std::forward<T>(args)...); }
 	template <typename... T> void set_update_cart_bank_cb(T &&... args) { m_update_cart_bank_cb.set(std::forward<T>(args)...); }

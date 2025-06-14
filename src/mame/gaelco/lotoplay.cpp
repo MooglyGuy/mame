@@ -60,12 +60,12 @@ INPUT_PORTS_END
 
 void lotoplay_state::lotoplay_p3(machine_config &config)
 {
-	M68705P3(config, m_maincpu, 3'579'545); // MC68705P3S, unknown clock
+	M68705P3(config, m_maincpu, XTAL::u(3'579'545)); // MC68705P3S, unknown clock
 }
 
 void lotoplay_state::lotoplay_p5(machine_config &config)
 {
-	M68705P5(config, m_maincpu, 3'579'545); // MC68705P5S, unknown clock
+	M68705P5(config, m_maincpu, XTAL::u(3'579'545)); // MC68705P5S, unknown clock
 }
 
 // Sets with MC68705 MCU.

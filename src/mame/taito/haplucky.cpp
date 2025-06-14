@@ -162,7 +162,7 @@ void haplucky_state::haplucky(machine_config &config)
 	ymsnd.port_b_write_callback().set([this] (u8 data) { logerror("%s: PB write %02X\n", machine().describe_context(), data); });
 	ymsnd.add_route(ALL_OUTPUTS, "mono", 0.5); // divider not verified
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "mono", 0.5); // DAC type not verified
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "mono", 0.5); // DAC type not verified
 }
 
 

@@ -59,7 +59,7 @@ ioport_constructor microtan_kbd_spinveti::device_input_ports() const
 //  microtan_kbd_spinveti - constructor
 //-------------------------------------------------
 
-microtan_kbd_spinveti::microtan_kbd_spinveti(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+microtan_kbd_spinveti::microtan_kbd_spinveti(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MICROTAN_KBD_SPINVETI, tag, owner, clock)
 	, device_microtan_kbd_interface(mconfig, *this)
 	, m_pb(*this, "PB")

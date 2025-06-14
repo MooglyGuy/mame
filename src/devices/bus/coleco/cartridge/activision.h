@@ -22,10 +22,10 @@
 class colecovision_activision_cartridge_device : public device_t, public device_colecovision_cartridge_interface
 {
 public:
-	colecovision_activision_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	colecovision_activision_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	colecovision_activision_cartridge_device(const machine_config &mconfig, device_type type, const char* tag, device_t* owner, uint32_t clock);
+	colecovision_activision_cartridge_device(const machine_config &mconfig, device_type type, const char* tag, device_t* owner, const XTAL &clock);
 
 	optional_device<i2cmem_device> m_eeprom;
 
@@ -42,7 +42,7 @@ private:
 class colecovision_activision_256b_cartridge_device : public colecovision_activision_cartridge_device
 {
 public:
-	colecovision_activision_256b_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	colecovision_activision_256b_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -51,7 +51,7 @@ protected:
 class colecovision_activision_32k_cartridge_device : public colecovision_activision_cartridge_device
 {
 public:
-	colecovision_activision_32k_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	colecovision_activision_32k_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

@@ -20,9 +20,9 @@ DECLARE_DEVICE_TYPE(SH7014_MTU_CHANNEL, sh7014_mtu_channel_device)
 class sh7014_mtu_device : public device_t
 {
 public:
-	sh7014_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7014_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
-	template<typename T> sh7014_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&intc)
+	template<typename T> sh7014_mtu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&intc)
 		: sh7014_mtu_device(mconfig, tag, owner, clock)
 	{
 		m_intc.set_tag(std::forward<T>(intc));
@@ -62,9 +62,9 @@ private:
 class sh7014_mtu_channel_device : public device_t
 {
 public:
-	sh7014_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7014_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
-	template<typename T> sh7014_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&intc, int chan_id, int32_t vector_tgia, int32_t vector_tgib, int32_t vector_tgic, int32_t vector_tgid, int32_t vector_tgiv, int32_t vector_tgiu)
+	template<typename T> sh7014_mtu_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&intc, int chan_id, int32_t vector_tgia, int32_t vector_tgib, int32_t vector_tgic, int32_t vector_tgid, int32_t vector_tgiv, int32_t vector_tgiu)
 		: sh7014_mtu_channel_device(mconfig, tag, owner, clock)
 	{
 		m_intc.set_tag(std::forward<T>(intc));

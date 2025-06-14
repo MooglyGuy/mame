@@ -14,12 +14,12 @@
 
 DEFINE_DEVICE_TYPE(ATI_VGA,    ati_vga_device,    "ati_vga",    "ATi VGA i/f")
 
-ati_vga_device::ati_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ati_vga_device::ati_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ati_vga_device(mconfig, ATI_VGA, tag, owner, clock)
 {
 }
 
-ati_vga_device::ati_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ati_vga_device::ati_vga_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -39,7 +39,7 @@ void ati_vga_device::device_start()
 
 void ati_vga_device::device_add_mconfig(machine_config &config)
 {
-	MACH8(config, "8514a", 0).set_vga_owner();
+	MACH8(config, "8514a").set_vga_owner();
 	EEPROM_93C46_16BIT(config, "ati_eeprom");
 }
 

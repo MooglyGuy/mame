@@ -89,7 +89,7 @@ void h8gen_dma_device::start_stop_test()
 
 // DMA channel, common code
 
-h8gen_dma_channel_device::h8gen_dma_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+h8gen_dma_channel_device::h8gen_dma_channel_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG)

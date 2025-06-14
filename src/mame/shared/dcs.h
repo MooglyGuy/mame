@@ -55,7 +55,7 @@ public:
 
 protected:
 	// construction/destruction
-	dcs_audio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int rev);
+	dcs_audio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int rev);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -374,29 +374,18 @@ class dcs2_audio_denver_device : public dcs2_audio_device
 {
 protected:
 	// construction/destruction
-<<<<<<< HEAD
-	dcs2_audio_denver_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	dcs2_audio_denver_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
-=======
-	dcs2_audio_denver_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
-protected:
-	// optional information overrides
-	virtual void device_add_mconfig(machine_config &config) override;
->>>>>>> 45d4cd52a81 (full xtal conversion)
 };
 
 class dcs2_audio_denver_5ch_device : public dcs2_audio_denver_device
 {
 public:
 	// construction/destruction
-<<<<<<< HEAD
-	dcs2_audio_denver_5ch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-
-=======
 	dcs2_audio_denver_5ch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
->>>>>>> 45d4cd52a81 (full xtal conversion)
+
 protected:
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -406,12 +395,8 @@ class dcs2_audio_denver_2ch_device : public dcs2_audio_denver_device
 {
 public:
 	// construction/destruction
-<<<<<<< HEAD
-	dcs2_audio_denver_2ch_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
-
-=======
 	dcs2_audio_denver_2ch_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
->>>>>>> 45d4cd52a81 (full xtal conversion)
+
 protected:
 	// device_t implementation
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

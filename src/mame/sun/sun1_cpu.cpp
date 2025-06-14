@@ -47,7 +47,7 @@ enum irq_mask : u8
 
 DEFINE_DEVICE_TYPE(MULTIBUS_SUN1CPU, sun1cpu_device, "sun1cpu", "Sun-1 CPU")
 
-sun1cpu_device::sun1cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+sun1cpu_device::sun1cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MULTIBUS_SUN1CPU, tag, owner, clock)
 	, device_multibus_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -258,7 +258,7 @@ void sun1cpu_device::device_reset()
 
 void sun1cpu_device::device_add_mconfig(machine_config &config)
 {
-	M68000(config, m_cpu, 0);
+	M68000(config, m_cpu, XTAL());
 	m_cpu->set_current_mmu(this);
 	m_cpu->set_addrmap(AS_PROGRAM, &sun1cpu_device::cpu_mem);
 
@@ -289,7 +289,7 @@ void sun1cpu_device::device_add_mconfig(machine_config &config)
 		});
 
 	// default configuration (1=watchdog, 2=user, 3=refresh, 4=uarta, 5=uartb)
-	AM9513(config, m_stc, 0);
+	AM9513(config, m_stc);
 	m_stc->fout_cb().set(m_stc, FUNC(am9513_device::gate1_w));
 	m_stc->out1_cb().set(FUNC(sun1cpu_device::watchdog_w));
 	m_stc->out2_cb().set(FUNC(sun1cpu_device::irq_w<M68K_IRQ_6>));
@@ -307,7 +307,7 @@ void sun1cpu_device::device_add_mconfig(machine_config &config)
 		m_stc->out5_cb().set(FUNC(sun1cpu_device::irq_w<M68K_IRQ_7>));
 
 		// assume duart rxc/txc driven at 9600baud (x16 clock)
-		CLOCK(config, "duart_clock", 9600 * 16).signal_handler().set(
+		CLOCK(config, "duart_clock", XTAL::u(9600) * 16).signal_handler().set(
 			[this](int state)
 			{
 				m_duart->txca_w(state);
@@ -319,7 +319,7 @@ void sun1cpu_device::device_add_mconfig(machine_config &config)
 
 	// port A: txd, rxd, rts, cts, dsr, dtr
 	// port B: txd, rxd
-	UPD7201(config, m_duart, 0);
+	UPD7201(config, m_duart, XTAL());
 	m_duart->out_txda_callback().set("rs232a", FUNC(rs232_port_device::write_txd));
 	m_duart->out_dtra_callback().set("rs232a", FUNC(rs232_port_device::write_dtr));
 	m_duart->out_rtsa_callback().set("rs232a", FUNC(rs232_port_device::write_rts));

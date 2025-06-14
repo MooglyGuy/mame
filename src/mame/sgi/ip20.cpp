@@ -156,14 +156,14 @@ static void scsi_devices(device_slot_interface &device)
 
 void ip20_state::indigo_r4000(machine_config &config)
 {
-	R4000(config, m_cpu, 50'000'000);
+	R4000(config, m_cpu, XTAL::u(50'000'000));
 
 	ip20(config);
 }
 
 void ip20_state::indigo_r4400(machine_config &config)
 {
-	R4400(config, m_cpu, 75'000'000);
+	R4400(config, m_cpu, XTAL::u(75'000'000));
 
 	ip20(config);
 }
@@ -174,11 +174,11 @@ void ip20_state::ip20(machine_config &config)
 
 	EEPROM_93C56_16BIT(config, m_eerom);
 
-	SGI_MC(config, m_mc, m_cpu, m_eerom, 50'000'000);
+	SGI_MC(config, m_mc, XTAL::u(50'000'000), m_cpu, m_eerom);
 	m_mc->eisa_present().set_constant(0);
 	m_mc->set_input_default(DEVICE_INPUT_DEFAULTS_NAME(ip20_mc));
 
-	SGI_HPC1(config, m_hpc, 0);
+	SGI_HPC1(config, m_hpc);
 	m_hpc->set_gio(m_cpu, AS_PROGRAM);
 	m_hpc->set_enet(m_eth);
 	m_hpc->int_w().set(m_int, FUNC(sgi_int2_device::lio0_w<sgi_int2_device::LIO0_ETHERNET>));
@@ -209,7 +209,7 @@ void ip20_state::ip20(machine_config &config)
 
 	DP8572A(config, m_rtc, 32.768_kHz_XTAL).set_use_utc(true);
 
-	NSCSI_BUS(config, "scsi", 0);
+	NSCSI_BUS(config, "scsi");
 	NSCSI_CONNECTOR(config, "scsi:0").option_set("wd33c93a", WD33C93A).machine_config(
 		[this](device_t *device)
 		{
@@ -227,7 +227,7 @@ void ip20_state::ip20(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi:6", scsi_devices, nullptr, false);
 	NSCSI_CONNECTOR(config, "scsi:7", scsi_devices, nullptr, false);
 
-	SEEQ8003(config, m_eth, 0);
+	SEEQ8003(config, m_eth);
 	m_eth->out_int_cb().set(m_hpc, FUNC(hpc1_device::write_int));
 	m_eth->out_rxrdy_cb().set(m_hpc, FUNC(hpc1_device::write_drq<1>));
 	m_hpc->dma_r_cb<1>().set(m_eth, FUNC(seeq8003_device::fifo_r));
@@ -238,12 +238,12 @@ void ip20_state::ip20(machine_config &config)
 
 	// duart 0
 	SCC85C30(config, m_scc[0], 10_MHz_XTAL);
-	m_scc[0]->configure_channels(3'686'400, 0, 3'686'400, 0);
+	m_scc[0]->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 	m_scc[0]->out_int_callback().set(scc_irq, FUNC(input_merger_any_high_device::in_w<0>));
 
 	sgi_kbd_port_device &kbd_port(SGI_KBD_PORT(config, "keyboard_port"));
 	kbd_port.option_set("keyboard", SGI_KBD);
-	rs232_port_device &mouse_port(RS232_PORT(config, "mouse_port", 0));
+	rs232_port_device &mouse_port(RS232_PORT(config, "mouse_port"));
 	mouse_port.option_set("mouse", SGI_HLE_SERIAL_MOUSE);
 	m_scc[0]->out_txda_callback().set(kbd_port, FUNC(sgi_kbd_port_device::write_txd));
 	kbd_port.rxd_handler().set(m_scc[0], FUNC(scc85c30_device::rxa_w));
@@ -251,7 +251,7 @@ void ip20_state::ip20(machine_config &config)
 
 	// duart 1
 	SCC85C30(config, m_scc[1], 10_MHz_XTAL);
-	m_scc[1]->configure_channels(3'686'400, 0, 3'686'400, 0);
+	m_scc[1]->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 	m_scc[1]->out_int_callback().set(scc_irq, FUNC(input_merger_any_high_device::in_w<1>));
 
 	rs232_port_device &rs232a(RS232_PORT(config, "rs232a", default_rs232_devices, nullptr));
@@ -271,7 +271,7 @@ void ip20_state::ip20(machine_config &config)
 
 	// duart 2
 	SCC85C30(config, m_scc[2], 10_MHz_XTAL);
-	m_scc[2]->configure_channels(3'686'400, 0, 3'686'400, 0);
+	m_scc[2]->configure_channels(XTAL::u(3'686'400), XTAL(), XTAL::u(3'686'400), XTAL());
 	m_scc[2]->out_int_callback().set(scc_irq, FUNC(input_merger_any_high_device::in_w<2>));
 
 	DSP56001(config, m_dsp, 20_MHz_XTAL);

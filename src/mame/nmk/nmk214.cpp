@@ -106,7 +106,7 @@ const u8 output_byte_bitswaps[8][8] =
 
 DEFINE_DEVICE_TYPE(NMK214, nmk214_device, "nmk214", "NMK214 Graphics Descrambler")
 
-nmk214_device::nmk214_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+nmk214_device::nmk214_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NMK214, tag, owner, clock)
 	, m_mode(0)
 	, m_input_address_bitswap(default_input_address_bitswap)

@@ -12,7 +12,7 @@
 class namcos10_exio_base_device : public device_t
 {
 public:
-	namcos10_exio_base_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namcos10_exio_base_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	uint8_t ident_code() { return m_ident_code; }
 
@@ -28,7 +28,7 @@ public:
 	virtual void ram_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0) {}
 
 protected:
-	namcos10_exio_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint8_t ident_code);
+	namcos10_exio_base_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint8_t ident_code);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -38,7 +38,7 @@ protected:
 class namcos10_exio_device : public namcos10_exio_base_device
 {
 public:
-	namcos10_exio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namcos10_exio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto analog_callback() { return m_analog_cb.bind(); }
 
@@ -79,7 +79,7 @@ private:
 class namcos10_mgexio_device : public namcos10_exio_base_device
 {
 public:
-	namcos10_mgexio_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	namcos10_mgexio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto port4_read_callback() { return m_port_read[0].bind(); }
 	auto port6_read_callback() { return m_port_read[1].bind(); }

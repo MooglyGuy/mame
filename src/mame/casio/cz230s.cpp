@@ -616,7 +616,7 @@ void cz230s_state::cz230s(machine_config &config)
 	m_pd->irq_cb().set_inputline(m_maincpu, UPD7810_INTF1);
 	m_pd->add_route(0, "speaker", 1.0);
 
-	UPD934G(config, m_pcm, 1'280'000);
+	UPD934G(config, m_pcm, XTAL::u(1'280'000));
 	m_pcm->set_addrmap(0, &cz230s_state::cz230s_pcm_map);
 	m_pcm->add_route(ALL_OUTPUTS, "speaker", 0.5);
 
@@ -644,7 +644,7 @@ void cz230s_state::sz1(machine_config &config)
 
 	CASIO_RA5(config, "cart");
 
-	BEEP(config, "beep", 2000).add_route(ALL_OUTPUTS, "speaker", 0.5); // TODO: verify freq
+	BEEP(config, "beep", XTAL::u(2000)).add_route(ALL_OUTPUTS, "speaker", 0.5); // TODO: verify freq
 
 	config.set_default_layout(layout_sz1);
 }

@@ -24,7 +24,7 @@ namespace bus::ti99::sidecar {
 class arcturus_device : public bus::ti99::internal::ioport_attached_device
 {
 public:
-	arcturus_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	arcturus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	virtual void readz(offs_t offset, uint8_t *value) override;
 	virtual void write(offs_t offset, uint8_t data) override;
 

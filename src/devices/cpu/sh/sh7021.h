@@ -18,7 +18,7 @@ class sh7021_device : public sh2_device
 {
 public:
 	// construction/destruction
-	sh7021_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7021_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void write_padr(uint16_t data);
 	void write_pbdr(uint16_t data);

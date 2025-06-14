@@ -14,7 +14,7 @@
 DEFINE_DEVICE_TYPE(TZB215_SPRITES, tzb215_device, "tzb215_sprites", "Tatsumi TZB215 Rotating Sprites")
 DEFINE_DEVICE_TYPE(TZB315_SPRITES, tzb315_device, "tzb315_sprites", "Tatsumi TZB315 Rotating Sprites")
 
-tzbx15_device::tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+tzbx15_device::tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 	, m_palette_clut(*this, "palette_clut")
@@ -25,29 +25,29 @@ tzbx15_device::tzbx15_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-tzbx15_device::tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 clut_size)
-	: tzbx15_device(mconfig, type, tag, owner, clock)
+tzbx15_device::tzbx15_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clut_size)
+	: tzbx15_device(mconfig, type, tag, owner)
 {
 	m_rom_clut_size = clut_size;
 }
 
-tzb215_device::tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u32 clut_size)
-	: tzbx15_device(mconfig, TZB215_SPRITES, tag, owner, clock, clut_size)
+tzb215_device::tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clut_size)
+	: tzbx15_device(mconfig, TZB215_SPRITES, tag, owner, clut_size)
 {
 }
 
-tzb215_device::tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
-	: tzbx15_device(mconfig, TZB215_SPRITES, tag, owner, clock, 0)
+tzb215_device::tzb215_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: tzbx15_device(mconfig, TZB215_SPRITES, tag, owner, 0)
 {
 }
 
-tzb315_device::tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u32 clut_size)
-	: tzbx15_device(mconfig, TZB315_SPRITES, tag, owner, clock, clut_size)
+tzb315_device::tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, const u32 clut_size)
+	: tzbx15_device(mconfig, TZB315_SPRITES, tag, owner, clut_size)
 {
 }
 
-tzb315_device::tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
-	: tzbx15_device(mconfig, TZB315_SPRITES, tag, owner, clock, 0)
+tzb315_device::tzb315_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
+	: tzbx15_device(mconfig, TZB315_SPRITES, tag, owner, 0)
 {
 }
 

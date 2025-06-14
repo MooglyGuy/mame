@@ -444,7 +444,7 @@ u32 maverick_device::decrypt(u32 value)
 class nubus_xceed30hr_device : public maverick_device
 {
 public:
-	nubus_xceed30hr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_xceed30hr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override;
@@ -472,12 +472,12 @@ void nubus_xceed30hr_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_screen_update(FUNC(nubus_xceed30hr_device::screen_update));
-	m_screen->set_raw(25175000, 800, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(25175000), 800, 0, 640, 525, 0, 480);
 
-	BT478(config, m_ramdac, 0);
+	BT478(config, m_ramdac);
 }
 
-nubus_xceed30hr_device::nubus_xceed30hr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_xceed30hr_device::nubus_xceed30hr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	maverick_device(mconfig, PDS030_XCEED30HR, tag, owner, clock),
 	m_screen(*this, "screen"),
 	m_ramdac(*this, "bt478")
@@ -506,7 +506,7 @@ u16 nubus_xceed30hr_device::read_external_signals()
 class nubus_xceed30hr_internal_device : public maverick_device
 {
 public:
-	nubus_xceed30hr_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_xceed30hr_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static auto parent_rom_device_type() { return &PDS030_XCEED30HR; }
 
@@ -532,7 +532,7 @@ void nubus_xceed30hr_internal_device::card_map(address_map &map)
 
 void nubus_xceed30hr_internal_device::device_add_mconfig(machine_config &config)
 {
-	BT478(config, m_ramdac, 0);
+	BT478(config, m_ramdac);
 }
 
 ROM_START(xceed30hr)
@@ -545,7 +545,7 @@ const tiny_rom_entry *nubus_xceed30hr_device::device_rom_region() const
 	return ROM_NAME(xceed30hr);
 }
 
-nubus_xceed30hr_internal_device::nubus_xceed30hr_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_xceed30hr_internal_device::nubus_xceed30hr_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	maverick_device(mconfig, PDS030_XCEED30HRINT, tag, owner, clock),
 	m_ramdac(*this, "bt478")
 {
@@ -583,7 +583,7 @@ const tiny_rom_entry *nubus_xceed30hr_internal_device::device_rom_region() const
 class nubus_xceedmc30_device : public maverick_device
 {
 public:
-	nubus_xceedmc30_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_xceedmc30_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -614,9 +614,9 @@ void nubus_xceedmc30_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	m_screen->set_screen_update(FUNC(nubus_xceedmc30_device::screen_update));
-	m_screen->set_raw(25175000, 800, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(25175000), 800, 0, 640, 525, 0, 480);
 
-	BT473(config, m_ramdac, 0);
+	BT473(config, m_ramdac);
 }
 
 void nubus_xceedmc30_device::card_map(address_map &map)
@@ -627,7 +627,7 @@ void nubus_xceedmc30_device::card_map(address_map &map)
 	map(0xc0'0000, 0xc0'001f).rw(m_ramdac, FUNC(bt47x_device_base::read), FUNC(bt47x_device_base::write)).umask32(0xff000000);
 }
 
-nubus_xceedmc30_device::nubus_xceedmc30_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_xceedmc30_device::nubus_xceedmc30_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	maverick_device(mconfig, PDS030_XCEEDMC30, tag, owner, clock),
 	m_screen(*this, "screen"),
 	m_ramdac(*this, "bt478")
@@ -673,7 +673,7 @@ u8 nubus_xceedmc30_device::translate_mode()
 class nubus_xceedmc30_internal_device : public maverick_device
 {
 public:
-	nubus_xceedmc30_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_xceedmc30_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static auto parent_rom_device_type() { return &PDS030_XCEEDMC30; }
 
@@ -698,7 +698,7 @@ const tiny_rom_entry *nubus_xceedmc30_internal_device::device_rom_region() const
 
 void nubus_xceedmc30_internal_device::device_add_mconfig(machine_config &config)
 {
-	BT473(config, m_ramdac, 0);
+	BT473(config, m_ramdac);
 }
 
 void nubus_xceedmc30_internal_device::card_map(address_map &map)
@@ -709,7 +709,7 @@ void nubus_xceedmc30_internal_device::card_map(address_map &map)
 	map(0xc0'0000, 0xc0'001f).rw(m_ramdac, FUNC(bt47x_device_base::read), FUNC(bt47x_device_base::write)).umask32(0xff000000);
 }
 
-nubus_xceedmc30_internal_device::nubus_xceedmc30_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_xceedmc30_internal_device::nubus_xceedmc30_internal_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	maverick_device(mconfig, PDS030_XCEEDMC30INT, tag, owner, clock),
 	m_ramdac(*this, "bt478")
 {

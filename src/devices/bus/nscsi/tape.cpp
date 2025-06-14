@@ -33,7 +33,7 @@ static constexpr int TAPE_PL_BUF_ID = 3;
 
 // construction
 
-nscsi_tape_device::nscsi_tape_device(const machine_config &config, device_type type, const char *tag, device_t *owner, u32 clock)
+nscsi_tape_device::nscsi_tape_device(const machine_config &config, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: nscsi_full_device(config, type, tag, owner, clock)
 	, m_image(*this, "image")
 	, m_sequence_counter(0)
@@ -45,7 +45,7 @@ nscsi_tape_device::nscsi_tape_device(const machine_config &config, device_type t
 {
 }
 
-nscsi_tape_device::nscsi_tape_device(const machine_config &config, const char *tag, device_t *owner, u32 clock)
+nscsi_tape_device::nscsi_tape_device(const machine_config &config, const char *tag, device_t *owner, const XTAL &clock)
 	: nscsi_tape_device(config, NSCSI_TAPE, tag, owner, clock)
 {
 }

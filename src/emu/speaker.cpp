@@ -53,7 +53,7 @@ sound_io_device &sound_io_device::set_position(u32 channel, double x, double y, 
 }
 
 sound_io_device::sound_io_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 channels) :
-	device_t(mconfig, type, tag, owner, 0),
+	device_t(mconfig, type, tag, owner, XTAL()),
 	device_sound_interface(mconfig, *this),
 	m_positions(channels ? channels : 1)
 {

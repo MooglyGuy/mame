@@ -24,7 +24,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(IT8705F, it8705f_device, "it8705f", "ITE IT8705F LPC Super I/O")
 
-it8705f_device::it8705f_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+it8705f_device::it8705f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IT8705F, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)
@@ -79,7 +79,7 @@ void it8705f_device::device_reset()
 	m_pc_lpt_drq_line = 4; // disabled
 //  m_pc_lpt_mode = 0x3f;
 
-	m_pc_fdc->set_rate(500000);
+	m_pc_fdc->set_rate(XTAL::u(500000));
 }
 
 device_memory_interface::space_config_vector it8705f_device::memory_space_config() const

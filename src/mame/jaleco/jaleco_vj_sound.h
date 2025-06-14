@@ -16,7 +16,7 @@ class jaleco_vj_isa16_sound_device :
 {
 public:
 	// construction/destruction
-	jaleco_vj_isa16_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	jaleco_vj_isa16_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void set_steppingstage_mode(bool mode) { m_is_steppingstage = mode; } // TODO: Split this out into a device specific to Stepping Stage
 

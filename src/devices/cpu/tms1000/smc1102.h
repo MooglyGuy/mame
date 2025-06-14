@@ -43,13 +43,13 @@ SMC1112F (60-pin QFP):
 class smc1102_cpu_device : public tms1100_cpu_device
 {
 public:
-	smc1102_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	smc1102_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// LCD segment outputs: COM pins in offset, D pins in data
 	auto write_segs() { return m_write_segs.bind(); }
 
 protected:
-	smc1102_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u8 o_pins, u8 r_pins, u8 pc_bits, u8 byte_bits, u8 x_bits, u8 stack_levels, int rom_width, address_map_constructor rom_map, int ram_width, address_map_constructor ram_map);
+	smc1102_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u8 o_pins, u8 r_pins, u8 pc_bits, u8 byte_bits, u8 x_bits, u8 stack_levels, int rom_width, address_map_constructor rom_map, int ram_width, address_map_constructor ram_map);
 
 	// overrides
 	virtual void device_start() override ATTR_COLD;
@@ -110,7 +110,7 @@ protected:
 class smc1112_cpu_device : public smc1102_cpu_device
 {
 public:
-	smc1112_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	smc1112_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

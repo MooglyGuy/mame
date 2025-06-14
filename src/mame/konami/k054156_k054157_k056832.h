@@ -33,13 +33,13 @@ class k056832_device : public device_t, public device_gfx_interface
 public:
 	using tile_delegate = device_delegate<void (int layer, int *code, int *color, int *flags, int *priority, u16 attr)>;
 
-	template <typename T> k056832_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&mixer_tag)
-		: k056832_device(mconfig, tag, owner, clock)
+	template <typename T> k056832_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&mixer_tag)
+		: k056832_device(mconfig, tag, owner)
 	{
 		m_k055555.set_tag(std::forward<T>(mixer_tag));
 	}
 
-	k056832_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	k056832_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template <typename... T> void set_tile_callback(T &&... args) { m_k056832_cb.set(std::forward<T>(args)...); }
 

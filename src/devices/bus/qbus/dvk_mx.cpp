@@ -93,7 +93,7 @@ inline dvk_mx_device::live_info::live_info()
 //  dvk_mx_device - constructor
 //-------------------------------------------------
 
-dvk_mx_device::dvk_mx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dvk_mx_device::dvk_mx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DVK_MX, tag, owner, clock)
 	, device_qbus_card_interface(mconfig, *this)
 	, m_connectors(*this, "%u", 0U)

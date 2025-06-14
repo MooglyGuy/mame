@@ -24,7 +24,7 @@ DEFINE_DEVICE_TYPE(PCE_ROM_ACARD_DUO, pce_acard_duo_device, "pce_acard_duo", "Ar
 DEFINE_DEVICE_TYPE(PCE_ROM_ACARD_PRO, pce_acard_pro_device, "pce_acard_pro", "Arcade Card Pro")
 
 
-pce_acard_duo_device::pce_acard_duo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pce_acard_duo_device::pce_acard_duo_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_pce_cart_interface( mconfig, *this )
 	, m_ram(*this, "ram", 0x200000, ENDIANNESS_LITTLE)
@@ -34,12 +34,12 @@ pce_acard_duo_device::pce_acard_duo_device(const machine_config &mconfig, device
 {
 }
 
-pce_acard_duo_device::pce_acard_duo_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_acard_duo_device::pce_acard_duo_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_acard_duo_device(mconfig, PCE_ROM_ACARD_DUO, tag, owner, clock)
 {
 }
 
-pce_acard_pro_device::pce_acard_pro_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_acard_pro_device::pce_acard_pro_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_acard_duo_device(mconfig, PCE_ROM_ACARD_PRO, tag, owner, clock)
 	, m_scdsys()
 {

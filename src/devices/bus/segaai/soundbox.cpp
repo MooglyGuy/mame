@@ -88,7 +88,7 @@ class segaai_soundbox_device : public device_t,
 								public segaai_exp_interface
 {
 public:
-	segaai_soundbox_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	segaai_soundbox_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, SEGAAI_SOUNDBOX, tag, owner, clock)
 		, segaai_exp_interface(mconfig, *this)
 		, m_tmp8253(*this, "tmp8253")

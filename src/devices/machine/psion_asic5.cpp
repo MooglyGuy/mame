@@ -46,7 +46,7 @@ DEFINE_DEVICE_TYPE(PSION_ASIC5, psion_asic5_device, "psion_asic5", "Psion ASIC5"
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_asic5_device::psion_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_asic5_device::psion_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_ASIC5, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, m_mode(~uint8_t(0))
@@ -296,7 +296,7 @@ void psion_asic5_device::data_w(uint16_t data)
 			case 0: m_bdr = (m_bdr & 0xff00) | (data << 0); break; // LSB
 			case 1: m_bdr = (m_bdr & 0x00ff) | (data << 8); break; // MSB
 			}
-			LOG("%s data_w: UART Baud rate divisor %04x, Baud rate %d\n", machine().describe_context(), m_bdr, clock() / 16 / (1 - m_bdr));
+			LOG("%s data_w: UART Baud rate divisor %04x, Baud rate %d\n", machine().describe_context(), m_bdr, clock().value() / 16 / (1 - m_bdr));
 			set_rate(clock() / 16 / (1 - m_bdr));
 			break;
 

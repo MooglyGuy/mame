@@ -40,7 +40,7 @@ class cdrom_image_device :  public device_t,
 {
 public:
 	// construction/destruction
-	cdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	cdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~cdrom_image_device();
 
 	void set_interface(const char *interface) { m_interface = interface; }
@@ -74,7 +74,7 @@ public:
 	bool is_dvd() const;
 
 protected:
-	cdrom_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, bool dvd_compat = false, bool gd_compat = false);
+	cdrom_image_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, bool dvd_compat = false, bool gd_compat = false);
 
 	// device_t implementation
 	virtual void device_config_complete() override;
@@ -99,7 +99,7 @@ class gdrom_image_device : public cdrom_image_device
 {
 public:
 	// construction/destruction
-	gdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	gdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		cdrom_image_device(mconfig, GDROM, tag, owner, clock, false, true) {}
 	virtual ~gdrom_image_device() = default;
 };
@@ -108,7 +108,7 @@ class dvdrom_image_device : public cdrom_image_device
 {
 public:
 	// construction/destruction
-	dvdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) :
+	dvdrom_image_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) :
 		cdrom_image_device(mconfig, DVDROM, tag, owner, clock, true, false) {}
 	virtual ~dvdrom_image_device() = default;
 };

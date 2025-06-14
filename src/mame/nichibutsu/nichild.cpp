@@ -457,7 +457,7 @@ void nichild_state::nichild(machine_config &config)
 
 	YM3812(config, "ymsnd", SOUND_CLOCK).add_route(ALL_OUTPUTS, "speaker", 0.5);
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 1.0); // unknown DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 1.0); // unknown DAC
 }
 
 

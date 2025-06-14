@@ -72,12 +72,12 @@ INPUT_PORTS_END
 
 void chakumelo_state::chakumel(machine_config &config)
 {
-	SH7604(config, m_maincpu, 6'140'000);
+	SH7604(config, m_maincpu, XTAL::u(6'140'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &chakumelo_state::program_map);
 
-	PC16552D(config, "duart0", 0);
+	PC16552D(config, "duart0");
 
-	PC16552D(config, "duart1", 0);
+	PC16552D(config, "duart1");
 
 	// HD64412F(config, "hd64412f", 33_MHz_XTAL);
 

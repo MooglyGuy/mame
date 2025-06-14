@@ -26,7 +26,7 @@ class atari_cx85_device : public device_t,
 {
 public:
 	// construction/destruction
-	atari_cx85_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	atari_cx85_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

@@ -19,7 +19,7 @@ class mn89304_vga_device : public svga_device
 {
 public:
 	// construction/destruction
-	mn89304_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mn89304_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_reset() override ATTR_COLD;
@@ -32,7 +32,7 @@ protected:
 DEFINE_DEVICE_TYPE(MN89304_VGA, mn89304_vga_device, "mn89304_vga", "MN89304 VGA")
 
 // TODO: nothing is known about this, configured out of usage in here for now.
-mn89304_vga_device::mn89304_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mn89304_vga_device::mn89304_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: svga_device(mconfig, MN89304_VGA, tag, owner, clock)
 {
 	// ...
@@ -761,7 +761,7 @@ void kn5000_state::kn5000(machine_config &config)
 	GENERIC_LATCH_8(config, m_subcpu_latch); //  @ IC22
 	m_subcpu_latch->data_pending_callback().set_inputline(m_subcpu, TLCS900_INT0);
 
-	UPD72067(config, m_fdc, 32'000'000); // actual controller is UPD72068GF-3B9 at IC208
+	UPD72067(config, m_fdc, XTAL::u(32'000'000)); // actual controller is UPD72068GF-3B9 at IC208
 	m_fdc->intrq_wr_callback().set_inputline(m_maincpu, TLCS900_INT4);
 	m_fdc->drq_wr_callback().set_inputline(m_maincpu, TLCS900_INT5);
 	m_fdc->hdl_wr_callback().set_inputline(m_maincpu, TLCS900_INT6);
@@ -780,7 +780,7 @@ void kn5000_state::kn5000(machine_config &config)
 	screen.set_raw(XTAL(40'000'000)/6, 424, 0, 320, 262, 0, 240);
 	screen.set_screen_update("vga", FUNC(mn89304_vga_device::screen_update));
 
-	mn89304_vga_device &vga(MN89304_VGA(config, "vga", 0));
+	mn89304_vga_device &vga(MN89304_VGA(config, "vga"));
 	vga.set_screen("screen");
 	vga.set_vram_size(0x100000);
 

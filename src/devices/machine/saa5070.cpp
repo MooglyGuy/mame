@@ -24,7 +24,7 @@ DEFINE_DEVICE_TYPE(SAA5070_UART, saa5070_uart_device, "saa5070_uart", "SAA5070 U
 //  LIVE DEVICE
 //**************************************************************************
 
-saa5070_uart_device::saa5070_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+saa5070_uart_device::saa5070_uart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SAA5070_UART, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, m_txd_handler(*this)
@@ -49,7 +49,7 @@ void saa5070_uart_device::device_reset()
 }
 
 
-void saa5070_uart_device::set_baud_rate(int rxbaud, int txbaud, int parity)
+void saa5070_uart_device::set_baud_rate(const XTAL &rxbaud, const XTAL &txbaud, int parity)
 {
 	if (parity)
 		set_data_frame(1, 7, (parity == 1) ? PARITY_ODD : PARITY_EVEN, STOP_BITS_1);
@@ -127,7 +127,7 @@ uint8_t saa5070_uart_device::rx_byte()
 }
 
 
-saa5070_device::saa5070_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+saa5070_device::saa5070_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, SAA5070, tag, owner, clock)
 	, m_line_uart(*this, "line_uart")
 	, m_tape_uart(*this, "tape_uart")
@@ -265,11 +265,11 @@ void saa5070_device::data_w(uint8_t data)
 		int tape_parity = device_serial_interface::PARITY_NONE;
 		if (BIT(data, 2))
 			tape_parity = BIT(data, 3) ? device_serial_interface::PARITY_ODD : device_serial_interface::PARITY_EVEN;
-		m_tape_uart->set_baud_rate(1300, 1300, tape_parity);
+		m_tape_uart->set_baud_rate(XTAL::u(1300), XTAL::u(1300), tape_parity);
 		int line_parity = device_serial_interface::PARITY_NONE;
 		if (BIT(data, 6))
 			line_parity = BIT(data, 7) ? device_serial_interface::PARITY_ODD : device_serial_interface::PARITY_EVEN;
-		m_line_uart->set_baud_rate(1200, BIT(data, 5) ? 1200 : 75, line_parity); // V23 Modem (1200/75 baud)
+		m_line_uart->set_baud_rate(XTAL::u(1200), BIT(data, 5) ? XTAL::u(1200) : XTAL::u(75), line_parity); // V23 Modem (1200/75 baud)
 		break;
 	}
 	case 0x3: // Command Register

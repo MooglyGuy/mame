@@ -20,7 +20,7 @@ NCR / Symbios Logic / LSI Logic 53C825A
 
 DEFINE_DEVICE_TYPE(NCR53C825_PCI, ncr53c825_pci_device,   "ncr53c825_pci",   "NCR/Symbios Logic/LSI Logic 53C825A PCI")
 
-ncr53c825_pci_device::ncr53c825_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ncr53c825_pci_device::ncr53c825_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_scsi_rom(*this, "scsi_rom")
 {
@@ -28,7 +28,7 @@ ncr53c825_pci_device::ncr53c825_pci_device(const machine_config &mconfig, device
 	set_ids(0x10000003, 0x14, 0x010000, 0x00000000);
 }
 
-ncr53c825_pci_device::ncr53c825_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+ncr53c825_pci_device::ncr53c825_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ncr53c825_pci_device(mconfig, NCR53C825_PCI, tag, owner, clock)
 {
 }

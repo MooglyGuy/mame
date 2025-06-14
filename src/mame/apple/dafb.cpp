@@ -76,7 +76,7 @@ void dafb_base::map(address_map &map)
 	map(0x00000300, 0x000003ff).rw(FUNC(dafb_base::clockgen_r), FUNC(dafb_base::clockgen_w));
 }
 
-dafb_base::dafb_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+dafb_base::dafb_base(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_vram_size(0x200000),
 	m_dafb_version(1),
@@ -99,12 +99,12 @@ dafb_base::dafb_base(const machine_config &mconfig, device_type type, const char
 	m_scsi_dma_write_cycles[0] = m_scsi_dma_write_cycles[1] = 3;
 }
 
-dafb_device::dafb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+dafb_device::dafb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	dafb_device(mconfig, DAFB, tag, owner, clock)
 {
 }
 
-dafb_device::dafb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+dafb_device::dafb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	dafb_base(mconfig, type, tag, owner, clock),
 	m_maincpu(*this, finder_base::DUMMY_TAG)
 {
@@ -113,13 +113,13 @@ dafb_device::dafb_device(const machine_config &mconfig, device_type type, const 
 }
 
 
-dafb_q950_device::dafb_q950_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+dafb_q950_device::dafb_q950_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	dafb_device(mconfig, DAFB_Q950, tag, owner, clock),
 	m_pcbr1(0)
 {
 }
 
-dafb_memc_device::dafb_memc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+dafb_memc_device::dafb_memc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	dafb_base(mconfig, DAFB_MEMC, tag, owner, clock),
 	m_pcbr1(0),
 	m_clock_shift(0),
@@ -127,7 +127,7 @@ dafb_memc_device::dafb_memc_device(const machine_config &mconfig, const char *ta
 {
 }
 
-dafb_memcjr_device::dafb_memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+dafb_memcjr_device::dafb_memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	dafb_base(mconfig, DAFB_MEMCJR, tag, owner, clock),
 	m_pcbr1(0),
 	m_last_clock(0),
@@ -188,7 +188,7 @@ void dafb_base::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	// dot clock, htotal, hstart, hend, vtotal, vstart, vend
-	m_screen->set_raw(31334400, 896, 0, 640, 525, 0, 480);
+	m_screen->set_raw(XTAL::u(31334400), 896, 0, 640, 525, 0, 480);
 	m_screen->set_screen_update(FUNC(dafb_base::screen_update));
 
 	PALETTE(config, m_palette).set_entries(256);

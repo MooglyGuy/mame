@@ -2186,7 +2186,7 @@ void spg2xx_game_prail_state::prail(machine_config &config)
 	m_maincpu->portb_out().set(FUNC(spg2xx_game_prail_state::prail_portb_w));
 
 	// TODO: this is not currently hooked up, it's used to store the unlock states for the gallery
-	I2C_24C02(config, "i2cmem", 0); // ATMLH13402C (24C02 compatible)
+	I2C_24C02(config, "i2cmem"); // ATMLH13402C (24C02 compatible)
 }
 
 
@@ -2264,7 +2264,7 @@ void epo_tetr_game_state::epo_tetr(machine_config& config)
 {
 	spg2xx(config);
 
-	I2C_24C02(config, "i2cmem", 0); // S24CS02A
+	I2C_24C02(config, "i2cmem"); // S24CS02A
 
 	m_maincpu->portb_in().set(FUNC(epo_tetr_game_state::epo_tetr_r));
 	m_maincpu->portb_out().set(FUNC(epo_tetr_game_state::epo_tetr_portb_w));

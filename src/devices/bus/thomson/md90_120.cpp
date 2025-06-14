@@ -27,7 +27,7 @@ DEFINE_DEVICE_TYPE(MD90_120, md90_120_device, "md90_120", "Thomson MD 90-120 Mod
 //  md90_120_device - constructor
 //-------------------------------------------------
 
-md90_120_device::md90_120_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+md90_120_device::md90_120_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MD90_120, tag, owner, clock),
 	thomson_extension_interface(mconfig, *this),
 	m_acia(*this, "acia")
@@ -52,7 +52,7 @@ void md90_120_device::device_add_mconfig(machine_config &config)
 	m_acia->txd_handler().set(FUNC(md90_120_device::modem_tx_w));
 	m_acia->irq_handler().set(FUNC(md90_120_device::modem_cb));
 
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 1200)); /* 1200 bauds, might be divided by 16 */
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(1200))); /* 1200 bauds, might be divided by 16 */
 	acia_clock.signal_handler().set(FUNC(md90_120_device::write_acia_clock));
 }
 

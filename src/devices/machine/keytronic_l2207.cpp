@@ -72,7 +72,7 @@
 
 DEFINE_DEVICE_TYPE(KEYTRONIC_L2207, keytronic_l2207_device, "keytronic_l2207", "Keytronic L2207 serial keyboard")
 
-keytronic_l2207_device::keytronic_l2207_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+keytronic_l2207_device::keytronic_l2207_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, KEYTRONIC_L2207, tag, owner, clock)
 	, m_mcu(*this, "mcu")
 	, m_beeper(*this, "beeper")

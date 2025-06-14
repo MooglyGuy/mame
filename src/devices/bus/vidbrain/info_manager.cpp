@@ -32,7 +32,7 @@ DEFINE_DEVICE_TYPE(VB_INFO_MANAGER, videobrain_info_manager_cartridge_device, "v
 //  videobrain_info_manager_cartridge_device - constructor
 //-------------------------------------------------
 
-videobrain_info_manager_cartridge_device::videobrain_info_manager_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+videobrain_info_manager_cartridge_device::videobrain_info_manager_cartridge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, VB_INFO_MANAGER, tag, owner, clock),
 	device_videobrain_expansion_card_interface(mconfig, *this)
 {

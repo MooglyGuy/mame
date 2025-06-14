@@ -23,7 +23,7 @@ class apple2_brightpen_device : public device_t, public device_a2gameio_interfac
 {
 public:
 	// construction/destruction
-	apple2_brightpen_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	apple2_brightpen_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, APPLE2_BRIGHTPEN, tag, owner, clock)
 		, device_a2gameio_interface(mconfig, *this)
 		, m_brightpen_point(*this, BRIGHTPEN_POINT)

@@ -33,7 +33,7 @@ public:
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 
 	// construction/destruction
-	epson_fx80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	epson_fx80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	/* Centronics stuff */
 	virtual void input_init(int state) override;
@@ -48,7 +48,7 @@ public:
 	virtual void input_data7(int state) override { if (state) m_centronics_data |= 0x80; else m_centronics_data &= ~0x80; }
 
 protected:
-	epson_fx80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	epson_fx80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -83,7 +83,7 @@ class epson_jx80_device : public epson_fx80_device
 {
 public:
 	// construction/destruction
-	epson_jx80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	epson_jx80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -162,11 +162,11 @@ void epson_jx80_device::epson_jx80_mem(address_map &map)
 void epson_fx80_device::device_add_mconfig(machine_config &config)
 {
 	/* basic machine hardware */
-	upd7810_device &upd(UPD7810(config, m_maincpu, 10000000)); // 10 Mhz
+	upd7810_device &upd(UPD7810(config, m_maincpu, XTAL::u(10000000))); // 10 Mhz
 	upd.set_addrmap(AS_PROGRAM, &epson_fx80_device::epson_fx80_mem);
 
 	/* upi41 i8042 slave cpu */
-	i8042ah_device &sla(I8042AH(config, m_slavecpu, 11000000)); // 11 Mhz
+	i8042ah_device &sla(I8042AH(config, m_slavecpu, XTAL::u(11000000))); // 11 Mhz
 	sla.p1_in_cb().set(FUNC(epson_fx80_device::slave_p1_r));
 	sla.p2_out_cb().set(FUNC(epson_fx80_device::slave_p2_w));
 	sla.t0_in_cb().set(FUNC(epson_fx80_device::home_sensor));
@@ -201,13 +201,13 @@ ioport_constructor epson_fx80_device::device_input_ports() const
 //-------------------------------------------------
 
 // constructor that passes device type
-epson_fx80_device::epson_fx80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+epson_fx80_device::epson_fx80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	epson_fx80_device(mconfig, EPSON_FX80, tag, owner, clock)
 {
 }
 
 // constructor to pass through the device type to device_t
-epson_fx80_device::epson_fx80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+epson_fx80_device::epson_fx80_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_centronics_peripheral_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),
@@ -216,7 +216,7 @@ epson_fx80_device::epson_fx80_device(const machine_config &mconfig, device_type 
 }
 
 // constructor that pass device type
-epson_jx80_device::epson_jx80_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+epson_jx80_device::epson_jx80_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	epson_fx80_device(mconfig, EPSON_JX80, tag, owner, clock)
 {
 }

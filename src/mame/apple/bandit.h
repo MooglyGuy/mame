@@ -17,18 +17,18 @@ class bandit_host_device : public pci_host_device
 {
 public:
 	template <typename T>
-	bandit_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&cpu_tag)
+	bandit_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&cpu_tag)
 		: bandit_host_device(mconfig, tag, owner, clock)
 	{
 		set_cpu_tag(std::forward<T>(cpu_tag));
 	}
-	bandit_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	bandit_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_cpu_tag(T &&tag) { m_cpu.set_tag(std::forward<T>(tag)); }
 	void set_dev_offset(int devOffset) { m_dev_offset = devOffset; }
 
 protected:
-	bandit_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	bandit_host_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -65,12 +65,12 @@ class aspen_host_device : public bandit_host_device
 {
 public:
 	template <typename T>
-	aspen_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&cpu_tag)
+	aspen_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&cpu_tag)
 		: aspen_host_device(mconfig, tag, owner, clock)
 	{
 		set_cpu_tag(std::forward<T>(cpu_tag));
 	}
-	aspen_host_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	aspen_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	virtual u32 be_config_address_r() override;

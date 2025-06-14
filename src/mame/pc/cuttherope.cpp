@@ -56,11 +56,11 @@ INPUT_PORTS_END
 
 void cuttherope_state::cuttherope(machine_config &config)
 {
-	PENTIUM4(config, m_maincpu, 100'000'000); // Exact CPU and frequency unknown
+	PENTIUM4(config, m_maincpu, XTAL::u(100'000'000)); // Exact CPU and frequency unknown
 	m_maincpu->set_addrmap(AS_PROGRAM, &cuttherope_state::cuttherope_map);
 	m_maincpu->set_addrmap(AS_IO, &cuttherope_state::cuttherope_io);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

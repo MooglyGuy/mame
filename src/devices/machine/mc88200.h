@@ -10,7 +10,7 @@ class mc88200_device
 	: public device_t
 {
 public:
-	mc88200_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock, u8 id = 0);
+	mc88200_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock, u8 id = 0);
 
 	template <typename T> void set_mbus(T &&tag, int spacenum) { m_mbus.set_tag(std::forward<T>(tag), spacenum); }
 

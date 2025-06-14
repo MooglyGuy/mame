@@ -15,7 +15,7 @@
 
 DEFINE_DEVICE_TYPE(SH_CMT, sh_cmt_device, "sh_cmt", "SH2/704x CMT")
 
-sh_cmt_device::sh_cmt_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_cmt_device::sh_cmt_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_CMT, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG),

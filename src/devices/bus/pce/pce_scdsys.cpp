@@ -22,19 +22,19 @@ DEFINE_DEVICE_TYPE(PCE_ROM_CDSYS3J, pce_cdsys3j_device, "pce_cdsys3j", "PCE Supe
 DEFINE_DEVICE_TYPE(PCE_ROM_CDSYS3U, pce_cdsys3u_device, "pce_cdsys3u", "TG16 Super System Card")
 
 
-pce_cdsys3_device::pce_cdsys3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+pce_cdsys3_device::pce_cdsys3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_pce_cart_interface(mconfig, *this)
 	, m_scdsys()
 {
 }
 
-pce_cdsys3j_device::pce_cdsys3j_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_cdsys3j_device::pce_cdsys3j_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_cdsys3_device(mconfig, PCE_ROM_CDSYS3J, tag, owner, clock)
 {
 }
 
-pce_cdsys3u_device::pce_cdsys3u_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+pce_cdsys3u_device::pce_cdsys3u_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pce_cdsys3_device(mconfig, PCE_ROM_CDSYS3U, tag, owner, clock)
 {
 }

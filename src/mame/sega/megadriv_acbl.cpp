@@ -1005,7 +1005,7 @@ void md_boot_mcu_state::md_boot_mcu(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &md_boot_mcu_state::md_boot_mcu_map);
 
-	PIC16C57(config, m_mcu, 4'000'000); // unknown clock
+	PIC16C57(config, m_mcu, XTAL::u(4'000'000)); // unknown clock
 	m_mcu->write_a().set(FUNC(md_boot_mcu_state::mcu_porta_w));
 	m_mcu->read_b().set_ioport("IN0");
 	m_mcu->write_b().set(FUNC(md_boot_mcu_state::mcu_portb_w));

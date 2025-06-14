@@ -36,7 +36,7 @@ void st_mmu_device::map(address_map &map)
 	map(0x60d, 0x60d).rw(FUNC(st_mmu_device::dma_address_l_r), FUNC(st_mmu_device::dma_address_l_w));
 }
 
-st_mmu_device::st_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+st_mmu_device::st_mmu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ST_MMU, tag, owner, clock),
 	m_ram(*this, finder_base::DUMMY_TAG),
 	m_cpu(*this, finder_base::DUMMY_TAG),

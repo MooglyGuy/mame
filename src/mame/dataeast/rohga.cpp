@@ -937,7 +937,7 @@ void rohga_state::rohga_base(machine_config &config)
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 0.46, 0);
 	m_oki[0]->add_route(ALL_OUTPUTS, "speaker", 0.46, 1);
 
-	OKIM6295(config, m_oki[1], XTAL::i(32'220'000)/16, okim6295_device::PIN7_HIGH);
+	OKIM6295(config, m_oki[1], XTAL::u(32'220'000)/16, okim6295_device::PIN7_HIGH);
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 0.18, 0);
 	m_oki[1]->add_route(ALL_OUTPUTS, "speaker", 0.18, 1);
 }
@@ -953,7 +953,7 @@ void rohga_state::rohga(machine_config &config)
 	subdevice<screen_device>("screen")->set_screen_update(FUNC(rohga_state::screen_update_rohga));
 	subdevice<screen_device>("screen")->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen[0], 0, m_palette, gfx_rohga_spr);
+	DECO_SPRITE(config, m_sprgen[0], m_palette, gfx_rohga_spr);
 	m_sprgen[0]->set_pri_callback(FUNC(rohga_state::rohga_pri_callback));
 	m_sprgen[0]->set_col_callback(FUNC(rohga_state::rohga_col_callback));
 }
@@ -1027,7 +1027,7 @@ void rohga_state::schmeisr(machine_config &config)
 	subdevice<screen_device>("screen")->set_screen_update(FUNC(rohga_state::screen_update_rohga));
 	subdevice<screen_device>("screen")->set_palette(m_palette);
 
-	DECO_SPRITE(config, m_sprgen[0], 0, m_palette, gfx_schmeisr_spr);
+	DECO_SPRITE(config, m_sprgen[0], m_palette, gfx_schmeisr_spr);
 	m_sprgen[0]->set_pri_callback(FUNC(rohga_state::rohga_pri_callback));
 	m_sprgen[0]->set_col_callback(FUNC(rohga_state::schmeisr_col_callback)); // wire mods on pcb...
 }

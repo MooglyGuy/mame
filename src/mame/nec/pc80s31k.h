@@ -73,7 +73,7 @@ public:
 	pc80s31k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	pc80s31k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pc80s31k_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
 	virtual void fdc_io(address_map &map) override ATTR_COLD;
@@ -85,7 +85,7 @@ private:
 class pc88va2_fd_if_device : public pc80s31k_device
 {
 public:
-	pc88va2_fd_if_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	pc88va2_fd_if_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto int_wr_callback() { return m_write_irq.bind(); }
 	auto drq_wr_callback() { return m_write_drq.bind(); }

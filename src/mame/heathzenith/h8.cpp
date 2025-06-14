@@ -433,7 +433,7 @@ void h8_state::h8(machine_config &config)
 	cassette_clock.signal_handler().append(m_uart, FUNC(i8251_device::write_rxc));
 
 	// Console UART clock is 16X the baud rate.
-	clock_device &console_clock(CLOCK(config, "console_clock", 600*16));
+	clock_device &console_clock(CLOCK(config, "console_clock", XTAL::u(600)*16));
 	console_clock.signal_handler().set(m_console, FUNC(i8251_device::write_txc));
 	console_clock.signal_handler().append(m_console, FUNC(i8251_device::write_rxc));
 

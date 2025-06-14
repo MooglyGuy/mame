@@ -3297,7 +3297,7 @@ void upd72069_device::auxcmd_w(uint8_t data)
 }
 
 
-hd63266f_device::hd63266f_device(const machine_config& mconfig, const char *tag, device_t *owner, uint32_t clock)
+hd63266f_device::hd63266f_device(const machine_config& mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd765_family_device(mconfig, HD63266F, tag, owner, clock)
 	, inp_cb(*this, 0)
 {

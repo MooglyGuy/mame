@@ -472,7 +472,7 @@ static void news_scsi_devices(device_slot_interface &device)
 
 void news_r3k_base_state::common(machine_config &config)
 {
-	DMAC_0448(config, m_dma, 0);
+	DMAC_0448(config, m_dma);
 	m_dma->set_bus(m_cpu, 0);
 	m_dma->out_int_cb().set(FUNC(news_r3k_base_state::irq_w<DMA>));
 	m_dma->dma_r_cb<1>().set(m_fdc, FUNC(upd72067_device::dma_r));
@@ -564,7 +564,7 @@ void nws3260_state::nws3260(machine_config &config)
 
 	// Integrated LCD panel
 	SCREEN(config, m_lcd, SCREEN_TYPE_LCD);
-	m_lcd->set_raw(52416000, 1120, 0, 1120, 780, 0, 780);
+	m_lcd->set_raw(XTAL::u(52416000), 1120, 0, 1120, 780, 0, 780);
 	m_lcd->set_screen_update(FUNC(nws3260_state::screen_update));
 }
 

@@ -101,7 +101,7 @@ ALLOW_SAVE_TYPE(ds1wire_device::state)
 //  ds1wire_device - constructor
 //-------------------------------------------------
 
-ds1wire_device::ds1wire_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+ds1wire_device::ds1wire_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_timing_scale(1.0)
 	, m_slot_timer(nullptr)
@@ -411,7 +411,7 @@ TIMER_CALLBACK_MEMBER(ds1wire_device::update_state)
 //  ds2430a_device - constructor
 //-------------------------------------------------
 
-ds2430a_device::ds2430a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+ds2430a_device::ds2430a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: ds1wire_device(mconfig, type, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 	, m_default_data(*this, DEVICE_SELF)
@@ -421,7 +421,7 @@ ds2430a_device::ds2430a_device(const machine_config &mconfig, device_type type, 
 	std::fill(std::begin(m_app_scratchpad), std::end(m_app_scratchpad), 0);
 }
 
-ds2430a_device::ds2430a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ds2430a_device::ds2430a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ds2430a_device(mconfig, DS2430A, tag, owner, clock)
 {
 }
@@ -431,7 +431,7 @@ ds2430a_device::ds2430a_device(const machine_config &mconfig, const char *tag, d
 //  ds1971_device - constructor
 //-------------------------------------------------
 
-ds1971_device::ds1971_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ds1971_device::ds1971_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ds2430a_device(mconfig, DS1971, tag, owner, clock)
 {
 }

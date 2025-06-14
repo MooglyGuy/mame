@@ -32,7 +32,7 @@ public:
 	int sense() { return exists() ? 0 : 1; }
 
 protected:
-	casio_ram_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, unsigned max_size);
+	casio_ram_cart_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, unsigned max_size);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual const software_list_loader &get_software_list_loader() const override { return rom_software_list_loader::instance(); }
@@ -46,19 +46,19 @@ private:
 class casio_ra3_device : public casio_ram_cart_device
 {
 public:
-	casio_ra3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	casio_ra3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class casio_ra5_device : public casio_ram_cart_device
 {
 public:
-	casio_ra5_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	casio_ra5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class casio_ra6_device : public casio_ram_cart_device
 {
 public:
-	casio_ra6_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	casio_ra6_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 // device type definition

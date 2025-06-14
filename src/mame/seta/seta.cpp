@@ -7955,7 +7955,7 @@ void seta_state::gundhara(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::wrofaero_map);
 	TIMER(config, "scantimer").configure_scanline(FUNC(seta_state::seta_interrupt_1_and_2), "screen", 0, 1);
 
-	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
+	pit8254_device &pit(PIT8254(config, "pit")); // uPD71054C
 	pit.set_clk<0>(16000000/2/8);
 	pit.out_handler<0>().set(FUNC(seta_state::pit_out0));
 
@@ -8862,7 +8862,7 @@ void seta_state::wrofaero(machine_config &config)
 	M68000(config, m_maincpu, XTAL::u(16000000));   // 16 MHz
 	m_maincpu->set_addrmap(AS_PROGRAM, &seta_state::wrofaero_map);
 
-	pit8254_device &pit(PIT8254(config, "pit", 0)); // uPD71054C
+	pit8254_device &pit(PIT8254(config, "pit")); // uPD71054C
 	pit.set_clk<0>(16000000/2/8);
 	pit.out_handler<0>().set(FUNC(seta_state::pit_out0));
 

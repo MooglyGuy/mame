@@ -57,7 +57,7 @@ static uint8_t unmfm_byte(uint16_t mfm)
 	return d;
 }
 
-s100_vector_dualmode_device::s100_vector_dualmode_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+s100_vector_dualmode_device::s100_vector_dualmode_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, S100_VECTOR_DUALMODE, tag, owner, clock)
 	, device_s100_card_interface(mconfig, *this)
 	, m_floppy(*this, "floppy%u", 0U)

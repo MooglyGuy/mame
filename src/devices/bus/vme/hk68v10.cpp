@@ -191,7 +191,7 @@
 
 DEFINE_DEVICE_TYPE(VME_HK68V10, vme_hk68v10_card_device, "hk68v10", "Heurikon HK68/V10")
 
-vme_hk68v10_card_device::vme_hk68v10_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_hk68v10_card_device::vme_hk68v10_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_HK68V10, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu(*this, "maincpu")

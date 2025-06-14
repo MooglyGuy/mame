@@ -133,7 +133,7 @@ GND                1         Ground
 DEFINE_DEVICE_TYPE(S2350, s2350_device, "s2350", "American Microsystems Inc. S2350 USRT")
 
 
-s2350_device::s2350_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+s2350_device::s2350_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, S2350, tag, owner, clock),
 	m_tbmt(*this),
 	m_fct(*this),

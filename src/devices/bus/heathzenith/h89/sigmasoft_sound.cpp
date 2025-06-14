@@ -39,7 +39,7 @@ namespace {
 class h89bus_sigmasoft_snd_device : public device_t, public device_h89bus_right_card_interface
 {
 public:
-	h89bus_sigmasoft_snd_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h89bus_sigmasoft_snd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual u8 read(u8 select_lines, u8 reg) override;
 	virtual void write(u8 select_lines, u8 reg, u8 val) override;
@@ -89,7 +89,7 @@ static INPUT_PORTS_START( sigma_sound )
 INPUT_PORTS_END
 
 
-h89bus_sigmasoft_snd_device::h89bus_sigmasoft_snd_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+h89bus_sigmasoft_snd_device::h89bus_sigmasoft_snd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, H89BUS_SIGMASOFT_SND, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_ay8910(*this, "ay8910"),

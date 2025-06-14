@@ -586,7 +586,7 @@ GFXDECODE_END
 void suprridr_state::suprridr(machine_config &config)
 {
 	// basic machine hardware
-	Z80(config, m_maincpu, 18'432'000 / 6);
+	Z80(config, m_maincpu, XTAL::u(18'432'000) / 6);
 	m_maincpu->set_addrmap(AS_PROGRAM, &suprridr_state::main_map);
 	m_maincpu->set_addrmap(AS_IO, &suprridr_state::main_portmap);
 	m_maincpu->set_vblank_int("screen", FUNC(suprridr_state::main_nmi_gen));
@@ -615,9 +615,9 @@ void suprridr_state::suprridr(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "mono").front_center();
 
-	AY8910(config, "ay1", 18'432'000 / 12).add_route(ALL_OUTPUTS, "mono", 0.25);
+	AY8910(config, "ay1", XTAL::u(18'432'000) / 12).add_route(ALL_OUTPUTS, "mono", 0.25);
 
-	ay8910_device &ay2(AY8910(config, "ay2", 18'432'000 / 12));
+	ay8910_device &ay2(AY8910(config, "ay2", XTAL::u(18'432'000) / 12));
 	ay2.port_a_read_callback().set("soundlatch", FUNC(generic_latch_8_device::read));
 	ay2.add_route(ALL_OUTPUTS, "mono", 0.25);
 

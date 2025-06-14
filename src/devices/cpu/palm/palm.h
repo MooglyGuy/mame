@@ -24,7 +24,7 @@ public:
 	auto program_level() { return m_program_level.bind(); }
 	auto select_ros() { return m_select_ros.bind(); }
 
-	palm_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	palm_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

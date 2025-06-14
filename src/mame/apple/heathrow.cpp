@@ -30,8 +30,8 @@
 #define VERBOSE (0)
 #include "logmacro.h"
 
-static constexpr u32 C7M  = 7833600;
-static constexpr u32 C15M = (C7M * 2);
+static constexpr XTAL C7M  = XTAL::u(7833600);
+static constexpr XTAL C15M = (C7M * 2);
 
 //**************************************************************************
 //  DEVICE DEFINITIONS
@@ -120,28 +120,28 @@ void macio_device::device_add_mconfig(machine_config &config)
 	m_via1->cb2_handler().set(FUNC(macio_device::via_out_cb2));
 	m_via1->irq_handler().set(FUNC(macio_device::set_irq_line<18>));
 
-	DBDMA_CHANNEL(config, m_dma_scsi, 0);
+	DBDMA_CHANNEL(config, m_dma_scsi);
 	m_dma_scsi->irq_callback().set(FUNC(macio_device::set_irq_line<0>));
 
-	DBDMA_CHANNEL(config, m_dma_floppy, 0);
+	DBDMA_CHANNEL(config, m_dma_floppy);
 	m_dma_floppy->irq_callback().set(FUNC(macio_device::set_irq_line<1>));
 
-	DBDMA_CHANNEL(config, m_dma_sccatx, 0);
+	DBDMA_CHANNEL(config, m_dma_sccatx);
 	m_dma_sccatx->irq_callback().set(FUNC(macio_device::set_irq_line<4>));
 
-	DBDMA_CHANNEL(config, m_dma_sccarx, 0);
+	DBDMA_CHANNEL(config, m_dma_sccarx);
 	m_dma_sccarx->irq_callback().set(FUNC(macio_device::set_irq_line<5>));
 
-	DBDMA_CHANNEL(config, m_dma_sccbtx, 0);
+	DBDMA_CHANNEL(config, m_dma_sccbtx);
 	m_dma_sccbtx->irq_callback().set(FUNC(macio_device::set_irq_line<6>));
 
-	DBDMA_CHANNEL(config, m_dma_sccbrx, 0);
+	DBDMA_CHANNEL(config, m_dma_sccbrx);
 	m_dma_sccbrx->irq_callback().set(FUNC(macio_device::set_irq_line<7>));
 
-	DBDMA_CHANNEL(config, m_dma_audio_out, 0);
+	DBDMA_CHANNEL(config, m_dma_audio_out);
 	m_dma_audio_out->irq_callback().set(FUNC(macio_device::set_irq_line<8>));
 
-	DBDMA_CHANNEL(config, m_dma_audio_in, 0);
+	DBDMA_CHANNEL(config, m_dma_audio_in);
 	m_dma_audio_in->irq_callback().set(FUNC(macio_device::set_irq_line<9>));
 
 	SWIM3(config, m_fdc, C15M);
@@ -152,7 +152,7 @@ void macio_device::device_add_mconfig(machine_config &config)
 	applefdintf_device::add_35_nc(config, m_floppy[1]);
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));
 
@@ -171,7 +171,7 @@ void grandcentral_device::device_add_mconfig(machine_config &config)
 {
 	macio_device::device_add_mconfig(config);
 
-	DBDMA_CHANNEL(config, m_dma_scsi1, 0);
+	DBDMA_CHANNEL(config, m_dma_scsi1);
 	m_dma_scsi1->irq_callback().set(FUNC(macio_device::set_irq_line<10>));
 }
 
@@ -179,10 +179,10 @@ void ohare_device::device_add_mconfig(machine_config &config)
 {
 	macio_device::device_add_mconfig(config);
 
-	DBDMA_CHANNEL(config, m_dma_ata0, 0);
+	DBDMA_CHANNEL(config, m_dma_ata0);
 	m_dma_ata0->irq_callback().set(FUNC(macio_device::set_irq_line<2>));
 
-	DBDMA_CHANNEL(config, m_dma_ata1, 0);
+	DBDMA_CHANNEL(config, m_dma_ata1);
 	m_dma_ata1->irq_callback().set(FUNC(macio_device::set_irq_line<3>));
 }
 
@@ -195,7 +195,7 @@ void macio_device::config_map(address_map &map)
 //  macio_device - constructor
 //-------------------------------------------------
 
-macio_device::macio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+macio_device::macio_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	pci_device(mconfig, type, tag, owner, clock),
 	write_irq(*this),
 	write_pb4(*this),
@@ -223,13 +223,13 @@ macio_device::macio_device(const machine_config &mconfig, device_type type, cons
 	m_toggle = 0;
 }
 
-grandcentral_device::grandcentral_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+grandcentral_device::grandcentral_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	macio_device(mconfig, GRAND_CENTRAL, tag, owner, clock),
 	m_dma_scsi1(*this, "dma_scsi1")
 {
 }
 
-ohare_device::ohare_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+ohare_device::ohare_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	macio_device(mconfig, type, tag, owner, clock),
 	device_nvram_interface(mconfig, *this),
 	m_dma_ata0(*this, "dma_ata0"),
@@ -237,22 +237,22 @@ ohare_device::ohare_device(const machine_config &mconfig, device_type type, cons
 {
 }
 
-ohare_device::ohare_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+ohare_device::ohare_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ohare_device(mconfig, OHARE, tag, owner, clock)
 {
 }
 
-heathrow_device::heathrow_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+heathrow_device::heathrow_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: ohare_device(mconfig, type, tag, owner, clock)
 {
 }
 
-heathrow_device::heathrow_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+heathrow_device::heathrow_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: ohare_device(mconfig, HEATHROW, tag, owner, clock)
 {
 }
 
-paddington_device::paddington_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+paddington_device::paddington_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: heathrow_device(mconfig, PADDINGTON, tag, owner, clock)
 {
 }
@@ -419,13 +419,13 @@ void macio_device::via_sync()
 	u64 cycle = m_maincpu->total_cycles();
 
 	// Get the number of the cycle the via is in at that time
-	u64 via_cycle = cycle * m_via1->clock() / m_maincpu->clock();
+	u64 via_cycle = cycle * m_via1->clock().value() / m_maincpu->clock().value();
 
 	// The access is going to start at via_cycle+1 and end at
 	// via_cycle+1.5, compute what that means in maincpu cycles (the
 	// +1 rounds up, since the clocks are too different to ever be
 	// synced).
-	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock() / (2 * m_via1->clock()) + 1;
+	u64 main_cycle = (via_cycle * 2 + 3) * m_maincpu->clock().value() / (2 * m_via1->clock().value()) + 1;
 
 	// Finally adjust the main cpu icount as needed.
 	m_maincpu->adjust_icount(-int(main_cycle - cycle));

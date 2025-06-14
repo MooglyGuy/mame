@@ -56,10 +56,10 @@ class lcpds_cv8lc_device : public device_t,
 {
 public:
 	// construction/destruction
-	lcpds_cv8lc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	lcpds_cv8lc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	lcpds_cv8lc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	lcpds_cv8lc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	required_device<tms34061_device> m_tms34061;
 	required_device<screen_device> m_screen;
@@ -107,12 +107,12 @@ INPUT_PORTS_END
 void lcpds_cv8lc_device::device_add_mconfig(machine_config &config)
 {
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(80'000'000, 1312, 0, 1024, 802, 0, 768);
+	m_screen->set_raw(XTAL::u(80'000'000), 1312, 0, 1024, 802, 0, 768);
 	m_screen->set_screen_update(FUNC(lcpds_cv8lc_device::screen_update));
 
 	PALETTE(config, m_palette).set_entries(256);
 
-	TMS34061(config, m_tms34061, 0);
+	TMS34061(config, m_tms34061);
 	m_tms34061->set_rowshift(10); // VRAM address is (row << rowshift) | col
 	m_tms34061->set_vram_size(0xc0000);
 	m_tms34061->set_screen(m_screen);
@@ -133,12 +133,12 @@ ioport_constructor lcpds_cv8lc_device::device_input_ports() const
 //  LIVE DEVICE
 //**************************************************************************
 
-lcpds_cv8lc_device::lcpds_cv8lc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+lcpds_cv8lc_device::lcpds_cv8lc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	lcpds_cv8lc_device(mconfig, PDSLC_COLORVUE8LC, tag, owner, clock)
 {
 }
 
-lcpds_cv8lc_device::lcpds_cv8lc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+lcpds_cv8lc_device::lcpds_cv8lc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_tms34061(*this, "tms34061"),

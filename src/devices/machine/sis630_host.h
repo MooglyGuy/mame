@@ -12,10 +12,9 @@
 class sis630_host_device : public pci_host_device
 {
 public:
-	template <typename T> sis630_host_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock,
-		T &&cpu_tag, int ram_size
-	) : sis630_host_device(mconfig, tag, owner, clock)
+	template <typename T>
+	sis630_host_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, int ram_size)
+		: sis630_host_device(mconfig, tag, owner)
 	{
 		// Revision 1 -> A1
 		set_ids(0x10390630, 0x01, 0x060000, 0x00);
@@ -24,7 +23,7 @@ public:
 		set_ram_size(ram_size);
 	}
 
-	sis630_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
+	sis630_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	void set_ram_size(int ram_size) { m_ram_size = ram_size; }
 
 

@@ -10,7 +10,7 @@
 
 DEFINE_DEVICE_TYPE(TC9223, tc9223_device, "tc9223", "TC9223P/F frequency synthesizer")
 
-tc9223_device::tc9223_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+tc9223_device::tc9223_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TC9223, tag, owner, clock)
 {
 }

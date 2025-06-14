@@ -71,7 +71,7 @@ ioport_constructor bbc_quinkey_device::device_input_ports() const
 //  bbc_quinkey_intf_device - constructor
 //-------------------------------------------------
 
-bbc_quinkey_intf_device::bbc_quinkey_intf_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_quinkey_intf_device::bbc_quinkey_intf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BBC_QUINKEY_INTF, tag, owner, clock)
 	, device_bbc_analogue_interface(mconfig, *this)
 	, m_quinkey(*this, "%u", 1)
@@ -109,7 +109,7 @@ device_bbc_quinkey_interface::device_bbc_quinkey_interface(const machine_config 
 //  bbc_quinkey_slot_device - constructor
 //-------------------------------------------------
 
-bbc_quinkey_slot_device::bbc_quinkey_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_quinkey_slot_device::bbc_quinkey_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BBC_QUINKEY_SLOT, tag, owner, clock)
 	, device_single_card_slot_interface<device_bbc_quinkey_interface>(mconfig, *this)
 	, m_card(nullptr)
@@ -140,7 +140,7 @@ uint8_t bbc_quinkey_slot_device::read()
 //  bbc_quinkey_device - constructor
 //-------------------------------------------------
 
-bbc_quinkey_device::bbc_quinkey_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_quinkey_device::bbc_quinkey_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BBC_QUINKEY, tag, owner, clock)
 	, device_bbc_quinkey_interface(mconfig, *this)
 	, m_keys(*this, "KEYS")

@@ -25,7 +25,7 @@ Assume Rev. B
 
 DEFINE_DEVICE_TYPE(GD5446_PCI, cirrus_gd5446_pci_device, "clgd5446_pci", "Cirrus Logic GD5446 card")
 
-cirrus_gd5446_pci_device::cirrus_gd5446_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+cirrus_gd5446_pci_device::cirrus_gd5446_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, GD5446_PCI, tag, owner, clock)
 	, m_vga(*this, "svga")
 	, m_vga_rom(*this, "vga_rom")
@@ -58,7 +58,7 @@ void cirrus_gd5446_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_vga, FUNC(cirrus_gd5446_vga_device::screen_update));
 
-	CIRRUS_GD5446_VGA(config, m_vga, 0);
+	CIRRUS_GD5446_VGA(config, m_vga);
 	m_vga->set_screen("screen");
 	// 1MB or 2MB, max 4MB
 	m_vga->set_vram_size(4*1024*1024);

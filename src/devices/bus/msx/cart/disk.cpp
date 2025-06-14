@@ -178,7 +178,7 @@ public:
 	virtual std::error_condition initialize_cartridge(std::string &message) override;
 
 protected:
-	msx_cart_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int fdc_regs_start_page, int fdc_regs_end_page)
+	msx_cart_disk_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int fdc_regs_start_page, int fdc_regs_end_page)
 		: device_t(mconfig, type, tag, owner, clock)
 		, msx_cart_interface(mconfig, *this)
 		, m_floppy0(*this, "fdc:0")
@@ -266,7 +266,7 @@ void msx_cart_disk_device::add_floppy_mconfig(machine_config &config)
 class disk_tc8566_device : public msx_cart_disk_device
 {
 protected:
-	disk_tc8566_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+	disk_tc8566_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: msx_cart_disk_device(mconfig, type, tag, owner, clock, PAGE1, PAGE2)
 		, m_fdc(*this, "fdc")
 	{ }
@@ -279,7 +279,7 @@ protected:
 class disk_wd_device : public msx_cart_disk_device
 {
 protected:
-	disk_wd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int fdc_regs_start_page = PAGE1, int fdc_regs_end_page = PAGE2)
+	disk_wd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int fdc_regs_start_page = PAGE1, int fdc_regs_end_page = PAGE2)
 		: msx_cart_disk_device(mconfig, type, tag, owner, clock, fdc_regs_start_page, fdc_regs_end_page)
 		, m_fdc(*this, "fdc")
 	{ }
@@ -313,7 +313,7 @@ public:
 	virtual std::error_condition initialize_cartridge(std::string &message) override;
 
 protected:
-	disk_type1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int fdc_regs_start_page = PAGE1, int fdc_regs_end_page = PAGE2)
+	disk_type1_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int fdc_regs_start_page = PAGE1, int fdc_regs_end_page = PAGE2)
 		: disk_wd_device(mconfig, type, tag, owner, clock, fdc_regs_start_page, fdc_regs_end_page)
 		, m_led(*this, "led0")
 		, m_side_control(0)
@@ -442,7 +442,7 @@ u8 disk_type1_device::status_r()
 class fd051_device : public disk_type1_device
 {
 public:
-	fd051_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	fd051_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_FD051, tag, owner, clock, PAGE0, PAGE3)
 	{ }
 
@@ -458,7 +458,7 @@ protected:
 class fsfd1_device : public disk_type1_device
 {
 public:
-	fsfd1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	fsfd1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_FSFD1, tag, owner, clock)
 	{ }
 
@@ -474,7 +474,7 @@ protected:
 class hb3600_device : public disk_type1_device
 {
 public:
-	hb3600_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	hb3600_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_HB3600, tag, owner, clock)
 	{ }
 
@@ -490,7 +490,7 @@ protected:
 class hbd20w_device : public disk_type1_device
 {
 public:
-	hbd20w_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	hbd20w_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_HBD20W, tag, owner, clock)
 	{ }
 
@@ -506,7 +506,7 @@ protected:
 class hbd50_device : public disk_type1_device
 {
 public:
-	hbd50_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	hbd50_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_HBD50, tag, owner, clock, PAGE0, PAGE3)
 	{ }
 
@@ -522,7 +522,7 @@ protected:
 class hbdf1_device : public disk_type1_device
 {
 public:
-	hbdf1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	hbdf1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_HBDF1, tag, owner, clock)
 	{ }
 
@@ -538,7 +538,7 @@ protected:
 class ml30dc_device : public disk_type1_device
 {
 public:
-	ml30dc_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	ml30dc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_ML30DC, tag, owner, clock)
 	{ }
 
@@ -556,7 +556,7 @@ protected:
 class nms1200_device : public disk_type1_device
 {
 public:
-	nms1200_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	nms1200_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_NMS1200, tag, owner, clock)
 	{ }
 
@@ -572,7 +572,7 @@ protected:
 class vy0010_device : public disk_type1_device
 {
 public:
-	vy0010_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	vy0010_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type1_device(mconfig, MSX_CART_VY0010, tag, owner, clock)
 	{ }
 
@@ -591,7 +591,7 @@ public:
 	virtual std::error_condition initialize_cartridge(std::string &message) override;
 
 protected:
-	disk_type2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int fdc_regs_start_page = PAGE1, int fdc_regs_end_page = PAGE2)
+	disk_type2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int fdc_regs_start_page = PAGE1, int fdc_regs_end_page = PAGE2)
 		: disk_wd_device(mconfig, type, tag, owner, clock, fdc_regs_start_page, fdc_regs_end_page)
 		, m_led(*this, "led0")
 		, m_control(0)
@@ -690,7 +690,7 @@ u8 disk_type2_device::status_r()
 class fscf351_device : public disk_type2_device
 {
 public:
-	fscf351_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	fscf351_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type2_device(mconfig, MSX_CART_FSCF351, tag, owner, clock)
 	{ }
 
@@ -706,7 +706,7 @@ protected:
 class tadpf550_device : public disk_type2_device
 {
 public:
-	tadpf550_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	tadpf550_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type2_device(mconfig, MSX_CART_TADPF550, tag, owner, clock)
 	{ }
 
@@ -726,7 +726,7 @@ public:
 	virtual std::error_condition initialize_cartridge(std::string &message) override;
 
 protected:
-	disk_type5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+	disk_type5_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_wd_device(mconfig, type, tag, owner, clock)
 		, m_control(0)
 	{ }
@@ -811,7 +811,7 @@ u8 disk_type5_device::status_r()
 class cdx2_device : public disk_type5_device
 {
 public:
-	cdx2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	cdx2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type5_device(mconfig, MSX_CART_CDX2, tag, owner, clock)
 	{ }
 
@@ -826,7 +826,7 @@ protected:
 class ddx3_device : public disk_type5_device
 {
 public:
-	ddx3_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	ddx3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_type5_device(mconfig, MSX_CART_DDX3, tag, owner, clock)
 	{ }
 
@@ -842,7 +842,7 @@ protected:
 class fsfd1a_device : public disk_tc8566_device
 {
 public:
-	fsfd1a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	fsfd1a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_tc8566_device(mconfig, MSX_CART_FSFD1A, tag, owner, clock)
 	{ }
 
@@ -853,7 +853,7 @@ protected:
 	virtual void device_start() override { }
 	virtual void device_add_mconfig(machine_config &config) override
 	{
-		TC8566AF(config, m_fdc, 16'000'000);
+		TC8566AF(config, m_fdc, XTAL::u(16'000'000));
 		add_floppy_mconfig<F35, DS>(config);
 	}
 };
@@ -883,7 +883,7 @@ std::error_condition fsfd1a_device::initialize_cartridge(std::string &message)
 class fd03_device : public disk_wd_device
 {
 public:
-	fd03_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	fd03_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_wd_device(mconfig, MSX_CART_FD03, tag, owner, clock)
 		, m_led(*this, "led0")
 		, m_control(0)
@@ -1033,7 +1033,7 @@ void fd03_device::dskchg_w(u8 data)
 class hxf101pe_device : public disk_wd_device
 {
 public:
-	hxf101pe_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	hxf101pe_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_wd_device(mconfig, MSX_CART_HXF101PE, tag, owner, clock, PAGE1, PAGE1)
 		, m_side_motor(0)
 		, m_drive_select0(0)
@@ -1188,7 +1188,7 @@ void hxf101pe_device::select1_w(u8 data)
 class mfd001_device : public disk_wd_device
 {
 public:
-	mfd001_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	mfd001_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_wd_device(mconfig, MSX_CART_MFD001, tag, owner, clock)
 		, m_control(0)
 	{ }
@@ -1291,7 +1291,7 @@ void mfd001_device::control_w(u8 data)
 class avdpf550_device : public disk_wd_device
 {
 public:
-	avdpf550_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	avdpf550_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: disk_wd_device(mconfig, MSX_CART_AVDPF550, tag, owner, clock)
 		, m_control(0)
 	{ }

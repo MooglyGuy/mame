@@ -51,7 +51,7 @@ public:
 		MODE_SEPARATE = 2
 	};
 
-	swx00_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u8 mode = 0);
+	swx00_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, u8 mode = 0);
 
 	auto read_pdt()    { return m_read_pdt.bind(); }
 	auto write_pdt()   { return m_write_pdt.bind(); }

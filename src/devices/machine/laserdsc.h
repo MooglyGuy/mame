@@ -348,7 +348,7 @@ public:
 	virtual int ready_r() { return ASSERT_LINE; }
 
 protected:
-	parallel_laserdisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock = 0);
+	parallel_laserdisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void player_overlay(bitmap_yuy16 &bitmap) override { }
 };

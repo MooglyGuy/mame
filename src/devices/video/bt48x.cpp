@@ -35,18 +35,18 @@
 DEFINE_DEVICE_TYPE(BT481, bt481_device, "bt481", "Brooktree Bt481 RAMDAC")
 DEFINE_DEVICE_TYPE(BT482, bt482_device, "bt482", "Brooktree Bt482 RAMDAC")
 
-bt481_device::bt481_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+bt481_device::bt481_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_palette_interface(mconfig, *this)
 {
 }
 
-bt481_device::bt481_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+bt481_device::bt481_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bt481_device(mconfig, BT481, tag, owner, clock)
 {
 }
 
-bt482_device::bt482_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+bt482_device::bt482_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	bt481_device(mconfig, BT482, tag, owner, clock)
 {
 }

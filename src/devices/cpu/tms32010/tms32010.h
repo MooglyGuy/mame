@@ -186,7 +186,7 @@ class tms32010_device : public tms3201x_base_device<12>
 {
 public:
 	// construction/destruction
-	tms32010_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tms32010_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

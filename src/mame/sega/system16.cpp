@@ -2619,7 +2619,7 @@ void segas1x_bootleg_state::bloxeedbl(machine_config &config)
 
 	MCFG_VIDEO_START_OVERRIDE(segas1x_bootleg_state, system16)
 
-	SEGA_SYS16B_SPRITES(config, m_sprites, 0);
+	SEGA_SYS16B_SPRITES(config, m_sprites);
 	m_sprites->set_local_originx(64);
 
 	GENERIC_LATCH_8(config, m_soundlatch);

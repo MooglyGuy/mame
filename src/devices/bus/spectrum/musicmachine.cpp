@@ -22,7 +22,7 @@ class spectrum_musicmachine_device  : public device_t, public device_spectrum_ex
 {
 public:
 	// construction/destruction
-	spectrum_musicmachine_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	spectrum_musicmachine_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	void write_acia_clock(u8 data);
 
@@ -50,11 +50,11 @@ void spectrum_musicmachine_device::device_add_mconfig(machine_config &config)
 	m_acia->irq_handler().set(DEVICE_SELF_OWNER, FUNC(spectrum_expansion_slot_device::nmi_w));
 	MIDI_PORT(config, "mdin", midiin_slot, "midiin").rxd_handler().set(m_acia, FUNC(acia6850_device::write_rxd));
 	MIDI_PORT(config, "mdout", midiout_slot, "midiout");
-	clock_device &acia_clock(CLOCK(config, "acia_clock", 31250*16));
+	clock_device &acia_clock(CLOCK(config, "acia_clock", XTAL::u(31250)*16));
 	acia_clock.signal_handler().set(FUNC(spectrum_musicmachine_device::write_acia_clock));
 
 	SPEAKER(config, "speaker").front_center();
-	ZN429E(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.2);
+	ZN429E(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.2);
 }
 
 
@@ -62,7 +62,7 @@ void spectrum_musicmachine_device::device_add_mconfig(machine_config &config)
 //  LIVE DEVICE
 //**************************************************************************
 
-spectrum_musicmachine_device::spectrum_musicmachine_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+spectrum_musicmachine_device::spectrum_musicmachine_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SPECTRUM_MUSICMACHINE, tag, owner, clock)
 	, device_spectrum_expansion_interface(mconfig, *this)
 	, m_acia(*this,"acia")

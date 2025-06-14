@@ -12,7 +12,7 @@
 class m50dass_device : public device_t
 {
 public:
-	m50dass_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	m50dass_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	void m50dass(machine_config &config) ATTR_COLD;
 
 protected:

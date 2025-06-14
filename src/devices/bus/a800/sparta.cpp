@@ -168,7 +168,7 @@ void a800_rom_spartados_device::subslot_w(offs_t offset, u8 data)
 
  -------------------------------------------------*/
 
-a800_rom_spartados_128kb_device::a800_rom_spartados_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_spartados_128kb_device::a800_rom_spartados_128kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_spartados_device(mconfig, A800_ROM_SPARTADOS_128KB, tag, owner, clock)
 {
 }

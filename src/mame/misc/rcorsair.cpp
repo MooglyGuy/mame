@@ -190,13 +190,13 @@ void rcorsair_state::rcorsair(machine_config &config)
 	GFXDECODE(config, "gfxdecode", "palette", gfx_rcorsair);
 	PALETTE(config, "palette").set_entries(0x100);
 
-	HD6845S(config, "crtc", 8000000 / 8).set_screen("screen");
+	HD6845S(config, "crtc", XTAL::u(8000000) / 8).set_screen("screen");
 
 	SPEAKER(config, "speaker").front_center();
 
-	AY8910(config, "ay1", 8000000 / 8).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	AY8910(config, "ay1", XTAL::u(8000000) / 8).add_route(ALL_OUTPUTS, "speaker", 0.5);
 
-	AY8910(config, "ay2", 8000000 / 8).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	AY8910(config, "ay2", XTAL::u(8000000) / 8).add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
 ROM_START( rcorsair )

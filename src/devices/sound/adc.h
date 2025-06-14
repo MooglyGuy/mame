@@ -11,7 +11,7 @@
 class zn449_device : public device_t, public device_sound_interface
 {
 public:
-	zn449_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	zn449_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	u8 read();
 
 protected:
@@ -25,7 +25,7 @@ protected:
 class adc10_device : public device_t, public device_sound_interface
 {
 public:
-	adc10_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	adc10_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	u16 read();
 
 protected:

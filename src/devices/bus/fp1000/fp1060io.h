@@ -14,7 +14,7 @@ class fp1060io_device : public fp1000_exp_device
 //, public device_single_card_slot_interface<device_fp1060io_slot_interface>
 {
 public:
-	fp1060io_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fp1060io_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cs_w(offs_t offset, u8 data) override;
 	virtual u8 id_r(offs_t offset) override;

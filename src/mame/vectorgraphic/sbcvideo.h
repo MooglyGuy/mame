@@ -12,7 +12,7 @@
 class vector_sbc_video_device : public device_t
 {
 public:
-	vector_sbc_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	vector_sbc_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	template <typename T> void set_buffer(T &&tag) { m_buffer.set_tag(std::forward<T>(tag)); }
 	template <typename T> void set_chrroml(T &&tag) { m_chrroml.set_tag(std::forward<T>(tag)); }

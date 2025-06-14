@@ -1858,7 +1858,7 @@ void a2000_state::a2000(machine_config &config)
 	m_cpuslot->ipl7_cb().set([this](int state) { m_maincpu->set_input_line(7, state); });
 
 	// zorro2 slots
-	ZORRO2_BUS(config, m_zorro, 0);
+	ZORRO2_BUS(config, m_zorro);
 	m_zorro->int2_handler().set(FUNC(a2000_state::zorro2_int2_w));
 	m_zorro->int6_handler().set(FUNC(a2000_state::zorro2_int6_w));
 	ZORRO2_SLOT(config, "zorro2:1", zorro2_cards, nullptr);

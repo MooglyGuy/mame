@@ -139,7 +139,7 @@ void abc99_device::mouse_mem(address_map &map)
 void abc99_device::device_add_mconfig(machine_config &config)
 {
 	// keyboard CPU
-	I8035(config, m_maincpu, 0); // from Z5 T0 output
+	I8035(config, m_maincpu, XTAL()); // from Z5 T0 output
 	m_maincpu->set_addrmap(AS_PROGRAM, &abc99_device::keyboard_mem);
 	m_maincpu->set_addrmap(AS_IO, &abc99_device::keyboard_io);
 	m_maincpu->p1_out_cb().set(FUNC(abc99_device::z2_p1_w));
@@ -152,14 +152,14 @@ void abc99_device::device_add_mconfig(machine_config &config)
 	m_mousecpu->set_addrmap(AS_PROGRAM, &abc99_device::mouse_mem);
 	m_mousecpu->p1_in_cb().set(FUNC(abc99_device::z5_p1_r));
 	m_mousecpu->p2_out_cb().set(FUNC(abc99_device::z5_p2_w));
-	m_mousecpu->set_t0_clk_cb(I8035_Z2_TAG, FUNC(device_t::set_unscaled_clock_int));
+	m_mousecpu->set_t0_clk_cb(I8035_Z2_TAG, FUNC(device_t::set_unscaled_clock_ns));
 	m_mousecpu->t1_in_cb().set(FUNC(abc99_device::z5_t1_r));
 
 	// watchdog
 	WATCHDOG_TIMER(config, m_watchdog).set_time(attotime::from_hz(0));
 
 	// mouse
-	LUXOR_R8(config, m_mouse, 0);
+	LUXOR_R8(config, m_mouse);
 
 	// sound hardware
 	SPEAKER(config, "mono").front_center();

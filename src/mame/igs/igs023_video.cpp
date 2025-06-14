@@ -31,7 +31,7 @@ constexpr bool get_flipx(u8 flip) { return BIT(flip, 0); }
 
 DEFINE_DEVICE_TYPE(IGS023_VIDEO, igs023_video_device, "igs023", "IGS023 Video System")
 
-igs023_video_device::igs023_video_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+igs023_video_device::igs023_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IGS023_VIDEO, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this, gfxinfo)
 	, m_gfx_region(*this, DEVICE_SELF)

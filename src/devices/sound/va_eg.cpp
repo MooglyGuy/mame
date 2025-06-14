@@ -10,7 +10,7 @@ static constexpr const float TIME_CONSTANTS_TO_END = 10;
 
 DEFINE_DEVICE_TYPE(VA_RC_EG, va_rc_eg_device, "va_rc_eg", "RC-based Envelope Generator")
 
-va_rc_eg_device::va_rc_eg_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+va_rc_eg_device::va_rc_eg_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VA_RC_EG, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
@@ -89,7 +89,7 @@ float va_rc_eg_device::get_v() const
 
 void va_rc_eg_device::device_start()
 {
-	m_stream = stream_alloc(0, 1, SAMPLE_RATE_OUTPUT_ADAPTIVE);
+	m_stream = stream_alloc(0, 1, XTAL(), SAMPLE_RATE_OUTPUT_ADAPTIVE);
 	save_item(NAME(m_r));
 	save_item(NAME(m_c));
 	save_item(NAME(m_rc_inv));

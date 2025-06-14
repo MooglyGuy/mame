@@ -15,7 +15,7 @@ class a800_supercharger_device : public device_t,
 								 public device_a800_cart_interface
 {
 public:
-	a800_supercharger_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	a800_supercharger_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
 

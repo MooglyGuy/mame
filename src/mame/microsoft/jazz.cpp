@@ -311,7 +311,7 @@ void jazz_state::jazz(machine_config &config)
 	NSCSI_CONNECTOR(config, "scsi:6", jazz_scsi_devices, "cdrom");
 
 	// scsi host adapter
-	NSCSI_CONNECTOR(config, "scsi:7").option_set("ncr53cf94", NCR53CF94).clock(40000000).machine_config(
+	NSCSI_CONNECTOR(config, "scsi:7").option_set("ncr53cf94", NCR53CF94).clock(XTAL::u(40000000)).machine_config(
 		[this] (device_t *device)
 		{
 			ncr53cf94_device &adapter = downcast<ncr53cf94_device &>(*device);

@@ -11,8 +11,8 @@
 class a800_rom_phoenix_device : public a800_rom_device
 {
 public:
-	a800_rom_phoenix_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	a800_rom_phoenix_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_phoenix_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	a800_rom_phoenix_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
@@ -30,7 +30,7 @@ protected:
 class a800_rom_blizzard_16kb_device : public a800_rom_phoenix_device
 {
 public:
-	a800_rom_blizzard_16kb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_blizzard_16kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 	virtual std::tuple<int, int> get_initial_rd_state() override { return std::make_tuple(1, 1); }
@@ -45,7 +45,7 @@ protected:
 class a800_rom_phoenix_ast2k_device : public a800_rom_phoenix_device
 {
 	public:
-	a800_rom_phoenix_ast2k_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_phoenix_ast2k_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 

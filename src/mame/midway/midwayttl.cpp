@@ -29,7 +29,7 @@ namespace {
 
 // TODO: just a placeholder, everything needs to be updated
 
-#define MASTER_CLOCK    7159000
+#define MASTER_CLOCK    XTAL::u(7159000)
 #define V_TOTAL         (0x105+1)       // 262
 #define H_TOTAL         (0x1C6+1)       // 454
 
@@ -74,7 +74,7 @@ static NETLIST_START(midwayttl) // TODO: just a placeholder, everything needs to
 void midwayttl_state::midwayttl(machine_config &config)
 {
 	// basic machine hardware
-	NETLIST_CPU(config, m_maincpu, netlist::config::DEFAULT_CLOCK()).set_source(netlist_midwayttl);
+	NETLIST_CPU(config, m_maincpu, XTAL::u(netlist::config::DEFAULT_CLOCK())).set_source(netlist_midwayttl);
 
 	// video hardware
 	SCREEN(config, "screen", SCREEN_TYPE_RASTER); // TODO: just a placeholder, everything needs to be updated

@@ -9,7 +9,7 @@
 class pc_joy_magnum6_device : public pc_basic_joy_device
 {
 public:
-	pc_joy_magnum6_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	pc_joy_magnum6_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	static constexpr feature_type imperfect_features() { return feature::CONTROLS; }
 

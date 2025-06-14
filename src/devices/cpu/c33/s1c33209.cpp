@@ -18,7 +18,7 @@ s1c33209_device::s1c33209_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock,
+		const XTAL &clock,
 		address_map_constructor internal_map) :
 	c33std_cpu_device_base(mconfig, type, tag, owner, clock, internal_map)
 {
@@ -28,7 +28,7 @@ s1c33209_device::s1c33209_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	s1c33209_device(
 			mconfig,
 			S1C33209,
@@ -43,7 +43,7 @@ s1c33221_device::s1c33221_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	s1c33209_device(
 			mconfig,
 			S1C33221,
@@ -58,7 +58,7 @@ s1c33222_device::s1c33222_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	s1c33209_device(
 			mconfig,
 			S1C33222,

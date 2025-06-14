@@ -6,7 +6,7 @@
 
 DEFINE_DEVICE_TYPE(MSX_KANJI12, msx_kanji12_device, "msx_kanji12", "MSX Kanji12")
 
-msx_kanji12_device::msx_kanji12_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_kanji12_device::msx_kanji12_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_KANJI12, tag, owner, clock)
 	, m_rom_region(*this, finder_base::DUMMY_TAG)
 	, m_selected(false)

@@ -59,7 +59,7 @@ ioport_constructor pccard_sram_device::device_input_ports() const
 //  pccard_sram_device - constructor
 //-------------------------------------------------
 
-pccard_sram_device::pccard_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+pccard_sram_device::pccard_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_memory_interface(mconfig, *this),
 	device_image_interface(mconfig, *this),
@@ -189,7 +189,7 @@ void pccard_sram_device::write_protect_w(int state)
 
 ***************************************************************************/
 
-pccard_mitsubishi_sram_device::pccard_mitsubishi_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+pccard_mitsubishi_sram_device::pccard_mitsubishi_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	pccard_sram_device(mconfig, type, tag, owner, clock),
 	m_sram(*this, "sram")
 {
@@ -238,7 +238,7 @@ void pccard_mitsubishi_sram_device::call_unload()
 	set_cd(1);
 }
 
-pccard_mitsubishi_mf31m1_lycat01_device::pccard_mitsubishi_mf31m1_lycat01_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pccard_mitsubishi_mf31m1_lycat01_device::pccard_mitsubishi_mf31m1_lycat01_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	pccard_mitsubishi_sram_device(mconfig, PCCARD_SRAM_MITSUBISHI_1M, tag, owner, clock)
 {
 	m_memory_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 16, 20, 0, address_map_constructor(FUNC(pccard_mitsubishi_mf31m1_lycat01_device::memory_map), this));
@@ -269,7 +269,7 @@ void pccard_mitsubishi_mf31m1_lycat01_device::memory_map(address_map &map)
 
 ***************************************************************************/
 
-pccard_centennial_sram_device::pccard_centennial_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock) :
+pccard_centennial_sram_device::pccard_centennial_sram_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	pccard_sram_device(mconfig, type, tag, owner, clock),
 	m_sram(*this, "sram"),
 	m_eeprom(*this, "eeprom"),
@@ -331,7 +331,7 @@ void pccard_centennial_sram_device::call_unload()
 	set_cd(1);
 }
 
-pccard_centennial_sl01m_15_11194_device::pccard_centennial_sl01m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pccard_centennial_sl01m_15_11194_device::pccard_centennial_sl01m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	pccard_centennial_sram_device(mconfig, PCCARD_SRAM_CENTENNIAL_1M, tag, owner, clock)
 {
 	m_memory_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 16, 20, 0, address_map_constructor(FUNC(pccard_centennial_sl01m_15_11194_device::memory_map), this));
@@ -358,7 +358,7 @@ const tiny_rom_entry *pccard_centennial_sl01m_15_11194_device::device_rom_region
 	return ROM_NAME( eeprom_01 );
 }
 
-pccard_centennial_sl02m_15_11194_device::pccard_centennial_sl02m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pccard_centennial_sl02m_15_11194_device::pccard_centennial_sl02m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	pccard_centennial_sram_device(mconfig, PCCARD_SRAM_CENTENNIAL_2M, tag, owner, clock)
 {
 	m_memory_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 16, 21, 0, address_map_constructor(FUNC(pccard_centennial_sl02m_15_11194_device::memory_map), this));
@@ -385,7 +385,7 @@ const tiny_rom_entry *pccard_centennial_sl02m_15_11194_device::device_rom_region
 	return ROM_NAME( eeprom_02 );
 }
 
-pccard_centennial_sl04m_15_11194_device::pccard_centennial_sl04m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pccard_centennial_sl04m_15_11194_device::pccard_centennial_sl04m_15_11194_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	pccard_centennial_sram_device(mconfig, PCCARD_SRAM_CENTENNIAL_4M, tag, owner, clock)
 {
 	m_memory_space_config = address_space_config("memory", ENDIANNESS_LITTLE, 16, 22, 0, address_map_constructor(FUNC(pccard_centennial_sl04m_15_11194_device::memory_map), this));

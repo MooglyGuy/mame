@@ -34,7 +34,7 @@ i82439hx_host_device::i82439hx_host_device(const machine_config &mconfig, device
 {
 }
 
-i82439hx_host_device::i82439hx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82439hx_host_device::i82439hx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: i82439hx_host_device(mconfig, I82439HX, tag, owner, clock)
 {
 	set_ids_host(0x80861250, 0x03, 0x00000000);

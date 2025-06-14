@@ -144,12 +144,12 @@ inline int exidy_sound_device::sh6840_update_noise(int clocks)
 
 DEFINE_DEVICE_TYPE(EXIDY, exidy_sound_device, "exidy_sfx", "Exidy SFX")
 
-exidy_sound_device::exidy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+exidy_sound_device::exidy_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: exidy_sound_device(mconfig, EXIDY, tag, owner, clock)
 {
 }
 
-exidy_sound_device::exidy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+exidy_sound_device::exidy_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_stream(nullptr)
@@ -170,7 +170,7 @@ exidy_sound_device::~exidy_sound_device()
 {
 }
 
-exidy_sh8253_sound_device::exidy_sh8253_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+exidy_sh8253_sound_device::exidy_sh8253_sound_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: exidy_sound_device(mconfig, type, tag, owner, clock)
 	, m_riot(*this, "riot")
 	, m_pia(*this, "pia")
@@ -211,9 +211,9 @@ void exidy_sh8253_sound_device::device_add_mconfig(machine_config &config)
 
 void exidy_sound_device::device_start()
 {
-	int sample_rate = SH8253_CLOCK.value();
+	const XTAL sample_rate = SH8253_CLOCK;
 
-	m_sh6840_clocks_per_sample = int(SH6840_CLOCK.dvalue() / double(sample_rate) * double(1 << 24));
+	m_sh6840_clocks_per_sample = int(SH6840_CLOCK.dvalue() / sample_rate.dvalue() * double(1 << 24));
 
 	// allocate the stream
 	m_stream = stream_alloc(0, 1, sample_rate);
@@ -724,7 +724,7 @@ void mtrap_sound_device::device_add_mconfig(machine_config &config)
 
 DEFINE_DEVICE_TYPE(EXIDY_VICTORY, victory_sound_device, "victory_sound", "Exidy SFX+PSG+Speech")
 
-victory_sound_device::victory_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+victory_sound_device::victory_sound_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: exidy_sh8253_sound_device(mconfig, EXIDY_VICTORY, tag, owner, clock)
 	, m_tms(*this, "tms")
 	, m_sound_response_ack_clk(0)

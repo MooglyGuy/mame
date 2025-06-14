@@ -17,13 +17,13 @@ public:
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
 	// construction/destruction
-	tseng_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tseng_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual uint8_t mem_r(offs_t offset) override;
 	virtual void mem_w(offs_t offset, uint8_t data) override;
 
 protected:
-	tseng_vga_device(const machine_config &mconfig, const char *tag, device_type type, device_t *owner, uint32_t clock);
+	tseng_vga_device(const machine_config &mconfig, const char *tag, device_type type, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 
@@ -67,7 +67,7 @@ public:
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
 	// construction/destruction
-	et4kw32i_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	et4kw32i_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	u8 acl_index_r(offs_t offset);
 	void acl_index_w(offs_t offset, u8 data);

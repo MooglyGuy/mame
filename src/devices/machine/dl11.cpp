@@ -71,7 +71,7 @@ dl11_device::dl11_device(const machine_config &mconfig, device_type type, const 
 {
 }
 
-dl11_device::dl11_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dl11_device::dl11_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: dl11_device(mconfig, DL11, tag, owner, clock)
 {
 }
@@ -362,7 +362,7 @@ int dl11_device::txrdy_r()
 //  k1801vp065_device - constructor
 //-------------------------------------------------
 
-k1801vp065_device::k1801vp065_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+k1801vp065_device::k1801vp065_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: dl11_device(mconfig, K1801VP065, tag, owner, clock)
 	, m_write_rts(*this)
 {

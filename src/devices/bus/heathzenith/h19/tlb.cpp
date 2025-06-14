@@ -114,7 +114,7 @@ static constexpr XTAL H19_BEEP_FRQ     = (H19_CLOCK / 2048);
 
 // Capacitor value in pF
 static constexpr u32 H19_KEY_DEBOUNCE_CAPACITOR = 5000;
-static const     u32 MM5740_CLOCK               = mm5740_device::calc_effective_clock_key_debounce(H19_KEY_DEBOUNCE_CAPACITOR);
+static const     XTAL MM5740_CLOCK              = mm5740_device::calc_effective_clock_key_debounce(H19_KEY_DEBOUNCE_CAPACITOR);
 
 // Keyboard flag masks
 static constexpr u8 KB_STATUS_SHIFT_KEYS_MASK      = 0x01;
@@ -148,12 +148,12 @@ device_heath_tlb_card_interface::device_heath_tlb_card_interface(const machine_c
 /**
  * original Heath H19 functionality
  */
-heath_tlb_device::heath_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_tlb_device::heath_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_TLB, tag, owner, clock)
 {
 }
 
-heath_tlb_device::heath_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+heath_tlb_device::heath_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_heath_tlb_card_interface(mconfig, *this),
 	m_maincpu(*this, "maincpu"),
@@ -1163,7 +1163,7 @@ void heath_tlb_device::device_add_mconfig(machine_config &config)
 	BEEP(config, m_beep, H19_BEEP_FRQ).add_route(ALL_OUTPUTS, "mono", 0.05);
 
 	// clock for repeat key
-	CLOCK(config, m_repeat_clock, 40);
+	CLOCK(config, m_repeat_clock, XTAL::u(40));
 	m_repeat_clock->set_duty_cycle(0);
 	m_repeat_clock->signal_handler().set(m_mm5740, FUNC(mm5740_device::repeat_line_w));
 }
@@ -1174,7 +1174,7 @@ void heath_tlb_device::device_add_mconfig(machine_config &config)
  *
  * Developed by ATG Systems
  */
-heath_super19_tlb_device::heath_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_super19_tlb_device::heath_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_SUPER19, tag, owner, clock)
 {
 }
@@ -1195,7 +1195,7 @@ ioport_constructor heath_super19_tlb_device::device_input_ports() const
  *
  * Developed by TMSI
  */
-heath_superset_tlb_device::heath_superset_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_superset_tlb_device::heath_superset_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_SUPERSET, tag, owner, clock),
 	m_selected_char_set(0)
 {
@@ -1343,7 +1343,7 @@ void heath_superset_tlb_device::out2_internal(int data)
  *
  * Developed by Barry Watzman, sold by HUG (Heath Users Group)
 */
-heath_watz_tlb_device::heath_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_watz_tlb_device::heath_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_WATZ, tag, owner, clock)
 {
 }
@@ -1364,7 +1364,7 @@ ioport_constructor heath_watz_tlb_device::device_input_ports() const
  *
  * Developed by William G. Parrott, III, sold by Software Wizardry, Inc.
  */
-heath_ultra_tlb_device::heath_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_ultra_tlb_device::heath_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_ULTRA, tag, owner, clock),
 	m_maincpu_region(*this, "maincpu"),
 	m_page_2_ram(*this, "page2ram"),
@@ -1414,7 +1414,7 @@ ioport_constructor heath_ultra_tlb_device::device_input_ports() const
 /**
  * Northwest Digital Systems GP-19 add-in board
  */
-heath_gp19_tlb_device::heath_gp19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_gp19_tlb_device::heath_gp19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_GP19, tag, owner, clock)
 {
 }
@@ -1589,7 +1589,7 @@ ioport_constructor heath_gp19_tlb_device::device_input_ports() const
  *   - horizontal retrace interrupt
  *
  */
-heath_imaginator_tlb_device::heath_imaginator_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_imaginator_tlb_device::heath_imaginator_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, HEATH_IMAGINATOR, tag, owner, clock),
 	m_mem_bank(*this,      "membank"),
 	m_p_graphic_ram(*this, "graphicram")
@@ -1813,12 +1813,12 @@ void heath_imaginator_tlb_device::set_irq_line()
  *
  *
  */
-heath_igc_tlb_device::heath_igc_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_igc_tlb_device::heath_igc_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_igc_tlb_device(mconfig, HEATH_IGC, tag, owner, clock)
 {
 }
 
-heath_igc_tlb_device::heath_igc_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+heath_igc_tlb_device::heath_igc_tlb_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_tlb_device(mconfig, type, tag, owner, clock),
 	m_joystick1(*this, "joystick_p1"),
 	m_joystick2(*this, "joystick_p2")
@@ -2058,7 +2058,7 @@ MC6845_UPDATE_ROW(heath_igc_tlb_device::crtc_update_row)
  * SigmaSoft and Systems IGC plus TLB with Super-19 ROM
  *
  */
-heath_igc_super19_tlb_device::heath_igc_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_igc_super19_tlb_device::heath_igc_super19_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_igc_tlb_device(mconfig, HEATH_IGC_SUPER19, tag, owner, clock)
 {
 }
@@ -2078,7 +2078,7 @@ ioport_constructor heath_igc_super19_tlb_device::device_input_ports() const
  * SigmaSoft and Systems IGC plus TLB with UltraROM
  *
  */
-heath_igc_ultra_tlb_device::heath_igc_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_igc_ultra_tlb_device::heath_igc_ultra_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_igc_tlb_device(mconfig, HEATH_IGC_ULTRA, tag, owner, clock),
 	m_maincpu_region(*this, "maincpu"),
 	m_page_2_ram(*this, "page2ram"),
@@ -2129,7 +2129,7 @@ ioport_constructor heath_igc_ultra_tlb_device::device_input_ports() const
  * SigmaSoft and Systems IGC plus TLB with Watzman ROM
  *
  */
-heath_igc_watz_tlb_device::heath_igc_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_igc_watz_tlb_device::heath_igc_watz_tlb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	heath_igc_tlb_device(mconfig, HEATH_IGC_WATZ, tag, owner, clock)
 {
 }
@@ -2149,7 +2149,7 @@ ioport_constructor heath_igc_watz_tlb_device::device_input_ports() const
  * Terminal Logic Board Connector
  *
  */
-heath_tlb_connector::heath_tlb_connector(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_tlb_connector::heath_tlb_connector(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, HEATH_TLB_CONNECTOR, tag, owner, clock),
 	device_single_card_slot_interface(mconfig, *this),
 	m_write_sd(*this),

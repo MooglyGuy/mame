@@ -30,7 +30,7 @@ public:
 	u64 internal_update(u64 current_time);
 
 protected:
-	sh_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	sh_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	required_device<sh7042_device> m_cpu;
 	required_device<sh_intc_device> m_intc;
@@ -90,7 +90,7 @@ protected:
 
 class sh_adc_ms_device : public sh_adc_device {
 public:
-	sh_adc_ms_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_adc_ms_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T, typename U> sh_adc_ms_device(const machine_config &mconfig, const char *tag, device_t *owner,
 												   T &&cpu, U &&intc, int port_base, int vect) :
@@ -106,7 +106,7 @@ public:
 
 class sh_adc_hs_device : public sh_adc_device {
 public:
-	sh_adc_hs_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sh_adc_hs_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	template<typename T, typename U> sh_adc_hs_device(const machine_config &mconfig, const char *tag, device_t *owner,
 												   T &&cpu, U &&intc, int vect) :

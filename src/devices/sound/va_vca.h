@@ -18,7 +18,7 @@
 class va_vca_device : public device_t, public device_sound_interface
 {
 public:
-	va_vca_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0) ATTR_COLD;
+	va_vca_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL()) ATTR_COLD;
 
 	// When streaming is enabled, the CV will be obtained from input 1 of the
 	// sound stream. Otherwise, the value set with `set_fixed_cv` will be used.

@@ -27,7 +27,7 @@
 class dvk_mx_device : public device_t, public device_qbus_card_interface
 {
 public:
-	dvk_mx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	dvk_mx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	uint16_t read(offs_t offset);
 	void write(offs_t offset, uint16_t data);

@@ -9,7 +9,7 @@
 class rf57_932_device : public device_t, public thomson_extension_interface
 {
 public:
-	rf57_932_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	rf57_932_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void rom_map(address_map &map) override ATTR_COLD;
 	virtual void io_map(address_map &map) override ATTR_COLD;

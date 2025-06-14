@@ -196,13 +196,13 @@ void quadra800_state::macqd800(machine_config &config)
 	m_iosb->read_pa4().set_constant(1);
 	m_iosb->read_pa6().set_constant(0);
 
-	APPLE_DFAC(config, m_dfac, 22257);
+	APPLE_DFAC(config, m_dfac, XTAL::u(22257));
 	m_iosb->write_dfac_clock().set(m_dfac, FUNC(dfac_device::clock_write));
 	m_iosb->write_dfac_data().set(m_dfac, FUNC(dfac_device::data_write));
 	m_iosb->write_dfac_latch().set(m_dfac, FUNC(dfac_device::latch_write));
 
 	SCC85C30(config, m_scc, C7M);
-	m_scc->configure_channels(3'686'400, 3'686'400, 3'686'400, 3'686'400);
+	m_scc->configure_channels(XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400), XTAL::u(3'686'400));
 	m_scc->out_int_callback().set(m_iosb, FUNC(iosb_device::scc_irq_w));
 	m_scc->out_txda_callback().set("printer", FUNC(rs232_port_device::write_txd));
 	m_scc->out_txdb_callback().set("modem", FUNC(rs232_port_device::write_txd));

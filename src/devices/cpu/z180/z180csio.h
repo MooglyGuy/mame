@@ -18,7 +18,7 @@
 class z180csio_device : public device_t
 {
 public:
-	z180csio_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	z180csio_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto cks_handler() { return m_cks_cb.bind(); }
 	auto txs_handler() { return m_txs_cb.bind(); }

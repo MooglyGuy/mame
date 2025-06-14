@@ -23,7 +23,7 @@ public:
 	void window_enable_w(u8 data);
 
 protected:
-	williams_blitter_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock = 0);
+	williams_blitter_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void set_clip_address(u16 clip_address) { m_clip_address = clip_address; }
 	void set_size_xor(u32 size_xor) { m_size_xor = size_xor; }
@@ -94,7 +94,7 @@ public:
 		set_proms_tag(std::forward<V>(proms_tag));
 	}
 
-	williams_blitter_sc1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_blitter_sc1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class williams_blitter_sc2_device : public williams_blitter_device {
@@ -120,7 +120,7 @@ public:
 		set_proms_tag(std::forward<V>(proms_tag));
 	}
 
-	williams_blitter_sc2_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	williams_blitter_sc2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 DECLARE_DEVICE_TYPE(WILLIAMS_BLITTER_SC1, williams_blitter_sc1_device)

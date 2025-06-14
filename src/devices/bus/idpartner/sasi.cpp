@@ -21,7 +21,7 @@ class idpartner_sasi_device :
 {
 public:
 	// construction/destruction
-	idpartner_sasi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	idpartner_sasi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation
@@ -48,7 +48,7 @@ private:
 };
 
 
-idpartner_sasi_device::idpartner_sasi_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+idpartner_sasi_device::idpartner_sasi_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, IDPARTNER_SASI, tag, owner, clock)
 	, bus::idpartner::device_exp_card_interface(mconfig, *this)
 	, m_sasibus(*this, "sasibus")

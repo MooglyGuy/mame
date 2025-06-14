@@ -16,7 +16,7 @@ megasys1_gatearray_device::megasys1_gatearray_device(
 		device_type type,
 		char const *tag,
 		device_t *owner,
-		u32 clock)
+		const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_cpu(*this, finder_base::DUMMY_TAG)
 	, m_cpuregion(*this, finder_base::DUMMY_TAG)
@@ -187,36 +187,36 @@ void megasys1_gatearray_device::install_overlay()
 }
 
 
-megasys1_gatearray_d65006_device::megasys1_gatearray_d65006_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+megasys1_gatearray_d65006_device::megasys1_gatearray_d65006_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: megasys1_gatearray_d65006_device(mconfig, MEGASYS1_GATEARRAY_D65006, tag, owner, clock)
 {
 	m_gatearray_seq = jaleco_d65006_unlock_sequence;
 }
 
-megasys1_gatearray_d65006_device::megasys1_gatearray_d65006_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+megasys1_gatearray_d65006_device::megasys1_gatearray_d65006_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: megasys1_gatearray_device(mconfig, type, tag, owner, clock)
 {
 }
 
-megasys1_gatearray_gs88000_device::megasys1_gatearray_gs88000_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+megasys1_gatearray_gs88000_device::megasys1_gatearray_gs88000_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: megasys1_gatearray_gs88000_device(mconfig, MEGASYS1_GATEARRAY_GS88000, tag, owner, clock)
 {
 	m_gatearray_seq = jaleco_gs88000_unlock_sequence;
 }
 
-megasys1_gatearray_gs88000_device::megasys1_gatearray_gs88000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+megasys1_gatearray_gs88000_device::megasys1_gatearray_gs88000_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: megasys1_gatearray_device(mconfig, type, tag, owner, clock)
 {
 }
 
 
-megasys1_gatearray_unkarray_device::megasys1_gatearray_unkarray_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+megasys1_gatearray_unkarray_device::megasys1_gatearray_unkarray_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: megasys1_gatearray_unkarray_device(mconfig, MEGASYS1_GATEARRAY_UNKARRAY, tag, owner, clock)
 {
 	m_gatearray_seq = nullptr; // only used by rodland, which doesn't enable an overlay
 }
 
-megasys1_gatearray_unkarray_device::megasys1_gatearray_unkarray_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+megasys1_gatearray_unkarray_device::megasys1_gatearray_unkarray_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: megasys1_gatearray_device(mconfig, type, tag, owner, clock)
 {
 }

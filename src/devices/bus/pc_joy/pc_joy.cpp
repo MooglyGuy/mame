@@ -96,7 +96,7 @@ pc_basic_joy_device::pc_basic_joy_device(const machine_config &mconfig, device_t
 {
 }
 
-pc_basic_joy_device::pc_basic_joy_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+pc_basic_joy_device::pc_basic_joy_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	pc_basic_joy_device(mconfig, PC_BASIC_JOY, tag, owner, clock)
 {
 }

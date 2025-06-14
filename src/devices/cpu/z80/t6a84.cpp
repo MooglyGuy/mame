@@ -32,11 +32,11 @@ void t6a84_device::internal_io_map(address_map &map) const
 	map(0xff, 0xff).rw(FUNC(t6a84_device::vector_page_r), FUNC(t6a84_device::vector_page_w));
 }
 
-t6a84_device::t6a84_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+t6a84_device::t6a84_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	t6a84_device(mconfig, T6A84, tag, owner, clock, address_map_constructor(FUNC(t6a84_device::internal_io_map), this))
 { }
 
-t6a84_device::t6a84_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor io_map)
+t6a84_device::t6a84_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor io_map)
 	: z80_device(mconfig, type, tag, owner, clock)
 	, m_program_space_config("program", ENDIANNESS_LITTLE, 8, 20, 0, 16, 0)
 	, m_data_space_config("data", ENDIANNESS_LITTLE, 8, 20, 0, 16, 0)

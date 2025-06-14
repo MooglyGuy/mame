@@ -42,7 +42,7 @@ k056230_device::k056230_device(const machine_config &mconfig, device_type type, 
 {
 }
 
-k056230_device::k056230_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+k056230_device::k056230_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: k056230_device(mconfig, K056230, tag, owner, clock)
 {
 }
@@ -125,7 +125,7 @@ void k056230_device::ram_w(offs_t offset, u32 data, u32 mem_mask)
  *
  ***************************************/
 
-k056230_viper_device::k056230_viper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+k056230_viper_device::k056230_viper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: k056230_device(mconfig, K056230_VIPER, tag, owner, clock)
 {
 }

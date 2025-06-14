@@ -234,7 +234,7 @@ DEFINE_DEVICE_TYPE(VME_SYS68K_CPU30BE,    vme_sys68k_cpu30be_card_device,    "sy
 DEFINE_DEVICE_TYPE(VME_SYS68K_CPU30LITE,  vme_sys68k_cpu30lite_card_device,  "sys68k_cpu30lite",  "Force Computers SYS68K/CPU-30Lite")
 DEFINE_DEVICE_TYPE(VME_SYS68K_CPU33,      vme_sys68k_cpu33_card_device,      "sys68k_cpu33",      "Force Computers SYS68K/CPU-33")
 
-sys68k_cpu30_device_base::sys68k_cpu30_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock, uint8_t board_id)
+sys68k_cpu30_device_base::sys68k_cpu30_device_base(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock, uint8_t board_id)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu (*this, "maincpu")
@@ -249,31 +249,31 @@ sys68k_cpu30_device_base::sys68k_cpu30_device_base(machine_config const &mconfig
 {
 }
 
-vme_sys68k_cpu30_card_device::vme_sys68k_cpu30_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu30_card_device::vme_sys68k_cpu30_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU30, tag, owner, clock, 0x50)
 {
 }
-vme_sys68k_cpu30x_card_device::vme_sys68k_cpu30x_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu30x_card_device::vme_sys68k_cpu30x_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU30X, tag, owner, clock, 0x50)
 {
 }
-vme_sys68k_cpu30xa_card_device::vme_sys68k_cpu30xa_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu30xa_card_device::vme_sys68k_cpu30xa_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU30XA, tag, owner, clock, 0x50)
 {
 }
-vme_sys68k_cpu30za_card_device::vme_sys68k_cpu30za_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu30za_card_device::vme_sys68k_cpu30za_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU30ZA, tag, owner, clock, 0x50)
 {
 }
-vme_sys68k_cpu30be_card_device::vme_sys68k_cpu30be_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu30be_card_device::vme_sys68k_cpu30be_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU30BE, tag, owner, clock, 0x50)
 {
 }
-vme_sys68k_cpu30lite_card_device::vme_sys68k_cpu30lite_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu30lite_card_device::vme_sys68k_cpu30lite_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU30LITE, tag, owner, clock, 0x50)
 {
 }
-vme_sys68k_cpu33_card_device::vme_sys68k_cpu33_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_sys68k_cpu33_card_device::vme_sys68k_cpu33_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: sys68k_cpu30_device_base(mconfig, VME_SYS68K_CPU33, tag, owner, clock, 0x68) // 0x60 skips FGA prompt
 {
 }

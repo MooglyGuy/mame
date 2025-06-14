@@ -63,7 +63,7 @@ void falconun_state::slavemap(address_map &map)
 
 void falconun_state::falconun(machine_config &config)
 {
-	M6802(config, m_maincpu, 40'000'000 / 4); // TODO 10 MHz for a M6802??
+	M6802(config, m_maincpu, XTAL::u(40'000'000) / 4); // TODO 10 MHz for a M6802??
 	m_maincpu->set_addrmap(AS_PROGRAM, &falconun_state::memmap);
 	m_maincpu->set_ram_enable(false);
 
@@ -73,7 +73,7 @@ void falconun_state::falconun(machine_config &config)
 	pia.irqa_handler().set("mainirq", FUNC(input_merger_device::in_w<0>));
 	pia.irqb_handler().set("mainirq", FUNC(input_merger_device::in_w<1>));
 
-	i8035_device &slavemcu(I8035(config, "slavemcu", 6'000'000));
+	i8035_device &slavemcu(I8035(config, "slavemcu", XTAL::u(6'000'000)));
 	slavemcu.set_addrmap(AS_PROGRAM, &falconun_state::slavemap);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);

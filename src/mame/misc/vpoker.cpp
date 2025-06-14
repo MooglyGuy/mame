@@ -535,7 +535,7 @@ void vpoker_state::vpoker(machine_config &config)
 
 	// sound hardware
 	SPEAKER(config, "speaker").front_center();
-	DAC_1BIT(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.5);
+	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.5);
 }
 
 
@@ -554,7 +554,7 @@ void vpoker_state::fiveaces(machine_config &config)
 
 	// 6840 PTM
 	ptm6840_device &ptm(PTM6840(config.replace(), "6840ptm", XTAL(4'000'000) / 4));
-	ptm.set_external_clocks(500, 0, 1000000);
+	ptm.set_external_clocks(XTAL::u(500), XTAL(), XTAL::u(1000000));
 	ptm.irq_callback().set(FUNC(vpoker_state::ptm_5_irq));
 	ptm.o2_callback().set("dac", FUNC(dac_1bit_device::data_w));
 }

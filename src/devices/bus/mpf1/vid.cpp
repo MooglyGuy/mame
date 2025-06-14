@@ -64,7 +64,7 @@ class mpf_vid_device : public device_t, public device_mpf1_exp_interface
 public:
 	static constexpr feature_type imperfect_features() { return feature::GRAPHICS; }
 
-	mpf_vid_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	mpf_vid_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, MPF_VID, tag, owner, clock)
 		, device_mpf1_exp_interface(mconfig, *this)
 		, m_rom(*this, "rom")

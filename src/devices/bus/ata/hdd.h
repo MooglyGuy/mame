@@ -27,7 +27,7 @@ class ide_hdd_device : public ide_hdd_device_base, public device_ata_interface
 {
 public:
 	// construction/destruction
-	ide_hdd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ide_hdd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_ata_interface implementation
 	virtual uint16_t read_dma() override { return dma_r(); }
@@ -44,7 +44,7 @@ public:
 	virtual void write_pdiag(int state) override { set_pdiag_in(state); }
 
 protected:
-	ide_hdd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	ide_hdd_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	// ata_hle_device_base implementation
@@ -61,7 +61,7 @@ class ata_cf_device : public cf_device_base, public device_ata_interface
 {
 public:
 	// construction/destruction
-	ata_cf_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	ata_cf_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device_ata_interface implementation
 	virtual uint16_t read_dma() override { return dma_r(); }

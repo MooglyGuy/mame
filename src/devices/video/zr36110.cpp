@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(ZR36110, zr36110_device, "zr36110", "Zoran ZR36110 mpeg decoder")
 
-zr36110_device::zr36110_device(const machine_config &mconfig, char const *tag, device_t *owner, u32 clock) :
+zr36110_device::zr36110_device(const machine_config &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ZR36110, tag, owner, clock),
 	m_drq_w(*this),
 	m_sp_frm_w{*this, *this},

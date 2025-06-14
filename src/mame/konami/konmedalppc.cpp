@@ -131,7 +131,7 @@ void konmedalppc_devices(device_slot_interface &device)
 void konmedalppc_state::konmedalppc(machine_config &config)
 {
 	// basic machine hardware
-	PPC403GA(config, m_maincpu, 66000000);
+	PPC403GA(config, m_maincpu, XTAL::u(66000000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &konmedalppc_state::main_map);
 
 	ATA_INTERFACE(config, m_ata).options(konmedalppc_devices, "cfcard", nullptr, true);
@@ -146,11 +146,11 @@ void konmedalppc_state::konmedalppc(machine_config &config)
 	screen.set_screen_update(FUNC(konmedalppc_state::screen_update));
 	screen.set_palette("palette");
 
-	K057714(config, m_gcu, 0).set_screen("screen");
+	K057714(config, m_gcu).set_screen("screen");
 
 	SPEAKER(config, "speaker", 2).front();
 
-	ymz280b_device &ymz(YMZ280B(config, "ymz", 16934400));
+	ymz280b_device &ymz(YMZ280B(config, "ymz", XTAL::u(16934400)));
 	ymz.set_addrmap(0, &konmedalppc_state::ymz280b_map);
 	ymz.add_route(1, "speaker", 1.0, 0);
 	ymz.add_route(0, "speaker", 1.0, 1);

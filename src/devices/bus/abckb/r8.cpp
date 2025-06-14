@@ -92,7 +92,7 @@ TIMER_CALLBACK_MEMBER(luxor_r8_device::scan_mouse)
 //  luxor_r8_device - constructor
 //-------------------------------------------------
 
-luxor_r8_device::luxor_r8_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+luxor_r8_device::luxor_r8_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, LUXOR_R8, tag, owner, clock),
 	m_mouse_timer(nullptr),
 	m_mouse_b(*this, "MOUSEB"),

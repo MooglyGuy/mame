@@ -673,9 +673,9 @@ void cops_state::revlatns(machine_config &config)
 	via1.writepb_handler().set(FUNC(cops_state::via1_b_w));
 	via1.cb1_handler().set(FUNC(cops_state::via1_cb1_w));
 
-	METERS(config, m_meters, 0).set_number(2);
+	METERS(config, m_meters).set_number(2);
 
-	bacta_datalogger_device &bacta(BACTA_DATALOGGER(config, "bacta", 0));
+	bacta_datalogger_device &bacta(BACTA_DATALOGGER(config, "bacta"));
 
 	m_dacia->txd1_handler().set("laserdisc", FUNC(sony_ldp1450hle_device::rx_w));
 	m_dacia->txd2_handler().set("bacta", FUNC(bacta_datalogger_device::write_txd));

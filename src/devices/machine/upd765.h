@@ -592,12 +592,12 @@ private:
 
 class hd63266f_device : public upd765_family_device {
 public:
-	hd63266f_device(const machine_config &mconfig, const char *tag, device_t* owner, uint32_t clock);
+	hd63266f_device(const machine_config &mconfig, const char *tag, device_t* owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 	auto inp_rd_callback() { return inp_cb.bind(); } // this is really the ts signal
 
-	void rate_w(u8 state) { state ? set_rate(500000) : set_rate(250000); }
+	void rate_w(u8 state) { set_rate(state ? XTAL::u(500000) : XTAL::u(250000)); }
 	void abort_w(u8 data);
 	u8 extstat_r();
 

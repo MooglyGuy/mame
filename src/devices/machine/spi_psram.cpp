@@ -107,12 +107,12 @@ enum class spi_ram_device::phase : u8
 };
 
 
-spi_ram_device::spi_ram_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+spi_ram_device::spi_ram_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	spi_ram_device(mconfig, SPI_RAM, tag, owner, clock)
 {
 }
 
-spi_ram_device::spi_ram_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, u32 clock) :
+spi_ram_device::spi_ram_device(machine_config const &mconfig, device_type type, char const *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_sio_cb(*this),
 	m_ram(),
@@ -347,7 +347,7 @@ inline void spi_ram_device::next_address()
 
 
 
-spi_psram_device::spi_psram_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock) :
+spi_psram_device::spi_psram_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 	spi_ram_device(mconfig, SPI_PSRAM, tag, owner, clock)
 {
 }

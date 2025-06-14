@@ -12,7 +12,7 @@ class tc6116_device : public device_t, public device_sound_interface, public dev
 public:
 	static constexpr feature_type unemulated_features() { return feature::SOUND; }
 
-	tc6116_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tc6116_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto int_callback() { return m_int_callback.bind(); }
 
@@ -74,8 +74,8 @@ private:
 
 	devcb_write_line m_int_callback;
 
-	uint32_t m_clock;                   // clock
-	uint32_t m_rate;                    // sample rate (usually 32000 Hz)
+	XTAL m_clock;                       // clock
+	XTAL m_rate;                        // sample rate (usually 32000 Hz)
 	sound_stream *m_stream;             // stream handle
 	pcm_channel m_chns[NUM_CHANNELS];   // channel memory
 	[[maybe_unused]] uint8_t m_sel_chn; // selected channel

@@ -18,7 +18,7 @@ class f2mc16_port_device :
 {
 public:
 	f2mc16_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint8_t defval, uint8_t mask);
-	f2mc16_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	f2mc16_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto read() { return m_read_cb.bind(); }
 	auto write() { return m_write_cb.bind(); }

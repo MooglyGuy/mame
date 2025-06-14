@@ -88,7 +88,7 @@ public:
 
 protected:
 	// construction
-	hmcs400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size);
+	hmcs400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size);
 
 	// device_t implementation
 	virtual void device_start() override ATTR_COLD;
@@ -309,136 +309,136 @@ protected:
 class hmcs402_cpu_device : public hmcs400_cpu_device
 {
 protected:
-	hmcs402_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	hmcs402_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614022_device : public hmcs402_cpu_device
 {
 public:
-	hd614022_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614022_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614023_device : public hmcs402_cpu_device
 {
 public:
-	hd614023_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614023_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614025_device : public hmcs402_cpu_device
 {
 public:
-	hd614025_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614025_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614026_device : public hmcs402_cpu_device
 {
 public:
-	hd614026_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614026_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614028_device : public hmcs402_cpu_device
 {
 public:
-	hd614028_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614028_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614029_device : public hmcs402_cpu_device
 {
 public:
-	hd614029_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614029_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs404_cpu_device : public hmcs400_cpu_device
 {
 protected:
-	hmcs404_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	hmcs404_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614042_device : public hmcs404_cpu_device
 {
 public:
-	hd614042_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614042_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614043_device : public hmcs404_cpu_device
 {
 public:
-	hd614043_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614043_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614045_device : public hmcs404_cpu_device
 {
 public:
-	hd614045_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614045_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614046_device : public hmcs404_cpu_device
 {
 public:
-	hd614046_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614046_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614048_device : public hmcs404_cpu_device
 {
 public:
-	hd614048_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614048_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614049_device : public hmcs404_cpu_device
 {
 public:
-	hd614049_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614049_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs408_cpu_device : public hmcs400_cpu_device
 {
 protected:
-	hmcs408_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	hmcs408_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614080_device : public hmcs408_cpu_device
 {
 public:
-	hd614080_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614080_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614081_device : public hmcs408_cpu_device
 {
 public:
-	hd614081_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614081_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614085_device : public hmcs408_cpu_device
 {
 public:
-	hd614085_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614085_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614086_device : public hmcs408_cpu_device
 {
 public:
-	hd614086_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614086_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614088_device : public hmcs408_cpu_device
 {
 public:
-	hd614088_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614088_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614089_device : public hmcs408_cpu_device
 {
 public:
-	hd614089_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614089_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs41x_cpu_device : public hmcs400_cpu_device
 {
 protected:
-	hmcs41x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, u32 rom_size, u32 ram_size);
+	hmcs41x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, u32 rom_size, u32 ram_size);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void reset_io() override;
@@ -447,57 +447,57 @@ protected:
 class hmcs412_cpu_device : public hmcs41x_cpu_device
 {
 protected:
-	hmcs412_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	hmcs412_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614120_device : public hmcs412_cpu_device
 {
 public:
-	hd614120_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614120_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614125_device : public hmcs412_cpu_device
 {
 public:
-	hd614125_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614125_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614128_device : public hmcs412_cpu_device
 {
 public:
-	hd614128_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614128_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs414_cpu_device : public hmcs41x_cpu_device
 {
 protected:
-	hmcs414_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	hmcs414_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614140_device : public hmcs414_cpu_device
 {
 public:
-	hd614140_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614140_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614145_device : public hmcs414_cpu_device
 {
 public:
-	hd614145_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614145_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd614148_device : public hmcs414_cpu_device
 {
 public:
-	hd614148_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd614148_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class hmcs424_cpu_device : public hmcs41x_cpu_device
 {
 protected:
-	hmcs424_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	hmcs424_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD { hmcs400_cpu_device::device_start(); }
 };
@@ -505,19 +505,19 @@ protected:
 class hd404240_device : public hmcs424_cpu_device
 {
 public:
-	hd404240_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd404240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd40l4240_device : public hmcs424_cpu_device
 {
 public:
-	hd40l4240_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd40l4240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class hd40a4240_device : public hmcs424_cpu_device
 {
 public:
-	hd40a4240_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	hd40a4240_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 

@@ -42,14 +42,14 @@ struct ADCR { enum : uint16_t
 
 DEFINE_DEVICE_TYPE(F2MC16_ADC, f2mc16_adc_device, "f2mc16_adc", "F2MC16 ADC")
 
-f2mc16_adc_device::f2mc16_adc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, required_device<f2mc16_intc_device> &intc, uint8_t vector) :
+f2mc16_adc_device::f2mc16_adc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, required_device<f2mc16_intc_device> &intc, uint8_t vector) :
 	f2mc16_adc_device(mconfig, tag, owner, clock)
 {
 	m_intc.set_tag(intc);
 	m_vector = vector;
 }
 
-f2mc16_adc_device::f2mc16_adc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+f2mc16_adc_device::f2mc16_adc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, F2MC16_ADC, tag, owner, clock),
 	m_intc(*this, finder_base::DUMMY_TAG),
 	m_channel_cb(*this, 0x000),
@@ -98,9 +98,9 @@ void f2mc16_adc_device::device_reset()
 void f2mc16_adc_device::device_clock_changed()
 {
 	if (machine().scheduler().currently_executing())
-		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_adc_device::update_peripheral_clock), this), clock());
+		machine().scheduler().synchronize(timer_expired_delegate(FUNC(f2mc16_adc_device::update_peripheral_clock), this), clock().value());
 	else
-		update_peripheral_clock(clock());
+		update_peripheral_clock(clock().value());
 }
 
 void f2mc16_adc_device::i2osclr(int state)

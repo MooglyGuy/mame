@@ -17,7 +17,7 @@
 
 DEFINE_DEVICE_TYPE(COLECO_SGM, coleco_sgm_device, "coleco_sgm", "Opcode Super Game Module")
 
-coleco_sgm_device::coleco_sgm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+coleco_sgm_device::coleco_sgm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, COLECO_SGM, tag, owner, clock),
 	device_coleco_expansion_interface(mconfig, *this),
 	m_view_lower(*this, "view_lower"),

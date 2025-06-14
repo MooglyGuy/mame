@@ -171,9 +171,9 @@ GFXDECODE_END
 
 void vta2000_state::vta2000(machine_config &config)
 {
-	//constexpr auto CPU_CLOCK = XTAL(4'000'000) / 4; // too slow for CRTC DMA
-	constexpr auto CPU_CLOCK = 2'000'000;
-	constexpr auto DOT_CLOCK = 12'500'000; // guessed
+	//constexpr XTAL CPU_CLOCK = XTAL(4'000'000) / 4; // too slow for CRTC DMA
+	constexpr XTAL CPU_CLOCK = XTAL::u(2'000'000);
+	constexpr XTAL DOT_CLOCK = XTAL::u(12'500'000); // guessed
 
 	/* basic machine hardware */
 	I8080(config, m_maincpu, CPU_CLOCK);

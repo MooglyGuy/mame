@@ -78,7 +78,7 @@ void rbv_device::device_add_mconfig(machine_config &config)
 //  rbv_device - constructor
 //-------------------------------------------------
 
-rbv_device::rbv_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+rbv_device::rbv_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, RBV, tag, owner, clock),
 	device_palette_interface(mconfig, *this),
 	write_6015(*this),
@@ -138,7 +138,7 @@ void rbv_device::device_reset()
 			m_hres = 512;
 			m_vres = 384;
 			m_monochrome = false;
-			m_screen->configure(640, 407, rectangle(0, 511, 0, 383), HZ_TO_ATTOSECONDS(double(clock()) / (2 * 640 * 407)));
+			m_screen->configure(640, 407, rectangle(0, 511, 0, 383), HZ_TO_ATTOSECONDS(clock().dvalue() / (2 * 640 * 407)));
 			break;
 
 		case 6: // 13" RGB

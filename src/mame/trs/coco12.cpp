@@ -567,8 +567,8 @@ void coco12_state::coco(machine_config &config)
 	SOFTWARE_LIST(config, "dragon_cart_list").set_compatible("dragon_cart");
 
 	// virtual hard disks
-	COCO_VHD(config, m_vhd_0, 0, m_maincpu);
-	COCO_VHD(config, m_vhd_1, 0, m_maincpu);
+	COCO_VHD(config, m_vhd_0, m_maincpu);
+	COCO_VHD(config, m_vhd_1, m_maincpu);
 }
 
 void coco12_state::cocoh(machine_config &config)

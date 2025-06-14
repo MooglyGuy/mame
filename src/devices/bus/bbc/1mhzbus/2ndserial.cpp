@@ -98,7 +98,7 @@ const tiny_rom_entry* bbc_2ndserial_device::device_rom_region() const
 //  bbc_2ndserial_device - constructor
 //-------------------------------------------------
 
-bbc_2ndserial_device::bbc_2ndserial_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+bbc_2ndserial_device::bbc_2ndserial_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, BBC_2NDSERIAL, tag, owner, clock)
 	, device_bbc_1mhzbus_interface(mconfig, *this)
 	, m_1mhzbus(*this, "1mhzbus")

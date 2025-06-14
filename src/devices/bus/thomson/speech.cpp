@@ -14,7 +14,7 @@ DEFINE_DEVICE_TYPE(THOMSON_SPEECH, thomson_speech_device, "thomson_speech", "Ced
 //  thomson_speech_device - constructor
 //-------------------------------------------------
 
-thomson_speech_device::thomson_speech_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+thomson_speech_device::thomson_speech_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, THOMSON_SPEECH, tag, owner, clock)
 	, thomson_extension_interface(mconfig, *this)
 {

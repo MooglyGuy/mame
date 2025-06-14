@@ -322,7 +322,7 @@ void psion3_state::psion3(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 	SPEAKER_SOUND(config, m_speaker).add_route(ALL_OUTPUTS, "mono", 1.00); // Piezo buzzer
 
-	PCD3311(config, m_dtmf, 3'580'000).add_route(ALL_OUTPUTS, "mono", 0.25); // PCD3311CT
+	PCD3311(config, m_dtmf, XTAL::u(3'580'000)).add_route(ALL_OUTPUTS, "mono", 0.25); // PCD3311CT
 
 	PSION_SSD(config, m_ssd[0]);
 	m_ssd[0]->door_cb().set(m_asic2, FUNC(psion_asic2_device::dnmi_w));

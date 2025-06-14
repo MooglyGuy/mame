@@ -10,7 +10,7 @@
 class sc16is741a_device : public device_t
 {
 public:
-	sc16is741a_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sc16is741a_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 	virtual ~sc16is741a_device();
 
 	auto so_cb() { return m_so_cb.bind(); }

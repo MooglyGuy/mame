@@ -16,18 +16,18 @@
 #include "screen.h"
 
 
-screen_ula_device::screen_ula_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+screen_ula_device::screen_ula_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_gfx_interface(mconfig, *this)
 {
 }
-screen_ula_plus_device::screen_ula_plus_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+screen_ula_plus_device::screen_ula_plus_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	screen_ula_device(mconfig, SCREEN_ULA_PLUS, tag, owner, clock)
 {
 	m_ula_type = ULA_TYPE_PLUS;
 }
 
-screen_ula_next_device::screen_ula_next_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+screen_ula_next_device::screen_ula_next_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	screen_ula_device(mconfig, SCREEN_ULA_NEXT, tag, owner, clock)
 {
 	m_ula_type = ULA_TYPE_NEXT;

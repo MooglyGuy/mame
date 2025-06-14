@@ -49,7 +49,7 @@ private:
 class audio_resampler_lofi : public audio_resampler
 {
 public:
-	audio_resampler_lofi(u32 fs, u32 ft);
+	audio_resampler_lofi(const XTAL &fs, const XTAL &ft);
 	virtual ~audio_resampler_lofi() = default;
 
 	virtual u32 history_size() const override;

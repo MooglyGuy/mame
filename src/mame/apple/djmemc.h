@@ -14,7 +14,7 @@ class djmemc_device :  public device_t
 {
 public:
 	// construction/destruction
-	djmemc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	djmemc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// interface routines
 	virtual void map(address_map &map) ATTR_COLD;
@@ -26,7 +26,7 @@ public:
 	auto write_irq() { return m_irq.bind(); }
 
 protected:
-	djmemc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	djmemc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -53,7 +53,7 @@ class memcjr_device : public djmemc_device
 {
 public:
 	// construction/destruction
-	memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	memcjr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 

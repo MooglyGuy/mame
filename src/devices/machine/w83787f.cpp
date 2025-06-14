@@ -22,7 +22,7 @@ Looks similar in design to National PC87306 (including similar reg names)
 
 DEFINE_DEVICE_TYPE(W83787F, w83787f_device, "w83787f", "National Semiconductor W83787F Super I/O Enhanced Sidewinder Lite")
 
-w83787f_device::w83787f_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+w83787f_device::w83787f_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, W83787F, tag, owner, clock)
 	, device_isa16_card_interface(mconfig, *this)
 	, device_memory_interface(mconfig, *this)

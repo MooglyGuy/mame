@@ -1205,11 +1205,11 @@ MACHINE_RESET_MEMBER(homedata_upd7807_state, reikaids)
 void mrokumei_state::mrokumei(machine_config &config)
 {
 	// basic machine hardware
-	MC6809E(config, m_maincpu, 16000000/8);  // 2MHz ?
+	MC6809E(config, m_maincpu, XTAL::u(16000000)/8);  // 2MHz ?
 	m_maincpu->set_addrmap(AS_PROGRAM, &mrokumei_state::mrokumei_map);
 	m_maincpu->set_vblank_int("screen", FUNC(mrokumei_state::homedata_irq)); // also triggered by the blitter
 
-	Z80(config, m_audiocpu, 16000000/4);   // 4MHz ?
+	Z80(config, m_audiocpu, XTAL::u(16000000)/4);   // 4MHz ?
 	m_audiocpu->set_addrmap(AS_PROGRAM, &mrokumei_state::mrokumei_sound_map);
 	m_audiocpu->set_addrmap(AS_IO, &mrokumei_state::mrokumei_sound_io_map);
 

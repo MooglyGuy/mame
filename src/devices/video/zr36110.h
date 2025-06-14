@@ -11,7 +11,7 @@
 class zr36110_device : public device_t
 {
 public:
-	zr36110_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	zr36110_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	auto drq_w()     { return m_drq_w.bind(); }
 	auto sp1_frm_w() { return m_sp_frm_w[0].bind();   }

@@ -6,12 +6,12 @@
 
 DEFINE_DEVICE_TYPE(MB90F574, mb90f574_device, "mb90f574", "Fujitsu MB90F574")
 
-mb90f574_device::mb90f574_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+mb90f574_device::mb90f574_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mb90570_device(mconfig, MB90F574, tag, owner, clock, 0x28ff)
 {
 }
 
-mb90570_device::mb90570_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, uint16_t internal_ram_end) :
+mb90570_device::mb90570_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, uint16_t internal_ram_end) :
 	f2mc16_device(mconfig, type, tag, owner, clock),
 	m_program_config("program", ENDIANNESS_LITTLE, 16, 24, 0, address_map_constructor(FUNC(mb90570_device::internal_map), this)),
 	m_internal_ram_end(internal_ram_end),

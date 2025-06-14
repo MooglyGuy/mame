@@ -21,7 +21,7 @@ public:
 		INT2_LINE,
 	};
 
-	m37640_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, u32 mode = 2);
+	m37640_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, u32 mode = 2);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

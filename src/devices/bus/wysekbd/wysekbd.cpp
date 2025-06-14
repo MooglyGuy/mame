@@ -36,7 +36,7 @@
 
 DEFINE_DEVICE_TYPE(WYSE_KEYBOARD, wyse_keyboard_port_device, "wysekbd", "Wyse Keyboard Port")
 
-wyse_keyboard_port_device::wyse_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+wyse_keyboard_port_device::wyse_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, WYSE_KEYBOARD, tag, owner, clock)
 	, device_single_card_slot_interface<wyse_keyboard_interface>(mconfig, *this)
 	, m_kbd(nullptr)

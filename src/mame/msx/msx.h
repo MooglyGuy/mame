@@ -235,7 +235,7 @@ protected:
 private:
 	// configuration helpers
 	template <typename T, typename U>
-	auto &add_base_slot(machine_config &config, T &&type, U &&tag, u8 prim, bool expanded, u8 sec, u8 page, u8 numpages, u32 clock = 0)
+	auto &add_base_slot(machine_config &config, T &&type, U &&tag, u8 prim, bool expanded, u8 sec, u8 page, u8 numpages, const XTAL &clock = XTAL())
 	{
 		auto &device(std::forward<T>(type)(config, std::forward<U>(tag), clock));
 		setup_slot_spaces(device);
@@ -280,7 +280,7 @@ private:
 		return device;
 	}
 	template <int N, typename T, typename U, typename V>
-	auto &add_cartridge_slot(machine_config &config, T &&type, U &&tag, u8 prim, bool expanded, u8 sec, V &&intf, const char *deft, u32 clock)
+	auto &add_cartridge_slot(machine_config &config, T &&type, U &&tag, u8 prim, bool expanded, u8 sec, V &&intf, const char *deft, const XTAL &clock)
 	{
 		auto &device = add_base_slot(config, std::forward<T>(type), std::forward<U>(tag), prim, expanded, sec, 0, 4, clock);
 		device.option_reset();
@@ -294,7 +294,7 @@ private:
 	template <int N, typename T, typename U, typename V>
 	auto &add_cartridge_slot(machine_config &config, T &&type, U &&tag, u8 prim, bool expanded, u8 sec, V &&intf, const char *deft)
 	{
-		return add_cartridge_slot<N>(config, std::forward<T>(type), std::forward<U>(tag), prim, expanded, sec, std::forward<V>(intf), deft, (m_main_xtal / m_cpu_xtal_divider).value());
+		return add_cartridge_slot<N>(config, std::forward<T>(type), std::forward<U>(tag), prim, expanded, sec, std::forward<V>(intf), deft, m_main_xtal / m_cpu_xtal_divider);
 	}
 	template <int N>
 	auto &add_cartridge_slot(machine_config &config, u8 prim, bool expanded, u8 sec)
@@ -304,7 +304,7 @@ private:
 		};
 		static_assert(N >= 1 && N <= 4, "Invalid cartridge slot number");
 		m_hw_def.has_cartslot(true);
-		return add_cartridge_slot<N>(config, MSX_SLOT_CARTRIDGE, tags[N-1], prim, expanded, sec, msx_cart, nullptr, (m_main_xtal / m_cpu_xtal_divider).value());
+		return add_cartridge_slot<N>(config, MSX_SLOT_CARTRIDGE, tags[N-1], prim, expanded, sec, msx_cart, nullptr, m_main_xtal / m_cpu_xtal_divider);
 	}
 };
 

@@ -31,7 +31,7 @@ DEFINE_DEVICE_TYPE(PSION_CONDOR, psion_condor_device, "psion_condor", "Psion Con
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_condor_device::psion_condor_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_condor_device::psion_condor_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_CONDOR, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, m_txd_handler(*this)

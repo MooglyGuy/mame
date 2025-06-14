@@ -11,7 +11,7 @@ class m68000msh_device : public m68000_musashi_device
 {
 public:
 	// construction/destruction
-	m68000msh_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	m68000msh_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::unique_ptr<util::disasm_interface> create_disassembler() override;
 

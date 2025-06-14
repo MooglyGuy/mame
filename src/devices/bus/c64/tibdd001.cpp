@@ -68,7 +68,7 @@ void c64_tib_dd_001_device::floppy_formats(format_registration &fr)
 
 void c64_tib_dd_001_device::device_add_mconfig(machine_config &config)
 {
-	WD37C65C(config, m_fdc, 16'000'000);
+	WD37C65C(config, m_fdc, XTAL::u(16'000'000));
 	m_fdc->hdl_wr_callback().set(FUNC(c64_tib_dd_001_device::motor_w));
 
 	FLOPPY_CONNECTOR(config, m_floppy, tib_dd_001_floppies, "35dd", c64_tib_dd_001_device::floppy_formats, true).enable_sound(true);
@@ -84,7 +84,7 @@ void c64_tib_dd_001_device::device_add_mconfig(machine_config &config)
 //  c64_tib_dd_001_device - constructor
 //-------------------------------------------------
 
-c64_tib_dd_001_device::c64_tib_dd_001_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+c64_tib_dd_001_device::c64_tib_dd_001_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, C64_TIB_DD_001, tag, owner, clock),
 	device_c64_expansion_card_interface(mconfig, *this),
 	m_fdc(*this, GM82C765B_TAG),

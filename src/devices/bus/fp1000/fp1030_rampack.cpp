@@ -16,7 +16,7 @@ FORMAT"PACK<x>:" to use it in BASIC as a writable buffer
 
 DEFINE_DEVICE_TYPE(FP1030_RAMPACK, fp1030_rampack_device, "fp1030_rampack", "FP-1030 RAMPACK")
 
-fp1030_rampack_device::fp1030_rampack_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+fp1030_rampack_device::fp1030_rampack_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: fp1060io_exp_device(mconfig, FP1030_RAMPACK, tag, owner, clock)
 	, m_nvram(*this, "nvram")
 {

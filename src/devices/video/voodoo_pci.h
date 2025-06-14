@@ -101,7 +101,7 @@ public:
 	voodoo_banshee_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
-	voodoo_banshee_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	voodoo_banshee_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -115,14 +115,14 @@ class voodoo_banshee_x86_pci_device : public voodoo_banshee_pci_device
 {
 public:
 	template <typename T, typename U>
-	voodoo_banshee_x86_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&cpu_tag, U &&screen_tag)
-		: voodoo_banshee_x86_pci_device(mconfig, tag, owner, clock)
+	voodoo_banshee_x86_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, U &&screen_tag)
+		: voodoo_banshee_x86_pci_device(mconfig, tag, owner)
 	{
 		set_cpu(std::forward<T>(cpu_tag));
 		set_screen(std::forward<U>(screen_tag));
 	}
 
-	voodoo_banshee_x86_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	voodoo_banshee_x86_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	virtual void device_start() override ATTR_COLD;

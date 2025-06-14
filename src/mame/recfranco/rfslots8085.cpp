@@ -854,7 +854,7 @@ void rfslots8085_state::rf53_3297(machine_config &config)
 
 	SPEAKER(config, "mono").front_center();
 
-	DAC_3BIT_BINARY_WEIGHTED(config, m_dac, 0).add_route(ALL_OUTPUTS, "mono", 2.0);
+	DAC_3BIT_BINARY_WEIGHTED(config, m_dac).add_route(ALL_OUTPUTS, "mono", 2.0);
 
 	AY8910(config, m_aysnd[0], SND_CLOCK / 3).add_route(ALL_OUTPUTS, "mono", 0.50);  // derived from sound cpu line T0
 	m_aysnd[0]->port_a_write_callback().set(FUNC(rfslots8085_state::ay0_porta_w));

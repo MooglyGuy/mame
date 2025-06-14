@@ -290,7 +290,7 @@ INPUT_PORTS_END
 void addocalc_state::addocalc(machine_config &config)
 {
 	// basic machine hardware
-	MM78(config, m_maincpu, 430000); // approximation - VC osc. R=47K
+	MM78(config, m_maincpu, XTAL::u(430000)); // approximation - VC osc. R=47K
 	m_maincpu->write_d().set(FUNC(addocalc_state::write_d));
 	m_maincpu->write_r().set(FUNC(addocalc_state::write_r));
 	m_maincpu->read_p().set(FUNC(addocalc_state::read_p));

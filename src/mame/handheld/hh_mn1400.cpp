@@ -214,7 +214,7 @@ INPUT_PORTS_END
 void compperf_state::compperf(machine_config &config)
 {
 	// basic machine hardware
-	MN1400_28PINS(config, m_maincpu, 290000); // approximation - RC osc. R=18K, C=100pF
+	MN1400_28PINS(config, m_maincpu, XTAL::u(290000)); // approximation - RC osc. R=18K, C=100pF
 	m_maincpu->write_c().set(FUNC(compperf_state::write_c));
 	m_maincpu->write_d().set(FUNC(compperf_state::write_d));
 	m_maincpu->write_e().set(FUNC(compperf_state::write_e));
@@ -382,7 +382,7 @@ INPUT_PORTS_END
 void scrablexa_state::scrablexa(machine_config &config)
 {
 	// basic machine hardware
-	MN1405(config, m_maincpu, 310000); // approximation - RC osc. R=15K, C=100pF
+	MN1405(config, m_maincpu, XTAL::u(310000)); // approximation - RC osc. R=15K, C=100pF
 	m_maincpu->write_c().set(FUNC(scrablexa_state::write_c));
 	m_maincpu->write_d().set(FUNC(scrablexa_state::write_d));
 	m_maincpu->write_e().set(FUNC(scrablexa_state::write_e));
@@ -519,7 +519,7 @@ INPUT_PORTS_END
 void tmbaskb_state::tmbaskb(machine_config &config)
 {
 	// basic machine hardware
-	MN1400_28PINS(config, m_maincpu, 290000); // approximation - RC osc. R=18K, C=100pF
+	MN1400_28PINS(config, m_maincpu, XTAL::u(290000)); // approximation - RC osc. R=18K, C=100pF
 	m_maincpu->write_c().set(FUNC(tmbaskb_state::write_c));
 	m_maincpu->set_c_mask(0x3ef);
 	m_maincpu->write_d().set(FUNC(tmbaskb_state::write_d));

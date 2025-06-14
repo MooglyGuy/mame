@@ -10,7 +10,7 @@
 class evo_cpu_device : public cpu_device
 {
 public:
-	evo_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	evo_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_start() override ATTR_COLD;

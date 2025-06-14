@@ -26,7 +26,7 @@ class tanbus_etisnd_device : public device_t, public device_tanbus_interface
 {
 public:
 	// construction/destruction
-	tanbus_etisnd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	tanbus_etisnd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

@@ -22,7 +22,7 @@ class ata_slot_device :
 {
 public:
 	// construction/destruction
-	ata_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	ata_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto irq_handler() { return m_irq_handler.bind(); }
 	auto dmarq_handler() { return m_dmarq_handler.bind(); }

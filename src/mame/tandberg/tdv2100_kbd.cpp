@@ -100,7 +100,7 @@
 
 DEFINE_DEVICE_TYPE(TANDBERG_TDV2100_KEYBOARD, tandberg_tdv2100_keyboard_device, "tandberg_tdv2100_keyboard", "Tandberg TDV-2100 series Keyboard");
 
-tandberg_tdv2100_keyboard_device::tandberg_tdv2100_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock):
+tandberg_tdv2100_keyboard_device::tandberg_tdv2100_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, TANDBERG_TDV2100_KEYBOARD, tag, owner, clock),
 	m_keymap(*this, "keyboard_chars_rom"),
 	m_keyparams(*this, "keyboard_params_rom"),
@@ -386,7 +386,7 @@ void tandberg_tdv2100_keyboard_device::nakl_w(int state)
 
 void tandberg_tdv2100_keyboard_device::device_add_mconfig(machine_config &mconfig)
 {
-	CLOCK(mconfig, m_scan_clock, 8235);
+	CLOCK(mconfig, m_scan_clock, XTAL::u(8235));
 	m_scan_clock->signal_handler().set(FUNC(tandberg_tdv2100_keyboard_device::scan_next_column));
 
 	mconfig.set_default_layout(layout_tdv2100kbd);

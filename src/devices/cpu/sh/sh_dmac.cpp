@@ -15,7 +15,7 @@
 DEFINE_DEVICE_TYPE(SH_DMAC, sh_dmac_device, "sh_dmac", "SH DMA controller")
 DEFINE_DEVICE_TYPE(SH_DMAC_CHANNEL, sh_dmac_channel_device, "sh_dmac_channel", "SH DMA controller channel")
 
-sh_dmac_device::sh_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_dmac_device::sh_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_DMAC, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG)
 {
@@ -43,7 +43,7 @@ void sh_dmac_device::dmaor_w(offs_t, u16 data, u16 mem_mask)
 	logerror("dmaor_w %04x\n", m_dmaor);
 }
 
-sh_dmac_channel_device::sh_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_dmac_channel_device::sh_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, SH_DMAC_CHANNEL, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG)

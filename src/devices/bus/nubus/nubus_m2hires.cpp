@@ -62,10 +62,10 @@ class nubus_m2hires_device : public device_t,
 {
 public:
 	// construction/destruction
-	nubus_m2hires_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_m2hires_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	nubus_m2hires_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_m2hires_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -378,14 +378,14 @@ u32 nubus_m2hires_device::vram_r(offs_t offset, u32 mem_mask)
 class nubus_portrait_device : public nubus_m2hires_device
 {
 public:
-	nubus_portrait_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+	nubus_portrait_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: nubus_m2hires_device(mconfig, NUBUS_WSPORTRAIT, tag, owner, clock),
 		m_color_index(0)
 	{
 	}
 
 protected:
-	nubus_portrait_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_portrait_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 	virtual const tiny_rom_entry *device_rom_region() const override ATTR_COLD;
@@ -405,7 +405,7 @@ void nubus_portrait_device::device_add_mconfig(machine_config &config)
 	m_screen->set_raw(57.2832_MHz_XTAL, 832, 0, 640, 918, 0, 832);
 	m_screen->set_physical_aspect(3, 4);
 
-	BT454(config, m_ramdac, 0);
+	BT454(config, m_ramdac);
 }
 
 ROM_START(wsportrait)
@@ -418,7 +418,7 @@ const tiny_rom_entry *nubus_portrait_device::device_rom_region() const
 	return ROM_NAME(wsportrait);
 }
 
-nubus_portrait_device::nubus_portrait_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_portrait_device::nubus_portrait_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_m2hires_device(mconfig, type, tag, owner, clock)
 {
 }
@@ -474,7 +474,7 @@ void nubus_portrait_device::ramdac_w(offs_t offset, u32 data)
 class nubus_workstation_device : public nubus_portrait_device
 {
 public:
-	nubus_workstation_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+	nubus_workstation_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 		nubus_portrait_device(mconfig, NUBUS_WORKSTATION, tag, owner, clock)
 	{
 	}
@@ -503,7 +503,7 @@ void nubus_workstation_device::device_add_mconfig(machine_config &config)
 	m_screen->set_screen_update(FUNC(nubus_workstation_device::screen_update));
 	m_screen->set_raw(100_MHz_XTAL, 1448, 0, 1152, 913, 0, 832);
 
-	BT454(config, m_ramdac, 0);
+	BT454(config, m_ramdac);
 }
 
 void nubus_workstation_device::device_start()

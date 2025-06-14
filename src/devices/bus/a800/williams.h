@@ -11,8 +11,8 @@
 class a800_rom_williams_device : public a800_rom_device
 {
 public:
-	a800_rom_williams_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	a800_rom_williams_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_williams_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	a800_rom_williams_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
@@ -34,8 +34,8 @@ protected:
 class a800_rom_express_device : public a800_rom_williams_device
 {
 public:
-	a800_rom_express_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-	a800_rom_express_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_express_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
+	a800_rom_express_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
@@ -47,7 +47,7 @@ protected:
 class a800_rom_diamond_device : public a800_rom_express_device
 {
 public:
-	a800_rom_diamond_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_diamond_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
@@ -56,7 +56,7 @@ private:
 class a800_rom_turbo_device : public a800_rom_williams_device
 {
 public:
-	a800_rom_turbo_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a800_rom_turbo_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cctl_map(address_map &map) override ATTR_COLD;
 };

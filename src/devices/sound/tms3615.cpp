@@ -49,7 +49,7 @@ void tms3615_device::device_start()
 
 void tms3615_device::sound_stream_update(sound_stream &stream)
 {
-	int samplerate = stream.sample_rate();
+	int samplerate = stream.sample_rate().value();
 
 	constexpr sound_stream::sample_t VMAX = 1.0f / sound_stream::sample_t(TMS3615_TONES);
 	for (int sampindex = 0; sampindex < stream.samples(); sampindex++)

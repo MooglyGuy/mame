@@ -21,7 +21,7 @@ class robotron_k7071_device
 	, public device_multibus_interface
 {
 public:
-	robotron_k7071_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	robotron_k7071_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

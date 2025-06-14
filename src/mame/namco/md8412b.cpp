@@ -16,7 +16,7 @@
 
 DEFINE_DEVICE_TYPE(MD8412B, md8412b_device, "md8412b", "Fujifilm MD8412B IEEE-1394 LLC")
 
-md8412b_device::md8412b_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+md8412b_device::md8412b_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MD8412B, tag, owner, clock)
 	, m_ctrl(0)
 	, m_node_id(0)

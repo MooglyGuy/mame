@@ -28,7 +28,7 @@
 
 DEFINE_DEVICE_TYPE(I82371EB_ISA, i82371eb_isa_device, "i82371eb_isa", "Intel 82371EB PIIX4E PCI to ISA/EIO southbridge")
 
-i82371eb_isa_device::i82371eb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+i82371eb_isa_device::i82371eb_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: i82371sb_isa_device(mconfig, I82371EB_ISA, tag, owner, clock)
 
 {

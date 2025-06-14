@@ -30,7 +30,7 @@ DEFINE_DEVICE_TYPE(OTI64111_PCI, oti64111_pci_device,   "oti64111_pci",   "OTI-6
 //OTI-64317
 
 
-oti64111_pci_device::oti64111_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+oti64111_pci_device::oti64111_pci_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 	, m_svga(*this, "svga")
 	, m_vga_rom(*this, "vga_rom")
@@ -39,7 +39,7 @@ oti64111_pci_device::oti64111_pci_device(const machine_config &mconfig, device_t
 	set_ids(0x104e0111, 0x30, 0x030000, 0x104e0111);
 }
 
-oti64111_pci_device::oti64111_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+oti64111_pci_device::oti64111_pci_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: oti64111_pci_device(mconfig, OTI64111_PCI, tag, owner, clock)
 {
 }
@@ -61,7 +61,7 @@ void oti64111_pci_device::device_add_mconfig(machine_config &config)
 	screen.set_raw(XTAL(25'174'800), 900, 0, 640, 526, 0, 480);
 	screen.set_screen_update(m_svga, FUNC(oak_oti111_vga_device::screen_update));
 
-	OTI111(config, m_svga, 0);
+	OTI111(config, m_svga);
 	m_svga->set_screen("screen");
 	m_svga->set_vram_size(4*1024*1024);
 }

@@ -60,7 +60,7 @@ void a800_rom_device::cart_map(address_map &map)
 
  -------------------------------------------------*/
 
-a800_rom_right_device::a800_rom_right_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_right_device::a800_rom_right_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, A800_ROM_RIGHT, tag, owner, clock)
 {
 }
@@ -88,7 +88,7 @@ void a800_rom_right_device::cart_map(address_map &map)
 
  -------------------------------------------------*/
 
-a800_rom_16kb_device::a800_rom_16kb_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a800_rom_16kb_device::a800_rom_16kb_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, A800_ROM_16KB, tag, owner, clock)
 {
 }
@@ -115,7 +115,7 @@ void a800_rom_16kb_device::cart_map(address_map &map)
 
  -------------------------------------------------*/
 
-xegs_rom_device::xegs_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+xegs_rom_device::xegs_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a800_rom_device(mconfig, XEGS_ROM, tag, owner, clock)
 	, m_bank(0)
 {
@@ -162,13 +162,13 @@ void xegs_rom_device::cctl_map(address_map &map)
 
  -------------------------------------------------*/
 
-a5200_rom_device::a5200_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+a5200_rom_device::a5200_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_a5200_cart_interface( mconfig, *this )
 {
 }
 
-a5200_rom_device::a5200_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a5200_rom_device::a5200_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a5200_rom_device(mconfig, A5200_ROM, tag, owner, clock)
 {
 }
@@ -194,7 +194,7 @@ void a5200_rom_device::device_start()
 
  -------------------------------------------------*/
 
-a5200_rom_2chips_device::a5200_rom_2chips_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+a5200_rom_2chips_device::a5200_rom_2chips_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: a5200_rom_device(mconfig, A5200_ROM_2CHIPS, tag, owner, clock)
 {
 }

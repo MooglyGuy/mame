@@ -729,7 +729,7 @@ class sa1100_cpu_device : public arm7_cpu_device
 {
 public:
 	// construction/destruction
-	sa1100_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sa1100_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 };
 
 class sa1110_cpu_device : public arm7_cpu_device

@@ -410,22 +410,22 @@ i8744_device::i8744_device(const machine_config &mconfig, const char *tag, devic
 {
 }
 
-p80c562_device::p80c562_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, int program_width, int data_width, uint8_t features)
+p80c562_device::p80c562_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int program_width, int data_width, uint8_t features)
 	: i80c51_device(mconfig, type, tag, owner, clock, program_width, data_width, features)
 {
 }
 
-p80c562_device::p80c562_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+p80c562_device::p80c562_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: p80c562_device(mconfig, P80C562, tag, owner, clock, 0, 8)
 {
 }
 
-p80c552_device::p80c552_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+p80c552_device::p80c552_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: p80c562_device(mconfig, P80C552, tag, owner, clock, 0, 8)
 {
 }
 
-p87c552_device::p87c552_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+p87c552_device::p87c552_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: p80c562_device(mconfig, P87C552, tag, owner, clock, 12, 8)
 {
 }

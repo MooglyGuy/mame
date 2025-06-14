@@ -15,7 +15,7 @@
 class sh7014_port_device : public device_t
 {
 public:
-	sh7014_port_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	sh7014_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto port_a_read_callback() { return m_port_a_read_cb.bind(); }
 	auto port_a_write_callback() { return m_port_a_write_cb.bind(); }

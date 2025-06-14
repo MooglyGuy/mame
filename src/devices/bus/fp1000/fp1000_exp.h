@@ -16,14 +16,14 @@ public:
 	// construction/destruction
 	template <typename T>
 	fp1000_exp_slot_device(machine_config const &mconfig, char const *tag, device_t *owner, T &&opts, char const *dflt)
-		: fp1000_exp_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: fp1000_exp_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	fp1000_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	fp1000_exp_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~fp1000_exp_slot_device();
 
 	template <typename T> void set_iospace(T &&tag, int spacenum) { m_iospace.set_tag(std::forward<T>(tag), spacenum); }
@@ -85,8 +85,7 @@ class fp1000_exp_device : public device_t, public device_fp1000_exp_interface
 {
 public:
 	// construction/destruction
-	fp1000_exp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
-
+	fp1000_exp_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 //  virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;

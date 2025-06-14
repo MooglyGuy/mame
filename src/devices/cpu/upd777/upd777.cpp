@@ -14,7 +14,7 @@
 
 DEFINE_DEVICE_TYPE(UPD777,    upd777_cpu_device,    "upd777",    "uPD777")
 
-upd777_cpu_device::upd777_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor data)
+upd777_cpu_device::upd777_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor data)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_datamem(*this, "datamem")
 	, m_space_config("program", ENDIANNESS_BIG, 16, 11, -1, address_map_constructor(FUNC(upd777_cpu_device::internal_map), this))
@@ -28,7 +28,7 @@ upd777_cpu_device::upd777_cpu_device(const machine_config &mconfig, device_type 
 {
 }
 
-upd777_cpu_device::upd777_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+upd777_cpu_device::upd777_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd777_cpu_device(mconfig, UPD777, tag, owner, clock, address_map_constructor(FUNC(upd777_cpu_device::internal_data_map), this))
 {
 }

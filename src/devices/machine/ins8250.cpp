@@ -671,8 +671,8 @@ void ins8250_uart_device::rx_w(int state)
 
 void ins8250_uart_device::device_start()
 {
-	set_tra_rate(0);
-	set_rcv_rate(0);
+	set_tra_rate(XTAL());
+	set_rcv_rate(XTAL());
 
 	save_item(NAME(m_regs.thr));
 	save_item(NAME(m_regs.rbr));

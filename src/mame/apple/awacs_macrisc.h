@@ -23,7 +23,7 @@ class awacs_macrisc_device : public device_t, public device_sound_interface
 {
 public:
 	// construction/destruction
-	awacs_macrisc_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	awacs_macrisc_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto dma_output() { return m_output_cb.bind(); }
 	auto dma_input() { return m_input_cb.bind(); }
@@ -32,7 +32,7 @@ public:
 	virtual void write_macrisc(offs_t offset, u32 data);
 
 protected:
-	awacs_macrisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	awacs_macrisc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	enum {
 		ACTIVE_OUT = 0x01,
@@ -60,7 +60,7 @@ protected:
 class screamer_device : public awacs_macrisc_device
 {
 public:
-	screamer_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	screamer_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual u32 read_macrisc(offs_t offset) override;
 	virtual void write_macrisc(offs_t offset, u32 data) override;

@@ -25,7 +25,7 @@ public:
 	virtual void regs_map(address_map &map) ATTR_COLD;
 
 protected:
-	k056230_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	k056230_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -43,7 +43,7 @@ class k056230_viper_device : public k056230_device
 {
 public:
 	// construction/destruction
-	k056230_viper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	k056230_viper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void regs_map(address_map &map) override ATTR_COLD;
 

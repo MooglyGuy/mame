@@ -129,7 +129,7 @@ void extrema_m27sv_state::extrema_m27sv(machine_config &config)
 
 	PALETTE(config, "palette").set_entries(0x100); // TODO
 
-	RAMDAC(config, "ramdac", 0, "palette");
+	RAMDAC(config, "ramdac", "palette");
 
 	SPEAKER(config, "mono").front_center();
 

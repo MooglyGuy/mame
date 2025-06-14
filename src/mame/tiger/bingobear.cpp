@@ -197,7 +197,7 @@ INPUT_PORTS_END
 
 void bingobear_state::bingobear(machine_config &config)
 {
-	constexpr u32 MASTER_CLOCK = 640'000; // approximation
+	constexpr XTAL MASTER_CLOCK = XTAL::u(640'000); // approximation
 
 	// basic machine hardware
 	TMS1100(config, m_maincpu, MASTER_CLOCK/2);

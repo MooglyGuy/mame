@@ -29,7 +29,7 @@ public:
 		PERIPHERAL_MODE = 1
 	};
 
-	psion_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	psion_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void set_mode(pc6_state mode) { m_mode = mode; }
 

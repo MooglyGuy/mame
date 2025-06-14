@@ -46,7 +46,7 @@ namespace {
 class h_88_5_device : public device_t, public device_h89bus_right_card_interface
 {
 public:
-	h_88_5_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	h_88_5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void write(u8 select_lines, u8 offset, u8 data) override;
 	virtual u8 read(u8 select_lines, u8 offset) override;
@@ -71,8 +71,8 @@ protected:
 	bool m_cassold;
 };
 
-h_88_5_device::h_88_5_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, H89BUS_H_88_5, tag, owner, 0),
+h_88_5_device::h_88_5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, H89BUS_H_88_5, tag, owner, clock),
 	device_h89bus_right_card_interface(mconfig, *this),
 	m_uart(*this, "uart"),
 	m_cass_player(*this, "cassette_player"),
@@ -180,12 +180,12 @@ void h_88_5_device::device_reset()
 
 void h_88_5_device::device_add_mconfig(machine_config &config)
 {
-	I8251(config, m_uart, 0);
+	I8251(config, m_uart, XTAL());
 	m_uart->txd_handler().set([this] (bool state) { m_cassbit = state; });
 	m_uart->rts_handler().set(FUNC(h_88_5_device::uart_rts));
 	m_uart->txempty_handler().set(FUNC(h_88_5_device::uart_tx_empty));
 
-	clock_device &cassette_clock(CLOCK(config, "cassette_clock", 4800));
+	clock_device &cassette_clock(CLOCK(config, "cassette_clock", XTAL::u(4800)));
 	cassette_clock.signal_handler().set(m_uart, FUNC(i8251_device::write_txc));
 	cassette_clock.signal_handler().append(m_uart, FUNC(i8251_device::write_rxc));
 

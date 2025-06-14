@@ -19,7 +19,7 @@ class isa16_pvga1a_device :
 {
 public:
 	// construction/destruction
-	isa16_pvga1a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_pvga1a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void remap(int space_id, offs_t start, offs_t end) override;
 
@@ -43,7 +43,7 @@ class isa16_pvga1a_jk_device :
 {
 public:
 	// construction/destruction
-	isa16_pvga1a_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_pvga1a_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -65,7 +65,7 @@ class isa8_wd90c90_jk_device :
 {
 public:
 	// construction/destruction
-	isa8_wd90c90_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa8_wd90c90_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -87,7 +87,7 @@ class isa16_wd90c00_jk_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c00_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c00_jk_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// resets itself at card POST for accessing $c6xxx area, plays with input sense later
 	static constexpr feature_type unemulated_features() { return feature::PROTECTION; }
@@ -112,7 +112,7 @@ class isa16_wd90c11_lr_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c11_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c11_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -134,7 +134,7 @@ class isa16_wd90c30_lr_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c30_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c30_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -156,7 +156,7 @@ class isa16_wd90c31_lr_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c31_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c31_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void remap(int space_id, offs_t start, offs_t end) override;
 
@@ -180,7 +180,7 @@ class isa16_wd90c31a_lr_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c31a_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c31a_lr_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -202,7 +202,7 @@ class isa16_wd90c31a_zs_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c31a_zs_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c31a_zs_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides
@@ -224,7 +224,7 @@ class isa16_wd90c33_zz_device :
 {
 public:
 	// construction/destruction
-	isa16_wd90c33_zz_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	isa16_wd90c33_zz_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

@@ -36,7 +36,7 @@ class sony_ldp1450hle_device : public laserdisc_device, public device_serial_int
 {
 public:
 	// construction/destruction
-	sony_ldp1450hle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	sony_ldp1450hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto serial_tx() { return m_serial_tx.bind(); }
 

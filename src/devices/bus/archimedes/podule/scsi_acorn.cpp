@@ -32,12 +32,12 @@ class arc_scsi_aka31_device :
 {
 public:
 	// construction/destruction
-	arc_scsi_aka31_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	arc_scsi_aka31_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	static constexpr feature_type unemulated_features() { return feature::DISK; }
 
 protected:
-	arc_scsi_aka31_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	arc_scsi_aka31_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -72,7 +72,7 @@ class arc_scsi_aka32_device : public arc_scsi_aka31_device
 {
 public:
 	// construction/destruction
-	arc_scsi_aka32_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	arc_scsi_aka32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// optional information overrides
@@ -148,7 +148,7 @@ void arc_scsi_aka31_device::device_add_mconfig(machine_config &config)
 			wd33c93.drq_cb().set([this](int state) { m_dmac->dmarq(state, 0); });
 		});
 
-	UPD71071(config, m_dmac, 0);
+	UPD71071(config, m_dmac);
 	m_dmac->set_cpu_tag(":maincpu");
 	m_dmac->set_clock(DERIVED_CLOCK(1, 1));
 	m_dmac->out_eop_callback().set([this](int state) { m_dmac_int = state; update_interrupts(); });
@@ -165,7 +165,7 @@ void arc_scsi_aka31_device::device_add_mconfig(machine_config &config)
 //  arc_scsi_aka31_device - constructor
 //-------------------------------------------------
 
-arc_scsi_aka31_device::arc_scsi_aka31_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+arc_scsi_aka31_device::arc_scsi_aka31_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_archimedes_podule_interface(mconfig, *this)
 	, m_wd33c93(*this, "scsi:7:wd33c93a")
@@ -178,12 +178,12 @@ arc_scsi_aka31_device::arc_scsi_aka31_device(const machine_config &mconfig, devi
 {
 }
 
-arc_scsi_aka31_device::arc_scsi_aka31_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_scsi_aka31_device::arc_scsi_aka31_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arc_scsi_aka31_device(mconfig, ARC_SCSI_AKA31, tag, owner, clock)
 {
 }
 
-arc_scsi_aka32_device::arc_scsi_aka32_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+arc_scsi_aka32_device::arc_scsi_aka32_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: arc_scsi_aka31_device(mconfig, ARC_SCSI_AKA32, tag, owner, clock)
 {
 }

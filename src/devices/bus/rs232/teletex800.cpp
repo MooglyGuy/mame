@@ -17,7 +17,7 @@ namespace {
 class teletex_800_device : public device_t, public device_rs232_port_interface
 {
 public:
-	teletex_800_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock) :
+	teletex_800_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock) :
 		device_t(mconfig, TELETEX_800, tag, owner, clock),
 		device_rs232_port_interface(mconfig, *this),
 		m_maincpu(*this, "z80"),

@@ -296,7 +296,7 @@ ioport_constructor st_video_device::device_input_ports() const
 }
 
 
-st_video_device::st_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+st_video_device::st_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, ST_VIDEO, tag, owner, clock),
 	device_video_interface(mconfig, *this),
 	device_palette_interface(mconfig, *this),

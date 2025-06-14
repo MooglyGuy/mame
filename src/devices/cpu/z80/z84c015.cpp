@@ -20,7 +20,7 @@ void z84c015_device::internal_io_map(address_map &map) const
 	map(0xef, 0xef).mirror(0xff00).rw(FUNC(z84c015_device::scdp_r), FUNC(z84c015_device::scdp_w));
 }
 
-z84c015_device::z84c015_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+z84c015_device::z84c015_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tmpz84c015_device(mconfig, Z84C015, tag, owner, clock, address_map_constructor(FUNC(z84c015_device::internal_io_map), this))
 	, m_program_space_config("program", ENDIANNESS_LITTLE, 8, 18, 0, 16, 0)
 	, m_opcodes_space_config("opcodes", ENDIANNESS_LITTLE, 8, 18, 0, 16, 0)

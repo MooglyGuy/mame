@@ -194,7 +194,7 @@ INPUT_PORTS_END
 void constjr_state::constjr(machine_config &config)
 {
 	// basic machine hardware
-	HD6301V1(config, m_maincpu, 4'000'000); // approximation, no XTAL
+	HD6301V1(config, m_maincpu, XTAL::u(4'000'000)); // approximation, no XTAL
 	m_maincpu->nvram_enable_backup(true);
 	m_maincpu->standby_cb().set(m_maincpu, FUNC(hd6301v1_cpu_device::nvram_set_battery));
 	m_maincpu->standby_cb().append([this](int state) { if (state) m_display->clear(); });

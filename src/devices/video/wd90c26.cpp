@@ -21,7 +21,7 @@ TODO:
 
 DEFINE_DEVICE_TYPE(WD90C26,  wd90c26_vga_device,   "wd90c26_vga",  "Western Digital WD90C26 VGA Controller")
 
-wd90c26_vga_device::wd90c26_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+wd90c26_vga_device::wd90c26_vga_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: wd90c11a_vga_device(mconfig, WD90C26, tag, owner, clock)
 {
 	m_crtc_space_config = address_space_config("crtc_regs", ENDIANNESS_LITTLE, 8, 8, 0, address_map_constructor(FUNC(wd90c26_vga_device::crtc_map), this));

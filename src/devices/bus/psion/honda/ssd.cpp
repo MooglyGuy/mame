@@ -18,7 +18,7 @@ namespace {
 class psion_siena_ssd_device : public device_t, public device_psion_honda_interface
 {
 public:
-	psion_siena_ssd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	psion_siena_ssd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, PSION_SIENA_SSD, tag, owner, clock)
 		, device_psion_honda_interface(mconfig, *this)
 		, m_ssd(*this, "ssd")

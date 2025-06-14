@@ -27,18 +27,18 @@ DEFINE_DEVICE_TYPE(PSION_PSU_ASIC5, psion_psu_asic5_device, "psion_psu_asic5", "
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_asic3_device::psion_asic3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+psion_asic3_device::psion_asic3_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, m_adin_cb(*this, 0)
 {
 }
 
-psion_psu_asic5_device::psion_psu_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_psu_asic5_device::psion_psu_asic5_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: psion_asic3_device(mconfig, PSION_PSU_ASIC5, tag, owner, clock)
 {
 }
 
-psion_psu_asic3_device::psion_psu_asic3_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_psu_asic3_device::psion_psu_asic3_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: psion_asic3_device(mconfig, PSION_PSU_ASIC3, tag, owner, clock)
 {
 }

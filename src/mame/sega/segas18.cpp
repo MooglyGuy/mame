@@ -1449,7 +1449,7 @@ void segas18_state::lghost_fd1094(machine_config &config)
 	// basic machine hardware
 	m_io->out_pc_callback().set(FUNC(segas18_state::lghost_gun_recoil_w));
 
-	MSM6253(config, m_lghost_adc, 0);
+	MSM6253(config, m_lghost_adc);
 	m_lghost_adc->set_input_cb<0>(FUNC(segas18_state::lghost_y1_r));
 	m_lghost_adc->set_input_cb<1>(FUNC(segas18_state::lghost_x1_r));
 	m_lghost_adc->set_input_cb<2>(FUNC(segas18_state::lghost_y2_r));
@@ -1463,7 +1463,7 @@ void segas18_state::lghost(machine_config &config)
 	// basic machine hardware
 	m_io->out_pc_callback().set(FUNC(segas18_state::lghost_gun_recoil_w));
 
-	MSM6253(config, m_lghost_adc, 0);
+	MSM6253(config, m_lghost_adc);
 	m_lghost_adc->set_input_cb<0>(FUNC(segas18_state::lghost_y1_r));
 	m_lghost_adc->set_input_cb<1>(FUNC(segas18_state::lghost_x1_r));
 	m_lghost_adc->set_input_cb<2>(FUNC(segas18_state::lghost_y2_r));

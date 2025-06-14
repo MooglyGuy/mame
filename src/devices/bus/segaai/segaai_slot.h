@@ -21,14 +21,14 @@ class segaai_card_slot_device : public device_t,
 public:
 	template <typename T>
 	segaai_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: segaai_card_slot_device(mconfig, tag, owner, u32(0))
+		: segaai_card_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	segaai_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	segaai_card_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	virtual ~segaai_card_slot_device();
 
 	template <typename T> void set_address_space(T &&tag, int no) { m_address_space.set_tag(std::forward<T>(tag), no); }

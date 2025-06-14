@@ -41,7 +41,7 @@ INPUT_PORTS_END
 
 void antonelli_hd6305_state::antonelli(machine_config &config)
 {
-	HD6305Y2(config, m_maincpu, 8'000'000); // type guessed; clock unknown
+	HD6305Y2(config, m_maincpu, XTAL::u(8'000'000)); // type guessed; clock unknown
 	m_maincpu->set_addrmap(AS_PROGRAM, &antonelli_hd6305_state::mem_map);
 
 	ACIA6850(config, "acia");

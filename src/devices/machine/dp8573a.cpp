@@ -125,7 +125,7 @@ enum : uint8_t
 DEFINE_DEVICE_TYPE(DP8572A, dp8572a_device, "dp8572a", "DP8572A Real Time Clock")
 DEFINE_DEVICE_TYPE(DP8573A, dp8573a_device, "dp8573a", "DP8573A Real Time Clock")
 
-dp8573a_device::dp8573a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+dp8573a_device::dp8573a_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, device_nvram_interface(mconfig, *this)
 	, device_rtc_interface(mconfig, *this)
@@ -134,12 +134,12 @@ dp8573a_device::dp8573a_device(const machine_config &mconfig, device_type type, 
 {
 }
 
-dp8573a_device::dp8573a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dp8573a_device::dp8573a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: dp8573a_device(mconfig, DP8573A, tag, owner, clock)
 {
 }
 
-dp8572a_device::dp8572a_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+dp8572a_device::dp8572a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: dp8573a_device(mconfig, DP8572A, tag, owner, clock)
 {
 }

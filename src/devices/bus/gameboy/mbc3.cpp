@@ -175,7 +175,7 @@ public:
 class tfboot_device : public mbc3_device_base
 {
 public:
-	tfboot_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	tfboot_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	virtual std::error_condition load(std::string &message) override ATTR_COLD;
 
@@ -761,7 +761,7 @@ tfboot_device::tfboot_device(
 		machine_config const &mconfig,
 		char const *tag,
 		device_t *owner,
-		u32 clock) :
+		const XTAL &clock) :
 	mbc3_device_base(mconfig, GB_ROM_TFANGBOOT, tag, owner, clock),
 	m_protection{ 0U, 0U }
 {

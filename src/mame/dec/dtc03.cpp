@@ -317,7 +317,7 @@ void dtc03_state::dtc03(machine_config &config)
 	m_dsp->set_addrmap(AS_IO, &dtc03_state::dsp_io);
 	m_dsp->bio().set(FUNC(dtc03_state::bio_line_r)); // guessing this hookup is the same as DTC-07
 
-	SCN2661C(config, m_epci, 5068800); // this is wrong as there's no dedicated 5.0688MHz xtal, probably actually just XTAL(20'000'000)/4
+	SCN2661C(config, m_epci, XTAL::u(5068800)); // this is wrong as there's no dedicated 5.0688MHz xtal, probably actually just XTAL(20'000'000)/4
 	m_epci->txd_handler().set(m_rs232, FUNC(rs232_port_device::write_txd));
 	m_epci->rts_handler().set(m_rs232, FUNC(rs232_port_device::write_rts));
 	m_epci->dtr_handler().set(m_rs232, FUNC(rs232_port_device::write_dtr));
@@ -331,7 +331,7 @@ void dtc03_state::dtc03(machine_config &config)
 	m_rs232->cts_handler().set(m_epci, FUNC(scn2661c_device::cts_w));
 
 	SPEAKER(config, "speaker").front_center();
-	DAC_12BIT_R2R(config, m_dac, 0).add_route(0, "speaker", 1.0); // AD7541 DAC
+	DAC_12BIT_R2R(config, m_dac).add_route(0, "speaker", 1.0); // AD7541 DAC
 }
 
 /* ROM definition */

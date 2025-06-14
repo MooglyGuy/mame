@@ -179,7 +179,7 @@ bt478_device::bt478_device(machine_config const &mconfig, char const *tag, devic
 {
 }
 
-bt479_device::bt479_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+bt479_device::bt479_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: bt47x_device_base(mconfig, BT479, tag, owner, clock, 1024, 16, 8)
 {
 }

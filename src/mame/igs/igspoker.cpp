@@ -2026,7 +2026,7 @@ void _2layers_state::igspoker(machine_config &config)
 
 	m_screen->set_screen_update(FUNC(_2layers_state::screen_update));
 
-	YM2413(config, "ymsnd", 3'579'545).add_route(ALL_OUTPUTS, "mono", 1.0);
+	YM2413(config, "ymsnd", XTAL::u(3'579'545)).add_route(ALL_OUTPUTS, "mono", 1.0);
 }
 
 

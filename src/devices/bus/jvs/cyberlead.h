@@ -19,12 +19,12 @@ class namco_cyberlead_device :
 	public device_jvs_interface
 {
 public:
-	namco_cyberlead_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	namco_cyberlead_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto &rs232() const { if (m_rs232) return *m_rs232; return *subdevice<rs232_port_device>(m_rs232.finder_tag()); }
 
 protected:
-	namco_cyberlead_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
+	namco_cyberlead_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// device_t
 	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
@@ -58,7 +58,7 @@ class namco_cyberlead_led_device :
 	public device_rs232_port_interface
 {
 public:
-	namco_cyberlead_led_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	namco_cyberlead_led_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 protected:
 	// device_t

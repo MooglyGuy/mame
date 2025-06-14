@@ -21,7 +21,7 @@
 DEFINE_DEVICE_TYPE(XA, xa_cpu, "xa", "Philips 80c51 XA")
 DEFINE_DEVICE_TYPE(MX10EXA, mx10exa_cpu_device, "mx10exa", "Philips MX10EXA")
 
-xa_cpu::xa_cpu(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock, address_map_constructor prg_map, address_map_constructor dat_map)
+xa_cpu::xa_cpu(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor prg_map, address_map_constructor dat_map)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_LITTLE, 16, 24, 0, prg_map)
 	, m_data_config("data", ENDIANNESS_LITTLE, 16, 24, 0, dat_map)
@@ -37,13 +37,13 @@ xa_cpu::xa_cpu(const machine_config &mconfig, device_type type, const char *tag,
 	add_names(default_names);
 }
 
-xa_cpu::xa_cpu(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+xa_cpu::xa_cpu(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: xa_cpu(mconfig, XA, tag, owner, clock, address_map_constructor(FUNC(xa_cpu::internal_map), this), address_map_constructor(FUNC(xa_cpu::internal_data_map), this))
 {
 }
 
 
-mx10exa_cpu_device::mx10exa_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+mx10exa_cpu_device::mx10exa_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: xa_cpu(mconfig, MX10EXA, tag, owner, clock, address_map_constructor(FUNC(mx10exa_cpu_device::mx10exa_internal_map), this), address_map_constructor(FUNC(mx10exa_cpu_device::mx10exa_internal_data_map), this))
 {
 }

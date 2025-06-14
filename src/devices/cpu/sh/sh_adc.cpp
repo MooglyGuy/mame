@@ -14,7 +14,7 @@ static constexpr int V = 0;
 DEFINE_DEVICE_TYPE(SH_ADC_MS, sh_adc_ms_device, "sh_adc_ms", "SH2/704x ADC (medium speed)")
 DEFINE_DEVICE_TYPE(SH_ADC_HS, sh_adc_hs_device, "sh_adc_hs", "SH2/704x ADC (high speed)")
 
-sh_adc_device::sh_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+sh_adc_device::sh_adc_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_intc(*this, finder_base::DUMMY_TAG),
@@ -23,7 +23,7 @@ sh_adc_device::sh_adc_device(const machine_config &mconfig, device_type type, co
 {
 }
 
-sh_adc_ms_device::sh_adc_ms_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_adc_ms_device::sh_adc_ms_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sh_adc_device(mconfig, SH_ADC_MS, tag, owner, clock)
 {
 	m_is_hs = false;
@@ -33,7 +33,7 @@ sh_adc_ms_device::sh_adc_ms_device(const machine_config &mconfig, const char *ta
 	m_analog_powered = true;
 }
 
-sh_adc_hs_device::sh_adc_hs_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+sh_adc_hs_device::sh_adc_hs_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sh_adc_device(mconfig, SH_ADC_HS, tag, owner, clock)
 {
 	m_is_hs = true;

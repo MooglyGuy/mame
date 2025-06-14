@@ -26,7 +26,7 @@
 #include "emu.h"
 #include "ymp21.h"
 
-ymp21_device::ymp21_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+ymp21_device::ymp21_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock),
 	  m_tx_cb(*this),
 	  m_dsp3_buffer(*this, "dsp3", 0x80 * 5, ENDIANNESS_LITTLE)

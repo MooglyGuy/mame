@@ -19,7 +19,7 @@
 
 DEFINE_DEVICE_TYPE(VT8231_ISA, vt8231_isa_device, "vt8231_isa", "VT8231 South Bridge - PCI to ISA Bridge")
 
-vt8231_isa_device::vt8231_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)   :
+vt8231_isa_device::vt8231_isa_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)   :
 	pci_device(mconfig, VT8231_ISA, tag, owner, clock),
 	m_com1(*this, "com1"),
 	m_com1_txd_cb(*this), m_com1_dtr_cb(*this), m_com1_rts_cb(*this),
@@ -30,7 +30,7 @@ vt8231_isa_device::vt8231_isa_device(const machine_config &mconfig, const char *
 
 void vt8231_isa_device::device_add_mconfig(machine_config &config)
 {
-	NS16550(config, m_com1, 1'843'200);
+	NS16550(config, m_com1, XTAL::u(1'843'200));
 	m_com1->out_tx_callback().set(FUNC(vt8231_isa_device::com1_txd_w));
 	m_com1->out_dtr_callback().set(FUNC(vt8231_isa_device::com1_dtr_w));
 	m_com1->out_rts_callback().set(FUNC(vt8231_isa_device::com1_rts_w));

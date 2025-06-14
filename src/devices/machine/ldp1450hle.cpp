@@ -64,7 +64,7 @@ DEFINE_DEVICE_TYPE(SONY_LDP1450HLE, sony_ldp1450hle_device, "ldp1450hle", "Sony 
 //  sony_ldp1450hle_device - constructor
 //-------------------------------------------------
 
-sony_ldp1450hle_device::sony_ldp1450hle_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+sony_ldp1450hle_device::sony_ldp1450hle_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: laserdisc_device(mconfig, SONY_LDP1450HLE, tag, owner, clock)
 	, device_serial_interface(mconfig, *this)
 	, m_serial_tx(*this)

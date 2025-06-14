@@ -15,9 +15,9 @@ public:
 	using tile_delegate = device_delegate<void (u8 layer, u8 &gfxno, u32 &code)>;
 
 	// construction/destruction
-	namco_cus4xtmap_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
-	template <typename T> namco_cus4xtmap_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&palette_tag, const gfx_decode_entry *gfxinfo)
-		: namco_cus4xtmap_device(mconfig, tag, owner, clock)
+	namco_cus4xtmap_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
+	template <typename T> namco_cus4xtmap_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&palette_tag, const gfx_decode_entry *gfxinfo)
+		: namco_cus4xtmap_device(mconfig, tag, owner)
 	{
 		set_info(gfxinfo);
 		set_palette(std::forward<T>(palette_tag));

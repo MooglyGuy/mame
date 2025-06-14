@@ -1987,7 +1987,7 @@ void lastmisn_state::lastmisn(machine_config &config)
 	// video hardware
 	BUFFERED_SPRITERAM8(config, m_spriteram);
 
-	DECO_KARNOVSPRITES(config, m_spritegen_krn, 0, m_palette, gfx_shackled_spr);
+	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_shackled_spr);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);
@@ -2104,10 +2104,6 @@ void gondo_state::gondo(machine_config &config)
 
 	DECO_KARNOVSPRITES(config, m_spritegen_krn, m_palette, gfx_gondo_spr);
 	m_spritegen_krn->set_colpri_callback(FUNC(gondo_state::gondo_colpri_cb));
-=======
-	DECO_KARNOVSPRITES(config, m_spritegen_krn);
-	m_spritegen_krn->set_colpri_callback(FUNC(dec8_state::gondo_colpri_cb));
->>>>>>> 45d4cd52a81 (full xtal conversion)
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
 	set_screen_raw_params(config);

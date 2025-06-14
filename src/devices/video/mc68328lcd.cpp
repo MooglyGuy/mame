@@ -14,7 +14,7 @@
 
 DEFINE_DEVICE_TYPE(MC68328_LCD, mc68328_lcd_device, "mc68328_lcd", "MC68328-compatible LCD Controller")
 
-mc68328_lcd_device::mc68328_lcd_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+mc68328_lcd_device::mc68328_lcd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MC68328_LCD, tag, owner, clock)
 	, device_palette_interface(mconfig, *this)
 	, device_video_interface(mconfig, *this)

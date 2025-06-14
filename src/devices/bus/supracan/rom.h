@@ -15,7 +15,7 @@ class superacan_rom_device : public device_t,
 {
 public:
 	// construction/destruction
-	superacan_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	superacan_rom_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// load/unload
 	virtual std::error_condition load() override;
@@ -27,7 +27,7 @@ public:
 	virtual void nvram_w(offs_t offset, u8 data) override;
 
 protected:
-	superacan_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	superacan_rom_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 

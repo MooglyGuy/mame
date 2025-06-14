@@ -1414,7 +1414,7 @@ void a7800_ntsc_state::a7800_ntsc(machine_config &config)
 	a7800_common(config, A7800_NTSC_Y1); // from schematics
 
 	// basic machine hardware
-	m_screen->set_raw(14'318'180/2, 454, 0, 320, 263, 27, 27 + 192 + 32);
+	m_screen->set_raw(XTAL::u(14'318'180)/2, 454, 0, 320, 263, 27, 27 + 192 + 32);
 
 	// software lists
 	SOFTWARE_LIST(config, "cart_list").set_original("a7800").set_filter("NTSC");
@@ -1425,7 +1425,7 @@ void a7800_pal_state::a7800_pal(machine_config &config)
 	a7800_common(config, A7800_PAL_Y1); // from hardware tests (and label?)
 
 	// basic machine hardware
-	m_screen->set_raw(14'187'576/2, 454, 0, 320, 313, 35, 35 + 228 + 32);
+	m_screen->set_raw(XTAL::u(14'187'576)/2, 454, 0, 320, 313, 35, 35 + 228 + 32);
 
 	// software lists
 	SOFTWARE_LIST(config, "cart_list").set_original("a7800").set_filter("PAL");

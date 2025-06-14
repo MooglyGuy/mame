@@ -12,7 +12,7 @@
 class a5200_rom_supercart_device : public a5200_rom_device
 {
 public:
-	a5200_rom_supercart_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	a5200_rom_supercart_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void cart_map(address_map &map) override ATTR_COLD;
 

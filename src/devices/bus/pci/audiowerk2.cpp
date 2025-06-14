@@ -42,14 +42,14 @@ DEFINE_DEVICE_TYPE(AUDIOWERK2, audiowerk2_device,   "audiowerk2",   "Emagic Audi
 
 
 
-audiowerk2_device::audiowerk2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+audiowerk2_device::audiowerk2_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: pci_card_device(mconfig, type, tag, owner, clock)
 {
 	// TODO: subvendor ID, comes from i2c bus
 	set_ids(0x11317146, 0x01, 0x048000, 0x00000000);
 }
 
-audiowerk2_device::audiowerk2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+audiowerk2_device::audiowerk2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: audiowerk2_device(mconfig, AUDIOWERK2, tag, owner, clock)
 {
 }

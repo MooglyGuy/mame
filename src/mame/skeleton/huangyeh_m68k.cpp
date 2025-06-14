@@ -223,7 +223,7 @@ void huangyeh_m68k_state::wlzb(machine_config &config)
 
 	PALETTE(config, "palette").set_entries(0x100); // TODO
 
-	RAMDAC(config, "ramdac", 0, "palette").set_addrmap(0, &huangyeh_m68k_state::ramdac_map);
+	RAMDAC(config, "ramdac", "palette").set_addrmap(0, &huangyeh_m68k_state::ramdac_map);
 
 	HD63484(config, m_acrtc, 22_MHz_XTAL / 4).set_addrmap(0, &huangyeh_m68k_state::hd63484_map);
 

@@ -686,7 +686,7 @@ void tmc1800_state::machine_reset()
 
 	/* initialize beeper */
 	m_beeper->set_state(0);
-	m_beeper->set_clock(XTAL::u(0));
+	m_beeper->set_clock(0);
 }
 
 // OSCOM 1000B

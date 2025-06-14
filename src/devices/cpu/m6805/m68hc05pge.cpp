@@ -91,7 +91,7 @@ ROM_START( m68hc05pge )
 	ROM_LOAD( "pge_boot.bin", 0x000000, 0x000200, CRC(62d4dfed) SHA1(79dc721651bf47aec53f57885779c84c4781761d) )
 ROM_END
 
-m68hc05pge_device::m68hc05pge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrbits, address_map_constructor internal_map) :
+m68hc05pge_device::m68hc05pge_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrbits, address_map_constructor internal_map) :
 	m6805_base_device(mconfig, tag, owner, clock, type, {s_hc_b_ops, s_hc_cycles, 16, 0x00ff, 0x0040, 0xfffc}),
 	device_nvram_interface(mconfig, *this),
 	m_program_config("program", ENDIANNESS_BIG, 8, addrbits, 0, internal_map),
@@ -123,7 +123,7 @@ m68hc05pge_device::m68hc05pge_device(const machine_config &mconfig, device_type 
 	std::fill(std::begin(m_pullups), std::end(m_pullups), 0);
 }
 
-m68hc05pge_device::m68hc05pge_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+m68hc05pge_device::m68hc05pge_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	m68hc05pge_device(mconfig, M68HC05PGE, tag, owner, clock, 16, address_map_constructor(FUNC(m68hc05pge_device::m68hc05pge_map), this))
 {
 }
@@ -435,7 +435,7 @@ void m68hc05pge_device::spi_w(offs_t offset, u8 data)
 
 			m_spi_out = data;
 			m_spi_in = 0;
-			LOGMASKED(LOG_SPI, "SPI: sending %02x, clock rate %d\n", data, clock() / s_spi_divisors[m_spcr & 3]);
+			LOGMASKED(LOG_SPI, "SPI: sending %02x, clock rate %d\n", data, clock().value() / s_spi_divisors[m_spcr & 3]);
 			m_spi_bit = 16;
 			m_spi_timer->adjust(attotime::from_hz(clock() / s_spi_divisors[m_spcr & 3]));
 			break;

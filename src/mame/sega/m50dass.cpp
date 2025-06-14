@@ -19,7 +19,7 @@
 
 DEFINE_DEVICE_TYPE(MEGALO50_DASS, m50dass_device, "m50dass", "Sega DASS")
 
-m50dass_device::m50dass_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+m50dass_device::m50dass_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MEGALO50_DASS, tag, owner, clock)
 	, m_maincpu(*this, "maincpu")
 	, m_ym2413(*this, "ym2413")

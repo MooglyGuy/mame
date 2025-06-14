@@ -162,7 +162,7 @@ void rf51w14cg_state::rfsantafem(machine_config &config)
 	SPEAKER(config, "mono").front_center();
 
 	// Sound PCB
-	OKIM6376(config, m_okim6376, 153600).add_route(ALL_OUTPUTS, "mono", 1.0); // RC OSC, guessed frequency
+	OKIM6376(config, m_okim6376, XTAL::u(153600)).add_route(ALL_OUTPUTS, "mono", 1.0); // RC OSC, guessed frequency
 
 	// Reels PCB
 	PIC16C57(config, "pic_reels", 20_MHz_XTAL / 2); // PIC16C57-HS, guessed divisor

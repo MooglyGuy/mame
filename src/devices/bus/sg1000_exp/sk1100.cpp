@@ -315,12 +315,12 @@ sega_sk1100_device::sega_sk1100_device(const machine_config &mconfig, device_typ
 {
 }
 
-sega_sk1100_device::sega_sk1100_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sega_sk1100_device::sega_sk1100_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sega_sk1100_device(mconfig, SEGA_SK1100, tag, owner, clock)
 {
 }
 
-sega_sk1100e_device::sega_sk1100e_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+sega_sk1100e_device::sega_sk1100e_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	sega_sk1100_device(mconfig, SEGA_SK1100E, tag, owner, clock)
 {
 }

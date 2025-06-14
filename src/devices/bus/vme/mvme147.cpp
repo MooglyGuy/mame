@@ -179,7 +179,7 @@
 
 DEFINE_DEVICE_TYPE(VME_MVME147, vme_mvme147_card_device, "mvme147", "Motorola MVME147")
 
-vme_mvme147_card_device::vme_mvme147_card_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock)
+vme_mvme147_card_device::vme_mvme147_card_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, VME_MVME147, tag, owner, clock)
 	, device_vme_card_interface(mconfig, *this)
 	, m_maincpu (*this, "maincpu")

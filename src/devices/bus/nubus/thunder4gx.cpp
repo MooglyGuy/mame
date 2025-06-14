@@ -56,10 +56,10 @@ class nubus_thunder4gx_device : public device_t,
 {
 public:
 	// construction/destruction
-	nubus_thunder4gx_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_thunder4gx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
-	nubus_thunder4gx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock);
+	nubus_thunder4gx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	required_device<screen_device> m_screen;
 	required_device<palette_device> m_palette;
@@ -162,12 +162,12 @@ ioport_constructor nubus_thunder4gx_device::device_input_ports() const
 //  LIVE DEVICE
 //**************************************************************************
 
-nubus_thunder4gx_device::nubus_thunder4gx_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+nubus_thunder4gx_device::nubus_thunder4gx_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_thunder4gx_device(mconfig, NUBUS_THUNDERIVGX, tag, owner, clock)
 {
 }
 
-nubus_thunder4gx_device::nubus_thunder4gx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+nubus_thunder4gx_device::nubus_thunder4gx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_nubus_card_interface(mconfig, *this),
 	m_screen(*this, "screen"),
@@ -881,7 +881,7 @@ void nubus_thunder4gx_device::clockgen_w(offs_t offset, u32 data, u32 mem_mask)
 class nubus_thunder4gx16_device : public nubus_thunder4gx_device
 {
 public:
-	nubus_thunder4gx16_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+	nubus_thunder4gx16_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	nubus_thunder4gx_device(mconfig, NUBUS_THUNDERIVGX16, tag, owner, clock)
 	{
 	}

@@ -14,7 +14,7 @@ DEFINE_DEVICE_TYPE(MSX_SLOT_FSA1FM, msx_slot_fsa1fm_device, "msx_slot_fs1afm", "
 DEFINE_DEVICE_TYPE(MSX_SLOT_FSA1FM2, msx_slot_fsa1fm2_device, "msx_slot_fs1afm2", "MSX Internal FS-A1FM part 2")
 
 
-msx_slot_fsa1fm2_device::msx_slot_fsa1fm2_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+msx_slot_fsa1fm2_device::msx_slot_fsa1fm2_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_SLOT_FSA1FM2, tag, owner, clock)
 	, msx_internal_slot_interface(mconfig, *this)
 	, m_rom_region(*this, finder_base::DUMMY_TAG)
@@ -136,7 +136,7 @@ void msx_slot_fsa1fm2_device::control_w(u8 data)
 
 
 
-msx_slot_fsa1fm_device::msx_slot_fsa1fm_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+msx_slot_fsa1fm_device::msx_slot_fsa1fm_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, MSX_SLOT_FSA1FM, tag, owner, clock)
 	, msx_internal_slot_interface(mconfig, *this)
 	, m_nvram(*this, "nvram")
@@ -166,7 +166,7 @@ void msx_slot_fsa1fm_device::device_add_mconfig(machine_config &config)
 	NVRAM(config, m_nvram, nvram_device::DEFAULT_ALL_0);
 
 	// Unknown how these are connected
-	I8251(config, m_i8251, 0);
+	I8251(config, m_i8251);
 
 	I8255(config, m_i8255);
 	m_i8255->out_pa_callback().set(FUNC(msx_slot_fsa1fm_device::i8255_port_a_w));

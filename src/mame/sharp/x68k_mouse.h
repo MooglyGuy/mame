@@ -11,7 +11,7 @@
 class x68k_mouse_device : public buffered_rs232_device<3>
 {
 public:
-	x68k_mouse_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock = 0);
+	x68k_mouse_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual void input_rts(int state) override; // MSCTRL (active low)
 

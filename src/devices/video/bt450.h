@@ -11,7 +11,7 @@ class bt450_device
 	, public device_palette_interface
 {
 public:
-	bt450_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	bt450_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 	u8 address_r();
 	void address_w(u8 data);

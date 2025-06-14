@@ -27,7 +27,7 @@ class nubus_lview_device :
 {
 public:
 	// construction/destruction
-	nubus_lview_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	nubus_lview_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

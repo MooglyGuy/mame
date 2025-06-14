@@ -2989,7 +2989,7 @@ void subsino_state::newhunterd(machine_config &config)
 {
 	tisub(config);
 
-	Z80(config.replace(), m_maincpu, 6'000'000); // unknown clock
+	Z80(config.replace(), m_maincpu, XTAL::u(6'000'000)); // unknown clock
 	m_maincpu->set_addrmap(AS_PROGRAM, &subsino_state::newhunterd_map);
 
 	subdevice<screen_device>("screen")->screen_vblank().set_inputline(m_maincpu, 0, HOLD_LINE); // ? (needs some kind of source for IM 1 interrupt)

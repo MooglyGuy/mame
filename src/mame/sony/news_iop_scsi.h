@@ -10,7 +10,7 @@ class news_iop_scsi_helper_device : public device_t
 {
 public:
 	// device type constructor
-	news_iop_scsi_helper_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	news_iop_scsi_helper_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	// callback configuration
 	auto scsi_read_callback() { return m_scsi_read_callback.bind(); }

@@ -20,7 +20,7 @@ public:
 
 	template <typename T>
 	pci_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, u8 slot, u8 irqa, u8 irqb, u8 irqc, u8 irqd, const char *dflt)
-		: pci_slot_device(mconfig, tag, owner, (uint32_t)0)
+		: pci_slot_device(mconfig, tag, owner)
 	{
 		option_reset();
 		opts(*this);
@@ -33,7 +33,7 @@ public:
 		m_irq[3] = irqd;
 	}
 
-	pci_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock = 0);
+	pci_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	virtual ~pci_slot_device();
 
@@ -79,7 +79,7 @@ protected:
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
 
-	pci_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	pci_card_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	void irq_pin_w(offs_t line, int state);
 };

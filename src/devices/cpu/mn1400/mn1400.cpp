@@ -19,15 +19,15 @@ DEFINE_DEVICE_TYPE(MN1405, mn1405_cpu_device, "mn1405", "Matsushita MN1405")
 
 
 // constructor
-mn1400_cpu_device::mn1400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data) :
+mn1400_cpu_device::mn1400_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int stack_levels, int prgwidth, address_map_constructor program, int datawidth, address_map_constructor data) :
 	mn1400_base_device(mconfig, type, tag, owner, clock, stack_levels, prgwidth, program, datawidth, data)
 { }
 
-mn1400_cpu_device::mn1400_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+mn1400_cpu_device::mn1400_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mn1400_cpu_device(mconfig, MN1400_40PINS, tag, owner, clock, 2 /* stack levels */, 10 /* rom bits */, address_map_constructor(FUNC(mn1400_cpu_device::program_1kx8), this), 6 /* ram bits */, address_map_constructor(FUNC(mn1400_cpu_device::data_64x4), this))
 { }
 
-mn1400_reduced_cpu_device::mn1400_reduced_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+mn1400_reduced_cpu_device::mn1400_reduced_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mn1400_cpu_device(mconfig, MN1400_28PINS, tag, owner, clock, 2, 10, address_map_constructor(FUNC(mn1400_reduced_cpu_device::program_1kx8), this), 6, address_map_constructor(FUNC(mn1400_reduced_cpu_device::data_64x4), this))
 {
 	// CO5-CO9, DO0-DO3 (scrambled)
@@ -35,7 +35,7 @@ mn1400_reduced_cpu_device::mn1400_reduced_cpu_device(const machine_config &mconf
 	set_d_mask(0xf, 0x5321);
 }
 
-mn1405_cpu_device::mn1405_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+mn1405_cpu_device::mn1405_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	mn1400_cpu_device(mconfig, MN1405, tag, owner, clock, 2, 11, address_map_constructor(FUNC(mn1405_cpu_device::program_2kx8), this), 7, address_map_constructor(FUNC(mn1405_cpu_device::data_128x4), this))
 { }
 

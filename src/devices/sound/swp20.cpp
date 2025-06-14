@@ -17,7 +17,7 @@ swp20_device::swp20_device(const machine_config &mconfig, const char *tag, devic
 
 void swp20_device::device_start()
 {
-	m_stream = stream_alloc(0, 2, 44100);
+	m_stream = stream_alloc(0, 2, XTAL::u(44100));
 
 	save_item(NAME(m_sample_address));
 }

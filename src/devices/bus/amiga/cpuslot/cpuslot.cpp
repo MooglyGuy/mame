@@ -19,7 +19,7 @@ DEFINE_DEVICE_TYPE(AMIGA_CPUSLOT, amiga_cpuslot_device, "amiga_cpuslot", "Amiga 
 //  SLOT DEVICE
 //**************************************************************************
 
-amiga_cpuslot_device::amiga_cpuslot_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
+amiga_cpuslot_device::amiga_cpuslot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, AMIGA_CPUSLOT, tag, owner, clock),
 	device_single_card_slot_interface<device_amiga_cpuslot_interface>(mconfig, *this),
 	m_space(*this, finder_base::DUMMY_TAG, -1),

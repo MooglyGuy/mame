@@ -164,7 +164,7 @@ INPUT_PORTS_END
 //  DEVICE INITIALIZATION
 //**************************************************************************
 
-network_adapter::network_adapter(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock)
+network_adapter::network_adapter(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, NABUPC_NETWORK_ADAPTER, tag, owner, clock)
 	, device_buffered_serial_interface(mconfig, *this)
 	, device_rs232_port_interface(mconfig, *this)
@@ -201,7 +201,7 @@ void network_adapter::device_reset()
 
 	// configure device_buffered_serial_interface
 	set_data_frame(START_BIT_COUNT, DATA_BIT_COUNT, PARITY, STOP_BITS);
-	set_rate(BAUD);
+	set_rate(XTAL::u(BAUD));
 	receive_register_reset();
 	transmit_register_reset();
 }

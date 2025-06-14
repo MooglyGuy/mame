@@ -16,7 +16,7 @@ DECLARE_DEVICE_TYPE(MSX_SLOT_PANASONIC08R, msx_slot_panasonic08r_device)
 class msx_slot_panasonic08r_device : public device_t, public msx_internal_slot_interface
 {
 public:
-	msx_slot_panasonic08r_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	msx_slot_panasonic08r_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	// configuration helpers
 	template <typename T> msx_slot_panasonic08r_device &set_mm_tag(T &&tag) { m_mm.set_tag(std::forward<T>(tag)); return *this; }

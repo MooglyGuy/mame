@@ -36,7 +36,7 @@ DEFINE_DEVICE_TYPE(PSION_ASIC4, psion_asic4_device, "psion_asic4", "Psion ASIC4"
 //  LIVE DEVICE
 //**************************************************************************
 
-psion_asic4_device::psion_asic4_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+psion_asic4_device::psion_asic4_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, PSION_ASIC4, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 	, m_space_config("program", ENDIANNESS_LITTLE, 8, 28)

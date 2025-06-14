@@ -38,12 +38,12 @@ static constexpr u16 SELECT_ADDR_MASK = 0xF8;
 /**
  * The SigmaSoft Parallel Port
  */
-sigmasoft_parallel_port::sigmasoft_parallel_port(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+sigmasoft_parallel_port::sigmasoft_parallel_port(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	sigmasoft_parallel_port(mconfig, H89BUS_SIGMASOFT_PARALLEL, tag, owner, clock)
 {
 }
 
-sigmasoft_parallel_port::sigmasoft_parallel_port(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock):
+sigmasoft_parallel_port::sigmasoft_parallel_port(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock):
 	device_t(mconfig, type, tag, owner, clock),
 	device_h89bus_left_card_interface(mconfig, *this),
 	m_jumpers(*this, "JUMPERS")
@@ -175,7 +175,7 @@ ioport_constructor sigmasoft_parallel_port::device_input_ports() const
 /**
  * The SigmaSoft Parallel Port connected to a SigmaSoft IGC board
  */
-sigmasoft_parallel_port_igc::sigmasoft_parallel_port_igc(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+sigmasoft_parallel_port_igc::sigmasoft_parallel_port_igc(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	sigmasoft_parallel_port(mconfig, H89BUS_SIGMASOFT_PARALLEL_IGC, tag, owner, clock),
 	m_tlbc(*this, finder_base::DUMMY_TAG)
 {

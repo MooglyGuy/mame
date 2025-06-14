@@ -22,7 +22,7 @@ class kl1839vm1_device :  public cpu_device
 {
 public:
 	// construction/destruction
-	kl1839vm1_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	kl1839vm1_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device-level overrides

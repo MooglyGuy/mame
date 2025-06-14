@@ -12,7 +12,7 @@
 DEFINE_DEVICE_TYPE(TMP68301, tmp68301_device, "tmp68301", "Toshiba TMP68301")
 DEFINE_DEVICE_TYPE(TMP68303, tmp68303_device, "tmp68303", "Toshiba TMP68303")
 
-tmp68301_device::tmp68301_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
+tmp68301_device::tmp68301_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock) :
 	m68000_mcu_device(mconfig, type, tag, owner, clock),
 	m_parallel_r_cb(*this, 0xffff),
 	m_parallel_w_cb(*this),
@@ -28,7 +28,7 @@ tmp68301_device::tmp68301_device(const machine_config &mconfig, device_type type
 	m_serial_external_clock = 0;
 }
 
-tmp68301_device::tmp68301_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tmp68301_device::tmp68301_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tmp68301_device(mconfig, TMP68301, tag, owner, clock)
 {
 }
@@ -932,13 +932,13 @@ void tmp68301_device::sdr_w(int ch, u8 data)
 void tmp68301_device::serial_clock_update(int ch)
 {
 	u32 divider = (m_spr ? m_spr : 256) * sbrr_to_div(m_sbrr[ch]);
-	u32 bclk = m_scr & 0x80 ? clock() : m_serial_external_clock;
+	u32 bclk = m_scr & 0x80 ? clock().value() : m_serial_external_clock;
 	logerror("serial %d divider %d baud %d\n", ch, divider, bclk/divider/8);
 
 	if(m_scr & 0x80)
 		m_serial_gclk[ch] = divider;
 	else
-		m_serial_gclk[ch] = clock() * divider / m_serial_external_clock;
+		m_serial_gclk[ch] = (clock() * divider / m_serial_external_clock).value();
 }
 
 u64 tmp68301_device::serial_get_next_edge(int ch)
@@ -1329,7 +1329,7 @@ void tmp68301_device::timer_predict(int ch)
 // - Stub, needs internal map overrides (DMA, new timers, irq changes, stepping motor controller, other)
 // - DMAC for pkspirit
 
-tmp68303_device::tmp68303_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tmp68303_device::tmp68303_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: tmp68301_device(mconfig, TMP68303, tag, owner, clock)
 {
 }

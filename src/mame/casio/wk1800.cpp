@@ -284,7 +284,7 @@ void wk1600_state::driver_start()
 /**************************************************************************/
 void wk1600_state::wk1600(machine_config &config)
 {
-	H83048(config, m_maincpu, 16'000'000).set_mode_a20();
+	H83048(config, m_maincpu, XTAL::u(16'000'000)).set_mode_a20();
 	m_maincpu->set_addrmap(AS_PROGRAM, &wk1600_state::wk1600_map);
 	m_maincpu->read_adc<0>().set_constant(0);
 	m_maincpu->read_adc<1>().set_ioport("AN1");
@@ -312,7 +312,7 @@ void wk1600_state::wk1600(machine_config &config)
 	midiout_slot(mdout);
 	m_maincpu->write_sci_tx<0>().set(mdout, FUNC(midi_port_device::write_txd));
 
-	HD44780(config, m_lcdc, 270'000); // TODO: Wrong device type, should be SED1278F2A; clock not measured, datasheet typical clock used
+	HD44780(config, m_lcdc, XTAL::u(270'000)); // TODO: Wrong device type, should be SED1278F2A; clock not measured, datasheet typical clock used
 	m_lcdc->set_lcd_size(2, 8);
 
 	auto &screen(SCREEN(config, "screen", SCREEN_TYPE_SVG));
@@ -341,7 +341,7 @@ void wk1800_state::wk1800(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &wk1800_state::wk1800_map);
 
 #if 0
-	HD63266F(config, m_fdc, 16'000'000);
+	HD63266F(config, m_fdc, XTAL::u(16'000'000));
 	m_fdc->set_ready_line_connected(false);
 	m_fdc->drq_wr_callback().set_inputline(m_maincpu, H8_INPUT_LINE_DREQ0);
 	m_maincpu->tend0().set(m_fdc, FUNC(upd765a_device::tc_line_w));

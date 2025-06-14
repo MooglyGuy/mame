@@ -60,7 +60,7 @@ static constexpr u16 VECTOR_TIME  = 0x80;
 static constexpr u8 STACK_START = 0x20;
 
 
-upd177x_cpu_device::upd177x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock)
+upd177x_cpu_device::upd177x_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, device_sound_interface(mconfig, *this)
 	, m_program_config("program", ENDIANNESS_LITTLE, 16, 16, -1, address_map_constructor(FUNC(upd177x_cpu_device::program_map), this))
@@ -68,7 +68,7 @@ upd177x_cpu_device::upd177x_cpu_device(const machine_config &mconfig, device_typ
 { }
 
 
-upd1771c_cpu_device::upd1771c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+upd1771c_cpu_device::upd1771c_cpu_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: upd177x_cpu_device(mconfig, UPD1771C, tag, owner, clock)
 { }
 

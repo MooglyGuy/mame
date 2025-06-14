@@ -63,7 +63,7 @@ INPUT_PORTS_END
 
 void kidsupstar_state::kidsupstar(machine_config &config)
 {
-	ARM9(config, m_maincpu, 240'000'000); // Unknown core and frequency
+	ARM9(config, m_maincpu, XTAL::u(240'000'000)); // Unknown core and frequency
 
 	SCREEN(config, m_screen, SCREEN_TYPE_LCD); // Monochrome 48x48 LCD screen
 	m_screen->set_refresh_hz(60); // Guess

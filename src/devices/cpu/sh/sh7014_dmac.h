@@ -37,9 +37,9 @@ public:
 		RS_SCI_RXI1 = 15,
 	};
 
-	sh7014_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7014_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
-	template<typename T, typename U, typename V> sh7014_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&dmac, U &&cpu, V &&intc, int chan_id, int vector)
+	template<typename T, typename U, typename V> sh7014_dmac_channel_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&dmac, U &&cpu, V &&intc, int chan_id, int vector)
 		: sh7014_dmac_channel_device(mconfig, tag, owner, clock)
 	{
 		m_dmac.set_tag(std::forward<T>(dmac));
@@ -129,9 +129,9 @@ private:
 class sh7014_dmac_device : public device_t
 {
 public:
-	sh7014_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	sh7014_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
-	template<typename T, typename U> sh7014_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock, T &&cpu, U &&intc)
+	template<typename T, typename U> sh7014_dmac_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&cpu, U &&intc)
 		: sh7014_dmac_device(mconfig, tag, owner, clock)
 	{
 		m_cpu.set_tag(std::forward<T>(cpu));

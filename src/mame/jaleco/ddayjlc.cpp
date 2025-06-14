@@ -607,7 +607,7 @@ void ddayjlc_state::ddayjlc(machine_config &config)
 
 	config.set_maximum_quantum(attotime::from_hz(6000));
 
-	I8257(config, m_dma, 12000000/3);
+	I8257(config, m_dma, XTAL::u(12000000)/3);
 	m_dma->out_hrq_cb().set(FUNC(ddayjlc_state::hrq_w));
 	m_dma->in_memr_cb().set(FUNC(ddayjlc_state::dma_mem_r));
 	m_dma->out_memw_cb().set(FUNC(ddayjlc_state::dma_mem_w));

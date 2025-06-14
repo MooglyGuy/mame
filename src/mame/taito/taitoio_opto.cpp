@@ -22,7 +22,7 @@ Used by Taito gambling/medal games:
 DEFINE_DEVICE_TYPE(TAITOIO_OPTO, taitoio_opto_device, "taitoio_opto", "Taito I/O Opto coin slot")
 
 
-taitoio_opto_device::taitoio_opto_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+taitoio_opto_device::taitoio_opto_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TAITOIO_OPTO, tag, owner, clock)
 	, m_opto_timer(nullptr)
 	, m_coin_sense(false)

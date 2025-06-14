@@ -300,7 +300,7 @@ INPUT_PORTS_END
 void turbos24k_state::turbos24k(machine_config &config)
 {
 	// basic machine hardware
-	HD6301Y0(config, m_maincpu, 12'000'000); // approximation, no XTAL
+	HD6301Y0(config, m_maincpu, XTAL::u(12'000'000)); // approximation, no XTAL
 	m_maincpu->set_addrmap(AS_PROGRAM, &turbos24k_state::main_map);
 	m_maincpu->nvram_enable_backup(true);
 	m_maincpu->standby_cb().set(m_maincpu, FUNC(hd6301y_cpu_device::nvram_set_battery));

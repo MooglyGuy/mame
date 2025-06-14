@@ -74,7 +74,7 @@ public:
 	void set_osc3(u32 osc) { m_osc3 = osc; }
 
 protected:
-	e0c6s46_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, address_map_constructor program, address_map_constructor data);
+	e0c6s46_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, address_map_constructor program, address_map_constructor data);
 
 	// device-level overrides
 	virtual void device_start() override ATTR_COLD;
@@ -182,7 +182,7 @@ private:
 class e0c6s48_device : public e0c6s46_device
 {
 public:
-	e0c6s48_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	e0c6s48_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 private:
 	void program_map(address_map &map) ATTR_COLD;

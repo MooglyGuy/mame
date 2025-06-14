@@ -84,7 +84,7 @@
 // device type definition
 DEFINE_DEVICE_TYPE(TIM011_KEYBOARD, tim011_keyboard_device, "tim011_kbd", "TIM-011 Keyboard")
 
-tim011_keyboard_device::tim011_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+tim011_keyboard_device::tim011_keyboard_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, TIM011_KEYBOARD, tag, owner, clock)
 	, m_keybcpu(*this, "keybcpu")
 	, m_speaker(*this, "speaker")
@@ -307,7 +307,7 @@ ioport_constructor tim011_keyboard_device::device_input_ports() const
 
 void tim011_keyboard_device::device_add_mconfig(machine_config &config)
 {
-	cdp1802_device &keybcpu(CDP1802(config, m_keybcpu, 2'000'000)); // unknown clock (208 * baud rate)
+	cdp1802_device &keybcpu(CDP1802(config, m_keybcpu, XTAL::u(2'000'000))); // unknown clock (208 * baud rate)
 	keybcpu.set_addrmap(AS_PROGRAM, &tim011_keyboard_device::keyboard_mem);
 	keybcpu.set_addrmap(AS_IO, &tim011_keyboard_device::keyboard_io);
 	keybcpu.q_cb().set(FUNC(tim011_keyboard_device::q_w));

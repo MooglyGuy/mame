@@ -18,7 +18,7 @@ namespace {
 class idpart_video_device : public device_t, public device_rs232_port_interface
 {
 public:
-	idpart_video_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	idpart_video_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: device_t(mconfig, IDPART_VIDEO, tag, owner, clock)
 		, device_rs232_port_interface(mconfig, *this)
 		, m_maincpu(*this, "maincpu")
@@ -164,7 +164,7 @@ void idpart_video_device::device_add_mconfig(machine_config &config)
 	m_dma->out_iow_cb<3>().set(m_mpsc, FUNC(i8274_device::da_w));
 
 	// PIT
-	PIT8254(config, m_pit, 0);
+	PIT8254(config, m_pit);
 	m_pit->set_clk<0>(XTAL(6'144'000) / 2);
 	m_pit->set_clk<1>(XTAL(6'144'000) / 2);
 	m_pit->set_clk<2>(XTAL(6'144'000) / 2);

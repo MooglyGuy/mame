@@ -25,10 +25,10 @@ class wyse_keyboard_port_device : public device_t, public device_single_card_slo
 {
 public:
 	// construction/destruction
-	wyse_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	wyse_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 	template <typename T>
 	wyse_keyboard_port_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&opts, const char *dflt)
-		: wyse_keyboard_port_device(mconfig, tag, owner, 0U)
+		: wyse_keyboard_port_device(mconfig, tag, owner, XTAL())
 	{
 		option_reset();
 		opts(*this);

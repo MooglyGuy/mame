@@ -11,7 +11,7 @@
 
 DEFINE_DEVICE_TYPE(ZR36060, zr36060_device, "zr36060", "Zoran ZR36060 Integrated JPEG codec")
 
-zr36060_device::zr36060_device(const machine_config &mconfig, char const *tag, device_t *owner, u32 clock)
+zr36060_device::zr36060_device(const machine_config &mconfig, char const *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, ZR36060, tag, owner, clock)
 	, device_memory_interface(mconfig, *this)
 {

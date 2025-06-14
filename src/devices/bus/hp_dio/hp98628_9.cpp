@@ -90,7 +90,7 @@ public:
 protected:
 	static inline constexpr unsigned LOW_RAM_SIZE = 2048;
 
-	base_98628_9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	base_98628_9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
@@ -156,7 +156,7 @@ protected:
 	uint8_t m_low_ram[LOW_RAM_SIZE];
 };
 
-base_98628_9_device::base_98628_9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+base_98628_9_device::base_98628_9_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, type, tag, owner, clock)
 	, bus::hp_dio::device_dio16_card_interface(mconfig, *this)
 	, m_cpu(*this, "cpu")
@@ -711,13 +711,13 @@ class dio16_98628_device :
 		public base_98628_9_device
 {
 public:
-	dio16_98628_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	dio16_98628_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: dio16_98628_device(mconfig, HPDIO_98628, tag, owner, clock)
 	{
 	}
 
 protected:
-	dio16_98628_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	dio16_98628_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: base_98628_9_device(mconfig, type, tag, owner, clock)
 		, m_rs232(*this, "rs232")
 	{
@@ -825,7 +825,7 @@ class dio16_98629_device :
 		public base_98628_9_device
 {
 public:
-	dio16_98629_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+	dio16_98629_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 		: dio16_98629_device(mconfig, HPDIO_98629, tag, owner, clock)
 	{
 	}
@@ -843,7 +843,7 @@ protected:
 		ST_PAUSE
 	};
 
-	dio16_98629_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock)
+	dio16_98629_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock)
 		: base_98628_9_device(mconfig, type, tag, owner, clock)
 		, m_stream(*this, "stream")
 		, m_timer(*this, "tmr")
@@ -907,7 +907,7 @@ void dio16_98629_device::device_add_mconfig(machine_config &config)
 {
 	base_config(config);
 
-	BITBANGER(config, m_stream, 0);
+	BITBANGER(config, m_stream);
 	TIMER(config, m_timer).configure_generic(FUNC(dio16_98629_device::timer_to));
 }
 

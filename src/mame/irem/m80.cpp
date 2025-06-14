@@ -406,7 +406,7 @@ void shisen_state::shisen(machine_config &config)
 	ymsnd.add_route(0, "speaker", 0.5, 0);
 	ymsnd.add_route(1, "speaker", 0.5, 1);
 
-	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // Y3014B DAC
+	DAC_8BIT_R2R(config, "dac").add_route(ALL_OUTPUTS, "speaker", 0.25, 0).add_route(ALL_OUTPUTS, "speaker", 0.25, 1); // Y3014B DAC
 }
 
 

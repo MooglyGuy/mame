@@ -19,7 +19,7 @@ class sun1cpu_device
 	, public m68000_device::mmu
 {
 public:
-	sun1cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	sun1cpu_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	// device_t implementation

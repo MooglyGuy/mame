@@ -80,7 +80,7 @@ void epoch_tv_globe_state::arm_map(address_map &map)
 
 void epoch_tv_globe_state::epoch_tv_globe(machine_config &config)
 {
-	ARM9(config, m_maincpu, 24000000 * 4); // unknown ARM core, unknown frequency (24Mhz XTAL)
+	ARM9(config, m_maincpu, XTAL::u(24000000) * 4); // unknown ARM core, unknown frequency (24Mhz XTAL)
 	m_maincpu->set_addrmap(AS_PROGRAM, &epoch_tv_globe_state::arm_map);
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);

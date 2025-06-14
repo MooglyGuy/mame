@@ -14,7 +14,7 @@
 
 class st_kbd_device : public device_t {
 public:
-	st_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	st_kbd_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	void tx_w(int state);
 	auto rx_cb() { return m_rx_cb.bind(); }

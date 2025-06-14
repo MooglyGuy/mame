@@ -29,13 +29,13 @@ device_heath_intr_interface::device_heath_intr_interface(const machine_config &m
  * Original Heath interrrupt controller
  *
  */
-heath_intr_cntrl::heath_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+heath_intr_cntrl::heath_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	heath_intr_cntrl(mconfig, HEATH_INTR_CNTRL, tag, owner, clock)
 {
 }
 
-heath_intr_cntrl::heath_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock):
-	device_t(mconfig, type, tag, owner, 0),
+heath_intr_cntrl::heath_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock):
+	device_t(mconfig, type, tag, owner, clock),
 	device_heath_intr_interface(mconfig, *this)
 {
 }
@@ -113,7 +113,7 @@ u8 heath_intr_cntrl::get_instruction()
  * Base interrupt controller for soft-sectored controller.
  *
  */
-ss_intr_cntrl::ss_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock):
+ss_intr_cntrl::ss_intr_cntrl(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock):
 	heath_intr_cntrl(mconfig, type, tag, owner, clock)
 {
 }
@@ -151,7 +151,7 @@ void ss_intr_cntrl::device_start()
  * It will take control of the interrupt system and block all other
  * interrupts while it is waiting for Z37 events.
  */
-z37_intr_cntrl::z37_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+z37_intr_cntrl::z37_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	ss_intr_cntrl(mconfig, HEATH_Z37_INTR_CNTRL, tag, owner, clock)
 {
 }
@@ -209,7 +209,7 @@ void z37_intr_cntrl::block_interrupts(u8 data)
  * Interrupt controller for the mms 77316 soft-sectored controller.
  *
  */
-mms_intr_cntrl::mms_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock):
+mms_intr_cntrl::mms_intr_cntrl(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock):
 	ss_intr_cntrl(mconfig, HEATH_MMS_INTR_CNTRL, tag, owner, clock)
 {
 }
@@ -247,7 +247,7 @@ void mms_intr_cntrl::device_start()
  *
  * Allows choice of interrupt controllers for Heath 8-bit computers.
  */
-heath_intr_socket::heath_intr_socket(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock) :
+heath_intr_socket::heath_intr_socket(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock) :
 	device_t(mconfig, HEATH_INTR_SOCKET, tag, owner, clock),
 	device_single_card_slot_interface(mconfig, *this),
 	m_irq_line(*this),

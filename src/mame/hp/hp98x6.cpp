@@ -78,22 +78,22 @@
 namespace {
 
 // CPU clock
-constexpr auto CPU_CLOCK = 16_MHz_XTAL / 2;
+constexpr XTAL CPU_CLOCK = 16_MHz_XTAL / 2;
 
 // 9816: video dot clock
-constexpr unsigned DOT_CLOCK_9816 = 19'988'000;
+constexpr XTAL DOT_CLOCK_9816 = XTAL::u(19'988'000);
 
 // 9826: video dot clock
-constexpr auto DOT_CLOCK_9826 = 10_MHz_XTAL;
+constexpr XTAL DOT_CLOCK_9826 = 10_MHz_XTAL;
 
 // 9836(c): video dot clock
-constexpr unsigned DOT_CLOCK_9836 = 25'771'500;
+constexpr XTAL DOT_CLOCK_9836 = XTAL::u(25'771'500);
 
 // HPIB and UPI clock
-constexpr auto HPIB_CLOCK = 10_MHz_XTAL / 2;
+constexpr XTAL HPIB_CLOCK = 10_MHz_XTAL / 2;
 
 // UART clock
-constexpr auto UART_CLOCK = 2.4576_MHz_XTAL;
+constexpr XTAL UART_CLOCK = 2.4576_MHz_XTAL;
 
 // Bit manipulation
 template<typename T> constexpr T BIT_MASK(unsigned n)
@@ -154,7 +154,7 @@ protected:
 	virtual void machine_start() override ATTR_COLD;
 	virtual void machine_reset() override ATTR_COLD;
 
-	void hp98x6_base(machine_config &mconfig, unsigned dot_clock, int char_width);
+	void hp98x6_base(machine_config &mconfig, const XTAL &dot_clock, int char_width);
 	virtual void cpu_mem_map(address_map &map) ATTR_COLD;
 	void diag_led_w(uint8_t data);
 	virtual void cpu_reset_w(int state);
@@ -214,7 +214,7 @@ void hp98x6_base_state::machine_reset()
 	diag_led_w(0);
 }
 
-void hp98x6_base_state::hp98x6_base(machine_config &config, unsigned dot_clock, int char_width)
+void hp98x6_base_state::hp98x6_base(machine_config &config, const XTAL &dot_clock, int char_width)
 {
 	M68000(config, m_cpu, CPU_CLOCK);
 	m_cpu->set_addrmap(AS_PROGRAM, &hp98x6_base_state::cpu_mem_map);
@@ -262,7 +262,7 @@ void hp98x6_base_state::hp98x6_base(machine_config &config, unsigned dot_clock, 
 
 	SOFTWARE_LIST(config, "optrom_list").set_original("hp98x6_rom");
 
-	DIO16(config, m_dio_bus, 0);
+	DIO16(config, m_dio_bus);
 	m_dio_bus->set_program_space(m_cpu, AS_PROGRAM);
 	m_cpu->reset_cb().append(m_dio_bus, FUNC(bus::hp_dio::dio16_device::reset_in));
 	// IRQ mergers
@@ -284,8 +284,8 @@ void hp98x6_base_state::hp98x6_base(machine_config &config, unsigned dot_clock, 
 
 	m_upi->irq1_write_cb().set(m_irq1_merger, FUNC(input_merger_any_high_device::in_w<1>));
 
-	DIO16_SLOT(config, "slot0", 0, "diobus", dio16_hp98x6_cards, nullptr, false);
-	DIO16_SLOT(config, "slot1", 0, "diobus", dio16_hp98x6_cards, nullptr, false);
+	DIO16_SLOT(config, "slot0", "diobus", dio16_hp98x6_cards, nullptr, false);
+	DIO16_SLOT(config, "slot1", "diobus", dio16_hp98x6_cards, nullptr, false);
 }
 
 void hp98x6_base_state::cpu_mem_map(address_map &map)
@@ -903,7 +903,7 @@ protected:
 
 	TIMER_DEVICE_CALLBACK_MEMBER(fdc_ram_io);
 
-	void hp9826_36(machine_config &mconfig, unsigned dot_clock, int char_width);
+	void hp9826_36(machine_config &mconfig, const XTAL &dot_clock, int char_width);
 	virtual void cpu_mem_map(address_map &map) override ATTR_COLD;
 	virtual void cpu_reset_w(int state) override;
 	unsigned get_sel_floppy() const;
@@ -989,7 +989,7 @@ static void floppies(device_slot_interface &device)
 	device.option_add("525dd", FLOPPY_525_DD);
 }
 
-void hp9826_36_state::hp9826_36(machine_config &mconfig, unsigned dot_clock, int char_width)
+void hp9826_36_state::hp9826_36(machine_config &mconfig, const XTAL &dot_clock, int char_width)
 {
 	hp98x6_base(mconfig, dot_clock, char_width);
 
@@ -1332,7 +1332,7 @@ private:
 
 void hp9826_state::hp9826(machine_config &mconfig)
 {
-	hp9826_36(mconfig, DOT_CLOCK_9826.value(), 8);
+	hp9826_36(mconfig, DOT_CLOCK_9826, 8);
 
 	SCREEN(mconfig, m_screen, SCREEN_TYPE_RASTER, rgb_t::white());
 	m_screen->set_raw(DOT_CLOCK_9826, 520, 0, 400, 321, 0, 300);

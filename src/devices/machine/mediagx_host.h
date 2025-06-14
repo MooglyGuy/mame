@@ -12,10 +12,9 @@
 class mediagx_host_device : public pci_host_device
 {
 public:
-	template <typename T> mediagx_host_device(
-		const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock,
-		T &&cpu_tag, int ram_size
-	) : mediagx_host_device(mconfig, tag, owner, clock)
+	template <typename T>
+	mediagx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, T &&cpu_tag, int ram_size)
+		: mediagx_host_device(mconfig, tag, owner)
 	{
 		set_ids(0x10780001, 0x00, 0x060000, 0x00);
 		//set_multifunction_device(true);
@@ -23,7 +22,7 @@ public:
 		set_ram_size(ram_size);
 	}
 
-	mediagx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mediagx_host_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 	void set_ram_size(int ram_size) { m_ram_size = ram_size; }
 
 protected:

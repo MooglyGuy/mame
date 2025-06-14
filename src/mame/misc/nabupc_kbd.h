@@ -22,7 +22,7 @@ class nabupc_keyboard_device: public device_t
 {
 public:
 	// construction/destruction
-	nabupc_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, uint32_t clock = 0);
+	nabupc_keyboard_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock = XTAL());
 
 	auto rxd_cb() { return m_rxd_cb.bind(); }
 

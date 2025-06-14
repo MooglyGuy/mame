@@ -299,7 +299,7 @@ void cps2000_state::maincpu_map(address_map &map)
 /**************************************************************************/
 void cps2000_state::cps2000(machine_config &config)
 {
-	UPD78C10(config, m_maincpu, 10'000'000);
+	UPD78C10(config, m_maincpu, XTAL::u(10'000'000));
 	m_maincpu->set_addrmap(AS_PROGRAM, &cps2000_state::maincpu_map);
 	m_maincpu->pa_out_cb().set_ioport("PA");
 	m_maincpu->pb_in_cb().set_ioport("PB");

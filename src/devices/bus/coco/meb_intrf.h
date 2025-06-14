@@ -27,7 +27,7 @@ class distomeb_slot_device final
 public:
 	// construction/destruction
 	template <typename T>
-	distomeb_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock, T &&opts, const char *dflt)
+	distomeb_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock, T &&opts, const char *dflt)
 		: distomeb_slot_device(mconfig, tag, owner, clock)
 	{
 		option_reset();
@@ -35,7 +35,7 @@ public:
 		set_default_option(dflt);
 		set_fixed(false);
 	}
-	distomeb_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock);
+	distomeb_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	auto cart_callback() { return m_cart_callback.bind(); }
 

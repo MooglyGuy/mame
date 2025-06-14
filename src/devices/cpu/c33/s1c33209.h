@@ -15,7 +15,7 @@
 class s1c33209_device : public c33std_cpu_device_base
 {
 public:
-	s1c33209_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	s1c33209_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 
 protected:
 	s1c33209_device(
@@ -23,7 +23,7 @@ protected:
 			device_type type,
 			char const *tag,
 			device_t *owner,
-			u32 clock,
+			const XTAL &clock,
 			address_map_constructor internal_map);
 
 	template <offs_t RomBytes> void memory_map(address_map &map) ATTR_COLD;
@@ -39,14 +39,14 @@ private:
 class s1c33221_device : public s1c33209_device
 {
 public:
-	s1c33221_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	s1c33221_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 
 class s1c33222_device : public s1c33209_device
 {
 public:
-	s1c33222_device(machine_config const &mconfig, char const *tag, device_t *owner, u32 clock);
+	s1c33222_device(machine_config const &mconfig, char const *tag, device_t *owner, const XTAL &clock);
 };
 
 

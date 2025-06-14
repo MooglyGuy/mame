@@ -66,11 +66,11 @@ INPUT_PORTS_END
 
 void pullttrig_state::pullttrig(machine_config &config)
 {
-	PENTIUM4(config, m_maincpu, 100'000'000); // Exact CPU and frequency unknown
+	PENTIUM4(config, m_maincpu, XTAL::u(100'000'000)); // Exact CPU and frequency unknown
 	m_maincpu->set_addrmap(AS_PROGRAM, &pullttrig_state::pullttrig_map);
 	m_maincpu->set_addrmap(AS_IO, &pullttrig_state::pullttrig_io);
 
-	PCI_ROOT(config, "pci", 0);
+	PCI_ROOT(config, "pci");
 	// ...
 }
 

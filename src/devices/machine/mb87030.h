@@ -215,7 +215,7 @@ private:
 class mb89351_device : public mb87030_device
 {
 public:
-	mb89351_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mb89351_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 };
@@ -223,7 +223,7 @@ public:
 class mb89352_device : public mb87030_device
 {
 public:
-	mb89352_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	mb89352_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock);
 
 	virtual void map(address_map &map) override ATTR_COLD;
 };

@@ -388,7 +388,7 @@ void maclc_state::maclc_base(machine_config &config)
 
 	SPEAKER(config, "speaker", 2).front();
 
-	APPLE_DFAC(config, m_dfac, 22257);
+	APPLE_DFAC(config, m_dfac, XTAL::u(22257));
 	m_dfac->add_route(0, "speaker", 1.0, 0);
 	m_dfac->add_route(1, "speaker", 1.0, 1);
 
@@ -400,7 +400,7 @@ void maclc_state::maclc_base(machine_config &config)
 	m_v8->add_route(0, m_dfac, 1.0, 0);
 	m_v8->add_route(1, m_dfac, 1.0, 1);
 
-	nubus_device &nubus(NUBUS(config, "pds", 0));
+	nubus_device &nubus(NUBUS(config, "pds"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.set_address_mask(0x80ffffff);
 	nubus.set_bus_mode(nubus_device::nubus_mode_t::LC_PDS);

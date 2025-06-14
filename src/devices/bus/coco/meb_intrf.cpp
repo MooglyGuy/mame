@@ -51,7 +51,7 @@ DEFINE_DEVICE_TYPE(DISTOMEB_SLOT, distomeb_slot_device, "distomeb_slot", "Disto 
 //-------------------------------------------------
 //  distomeb_slot_device - constructor
 //-------------------------------------------------
-distomeb_slot_device::distomeb_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+distomeb_slot_device::distomeb_slot_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: device_t(mconfig, DISTOMEB_SLOT, tag, owner, clock)
 	, device_single_card_slot_interface<device_distomeb_interface>(mconfig, *this)
 	, m_cart_callback(*this)

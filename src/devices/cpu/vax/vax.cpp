@@ -18,7 +18,7 @@ DEFINE_DEVICE_TYPE(DC333, dc333_device, "dc333", "DEC DC333 MicroVAX II CPU")
 DEFINE_DEVICE_TYPE(DC341, dc341_device, "dc341", "DEC DC341 CVAX CPU")
 
 
-vax_cpu_device::vax_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock, int addrwidth)
+vax_cpu_device::vax_cpu_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, const XTAL &clock, int addrwidth)
 	: cpu_device(mconfig, type, tag, owner, clock)
 	, m_program_config("program", ENDIANNESS_LITTLE, 32, addrwidth, 0, 32, 9)
 	, m_psl(0)
@@ -26,17 +26,17 @@ vax_cpu_device::vax_cpu_device(const machine_config &mconfig, device_type type, 
 {
 }
 
-kd32a_device::kd32a_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+kd32a_device::kd32a_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vax_cpu_device(mconfig, KD32A, tag, owner, clock, 30)
 {
 }
 
-dc333_device::dc333_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+dc333_device::dc333_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vax_cpu_device(mconfig, DC333, tag, owner, clock, 32)
 {
 }
 
-dc341_device::dc341_device(const machine_config &mconfig, const char *tag, device_t *owner, u32 clock)
+dc341_device::dc341_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: vax_cpu_device(mconfig, DC341, tag, owner, clock, 32)
 {
 }

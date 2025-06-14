@@ -86,7 +86,7 @@ INPUT_PORTS_END
 
 void librie_state::ebx5003(machine_config &config)
 {
-	ARM920T(config, m_maincpu, 66'000'000); // ARM920T core, unknown clock
+	ARM920T(config, m_maincpu, XTAL::u(66'000'000)); // ARM920T core, unknown clock
 
 	screen_device&screen(SCREEN(config, "screen", SCREEN_TYPE_LCD)); // Not LCD, but e-Ink, 800×600, 167 PPI, four-level greyscale
 	screen.set_refresh_hz(60);
@@ -98,7 +98,7 @@ void librie_state::ebx5003(machine_config &config)
 
 	SPEAKER(config, "speaker").front_center();
 
-	H83002(config, m_mcu, 66'000'000); // Actually a Hitachi H8/3802 HD6473802FP. Unknown clock
+	H83002(config, m_mcu, XTAL::u(66'000'000)); // Actually a Hitachi H8/3802 HD6473802FP. Unknown clock
 }
 
 

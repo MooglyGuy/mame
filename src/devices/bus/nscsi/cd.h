@@ -115,7 +115,7 @@ public:
 class nscsi_toshiba_xm5401_device : public nscsi_cdrom_device
 {
 public:
-	nscsi_toshiba_xm5401_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	nscsi_toshiba_xm5401_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock = XTAL());
 };
 
 class nscsi_toshiba_xm5401_sun_device : public nscsi_cdrom_device

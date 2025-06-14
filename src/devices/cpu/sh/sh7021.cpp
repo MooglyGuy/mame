@@ -187,7 +187,7 @@ void sh7021_device::internal_map(address_map &map)
 	map(0x07000000, 0x070003ff).ram().mirror(0x00fffc00); // 1KB internal RAM, actually at 0xf000000
 }
 
-sh7021_device::sh7021_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock)
+sh7021_device::sh7021_device(const machine_config &mconfig, const char *tag, device_t *owner, const XTAL &clock)
 	: sh2_device(mconfig, SH7021, tag, owner, clock, CPU_TYPE_SH2, address_map_constructor(FUNC(sh7021_device::internal_map), this), 28, 0xc7ffffff)
 	, m_pa_out(*this)
 	, m_pb_out(*this)
@@ -1266,7 +1266,7 @@ void sh7021_device::start_timer(int i)
 
 //  printf("Starting timer %u: TCNT:%x GR:%x TCR:%x TI:%x TICK:%f\n", i, m_itu.timer[i].tcnt, m_itu.timer[i].gra, m_itu.timer[i].tcr & 7, m_itu.timer[i].tier, (double)clock()/psc);
 //  printf("%d\n", clock());
-	LOGMASKED(LOG_ITU_WR, "Starting Timer %d, prescale %d, clock %d, current count %04x\n", i, prescale, clock(), m_itu.timer[i].tcnt);
+	LOGMASKED(LOG_ITU_WR, "Starting Timer %d, prescale %d, clock %d, current count %04x\n", i, prescale, clock().value(), m_itu.timer[i].tcnt);
 	attotime period = attotime::from_ticks(prescale, clock());
 	m_itu.timer[i].et->adjust(period, i, period);
 }

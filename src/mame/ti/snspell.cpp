@@ -253,7 +253,7 @@ namespace {
 // The typical osc freq curve for TMS5100 is unknown. Let's assume it is set to the default frequency,
 // which is 640kHz for 8KHz according to the TMS5100 documentation.
 
-static constexpr u32 MASTER_CLOCK = 640'000;
+static constexpr XTAL MASTER_CLOCK = XTAL::u(640'000);
 
 
 class snspell_state : public driver_device
