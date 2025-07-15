@@ -624,8 +624,8 @@ private:
 
 	std::unique_ptr<taitotz_renderer> m_renderer;
 
-	uint32_t screen_update_taitotz(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
-	INTERRUPT_GEN_MEMBER(taitotz_vbi);
+	uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
+	INTERRUPT_GEN_MEMBER(vblank);
 	uint16_t tlcs_ide0_r(offs_t offset, uint16_t mem_mask = ~0);
 	uint16_t tlcs_ide1_r(offs_t offset, uint16_t mem_mask = ~0);
 	void ide_interrupt(int state);
@@ -1445,7 +1445,7 @@ void taitotz_renderer::push_direct_poly_fifo(uint32_t data)
 	}
 }
 
-uint32_t taitotz_state::screen_update_taitotz(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
+uint32_t taitotz_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
 	m_renderer->draw(bitmap, cliprect);
 
@@ -2620,7 +2620,7 @@ void taitotz_state::machine_start()
 }
 
 
-INTERRUPT_GEN_MEMBER(taitotz_state::taitotz_vbi)
+INTERRUPT_GEN_MEMBER(taitotz_state::vblank)
 {
 	m_iocpu->set_input_line(TLCS900_INT3, ASSERT_LINE);
 }
@@ -2652,7 +2652,7 @@ void taitotz_state::taitotz(machine_config &config)
 	m_iocpu->an_read<6>().set_ioport("ANALOG7");
 	m_iocpu->an_read<7>().set_ioport("ANALOG8");
 	m_iocpu->set_addrmap(AS_PROGRAM, &taitotz_state::tlcs900h_mem);
-	m_iocpu->set_vblank_int("screen", FUNC(taitotz_state::taitotz_vbi));
+	m_iocpu->set_vblank_int("screen", FUNC(taitotz_state::vblank));
 
 	/* MN1020819DA sound CPU */
 
@@ -2668,7 +2668,7 @@ void taitotz_state::taitotz(machine_config &config)
 	m_screen->set_vblank_time(ATTOSECONDS_IN_USEC(0));
 	m_screen->set_size(512, 384);
 	m_screen->set_visarea(0, 511, 0, 383);
-	m_screen->set_screen_update(FUNC(taitotz_state::screen_update_taitotz));
+	m_screen->set_screen_update(FUNC(taitotz_state::screen_update));
 }
 
 void taitotz_state::landhigh(machine_config &config)

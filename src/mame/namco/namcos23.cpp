@@ -1302,13 +1302,14 @@ It can also be used with Final Furlong when wired correctly.
 #define LOG_RS232           (1ULL << 44)
 #define LOG_IRQ_STATUS      (1ULL << 45)
 #define LOG_C451            (1ULL << 46)
+#define LOG_DIRECT          (1ULL << 47)
 #define LOG_ALL ( LOG_PROJ_MAT | LOG_3D_STATE_ERR | LOG_3D_STATE_UNK | LOG_VEC_ERR | LOG_VEC_UNK | LOG_RENDER_ERR | LOG_RENDER_INFO | LOG_MODEL_ERR | \
 				LOG_MODEL_INFO | LOG_MODELS | LOG_C435_PIO_UNK | LOG_C435_UNK | LOG_C417_UNK | LOG_C417_ACK | LOG_C412_UNK | LOG_C421_UNK | \
 				LOG_C422_IRQ | LOG_C422_UNK | LOG_C361_UNK | LOG_CTL_UNK | LOG_C417_IRQ | LOG_C361_IRQ | LOG_MATRIX_INFO | LOG_VEC_INFO | \
 				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C404_REGS | LOG_C404_RAM | LOG_GMEN | \
-				LOG_GENERAL | LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK | LOG_MCU_PORTS )
+				LOG_GENERAL | LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK | LOG_MCU_PORTS | LOG_DIRECT )
 
-#define VERBOSE ( LOG_ALL & ~( LOG_MCU_PORTS | LOG_IRQ_STATUS | LOG_RS232 ) )
+#define VERBOSE ( LOG_ALL )
 #include "logmacro.h"
 
 class PixxiiiPacket
@@ -1821,6 +1822,7 @@ struct namcos23_render_data
 	bool pfade_enabled;
 	u8 fadefactor;
 	bool shade_enabled;
+	bool fog_enabled;
 	bool alpha_enabled;
 	bool blend_enabled;
 	u8 alphafactor;
@@ -2251,6 +2253,7 @@ protected:
 	u16 m_light_power;
 	u16 m_light_ambient;
 	float m_proj_matrix[8*3];
+	u32 m_proj_matrix_raw[8*3];
 	u8 m_proj_matrix_line;
 
 	// There may only be 128 matrix and vector slots.
@@ -2633,8 +2636,10 @@ void namcos23_state::c435_state_set_projection_matrix_line(const u16 *param)
 	buf << "projection matrix line:";
 	for (int i = 0; i < 8; i++)
 	{
-		util::stream_format(buf, " %f", f24_to_f32((param[2 * i + 1] << 16) | param[2 * i + 2]));
-		m_proj_matrix[m_proj_matrix_line * 8 + i] = f24_to_f32((param[2 * i + 1] << 16) | param[2 * i + 2]);
+		const int mat_idx = m_proj_matrix_line * 8 + i;
+		m_proj_matrix_raw[mat_idx] = (param[2 * i + 1] << 16) | param[2 * i + 2];
+		m_proj_matrix[mat_idx] = f24_to_f32(m_proj_matrix_raw[mat_idx]);
+		util::stream_format(buf, " %f", m_proj_matrix[mat_idx]);
 	}
 	m_proj_matrix_line = (m_proj_matrix_line + 1) % 3;
 	buf << "\n";
@@ -2994,6 +2999,15 @@ void namcos23_state::c435_matrix_set() // 0.4
 		LOGMASKED(LOG_MATRIX_UNK, "%s: WARNING: c435_matrix_set header %04x\n", machine().describe_context(), m_c435.buffer[0]);
 
 	s16 *t = c435_getm(m_c435.buffer[1]);
+	//t[0] = m_c435.buffer[2];
+	//t[3] = m_c435.buffer[3];
+	//t[6] = m_c435.buffer[4];
+	//t[1] = m_c435.buffer[5];
+	//t[4] = m_c435.buffer[6];
+	//t[7] = m_c435.buffer[7];
+	//t[2] = m_c435.buffer[8];
+	//t[5] = m_c435.buffer[9];
+	//t[8] = m_c435.buffer[10];
 	for (int i = 0; i < 9; i++)
 		t[i] = m_c435.buffer[i+2];
 	LOGMASKED(LOG_MATRIX_INFO, "c435_matrix_set (%04x): Matrix %d:\n", m_c435.buffer[0], m_c435.buffer[1]);
@@ -3447,6 +3461,9 @@ void namcos23_state::c435_render() // 8
 	if (size != 3)
 		LOGMASKED(LOG_RENDER_ERR, "%04x %04x %04x %04x %04x\n", m_c435.buffer[0], m_c435.buffer[1], m_c435.buffer[2], m_c435.buffer[3], m_c435.buffer[4]);
 
+	//if (BIT(m_c435.buffer[0], 9))
+		//return;
+
 	if (s_capturing)
 	{
 		PixxiiiPacket &cren = log_packet("CREN");
@@ -3471,6 +3488,7 @@ void namcos23_state::c435_render() // 8
 	{
 		//machine().debug_break();
 		//printf("Trying to render model: %04x\n", m_c435.buffer[1]);
+		//logerror("Too-small model index %04x\n", m_c435.buffer[1]);
 		re->model.model = m_c435.buffer[1] + 0x80;
 	}
 	else
@@ -3480,6 +3498,11 @@ void namcos23_state::c435_render() // 8
 
 	re->type = MODEL;
 	re->model.model2 = (size == 4 ? m_c435.buffer[2] : 0);
+	if (re->model.model2 != 0 && re->model.model2 < 0x80)
+	{
+		re->model.model2 += 0x80;
+	}
+
 	re->scaling = use_scaling ? m_scaling / 16384.0 : 1.0;
 	re->model.transpose = transpose;
 	re->absolute_priority = m_absolute_priority;
@@ -3930,6 +3953,8 @@ void namcos23_renderer::render_scanline(s32 scanline, const extent_t& extent, co
 	rgbaint_t fadecolor = rd.fadecolor;
 	rgbaint_t polycolor = rd.polycolor;
 	bool shade_enabled = rd.shade_enabled;
+	//bool fog_enabled = rd.fog_enabled && false;
+	//bool weird_check = rd.weird_check && false;
 	bool blend_enabled = rd.blend_enabled;
 
 	u32 *dest = &rd.bitmap->pix(scanline);
@@ -3993,6 +4018,15 @@ void namcos23_renderer::render_scanline(s32 scanline, const extent_t& extent, co
 			{
 				rgb.blend(rgbaint_t(dest[x]), 0x80);
 			}
+
+			//if (fog_enabled)
+			//{
+			//	rgb.set(0xff, 0x00, 0xff, 0x00);
+			//}
+			//else
+			//{
+			//	rgb.set(0xff, 0x00, 0x00, 0xff);
+			//}
 
 			u32 src = rgb.to_rgba();
 			dest[x] = 0xff000000 | src;
@@ -4130,6 +4164,7 @@ void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 		p->rd.sprite = false;
 		p->rd.immediate = false;
 		p->rd.shade_enabled = true;
+		p->rd.fog_enabled = BIT(~re->direct.d[2], 15);
 		p->rd.rgb = 0x00ffffff;
 		p->rd.flags = flags;
 		p->rd.tbase = ((re->direct.d[2] & 0x000f) << 12) | (BIT(re->direct.d[2], 7) << 16);
@@ -4227,6 +4262,7 @@ void namcos23_state::render_sprite_tile(u32 code_offset, const namcos23_render_e
 		p->rd.sprite = true;
 		p->rd.immediate = false;
 		p->rd.shade_enabled = false;
+		p->rd.fog_enabled = false;
 		p->rd.sprite_source = gfx->get_data(code % gfx->elements());
 		p->rd.sprite_line_modulo = gfx->rowbytes();
 		p->rd.sprite_xflip = sprite.xflip;
@@ -4328,6 +4364,7 @@ void namcos23_state::render_immediate(const namcos23_render_entry *re)
 		p->rd.sprite = false;
 		p->rd.immediate = true;
 		p->rd.shade_enabled = true;
+		p->rd.fog_enabled = BIT(~re->immediate.pal, 15);
 		p->rd.h = h;
 		p->rd.type = type;
 		p->rd.tbase = 0;
@@ -4368,7 +4405,7 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 	u32 adr2 = m_ptrom[re->model.model2];
 	if (adr >= m_ptrom_limit || adr2 >= m_ptrom_limit)
 	{
-		LOGMASKED(LOG_MODEL_ERR, "%s: WARNING: model %04x base address %08x out-of-bounds - pointram?\n", machine().describe_context(), re->model.model, adr);
+		LOGMASKED(LOG_MODEL_ERR, "%s: WARNING: model %04x base address %08x out-of-bounds - pointram? (model2 %04x, adr2 %08x)\n", machine().describe_context(), re->model.model, adr, re->model.model2, adr2);
 		return;
 	}
 
@@ -4600,6 +4637,7 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 			p->rd.sprite = false;
 			p->rd.immediate = false;
 			p->rd.shade_enabled = true;
+			p->rd.fog_enabled = BIT(~h, 31);
 			p->rd.h = h;
 			p->rd.type = type;
 			p->rd.tbase = tbase;
@@ -5271,6 +5309,7 @@ void namcos23_state::video_start()
 	m_tileid_mask = (memregion("textilemapl")->bytes()/2 - 1) & ~0xff; // Used for y masking
 	m_tile_mask = memregion("textile")->bytes()/256 - 1;
 	m_ptrom_limit = memregion("pointrom")->bytes()/4;
+	printf("m_ptrom_limit is %08x\n", m_ptrom_limit);
 
 	for (int i = 0; i < m_gfxdecode->gfx(1)->elements(); i++)
 		m_gfxdecode->gfx(1)->get_data(i);
@@ -5294,7 +5333,7 @@ void namcos23_state::check_pixxiii_trigger()
 		start_capture();
 
 		PixxiiiPacket &prjm = log_packet("PRJM");
-		prjm.add_float_buffer(m_proj_matrix, 24);
+		prjm.add_u32_buffer(m_proj_matrix_raw, 24);
 
 		PixxiiiPacket &mats = log_packet("MATS");
 		for (int i = 0; i < 256; i++)
@@ -5801,7 +5840,7 @@ u16 namcos23_state::c417_ptrom_lsw_r()
 	}
 	// TODO: rapid river wants auto-inc in some way here (NGs point ROM self test otherwise)
 	LOGMASKED(LOG_C417_REG, "%s: c417 point rom[%06x] lsw read: %04x\n", machine().describe_context(), m_c417.pointrom_adr, (u16)m_ptrom[m_c417.pointrom_adr]);
-	return m_ptrom[m_c417.pointrom_adr];
+	return m_ptrom[m_c417.pointrom_adr++];
 }
 
 void namcos23_state::c417_irq_ack_w(offs_t offset, u16 data)
@@ -6164,6 +6203,7 @@ void namcos23_state::direct_buf_w(offs_t offset, u16 data, u16 mem_mask)
 	if (!m_c435.direct_buf_open)
 		return;
 
+	LOGMASKED(LOG_DIRECT, "Direct Write [%03x]: %04x\n", m_c435.direct_buf_pos, data);
 	if (m_c435.direct_buf_pos == 0)
 	{
 		m_c435.direct_buf_pos++;
@@ -6236,7 +6276,15 @@ u16 namcos23_state::ctl_input1_r()
 void namcos23_state::ctl_input1_w(offs_t offset, u16 data)
 {
 	// These may be coming from another CPU, in particular the I/O one
+	static bool was_a_pressed = false;
+	const u16 value = m_p1->read();
+	const bool is_a_pressed = !BIT(value, 3);
 	m_ctl_inp_buffer[0] = m_p1->read();
+	if (was_a_pressed && is_a_pressed)
+		m_ctl_inp_buffer[0] |= 0x0008;
+	if (!was_a_pressed && is_a_pressed)
+		logerror("A pressed\n");
+	was_a_pressed = is_a_pressed;
 }
 
 u16 namcos23_state::ctl_input2_r()
@@ -7035,6 +7083,7 @@ void namcos23_state::machine_start()
 
 	save_item(NAME(m_ptrom_limit));
 	save_item(NAME(m_proj_matrix));
+	save_item(NAME(m_proj_matrix_raw));
 	save_item(NAME(m_proj_matrix_line));
 
 	save_item(NAME(m_absolute_priority));
@@ -7114,6 +7163,7 @@ void namcos23_state::machine_reset()
 	m_c435.direct_buf_nonempty = false;
 	m_c435.direct_buf_open = false;
 	memset(m_proj_matrix, 0, sizeof(float) * 24);
+	memset(m_proj_matrix_raw, 0, sizeof(u32) * 24);
 	m_proj_matrix_line = 0;
 
 	memset(m_c404.rowscroll, 0, sizeof(m_c404.rowscroll));
