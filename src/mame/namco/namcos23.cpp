@@ -3297,7 +3297,11 @@ void namcos23_state::c435_state_set(u16 type, const u16 *param)
 	case 0x0036:
 		LOGMASKED(LOG_3D_STATE_UNK, "%s: unknown state set (%04x)\n", machine().describe_context(), m_c435.buffer[0]);
 		for (int i = 0; i < (m_c435.buffer[0] & 0xff); i++)
+		{
 			LOGMASKED(LOG_3D_STATE_UNK, "%s: Word %02x: %04x\n", machine().describe_context(), i, m_c435.buffer[1 + i]);
+			printf("%04x ", m_c435.buffer[1 + i]);
+		}
+		printf("\n");
 		if (s_capturing)
 		{
 			PixxiiiPacket &cs36 = log_packet("CS36");
@@ -3471,8 +3475,9 @@ void namcos23_state::c435_render() // 8
 	}
 
 	render_t &render = m_render;
-	bool use_scaling = BIT(m_c435.buffer[0], 7);
-	bool transpose = BIT(m_c435.buffer[0], 6);
+	const bool use_scaling = BIT(m_c435.buffer[0], 7);
+	const bool transpose = BIT(m_c435.buffer[0], 6);
+	const bool scroll = BIT(m_c435.buffer[0], 9);
 
 	if (render.count[render.cur] >= RENDER_MAX_ENTRIES)
 	{
@@ -3507,8 +3512,8 @@ void namcos23_state::c435_render() // 8
 	re->model.transpose = transpose;
 	re->absolute_priority = m_absolute_priority;
 	re->model_blend_factor = m_model_blend_factor;
-	re->tx = m_tx;
-	re->ty = m_ty;
+	re->tx = scroll ? m_tx : 0;
+	re->ty = scroll ? m_ty : 0;
 	re->light_power = m_light_power;
 	re->light_ambient = m_light_ambient;
 	re->model.light_vector[0] = m_light_vector[0];
@@ -4155,7 +4160,22 @@ void namcos23_state::render_direct_poly(const namcos23_render_entry *re)
 			p->pv[j].y = ((s16)src[3] + 240);
 		}
 
-		p->zkey = polyshift | (re->absolute_priority << 21);
+		int zsort = 0;
+		if (zsort > 0x1fffff) zsort = 0x1fffff;
+
+		int absolute_priority = re->absolute_priority & 7;
+		if (BIT(polyshift, 21))
+			zsort = polyshift & 0x1fffff;
+		else
+		{
+			zsort += BIT(polyshift, 17) ? (polyshift | 0xfffc0000) : (polyshift & 0x0001ffff);
+			absolute_priority += (polyshift & 0x1c0000) >> 18;
+		}
+
+		zsort = std::clamp(zsort, 0, 0x1fffff);
+		zsort |= (absolute_priority << 21);
+		p->zkey = zsort;
+
 		p->rd.machine = &machine();
 		p->rd.texture_lookup = render_texture_lookup;
 		p->rd.stencil_lookup = render_stencil_lookup_always;
@@ -4476,8 +4496,8 @@ void namcos23_state::render_model(const namcos23_render_entry *re)
 			pv[i].x = x;
 			pv[i].y = y;
 			pv[i].p[0] = z;
-			pv[i].p[1] = (((v1 >> 20) & 0xf00) | ((v2 >> 24) & 0xff)) + (stencil_enabled ? 0 : 0.5);
-			pv[i].p[2] = (((v1 >> 16) & 0xf00) | ((v3 >> 24) & 0xff)) + (stencil_enabled ? 0 : 0.5);
+			pv[i].p[1] = (((v1 >> 20) & 0xf00) | ((v2 >> 24) & 0xff)) + (stencil_enabled ? 0 : 0.5) + re->tx;
+			pv[i].p[2] = (((v1 >> 16) & 0xf00) | ((v3 >> 24) & 0xff)) + (stencil_enabled ? 0 : 0.5) + re->ty;
 			pv[i].p[3] = 64;
 
 			static const u8 LIGHT_SHIFTS[4] = { 24, 16,  8,  0 };
