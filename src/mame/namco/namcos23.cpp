@@ -1309,7 +1309,8 @@ It can also be used with Final Furlong when wired correctly.
 				LOG_CTL_REG | LOG_C435_REG | LOG_C361_REG | LOG_C417_REG | LOG_C412_RAM | LOG_C421_RAM | LOG_C404_REGS | LOG_C404_RAM | LOG_GMEN | \
 				LOG_GENERAL | LOG_RS232 | LOG_IRQ_STATUS | LOG_C451 | LOG_MATRIX_UNK | LOG_VEC_UNK | LOG_MCU_PORTS | LOG_DIRECT )
 
-#define VERBOSE ( LOG_ALL )
+#define VERBOSE ( 0 )
+
 #include "logmacro.h"
 
 class PixxiiiPacket
@@ -2471,14 +2472,15 @@ protected:
 	u32 sh2_unk_r(offs_t offset, u32 mem_mask = ~0);
 	void sh2_unk_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 	u32 sh2_unk6200000_r(offs_t offset, u32 mem_mask = ~0);
-	u32 sh2_kludge_r();
+	//u32 sh2_kludge_r();
 	void vpx_i2c_sdao_w(int state);
 	u8 vpx_i2c_r();
 	void vpx_i2c_w(u8 data);
 
-	TIMER_CALLBACK_MEMBER(sh2_irq_off);
-	int m_sh2_irq;
-	emu_timer *m_sh2_irq_timer;
+	TIMER_CALLBACK_MEMBER(sh2_irq_1);
+	TIMER_CALLBACK_MEMBER(sh2_irq_2);
+	emu_timer *m_sh2_irq_timer1;
+	emu_timer *m_sh2_irq_timer2;
 
 private:
 	void mips_map(address_map &map) ATTR_COLD;
@@ -4839,7 +4841,7 @@ void namcos23_state::render_run(screen_device &screen, bitmap_rgb32 &bitmap)
 				render_model(re);
 			break;
 		case DIRECT:
-			if (m_c404.layer_flags & 1)
+			if ((m_c404.layer_flags & 1) && false)
 				render_direct_poly(re);
 			break;
 		case IMMEDIATE:
@@ -5580,7 +5582,7 @@ u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, c
 	}
 	bitmap.fill(bg_color.to_rgba(), cliprect);
 
-	if (m_c404.layer_flags & 4)
+	if ((m_c404.layer_flags & 4) || true)
 	{
 		apply_text_scroll();
 		m_bgtilemap->set_palette_offset(m_c404.palbase);
@@ -5591,7 +5593,7 @@ u32 namcos23_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, c
 
 	render_run(screen, bitmap);
 
-	if (m_c404.layer_flags & 4)
+	if ((m_c404.layer_flags & 4) || true)
 	{
 		mix_text_layer(screen, bitmap, cliprect, 6);
 	}
@@ -6736,7 +6738,9 @@ void namcoss23_gmen_state::sh2_shared_w(offs_t offset, u32 data, u32 mem_mask)
 
 u32 namcoss23_gmen_state::sh2_dsw_r(offs_t offset, u32 mem_mask)
 {
-	return m_dsw->read() << 24;
+	const u32 data = m_dsw->read() << 24;
+	LOGMASKED(LOG_SH2, "%s: sh2_dsw_r: %08x & %08x\n", machine().describe_context(), data, mem_mask);
+	return data;
 }
 
 u32 namcoss23_gmen_state::mips_sh2_unk_r(offs_t offset, u32 mem_mask)
@@ -6747,16 +6751,19 @@ u32 namcoss23_gmen_state::mips_sh2_unk_r(offs_t offset, u32 mem_mask)
 
 u32 namcoss23_gmen_state::sh2_unk_r(offs_t offset, u32 mem_mask)
 {
+	LOGMASKED(LOG_SH2, "%s: sh2_unk_r: %08x & %08x\n", machine().describe_context(), 0, mem_mask);
 	return 0;
 }
 
 void namcoss23_gmen_state::sh2_unk_w(offs_t offset, u32 data, u32 mem_mask)
 {
+	LOGMASKED(LOG_SH2, "%s: sh2_unk_w: %08x & %08x\n", machine().describe_context(), data, mem_mask);
 	COMBINE_DATA(&m_sh2_unk);
 }
 
 u32 namcoss23_gmen_state::sh2_unk6200000_r(offs_t offset, u32 mem_mask)
 {
+	LOGMASKED(LOG_SH2, "%s: sh2_unk6200000_r: %08x & %08x\n", machine().describe_context().c_str(), 0x04000000, mem_mask);
 	return 0x04000000;
 }
 
@@ -6776,10 +6783,11 @@ void namcoss23_gmen_state::vpx_i2c_w(u8 data) {
 	m_vpx->scl_write(BIT(data, 1));
 }
 
-u32 namcoss23_gmen_state::sh2_kludge_r()
+/*u32 namcoss23_gmen_state::sh2_kludge_r()
 {
+	LOGMASKED(LOG_SH2, "%s: sh2_kludge_r\n", machine().describe_context());
 	return 0x22115566;
-}
+}*/
 
 void namcoss23_gmen_state::mips_map(address_map &map)
 {
@@ -6787,7 +6795,7 @@ void namcoss23_gmen_state::mips_map(address_map &map)
 	map(0x0e400000, 0x0e400003).r(FUNC(namcoss23_gmen_state::sh2_trigger_r));
 	map(0x0e600000, 0x0e600003).r(FUNC(namcoss23_gmen_state::mips_sh2_unk_r));
 	map(0x0e700000, 0x0e70ffff).rw(FUNC(namcoss23_gmen_state::sh2_shared_r), FUNC(namcoss23_gmen_state::sh2_shared_w));
-	map(0x0e70c000, 0x0e70c003).r(FUNC(namcoss23_gmen_state::sh2_kludge_r));
+	//map(0x0e70c000, 0x0e70c003).r(FUNC(namcoss23_gmen_state::sh2_kludge_r));
 }
 
 void namcoss23_gmen_state::sh2_map(address_map &map)
@@ -6799,7 +6807,8 @@ void namcoss23_gmen_state::sh2_map(address_map &map)
 	map(0x03000000, 0x03000003).r(FUNC(namcoss23_gmen_state::sh2_dsw_r));
 	map(0x06000000, 0x06000003).umask32(0xff000000).rw(FUNC(namcoss23_gmen_state::vpx_i2c_r), FUNC(namcoss23_gmen_state::vpx_i2c_w));
 	map(0x06200000, 0x06200003).r(FUNC(namcoss23_gmen_state::sh2_unk6200000_r));
-	//map(0x06600000, 0x06600003).nopw();
+	map(0x06200000, 0x06200003).nopw();
+	map(0x06600000, 0x06600003).nopw();
 	map(0x00c00000, 0x00c0006b).m(m_firewire, FUNC(md8412b_device::map));
 }
 
@@ -7215,8 +7224,10 @@ void namcoss23_gmen_state::machine_start()
 {
 	namcos23_state::machine_start();
 
-	m_sh2_irq_timer = timer_alloc(FUNC(namcoss23_gmen_state::sh2_irq_off), this);
 	save_item(NAME(m_vpx_sdao));
+
+	m_sh2_irq_timer1 = timer_alloc(FUNC(namcoss23_gmen_state::sh2_irq_1), this);
+	m_sh2_irq_timer2 = timer_alloc(FUNC(namcoss23_gmen_state::sh2_irq_2), this);
 }
 
 void namcoss23_gmen_state::machine_reset()
@@ -7225,19 +7236,22 @@ void namcoss23_gmen_state::machine_reset()
 
 	// halt the SH-2 until we need it
 	m_sh2->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
-	m_sh2_irq_timer->adjust(attotime::never);
+	m_sh2_irq_timer1->adjust(attotime::never);
+	m_sh2_irq_timer2->adjust(attotime::never);
 
-	m_sh2_irq = -1;
 	m_sh2_unk = 0;
 	m_vpx_sdao = 0;
 }
 
-TIMER_CALLBACK_MEMBER(namcoss23_gmen_state::sh2_irq_off)
+TIMER_CALLBACK_MEMBER(namcoss23_gmen_state::sh2_irq_1)
 {
-	m_sh2->set_input_line(m_sh2_irq, CLEAR_LINE);
-	m_sh2_irq = -1;
+	m_sh2->set_input_line(4, ASSERT_LINE);
 }
 
+TIMER_CALLBACK_MEMBER(namcoss23_gmen_state::sh2_irq_2)
+{
+	m_sh2->set_input_line(6, ASSERT_LINE);
+}
 
 
 #define XOR(a) WORD2_XOR_BE(a)
@@ -7482,13 +7496,14 @@ void namcoss23_gmen_state::gmen(machine_config &config)
 
 	m_maincpu->set_addrmap(AS_PROGRAM, &namcoss23_gmen_state::mips_map);
 
-	SH7604(config, m_sh2, XTAL(28'700'000));
+	SH7604(config, m_sh2, XTAL(20'000'000));
 	m_sh2->set_addrmap(AS_PROGRAM, &namcoss23_gmen_state::sh2_map);
 
 	VPX3220A(config, m_vpx, 0);
 	m_vpx->sda_callback().set(FUNC(namcoss23_gmen_state::vpx_i2c_sdao_w));
 
 	MD8412B(config, m_firewire, 0);
+	m_firewire->int_callback().set_inputline(m_sh2, 8);
 }
 
 void namcoss23_gmen_state::gunwars(machine_config &config)
@@ -7685,28 +7700,28 @@ static INPUT_PORTS_START(gmen)
 	PORT_INCLUDE(s23)
 
 	PORT_START("GMENDSW")
-	PORT_DIPNAME( 0x01, 0x01, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x01, 0x01, "SH-2 Bit 0")
 	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x02, 0x02, "SH-2 Bit 1")
 	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x04, 0x04, "SH-2 Bit 2")
 	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x08, 0x08, "SH-2 Bit 3")
 	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x10, 0x10, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x10, 0x10, "SH-2 Bit 4")
 	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x20, 0x20, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x20, 0x20, "SH-2 Bit 5")
 	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x40, 0x40, "SH-2 Bit 6")
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x80, 0x80, DEF_STR( Unknown ) )
+	PORT_DIPNAME( 0x80, 0x80, "SH-2 Bit 7")
 	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 INPUT_PORTS_END

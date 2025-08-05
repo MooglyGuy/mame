@@ -799,6 +799,14 @@ uint8_t sh7604_device::smr_r()
 
 void sh7604_device::smr_w(uint8_t data)
 {
+	static const char *const DIVISOR_NAMES[4] = { "1/1", "1/8", "1/32", "1/128" };
+	printf("SMR: %02x\n", data);
+	printf("  Character Length: %s\n", BIT(data, 6) ? "7 bits" : "8 bits");
+	printf("  Parity Enable: %s\n", BIT(data, 5) ? "Yes" : "No");
+	if (BIT(data, 5))
+		printf("  Parity Mode: %s\n", BIT(data, 4) ? "Odd" : "Even");
+	printf("  Stop Bits: %d\n", BIT(data, 3) ? 2 : 1);
+	printf("  Divisor: %s\n", DIVISOR_NAMES[BIT(data, 0, 2)]);
 	m_smr = data;
 }
 
@@ -809,6 +817,12 @@ uint8_t sh7604_device::brr_r()
 
 void sh7604_device::brr_w(uint8_t data)
 {
+	printf("BRR: %02x\n", data);
+	const int cks = BIT(m_smr, 0, 2);
+	static const int POWS[4] = { 1, 8, 32, 128 };
+	static const float denom = 32.0f * POWS[cks] * (int)(data + 1);
+	int rate = (int)(clock() / denom);
+	printf("  Rate: %d\n", rate);
 	m_brr = data;
 }
 
@@ -819,6 +833,7 @@ uint8_t sh7604_device::scr_r()
 
 void sh7604_device::scr_w(uint8_t data)
 {
+	printf("SCR: %02x\n", data);
 	m_scr = data;
 }
 
@@ -830,7 +845,7 @@ uint8_t sh7604_device::tdr_r()
 void sh7604_device::tdr_w(uint8_t data)
 {
 	m_tdr = data;
-	//printf("%c", data & 0xff);
+	printf("%c", data & 0xff);
 }
 
 uint8_t sh7604_device::ssr_r()

@@ -18,7 +18,7 @@
 #include "sh_dasm.h"
 #include "cpu/drcumlsh.h"
 
-//#define VERBOSE 1
+#define VERBOSE 1
 #include "logmacro.h"
 
 constexpr int SH2_INT_15 = 15;

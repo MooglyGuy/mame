@@ -20,6 +20,8 @@ public:
 
 	void map(address_map &map);
 
+	auto int_callback() { return m_int_cb.bind(); }
+
 protected:
 	virtual void device_start() override;
 	virtual void device_reset() override;
@@ -118,6 +120,15 @@ protected:
 		PACKET_CTRL_BUSYCTRL_WIDTH      = 3,
 		PACKET_CTRL_WRITE_PEND          = 12,
 
+		DIAG_STATUS_BUSY_STATE			= 2,
+		DIAG_STATUS_AT_ACK				= 8,
+		DIAG_STATUS_AT_ACK_MASK			= 0x00000f00,
+		DIAG_STATUS_ACK_STATUS			= 12,
+		DIAG_STATUS_ACK_STATUS_MASK		= 0x00003000,
+		DIAG_STATUS_RETRY_TIME_MAX		= 15,
+		DIAG_STATUS_AT_BUSY				= 24,
+		DIAG_STATUS_IT_BUSY				= 25,
+
 		PHY_CTRL_MASK                   = 0x00000fff,
 		PHY_CTRL_REG_DATA               = 0,
 		PHY_CTRL_REG_DATA_WIDTH         = 8,
@@ -139,8 +150,10 @@ protected:
 		CYCLE_TIMER_OFFSET_WIDTH        = 12,
 		CYCLE_TIMER_COUNT               = 12,
 		CYCLE_TIMER_COUNT_WIDTH         = 13,
+		CYCLE_TIMER_COUNT_MASK          = 0x01fff000,
 		CYCLE_TIMER_SECONDS             = 25,
 		CYCLE_TIMER_SECONDS_WIDTH       = 7,
+		CYCLE_TIMER_SECONDS_MASK		= 0xfe000000,
 
 		SYNC_LENGTH_MASK                = 0x0fff0000,
 		SYNC_LENGTH_VAL                 = 16,
@@ -222,15 +235,70 @@ protected:
 	};
 
 private:
+	void update_interrupt();
+
+	void cycle_tick(s32 param);
+
+	void handle_async_tx();
+	void handle_iso_tx();
+
+	void push_async_rx_word(const u32 data);
+	u32 pop_async_rx_word();
+	void push_async_tx_word(const u32 data);
+	u32 pop_async_tx_word();
+	void push_iso_rx_word(const u32 data);
+	u32 pop_iso_rx_word();
+	void push_iso_tx_word(const u32 data);
+	u32 pop_iso_tx_word();
+	void push_iso_flight_word(const u32 data);
+	u32 pop_iso_flight_word();
+
+	void recv_self_id();
+
+	devcb_write_line m_int_cb;
+	bool m_int_active;
+
+	emu_timer *m_cycle_timer;
+	bool m_async_active;
+	bool m_cycle_started;
+	bool m_iso_going;
+
+	u32 m_async_rx_buf[512];
+	u32 m_async_rx_wr_idx;
+	u32 m_async_rx_rd_idx;
+	u32 m_async_rx_count;
+	u32 m_async_rx_limit;
+	u32 m_async_tx_buf[512];
+	u32 m_async_tx_wr_idx;
+	u32 m_async_tx_rd_idx;
+	u32 m_async_tx_count;
+	u32 m_async_tx_limit;
+	u32 m_iso_rx_buf[512];
+	u32 m_iso_rx_wr_idx;
+	u32 m_iso_rx_rd_idx;
+	u32 m_iso_rx_count;
+	u32 m_iso_rx_limit;
+	u32 m_iso_tx_buf[512];
+	u32 m_iso_tx_wr_idx;
+	u32 m_iso_tx_rd_idx;
+	u32 m_iso_tx_count;
+	u32 m_iso_tx_limit;
+	u32 m_iso_flight_buf[512];
+	u32 m_iso_flight_wr_idx;
+	u32 m_iso_flight_rd_idx;
+	u32 m_iso_flight_count;
+	u32 m_iso_flight_limit;
+
 	u32 m_ctrl;
 	u32 m_node_id;
 	u32 m_async_bufsize;
 	u32 m_sync_bufsize;
 	u32 m_packet_ctrl;
+	u32 m_diag_status;
 	u32 m_phy_ctrl;
 	u8 m_phy_regs[7];
 	u32 m_at_retries_ctrl;
-	u32 m_cycle_timer;
+	u32 m_cycle_timer_reg;
 	u32 m_sync_packet_len;
 	u32 m_sync_config[4];
 	u32 m_buf_status_ctrl;
